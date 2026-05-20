@@ -2,6 +2,9 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { secureHeaders } from 'hono/secure-headers'
+import { authRouter } from './routes/auth.js'
+import { billingRouter } from './routes/billing.js'
+import { webhooksRouter } from './routes/webhooks.js'
 
 const app = new Hono()
 
@@ -17,11 +20,9 @@ app.use(
 
 app.get('/health', (c) => c.json({ status: 'ok', service: 'alpha-kelassi-api' }))
 
-// Routes (à implémenter dans les sprints suivants)
-// app.route('/api/subjects', subjectsRouter)
-// app.route('/api/documents', documentsRouter)
-// app.route('/api/ai', aiRouter)
-// app.route('/webhooks', webhooksRouter)
+app.route('/api/auth', authRouter)
+app.route('/api/billing', billingRouter)
+app.route('/webhooks', webhooksRouter)
 
 export default {
   port: parseInt(process.env['PORT'] ?? '3001'),
