@@ -42,9 +42,23 @@ router.post('/', async (c) => {
 
   const meta = uploadSchema.parse(JSON.parse(metaRaw))
 
+  // Vérification content-type réel (magic bytes PDF = %PDF)
+  const headerBytes = new Uint8Array(await file.slice(0, 4).arrayBuffer())
+  const magic = String.fromCharCode(...headerBytes)
+  if (!magic.startsWith('%PDF')) {
+    return c.json({ error: { code: 'INVALID_FILE', message: 'Le fichier doit être un PDF valide' } }, 400)
+  }
+
+  // Sanitise le nom de fichier : supprime path traversal + caractères dangereux
+  const safeName = file.name
+    .replace(/[^a-zA-Z0-9._-]/g, '_')  // garde seulement les caractères sûrs
+    .replace(/\.{2,}/g, '_')            // bloque ../
+    .replace(/^[._]+/, '')              // pas de point/underscore en début
+    .slice(0, 100)                      // longueur max
+
   // Upload vers Supabase Storage
   const bucket = meta.is_premium ? 'pdfs-premium' : 'pdfs-public'
-  const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`
+  const fileName = `${Date.now()}_${safeName || 'document.pdf'}`
   const arrayBuffer = await file.arrayBuffer()
 
   const { error: storageError } = await supabase.storage

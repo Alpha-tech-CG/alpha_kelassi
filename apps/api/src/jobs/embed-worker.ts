@@ -9,11 +9,25 @@ interface EmbedJobData {
   pdf_url: string
 }
 
+const ALLOWED_PDF_HOSTS = [
+  process.env['SUPABASE_URL'] ? new URL(process.env['SUPABASE_URL']!).hostname : null,
+].filter(Boolean) as string[]
+
+function assertSafeStorageUrl(url: string): void {
+  let parsed: URL
+  try { parsed = new URL(url) } catch { throw new Error('pdf_url invalide') }
+  if (parsed.protocol !== 'https:') throw new Error('pdf_url doit utiliser HTTPS')
+  if (!ALLOWED_PDF_HOSTS.some((h) => parsed.hostname === h || parsed.hostname.endsWith(`.${h}`))) {
+    throw new Error(`pdf_url pointe vers un hôte non autorisé : ${parsed.hostname}`)
+  }
+}
+
 async function processEmbedJob(job: Job<EmbedJobData>) {
   const { document_id, pdf_url } = job.data
   await job.updateProgress(5)
 
-  // 1. Télécharge le PDF depuis Supabase Storage (URL signée ou publique)
+  // 1. Télécharge le PDF depuis Supabase Storage (URL validée contre SSRF)
+  assertSafeStorageUrl(pdf_url)
   const response = await fetch(pdf_url)
   if (!response.ok) throw new Error(`Impossible de télécharger le PDF : ${response.status}`)
   const buffer = Buffer.from(await response.arrayBuffer())

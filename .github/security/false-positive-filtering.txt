@@ -1,0 +1,19 @@
+## Alpha Kelassi — Règles de filtrage des faux positifs
+
+### Précédents du projet
+
+1. **Supabase client anon** : L'utilisation de `createClient` (anon key) côté serveur dans Next.js Server Components est sécurisée tant que RLS est activée sur toutes les tables. Ne pas signaler comme vulnérabilité sauf si RLS est désactivée ou si `supabaseAdmin` est utilisé à la place.
+
+2. **`authMiddleware` Hono** : Le middleware `apps/api/src/middleware/auth.ts` vérifie le JWT Supabase via `supabase.auth.getUser()`. Si un endpoint utilise ce middleware, l'auth est valide.
+
+3. **Variables d'environnement `EXPO_PUBLIC_*`** : Ces variables sont intentionnellement publiques dans Expo (nécessaire pour l'app client). Ne pas signaler leur présence dans le code comme une fuite de secrets, sauf si ce sont des clés secrètes (STRIPE_SECRET, GEMINI_API_KEY) qui ne devraient jamais être `EXPO_PUBLIC_`.
+
+4. **`trustAllCerts: false`** dans react-native-pdf : Cette configuration désactive la validation des certificats. C'est une vraie vulnérabilité — TOUJOURS signaler.
+
+5. **Chunks RAG dans les prompts IA** : Injecter du contenu de cours dans un prompt Gemini est un risque de prompt injection uniquement si l'élève peut contrôler le contenu des chunks. Les chunks viennent de PDFs uploadés par des admins — exclure si l'upload est réservé aux admins.
+
+6. **Quota Redis** : Le compteur quota dans `lib/quota.ts` utilise INCR + EXPIRE. La race condition théorique entre INCR et EXPIRE est acceptable (pire cas : 1 question supplémentaire). Ne pas signaler.
+
+7. **Signed URLs Supabase (TTL 900s)** : Les signed URLs avec TTL 15 min dans `cours/[id]/page.tsx` sont une décision de conception. Ne pas signaler comme exposition de données, sauf si l'URL est loggée ou mise en cache côté public.
+
+8. **`supabaseAdmin`** : N'existe que dans `apps/web/src/lib/supabase/server.ts` et ne doit JAMAIS être importé dans des composants clients. Signaler si importé côté client.

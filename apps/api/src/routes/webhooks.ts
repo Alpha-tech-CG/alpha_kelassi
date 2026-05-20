@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import Stripe from 'stripe'
+import { createHash } from 'crypto'
 import { supabase } from '../lib/supabase.js'
 
 const router = new Hono()
@@ -70,7 +71,27 @@ router.post('/cinetpay', async (c) => {
     cpm_trans_id: string
     cpm_result: string
     cpm_custom: string
+    cpm_site_id: string
+    cpm_amount: string
+    cpm_currency: string
+    signature: string
   }>()
+
+  // Vérification HMAC CinetPay — prévient les faux paiements
+  const apiKey = process.env['CINETPAY_API_KEY']!
+  const expectedSig = createHash('sha256')
+    .update(
+      apiKey +
+      body.cpm_amount +
+      body.cpm_currency +
+      body.cpm_trans_id +
+      body.cpm_custom
+    )
+    .digest('hex')
+
+  if (body.signature !== expectedSig) {
+    return c.json({ error: 'Invalid signature' }, 400)
+  }
 
   if (body.cpm_result !== '00') return c.json({ received: true })
 

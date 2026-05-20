@@ -1,0 +1,45 @@
+## Alpha Kelassi — Instructions de scan sécurité personnalisées
+
+### Stack à couvrir
+- Next.js 15 App Router (Server Components, Server Actions, route handlers)
+- Hono (edge API framework) — routes sous apps/api/src/routes/
+- Supabase (PostgreSQL + Auth + Storage + RLS)
+- BullMQ (queue Redis) — jobs sous apps/api/src/jobs/
+- Gemini AI (Google Generative AI) — streaming SSE
+- Stripe + CinetPay (paiements)
+- React Native / Expo (mobile)
+
+### Catégories supplémentaires à examiner
+
+**Supabase & RLS:**
+- Utilisation de `supabase` (client anon) vs `supabaseAdmin` (service role) — le service role bypass toutes les RLS
+- Requêtes sans filtre `eq('user_id', userId)` sur des tables protégées par RLS
+- Signed URLs Supabase Storage exposées dans des réponses publiques
+- Uploads fichiers sans vérification du content-type réel (magic bytes)
+
+**Auth & JWT:**
+- Endpoints API sans `authMiddleware` appliqué
+- Vérification du rôle admin côté client (contournable)
+- Sessions Supabase non invalidées après changement de mot de passe
+- Tokens JWT encodés dans des logs ou réponses d'erreur
+
+**Paiements:**
+- Webhooks Stripe sans vérification `stripe.webhooks.constructEvent()` de la signature
+- Webhooks CinetPay sans vérification HMAC de la signature
+- Mise à jour du plan utilisateur sans vérifier l'origine du webhook
+- Montants/plans modifiables côté client avant la création de la session Stripe
+
+**Injection & IA:**
+- Prompt injection via contenu utilisateur dans les prompts Gemini
+- Contenu des chunks PDF injecté directement dans un prompt sans nettoyage
+- Path traversal dans les noms de fichiers lors de l'upload vers Supabase Storage
+- Noms de fichiers PDF non sanitisés (ex: `../../etc/passwd.pdf`)
+
+**BullMQ / Redis:**
+- Données sensibles dans les job payloads BullMQ (tokens, clés)
+- `pdf_url` dans le job payload — vérifier que c'est une URL Supabase légitime
+
+**Mobile:**
+- Clés API ou secrets dans le code Expo compilé (process.env EXPO_PUBLIC_*)
+- AsyncStorage vs SecureStore pour les tokens sensibles
+- Certificats non validés (trustAllCerts dans le PDF viewer)
