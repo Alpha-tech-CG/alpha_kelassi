@@ -93,8 +93,76 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      <footer className="border-t py-6 text-center text-sm text-gray-400">
-        © 2026 Kelassi · Congo Brazzaville
+      {/* App mobile */}
+      <section className="bg-blue-600 py-16 text-center px-6">
+        <p className="text-white/80 text-sm font-medium uppercase tracking-wide mb-2">Application mobile</p>
+        <h2 className="text-3xl font-bold text-white mb-3">Révise même sans connexion</h2>
+        <p className="text-blue-100 mb-8 max-w-md mx-auto text-sm">
+          Télécharge tes cours en avance. Révise dans le bus, sans WiFi. Tes flashcards se synchronisent quand tu te reconnectes.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href="#"
+            className="inline-flex items-center gap-3 bg-black text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-900"
+          >
+            <span className="text-2xl">🍎</span>
+            <div className="text-left">
+              <p className="text-xs text-gray-400">Disponible sur</p>
+              <p className="text-sm font-semibold">App Store</p>
+            </div>
+          </a>
+          <a
+            href="#"
+            className="inline-flex items-center gap-3 bg-black text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-900"
+          >
+            <span className="text-2xl">🤖</span>
+            <div className="text-left">
+              <p className="text-xs text-gray-400">Disponible sur</p>
+              <p className="text-sm font-semibold">Google Play</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      {/* Témoignage beta */}
+      <section className="py-16 px-6 max-w-4xl mx-auto text-center">
+        <p className="text-sm text-gray-400 uppercase tracking-wide mb-6">Programme Beta — Brazzaville & Pointe-Noire</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {[
+            { quote: 'Kelassi m\'a aidé à comprendre les intégrales en 20 minutes.', name: 'Élève BAC C · Lycée Savorgnan de Brazza' },
+            { quote: 'J\'adore les flashcards. Je révise dans le bus maintenant !', name: 'Élève BEPC · Brazzaville' },
+            { quote: 'Le tuteur IA explique mieux que certains profs, franchement.', name: 'Élève BAC D · Pointe-Noire' },
+          ].map((t) => (
+            <div key={t.name} className="bg-white border rounded-2xl p-5 text-left">
+              <p className="text-gray-600 text-sm italic mb-3">"{t.quote}"</p>
+              <p className="text-xs text-gray-400">{t.name}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 text-center px-6">
+        <h2 className="text-3xl font-bold mb-4">Prêt à commencer ?</h2>
+        <p className="text-gray-500 mb-8">10 questions IA gratuites par jour. Pas de carte requise.</p>
+        <Link
+          href="/register"
+          className="px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg hover:bg-blue-700"
+        >
+          Créer mon compte gratuit
+        </Link>
+      </section>
+
+      <footer className="border-t py-8 px-6">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+          <span className="font-bold text-blue-600 text-base">Kelassi</span>
+          <div className="flex gap-6">
+            <Link href="/cgu" className="hover:text-gray-600">CGU</Link>
+            <Link href="/confidentialite" className="hover:text-gray-600">Confidentialité</Link>
+            <a href="mailto:support@kelassi.app" className="hover:text-gray-600">Contact</a>
+          </div>
+          <span>© 2026 Alpha-Tech · Congo Brazzaville</span>
+        </div>
       </footer>
     </main>
   )

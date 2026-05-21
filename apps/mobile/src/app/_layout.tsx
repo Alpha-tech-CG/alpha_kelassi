@@ -11,11 +11,33 @@ function AuthGuard({ session }: { session: Session | null }) {
   const router = useRouter()
 
   useEffect(() => {
-    const inAuth = segments[0] === '(auth)'
+    const inAuth       = segments[0] === '(auth)'
+    const inOnboarding = segments[0] === 'onboarding'
+
     if (!session && !inAuth) {
       router.replace('/(auth)/login')
-    } else if (session && inAuth) {
-      router.replace('/(tabs)/')
+      return
+    }
+    if (session && inAuth) {
+      // Vérifie si l'onboarding est déjà fait
+      supabase.from('users').select('onboarding_completed').eq('id', session.user.id).single()
+        .then(({ data }) => {
+          if (!data?.onboarding_completed) {
+            router.replace('/onboarding' as any)
+          } else {
+            router.replace('/(tabs)/')
+          }
+        })
+      return
+    }
+    if (session && !inOnboarding && !inAuth) {
+      // Vérifie onboarding seulement au premier rendu (segments[0] === undefined = root)
+      if (!segments[0]) {
+        supabase.from('users').select('onboarding_completed').eq('id', session.user.id).single()
+          .then(({ data }) => {
+            if (!data?.onboarding_completed) router.replace('/onboarding' as any)
+          })
+      }
     }
   }, [session, segments])
 
@@ -48,6 +70,7 @@ export default function RootLayout() {
         <Stack.Screen name="cours/[id]" options={{ headerShown: true, title: '' }} />
         <Stack.Screen name="examens/[id]" options={{ headerShown: true, title: '' }} />
         <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
       </Stack>
       <StatusBar style="auto" />
     </DatabaseProvider>

@@ -3,6 +3,7 @@
     "name": "Kelassi",
     "slug": "kelassi",
     "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
     "scheme": "kelassi",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,9 +16,14 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.kelassi.app",
+      "buildNumber": "1",
+      "privacyManifests": {
+        "NSPrivacyTracking": false
+      },
       "infoPlist": {
-        "NSCameraUsageDescription": "Utilisé pour scanner des documents",
-        "NSMicrophoneUsageDescription": "Utilisé pour les questions vocales"
+        "NSCameraUsageDescription": "Utilisé pour scanner des documents de cours",
+        "NSMicrophoneUsageDescription": "Utilisé pour les questions vocales à Kelassi",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -26,6 +32,10 @@
         "backgroundColor": "#2563eb"
       },
       "package": "com.kelassi.app",
+      "versionCode": 1,
+      "compileSdkVersion": 34,
+      "targetSdkVersion": 34,
+      "minSdkVersion": 23,
       "permissions": ["INTERNET", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "plugins": [

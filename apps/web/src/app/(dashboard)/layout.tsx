@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { BetaFeedbackButton } from '@/components/beta-feedback-button'
 
 const NAV = [
   { href: '/dashboard', label: 'Accueil', icon: '🏠' },
@@ -19,9 +20,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const { data: profile } = await supabase
     .from('users')
-    .select('full_name, plan, role, xp')
+    .select('full_name, plan, role, xp, onboarding_completed')
     .eq('id', user.id)
     .single()
+
+  if (profile && !profile.onboarding_completed) redirect('/onboarding')
 
   return (
     <div className="min-h-screen flex">
@@ -87,6 +90,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <main className="flex-1 overflow-auto bg-gray-50">
         {children}
       </main>
+
+      <BetaFeedbackButton />
     </div>
   )
 }

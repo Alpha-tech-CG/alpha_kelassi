@@ -13,6 +13,8 @@ import { flashcardsRouter } from './routes/flashcards.js'
 import { progressRouter } from './routes/progress.js'
 import { adminAnalyticsRouter } from './routes/admin/analytics.js'
 import { accountRouter } from './routes/account.js'
+import { onboardingRouter } from './routes/onboarding.js'
+import { feedbackRouter } from './routes/feedback.js'
 import { startEmbedWorker } from './jobs/embed-worker.js'
 import { initSentry } from './lib/monitoring.js'
 import { metricsMiddleware, getMetrics } from './middleware/metrics.js'
@@ -54,6 +56,8 @@ app.route('/api/flashcards', flashcardsRouter)
 app.route('/api/progress', progressRouter)
 app.route('/api/admin/analytics', adminAnalyticsRouter)
 app.route('/api/account', accountRouter)
+app.route('/api/onboarding', onboardingRouter)
+app.route('/api/feedback', feedbackRouter)
 app.use('/api/ai/chat', chatRateLimit)
 app.route('/webhooks', webhooksRouter)
 
