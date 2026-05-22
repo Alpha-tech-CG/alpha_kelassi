@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { createClient } from '@/lib/supabase/client'
 
 type Level = 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
 type DocType = 'cours' | 'examen'
@@ -39,9 +38,6 @@ export function UploadForm({ subjects, onSuccess }: Props) {
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
-    const { data: { session } } = await supabase.auth.getSession()
-
     const meta = {
       ...form,
       year: form.year ? parseInt(form.year) : undefined,
@@ -52,18 +48,14 @@ export function UploadForm({ subjects, onSuccess }: Props) {
     fd.append('file', file)
     fd.append('meta', JSON.stringify(meta))
 
-    const res = await fetch(
-      `${process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:3001'}/api/admin/documents`,
-      {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${session?.access_token}` },
-        body: fd,
-      }
-    )
+    const res = await fetch('/api/admin/documents', {
+      method: 'POST',
+      body: fd,
+    })
 
-    const json = await res.json() as { error?: { message: string } }
+    const json = await res.json() as { error?: string; data?: unknown }
     if (!res.ok) {
-      setError(json.error?.message ?? 'Erreur upload')
+      setError(json.error ?? 'Erreur upload')
     } else {
       setFile(null)
       if (fileRef.current) fileRef.current.value = ''
