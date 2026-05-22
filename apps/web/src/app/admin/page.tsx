@@ -1,16 +1,72 @@
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 
-const API_URL = process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:3001'
+const supabaseAdmin = createAdminClient(
+  process.env['NEXT_PUBLIC_SUPABASE_URL']!,
+  process.env['SUPABASE_SERVICE_ROLE_KEY']!
+)
 
-async function getAnalytics(token: string) {
+async function getAnalytics() {
   try {
-    const res = await fetch(`${API_URL}/api/admin/analytics`, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
-    })
-    if (!res.ok) return null
-    const json = await res.json()
-    return json.data
+    const [
+      { data: topDocs },
+      { data: activeSubs },
+      { data: recentQuestions },
+      { count: totalUsers },
+    ] = await Promise.all([
+      supabaseAdmin
+        .from('document_views')
+        .select('document_id, documents(title, type, level)')
+        .gte('viewed_at', new Date(Date.now() - 7 * 86400000).toISOString())
+        .limit(500),
+
+      supabaseAdmin
+        .from('subscriptions')
+        .select('plan, status, stripe_sub_id, cinetpay_ref, expires_at, created_at')
+        .eq('status', 'active'),
+
+      supabaseAdmin
+        .from('chat_messages')
+        .select('content, created_at')
+        .eq('role', 'user')
+        .order('created_at', { ascending: false })
+        .limit(50),
+
+      supabaseAdmin.from('users').select('id', { count: 'exact', head: true }),
+    ])
+
+    // Agrège les vues par document
+    const viewsByDoc = new Map<string, { count: number; title: string; type: string; level: string }>()
+    for (const row of topDocs ?? []) {
+      const doc = row.documents as { title: string; type: string; level: string } | null
+      const cur = viewsByDoc.get(row.document_id) ?? { count: 0, title: doc?.title ?? '', type: doc?.type ?? '', level: doc?.level ?? '' }
+      viewsByDoc.set(row.document_id, { ...cur, count: cur.count + 1 })
+    }
+    const topDocsSorted = [...viewsByDoc.entries()]
+      .map(([id, v]) => ({ document_id: id, ...v }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10)
+
+    const stripeCount = (activeSubs ?? []).filter((s) => s.stripe_sub_id).length
+    const cinetpayCount = (activeSubs ?? []).filter((s) => s.cinetpay_ref).length
+
+    return {
+      top_documents: topDocsSorted,
+      revenue: {
+        active_subscriptions: (activeSubs ?? []).length,
+        stripe_count: stripeCount,
+        cinetpay_count: cinetpayCount,
+        monthly_revenue_fcfa: stripeCount * 2000 + cinetpayCount * 2000,
+      },
+      recent_questions: (recentQuestions ?? []).slice(0, 20).map((q) => ({
+        content: q.content.slice(0, 120),
+        asked_at: q.created_at,
+      })),
+      totals: {
+        users: totalUsers ?? 0,
+        active_subs: (activeSubs ?? []).length,
+      },
+    }
   } catch {
     return null
   }
@@ -18,8 +74,9 @@ async function getAnalytics(token: string) {
 
 export default async function AdminOverviewPage() {
   const supabase = await createClient()
-  const { data: { session } } = await supabase.auth.getSession()
-  const analytics = session ? await getAnalytics(session.access_token) : null
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const analytics = user ? await getAnalytics() : null
 
   const totals = analytics?.totals ?? { users: 0, active_subs: 0 }
   const revenue = analytics?.revenue ?? { monthly_revenue_fcfa: 0, active_subscriptions: 0, stripe_count: 0, cinetpay_count: 0 }
@@ -36,7 +93,7 @@ export default async function AdminOverviewPage() {
   return (
     <div className="px-8 py-8 max-w-6xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-black text-gray-900">Vue d'ensemble</h1>
+        <h1 className="text-2xl font-black text-gray-900">Vue d&apos;ensemble</h1>
         <p className="text-gray-500 text-sm mt-1">Tableau de bord administrateur Kelassi</p>
       </div>
 
@@ -61,7 +118,7 @@ export default async function AdminOverviewPage() {
             <p className="text-gray-400 text-sm text-center py-6">Aucune donnée</p>
           ) : (
             <div className="space-y-3">
-              {(topDocs as any[]).slice(0, 8).map((d: any, i: number) => (
+              {topDocs.slice(0, 8).map((d, i) => (
                 <div key={d.document_id} className="flex items-center gap-3">
                   <span className="w-5 text-xs font-bold text-gray-400 text-right flex-shrink-0">{i + 1}</span>
                   <div className="flex-1 min-w-0">
@@ -84,7 +141,7 @@ export default async function AdminOverviewPage() {
             <p className="text-gray-400 text-sm text-center py-6">Aucune donnée</p>
           ) : (
             <div className="space-y-3">
-              {(recentQ as any[]).map((q: any, i: number) => (
+              {recentQ.map((q, i) => (
                 <div key={i} className="flex gap-3">
                   <span className="text-blue-400 flex-shrink-0 mt-0.5">🤖</span>
                   <div className="min-w-0">
@@ -99,12 +156,6 @@ export default async function AdminOverviewPage() {
           )}
         </div>
       </div>
-
-      {!analytics && (
-        <div className="mt-6 bg-orange-50 border border-orange-100 rounded-xl p-4 text-orange-700 text-sm">
-          ⚠️ Impossible de charger les analytics — l'API est peut-être hors ligne.
-        </div>
-      )}
     </div>
   )
 }
