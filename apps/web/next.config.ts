@@ -18,24 +18,20 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 86400,
   },
 
-  // pdf-parse et mammoth sont des libs Node.js pures — ne pas bundler avec webpack
-  serverExternalPackages: ['pdf-parse', 'mammoth'],
+  // pdfjs-dist et mammoth sont des libs Node.js — ne pas bundler avec webpack
+  serverExternalPackages: ['pdfjs-dist', 'mammoth', 'canvas'],
 
   // Réduit le JS importé pour les libs lourdes
   experimental: {
     optimizePackageImports: ['recharts', 'react-pdf', 'lucide-react'],
   },
 
-  // pdf-parse : son index.js require() ses propres fichiers de test, ce qui
-  // cause "unsupported Unicode escape sequence" dans webpack.
-  // On force l'externalisation côté webpack en plus de serverExternalPackages.
-  webpack(config, { isServer }) {
-    if (isServer) {
-      config.externals = [
-        ...(Array.isArray(config.externals) ? config.externals : [config.externals].filter(Boolean)),
-        'pdf-parse',
-        'mammoth',
-      ]
+  webpack(config) {
+    // pdfjs-dist essaie d'importer canvas pour le rendu d'images.
+    // En extraction texte serveur on n'en a pas besoin.
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      canvas: false,
     }
     return config
   },

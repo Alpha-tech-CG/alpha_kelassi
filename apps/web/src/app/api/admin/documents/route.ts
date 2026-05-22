@@ -37,12 +37,30 @@ function detectFormat(filename: string): 'pdf' | 'docx' | 'txt' | null {
 async function extractText(buffer: Buffer, format: 'pdf' | 'docx' | 'txt'): Promise<string> {
   if (format === 'txt') return buffer.toString('utf-8')
   if (format === 'pdf') {
-    // Importer le fichier lib directement évite que pdf-parse/index.js
-    // charge ses fichiers de test (cause du "unsupported Unicode escape sequence")
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const pdfParse = require('pdf-parse/lib/pdf-parse')
-    const result = await pdfParse(buffer)
-    return result.text
+    // Utiliser pdfjs-dist directement (déjà installé via react-pdf).
+    // pdf-parse bundlait une vieille version de pdfjs incompatible avec Node.js 20.
+    const pdfjs = await import('pdfjs-dist')
+    pdfjs.GlobalWorkerOptions.workerSrc = '' // pas de worker Web en serverless
+
+    const doc = await pdfjs.getDocument({
+      data: new Uint8Array(buffer),
+      useWorkerFetch: false,
+      isEvalSupported: false,
+      useSystemFonts: true,
+      disableFontFace: true,
+    }).promise
+
+    const pages: string[] = []
+    for (let i = 1; i <= doc.numPages; i++) {
+      const page = await doc.getPage(i)
+      const content = await page.getTextContent()
+      const text = content.items
+        .map((item) => ('str' in item ? (item as { str: string }).str : ''))
+        .join(' ')
+      pages.push(text)
+    }
+    await doc.destroy()
+    return pages.join('\n')
   }
   if (format === 'docx') {
     const mammoth = await import('mammoth')
