@@ -43,7 +43,7 @@ async function extractText(buffer: Buffer, format: 'pdf' | 'docx' | 'txt'): Prom
     const pdfjs = await import('pdfjs-dist')
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     pdfjs.GlobalWorkerOptions.workerSrc = require.resolve(
-      'pdfjs-dist/build/pdf.worker.min.mjs'
+      'pdfjs-dist/build/pdf.worker.min.js'
     )
 
     const doc = await pdfjs.getDocument({
