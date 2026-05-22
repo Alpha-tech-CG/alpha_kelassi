@@ -37,13 +37,16 @@ function detectFormat(filename: string): 'pdf' | 'docx' | 'txt' | null {
 async function extractText(buffer: Buffer, format: 'pdf' | 'docx' | 'txt'): Promise<string> {
   if (format === 'txt') return buffer.toString('utf-8')
   if (format === 'pdf') {
-    // pdfjs-dist en Node.js : require.resolve donne le chemin absolu du worker
-    // au runtime (pas bundlé grâce à serverExternalPackages).
-    // pdfjs utilise worker_threads avec ce chemin → pas besoin de Web Worker.
+    // pdfjs-dist v4 est ESM-only : on ne peut pas utiliser require.resolve()
+    // sur les fichiers .mjs (webpack essaie de les bundler et échoue).
+    // Solution : createRequire() depuis le module Node.js natif 'module'
+    // crée une fonction require dynamique que webpack n'analyse PAS statiquement.
+    // Au runtime, Node.js résout correctement le chemin absolu du worker .mjs.
     const pdfjs = await import('pdfjs-dist')
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    pdfjs.GlobalWorkerOptions.workerSrc = require.resolve(
-      'pdfjs-dist/build/pdf.worker.min.js'
+    const { createRequire } = await import('module')
+    const _require = createRequire(process.cwd() + '/package.json')
+    pdfjs.GlobalWorkerOptions.workerSrc = _require.resolve(
+      'pdfjs-dist/build/pdf.worker.min.mjs'
     )
 
     const doc = await pdfjs.getDocument({
