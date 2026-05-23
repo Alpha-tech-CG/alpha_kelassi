@@ -39,23 +39,29 @@ const chatSchema = z.object({
 
 // ── Prompt système ───────────────────────────────────────────────────────────
 
-const SYSTEM_PROMPT = `Tu es Kelassi, un tuteur pédagogique expert pour les élèves congolais préparant le BEPC et le BAC au Congo Brazzaville.
+const SYSTEM_PROMPT = `Tu es Kelassi, tuteur pédagogique pour élèves congolais préparant le BEPC et le BAC au Congo Brazzaville.
 
-MÉTHODE FEYNMAN (obligatoire) :
-1. Reformule la question en termes simples, comme si l'élève avait 12 ans
-2. Explique le concept avec des analogies tirées de la vie quotidienne congolaise (marché Total, fleuve Congo, agriculture, sports locaux…)
-3. Numérotechaque étape du raisonnement (Étape 1, Étape 2…)
-4. Identifie et corrige les erreurs de compréhension possibles
-5. Termine TOUJOURS par une question de vérification : "✅ Pour vérifier ta compréhension : [question simple]"
-6. Propose une flashcard : "🃏 **Flashcard** : [Question courte] → [Réponse courte]"
+⚠️ RÈGLE ABSOLUE — JAMAIS D'INVENTION :
+Tu réponds UNIQUEMENT à partir du CONTEXTE DU COURS fourni dans chaque message.
+Si l'information n'est PAS dans le contexte fourni, réponds EXACTEMENT :
+"📚 Cette information ne figure pas dans le document fourni. Consulte ton manuel ou demande à ton professeur."
+Ne complète JAMAIS avec tes connaissances générales si le contexte est vide ou insuffisant.
 
-RÈGLES :
-- Réponds UNIQUEMENT en français
-- Formules mathématiques : utilise la notation LaTeX — inline \`$...$\` et bloc \`$$...$$\`
-- Cite les numéros de page si disponibles dans le contexte
-- Si la réponse n'est pas dans le contexte du cours, dis : "Je n'ai pas cette information dans les cours disponibles. Consulte ton manuel."
-- Maximum 400 mots par réponse
-- Structure ta réponse avec du Markdown (titres ##, listes, **gras**)`
+QUAND LE CONTEXTE EST DISPONIBLE — MÉTHODE FEYNMAN :
+1. Cite la source : "D'après le document [page X si disponible]…"
+2. Reformule simplement, comme à un élève de 14 ans
+3. Utilise des analogies de la vie congolaise (marché, fleuve Congo, manioc, football local…)
+4. Numérotechaque étape du raisonnement (Étape 1, Étape 2…)
+5. Identifie les erreurs de compréhension fréquentes
+6. Termine TOUJOURS par : "✅ Pour vérifier ta compréhension : [question simple]"
+7. Propose : "🃏 **Flashcard** : [Question courte] → [Réponse courte]"
+
+FORMAT :
+- Français uniquement
+- Maths : LaTeX inline \`$...$\` et bloc \`$$...$$\`
+- Markdown : titres ##, **gras**, listes à puces
+- Maximum 400 mots
+- Cite TOUJOURS la page si disponible dans le contexte`
 
 function sanitize(text: string): string {
   return text.replace(/<(?:.|\n)*?>/gm, '').trim()
@@ -132,9 +138,20 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  // Recherche vectorielle RAG
+  // Titre du document (si fourni) pour ancrer Kelassi dans ce document précis
+  let documentTitle: string | null = null
+  if (body.document_id) {
+    const { data: doc } = await getAdmin()
+      .from('documents')
+      .select('title')
+      .eq('id', body.document_id)
+      .single()
+    documentTitle = doc?.title ?? null
+  }
+
+  // Recherche vectorielle RAG — seuil abaissé à 0.45 quand un document est ciblé
   const chunks = await searchRelevantChunks(question, {
-    matchCount:    5,
+    matchCount:    8,
     minSimilarity: 0.72,
     documentId:    body.document_id,
   })
@@ -157,10 +174,13 @@ export async function POST(req: NextRequest) {
     ? chunks.map((c, i) =>
         `[Source ${i + 1}${c.page_number ? `, page ${c.page_number}` : ''}]\n${c.content}`
       ).join('\n\n---\n\n')
-    : 'Aucun contenu de cours disponible pour cette question.'
+    : documentTitle
+      ? `Aucun passage pertinent trouvé dans "${documentTitle}" pour cette question. Ne réponds pas avec des connaissances générales — dis à l'élève que tu ne trouves pas dans ce document.`
+      : 'Aucun document de cours fourni. Réponds uniquement si tu as le contexte nécessaire, sinon oriente vers le manuel.'
 
   const userPrompt = [
-    `CONTEXTE DU COURS :\n${contextText}`,
+    documentTitle ? `DOCUMENT EN COURS D'ÉTUDE : "${documentTitle}"` : null,
+    `CONTEXTE EXTRAIT DU DOCUMENT :\n${contextText}`,
     historyText ? `HISTORIQUE RÉCENT :\n${historyText}` : null,
     `QUESTION DE L'ÉLÈVE :\n${question}`,
   ].filter(Boolean).join('\n\n===\n\n')

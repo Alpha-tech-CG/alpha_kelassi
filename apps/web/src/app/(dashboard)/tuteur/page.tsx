@@ -35,6 +35,7 @@ export default function TuteurPage() {
   const [sourcesCount, setSourcesCount] = useState(0)
   const [exerciseContext, setExerciseContext] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [clearingHistory, setClearingHistory] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -55,6 +56,16 @@ export default function TuteurPage() {
     if (!res.ok) return
     const json = await res.json() as { data?: typeof sessions }
     setSessions(json.data ?? [])
+  }
+
+  async function clearHistory() {
+    if (!confirm('Effacer tout l\'historique des conversations ?')) return
+    setClearingHistory(true)
+    await fetch('/api/ai/sessions', { method: 'DELETE' })
+    setSessions([])
+    setMessages([])
+    setSessionId(null)
+    setClearingHistory(false)
   }
 
   async function loadSessionMessages(sid: string) {
@@ -171,7 +182,19 @@ export default function TuteurPage() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-3 space-y-1">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-2">Historique</p>
+          <div className="flex items-center justify-between px-2 py-2">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Historique</p>
+            {sessions.length > 0 && (
+              <button
+                onClick={clearHistory}
+                disabled={clearingHistory}
+                className="text-xs text-red-400 hover:text-red-600 transition-colors disabled:opacity-40"
+                title="Effacer tout l'historique"
+              >
+                {clearingHistory ? '…' : '🗑 Tout effacer'}
+              </button>
+            )}
+          </div>
           {sessions.length === 0 && (
             <p className="text-xs text-gray-400 px-3 py-3">Aucune conversation</p>
           )}
@@ -186,7 +209,7 @@ export default function TuteurPage() {
               }`}
             >
               <p className="truncate">{s.documents?.title ?? 'Session libre'}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{new Date(s.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}</p>
+              <p className="text-xs text-gray-400 mt-0.5">{new Date(s.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
             </button>
           ))}
         </div>
@@ -207,15 +230,29 @@ export default function TuteurPage() {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-2 space-y-1">
+              {sessions.length === 0 && (
+                <p className="text-xs text-gray-400 px-3 py-3">Aucune conversation</p>
+              )}
               {sessions.map((s) => (
                 <button key={s.id} onClick={() => loadSessionMessages(s.id)}
                   className={`w-full text-left px-3 py-2 rounded-lg text-sm ${s.id === sessionId ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'}`}
                 >
                   <p className="truncate">{s.documents?.title ?? 'Session libre'}</p>
-                  <p className="text-xs text-gray-400">{new Date(s.created_at).toLocaleDateString('fr-FR')}</p>
+                  <p className="text-xs text-gray-400">{new Date(s.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                 </button>
               ))}
             </div>
+            {sessions.length > 0 && (
+              <div className="p-3 border-t">
+                <button
+                  onClick={clearHistory}
+                  disabled={clearingHistory}
+                  className="w-full py-2 text-xs text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition-colors disabled:opacity-40"
+                >
+                  {clearingHistory ? 'Suppression…' : '🗑 Effacer l\'historique'}
+                </button>
+              </div>
+            )}
           </aside>
         </div>
       )}
