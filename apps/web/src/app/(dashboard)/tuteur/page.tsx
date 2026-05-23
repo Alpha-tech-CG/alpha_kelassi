@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { MarkdownRenderer } from '@/components/markdown-renderer'
 
 interface Message {
   id: string
@@ -292,20 +293,24 @@ export default function TuteurPage() {
                 {msg.role === 'assistant' && (
                   <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center text-white text-xs font-black flex-shrink-0 mt-1">K</div>
                 )}
-                <div className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm whitespace-pre-wrap leading-relaxed ${
-                  msg.role === 'user'
-                    ? 'bg-emerald-600 text-white rounded-br-sm shadow-md'
-                    : 'bg-white border border-gray-100 text-gray-800 rounded-bl-sm shadow-sm'
-                }`}>
-                  {msg.content}
-                  {msg.streaming && (
-                    <span className="inline-flex gap-0.5 ml-1 align-middle">
-                      <span className="w-1 h-1 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-1 h-1 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-1 h-1 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </span>
-                  )}
-                </div>
+                {msg.role === 'user' ? (
+                  /* Message utilisateur — texte brut, bulle verte */
+                  <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-br-sm text-sm whitespace-pre-wrap leading-relaxed bg-emerald-600 text-white shadow-md">
+                    {msg.content}
+                  </div>
+                ) : (
+                  /* Réponse Kelassi — Markdown + LaTeX rendu */
+                  <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm bg-white border border-gray-100 text-gray-800 shadow-sm">
+                    <MarkdownRenderer content={msg.content} prose={false} />
+                    {msg.streaming && (
+                      <span className="inline-flex gap-0.5 mt-1 align-middle">
+                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </span>
+                    )}
+                  </div>
+                )}
                 {msg.role === 'user' && (
                   <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 text-xs font-bold flex-shrink-0 mt-1">Moi</div>
                 )}
