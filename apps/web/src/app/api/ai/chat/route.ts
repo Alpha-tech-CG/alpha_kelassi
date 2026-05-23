@@ -33,8 +33,8 @@ function getAdmin() {
 
 const chatSchema = z.object({
   question:    z.string().min(1).max(2000),
-  session_id:  z.string().uuid().optional(),
-  document_id: z.string().uuid().optional(),
+  session_id:  z.string().uuid().nullish().transform((v) => v ?? undefined),
+  document_id: z.string().uuid().nullish().transform((v) => v ?? undefined),
 })
 
 // ── Prompt système ───────────────────────────────────────────────────────────

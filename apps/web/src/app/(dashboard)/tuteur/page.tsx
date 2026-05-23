@@ -92,10 +92,15 @@ export default function TuteurPage() {
       const params = new URLSearchParams(window.location.search)
       const documentId = params.get('document')
 
+      // Ne pas envoyer les champs null — Zod attend undefined, pas null
+      const chatBody: Record<string, string> = { question }
+      if (sessionId)   chatBody.session_id  = sessionId
+      if (documentId)  chatBody.document_id = documentId
+
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, session_id: sessionId, document_id: documentId }),
+        body: JSON.stringify(chatBody),
       })
 
       if (!res.ok) {
