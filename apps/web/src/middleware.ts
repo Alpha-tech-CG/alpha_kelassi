@@ -35,7 +35,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirige vers /login si non connecté et sur une page protégée
+  // Les routes /api/ gèrent leur propre authentification (pas de redirect)
   const isPublic = PUBLIC_ROUTES.some((r) => pathname === r || pathname.startsWith('/auth'))
+    || pathname.startsWith('/api/')
   if (!user && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url))
   }

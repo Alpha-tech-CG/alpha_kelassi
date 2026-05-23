@@ -116,7 +116,11 @@ export default function TuteurPage() {
           if (line.startsWith('data: ')) {
             try {
               const payload = JSON.parse(line.slice(6))
-              if (payload.text) {
+              if (payload.error) {
+                setMessages((prev) => prev.map((m) =>
+                  m.id === assistantMsg.id ? { ...m, content: `❌ ${payload.error}`, streaming: false } : m
+                ))
+              } else if (payload.text) {
                 setMessages((prev) => prev.map((m) =>
                   m.id === assistantMsg.id ? { ...m, content: m.content + payload.text } : m
                 ))

@@ -178,31 +178,40 @@ export async function POST(req: NextRequest) {
     async start(controller) {
       const enc = new TextEncoder()
 
-      // Métadonnées en premier
-      controller.enqueue(enc.encode(
-        `event: meta\ndata: ${JSON.stringify({
-          session_id:      sessionId,
-          quota_remaining: quota.remaining,
-          sources_count:   chunks.length,
-        })}\n\n`
-      ))
+      try {
+        // Métadonnées en premier
+        controller.enqueue(enc.encode(
+          `event: meta\ndata: ${JSON.stringify({
+            session_id:      sessionId,
+            quota_remaining: quota.remaining,
+            sources_count:   chunks.length,
+          })}\n\n`
+        ))
 
-      for await (const chunk of stream) {
-        const text = chunk.text
-        if (text) {
-          fullResponse += text
-          controller.enqueue(enc.encode(`data: ${JSON.stringify({ text })}\n\n`))
+        for await (const chunk of stream) {
+          const text = chunk.text
+          if (text) {
+            fullResponse += text
+            controller.enqueue(enc.encode(`data: ${JSON.stringify({ text })}\n\n`))
+          }
         }
+
+        controller.enqueue(enc.encode('event: done\ndata: {}\n\n'))
+        controller.close()
+
+        // Sauvegarde asynchrone via admin client (le client cookié peut expirer dans le callback)
+        Promise.all([
+          saveChatMessages(getAdmin(), sessionId!, question, fullResponse),
+          redis.set(cacheKey, fullResponse, { ex: 86400 }),
+        ]).catch(console.error)
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Erreur Gemini inconnue'
+        console.error('[chat/stream] error:', message)
+        try {
+          controller.enqueue(enc.encode(`data: ${JSON.stringify({ error: message })}\n\n`))
+          controller.close()
+        } catch {}
       }
-
-      controller.enqueue(enc.encode('event: done\ndata: {}\n\n'))
-      controller.close()
-
-      // Sauvegarde asynchrone via admin client (le client cookié peut expirer dans le callback)
-      Promise.all([
-        saveChatMessages(getAdmin(), sessionId!, question, fullResponse),
-        redis.set(cacheKey, fullResponse, { ex: 86400 }),
-      ]).catch(console.error)
     },
   })
 
