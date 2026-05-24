@@ -35,6 +35,10 @@ const chatSchema = z.object({
   question:    z.string().min(1).max(2000),
   session_id:  z.string().uuid().nullish().transform((v) => v ?? undefined),
   document_id: z.string().uuid().nullish().transform((v) => v ?? undefined),
+  image: z.object({
+    data:     z.string().min(1),   // base64
+    mimeType: z.string().min(1),   // 'image/jpeg' etc.
+  }).optional(),
 })
 
 // ── Prompt système ───────────────────────────────────────────────────────────
@@ -65,6 +69,13 @@ Ne donne JAMAIS la réponse directement. À la place :
 3. 🔢 Si calcul : montre la MÉTHODE de la première étape, laisse l'élève faire les suivantes
 4. ✅ **Question de vérification** à la fin : "Maintenant essaie : [exercice similaire simple]"
 5. 🃏 **Flashcard** (uniquement quand le concept est maîtrisé) : [Question] → [Réponse]
+
+── QUAND L'ÉLÈVE ENVOIE UNE IMAGE ──
+1. Décris brièvement ce que tu vois (type d'exercice, matière, niveau apparent)
+2. Ne résous PAS l'exercice directement
+3. Identifie l'étape clé qui bloque probablement l'élève
+4. Pose une première question ciblée pour l'orienter
+Exemple : "Je vois un système de deux équations. Quelle méthode as-tu essayée jusqu'ici ?"
 
 ── EXCEPTIONS ──
 - Si l'élève demande explicitement "donne-moi la réponse" ou "je n'y arrive vraiment pas après plusieurs essais" → donne la réponse complète en expliquant chaque étape
@@ -201,15 +212,21 @@ export async function POST(req: NextRequest) {
     `QUESTION DE L'ÉLÈVE :\n${question}`,
   ].filter(Boolean).join('\n\n===\n\n')
 
+  // Construction des parts : texte + image optionnelle
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parts: any[] = [{ text: userPrompt }]
+  if (body.image) {
+    parts.push({ inlineData: { mimeType: body.image.mimeType, data: body.image.data } })
+  }
+
   // thinkingBudget:0 — désactive le mode "réflexion" de Gemini 2.5 Flash
-  // sans ça il réfléchit en silence 30-60s avant d'émettre le moindre token
   const stream = await getGenai().models.generateContentStream({
     model:    'gemini-2.5-flash',
     config:   {
       systemInstruction: SYSTEM_PROMPT,
       thinkingConfig:    { thinkingBudget: 0 },
     },
-    contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+    contents: [{ role: 'user', parts }],
   })
 
   let fullResponse = ''
