@@ -114,14 +114,21 @@ function groupExercises(
   }))
 }
 
+interface SolutionState {
+  content:   string
+  streaming: boolean
+  shown:     boolean
+}
+
 export function ExamenViewer({
   docId, title, level, year,
   enonceUrl, corrigeUrl, corrigeIsPremium,
   exercises, contextChunks,
 }: Props) {
-  const [activePanel, setActivePanel] = useState<Panel>('enonce')
+  const [activePanel,      setActivePanel]      = useState<Panel>('enonce')
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null)
-  const [copiedId, setCopiedId] = useState<string | null>(null)
+  const [copiedId,         setCopiedId]         = useState<string | null>(null)
+  const [solutions,        setSolutions]        = useState<Record<string, SolutionState>>({})
 
   useEffect(() => {
     saveExamHistorique({ id: docId, title, level, year })
@@ -153,6 +160,78 @@ export function ExamenViewer({
     const q = encodeURIComponent(`Explique-moi cet exercice :\n\n${preview}…`)
     return `/tuteur?document=${docId}&exercise=${exercise.id}&q=${q}`
   }
+
+  /* ── Stream de la solution complète ────────────────────────────────── */
+  const getSolution = useCallback(async (exercise: ExerciseChunk) => {
+    const exId = exercise.id
+
+    // Si déjà visible, juste masquer/afficher
+    if (solutions[exId]?.content && !solutions[exId]?.streaming) {
+      setSolutions((prev) => ({
+        ...prev,
+        [exId]: { ...prev[exId], shown: !prev[exId].shown },
+      }))
+      return
+    }
+
+    // Initialise l'état de streaming
+    setSolutions((prev) => ({ ...prev, [exId]: { content: '', streaming: true, shown: true } }))
+
+    const question = `Donne-moi la solution complète et détaillée de cet exercice avec toutes les étapes expliquées. Je veux comprendre chaque étape du raisonnement.\n\nExercice :\n${exercise.content}`
+
+    try {
+      const body: Record<string, string> = { question, document_id: docId }
+      const res = await fetch('/api/ai/chat', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(body),
+      })
+
+      if (!res.ok) {
+        setSolutions((prev) => ({
+          ...prev,
+          [exId]: { content: '❌ Impossible d\'obtenir la solution. Réessaie.', streaming: false, shown: true },
+        }))
+        return
+      }
+
+      const reader  = res.body!.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
+        for (const line of lines) {
+          if (!line.trim() || line.startsWith('event:')) continue
+          if (line.startsWith('data: ')) {
+            try {
+              const payload = JSON.parse(line.slice(6))
+              if (typeof payload.text === 'string' && payload.text.length > 0) {
+                setSolutions((prev) => ({
+                  ...prev,
+                  [exId]: { ...prev[exId], content: (prev[exId]?.content ?? '') + payload.text },
+                }))
+              }
+            } catch { /* non-JSON */ }
+          }
+        }
+      }
+    } catch {
+      setSolutions((prev) => ({
+        ...prev,
+        [exId]: { content: '❌ Erreur de connexion. Réessaie.', streaming: false, shown: true },
+      }))
+    } finally {
+      setSolutions((prev) => ({
+        ...prev,
+        [exId]: { ...prev[exId], streaming: false },
+      }))
+    }
+  }, [docId, solutions])
 
   const copyLink = useCallback(async (exId: string) => {
     const url = `${window.location.origin}/examens/${docId}#ex-${exId}`
@@ -310,17 +389,38 @@ export function ExamenViewer({
                         </div>
 
                         {/* Actions */}
-                        <div className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-2 flex-wrap mb-3">
                           {ex.page_number && (
                             <span className="sm:hidden text-xs text-gray-400 bg-white px-2 py-1 rounded-lg border border-gray-100">
                               📄 p. {ex.page_number}
                             </span>
                           )}
+                          {/* Bouton solution complète */}
+                          <button
+                            onClick={() => getSolution(ex)}
+                            disabled={solutions[ex.id]?.streaming}
+                            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border-2 transition-all shadow-sm ${
+                              solutions[ex.id]?.shown && solutions[ex.id]?.content
+                                ? 'bg-amber-50 text-amber-700 border-amber-300 hover:bg-amber-100'
+                                : 'bg-amber-500 text-white border-amber-500 hover:bg-amber-600'
+                            } disabled:opacity-60 disabled:cursor-not-allowed`}
+                          >
+                            {solutions[ex.id]?.streaming ? (
+                              <><span className="animate-spin">⏳</span> Génération…</>
+                            ) : solutions[ex.id]?.shown && solutions[ex.id]?.content ? (
+                              '🔼 Masquer la solution'
+                            ) : solutions[ex.id]?.content ? (
+                              '💡 Afficher la solution'
+                            ) : (
+                              '💡 Solution complète'
+                            )}
+                          </button>
+
                           <Link
                             href={buildTuteurUrl(ex)}
                             className="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm"
                           >
-                            🤖 Expliquer avec Kelassi
+                            🤖 Me faire guider
                           </Link>
                           <button
                             onClick={() => copyLink(ex.id)}
@@ -333,6 +433,26 @@ export function ExamenViewer({
                             {isCopied ? '✓ Lien copié !' : '🔗 Partager'}
                           </button>
                         </div>
+
+                        {/* Solution complète streamée */}
+                        {solutions[ex.id]?.shown && (solutions[ex.id]?.content || solutions[ex.id]?.streaming) && (
+                          <div className="rounded-xl border-2 border-amber-200 bg-amber-50/60 overflow-hidden">
+                            <div className="flex items-center gap-2 px-4 py-2.5 bg-amber-100 border-b border-amber-200">
+                              <span className="text-base">💡</span>
+                              <p className="text-xs font-bold text-amber-800 uppercase tracking-wide">Solution complète · Kelassi IA</p>
+                              {solutions[ex.id]?.streaming && (
+                                <span className="ml-auto inline-flex gap-0.5">
+                                  <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                  <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                  <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                </span>
+                              )}
+                            </div>
+                            <div className="px-4 py-4 text-sm">
+                              <MarkdownRenderer content={solutions[ex.id].content} prose={false} />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
