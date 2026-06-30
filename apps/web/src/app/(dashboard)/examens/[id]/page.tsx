@@ -59,10 +59,12 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
       .get(),
   ])
 
-  const exercises    = exercisesSnap.docs.map((d) => ({ id: d.id, ...d.data() }))
-  const contextChunks = contextChunksSnap.docs
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const exercises    = exercisesSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const contextChunks = (contextChunksSnap.docs
     .map((d) => ({ id: d.id, ...d.data() }))
-    .filter((c: any) => !c.metadata?.is_exercise)
+    .filter((c: any) => !c.metadata?.is_exercise)) as any[]
 
   const enonceUrl  = doc.pdf_url ?? null
   const corrigeUrl = doc.corrige_url ?? null

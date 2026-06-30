@@ -179,6 +179,9 @@ importers:
       firebase:
         specifier: ^12.15.0
         version: 12.15.0
+      firebase-admin:
+        specifier: ^14.1.0
+        version: 14.1.0
       katex:
         specifier: ^0.17.0
         version: 0.17.0
