@@ -18,7 +18,10 @@ import { onboardingRouter } from './routes/onboarding.js'
 import { feedbackRouter } from './routes/feedback.js'
 import { adminNotificationsRouter } from './routes/admin/notifications.js'
 import { notificationsRouter } from './routes/notifications.js'
+import { adminSynthesizeRouter } from './routes/admin/synthesize.js'
+import { chaptersRouter } from './routes/chapters.js'
 import { startEmbedWorker } from './jobs/embed-worker.js'
+import { startSynthesizeWorker } from './jobs/synthesize-worker.js'
 import { initSentry } from './lib/monitoring.js'
 import { metricsMiddleware, getMetrics } from './middleware/metrics.js'
 import { chatRateLimit } from './middleware/rate-limit.js'
@@ -27,8 +30,17 @@ import { chatRateLimit } from './middleware/rate-limit.js'
 const queueRedisUrl = process.env['QUEUE_REDIS_URL']
 if (queueRedisUrl && !queueRedisUrl.includes('xxxx')) {
   startEmbedWorker()
+  startSynthesizeWorker()
 }
 initSentry().catch(() => null)
+
+// Health check Redis au démarrage
+import { redis } from './lib/redis.js'
+redis.ping().then(() => {
+  console.log('✅ Redis connecté')
+}).catch((err) => {
+  console.error('❌ Redis indisponible — le rate limiting et le cache ne fonctionneront pas:', err)
+})
 
 const app = new Hono()
 
@@ -66,6 +78,8 @@ app.route('/api/onboarding', onboardingRouter)
 app.route('/api/feedback', feedbackRouter)
 app.route('/api/admin/notifications', adminNotificationsRouter)
 app.route('/api/notifications', notificationsRouter)
+app.route('/api/admin/synthesize', adminSynthesizeRouter)
+app.route('/api/chapters', chaptersRouter)
 app.use('/api/ai/chat', chatRateLimit)
 app.route('/webhooks', webhooksRouter)
 

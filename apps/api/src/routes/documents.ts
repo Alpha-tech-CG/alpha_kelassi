@@ -1,136 +1,127 @@
-﻿import { Hono } from 'hono'
+import { Hono } from 'hono'
 import type { AppVariables } from '../lib/types.js'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
-
 import { redis } from '../lib/redis.js'
 import { authMiddleware } from '../middleware/auth.js'
-import { supabaseAdmin } from '../lib/supabase.js'
+import { adminDb, adminStorage, COLLECTIONS } from '../lib/firebase.js'
 
 const router = new Hono<{ Variables: AppVariables }>()
-
 router.use('*', authMiddleware)
 
-// GET /api/documents?subject_id=&type=cours&level=bepc&year=2023&cursor=&limit=20
+// GET /api/documents?subject_id=&type=cours&level=bepc&cursor=&limit=20
 router.get('/', zValidator('query', z.object({
-  subject_id: z.string().uuid().optional(),
-  type: z.enum(['cours', 'examen']).optional(),
-  level: z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']).optional(),
-  year: z.coerce.number().int().optional(),
-  cursor: z.string().optional(),
-  limit: z.coerce.number().int().min(1).max(50).default(20),
+  subject_id: z.string().optional(),
+  type:       z.enum(['cours', 'examen']).optional(),
+  level:      z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']).optional(),
+  year:       z.coerce.number().int().optional(),
+  limit:      z.coerce.number().int().min(1).max(50).default(20),
 })), async (c) => {
-  const { subject_id, type, level, year, cursor, limit } = c.req.valid('query')
-  const userId = c.get('userId') as string
+  const { subject_id, type, level, year, limit } = c.req.valid('query')
+  const userId = c.get('userId')
 
-  // VÃ©rifie le plan de l'utilisateur
-  const { data: user } = await c.get('supabase').from('users').select('plan').eq('id', userId).single()
-  const isPremium = user?.plan === 'premium'
+  // Vérifie le plan utilisateur
+  const userSnap = await adminDb.collection(COLLECTIONS.USERS).doc(userId).get()
+  const isPremium = userSnap.data()?.plan === 'premium'
 
-  const cacheKey = `docs:${subject_id}:${type}:${level}:${year}:${cursor}:${limit}:${isPremium}`
+  const cacheKey = `docs:${subject_id}:${type}:${level}:${year}:${limit}:${isPremium}`
   const cached = await redis.get(cacheKey)
   if (cached) return c.json(cached)
 
-  let query = c.get('supabase').from('documents')
-    .select('id, title, type, level, year, session, subject_id, is_premium, country_code, created_at')
-    .order('created_at', { ascending: false })
-    .limit(limit + 1)
+  let ref = adminDb.collection(COLLECTIONS.DOCUMENTS)
+    .orderBy('created_at', 'desc')
+    .limit(limit + 1) as FirebaseFirestore.Query
 
-  if (!isPremium) query = query.eq('is_premium', false)
-  if (subject_id) query = query.eq('subject_id', subject_id)
-  if (type) query = query.eq('type', type)
-  if (level) query = query.eq('level', level)
-  if (year) query = query.eq('year', year)
-  if (cursor) query = query.lt('created_at', cursor)
+  if (!isPremium) ref = ref.where('is_premium', '==', false)
+  if (subject_id) ref = ref.where('subject_id', '==', subject_id)
+  if (type)       ref = ref.where('type', '==', type)
+  if (level)      ref = ref.where('level', '==', level)
+  if (year)       ref = ref.where('year', '==', year)
 
-  const { data, error } = await query
-  if (error) return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
+  const snap = await ref.get()
+  const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+  const hasMore = items.length > limit
+  const page = hasMore ? items.slice(0, limit) : items
 
-  const hasMore = data.length > limit
-  const items = hasMore ? data.slice(0, limit) : data
-  const nextCursor = hasMore ? items[items.length - 1]?.created_at : null
-
-  const result = { data: items, next_cursor: nextCursor, has_more: hasMore }
+  const result = { data: page, has_more: hasMore }
   await redis.set(cacheKey, result, { ex: 3600 })
   return c.json(result)
 })
 
-// GET /api/documents/:id â€” dÃ©tail + URL PDF signÃ©e 15 min
+// GET /api/documents/:id
 router.get('/:id', async (c) => {
-  const id = c.req.param('id')
-  const userId = c.get('userId') as string
+  const id     = c.req.param('id')
+  const userId = c.get('userId')
 
-  const { data: doc, error } = await c.get('supabase').from('documents')
-    .select('*')
-    .eq('id', id)
-    .single()
+  const docSnap = await adminDb.collection(COLLECTIONS.DOCUMENTS).doc(id).get()
+  if (!docSnap.exists) {
+    return c.json({ error: { code: 'NOT_FOUND', message: 'Document introuvable' } }, 404)
+  }
+  const doc = { id: docSnap.id, ...docSnap.data() } as Record<string, unknown>
 
-  if (error || !doc) return c.json({ error: { code: 'NOT_FOUND', message: 'Document introuvable' } }, 404)
-
-  if (doc.is_premium) {
-    const { data: user } = await c.get('supabase').from('users').select('plan').eq('id', userId).single()
-    if (user?.plan !== 'premium') {
+  if (doc['is_premium']) {
+    const userSnap = await adminDb.collection(COLLECTIONS.USERS).doc(userId).get()
+    if (userSnap.data()?.plan !== 'premium') {
       return c.json({ error: { code: 'FORBIDDEN', message: 'Abonnement premium requis' } }, 403)
     }
   }
 
-  // GÃ©nÃ¨re une URL signÃ©e (15 min) pour le PDF
-  const bucket = doc.is_premium ? 'pdfs-premium' : 'pdfs-public'
-  const filePath = doc.pdf_url.split('/').pop() ?? ''
-  const { data: signed } = await supabaseAdmin.storage
-    .from(bucket)
-    .createSignedUrl(filePath, 900)
+  // URL signée Firebase Storage (15 min)
+  const bucket   = adminStorage.bucket()
+  const filePath = doc['storage_path'] as string
+  const [signedUrl] = await bucket.file(filePath).getSignedUrl({
+    action:  'read',
+    expires: Date.now() + 15 * 60 * 1000,
+  })
 
-  // XP + tracking vue en arriÃ¨re-plan
+  // XP + tracking vue en arrière-plan
   const { awardXP, trackDocumentView, checkAndAwardBadges } = await import('../lib/xp.js')
-  Promise.all([
+  Promise.allSettled([
     trackDocumentView(userId, id),
     awardXP(userId, 5),
     checkAndAwardBadges(userId),
-  ]).catch(() => null)
+  ]).then((results) => {
+    for (const r of results) {
+      if (r.status === 'rejected') console.error('[documents] background task failed:', r.reason)
+    }
+  })
 
-  return c.json({ data: { ...doc, signed_url: signed?.signedUrl } })
+  return c.json({ data: { ...doc, signed_url: signedUrl } })
 })
 
-// GET /api/documents/:id/exercises â€” chunks exercices pour contextualisation Kelassi
+// GET /api/documents/:id/exercises
 router.get('/:id/exercises', async (c) => {
-  const id = c.req.param('id')
-
-  const { data: chunks, error } = await c.get('supabase').from('document_chunks')
-    .select('id, content, chunk_index, page_number, metadata')
-    .eq('document_id', id)
-    .filter('metadata->>is_exercise', 'eq', 'true')
-    .order('chunk_index')
+  const id   = c.req.param('id')
+  const snap = await adminDb.collection(COLLECTIONS.DOCUMENT_CHUNKS)
+    .where('document_id', '==', id)
+    .where('is_exercise', '==', true)
+    .orderBy('chunk_index')
     .limit(30)
+    .get()
 
-  if (error) return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
-  return c.json({ data: chunks ?? [] })
+  const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+  return c.json({ data })
 })
 
-// GET /api/documents/:id/text â€” texte extrait pour mode hors-ligne
+// GET /api/documents/:id/text
 router.get('/:id/text', async (c) => {
-  const id = c.req.param('id')
+  const id     = c.req.param('id')
+  const userId = c.get('userId')
 
-  const { data: doc } = await c.get('supabase').from('documents')
-    .select('text_content, is_premium')
-    .eq('id', id)
-    .single()
+  const docSnap = await adminDb.collection(COLLECTIONS.DOCUMENTS).doc(id).get()
+  if (!docSnap.exists) {
+    return c.json({ error: { code: 'NOT_FOUND', message: 'Document introuvable' } }, 404)
+  }
+  const doc = docSnap.data()!
 
-  if (!doc) return c.json({ error: { code: 'NOT_FOUND', message: 'Document introuvable' } }, 404)
-
-  if (doc.is_premium) {
-    const userId = c.get('userId') as string
-    const { data: user } = await c.get('supabase').from('users').select('plan').eq('id', userId).single()
-    if (user?.plan !== 'premium') {
+  if (doc['is_premium']) {
+    const userSnap = await adminDb.collection(COLLECTIONS.USERS).doc(userId).get()
+    if (userSnap.data()?.plan !== 'premium') {
       return c.json({ error: { code: 'FORBIDDEN', message: 'Abonnement premium requis' } }, 403)
     }
   }
 
-  return c.json({ data: { text_content: doc.text_content } })
+  return c.json({ data: { text_content: doc['text_content'] ?? null } })
 })
 
 export { router as documentsRouter }
-
-
-
-

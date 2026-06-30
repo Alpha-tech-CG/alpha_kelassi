@@ -1,109 +1,98 @@
-﻿import { Hono } from 'hono'
+import { Hono } from 'hono'
 import type { AppVariables } from '../../lib/types.js'
-import { supabaseAdmin as supabase } from '../../lib/supabase.js'
-import { authMiddleware } from '../../middleware/auth.js'
+import { authMiddleware, adminMiddleware } from '../../middleware/auth.js'
+import { adminDb, COLLECTIONS } from '../../lib/firebase.js'
 
 const router = new Hono<{ Variables: AppVariables }>()
 router.use('*', authMiddleware)
-
-router.use('*', async (c, next) => {
-  const userId = c.get('userId') as string
-  const { data: user } = await supabase.from('users').select('role').eq('id', userId).single()
-  if (user?.role !== 'admin') return c.json({ error: { code: 'FORBIDDEN' } }, 403)
-  await next()
-})
+router.use('*', adminMiddleware)
 
 // GET /api/admin/analytics
 router.get('/', async (c) => {
-  const [
-    { data: topDocs },
-    { data: activeStats },
-    { data: activeSubs },
-    { data: recentQuestions },
-    { count: totalUsers },
-  ] = await Promise.all([
-    // Documents les plus vus sur 7 jours
-    supabase
-      .from('document_views')
-      .select('document_id, documents(title, type, level)')
-      .gte('viewed_at', new Date(Date.now() - 7 * 86400000).toISOString())
-      .limit(500),
+  const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString()
+  const sixDaysAgo   = new Date(Date.now() - 6 * 86400000).toISOString().slice(0, 10)
 
-    // Utilisateurs actifs par jour (7 derniers jours)
-    supabase
-      .from('user_progress')
-      .select('user_id, last_active')
-      .gte('last_active', new Date(Date.now() - 6 * 86400000).toISOString().slice(0, 10)),
+  const [viewsSnap, progressSnap, subsSnap, recentMsgsSnap, usersSnap] = await Promise.all([
+    // Vues des 7 derniers jours
+    adminDb.collection(COLLECTIONS.DOCUMENT_VIEWS)
+      .where('viewed_at', '>=', sevenDaysAgo)
+      .get(),
+
+    // Utilisateurs actifs (7 jours)
+    adminDb.collection(COLLECTIONS.USER_PROGRESS)
+      .where('last_active', '>=', sixDaysAgo)
+      .get(),
 
     // Abonnements actifs
-    supabase
-      .from('subscriptions')
-      .select('plan, status, stripe_sub_id, cinetpay_ref, expires_at, created_at')
-      .eq('status', 'active'),
+    adminDb.collection(COLLECTIONS.SUBSCRIPTIONS)
+      .where('status', '==', 'active')
+      .get(),
 
-    // Questions rÃ©centes (pour cache prioritaire)
-    supabase
-      .from('chat_messages')
-      .select('content, created_at')
-      .eq('role', 'user')
-      .order('created_at', { ascending: false })
-      .limit(50),
+    // Questions récentes
+    adminDb.collection(COLLECTIONS.CHAT_MESSAGES)
+      .where('role', '==', 'user')
+      .orderBy('created_at', 'desc')
+      .limit(50)
+      .get(),
 
     // Total utilisateurs
-    supabase.from('users').select('id', { count: 'exact', head: true }),
+    adminDb.collection(COLLECTIONS.USERS).select().get(),
   ])
 
-  // AgrÃ¨ge les vues par document cÃ´tÃ© JS
-  const viewsByDoc = new Map<string, { count: number; title: string; type: string; level: string }>()
-  for (const row of topDocs ?? []) {
-    const doc = row.documents as { title: string; type: string; level: string } | null
-    const cur = viewsByDoc.get(row.document_id) ?? { count: 0, title: doc?.title ?? '', type: doc?.type ?? '', level: doc?.level ?? '' }
-    viewsByDoc.set(row.document_id, { ...cur, count: cur.count + 1 })
+  // Agrégation côté JS (Firestore n'a pas de GROUP BY)
+  const viewsByDoc = new Map<string, { count: number; document_id: string }>()
+  for (const d of viewsSnap.docs) {
+    const docId = d.data()['document_id'] as string
+    const cur   = viewsByDoc.get(docId) ?? { count: 0, document_id: docId }
+    viewsByDoc.set(docId, { ...cur, count: cur.count + 1 })
   }
-  const topDocsSorted = [...viewsByDoc.entries()]
-    .map(([id, v]) => ({ document_id: id, ...v }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 10)
+
+  // Récupère les titres des top 10 documents
+  const topRaw = [...viewsByDoc.values()].sort((a, b) => b.count - a.count).slice(0, 10)
+  const topDocsWithMeta = await Promise.all(
+    topRaw.map(async ({ document_id, count }) => {
+      const snap = await adminDb.collection(COLLECTIONS.DOCUMENTS).doc(document_id).get()
+      const d    = snap.data() ?? {}
+      return { document_id, view_count: count, title: d['title'] ?? '', type: d['type'] ?? '', level: d['level'] ?? '' }
+    })
+  )
 
   // Utilisateurs actifs par jour
   const activeByDay = new Map<string, Set<string>>()
-  for (const row of activeStats ?? []) {
-    const day = row.last_active
-    if (!activeByDay.has(day)) activeByDay.set(day, new Set())
-    activeByDay.get(day)!.add(row.user_id)
+  for (const d of progressSnap.docs) {
+    const row = d.data() as { user_id: string; last_active: string }
+    if (!activeByDay.has(row.last_active)) activeByDay.set(row.last_active, new Set())
+    activeByDay.get(row.last_active)!.add(row.user_id)
   }
   const activeChart = [...activeByDay.entries()]
     .map(([day, users]) => ({ day, active_users: users.size }))
     .sort((a, b) => a.day.localeCompare(b.day))
 
-  // Revenus estimÃ©s
-  const stripeCount = (activeSubs ?? []).filter((s) => s.stripe_sub_id).length
-  const cinetpayCount = (activeSubs ?? []).filter((s) => s.cinetpay_ref).length
-  const revenueEstimate = {
-    active_subscriptions: (activeSubs ?? []).length,
-    stripe_count: stripeCount,
-    cinetpay_count: cinetpayCount,
-    // Prix indicatifs : 2000 FCFA/mois â‰ˆ 3 EUR, 20000 FCFA/an â‰ˆ 30 EUR
-    monthly_revenue_fcfa: stripeCount * 2000 + cinetpayCount * 2000,
-  }
+  // Revenus estimés
+  const subs         = subsSnap.docs.map((d) => d.data())
+  const stripeCount  = subs.filter((s) => s['stripe_sub_id']).length
+  const cinetCount   = subs.filter((s) => s['cinetpay_ref']).length
 
   return c.json({
     data: {
-      top_documents: topDocsSorted,
+      top_documents:      topDocsWithMeta,
       active_users_chart: activeChart,
-      revenue: revenueEstimate,
-      recent_questions: (recentQuestions ?? []).slice(0, 20).map((q) => ({
-        content: q.content.slice(0, 120),
-        asked_at: q.created_at,
+      revenue: {
+        active_subscriptions: subs.length,
+        stripe_count:         stripeCount,
+        cinetpay_count:       cinetCount,
+        monthly_revenue_fcfa: (stripeCount + cinetCount) * 2000,
+      },
+      recent_questions: recentMsgsSnap.docs.slice(0, 20).map((d) => ({
+        content:  (d.data()['content'] as string).slice(0, 120),
+        asked_at: d.data()['created_at'],
       })),
       totals: {
-        users: totalUsers ?? 0,
-        active_subs: (activeSubs ?? []).length,
+        users:       usersSnap.size,
+        active_subs: subs.length,
       },
     },
   })
 })
 
 export { router as adminAnalyticsRouter }
-
-

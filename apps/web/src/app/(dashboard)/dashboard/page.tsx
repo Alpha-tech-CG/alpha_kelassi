@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { redis } from '@/lib/redis'
 import { BookOpen, FileText, Bot, Layers, Crown, BarChart3, type LucideIcon } from 'lucide-react'
 
 interface Shortcut {
@@ -15,14 +16,32 @@ const SHORTCUTS: Shortcut[] = [
   { href: '/flashcards', label: 'Flashcards', Icon: Layers,   gradient: 'from-amber-500 to-orange-500',   bg: 'bg-amber-50',   text: 'text-amber-700',   iconColor: 'text-white' },
 ]
 
+type RecentDoc = { id: string; title: string; type: string; level: string }
+
+async function getRecentDocs(supabase: Awaited<ReturnType<typeof createClient>>): Promise<RecentDoc[]> {
+  const cached = await redis.get<RecentDoc[]>('docs:recent:4')
+  if (cached) return cached
+
+  const { data } = await supabase
+    .from('documents')
+    .select('id, title, type, level')
+    .eq('is_premium', false)
+    .order('created_at', { ascending: false })
+    .limit(4)
+
+  const docs = data ?? []
+  await redis.set('docs:recent:4', docs, { ex: 90 }) // 90s TTL
+  return docs
+}
+
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: profile }, { data: progress }, { data: recentDocs }] = await Promise.all([
+  const [{ data: profile }, { data: progress }, recentDocs] = await Promise.all([
     supabase.from('users').select('full_name, plan, onboarding_completed').eq('id', user!.id).single(),
     supabase.from('user_progress').select('*, subjects(name)').eq('user_id', user!.id).limit(5),
-    supabase.from('documents').select('id, title, type, level').eq('is_premium', false).order('created_at', { ascending: false }).limit(4),
+    getRecentDocs(supabase),
   ])
 
   // Redirige les nouveaux utilisateurs vers l'onboarding

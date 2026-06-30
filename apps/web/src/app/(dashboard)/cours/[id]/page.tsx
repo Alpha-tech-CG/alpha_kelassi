@@ -64,6 +64,13 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
   const subjectName = (doc.subjects as { name: string } | null)?.name
   const hasText = !!(doc as Record<string, unknown>).text_content
 
+  // Compte les fiches disponibles
+  const { count: chaptersCount } = await supabase
+    .from('course_chapters')
+    .select('id', { count: 'exact', head: true })
+    .eq('document_id', id)
+    .eq('status', 'done')
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
 
@@ -109,7 +116,7 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
             {signed?.signedUrl && (
               <a
                 href={signed.signedUrl}
@@ -121,6 +128,14 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
               >
                 ⬇️ <span className="hidden sm:inline">Fichier</span>
               </a>
+            )}
+            {!isExam && (chaptersCount ?? 0) > 0 && (
+              <Link
+                href={`/cours/${doc.id}/chapters`}
+                className="flex items-center gap-1.5 px-3 py-2.5 border border-violet-200 text-violet-700 bg-violet-50 rounded-xl text-sm font-bold hover:bg-violet-100 transition-colors"
+              >
+                📋 <span className="hidden sm:inline">{chaptersCount} Fiches</span><span className="sm:hidden">Fiches</span>
+              </Link>
             )}
             <Link
               href={`/tuteur?document=${doc.id}`}

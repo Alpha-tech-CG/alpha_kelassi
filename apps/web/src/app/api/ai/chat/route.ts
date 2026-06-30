@@ -10,7 +10,7 @@ import { checkAndIncrementQuota } from '@/lib/ai/quota'
 
 export const maxDuration = 60
 
-// ── Clients lazy (jamais instanciés au build time) ──────────────────────────
+// ── Clients lazy ─────────────────────────────────────────────────────────────
 
 let _genai: GoogleGenAI | null = null
 function getGenai(): GoogleGenAI {
@@ -29,19 +29,20 @@ function getAdmin() {
   return _admin
 }
 
-// ── Validation ───────────────────────────────────────────────────────────────
+// ── Validation ────────────────────────────────────────────────────────────────
 
 const chatSchema = z.object({
-  question:    z.string().min(1).max(2000),
-  session_id:  z.string().uuid().nullish().transform((v) => v ?? undefined),
-  document_id: z.string().uuid().nullish().transform((v) => v ?? undefined),
+  question:       z.string().min(1).max(2000),
+  session_id:     z.string().uuid().nullish().transform((v) => v ?? undefined),
+  document_id:    z.string().uuid().nullish().transform((v) => v ?? undefined),
+  revealSolution: z.boolean().optional().default(false),
   image: z.object({
-    data:     z.string().min(1),   // base64
-    mimeType: z.string().min(1),   // 'image/jpeg' etc.
+    data:     z.string().min(1),
+    mimeType: z.string().min(1),
   }).optional(),
 })
 
-// ── Prompt système ───────────────────────────────────────────────────────────
+// ── Prompt Socratique (défaut) ────────────────────────────────────────────────
 
 const SYSTEM_PROMPT = `Tu es Kelassi, tuteur pédagogique pour élèves congolais préparant le BEPC et le BAC au Congo Brazzaville.
 
@@ -90,27 +91,54 @@ Exemple : "Je vois un système de deux équations. Quelle méthode as-tu essayé
 - Si connaissances générales : précise "D'après le programme BEPC/BAC…"
 - Utilise des analogies congolaises (marché, fleuve Congo, manioc, saison des pluies…) pour illustrer`
 
+// ── Prompt Solution Directe (Premium / coûte tous les crédits) ───────────────
+
+const SOLUTION_PROMPT = `Tu es Kelassi, correcteur expert pour les examens officiels congolais (BEPC et BAC — MEPSA).
+
+L'élève a débloqué le MODE CORRECTION COMPLÈTE. Fournis une correction exhaustive et méthodique.
+
+── STRUCTURE OBLIGATOIRE DE LA CORRECTION ──
+## 📋 Identification
+- Type d'exercice, matière, niveau, notions clés mobilisées
+
+## 🔢 Correction étape par étape
+Numérote chaque étape. Montre TOUT le calcul/raisonnement sans sauter d'étape.
+Pour chaque étape : **[Étape N]** → action → résultat intermédiaire
+
+## 📐 Formules et lois utilisées
+Liste avec leur nom officiel au programme (ex: "Théorème de Pythagore", "Loi d'Ohm")
+
+## ✅ Résultat final
+**Réponse :** [valeur + unité + interprétation si nécessaire]
+
+## 💡 À retenir pour l'examen
+Une règle mnémotechnique ou astuce spécifique au programme congolais pour ne plus se tromper.
+
+── RÈGLES DE QUALITÉ ──
+- Français uniquement, style académique
+- Maths : LaTeX inline \`$...$\` et bloc \`$$...$$\` pour toutes les formules
+- Maximum 500 mots — précis et complet
+- Méthodologie exacte attendue par les correcteurs MEPSA
+- Si document fourni : cite la page/section source`
+
 function sanitize(text: string): string {
   return text.replace(/<(?:.|\n)*?>/gm, '').trim()
 }
 
-// ── Handler principal ────────────────────────────────────────────────────────
+// ── Handler principal ─────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
-  // Vérifie la clé Gemini avant tout
   if (!process.env['GEMINI_API_KEY']) {
     return NextResponse.json(
-      { error: { code: 'MISCONFIGURED', message: 'GEMINI_API_KEY non configurée sur le serveur.' } },
+      { error: { code: 'MISCONFIGURED', message: 'GEMINI_API_KEY non configurée.' } },
       { status: 503 }
     )
   }
 
-  // Auth via cookie Supabase SSR
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
-  // Validation du body
   let body: z.infer<typeof chatSchema>
   try {
     body = chatSchema.parse(await req.json())
@@ -118,72 +146,76 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Corps invalide' }, { status: 400 })
   }
 
-  // Plan + quota
   const { data: profile } = await getAdmin()
     .from('users').select('plan').eq('id', user.id).single()
-  const plan  = profile?.plan ?? 'free'
-  const quota = await checkAndIncrementQuota(user.id, plan)
+  const plan = profile?.plan ?? 'free'
+
+  // ── Quota : mode solution coûte tous les crédits free ──
+  const quotaMode = body.revealSolution ? 'solution' : 'socratic'
+  const quota     = await checkAndIncrementQuota(user.id, plan, quotaMode)
 
   if (!quota.allowed) {
+    const isSolutionBlock = body.revealSolution && plan !== 'premium'
     return NextResponse.json({
       error: {
-        code: 'QUOTA_EXCEEDED',
-        message: `Limite journalière atteinte (${plan === 'free' ? '5' : '200'} questions/jour).${
-          plan === 'free' ? ' Passe à Premium pour continuer.' : ' Réessaie demain.'
-        }`,
-        remaining: 0,
+        code:    isSolutionBlock ? 'SOLUTION_NO_CREDITS' : 'QUOTA_EXCEEDED',
+        message: isSolutionBlock
+          ? 'Tu n\'as plus de crédits aujourd\'hui. Passe à Premium pour des solutions illimitées.'
+          : `Limite journalière atteinte (${plan === 'free' ? '5' : '200'} questions/jour).${
+              plan === 'free' ? ' Passe à Premium pour continuer.' : ' Réessaie demain.'
+            }`,
+        remaining:   0,
+        upgrade_url: '/billing',
       },
     }, { status: 429 })
   }
 
   const question = sanitize(body.question)
 
-  // Session : crée ou récupère
+  // Session
   let sessionId = body.session_id
   if (!sessionId) {
     const { data: session } = await supabase
       .from('chat_sessions')
       .insert({ user_id: user.id, document_id: body.document_id ?? null })
-      .select('id')
-      .single()
+      .select('id').single()
     sessionId = session!.id
   }
 
-  // Cache Redis
-  const cacheKey = `cache:chat:${createHash('sha256').update(question.toLowerCase()).digest('hex')}`
-  const cached = await redis.get<string>(cacheKey)
+  // Cache Redis — clé distincte pour solutions vs socratique
+  const cachePrefix = body.revealSolution ? 'cache:solution' : 'cache:chat'
+  const cacheKey    = `${cachePrefix}:${createHash('sha256').update(question.toLowerCase()).digest('hex')}`
+  const cached      = await redis.get<string>(cacheKey)
   if (cached) {
     saveChatMessages(getAdmin(), sessionId, question, cached).catch(() => {})
     return new Response(cached, {
       headers: {
         'Content-Type':      'text/event-stream',
         'Cache-Control':     'no-cache',
-        'X-Session-Id':      sessionId,
+        'X-Session-Id':      sessionId ?? '',
         'X-Quota-Remaining': String(quota.remaining),
         'X-Cache':           'HIT',
+        'X-Mode':            body.revealSolution ? 'solution' : 'socratic',
       },
     })
   }
 
-  // Titre du document (si fourni) pour ancrer Kelassi dans ce document précis
+  // Document context
   let documentTitle: string | null = null
   if (body.document_id) {
     const { data: doc } = await getAdmin()
-      .from('documents')
-      .select('title')
-      .eq('id', body.document_id)
-      .single()
+      .from('documents').select('title').eq('id', body.document_id).single()
     documentTitle = doc?.title ?? null
   }
 
-  // Recherche vectorielle RAG — seuil abaissé à 0.45 quand un document est ciblé
+  // RAG — seuil plus bas en mode solution (on veut le maximum de contexte)
   const chunks = await searchRelevantChunks(question, {
-    matchCount:    8,
-    minSimilarity: 0.72,
+    matchCount:    body.revealSolution ? 12 : 8,
+    minSimilarity: body.revealSolution ? 0.40 : 0.72,
     documentId:    body.document_id,
   })
 
-  // Historique des 5 derniers tours
+  // Historique
   const { data: history } = await supabase
     .from('chat_messages')
     .select('role, content')
@@ -196,35 +228,37 @@ export async function POST(req: NextRequest) {
     .map((m) => `${m.role === 'user' ? 'Élève' : 'Kelassi'}: ${m.content}`)
     .join('\n')
 
-  // Prompt enrichi avec contexte RAG
   const contextText = chunks.length > 0
     ? chunks.map((c, i) =>
         `[Source ${i + 1}${c.page_number ? `, page ${c.page_number}` : ''}]\n${c.content}`
       ).join('\n\n---\n\n')
     : documentTitle
-      ? `Aucun passage spécifique trouvé dans "${documentTitle}" pour cette question. Réponds en t'appuyant sur tes connaissances du programme BEPC/BAC et indique que la réponse vient du programme général, pas du document.`
-      : 'Pas de document spécifique — réponds en tuteur BEPC/BAC en utilisant tes connaissances du programme congolais.'
+      ? `Aucun passage spécifique trouvé dans "${documentTitle}". Utilise tes connaissances du programme BEPC/BAC.`
+      : 'Pas de document — réponds sur le programme BEPC/BAC congolais.'
 
   const userPrompt = [
-    documentTitle ? `DOCUMENT EN COURS D'ÉTUDE : "${documentTitle}"` : null,
-    `CONTEXTE EXTRAIT DU DOCUMENT :\n${contextText}`,
-    historyText ? `HISTORIQUE RÉCENT :\n${historyText}` : null,
-    `QUESTION DE L'ÉLÈVE :\n${question}`,
+    documentTitle ? `DOCUMENT ÉTUDIÉ : "${documentTitle}"` : null,
+    `CONTEXTE :\n${contextText}`,
+    historyText ? `HISTORIQUE :\n${historyText}` : null,
+    body.revealSolution
+      ? `DEMANDE DE CORRECTION COMPLÈTE :\n${question}`
+      : `QUESTION DE L'ÉLÈVE :\n${question}`,
   ].filter(Boolean).join('\n\n===\n\n')
 
-  // Construction des parts : texte + image optionnelle
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const parts: any[] = [{ text: userPrompt }]
   if (body.image) {
     parts.push({ inlineData: { mimeType: body.image.mimeType, data: body.image.data } })
   }
 
-  // thinkingBudget:0 — désactive le mode "réflexion" de Gemini 2.5 Flash
+  const systemPrompt = body.revealSolution ? SOLUTION_PROMPT : SYSTEM_PROMPT
+
   const stream = await getGenai().models.generateContentStream({
     model:    'gemini-2.5-flash',
     config:   {
-      systemInstruction: SYSTEM_PROMPT,
-      thinkingConfig:    { thinkingBudget: 0 },
+      systemInstruction: systemPrompt,
+      // Solution : alloue du budget de réflexion pour une correction de qualité
+      thinkingConfig: { thinkingBudget: body.revealSolution ? 2048 : 0 },
     },
     contents: [{ role: 'user', parts }],
   })
@@ -234,14 +268,14 @@ export async function POST(req: NextRequest) {
   const readable = new ReadableStream({
     async start(controller) {
       const enc = new TextEncoder()
-
       try {
-        // Métadonnées en premier
         controller.enqueue(enc.encode(
           `event: meta\ndata: ${JSON.stringify({
             session_id:      sessionId,
             quota_remaining: quota.remaining,
+            credits_cost:    quota.creditsCost,
             sources_count:   chunks.length,
+            mode:            body.revealSolution ? 'solution' : 'socratic',
           })}\n\n`
         ))
 
@@ -256,10 +290,10 @@ export async function POST(req: NextRequest) {
         controller.enqueue(enc.encode('event: done\ndata: {}\n\n'))
         controller.close()
 
-        // Sauvegarde asynchrone via admin client (le client cookié peut expirer dans le callback)
         Promise.all([
           saveChatMessages(getAdmin(), sessionId!, question, fullResponse),
-          redis.set(cacheKey, fullResponse, { ex: 86400 }),
+          // Cache 24h pour solutions (contenu stable), 1h pour socratique
+          redis.set(cacheKey, fullResponse, { ex: body.revealSolution ? 86400 : 3600 }),
         ]).catch(console.error)
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erreur Gemini inconnue'
@@ -277,8 +311,10 @@ export async function POST(req: NextRequest) {
       'Content-Type':      'text/event-stream',
       'Cache-Control':     'no-cache',
       'Connection':        'keep-alive',
-      'X-Session-Id':      sessionId,
+      'X-Session-Id':      sessionId ?? '',
       'X-Quota-Remaining': String(quota.remaining),
+      'X-Credits-Cost':    String(quota.creditsCost),
+      'X-Mode':            body.revealSolution ? 'solution' : 'socratic',
     },
   })
 }

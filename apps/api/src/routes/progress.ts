@@ -1,77 +1,86 @@
-﻿import { Hono } from 'hono'
+import { Hono } from 'hono'
 import type { AppVariables } from '../lib/types.js'
-
 import { authMiddleware } from '../middleware/auth.js'
+import { adminDb, COLLECTIONS } from '../lib/firebase.js'
 import { computeLevel, BADGES } from '../lib/xp.js'
 
 const router = new Hono<{ Variables: AppVariables }>()
 router.use('*', authMiddleware)
 
-// GET /api/progress/dashboard â€” toutes les donnÃ©es de progression Ã©lÃ¨ve
+// GET /api/progress/dashboard — toutes les données de progression élève
 router.get('/dashboard', async (c) => {
-  const userId = c.get('userId') as string
+  const userId = c.get('userId')
+  const now    = new Date().toISOString()
 
-  const [
-    { data: user },
-    { data: badges },
-    { data: progressRows },
-    { data: nextCard },
-    { count: questionsCount },
-    { count: viewsCount },
-  ] = await Promise.all([
-    c.get('supabase').from('users').select('xp, full_name, plan').eq('id', userId).single(),
-    c.get('supabase').from('user_badges').select('badge_code, earned_at').eq('user_id', userId).order('earned_at'),
-    c.get('supabase').from('user_progress')
-      .select('subject_id, flashcards_reviewed, score_avg, streak_days, last_active, subjects(name, level)')
-      .eq('user_id', userId),
-    c.get('supabase').from('flashcards')
-      .select('id, front, next_review, documents(title)')
-      .eq('user_id', userId)
-      .lte('next_review', new Date().toISOString())
-      .order('next_review', { ascending: true })
+  const [userSnap, badgesSnap, progressSnap, nextCardSnap, sessionsSnap, viewsSnap] = await Promise.all([
+    adminDb.collection(COLLECTIONS.USERS).doc(userId).get(),
+    adminDb.collection(COLLECTIONS.USER_BADGES).where('user_id', '==', userId).orderBy('earned_at').get(),
+    adminDb.collection(COLLECTIONS.USER_PROGRESS).where('user_id', '==', userId).get(),
+    adminDb.collection(COLLECTIONS.FLASHCARDS)
+      .where('user_id', '==', userId)
+      .where('next_review', '<=', now)
+      .orderBy('next_review', 'asc')
       .limit(1)
-      .single(),
-    c.get('supabase').from('chat_messages')
-      .select('id', { count: 'exact', head: true })
-      .eq('role', 'user')
-      .in(
-        'session_id',
-        (await c.get('supabase').from('chat_sessions').select('id').eq('user_id', userId)).data?.map((s) => s.id) ?? []
-      ),
-    c.get('supabase').from('document_views')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId),
+      .get(),
+    adminDb.collection(COLLECTIONS.CHAT_SESSIONS).where('user_id', '==', userId).get(),
+    adminDb.collection(COLLECTIONS.DOCUMENT_VIEWS).where('user_id', '==', userId)
+      .select() // compte seulement
+      .get(),
   ])
 
-  const xp = user?.xp ?? 0
-  const levelInfo = computeLevel(xp)
-  const maxStreak = Math.max(...(progressRows ?? []).map((p) => p.streak_days), 0)
+  // Compte les messages utilisateur dans toutes les sessions
+  const sessionIds  = sessionsSnap.docs.map((d) => d.id)
+  let questionsCount = 0
+  if (sessionIds.length > 0) {
+    // Firestore limite les `in` à 30 éléments — on fait par batch
+    const batches = []
+    for (let i = 0; i < sessionIds.length; i += 30) {
+      batches.push(
+        adminDb.collection(COLLECTIONS.CHAT_MESSAGES)
+          .where('session_id', 'in', sessionIds.slice(i, i + 30))
+          .where('role', '==', 'user')
+          .select()
+          .get()
+      )
+    }
+    const results = await Promise.all(batches)
+    questionsCount = results.reduce((sum, snap) => sum + snap.size, 0)
+  }
 
-  const badgesWithMeta = (badges ?? []).map((b) => ({
-    code: b.badge_code,
-    earned_at: b.earned_at,
-    ...BADGES[b.badge_code as keyof typeof BADGES],
-  }))
+  const user         = userSnap.data() ?? {}
+  const xp           = (user['xp'] as number) ?? 0
+  const levelInfo    = computeLevel(xp)
+  const progressRows = progressSnap.docs.map((d) => ({ id: d.id, ...d.data() }))
+  const maxStreak    = Math.max(...progressRows.map((p) => (p as Record<string, unknown>)['streak_days'] as number ?? 0), 0)
+
+  const badgesWithMeta = badgesSnap.docs.map((d) => {
+    const b = d.data() as { badge_code: string; earned_at: string }
+    return {
+      code:      b.badge_code,
+      earned_at: b.earned_at,
+      ...BADGES[b.badge_code as keyof typeof BADGES],
+    }
+  })
+
+  const nextCard = nextCardSnap.empty ? null : { id: nextCardSnap.docs[0]!.id, ...nextCardSnap.docs[0]!.data() }
 
   return c.json({
     data: {
       xp,
-      level: levelInfo.level,
-      level_label: levelInfo.label,
-      next_level_xp: levelInfo.nextXp,
-      streak: maxStreak,
-      badges: badgesWithMeta,
-      progress: progressRows ?? [],
-      next_review: nextCard ?? null,
+      level:          levelInfo.level,
+      level_label:    levelInfo.label,
+      next_level_xp:  levelInfo.nextXp,
+      streak:         maxStreak,
+      badges:         badgesWithMeta,
+      progress:       progressRows,
+      next_review:    nextCard,
       stats: {
-        questions_asked: questionsCount ?? 0,
-        documents_viewed: viewsCount ?? 0,
-        flashcards_reviewed: (progressRows ?? []).reduce((s, p) => s + p.flashcards_reviewed, 0),
+        questions_asked:     questionsCount,
+        documents_viewed:    viewsSnap.size,
+        flashcards_reviewed: progressRows.reduce((s, p) => s + ((p as Record<string, unknown>)['flashcards_reviewed'] as number ?? 0), 0),
       },
     },
   })
 })
 
 export { router as progressRouter }
-
-

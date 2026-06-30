@@ -1,34 +1,44 @@
-﻿import type { Context, Next } from 'hono'
+import type { Context, Next } from 'hono'
 import type { AppVariables } from '../lib/types.js'
-import { createClient } from '@supabase/supabase-js'
-import type { Database } from '@alpha-kelassi/types'
-import { createScopedClient } from '../lib/supabase.js'
+import { adminAuth, adminDb, COLLECTIONS } from '../lib/firebase.js'
 
 export async function authMiddleware(c: Context<{ Variables: AppVariables }>, next: Next) {
   const authorization = c.req.header('Authorization')
   if (!authorization?.startsWith('Bearer ')) {
-    return c.json({ error: { code: 'UNAUTHORIZED', message: 'Missing token' } }, 401)
+    return c.json({ error: { code: 'UNAUTHORIZED', message: 'Token manquant' } }, 401)
   }
 
   const token = authorization.slice(7)
-  
-  // On utilise un client admin temporaire uniquement pour vérifier le token
-  // car getUser() nécessite une clé valide pour contacter Supabase Auth
-  const supabaseAuth = createClient<Database>(
-    process.env['SUPABASE_URL']!,
-    process.env['SUPABASE_SERVICE_ROLE_KEY']!,
-    { auth: { persistSession: false } }
-  )
 
-  const { data: { user }, error } = await supabaseAuth.auth.getUser(token)
-  if (error || !user) {
-    return c.json({ error: { code: 'UNAUTHORIZED', message: 'Invalid token' } }, 401)
+  let decodedToken: Awaited<ReturnType<typeof adminAuth.verifyIdToken>>
+  try {
+    decodedToken = await adminAuth.verifyIdToken(token)
+  } catch {
+    return c.json({ error: { code: 'UNAUTHORIZED', message: 'Token invalide ou expiré' } }, 401)
   }
 
-  // Injecte l'ID utilisateur et le client Supabase sécurisé (RLS) dans le contexte
-  c.set('userId', user.id)
-  c.set('supabase', createScopedClient(token))
-  
+  const userId = decodedToken.uid
+
+  // Injecte l'UID et le client Firestore dans le contexte Hono
+  c.set('userId', userId)
+  c.set('db', adminDb)
+  c.set('collections', COLLECTIONS)
+
   await next()
 }
 
+/**
+ * Vérifie que l'utilisateur a le rôle admin dans Firestore.
+ * À utiliser en chaîne après authMiddleware.
+ */
+export async function adminMiddleware(c: Context<{ Variables: AppVariables }>, next: Next) {
+  const userId = c.get('userId') as string
+  const db     = c.get('db') as typeof adminDb
+
+  const userSnap = await db.collection(COLLECTIONS.USERS).doc(userId).get()
+  if (!userSnap.exists || userSnap.data()?.role !== 'admin') {
+    return c.json({ error: { code: 'FORBIDDEN', message: 'Accès admin requis' } }, 403)
+  }
+
+  await next()
+}

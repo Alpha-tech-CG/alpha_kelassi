@@ -3,26 +3,71 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { createClient } from '@/lib/supabase/client'
 import { MarkdownRenderer } from '@/components/markdown-renderer'
 
 interface ImageAttachment {
-  data:     string   // base64 sans le préfixe data:...
+  data:     string
   mimeType: string
-  preview:  string   // data-URL pour l'affichage
+  preview:  string
 }
 
 interface Message {
-  id:        string
-  role:      'user' | 'assistant'
-  content:   string
+  id:         string
+  role:       'user' | 'assistant'
+  content:    string
   streaming?: boolean
-  image?:    string   // preview URL affichée dans la bulle
+  image?:     string
+  isSolution?: boolean  // indique une réponse en mode Solution Directe
 }
 
 interface Session {
   id:         string
   created_at: string
   documents:  { title: string } | null
+}
+
+// ── Modal confirmation Solution Directe (free users) ─────────────────────────
+function SolutionConfirmModal({
+  creditsLeft,
+  onConfirm,
+  onCancel,
+}: {
+  creditsLeft: number
+  onConfirm: () => void
+  onCancel:  () => void
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+      <div className="bg-white rounded-3xl p-7 max-w-sm w-full shadow-2xl">
+        <div className="text-center mb-5">
+          <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">⚡</div>
+          <h3 className="text-lg font-black text-gray-900">Solution complète</h3>
+          <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+            Cette action utilisera <strong className="text-amber-600">tous tes {creditsLeft} crédit{creditsLeft > 1 ? 's' : ''} restant{creditsLeft > 1 ? 's' : ''}</strong> du jour.
+            Tu ne pourras plus poser de questions avant demain.
+          </p>
+        </div>
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 rounded-2xl p-4 mb-5 text-sm text-amber-700">
+          💡 <strong>Conseil :</strong> Passe à <strong>Premium</strong> pour des solutions illimitées à <strong>2 000 FCFA/mois</strong>.
+        </div>
+        <div className="flex gap-3">
+          <button onClick={onCancel}
+            className="flex-1 py-3 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
+            Annuler
+          </button>
+          <button onClick={onConfirm}
+            className="flex-1 py-3 bg-amber-500 text-white rounded-2xl text-sm font-semibold hover:bg-amber-600 transition-colors shadow-sm">
+            Utiliser mes crédits
+          </button>
+        </div>
+        <Link href="/billing"
+          className="block text-center text-xs text-blue-600 hover:underline mt-4">
+          Passer Premium — accès illimité →
+        </Link>
+      </div>
+    </div>
+  )
 }
 
 const SUGGESTIONS = [
@@ -58,20 +103,23 @@ async function compressImage(file: File): Promise<ImageAttachment> {
 }
 
 export default function TuteurPage() {
-  const [messages,       setMessages]       = useState<Message[]>([])
-  const [sessions,       setSessions]       = useState<Session[]>([])
-  const [sessionId,      setSessionId]      = useState<string | null>(null)
-  const [input,          setInput]          = useState('')
-  const [selectedImage,  setSelectedImage]  = useState<ImageAttachment | null>(null)
-  const [loading,        setLoading]        = useState(false)
-  const [quotaRemaining, setQuotaRemaining] = useState<number | null>(null)
-  const [sourcesCount,   setSourcesCount]   = useState(0)
-  const [exerciseContext,setExerciseContext] = useState<string | null>(null)
-  const [sidebarOpen,    setSidebarOpen]    = useState(false)
-  const [clearingHistory,setClearingHistory]= useState(false)
-  const bottomRef  = useRef<HTMLDivElement>(null)
-  const textareaRef= useRef<HTMLTextAreaElement>(null)
+  const [messages,        setMessages]        = useState<Message[]>([])
+  const [sessions,        setSessions]        = useState<Session[]>([])
+  const [sessionId,       setSessionId]       = useState<string | null>(null)
+  const [input,           setInput]           = useState('')
+  const [selectedImage,   setSelectedImage]   = useState<ImageAttachment | null>(null)
+  const [loading,         setLoading]         = useState(false)
+  const [quotaRemaining,  setQuotaRemaining]  = useState<number | null>(null)
+  const [sourcesCount,    setSourcesCount]    = useState(0)
+  const [exerciseContext, setExerciseContext]  = useState<string | null>(null)
+  const [sidebarOpen,     setSidebarOpen]     = useState(false)
+  const [clearingHistory, setClearingHistory] = useState(false)
+  const [userPlan,        setUserPlan]        = useState<'free' | 'premium'>('free')
+  const [showSolutionModal, setShowSolutionModal] = useState(false)
+  const bottomRef   = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const supabase    = createClient()
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -80,6 +128,15 @@ export default function TuteurPage() {
     const exId   = params.get('exercise')
     if (q) { setInput(decodeURIComponent(q)); if (exId) setExerciseContext(exId) }
     else if (docId) setInput('Explique-moi ce document.')
+  }, [])
+
+  // Charge le plan utilisateur (une seule fois)
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) return
+      supabase.from('users').select('plan').eq('id', session.user.id).single()
+        .then(({ data }) => setUserPlan((data?.plan as 'free' | 'premium') ?? 'free'))
+    })
   }, [])
 
   useEffect(() => { loadSessions() }, [])
@@ -130,7 +187,7 @@ export default function TuteurPage() {
   }
 
   /* ── Envoi du message ─────────────────────────────────────────────────── */
-  const sendMessage = useCallback(async () => {
+  const sendMessage = useCallback(async (revealSolution = false) => {
     const hasText  = input.trim().length > 0
     const hasImage = !!selectedImage
     if ((!hasText && !hasImage) || loading) return
@@ -140,15 +197,22 @@ export default function TuteurPage() {
     setInput('')
     setSelectedImage(null)
     setExerciseContext(null)
+    setShowSolutionModal(false)
     setLoading(true)
 
     const userMsg: Message = {
       id:      crypto.randomUUID(),
       role:    'user',
-      content: question,
+      content: revealSolution ? `⚡ Solution complète demandée : ${question}` : question,
       image:   imageToSend?.preview,
     }
-    const assistantMsg: Message = { id: crypto.randomUUID(), role: 'assistant', content: '', streaming: true }
+    const assistantMsg: Message = {
+      id:         crypto.randomUUID(),
+      role:       'assistant',
+      content:    '',
+      streaming:  true,
+      isSolution: revealSolution,
+    }
     setMessages((prev) => [...prev, userMsg, assistantMsg])
 
     try {
@@ -156,7 +220,7 @@ export default function TuteurPage() {
       const documentId = params.get('document')
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const chatBody: Record<string, any> = { question }
+      const chatBody: Record<string, any> = { question, revealSolution }
       if (sessionId)   chatBody.session_id  = sessionId
       if (documentId)  chatBody.document_id = documentId
       if (imageToSend) chatBody.image = { data: imageToSend.data, mimeType: imageToSend.mimeType }
@@ -178,8 +242,8 @@ export default function TuteurPage() {
         return
       }
 
-      const newSessionId = res.headers.get('X-Session-Id')
-      const remaining    = res.headers.get('X-Quota-Remaining')
+      const newSessionId  = res.headers.get('X-Session-Id')
+      const remaining     = res.headers.get('X-Quota-Remaining')
       if (newSessionId && !sessionId) setSessionId(newSessionId)
       if (remaining) setQuotaRemaining(parseInt(remaining, 10))
 
@@ -253,10 +317,32 @@ export default function TuteurPage() {
     setSidebarOpen(false)
   }
 
-  const canSend = (input.trim().length > 0 || !!selectedImage) && !loading
+  const canSend     = (input.trim().length > 0 || !!selectedImage) && !loading
+  const hasMessages = messages.length > 0
+
+  // Détermine si le bouton Solution Directe est cliquable
+  function handleSolutionClick() {
+    if (!canSend) return
+    if (userPlan === 'premium') {
+      sendMessage(true)
+    } else {
+      // Free : demande confirmation avant de consommer tous les crédits
+      if ((quotaRemaining ?? 0) <= 0) return // quota épuisé, le bloc quota s'affiche déjà
+      setShowSolutionModal(true)
+    }
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
+
+      {/* Modal confirmation Solution Directe (plan free) */}
+      {showSolutionModal && (
+        <SolutionConfirmModal
+          creditsLeft={quotaRemaining ?? 1}
+          onConfirm={() => sendMessage(true)}
+          onCancel={() => setShowSolutionModal(false)}
+        />
+      )}
 
       {/* ── Sidebar desktop ───────────────────────────────────────────── */}
       <aside className="hidden lg:flex w-72 flex-col bg-white border-r border-gray-100">
@@ -426,7 +512,16 @@ export default function TuteurPage() {
                     )}
                   </div>
                 ) : (
-                  <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm bg-white border border-gray-100 text-gray-800 shadow-sm">
+                  <div className={`max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-gray-800 shadow-sm ${
+                    msg.isSolution
+                      ? 'bg-amber-50 border border-amber-200'
+                      : 'bg-white border border-gray-100'
+                  }`}>
+                    {msg.isSolution && (
+                      <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full mb-2">
+                        ⚡ Solution complète
+                      </span>
+                    )}
                     <MarkdownRenderer content={msg.content} prose={false} />
                     {msg.streaming && (
                       <span className="inline-flex gap-0.5 mt-1 align-middle">
@@ -486,45 +581,66 @@ export default function TuteurPage() {
               </Link>
             </div>
           ) : (
-            <div className="flex items-end gap-2 max-w-3xl mx-auto">
-              {/* Bouton image */}
-              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageSelect} />
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                disabled={loading}
-                title="Envoyer une photo d'exercice"
-                className={`flex-shrink-0 w-11 h-11 rounded-2xl border-2 flex items-center justify-center text-lg transition-all ${
-                  selectedImage
-                    ? 'bg-emerald-100 border-emerald-400 text-emerald-600'
-                    : 'bg-white border-gray-200 text-gray-400 hover:border-emerald-300 hover:text-emerald-500 hover:bg-emerald-50'
-                } disabled:opacity-40`}
-              >
-                📷
-              </button>
+            <div className="max-w-3xl mx-auto space-y-2">
+              {/* Bouton Solution Directe — visible quand il y a au moins un échange */}
+              {hasMessages && (
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleSolutionClick}
+                    disabled={!canSend || (quotaRemaining !== null && quotaRemaining <= 0)}
+                    title={userPlan === 'premium' ? 'Solution complète (Premium)' : `Coûte tous tes crédits restants (${quotaRemaining ?? '?'})`}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed
+                      bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 hover:border-amber-300"
+                  >
+                    ⚡ Solution directe
+                    {userPlan === 'premium'
+                      ? <span className="text-amber-500 text-[10px]">Premium</span>
+                      : <span className="text-amber-500 text-[10px]">{quotaRemaining ?? '?'} crédit{(quotaRemaining ?? 0) > 1 ? 's' : ''}</span>
+                    }
+                  </button>
+                </div>
+              )}
 
-              {/* Zone de texte */}
-              <div className="flex-1 relative">
-                <textarea
-                  ref={textareaRef}
-                  className="w-full resize-none border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-gray-50 max-h-36 transition-all"
-                  placeholder={selectedImage ? 'Pose une question sur cette image… (ou envoie directement)' : 'Pose ta question à Kelassi… (Entrée pour envoyer)'}
-                  rows={1}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() }
-                  }}
-                />
+              <div className="flex items-end gap-2">
+                {/* Bouton image */}
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageSelect} />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={loading}
+                  title="Envoyer une photo d'exercice"
+                  className={`flex-shrink-0 w-11 h-11 rounded-2xl border-2 flex items-center justify-center text-lg transition-all ${
+                    selectedImage
+                      ? 'bg-emerald-100 border-emerald-400 text-emerald-600'
+                      : 'bg-white border-gray-200 text-gray-400 hover:border-emerald-300 hover:text-emerald-500 hover:bg-emerald-50'
+                  } disabled:opacity-40`}
+                >
+                  📷
+                </button>
+
+                {/* Zone de texte */}
+                <div className="flex-1 relative">
+                  <textarea
+                    ref={textareaRef}
+                    className="w-full resize-none border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-gray-50 max-h-36 transition-all"
+                    placeholder={selectedImage ? 'Pose une question sur cette image… (ou envoie directement)' : 'Pose ta question à Kelassi… (Entrée pour envoyer)'}
+                    rows={1}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() }
+                    }}
+                  />
+                </div>
+
+                {/* Bouton envoyer */}
+                <button
+                  onClick={() => sendMessage()}
+                  disabled={!canSend}
+                  className="flex-shrink-0 px-5 py-3 bg-emerald-600 text-white rounded-2xl hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed font-semibold text-sm transition-colors shadow-sm"
+                >
+                  {loading ? '…' : '→'}
+                </button>
               </div>
-
-              {/* Bouton envoyer */}
-              <button
-                onClick={sendMessage}
-                disabled={!canSend}
-                className="flex-shrink-0 px-5 py-3 bg-emerald-600 text-white rounded-2xl hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed font-semibold text-sm transition-colors shadow-sm"
-              >
-                {loading ? '…' : '→'}
-              </button>
             </div>
           )}
         </div>

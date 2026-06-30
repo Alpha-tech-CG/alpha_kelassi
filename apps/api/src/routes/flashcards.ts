@@ -4,8 +4,9 @@ import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { GoogleGenAI } from '@google/genai'
 import { authMiddleware } from '../middleware/auth.js'
-
+import { adminDb, COLLECTIONS } from '../lib/firebase.js'
 import { computeSM2 } from '../lib/sm2.js'
+import { FieldValue } from 'firebase-admin/firestore'
 
 const router = new Hono<{ Variables: AppVariables }>()
 const genai = new GoogleGenAI({ apiKey: process.env['GEMINI_API_KEY']! })
@@ -14,120 +15,118 @@ router.use('*', authMiddleware)
 
 // GET /flashcards/due — cartes à réviser aujourd'hui
 router.get('/due', async (c) => {
-  const userId = c.get('userId') as string
-  const limit = parseInt(c.req.query('limit') ?? '20', 10)
+  const userId = c.get('userId')
+  const limit  = Math.min(parseInt(c.req.query('limit') ?? '20', 10), 50)
+  const now    = new Date().toISOString()
 
-  const { data, error } = await c.get('supabase').from('flashcards')
-    .select('*, documents(title, subjects(name))')
-    .eq('user_id', userId)
-    .lte('next_review', new Date().toISOString())
-    .order('next_review', { ascending: true })
+  const snap = await adminDb.collection(COLLECTIONS.FLASHCARDS)
+    .where('user_id', '==', userId)
+    .where('next_review', '<=', now)
+    .orderBy('next_review', 'asc')
     .limit(limit)
+    .get()
 
-  if (error) return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
-  return c.json({ data: data ?? [], count: data?.length ?? 0 })
+  const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+  return c.json({ data, count: data.length })
 })
 
-// GET /flashcards — toutes les cartes (avec filtre optionnel)
+// GET /flashcards — toutes les cartes
 router.get('/', async (c) => {
-  const userId = c.get('userId') as string
+  const userId     = c.get('userId')
   const documentId = c.req.query('document_id')
 
-  let query = c.get('supabase').from('flashcards')
-    .select('*, documents(title, subjects(name))')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
+  let ref = adminDb.collection(COLLECTIONS.FLASHCARDS)
+    .where('user_id', '==', userId)
+    .orderBy('created_at', 'desc')
+    .limit(200) as FirebaseFirestore.Query
 
-  if (documentId) query = query.eq('document_id', documentId)
+  if (documentId) ref = ref.where('document_id', '==', documentId)
 
-  const { data, error } = await query.limit(200)
-  if (error) return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
-  return c.json({ data: data ?? [] })
+  const snap = await ref.get()
+  const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+  return c.json({ data })
 })
 
 // POST /flashcards/review — enregistre une révision SM-2
 router.post(
   '/review',
-  zValidator('json', z.object({ flashcard_id: z.string().uuid(), quality: z.number().int().min(0).max(5) })),
+  zValidator('json', z.object({
+    flashcard_id: z.string(),
+    quality:      z.number().int().min(0).max(5),
+  })),
   async (c) => {
-    const userId = c.get('userId') as string
+    const userId                   = c.get('userId')
     const { flashcard_id, quality } = c.req.valid('json')
 
-    const { data: card } = await c.get('supabase').from('flashcards')
-      .select('ease_factor, interval, reps')
-      .eq('id', flashcard_id)
-      .eq('user_id', userId)
-      .single()
+    const cardRef  = adminDb.collection(COLLECTIONS.FLASHCARDS).doc(flashcard_id)
+    const cardSnap = await cardRef.get()
 
-    if (!card) return c.json({ error: { code: 'NOT_FOUND' } }, 404)
+    if (!cardSnap.exists || cardSnap.data()?.user_id !== userId) {
+      return c.json({ error: { code: 'NOT_FOUND' } }, 404)
+    }
 
+    const card   = cardSnap.data()!
     const result = computeSM2(
-      { easeFactor: card.ease_factor, interval: card.interval, reps: card.reps },
+      { easeFactor: card['ease_factor'], interval: card['interval'], reps: card['reps'] },
       quality
     )
 
-    const { data: updated, error } = await c.get('supabase').from('flashcards')
-      .update({
-        ease_factor: result.easeFactor,
-        interval: result.interval,
-        reps: result.reps,
-        next_review: result.nextReview.toISOString(),
-      })
-      .eq('id', flashcard_id)
-      .select()
-      .single()
+    const update = {
+      ease_factor: result.easeFactor,
+      interval:    result.interval,
+      reps:        result.reps,
+      next_review: result.nextReview.toISOString(),
+      updated_at:  FieldValue.serverTimestamp(),
+    }
+    await cardRef.update(update)
 
-    if (error) return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
-
-    // XP + badges en arrière-plan (non bloquant)
     const xpAmount = quality >= 4 ? 3 : quality >= 3 ? 2 : 0
     if (xpAmount > 0) {
       const { awardXP, checkAndAwardBadges } = await import('../lib/xp.js')
-      awardXP(userId, xpAmount).catch(() => null)
-      checkAndAwardBadges(userId).catch(() => null)
+      Promise.allSettled([awardXP(userId, xpAmount), checkAndAwardBadges(userId)])
     }
 
-    return c.json({ data: updated })
+    return c.json({ data: { id: flashcard_id, ...card, ...update } })
   }
 )
 
-// POST /flashcards/generate — génère des flashcards depuis un document
+// POST /flashcards/generate — génère des flashcards IA depuis un document
 router.post(
   '/generate',
-  zValidator('json', z.object({ document_id: z.string().uuid(), count: z.number().int().min(1).max(20).default(10) })),
+  zValidator('json', z.object({
+    document_id: z.string(),
+    count:       z.number().int().min(1).max(20).default(10),
+  })),
   async (c) => {
-    const userId = c.get('userId') as string
-    const { document_id, count } = c.req.valid('json')
+    const userId                  = c.get('userId')
+    const { document_id, count }  = c.req.valid('json')
 
-    // Récupère les chunks du document
-    const { data: chunks } = await c.get('supabase').from('document_chunks')
-      .select('content')
-      .eq('document_id', document_id)
-      .order('chunk_index', { ascending: true })
+    const chunksSnap = await adminDb.collection(COLLECTIONS.DOCUMENT_CHUNKS)
+      .where('document_id', '==', document_id)
+      .orderBy('chunk_index', 'asc')
       .limit(30)
+      .get()
 
-    if (!chunks || chunks.length === 0) {
-      return c.json({ error: { code: 'NOT_INDEXED', message: 'Ce document n\'est pas encore indexé. Réessaie dans quelques minutes.' } }, 422)
+    if (chunksSnap.empty) {
+      return c.json({ error: { code: 'NOT_INDEXED', message: 'Document pas encore indexé. Réessaie dans quelques minutes.' } }, 422)
     }
 
-    const context = chunks.map((c) => c.content).join('\n\n---\n\n').slice(0, 8000)
+    const context = chunksSnap.docs.map((d) => d.data()['content']).join('\n\n---\n\n').slice(0, 8000)
 
-    const prompt = `Tu es un expert pédagogique. À partir du contenu de cours ci-dessous, génère exactement ${count} flashcards pour aider un élève congolais à réviser.
+    const prompt = `Tu es un expert pédagogique. À partir du contenu ci-dessous, génère exactement ${count} flashcards pour un élève congolais.
 
 Règles :
-- Recto (front) : question courte et précise (max 120 caractères)
-- Verso (back) : réponse concise (max 300 caractères), avec un exemple concret si possible
-- Couvre les concepts clés, définitions et formules importantes
+- Recto : question courte et précise (max 120 caractères)
+- Verso : réponse concise (max 300 caractères)
 - Varie les types : définition, application, exemple, calcul
-
-Retourne UNIQUEMENT un tableau JSON valide, sans markdown, sans commentaires :
+- Retourne UNIQUEMENT un tableau JSON valide, sans markdown :
 [{"front":"...","back":"..."},...]
 
-Contenu du cours :
+Contenu :
 ${context}`
 
     const response = await genai.models.generateContent({
-      model: 'gemini-1.5-flash',
+      model:    'gemini-1.5-flash',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
     })
     const raw = response.text ?? ''
@@ -141,30 +140,42 @@ ${context}`
       return c.json({ error: { code: 'GENERATION_ERROR', message: 'Erreur de génération. Réessaie.' } }, 500)
     }
 
-    const rows = cards.slice(0, count).map((card) => ({
-      user_id: userId,
-      document_id,
-      front: card.front,
-      back: card.back,
-    }))
+    const now    = new Date().toISOString()
+    const batch  = adminDb.batch()
+    const inserted: { id: string; front: string; back: string }[] = []
 
-    const { data: inserted, error: dbError } = await c.get('supabase').from('flashcards')
-      .insert(rows)
-      .select()
+    for (const card of cards.slice(0, count)) {
+      const ref = adminDb.collection(COLLECTIONS.FLASHCARDS).doc()
+      batch.set(ref, {
+        user_id:     userId,
+        document_id,
+        front:       card.front,
+        back:        card.back,
+        ease_factor: 2.5,
+        interval:    1,
+        reps:        0,
+        next_review: now,
+        created_at:  FieldValue.serverTimestamp(),
+      })
+      inserted.push({ id: ref.id, ...card })
+    }
 
-    if (dbError) return c.json({ error: { code: 'DB_ERROR', message: dbError.message } }, 500)
-    return c.json({ data: inserted, count: inserted?.length ?? 0 }, 201)
+    await batch.commit()
+    return c.json({ data: inserted, count: inserted.length }, 201)
   }
 )
 
 // DELETE /flashcards/:id
 router.delete('/:id', async (c) => {
-  const userId = c.get('userId') as string
-  const id = c.req.param('id')
-  await c.get('supabase').from('flashcards').delete().eq('id', id).eq('user_id', userId)
+  const userId = c.get('userId')
+  const id     = c.req.param('id')
+
+  const cardSnap = await adminDb.collection(COLLECTIONS.FLASHCARDS).doc(id).get()
+  if (cardSnap.exists && cardSnap.data()?.user_id === userId) {
+    await adminDb.collection(COLLECTIONS.FLASHCARDS).doc(id).delete()
+  }
+
   return c.json({ data: { deleted: true } })
 })
 
 export { router as flashcardsRouter }
-
-

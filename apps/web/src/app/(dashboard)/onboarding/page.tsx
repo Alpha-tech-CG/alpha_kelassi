@@ -4,8 +4,6 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
-const API_URL = ''  // routes Next.js locales
-
 const LEVELS = [
   { value: 'bepc',  label: 'BEPC',  sub: '3ème', color: 'border-blue-500 bg-blue-50 text-blue-700' },
   { value: 'bac_c', label: 'BAC C', sub: 'Maths-Sciences', color: 'border-purple-500 bg-purple-50 text-purple-700' },
@@ -19,14 +17,20 @@ const TIPS = [
   { icon: '🔄', title: 'Reformule si besoin', desc: '"Je n\'ai pas compris, explique autrement" → Kelassi réessaie.' },
 ]
 
+const STEPS = ['Niveau', 'Matières', 'Tutoriel', 'Parrainage', 'C\'est parti']
+
 export default function OnboardingPage() {
-  const router = useRouter()
+  const router   = useRouter()
   const supabase = createClient()
-  const [step, setStep] = useState(0)
-  const [level, setLevel] = useState<string | null>(null)
-  const [subjects, setSubjects] = useState<{ id: string; name: string }[]>([])
+
+  const [step,             setStep]             = useState(0)
+  const [level,            setLevel]            = useState<string | null>(null)
+  const [subjects,         setSubjects]         = useState<{ id: string; name: string }[]>([])
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
-  const [loading, setLoading] = useState(false)
+  const [referralCode,     setReferralCode]     = useState('')
+  const [referralStatus,   setReferralStatus]   = useState<'idle' | 'checking' | 'ok' | 'error'>('idle')
+  const [referralMsg,      setReferralMsg]      = useState('')
+  const [loading,          setLoading]          = useState(false)
 
   async function handleLevelSelect(lvl: string) {
     setLevel(lvl)
@@ -41,14 +45,38 @@ export default function OnboardingPage() {
     )
   }
 
+  async function validateReferralCode() {
+    const code = referralCode.trim().toUpperCase()
+    if (!code) { setStep(4); return }
+
+    setReferralStatus('checking')
+    try {
+      const res  = await fetch('/api/referral/validate', {
+        method:      'POST',
+        headers:     { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body:        JSON.stringify({ code }),
+      })
+      const json = await res.json()
+      if (res.ok) {
+        setReferralStatus('ok')
+        setReferralMsg(json.data?.message ?? 'Code validé !')
+        setTimeout(() => setStep(4), 1600)
+      } else {
+        setReferralStatus('error')
+        setReferralMsg(json.error ?? 'Code invalide.')
+      }
+    } catch {
+      setReferralStatus('error')
+      setReferralMsg('Erreur réseau. Réessaie.')
+    }
+  }
+
   async function handleComplete() {
     if (!level || selectedSubjects.length === 0) return
     setLoading(true)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return
-
-      const res = await fetch(`${API_URL}/api/onboarding/complete`, {
+      const res  = await fetch('/api/onboarding/complete', {
         method:      'POST',
         headers:     { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -57,7 +85,7 @@ export default function OnboardingPage() {
       const json = await res.json()
 
       if (json.data?.suggested_document) {
-        await fetch(`${API_URL}/api/flashcards/generate`, {
+        await fetch('/api/flashcards/generate', {
           method:      'POST',
           headers:     { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -71,11 +99,10 @@ export default function OnboardingPage() {
     }
   }
 
-  const STEPS = ['Niveau', 'Matières', 'Tutoriel', 'C\'est parti']
-
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-lg">
+
         {/* Progress */}
         <div className="flex items-center gap-2 mb-8 justify-center">
           {STEPS.map((s, i) => (
@@ -85,7 +112,9 @@ export default function OnboardingPage() {
               }`}>
                 {i < step ? '✓' : i + 1}
               </div>
-              {i < STEPS.length - 1 && <div className={`h-0.5 w-8 transition-colors ${i < step ? 'bg-blue-600' : 'bg-gray-200'}`} />}
+              {i < STEPS.length - 1 && (
+                <div className={`h-0.5 w-6 transition-colors ${i < step ? 'bg-blue-600' : 'bg-gray-200'}`} />
+              )}
             </div>
           ))}
         </div>
@@ -100,11 +129,8 @@ export default function OnboardingPage() {
               <p className="text-gray-500 text-center text-sm mb-8">Quel est ton niveau scolaire ?</p>
               <div className="grid grid-cols-2 gap-3">
                 {LEVELS.map((l) => (
-                  <button
-                    key={l.value}
-                    onClick={() => handleLevelSelect(l.value)}
-                    className={`border-2 rounded-xl p-4 text-left transition-all hover:scale-105 ${l.color}`}
-                  >
+                  <button key={l.value} onClick={() => handleLevelSelect(l.value)}
+                    className={`border-2 rounded-xl p-4 text-left transition-all hover:scale-105 ${l.color}`}>
                     <p className="text-xl font-bold">{l.label}</p>
                     <p className="text-xs mt-0.5 opacity-75">{l.sub}</p>
                   </button>
@@ -123,23 +149,17 @@ export default function OnboardingPage() {
                 {subjects.map((s) => {
                   const sel = selectedSubjects.includes(s.id)
                   return (
-                    <button
-                      key={s.id}
-                      onClick={() => toggleSubject(s.id)}
+                    <button key={s.id} onClick={() => toggleSubject(s.id)}
                       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                         sel ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
+                      }`}>
                       {s.name}
                     </button>
                   )
                 })}
               </div>
-              <button
-                onClick={() => setStep(2)}
-                disabled={selectedSubjects.length === 0}
-                className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 disabled:opacity-40"
-              >
+              <button onClick={() => setStep(2)} disabled={selectedSubjects.length === 0}
+                className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 disabled:opacity-40">
                 Continuer ({selectedSubjects.length} choisie{selectedSubjects.length > 1 ? 's' : ''})
               </button>
             </div>
@@ -161,17 +181,59 @@ export default function OnboardingPage() {
                   </div>
                 ))}
               </div>
-              <button
-                onClick={() => setStep(3)}
-                className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700"
-              >
+              <button onClick={() => setStep(3)}
+                className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700">
                 J'ai compris !
               </button>
             </div>
           )}
 
-          {/* Étape 3 — Lancement */}
+          {/* Étape 3 — Code de parrainage (optionnel) */}
           {step === 3 && (
+            <div>
+              <p className="text-4xl text-center mb-4">🎁</p>
+              <h2 className="text-xl font-bold text-center mb-1">Code de parrainage ?</h2>
+              <p className="text-gray-500 text-center text-sm mb-6">
+                Un ami t'a invité ? Entre son code et il recevra <strong>+5 questions IA</strong> aujourd'hui en cadeau.
+              </p>
+
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="KELASSI-XXXX"
+                  value={referralCode}
+                  onChange={(e) => {
+                    setReferralCode(e.target.value.toUpperCase())
+                    if (referralStatus !== 'idle') setReferralStatus('idle')
+                  }}
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-center text-lg font-mono font-bold tracking-widest focus:outline-none focus:border-blue-500 uppercase transition-colors"
+                  maxLength={12}
+                />
+                {referralStatus === 'ok' && (
+                  <p className="text-emerald-600 text-sm text-center mt-2 font-medium animate-pulse">✅ {referralMsg}</p>
+                )}
+                {referralStatus === 'error' && (
+                  <p className="text-red-500 text-sm text-center mt-2">{referralMsg}</p>
+                )}
+              </div>
+
+              <button
+                onClick={validateReferralCode}
+                disabled={referralStatus === 'checking' || referralStatus === 'ok'}
+                className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 disabled:opacity-50 mb-3 transition-colors"
+              >
+                {referralStatus === 'checking' ? 'Vérification…' : referralStatus === 'ok' ? '✅ Code validé !' : 'Valider le code'}
+              </button>
+
+              <button onClick={() => setStep(4)}
+                className="w-full py-2.5 text-sm text-gray-400 hover:text-gray-600 transition-colors">
+                Passer cette étape →
+              </button>
+            </div>
+          )}
+
+          {/* Étape 4 — Lancement */}
+          {step === 4 && (
             <div>
               <p className="text-4xl text-center mb-4">🃏</p>
               <h2 className="text-xl font-bold text-center mb-2">Ta première flashcard t'attend !</h2>
@@ -185,15 +247,13 @@ export default function OnboardingPage() {
                   </div>
                 ))}
               </div>
-              <button
-                onClick={handleComplete}
-                disabled={loading}
-                className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 disabled:opacity-50"
-              >
+              <button onClick={handleComplete} disabled={loading}
+                className="w-full py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 disabled:opacity-50">
                 {loading ? 'Préparation...' : 'C\'est parti ! 🚀'}
               </button>
             </div>
           )}
+
         </div>
       </div>
     </div>

@@ -1,7 +1,8 @@
-﻿import { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '@alpha-kelassi/types'
+import type { Firestore } from 'firebase-admin/firestore'
+import type { COLLECTIONS } from './firebase.js'
 
 export type AppVariables = {
   userId: string
-  supabase: SupabaseClient<Database>
+  db: Firestore
+  collections: typeof COLLECTIONS
 }

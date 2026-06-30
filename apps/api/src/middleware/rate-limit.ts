@@ -19,6 +19,14 @@ function getClientIp(c: Context): string {
 export function rateLimit({ windowSeconds, max, keyPrefix }: RateLimitOptions) {
   return async (c: Context, next: Next) => {
     const ip = getClientIp(c)
+
+    if (ip === 'unknown') {
+      return c.json(
+        { error: { code: 'RATE_LIMITED', message: 'IP non déterminée — requête refusée.' } },
+        429
+      )
+    }
+
     const key = `rl:${keyPrefix}:${ip}`
 
     const count = await redis.incr(key)

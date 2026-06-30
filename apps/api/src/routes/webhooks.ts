@@ -96,7 +96,10 @@ router.post('/cinetpay', async (c) => {
   if (body.cpm_result !== '00') return c.json({ received: true })
 
   let meta: { user_id?: string; plan?: string } = {}
-  try { meta = JSON.parse(body.cpm_custom) } catch { return c.json({ received: true }) }
+  try { meta = JSON.parse(body.cpm_custom) } catch {
+    console.error('[cinetpay] cpm_custom JSON invalide:', body.cpm_custom)
+    return c.json({ error: 'Payload invalide' }, 400)
+  }
 
   const { user_id: userId, plan } = meta
   if (!userId) return c.json({ received: true })

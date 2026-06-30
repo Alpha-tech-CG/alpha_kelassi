@@ -1,220 +1,158 @@
-﻿import { Hono } from 'hono'
+import { Hono } from 'hono'
 import type { AppVariables } from '../../lib/types.js'
 import { z } from 'zod'
-// @ts-ignore
 import { zValidator } from '@hono/zod-validator'
-import { supabaseAdmin as supabase } from '../../lib/supabase.js'
-import { authMiddleware } from '../../middleware/auth.js'
+import { authMiddleware, adminMiddleware } from '../../middleware/auth.js'
+import { adminDb, adminStorage, COLLECTIONS } from '../../lib/firebase.js'
 import { embedQueue } from '../../jobs/embed-queue.js'
 import { detectFormat, extractText } from '../../lib/text-extractor.js'
+import { FieldValue } from 'firebase-admin/firestore'
 
 const router = new Hono<{ Variables: AppVariables }>()
-
 router.use('*', authMiddleware)
-
-// Middleware admin uniquement
-router.use('*', async (c, next) => {
-  const userId = c.get('userId') as string
-  const { data: user } = await supabase.from('users').select('role').eq('id', userId).single()
-  if (user?.role !== 'admin') {
-    return c.json({ error: { code: 'FORBIDDEN', message: 'Admin requis' } }, 403)
-  }
-  await next()
-})
+router.use('*', adminMiddleware)
 
 const uploadSchema = z.object({
-  subject_id: z.string().uuid(),
-  type: z.enum(['cours', 'examen']),
-  title: z.string().min(3),
-  level: z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
-  year: z.coerce.number().int().min(1990).max(2030).optional(),
-  session: z.enum(['normale', 'rattrapage']).optional(),
+  subject_id:   z.string(),
+  type:         z.enum(['cours', 'examen']),
+  title:        z.string().min(3),
+  level:        z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  year:         z.coerce.number().int().min(1990).max(2030).optional(),
+  session:      z.enum(['normale', 'rattrapage']).optional(),
   country_code: z.string().length(2).default('CG'),
-  is_premium: z.boolean().default(false),
+  is_premium:   z.boolean().default(false),
 })
 
-// POST /api/admin/documents — upload PDF / DOCX / TXT + extraction texte immédiate
+// POST /api/admin/documents — upload PDF/DOCX/TXT
 router.post('/', async (c) => {
   const formData = await c.req.formData()
-  const file = formData.get('file') as File | null
-  const metaRaw = formData.get('meta') as string | null
+  const file     = formData.get('file') as File | null
+  const metaRaw  = formData.get('meta') as string | null
 
   if (!file || !metaRaw) {
     return c.json({ error: { code: 'BAD_REQUEST', message: 'Fichier et métadonnées requis' } }, 400)
   }
 
-  const meta = uploadSchema.parse(JSON.parse(metaRaw))
+  const meta        = uploadSchema.parse(JSON.parse(metaRaw))
   const arrayBuffer = await file.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
+  const buffer      = Buffer.from(arrayBuffer)
 
-  // Détection du format (PDF, DOCX, TXT) via extension + magic bytes
   const headerBytes = new Uint8Array(buffer.slice(0, 4))
-  const format = detectFormat(file.name, file.type, headerBytes)
+  const format      = detectFormat(file.name, file.type, headerBytes)
   if (!format) {
-    return c.json({
-      error: {
-        code: 'INVALID_FILE',
-        message: 'Format non supporté. Utilisez PDF, DOCX ou TXT.',
-      },
-    }, 400)
+    return c.json({ error: { code: 'INVALID_FILE', message: 'Format non supporté. Utilisez PDF, DOCX ou TXT.' } }, 400)
   }
 
-  // Extraction du texte dès l'upload (toutes formats)
   let textContent: string | null = null
   try {
     textContent = await extractText(buffer, format)
     if (!textContent || textContent.trim().length < 20) {
-      return c.json({
-        error: {
-          code: 'EMPTY_DOCUMENT',
-          message: 'Le document semble vide ou non extractible (PDF scanné ?)',
-        },
-      }, 422)
+      return c.json({ error: { code: 'EMPTY_DOCUMENT', message: 'Document vide ou non extractible (PDF scanné ?)' } }, 422)
     }
   } catch (err) {
-    return c.json({
-      error: { code: 'EXTRACTION_ERROR', message: `Erreur extraction texte : ${(err as Error).message}` },
-    }, 422)
+    return c.json({ error: { code: 'EXTRACTION_ERROR', message: `Erreur extraction : ${(err as Error).message}` } }, 422)
   }
 
-  // Sanitise le nom de fichier
   const safeName = file.name
     .replace(/[^a-zA-Z0-9._-]/g, '_')
     .replace(/\.{2,}/g, '_')
     .replace(/^[._]+/, '')
     .slice(0, 100)
 
-  // Content-type selon format
   const contentTypeMap: Record<string, string> = {
-    pdf: 'application/pdf',
+    pdf:  'application/pdf',
     docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    txt: 'text/plain; charset=utf-8',
+    txt:  'text/plain; charset=utf-8',
   }
 
-  const bucket = meta.is_premium ? 'pdfs-premium' : 'pdfs-public'
-  const fileName = `${Date.now()}_${safeName || `document.${format}`}`
+  const folder      = meta.is_premium ? 'pdfs-premium' : 'pdfs-public'
+  const storagePath = `${folder}/${Date.now()}_${safeName || `document.${format}`}`
+  const bucket      = adminStorage.bucket()
 
-  const { error: storageError } = await supabase.storage
-    .from(bucket)
-    .upload(fileName, arrayBuffer, { contentType: contentTypeMap[format] as string, upsert: false })
+  await bucket.file(storagePath).save(buffer, {
+    metadata: { contentType: contentTypeMap[format] },
+  })
 
-  if (storageError) {
-    return c.json({ error: { code: 'UPLOAD_ERROR', message: storageError.message } }, 500)
-  }
+  const docRef = await adminDb.collection(COLLECTIONS.DOCUMENTS).add({
+    ...meta,
+    year:         meta.year    ?? null,
+    session:      meta.session ?? null,
+    storage_path: storagePath,
+    text_content: textContent,
+    synthesized_at: null,
+    created_at:   FieldValue.serverTimestamp(),
+  })
 
-  const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(fileName)
-
-  // Insère le document + text_content extrait
-  // Convertit undefined → null pour year/session (exactOptionalPropertyTypes)
-  const { data: doc, error: dbError } = await supabase
-    .from('documents')
-    .insert({
-      ...meta,
-      year: meta.year ?? null,
-      session: meta.session ?? null,
-      pdf_url: publicUrl,
-      text_content: textContent,
-    })
-    .select()
-    .single()
-
-  if (dbError) {
-    return c.json({ error: { code: 'DB_ERROR', message: dbError.message } }, 500)
-  }
-
-  // Déclenche le job d'indexation RAG (chunking + embeddings)
   if (embedQueue) {
     await embedQueue.add('embed_document', {
-      document_id: doc.id,
-      pdf_url: publicUrl,
-      text_content: textContent,  // évite une re-extraction dans le worker
+      document_id:  docRef.id,
+      storage_path: storagePath,
+      text_content: textContent,
     })
   }
 
-  return c.json({ data: doc }, 201)
+  const snap = await docRef.get()
+  return c.json({ data: { id: snap.id, ...snap.data() } }, 201)
 })
 
-// PUT /api/admin/documents/:id â€” mise Ã  jour mÃ©tadonnÃ©es
+// PUT /api/admin/documents/:id — mise à jour métadonnées
 router.put('/:id', zValidator('json', uploadSchema.partial()), async (c) => {
-  const id = c.req.param('id')
-  const updates = (c.req.valid as any)('json')
-
-  const { data, error } = await supabase
-    .from('documents')
-    .update(updates)
-    .eq('id', id)
-    .select()
-    .single()
-
-  if (error) return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
-  return c.json({ data })
+  const id      = c.req.param('id')
+  const updates = c.req.valid('json')
+  const ref     = adminDb.collection(COLLECTIONS.DOCUMENTS).doc(id)
+  await ref.update({ ...updates, updated_at: FieldValue.serverTimestamp() })
+  const snap = await ref.get()
+  return c.json({ data: { id: snap.id, ...snap.data() } })
 })
 
-// PATCH /api/admin/documents/:id/corrige â€” upload du PDF corrigÃ©
+// PATCH /api/admin/documents/:id/corrige — upload du corrigé
 router.patch('/:id/corrige', async (c) => {
-  const id = c.req.param('id')
-
-  const { data: doc } = await supabase.from('documents').select('id, is_premium').eq('id', id).single()
-  if (!doc) return c.json({ error: { code: 'NOT_FOUND', message: 'Document introuvable' } }, 404)
-
-  const formData = await c.req.formData()
-  const file = formData.get('file') as File | null
-  if (!file) return c.json({ error: { code: 'BAD_REQUEST', message: 'Fichier requis' } }, 400)
-
-  // Magic bytes PDF
-  const headerBytes = new Uint8Array(await file.slice(0, 4).arrayBuffer())
-  if (!String.fromCharCode(...headerBytes).startsWith('%PDF')) {
-    return c.json({ error: { code: 'INVALID_FILE', message: 'Le fichier doit Ãªtre un PDF valide' } }, 400)
+  const id      = c.req.param('id')
+  const docSnap = await adminDb.collection(COLLECTIONS.DOCUMENTS).doc(id).get()
+  if (!docSnap.exists) {
+    return c.json({ error: { code: 'NOT_FOUND', message: 'Document introuvable' } }, 404)
   }
 
-  const safeName = file.name
-    .replace(/[^a-zA-Z0-9._-]/g, '_')
-    .replace(/\.{2,}/g, '_')
-    .replace(/^[._]+/, '')
-    .slice(0, 100)
+  const formData = await c.req.formData()
+  const file     = formData.get('file') as File | null
+  if (!file) return c.json({ error: { code: 'BAD_REQUEST', message: 'Fichier requis' } }, 400)
 
-  const bucket = doc.is_premium ? 'pdfs-premium' : 'pdfs-public'
-  const fileName = `corrige_${Date.now()}_${safeName || 'corrige.pdf'}`
-  const arrayBuffer = await file.arrayBuffer()
+  const headerBytes = new Uint8Array(await file.slice(0, 4).arrayBuffer())
+  if (!String.fromCharCode(...headerBytes).startsWith('%PDF')) {
+    return c.json({ error: { code: 'INVALID_FILE', message: 'Le fichier doit être un PDF valide' } }, 400)
+  }
 
-  const { error: storageError } = await supabase.storage
-    .from(bucket)
-    .upload(fileName, arrayBuffer, { contentType: 'application/pdf', upsert: false })
+  const safeName    = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 100)
+  const isPremium   = docSnap.data()?.['is_premium'] as boolean
+  const folder      = isPremium ? 'pdfs-premium' : 'pdfs-public'
+  const storagePath = `${folder}/corrige_${Date.now()}_${safeName || 'corrige.pdf'}`
+  const buffer      = Buffer.from(await file.arrayBuffer())
 
-  if (storageError) return c.json({ error: { code: 'UPLOAD_ERROR', message: storageError.message } }, 500)
+  await adminStorage.bucket().file(storagePath).save(buffer, {
+    metadata: { contentType: 'application/pdf' },
+  })
 
-  const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(fileName)
-
-  const { data, error } = await supabase
-    .from('documents')
-    .update({ corrige_url: publicUrl })
-    .eq('id', id)
-    .select()
-    .single()
-
-  if (error) return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
-  return c.json({ data })
+  const ref = adminDb.collection(COLLECTIONS.DOCUMENTS).doc(id)
+  await ref.update({ corrige_storage_path: storagePath, updated_at: FieldValue.serverTimestamp() })
+  const snap = await ref.get()
+  return c.json({ data: { id: snap.id, ...snap.data() } })
 })
 
 // DELETE /api/admin/documents/:id
 router.delete('/:id', async (c) => {
-  const id = c.req.param('id')
-
-  const { data: doc } = await supabase.from('documents').select('pdf_url, is_premium').eq('id', id).single()
-  if (!doc) return c.json({ error: { code: 'NOT_FOUND', message: 'Introuvable' } }, 404)
-
-  // Supprime le fichier du storage si l'URL existe
-  const bucket = doc.is_premium ? 'pdfs-premium' : 'pdfs-public'
-  if (doc.pdf_url) {
-    const fileName = doc.pdf_url.split('/').pop() ?? ''
-    if (fileName) await supabase.storage.from(bucket).remove([fileName])
+  const id      = c.req.param('id')
+  const docSnap = await adminDb.collection(COLLECTIONS.DOCUMENTS).doc(id).get()
+  if (!docSnap.exists) {
+    return c.json({ error: { code: 'NOT_FOUND', message: 'Introuvable' } }, 404)
   }
 
-  await supabase.from('documents').delete().eq('id', id)
+  const storagePath = docSnap.data()?.['storage_path'] as string | null
+  if (storagePath) {
+    await adminStorage.bucket().file(storagePath).delete().catch(() => null)
+  }
+
+  await adminDb.collection(COLLECTIONS.DOCUMENTS).doc(id).delete()
   return c.json({ data: { deleted: true } })
 })
 
 export { router as adminDocumentsRouter }
-
-
-

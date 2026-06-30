@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { BetaFeedbackButton } from '@/components/beta-feedback-button'
 import { NotificationBanner } from '@/components/notification-banner'
+import { redis } from '@/lib/redis'
 import {
   Home, BookOpen, FileText, Bot, Layers, TrendingUp,
   Crown, Wrench, type LucideIcon,
@@ -28,16 +29,29 @@ const MOBILE_NAV: NavItem[] = [
   { href: '/progression', label: 'Progrès', Icon: TrendingUp },
 ]
 
+type UserProfile = { full_name: string | null; plan: string | null; role: string | null }
+
+async function getCachedProfile(userId: string, supabase: Awaited<ReturnType<typeof createClient>>): Promise<UserProfile | null> {
+  const cacheKey = `profile:${userId}`
+  const cached = await redis.get<UserProfile>(cacheKey)
+  if (cached) return cached
+
+  const { data } = await supabase
+    .from('users')
+    .select('full_name, plan, role')
+    .eq('id', userId)
+    .single()
+
+  if (data) await redis.set(cacheKey, data, { ex: 300 }) // 5 min TTL
+  return data
+}
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('users')
-    .select('full_name, plan, role')
-    .eq('id', user.id)
-    .single()
+  const profile = await getCachedProfile(user.id, supabase)
 
   return (
     <div className="min-h-screen flex">

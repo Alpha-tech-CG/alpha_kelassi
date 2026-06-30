@@ -1,9 +1,3 @@
-import { createBrowserClient } from '@supabase/ssr'
-import type { Database } from '@alpha-kelassi/types'
-
-export function createClient() {
-  return createBrowserClient<Database>(
-    process.env['NEXT_PUBLIC_SUPABASE_URL']!,
-    process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!
-  )
-}
+// Ce fichier est conservé pour compatibilité pendant la migration.
+// Utiliser apps/web/src/lib/firebase/client.ts à la place.
+export { db as supabase, auth, storage } from '../firebase/client'

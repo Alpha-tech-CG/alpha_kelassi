@@ -1,51 +1,24 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+/**
+ * Remplacé par Firebase Admin SDK.
+ * Ce fichier expose un helper pour récupérer l'utilisateur courant côté serveur
+ * via le cookie de session Firebase.
+ */
 import { cookies } from 'next/headers'
-import type { Database } from '@alpha-kelassi/types'
+import { adminAuth } from '@/lib/firebase/admin'
 
-export async function createClient() {
+export async function getServerUser() {
   const cookieStore = await cookies()
-
-  return createServerClient<Database>(
-    process.env['NEXT_PUBLIC_SUPABASE_URL']!,
-    process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // appelé depuis un Server Component — ignoré
-          }
-        },
-      },
-    }
-  )
+  const token = cookieStore.get('firebase-token')?.value
+  if (!token) return null
+  try {
+    const decoded = await adminAuth.verifyIdToken(token)
+    return { id: decoded.uid, ...decoded }
+  } catch {
+    return null
+  }
 }
 
-export async function createAdminClient() {
-  const cookieStore = await cookies()
-
-  return createServerClient<Database>(
-    process.env['NEXT_PUBLIC_SUPABASE_URL']!,
-    process.env['SUPABASE_SERVICE_ROLE_KEY']!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {}
-        },
-      },
-    }
-  )
+// Alias pour la compatibilité avec l'ancien code
+export const createClient = () => {
+  throw new Error('createClient Supabase supprimé — utilise getServerUser() ou le Firebase Admin SDK directement')
 }
