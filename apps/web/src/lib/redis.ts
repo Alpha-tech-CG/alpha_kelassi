@@ -11,7 +11,9 @@ const redisToken = cleanEnv(process.env['UPSTASH_REDIS_REST_TOKEN'])
 
 const isConfigured =
   redisUrl.startsWith('https://') &&
-  redisToken.length > 0
+  !redisUrl.includes('xxxx') &&
+  redisToken.length > 20 &&
+  !redisToken.startsWith('AXxxx')
 
 // Singleton lazy — créé une seule fois au premier appel
 let _redis: Redis | null = null
