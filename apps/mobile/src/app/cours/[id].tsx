@@ -1,190 +1,95 @@
-import { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, ScrollView } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import * as FileSystem from 'expo-file-system'
-import Pdf from 'react-native-pdf'
-import { supabase } from '../../lib/supabase'
-import { useNetworkStatus } from '../../hooks/useNetworkStatus'
-import { database, DocumentModel } from '../../db'
-import { Q } from '@nozbe/watermelondb'
-
-interface Doc { id: string; title: string; type: string; level: string; year: number | null; session: string | null; is_premium: boolean; pdf_url: string }
+import { getCourseById, levelLabels } from '../../content/courses'
 
 export default function CoursDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
-  const { isOnline } = useNetworkStatus()
-  const [doc, setDoc] = useState<Doc | null>(null)
-  const [signedUrl, setSignedUrl] = useState<string | null>(null)
-  const [localPath, setLocalPath] = useState<string | null>(null)
-  const [downloading, setDownloading] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [isPremiumBlocked, setIsPremiumBlocked] = useState(false)
+  const course = getCourseById(id)
 
-  useEffect(() => {
-    loadDoc()
-  }, [id])
-
-  async function loadDoc() {
-    // Check local DB first
-    const localDocs = await database.get<DocumentModel>('documents').query(Q.where('remote_id', id)).fetch()
-    if (localDocs[0]?.localPdfPath) {
-      setLocalPath(localDocs[0].localPdfPath)
-    }
-
-    if (!isOnline) {
-      if (localDocs[0]) {
-        setDoc({ id: localDocs[0].remoteId, title: localDocs[0].title, type: localDocs[0].type, level: localDocs[0].level, year: localDocs[0].year, session: localDocs[0].session, is_premium: localDocs[0].isPremium, pdf_url: '' })
-      }
-      setLoading(false)
-      return
-    }
-
-    const { data } = await supabase.from('documents').select('*').eq('id', id).single()
-    if (!data) { setLoading(false); return }
-    setDoc(data as Doc)
-
-    if (data.is_premium) {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data: profile } = await supabase.from('users').select('plan').eq('id', user.id).single()
-        if (profile?.plan !== 'premium') {
-          setIsPremiumBlocked(true)
-          setLoading(false)
-          return
-        }
-      }
-    }
-
-    const bucket = data.is_premium ? 'pdfs-premium' : 'pdfs-public'
-    const fileName = data.pdf_url.split('/').pop() ?? ''
-    const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(fileName, 900)
-    setSignedUrl(signed?.signedUrl ?? null)
-    setLoading(false)
-  }
-
-  async function downloadForOffline() {
-    if (!signedUrl || !doc) return
-    setDownloading(true)
-    try {
-      const path = `${FileSystem.documentDirectory}kelassi_${doc.id}.pdf`
-      await FileSystem.downloadAsync(signedUrl, path)
-      setLocalPath(path)
-
-      // Update WatermelonDB
-      await database.write(async () => {
-        const existing = await database.get<DocumentModel>('documents').query(Q.where('remote_id', doc.id)).fetch()
-        if (existing[0]) {
-          await existing[0].update((m) => {
-            m.localPdfPath = path
-            m.downloadedAt = Date.now()
-          })
-        } else {
-          await database.get<DocumentModel>('documents').create((m) => {
-            m.remoteId = doc.id
-            m.title = doc.title
-            m.type = doc.type
-            m.level = doc.level
-            m.year = doc.year
-            m.isPremium = doc.is_premium
-            m.localPdfPath = path
-            m.downloadedAt = Date.now()
-          })
-        }
-      })
-      Alert.alert('Téléchargé ✓', 'Le document est disponible hors-ligne.')
-    } catch {
-      Alert.alert('Erreur', 'Impossible de télécharger le document.')
-    }
-    setDownloading(false)
-  }
-
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
-
-  if (isPremiumBlocked) {
+  if (!course) {
     return (
-      <View style={styles.blocked}>
-        <Text style={styles.blockedIcon}>⭐</Text>
-        <Text style={styles.blockedTitle}>Contenu Premium</Text>
-        <Text style={styles.blockedSub}>Ce document est réservé aux abonnés Premium.</Text>
-        <TouchableOpacity style={styles.upgradeBtn} onPress={() => router.push('/(tabs)/profil')}>
-          <Text style={styles.upgradeBtnText}>Passer à Premium</Text>
+      <View style={styles.empty}>
+        <Text style={styles.emptyTitle}>Cours introuvable</Text>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <Text style={styles.backButtonText}>Retour</Text>
         </TouchableOpacity>
       </View>
     )
   }
 
-  const pdfSource = localPath
-    ? { uri: `file://${localPath}`, cache: true }
-    : signedUrl
-      ? { uri: signedUrl, cache: false }
-      : null
-
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.docHeader}>
-        <Text style={styles.docTitle} numberOfLines={2}>{doc?.title}</Text>
-        <View style={styles.docMeta}>
-          <Text style={styles.levelBadge}>{doc?.level.replace('_', ' ').toUpperCase()}</Text>
-          {doc?.year && <Text style={styles.metaText}>· {doc.year}</Text>}
-        </View>
-        <View style={styles.actions}>
-          {!localPath ? (
-            <TouchableOpacity
-              style={[styles.downloadBtn, (!signedUrl || downloading) && styles.downloadBtnDisabled]}
-              onPress={downloadForOffline}
-              disabled={!signedUrl || downloading}
-            >
-              {downloading ? <ActivityIndicator size="small" color="#0F8F4F" /> : <Text style={styles.downloadBtnText}>⬇️ Télécharger hors-ligne</Text>}
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.downloadedBadge}>
-              <Text style={styles.downloadedText}>✓ Disponible hors-ligne</Text>
-            </View>
-          )}
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <View style={styles.hero}>
+        <Text style={styles.subject}>{course.subject}</Text>
+        <Text style={styles.title}>{course.title}</Text>
+        <Text style={styles.summary}>{course.summary}</Text>
+        <View style={styles.metaRow}>
+          <Text style={styles.levelBadge}>{levelLabels[course.level]}</Text>
+          <Text style={styles.metaBadge}>{course.chapter}</Text>
+          <Text style={styles.metaBadge}>{course.duration}</Text>
+          {course.isPremium && <Text style={styles.premiumBadge}>Premium</Text>}
         </View>
       </View>
 
-      {/* PDF Viewer */}
-      {pdfSource ? (
-        <Pdf
-          source={pdfSource}
-          style={styles.pdf}
-          onError={(err) => Alert.alert('Erreur PDF', String(err))}
-          trustAllCerts={false}
-        />
-      ) : (
-        <View style={styles.noPdf}>
-          <Text style={styles.noPdfText}>
-            {isOnline ? 'PDF indisponible' : 'Ce document n\'a pas été téléchargé hors-ligne.'}
-          </Text>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Objectifs</Text>
+        {course.objectives.map((objective) => (
+          <View key={objective} style={styles.bulletRow}>
+            <Text style={styles.bulletDot}>•</Text>
+            <Text style={styles.bulletText}>{objective}</Text>
+          </View>
+        ))}
+      </View>
+
+      {course.sections.map((section, index) => (
+        <View key={section.title} style={styles.card}>
+          <Text style={styles.sectionEyebrow}>Partie {index + 1}</Text>
+          <Text style={styles.cardTitle}>{section.title}</Text>
+          {section.body.map((paragraph) => (
+            <Text key={paragraph} style={styles.paragraph}>{paragraph}</Text>
+          ))}
         </View>
-      )}
-    </View>
+      ))}
+
+      <View style={styles.takeawaysCard}>
+        <Text style={styles.takeawaysTitle}>A retenir</Text>
+        {course.takeaways.map((item) => (
+          <View key={item} style={styles.takeawayRow}>
+            <Text style={styles.takeawayCheck}>✓</Text>
+            <Text style={styles.takeawayText}>{item}</Text>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  docHeader: { padding: 16, borderBottomWidth: 1, borderBottomColor: '#EEF8F4' },
-  docTitle: { fontSize: 17, fontWeight: '700', color: '#1F2A24', marginBottom: 6 },
-  docMeta: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
-  levelBadge: { fontSize: 11, backgroundColor: '#EAF5EC', color: '#0F8F4F', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, fontWeight: '600' },
-  metaText: { fontSize: 13, color: '#6D7A72' },
-  actions: { flexDirection: 'row' },
-  downloadBtn: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10, backgroundColor: '#EAF5EC', gap: 6 },
-  downloadBtnDisabled: { opacity: 0.5 },
-  downloadBtnText: { fontSize: 13, color: '#0F8F4F', fontWeight: '600' },
-  downloadedBadge: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 10, backgroundColor: '#EAF5EC' },
-  downloadedText: { fontSize: 13, color: '#0F8F4F', fontWeight: '600' },
-  pdf: { flex: 1 },
-  noPdf: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  noPdfText: { fontSize: 14, color: '#6D7A72', textAlign: 'center', paddingHorizontal: 40 },
-  blocked: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
-  blockedIcon: { fontSize: 56, marginBottom: 16 },
-  blockedTitle: { fontSize: 20, fontWeight: '700', color: '#1F2A24', marginBottom: 8 },
-  blockedSub: { fontSize: 14, color: '#6D7A72', textAlign: 'center', marginBottom: 24 },
-  upgradeBtn: { backgroundColor: '#0B6B3A', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 28 },
-  upgradeBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
+  container: { flex: 1, backgroundColor: '#F7FAF8' },
+  content: { padding: 16, paddingTop: 60, paddingBottom: 32 },
+  hero: { backgroundColor: '#EAF5EC', borderRadius: 18, padding: 18, borderWidth: 1, borderColor: '#DDE8E1', marginBottom: 14 },
+  subject: { fontSize: 12, fontWeight: '800', color: '#0B6B3A', textTransform: 'uppercase', marginBottom: 8 },
+  title: { fontSize: 24, fontWeight: '800', color: '#1F2A24', lineHeight: 30, marginBottom: 8 },
+  summary: { fontSize: 14, color: '#6D7A72', lineHeight: 21, marginBottom: 14 },
+  metaRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  levelBadge: { fontSize: 11, backgroundColor: '#0F8F4F', color: '#FFFFFF', paddingHorizontal: 9, paddingVertical: 5, borderRadius: 12, fontWeight: '700' },
+  metaBadge: { fontSize: 11, backgroundColor: '#FFFFFF', color: '#1F2A24', paddingHorizontal: 9, paddingVertical: 5, borderRadius: 12 },
+  premiumBadge: { fontSize: 11, backgroundColor: '#F7D64A', color: '#202624', paddingHorizontal: 9, paddingVertical: 5, borderRadius: 12, fontWeight: '700' },
+  card: { backgroundColor: '#FFFFFF', borderRadius: 16, padding: 16, borderWidth: 1, borderColor: '#DDE8E1', marginBottom: 12 },
+  sectionEyebrow: { fontSize: 11, color: '#0F8F4F', fontWeight: '800', textTransform: 'uppercase', marginBottom: 4 },
+  cardTitle: { fontSize: 17, fontWeight: '800', color: '#1F2A24', marginBottom: 10 },
+  paragraph: { fontSize: 15, color: '#1F2A24', lineHeight: 23, marginBottom: 10 },
+  bulletRow: { flexDirection: 'row', gap: 8, marginBottom: 8 },
+  bulletDot: { color: '#0F8F4F', fontSize: 18, lineHeight: 22 },
+  bulletText: { flex: 1, fontSize: 14, color: '#1F2A24', lineHeight: 21 },
+  takeawaysCard: { backgroundColor: '#FFF7CC', borderRadius: 16, padding: 16, borderWidth: 1, borderColor: '#F7D64A' },
+  takeawaysTitle: { fontSize: 17, fontWeight: '800', color: '#202624', marginBottom: 10 },
+  takeawayRow: { flexDirection: 'row', gap: 8, marginBottom: 8 },
+  takeawayCheck: { color: '#0B6B3A', fontSize: 15, fontWeight: '800' },
+  takeawayText: { flex: 1, fontSize: 14, color: '#202624', lineHeight: 21 },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, backgroundColor: '#F7FAF8' },
+  emptyTitle: { fontSize: 18, fontWeight: '700', color: '#1F2A24', marginBottom: 16 },
+  backButton: { backgroundColor: '#0F8F4F', borderRadius: 12, paddingHorizontal: 20, paddingVertical: 12 },
+  backButtonText: { color: '#FFFFFF', fontWeight: '700' },
 })
