@@ -130,7 +130,7 @@ router.post('/chat', async (c) => {
   }
 
   // 4. Recherche vectorielle
-  const chunks = await searchRelevantChunks(sanitizePrompt(body.question), {
+  const chunks = await searchRelevantChunks(c.get('supabase'), sanitizePrompt(body.question), {
     matchCount: 5,
     minSimilarity: 0.72,
     documentId: body.document_id,
@@ -172,7 +172,7 @@ router.post('/chat', async (c) => {
     async start(controller) {
       const encoder = new TextEncoder()
 
-      // Envoie les métadonnées en premier événement
+      // Envoie les mï¿½tadonnï¿½es en premier ï¿½vï¿½nement
       controller.enqueue(encoder.encode(
         `event: meta\ndata: ${JSON.stringify({ session_id: sessionId, quota_remaining: quota.remaining, sources_count: chunks.length })}\n\n`
       ))

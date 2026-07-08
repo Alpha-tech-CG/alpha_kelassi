@@ -1,4 +1,5 @@
-import { supabase } from './supabase.js'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { Database } from '@alpha-kelassi/types'
 import { embedQuery } from './embeddings.js'
 
 export interface ChunkResult {
@@ -11,7 +12,14 @@ export interface ChunkResult {
   similarity: number
 }
 
+/**
+ * Recherche vectorielle RAG. Prend le client Supabase de la requête en cours
+ * (forwardant le JWT de l'élève) pour que search_chunks() applique le bon
+ * gating premium via auth.uid() — jamais un client anonyme/admin ici, sinon
+ * le filtrage premium ne reflète plus l'utilisateur réel qui pose la question.
+ */
 export async function searchRelevantChunks(
+  supabase: SupabaseClient<Database>,
   question: string,
   options: { matchCount?: number; minSimilarity?: number; documentId?: string } = {}
 ): Promise<ChunkResult[]> {

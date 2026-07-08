@@ -1,4 +1,9 @@
-import { supabase } from './supabase.js'
+// service role : chaque fonction ci-dessous scope déjà ses requêtes par un
+// userId validé côté serveur (extrait du JWT par authMiddleware) — jamais
+// une valeur fournie librement par le client. Le client anon (sans JWT)
+// utilisé auparavant faisait échouer silencieusement toutes ces requêtes
+// (RLS "select/update own" bloque tout appel sans auth.uid()).
+import { supabaseAdmin as supabase } from './supabase.js'
 
 export const XP = {
   DOCUMENT_VIEW:    5,
