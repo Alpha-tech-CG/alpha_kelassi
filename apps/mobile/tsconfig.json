@@ -3,11 +3,14 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": [
-      "ESNext"
+      "ESNext",
+      "DOM"
     ],
     "jsx": "react-native",
     "moduleResolution": "bundler",
     "strict": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "noEmit": true,
     "paths": {
       "@/*": [

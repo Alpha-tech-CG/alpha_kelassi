@@ -22,7 +22,10 @@ export default function ExamensScreen() {
       .order('year', { ascending: false })
       .limit(100)
       .then(({ data }) => {
-        setDocs((data ?? []) as Doc[])
+        setDocs((data ?? []).map((doc) => ({
+          ...doc,
+          subjects: Array.isArray(doc.subjects) ? (doc.subjects[0] ?? null) : doc.subjects,
+        })) as Doc[])
         setLoading(false)
       })
   }, [])

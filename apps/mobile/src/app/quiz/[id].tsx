@@ -124,6 +124,9 @@ export default function QuizTakeScreen() {
 
   // ---------- Passage ----------
   const q = quiz.questions[current]
+  if (!q) {
+    return <View style={styles.center}><Text>Question introuvable.</Text></View>
+  }
   const answeredCount = Object.keys(answers).length
   const lowTime = remaining <= 30
 

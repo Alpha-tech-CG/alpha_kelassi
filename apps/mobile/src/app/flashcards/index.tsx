@@ -103,6 +103,13 @@ export default function FlashcardsScreen() {
   }
 
   const card = cards[index]
+  if (!card) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.doneSub}>Aucune carte à afficher.</Text>
+      </View>
+    )
+  }
   const progress = index / cards.length
 
   return (

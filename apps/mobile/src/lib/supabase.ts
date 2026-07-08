@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 import * as SecureStore from 'expo-secure-store'
-import type { Database } from '@alpha-kelassi/types'
 
 const ExpoSecureStoreAdapter = {
   getItem: (key: string) => SecureStore.getItemAsync(key),
@@ -8,7 +7,7 @@ const ExpoSecureStoreAdapter = {
   removeItem: (key: string) => SecureStore.deleteItemAsync(key),
 }
 
-export const supabase = createClient<Database>(
+export const supabase = createClient(
   process.env['EXPO_PUBLIC_SUPABASE_URL']!,
   process.env['EXPO_PUBLIC_SUPABASE_ANON_KEY']!,
   {

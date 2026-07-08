@@ -2,7 +2,7 @@ import { Model } from '@nozbe/watermelondb'
 import { field, date, readonly } from '@nozbe/watermelondb/decorators'
 
 export class DocumentModel extends Model {
-  static table = 'documents'
+  static override table = 'documents'
 
   @field('remote_id') remoteId!: string
   @field('title') title!: string
