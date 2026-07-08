@@ -5,7 +5,7 @@ import { BetaFeedbackButton } from '@/components/beta-feedback-button'
 import { NotificationBanner } from '@/components/notification-banner'
 import {
   Home, BookOpen, FileText, Bot, Layers, TrendingUp,
-  Crown, Wrench, type LucideIcon,
+  Crown, Wrench, ListChecks, CalendarClock, PlayCircle, type LucideIcon,
 } from 'lucide-react'
 
 interface NavItem { href: string; label: string; Icon: LucideIcon }
@@ -14,8 +14,11 @@ const NAV: NavItem[] = [
   { href: '/dashboard',  label: 'Accueil',    Icon: Home       },
   { href: '/cours',      label: 'Cours',       Icon: BookOpen   },
   { href: '/examens',    label: 'Examens',     Icon: FileText   },
+  { href: '/videos',     label: 'Vidéos',      Icon: PlayCircle },
   { href: '/tuteur',     label: 'Kelassi IA',  Icon: Bot        },
   { href: '/flashcards', label: 'Flashcards',  Icon: Layers     },
+  { href: '/quiz',       label: 'QCM',         Icon: ListChecks },
+  { href: '/planning',   label: 'Planning',    Icon: CalendarClock },
   { href: '/progression',label: 'Progression', Icon: TrendingUp },
   { href: '/billing',    label: 'Premium',     Icon: Crown      },
 ]

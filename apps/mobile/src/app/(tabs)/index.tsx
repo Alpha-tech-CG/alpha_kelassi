@@ -42,6 +42,9 @@ export default function HomeScreen() {
     { label: 'Examens', icon: '📝', color: '#f5f3ff', route: '/(tabs)/examens' },
     { label: 'Kelassi IA', icon: '🤖', color: '#f0fdf4', route: '/(tabs)/tuteur' },
     { label: 'Flashcards', icon: '🃏', color: '#fffbeb', route: '/flashcards/index' },
+    { label: 'QCM', icon: '✅', color: '#eef2ff', route: '/quiz/index' },
+    { label: 'Planning', icon: '📅', color: '#eff6ff', route: '/planning/index' },
+    { label: 'Vidéos', icon: '🎬', color: '#fef2f2', route: '/videos/index' },
   ]
 
   return (

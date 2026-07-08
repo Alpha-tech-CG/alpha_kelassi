@@ -26,6 +26,8 @@ export type Database = {
           onboarding_completed: boolean
           study_level_pref: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d' | null
           subject_ids_pref: string[] | null
+          whatsapp_opt_in: boolean
+          reminder_hour: number
           created_at: string
           updated_at: string
         }
@@ -42,6 +44,8 @@ export type Database = {
           onboarding_completed?: boolean
           study_level_pref?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d' | null
           subject_ids_pref?: string[] | null
+          whatsapp_opt_in?: boolean
+          reminder_hour?: number
           created_at?: string
           updated_at?: string
         }
@@ -58,8 +62,94 @@ export type Database = {
           onboarding_completed?: boolean
           study_level_pref?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d' | null
           subject_ids_pref?: string[] | null
+          whatsapp_opt_in?: boolean
+          reminder_hour?: number
           created_at?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      message_log: {
+        Row: {
+          id: string
+          user_id: string
+          channel: 'whatsapp' | 'sms'
+          template: string
+          to_phone: string
+          body: string | null
+          status: 'sent' | 'failed' | 'delivered' | 'read'
+          provider_id: string | null
+          dedup_key: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          channel: 'whatsapp' | 'sms'
+          template: string
+          to_phone: string
+          body?: string | null
+          status?: 'sent' | 'failed' | 'delivered' | 'read'
+          provider_id?: string | null
+          dedup_key?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          channel?: 'whatsapp' | 'sms'
+          template?: string
+          to_phone?: string
+          body?: string | null
+          status?: 'sent' | 'failed' | 'delivered' | 'read'
+          provider_id?: string | null
+          dedup_key?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      videos: {
+        Row: {
+          id: string
+          subject_id: string
+          title: string
+          description: string | null
+          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          provider: 'youtube' | 'vimeo'
+          external_id: string
+          url: string
+          duration_sec: number | null
+          thumbnail_url: string | null
+          is_premium: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          subject_id: string
+          title: string
+          description?: string | null
+          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          provider?: 'youtube' | 'vimeo'
+          external_id: string
+          url: string
+          duration_sec?: number | null
+          thumbnail_url?: string | null
+          is_premium?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          subject_id?: string
+          title?: string
+          description?: string | null
+          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          provider?: 'youtube' | 'vimeo'
+          external_id?: string
+          url?: string
+          duration_sec?: number | null
+          thumbnail_url?: string | null
+          is_premium?: boolean
+          created_at?: string
         }
         Relationships: []
       }
@@ -503,11 +593,243 @@ export type Database = {
         }
         Relationships: []
       }
+      quizzes: {
+        Row: {
+          id: string
+          subject_id: string
+          document_id: string | null
+          title: string
+          description: string | null
+          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          time_limit_sec: number
+          is_premium: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          subject_id: string
+          document_id?: string | null
+          title: string
+          description?: string | null
+          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          time_limit_sec?: number
+          is_premium?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          subject_id?: string
+          document_id?: string | null
+          title?: string
+          description?: string | null
+          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          time_limit_sec?: number
+          is_premium?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      quiz_questions: {
+        Row: {
+          id: string
+          quiz_id: string
+          position: number
+          prompt: string
+          options: Json
+          correct_index: number
+          explanation: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          quiz_id: string
+          position: number
+          prompt: string
+          options: Json
+          correct_index: number
+          explanation?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          quiz_id?: string
+          position?: number
+          prompt?: string
+          options?: Json
+          correct_index?: number
+          explanation?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      quiz_attempts: {
+        Row: {
+          id: string
+          user_id: string
+          quiz_id: string
+          score: number
+          total: number
+          duration_sec: number
+          completed_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          quiz_id: string
+          score: number
+          total: number
+          duration_sec: number
+          completed_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          quiz_id?: string
+          score?: number
+          total?: number
+          duration_sec?: number
+          completed_at?: string
+        }
+        Relationships: []
+      }
+      quiz_attempt_answers: {
+        Row: {
+          id: string
+          attempt_id: string
+          question_id: string
+          selected_index: number | null
+          is_correct: boolean
+        }
+        Insert: {
+          id?: string
+          attempt_id: string
+          question_id: string
+          selected_index?: number | null
+          is_correct: boolean
+        }
+        Update: {
+          id?: string
+          attempt_id?: string
+          question_id?: string
+          selected_index?: number | null
+          is_correct?: boolean
+        }
+        Relationships: []
+      }
+      exam_events: {
+        Row: {
+          id: string
+          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          label: string
+          exam_date: string
+          country_code: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          label: string
+          exam_date: string
+          country_code?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          label?: string
+          exam_date?: string
+          country_code?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      revision_plans: {
+        Row: {
+          id: string
+          user_id: string
+          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          title: string
+          exam_date: string
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          title: string
+          exam_date: string
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          title?: string
+          exam_date?: string
+          is_active?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      revision_sessions: {
+        Row: {
+          id: string
+          user_id: string
+          plan_id: string | null
+          subject_id: string | null
+          title: string
+          scheduled_date: string
+          duration_min: number
+          is_done: boolean
+          done_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          plan_id?: string | null
+          subject_id?: string | null
+          title: string
+          scheduled_date: string
+          duration_min?: number
+          is_done?: boolean
+          done_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          plan_id?: string | null
+          subject_id?: string | null
+          title?: string
+          scheduled_date?: string
+          duration_min?: number
+          is_done?: boolean
+          done_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      quiz_weak_areas: {
+        Row: {
+          user_id: string
+          subject_id: string
+          subject_name: string
+          answered: number
+          wrong: number
+          error_rate: number
+        }
+      }
     }
     Functions: {
+      submit_quiz_attempt: {
+        Args: { p_quiz_id: string; p_answers: Json; p_duration_sec: number }
+        Returns: Json
+      }
       search_chunks: {
         Args: {
           query_embedding: string
