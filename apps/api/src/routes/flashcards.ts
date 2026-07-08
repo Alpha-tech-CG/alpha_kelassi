@@ -8,7 +8,14 @@ import { authMiddleware } from '../middleware/auth.js'
 import { computeSM2 } from '../lib/sm2.js'
 
 const router = new Hono<{ Variables: AppVariables }>()
-const genai = new GoogleGenAI({ apiKey: process.env['GEMINI_API_KEY']! })
+
+// Lazy — évite de faire planter tout le serveur au démarrage si
+// GEMINI_API_KEY n'est pas encore configurée
+let _genai: GoogleGenAI | null = null
+function getGenai(): GoogleGenAI {
+  if (!_genai) _genai = new GoogleGenAI({ apiKey: process.env['GEMINI_API_KEY'] ?? '' })
+  return _genai
+}
 
 router.use('*', authMiddleware)
 
@@ -126,7 +133,7 @@ Retourne UNIQUEMENT un tableau JSON valide, sans markdown, sans commentaires :
 Contenu du cours :
 ${context}`
 
-    const response = await genai.models.generateContent({
+    const response = await getGenai().models.generateContent({
       model: 'gemini-1.5-flash',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
     })

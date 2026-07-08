@@ -4,7 +4,14 @@ import { createHash } from 'crypto'
 import { supabaseAdmin as supabase } from '../lib/supabase.js'
 
 const router = new Hono()
-const stripe = new Stripe(process.env['STRIPE_SECRET_KEY']!)
+
+// Lazy — évite de faire planter tout le serveur au démarrage si
+// STRIPE_SECRET_KEY n'est pas encore configurée (feature optionnelle)
+let _stripe: Stripe | null = null
+function getStripe(): Stripe {
+  if (!_stripe) _stripe = new Stripe(process.env['STRIPE_SECRET_KEY'] || 'sk_test_placeholder')
+  return _stripe
+}
 
 // POST /webhooks/stripe
 router.post('/stripe', async (c) => {
@@ -13,7 +20,7 @@ router.post('/stripe', async (c) => {
 
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(body, sig!, process.env['STRIPE_WEBHOOK_SECRET']!)
+    event = getStripe().webhooks.constructEvent(body, sig!, process.env['STRIPE_WEBHOOK_SECRET']!)
   } catch {
     return c.json({ error: 'Invalid signature' }, 400)
   }

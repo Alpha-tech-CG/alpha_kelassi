@@ -14,7 +14,14 @@ import { checkAndIncrementQuota, getQuotaStatus } from '../lib/quota.js'
 const router = new Hono<{ Variables: AppVariables }>();
 
 function sanitizePrompt(text: string): string { return text.replace(/<(?:.|\n)*?>/gm, '').trim(); }
-const genai = new GoogleGenAI({ apiKey: process.env['GEMINI_API_KEY']! })
+
+// Lazy — évite de faire planter tout le serveur au démarrage si
+// GEMINI_API_KEY n'est pas encore configurée
+let _genai: GoogleGenAI | null = null
+function getGenai(): GoogleGenAI {
+  if (!_genai) _genai = new GoogleGenAI({ apiKey: process.env['GEMINI_API_KEY'] ?? '' })
+  return _genai
+}
 
 router.use('*', authMiddleware)
 
@@ -163,7 +170,7 @@ router.post('/chat', async (c) => {
   ].filter(Boolean).join('\n\n===\n\n')
 
   // 7. Streaming Gemini
-  const stream = await genai.models.generateContentStream({
+  const stream = await getGenai().models.generateContentStream({
     model: 'gemini-1.5-flash',
     config: { systemInstruction: SYSTEM_PROMPT },
     contents: [{ role: 'user', parts: [{ text: userPrompt }] }],

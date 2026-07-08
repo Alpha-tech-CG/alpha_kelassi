@@ -1,6 +1,12 @@
 import { GoogleGenAI } from '@google/genai'
 
-const genai = new GoogleGenAI({ apiKey: process.env['GEMINI_API_KEY']! })
+// Lazy — évite de faire planter tout le serveur au démarrage si
+// GEMINI_API_KEY n'est pas encore configurée
+let _genai: GoogleGenAI | null = null
+function getGenai(): GoogleGenAI {
+  if (!_genai) _genai = new GoogleGenAI({ apiKey: process.env['GEMINI_API_KEY'] ?? '' })
+  return _genai
+}
 
 const BATCH_SIZE = 100
 const EMBED_MODEL = 'text-embedding-004'
@@ -12,7 +18,7 @@ export async function embedTexts(texts: string[]): Promise<number[][]> {
     const batch = texts.slice(i, i + BATCH_SIZE)
     const results = await Promise.all(
       batch.map((text) =>
-        genai.models.embedContent({
+        getGenai().models.embedContent({
           model: EMBED_MODEL,
           contents: text,
           config: { taskType: 'RETRIEVAL_DOCUMENT' },
@@ -29,7 +35,7 @@ export async function embedTexts(texts: string[]): Promise<number[][]> {
 }
 
 export async function embedQuery(text: string): Promise<number[]> {
-  const result = await genai.models.embedContent({
+  const result = await getGenai().models.embedContent({
     model: EMBED_MODEL,
     contents: text,
     config: { taskType: 'RETRIEVAL_QUERY' },

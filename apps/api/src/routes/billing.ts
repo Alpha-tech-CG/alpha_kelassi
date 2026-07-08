@@ -7,7 +7,14 @@ import Stripe from 'stripe'
 import { authMiddleware } from '../middleware/auth.js'
 
 const router = new Hono<{ Variables: AppVariables }>()
-const stripe = new Stripe(process.env['STRIPE_SECRET_KEY']!)
+
+// Lazy — évite de faire planter tout le serveur au démarrage si
+// STRIPE_SECRET_KEY n'est pas encore configurée (feature optionnelle)
+let _stripe: Stripe | null = null
+function getStripe(): Stripe {
+  if (!_stripe) _stripe = new Stripe(process.env['STRIPE_SECRET_KEY'] || 'sk_test_placeholder')
+  return _stripe
+}
 
 router.use('*', authMiddleware)
 
@@ -30,7 +37,7 @@ router.post(
       .eq('id', userId)
       .single()
 
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       mode: 'subscription',
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
@@ -113,7 +120,7 @@ router.post('/cancel', async (c) => {
     return c.json({ error: { code: 'NO_SUBSCRIPTION', message: 'Aucun abonnement actif' } }, 404)
   }
 
-  await stripe.subscriptions.update(sub.stripe_sub_id, { cancel_at_period_end: true })
+  await getStripe().subscriptions.update(sub.stripe_sub_id, { cancel_at_period_end: true })
 
   return c.json({ data: { canceled: true } })
 })
