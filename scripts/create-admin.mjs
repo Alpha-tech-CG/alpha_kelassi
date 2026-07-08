@@ -1,68 +1,88 @@
 /**
- * Script one-shot : crée le compte admin et le profil Firestore
- * Usage : node scripts/create-admin.mjs
+ * Crée (ou promeut en admin) un compte utilisateur Supabase.
+ * Usage : node scripts/create-admin.mjs <email> [password]
+ * Si password est omis, un mot de passe aléatoire fort est généré et affiché.
+ * Lit SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY depuis apps/api/.env.local.
  */
-import { initializeApp, cert, getApps } from 'firebase-admin/app'
-import { getAuth } from 'firebase-admin/auth'
-import { getFirestore } from 'firebase-admin/firestore'
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { randomBytes } from 'crypto'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-// Charge les vars depuis apps/web/.env.local
+const [, , emailArg, passwordArg] = process.argv
+if (!emailArg) {
+  console.error('Usage : node scripts/create-admin.mjs <email> [password]')
+  process.exit(1)
+}
+
 const env = Object.fromEntries(
-  readFileSync(join(__dirname, '..', 'apps', 'web', '.env.local'), 'utf-8')
+  readFileSync(join(__dirname, '..', 'apps', 'api', '.env.local'), 'utf-8')
     .split('\n')
-    .filter(l => l.includes('=') && !l.startsWith('#'))
-    .map(l => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()] })
+    .filter((l) => l.includes('=') && !l.startsWith('#'))
+    .map((l) => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()] })
 )
 
-const app = getApps().length === 0
-  ? initializeApp({
-      credential: cert({
-        projectId:   env.FIREBASE_PROJECT_ID,
-        clientEmail: env.FIREBASE_CLIENT_EMAIL,
-        privateKey:  (env.FIREBASE_PRIVATE_KEY || '').replace(/^"|"$/g, '').replace(/\\n/g, '\n'),
-      }),
-    })
-  : getApps()[0]
+const SUPABASE_URL = env.SUPABASE_URL
+const SERVICE_ROLE_KEY = env.SUPABASE_SERVICE_ROLE_KEY
+if (!SUPABASE_URL || !SERVICE_ROLE_KEY || SUPABASE_URL.includes('xxxx')) {
+  console.error('SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY manquants ou non configurés dans apps/api/.env.local')
+  process.exit(1)
+}
 
-const adminAuth = getAuth(app)
-const adminDb   = getFirestore(app)
+const EMAIL = emailArg
+const PASSWORD = passwordArg || randomBytes(12).toString('base64url')
 
-const EMAIL    = 'fresneilm139@gmail.com'
-const PASSWORD = 'Admin@Kelassi2025!'
-const NAME     = 'Admin Kelassi'
+async function adminFetch(path, init) {
+  const res = await fetch(`${SUPABASE_URL}${path}`, {
+    ...init,
+    headers: {
+      'Content-Type': 'application/json',
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+      ...(init?.headers ?? {}),
+    },
+  })
+  const json = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(json.message || json.msg || `HTTP ${res.status}`)
+  return json
+}
 
 async function main() {
-  let uid
+  // 1. Cherche un compte Auth existant avec cet email
+  const { users } = await adminFetch(`/auth/v1/admin/users?page=1&per_page=1&email=${encodeURIComponent(EMAIL)}`)
+  let userId = users?.[0]?.id
+  let created = false
 
-  try {
-    const existing = await adminAuth.getUserByEmail(EMAIL)
-    uid = existing.uid
-    console.log(`✓ Compte existant trouvé : ${uid}`)
-  } catch {
-    const user = await adminAuth.createUser({ email: EMAIL, password: PASSWORD, displayName: NAME })
-    uid = user.uid
-    console.log(`✓ Compte créé : ${uid}`)
+  if (userId) {
+    console.log(`✓ Compte Auth existant trouvé : ${userId}`)
+  } else {
+    const user = await adminFetch('/auth/v1/admin/users', {
+      method: 'POST',
+      body: JSON.stringify({ email: EMAIL, password: PASSWORD, email_confirm: true }),
+    })
+    userId = user.id
+    created = true
+    console.log(`✓ Compte Auth créé : ${userId}`)
   }
 
-  await adminDb.collection('users').doc(uid).set({
-    uid,
-    email: EMAIL,
-    full_name: NAME,
-    role: 'admin',
-    level: 'bac_c',
-    created_at: new Date(),
-  }, { merge: true })
+  // 2. Upsert le profil public.users avec role='admin'
+  await adminFetch('/rest/v1/users', {
+    method: 'POST',
+    headers: { Prefer: 'resolution=merge-duplicates' },
+    body: JSON.stringify({ id: userId, email: EMAIL, role: 'admin', plan: 'premium' }),
+  })
+  console.log(`✓ Rôle admin défini dans public.users pour ${EMAIL}`)
 
-  console.log(`✓ Rôle admin défini dans Firestore pour ${EMAIL}`)
   console.log(`\nEmail    : ${EMAIL}`)
-  console.log(`Password : ${PASSWORD}`)
-  console.log(`\n⚠  Change le mot de passe après ta première connexion !`)
+  if (created) {
+    console.log(`Password : ${PASSWORD}`)
+    console.log(`\n⚠  Ce mot de passe ne sera plus jamais affiché — note-le maintenant.`)
+  } else {
+    console.log(`Password : (compte existant, mot de passe inchangé)`)
+  }
   process.exit(0)
 }
 
-main().catch(e => { console.error('✗', e.message); process.exit(1) })
+main().catch((e) => { console.error('✗', e.message); process.exit(1) })
