@@ -6,7 +6,7 @@ alter table public.users
 
 -- Badges gagnés
 create table if not exists public.user_badges (
-  id         uuid primary key default uuid_generate_v4(),
+  id         uuid primary key default gen_random_uuid(),
   user_id    uuid not null references public.users(id) on delete cascade,
   badge_code text not null,
   earned_at  timestamptz not null default now(),
@@ -17,7 +17,7 @@ create index if not exists idx_user_badges_user on public.user_badges(user_id);
 
 -- Vues de documents (1 ligne par visite — pour analytics admin)
 create table if not exists public.document_views (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   user_id     uuid not null references public.users(id) on delete cascade,
   document_id uuid not null references public.documents(id) on delete cascade,
   viewed_at   timestamptz not null default now()

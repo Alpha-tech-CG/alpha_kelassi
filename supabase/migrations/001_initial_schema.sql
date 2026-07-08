@@ -2,7 +2,7 @@
 -- Migration 001: tables de base + pgvector
 
 -- Extensions
-create extension if not exists "uuid-ossp";
+create extension if not exists "pgcrypto";
 create extension if not exists "vector";
 
 -- Enum types
@@ -28,7 +28,7 @@ create table public.users (
 
 -- Abonnements
 create table public.subscriptions (
-  id                uuid primary key default uuid_generate_v4(),
+  id                uuid primary key default gen_random_uuid(),
   user_id           uuid not null references public.users(id) on delete cascade,
   stripe_sub_id     text unique,
   cinetpay_ref      text unique,
@@ -41,7 +41,7 @@ create table public.subscriptions (
 
 -- Matières (Maths, Physique-Chimie, SVT, Français, Histoire-Géo, Philosophie...)
 create table public.subjects (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   name         text not null,
   level        study_level not null,
   country_code char(2) not null default 'CG',
@@ -52,7 +52,7 @@ create table public.subjects (
 
 -- Documents (cours PDF + examens d'État)
 create table public.documents (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   subject_id   uuid not null references public.subjects(id) on delete cascade,
   type         document_type not null,
   title        text not null,
@@ -68,7 +68,7 @@ create table public.documents (
 
 -- Chunks vectorisés pour le RAG
 create table public.document_chunks (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   document_id  uuid not null references public.documents(id) on delete cascade,
   content      text not null,
   embedding    vector(768),        -- Gemini text-embedding-004
@@ -83,7 +83,7 @@ create index on public.document_chunks using hnsw (embedding vector_cosine_ops)
 
 -- Sessions de chat avec Kelassi
 create table public.chat_sessions (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   user_id      uuid not null references public.users(id) on delete cascade,
   document_id  uuid references public.documents(id) on delete set null,
   title        text,
@@ -92,7 +92,7 @@ create table public.chat_sessions (
 
 -- Messages dans une session
 create table public.chat_messages (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   session_id   uuid not null references public.chat_sessions(id) on delete cascade,
   role         message_role not null,
   content      text not null,
@@ -101,7 +101,7 @@ create table public.chat_messages (
 
 -- Flashcards avec algorithme SM-2
 create table public.flashcards (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   user_id      uuid not null references public.users(id) on delete cascade,
   document_id  uuid not null references public.documents(id) on delete cascade,
   front        text not null,
@@ -115,7 +115,7 @@ create table public.flashcards (
 
 -- Progression par matière
 create table public.user_progress (
-  id                  uuid primary key default uuid_generate_v4(),
+  id                  uuid primary key default gen_random_uuid(),
   user_id             uuid not null references public.users(id) on delete cascade,
   subject_id          uuid not null references public.subjects(id) on delete cascade,
   flashcards_reviewed integer not null default 0,

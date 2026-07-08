@@ -8,7 +8,7 @@ alter table public.users
 
 -- Feedbacks beta utilisateurs
 create table if not exists public.beta_feedback (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   user_id     uuid references public.users(id) on delete set null,
   rating      smallint not null check (rating between 1 and 5),
   comment     text,

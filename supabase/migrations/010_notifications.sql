@@ -3,7 +3,7 @@
 create type notification_type as enum ('annonce', 'promo', 'pub', 'alerte');
 
 create table public.notifications (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   type        notification_type not null default 'annonce',
   title       text not null,
   message     text not null,

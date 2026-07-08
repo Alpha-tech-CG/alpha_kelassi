@@ -3,7 +3,7 @@
 
 -- Un QCM appartient à une matière (et optionnellement à un document source)
 create table if not exists public.quizzes (
-  id             uuid primary key default uuid_generate_v4(),
+  id             uuid primary key default gen_random_uuid(),
   subject_id     uuid not null references public.subjects(id) on delete cascade,
   document_id    uuid references public.documents(id) on delete set null,
   title          text not null,
@@ -18,7 +18,7 @@ create index if not exists idx_quizzes_subject on public.quizzes(subject_id, lev
 
 -- Questions d'un QCM
 create table if not exists public.quiz_questions (
-  id            uuid primary key default uuid_generate_v4(),
+  id            uuid primary key default gen_random_uuid(),
   quiz_id       uuid not null references public.quizzes(id) on delete cascade,
   position      smallint not null,                 -- ordre d'affichage (1..N)
   prompt        text not null,
@@ -33,7 +33,7 @@ create index if not exists idx_quiz_questions_quiz on public.quiz_questions(quiz
 
 -- Tentatives d'un utilisateur sur un QCM
 create table if not exists public.quiz_attempts (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   user_id      uuid not null references public.users(id) on delete cascade,
   quiz_id      uuid not null references public.quizzes(id) on delete cascade,
   score        smallint not null,                  -- nombre de bonnes réponses
@@ -47,7 +47,7 @@ create index if not exists idx_quiz_attempts_quiz on public.quiz_attempts(quiz_i
 
 -- Réponse par question (base de la détection des points faibles)
 create table if not exists public.quiz_attempt_answers (
-  id             uuid primary key default uuid_generate_v4(),
+  id             uuid primary key default gen_random_uuid(),
   attempt_id     uuid not null references public.quiz_attempts(id) on delete cascade,
   question_id    uuid not null references public.quiz_questions(id) on delete cascade,
   selected_index smallint,                          -- null = question laissée sans réponse

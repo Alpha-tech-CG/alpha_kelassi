@@ -8,7 +8,7 @@ alter table public.users
 
 -- Journal des messages sortants : audit + idempotence (évite les doublons)
 create table if not exists public.message_log (
-  id          uuid primary key default uuid_generate_v4(),
+  id          uuid primary key default gen_random_uuid(),
   user_id     uuid not null references public.users(id) on delete cascade,
   channel     text not null check (channel in ('whatsapp', 'sms')),
   template    text not null,                 -- ex. 'revision_reminder'

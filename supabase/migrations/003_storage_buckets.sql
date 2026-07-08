@@ -21,7 +21,7 @@ create policy "pdfs-public: read all"
 -- Policy PDFs publics: écriture admin uniquement
 create policy "pdfs-public: admin write"
   on storage.objects for insert
-  using (
+  with check (
     bucket_id = 'pdfs-public'
     and public.current_user_role() = 'admin'
   );
@@ -38,7 +38,7 @@ create policy "pdfs-premium: read premium users"
 -- Policy PDFs premium: écriture admin uniquement
 create policy "pdfs-premium: admin write"
   on storage.objects for insert
-  using (
+  with check (
     bucket_id = 'pdfs-premium'
     and public.current_user_role() = 'admin'
   );
@@ -50,4 +50,4 @@ create policy "images: read all"
 
 create policy "images: authenticated write"
   on storage.objects for insert
-  using (bucket_id = 'images' and auth.uid() is not null);
+  with check (bucket_id = 'images' and auth.uid() is not null);

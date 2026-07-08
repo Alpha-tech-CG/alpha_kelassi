@@ -3,7 +3,7 @@
 
 -- Dates officielles des examens d'État (référentiel géré par l'admin)
 create table if not exists public.exam_events (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   level        study_level not null,
   label        text not null,                 -- ex. "BEPC 2027"
   exam_date    date not null,
@@ -15,7 +15,7 @@ create index if not exists idx_exam_events_level on public.exam_events(level, ex
 
 -- Plan de révision d'un élève (cible un examen)
 create table if not exists public.revision_plans (
-  id         uuid primary key default uuid_generate_v4(),
+  id         uuid primary key default gen_random_uuid(),
   user_id    uuid not null references public.users(id) on delete cascade,
   level      study_level not null,
   title      text not null,
@@ -28,7 +28,7 @@ create index if not exists idx_revision_plans_user on public.revision_plans(user
 
 -- Séances de révision planifiées (l'emploi du temps)
 create table if not exists public.revision_sessions (
-  id             uuid primary key default uuid_generate_v4(),
+  id             uuid primary key default gen_random_uuid(),
   user_id        uuid not null references public.users(id) on delete cascade,
   plan_id        uuid references public.revision_plans(id) on delete cascade,
   subject_id     uuid references public.subjects(id) on delete set null,
