@@ -149,8 +149,10 @@ export async function POST(req: NextRequest) {
     sessionId = session!.id
   }
 
-  // Cache Redis
-  const cacheKey = `cache:chat:${createHash('sha256').update(question.toLowerCase()).digest('hex')}`
+  // Cache Redis (clé incluant le plan — une réponse construite avec du
+  // contenu premium ne doit jamais être servie depuis le cache à un élève
+  // gratuit posant la même question)
+  const cacheKey = `cache:chat:${plan}:${createHash('sha256').update(question.toLowerCase()).digest('hex')}`
   const cached = await redis.get<string>(cacheKey)
   if (cached) {
     saveChatMessages(getAdmin(), sessionId, question, cached).catch(() => {})
@@ -181,6 +183,7 @@ export async function POST(req: NextRequest) {
     matchCount:    8,
     minSimilarity: 0.72,
     documentId:    body.document_id,
+    isPremium:     plan === 'premium',
   })
 
   // Historique des 5 derniers tours

@@ -13,17 +13,19 @@ export interface ChunkResult {
 }
 
 /**
- * Recherche vectorielle RAG. Prend le client Supabase de la requête en cours
- * (forwardant le JWT de l'élève) pour que search_chunks() applique le bon
- * gating premium via auth.uid() — jamais un client anonyme/admin ici, sinon
- * le filtrage premium ne reflète plus l'utilisateur réel qui pose la question.
+ * Recherche vectorielle RAG.
+ * `isPremium` doit refléter le plan RÉEL de l'élève qui pose la question
+ * (déterminé par l'appelant via sa propre session, pas déduit ici) — la
+ * fonction SQL search_chunks() filtre le contenu premium sur ce paramètre
+ * explicite plutôt que via auth.uid(), car cet appel serveur ne porte pas
+ * toujours l'identité de l'utilisateur au niveau du rôle Postgres.
  */
 export async function searchRelevantChunks(
   supabase: SupabaseClient<Database>,
   question: string,
-  options: { matchCount?: number; minSimilarity?: number; documentId?: string } = {}
+  options: { matchCount?: number; minSimilarity?: number; documentId?: string; isPremium?: boolean } = {}
 ): Promise<ChunkResult[]> {
-  const { matchCount = 5, minSimilarity = 0.72, documentId } = options
+  const { matchCount = 5, minSimilarity = 0.72, documentId, isPremium = false } = options
 
   let embedding: number[]
   try {
@@ -40,6 +42,7 @@ export async function searchRelevantChunks(
     match_count: matchCount,
     min_similarity: minSimilarity,
     filter_document: documentId ?? null,
+    p_include_premium: isPremium,
   })
 
   if (error) {

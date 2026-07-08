@@ -112,8 +112,10 @@ router.post('/chat', async (c) => {
     sessionId = session!.id
   }
 
-  // 3. Cache Redis (clé = SHA256 de la question normalisée)
-  const cacheKey = `cache:chat:${createHash('sha256').update(sanitizePrompt(body.question).toLowerCase().trim()).digest('hex')}`
+  // 3. Cache Redis (clé = SHA256 de la question normalisée + plan — une
+  // réponse construite avec du contenu premium ne doit jamais être servie
+  // depuis le cache à un élève gratuit posant la même question)
+  const cacheKey = `cache:chat:${plan}:${createHash('sha256').update(sanitizePrompt(body.question).toLowerCase().trim()).digest('hex')}`
   const cached = await redis.get<string>(cacheKey)
   if (cached) {
     // Sauvegarde async sans bloquer
@@ -134,6 +136,7 @@ router.post('/chat', async (c) => {
     matchCount: 5,
     minSimilarity: 0.72,
     documentId: body.document_id,
+    isPremium: plan === 'premium',
   })
 
   // 5. Historique (5 derniers tours)
