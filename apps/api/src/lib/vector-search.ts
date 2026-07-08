@@ -23,7 +23,7 @@ export interface ChunkResult {
 export async function searchRelevantChunks(
   supabase: SupabaseClient<Database>,
   question: string,
-  options: { matchCount?: number; minSimilarity?: number; documentId?: string; isPremium?: boolean } = {}
+  options: { matchCount?: number; minSimilarity?: number; documentId?: string | undefined; isPremium?: boolean } = {}
 ): Promise<ChunkResult[]> {
   const { matchCount = 5, minSimilarity = 0.72, documentId, isPremium = false } = options
 
@@ -38,10 +38,10 @@ export async function searchRelevantChunks(
   }
 
   const { data, error } = await supabase.rpc('search_chunks', {
-    query_embedding: embedding,
+    query_embedding: JSON.stringify(embedding),
     match_count: matchCount,
     min_similarity: minSimilarity,
-    filter_document: documentId ?? null,
+    filter_document: documentId,
     p_include_premium: isPremium,
   })
 

@@ -69,6 +69,7 @@ router.get('/', async (c) => {
   const activeByDay = new Map<string, Set<string>>()
   for (const row of activeStats ?? []) {
     const day = row.last_active
+    if (!day) continue
     if (!activeByDay.has(day)) activeByDay.set(day, new Set())
     activeByDay.get(day)!.add(row.user_id)
   }

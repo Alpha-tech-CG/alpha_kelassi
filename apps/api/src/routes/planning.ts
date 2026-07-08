@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { AppVariables } from '../lib/types.js'
+import { type AppVariables, parseStudyLevel } from '../lib/types.js'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { authMiddleware } from '../middleware/auth.js'
@@ -9,7 +9,7 @@ router.use('*', authMiddleware)
 
 // GET /planning/exams?level= — dates d'examen à venir
 router.get('/exams', async (c) => {
-  const level = c.req.query('level')
+  const level = parseStudyLevel(c.req.query('level'))
   const today = new Date().toISOString().slice(0, 10)
   let q = c.get('supabase').from('exam_events')
     .select('id, level, label, exam_date')

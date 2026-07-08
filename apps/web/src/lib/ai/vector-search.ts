@@ -51,7 +51,7 @@ export async function searchRelevantChunks(
   }
 
   const { data, error } = await getAdmin().rpc('search_chunks', {
-    query_embedding:  embedding,
+    query_embedding:  JSON.stringify(embedding),
     match_count:      effectiveCount,
     min_similarity:   effectiveSimilarity,
     filter_document:  documentId ?? null,

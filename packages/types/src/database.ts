@@ -62,8 +62,8 @@ export type Database = {
           onboarding_completed?: boolean
           study_level_pref?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d' | null
           subject_ids_pref?: string[] | null
-          whatsapp_opt_in?: boolean
-          reminder_hour?: number
+          whatsapp_opt_in?: boolean | undefined
+          reminder_hour?: number | undefined
           created_at?: string
           updated_at?: string
         }
@@ -106,7 +106,15 @@ export type Database = {
           dedup_key?: string | null
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'message_log_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       videos: {
         Row: {
@@ -151,7 +159,15 @@ export type Database = {
           is_premium?: boolean
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'videos_subject_id_fkey'
+            columns: ['subject_id']
+            isOneToOne: false
+            referencedRelation: 'subjects'
+            referencedColumns: ['id']
+          }
+        ]
       }
       subjects: {
         Row: {
@@ -190,7 +206,7 @@ export type Database = {
           year: number | null
           session: 'normale' | 'rattrapage' | null
           country_code: string
-          pdf_url: string | null
+          pdf_url: string
           corrige_url: string | null
           text_content: string | null
           is_premium: boolean
@@ -315,6 +331,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'chat_sessions_document_id_fkey'
+            columns: ['document_id']
+            isOneToOne: false
+            referencedRelation: 'documents'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -387,7 +410,22 @@ export type Database = {
           reps?: number
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'flashcards_document_id_fkey'
+            columns: ['document_id']
+            isOneToOne: false
+            referencedRelation: 'documents'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'flashcards_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       user_badges: {
         Row: {
@@ -408,7 +446,15 @@ export type Database = {
           badge_code?: string
           earned_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'user_badges_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       document_views: {
         Row: {
@@ -429,7 +475,22 @@ export type Database = {
           document_id?: string
           viewed_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'document_views_document_id_fkey'
+            columns: ['document_id']
+            isOneToOne: false
+            referencedRelation: 'documents'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'document_views_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       subscriptions: {
         Row: {
@@ -462,7 +523,15 @@ export type Database = {
           expires_at?: string | null
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'subscriptions_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       push_tokens: {
         Row: {
@@ -522,7 +591,22 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'user_progress_subject_id_fkey'
+            columns: ['subject_id']
+            isOneToOne: false
+            referencedRelation: 'subjects'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_progress_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       beta_feedback: {
         Row: {
@@ -552,7 +636,15 @@ export type Database = {
           app_version?: string | null
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'beta_feedback_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       notifications: {
         Row: {
@@ -569,26 +661,26 @@ export type Database = {
         }
         Insert: {
           id?: string
-          type?: string
+          type?: string | undefined
           title: string
           message: string
-          cta_label?: string | null
-          cta_url?: string | null
-          target_plan?: 'all' | 'free' | 'premium'
-          is_active?: boolean
-          expires_at?: string | null
+          cta_label?: string | null | undefined
+          cta_url?: string | null | undefined
+          target_plan?: 'all' | 'free' | 'premium' | undefined
+          is_active?: boolean | undefined
+          expires_at?: string | null | undefined
           created_at?: string
         }
         Update: {
           id?: string
-          type?: string
-          title?: string
-          message?: string
-          cta_label?: string | null
-          cta_url?: string | null
-          target_plan?: 'all' | 'free' | 'premium'
-          is_active?: boolean
-          expires_at?: string | null
+          type?: string | undefined
+          title?: string | undefined
+          message?: string | undefined
+          cta_label?: string | null | undefined
+          cta_url?: string | null | undefined
+          target_plan?: 'all' | 'free' | 'premium' | undefined
+          is_active?: boolean | undefined
+          expires_at?: string | null | undefined
           created_at?: string
         }
         Relationships: []
@@ -627,7 +719,22 @@ export type Database = {
           is_premium?: boolean
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'quizzes_document_id_fkey'
+            columns: ['document_id']
+            isOneToOne: false
+            referencedRelation: 'documents'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'quizzes_subject_id_fkey'
+            columns: ['subject_id']
+            isOneToOne: false
+            referencedRelation: 'subjects'
+            referencedColumns: ['id']
+          }
+        ]
       }
       quiz_questions: {
         Row: {
@@ -660,7 +767,15 @@ export type Database = {
           explanation?: string | null
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'quiz_questions_quiz_id_fkey'
+            columns: ['quiz_id']
+            isOneToOne: false
+            referencedRelation: 'quizzes'
+            referencedColumns: ['id']
+          }
+        ]
       }
       quiz_attempts: {
         Row: {
@@ -690,7 +805,22 @@ export type Database = {
           duration_sec?: number
           completed_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'quiz_attempts_quiz_id_fkey'
+            columns: ['quiz_id']
+            isOneToOne: false
+            referencedRelation: 'quizzes'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'quiz_attempts_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       quiz_attempt_answers: {
         Row: {
@@ -714,7 +844,22 @@ export type Database = {
           selected_index?: number | null
           is_correct?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'quiz_attempt_answers_attempt_id_fkey'
+            columns: ['attempt_id']
+            isOneToOne: false
+            referencedRelation: 'quiz_attempts'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'quiz_attempt_answers_question_id_fkey'
+            columns: ['question_id']
+            isOneToOne: false
+            referencedRelation: 'quiz_questions'
+            referencedColumns: ['id']
+          }
+        ]
       }
       exam_events: {
         Row: {
@@ -771,7 +916,15 @@ export type Database = {
           is_active?: boolean
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'revision_plans_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
       revision_sessions: {
         Row: {
@@ -810,7 +963,29 @@ export type Database = {
           done_at?: string | null
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'revision_sessions_plan_id_fkey'
+            columns: ['plan_id']
+            isOneToOne: false
+            referencedRelation: 'revision_plans'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'revision_sessions_subject_id_fkey'
+            columns: ['subject_id']
+            isOneToOne: false
+            referencedRelation: 'subjects'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'revision_sessions_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
       }
     }
     Views: {
@@ -823,6 +998,7 @@ export type Database = {
           wrong: number
           error_rate: number
         }
+        Relationships: []
       }
     }
     Functions: {
@@ -835,7 +1011,8 @@ export type Database = {
           query_embedding: string
           match_count?: number
           min_similarity?: number
-          filter_document_id?: string
+          filter_document?: string | undefined
+          p_include_premium?: boolean
         }
         Returns: {
           id: string

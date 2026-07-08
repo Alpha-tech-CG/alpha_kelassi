@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { AppVariables } from '../lib/types.js'
+import { type AppVariables, parseStudyLevel } from '../lib/types.js'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { authMiddleware } from '../middleware/auth.js'
@@ -11,7 +11,7 @@ router.use('*', authMiddleware)
 // GET /quiz?subject_id=&level= — liste des QCM
 router.get('/', async (c) => {
   const subjectId = c.req.query('subject_id')
-  const level = c.req.query('level')
+  const level = parseStudyLevel(c.req.query('level'))
 
   let query = c.get('supabase').from('quizzes')
     .select('id, title, description, level, time_limit_sec, is_premium, subjects(name)')

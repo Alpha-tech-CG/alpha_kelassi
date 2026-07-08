@@ -37,11 +37,13 @@ router.post('/', async (c) => {
       }
 
       // 2. Statuts de livraison : mettre à jour message_log
+      const DELIVERY_STATUSES = ['delivered', 'read', 'failed'] as const
       for (const st of value.statuses ?? []) {
         const providerId = st.id as string | undefined
         const status = st.status as string | undefined  // sent | delivered | read | failed
-        if (providerId && status && ['delivered', 'read', 'failed'].includes(status)) {
-          await supabaseAdmin.from('message_log').update({ status }).eq('provider_id', providerId)
+        const deliveryStatus = DELIVERY_STATUSES.find((s) => s === status)
+        if (providerId && deliveryStatus) {
+          await supabaseAdmin.from('message_log').update({ status: deliveryStatus }).eq('provider_id', providerId)
         }
       }
     }
