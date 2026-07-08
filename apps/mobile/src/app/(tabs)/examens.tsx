@@ -37,7 +37,7 @@ export default function ExamensScreen() {
   }, {})
   const sections = Object.entries(byYear).sort((a, b) => b[0].localeCompare(a[0]))
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#7c3aed" />
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0B6B3A" />
 
   return (
     <View style={styles.container}>
@@ -101,26 +101,26 @@ export default function ExamensScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
-  header: { backgroundColor: '#fff', paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#f3f4f6' },
-  title: { fontSize: 22, fontWeight: '700', color: '#111827', marginBottom: 12 },
+  container: { flex: 1, backgroundColor: '#F7FAF8' },
+  header: { backgroundColor: '#F0ECFA', paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#DDE8E1' },
+  title: { fontSize: 22, fontWeight: '700', color: '#1F2A24', marginBottom: 12 },
   levels: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  levelChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, backgroundColor: '#f3f4f6', borderWidth: 1, borderColor: '#e5e7eb' },
-  levelChipActive: { backgroundColor: '#7c3aed', borderColor: '#7c3aed' },
-  levelChipText: { fontSize: 12, fontWeight: '600', color: '#6b7280' },
+  levelChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, backgroundColor: '#EEF8F4', borderWidth: 1, borderColor: '#DDE8E1' },
+  levelChipActive: { backgroundColor: '#0B6B3A', borderColor: '#0B6B3A' },
+  levelChipText: { fontSize: 12, fontWeight: '600', color: '#6D7A72' },
   levelChipTextActive: { color: '#fff' },
   list: { padding: 16 },
   section: { marginBottom: 24 },
-  yearLabel: { fontSize: 16, fontWeight: '700', color: '#374151', marginBottom: 10 },
-  card: { backgroundColor: '#fff', borderRadius: 14, padding: 14, flexDirection: 'row', alignItems: 'center', marginBottom: 8, borderWidth: 1, borderColor: '#f3f4f6' },
+  yearLabel: { fontSize: 16, fontWeight: '700', color: '#1F2A24', marginBottom: 10 },
+  card: { backgroundColor: '#fff', borderRadius: 14, padding: 14, flexDirection: 'row', alignItems: 'center', marginBottom: 8, borderWidth: 1, borderColor: '#EEF8F4' },
   cardIcon: { fontSize: 22, marginRight: 12 },
-  cardTitle: { fontSize: 14, fontWeight: '500', color: '#111827', marginBottom: 4 },
+  cardTitle: { fontSize: 14, fontWeight: '500', color: '#1F2A24', marginBottom: 4 },
   cardMeta: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, alignItems: 'center' },
-  levelBadge: { fontSize: 10, backgroundColor: '#f3e8ff', color: '#7c3aed', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 10, fontWeight: '600' },
-  sessionBadge: { fontSize: 10, backgroundColor: '#dcfce7', color: '#16a34a', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 10 },
-  rattrapageBadge: { backgroundColor: '#ffedd5', color: '#ea580c' },
-  subjectText: { fontSize: 10, color: '#9ca3af' },
+  levelBadge: { fontSize: 10, backgroundColor: '#F0ECFA', color: '#0B6B3A', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 10, fontWeight: '600' },
+  sessionBadge: { fontSize: 10, backgroundColor: '#EAF5EC', color: '#0F8F4F', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 10 },
+  rattrapageBadge: { backgroundColor: '#FFF7CC', color: '#0B6B3A' },
+  subjectText: { fontSize: 10, color: '#6D7A72' },
   empty: { paddingTop: 60, alignItems: 'center' },
   emptyIcon: { fontSize: 40, marginBottom: 8 },
-  emptyText: { fontSize: 14, color: '#9ca3af' },
+  emptyText: { fontSize: 14, color: '#6D7A72' },
 })

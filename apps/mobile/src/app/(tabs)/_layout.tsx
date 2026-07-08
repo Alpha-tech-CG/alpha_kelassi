@@ -18,9 +18,9 @@ export default function TabsLayout() {
       <OfflineBanner />
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: '#2563eb',
-          tabBarInactiveTintColor: '#9ca3af',
-          tabBarStyle: { borderTopColor: '#e5e7eb' },
+          tabBarActiveTintColor: '#0F8F4F',
+          tabBarInactiveTintColor: '#6D7A72',
+          tabBarStyle: { borderTopColor: '#DDE8E1', backgroundColor: '#FFFFFF' },
           headerShown: false,
         }}
       >
@@ -51,12 +51,12 @@ export default function TabsLayout() {
 
 const styles = StyleSheet.create({
   banner: {
-    backgroundColor: '#f59e0b',
+    backgroundColor: '#F7D64A',
     paddingVertical: 6,
     alignItems: 'center',
   },
   bannerText: {
-    color: '#fff',
+    color: '#202624',
     fontSize: 13,
     fontWeight: '600',
   },

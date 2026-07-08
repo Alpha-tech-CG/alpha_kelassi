@@ -33,7 +33,7 @@ export default function ProfilScreen() {
     ])
   }
 
-  if (!profile) return <ActivityIndicator style={{ flex: 1 }} color="#2563eb" />
+  if (!profile) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
 
   return (
     <View style={styles.container}>
@@ -64,18 +64,18 @@ export default function ProfilScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb', padding: 24 },
+  container: { flex: 1, backgroundColor: '#F7FAF8', padding: 24 },
   header: { alignItems: 'center', paddingTop: 60, marginBottom: 32 },
-  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#2563eb', alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
+  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#0F8F4F', alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
   avatarText: { fontSize: 32, color: '#fff', fontWeight: '700' },
-  name: { fontSize: 20, fontWeight: '700', color: '#111827' },
-  email: { fontSize: 14, color: '#6b7280', marginTop: 4, marginBottom: 8 },
-  planBadge: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: 20, backgroundColor: '#f3f4f6' },
-  planBadgePremium: { backgroundColor: '#fef3c7' },
-  planText: { fontSize: 13, color: '#6b7280', fontWeight: '600' },
-  planTextPremium: { color: '#d97706' },
-  upgradeBtn: { backgroundColor: '#2563eb', borderRadius: 14, padding: 16, alignItems: 'center', marginBottom: 12 },
+  name: { fontSize: 20, fontWeight: '700', color: '#1F2A24' },
+  email: { fontSize: 14, color: '#6D7A72', marginTop: 4, marginBottom: 8 },
+  planBadge: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: 20, backgroundColor: '#EEF8F4' },
+  planBadgePremium: { backgroundColor: '#FFF7CC' },
+  planText: { fontSize: 13, color: '#6D7A72', fontWeight: '600' },
+  planTextPremium: { color: '#0B6B3A' },
+  upgradeBtn: { backgroundColor: '#0F8F4F', borderRadius: 14, padding: 16, alignItems: 'center', marginBottom: 12 },
   upgradeBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
-  logoutBtn: { borderRadius: 14, padding: 16, alignItems: 'center', borderWidth: 1, borderColor: '#e5e7eb', backgroundColor: '#fff' },
-  logoutText: { color: '#ef4444', fontWeight: '600', fontSize: 15 },
+  logoutBtn: { borderRadius: 14, padding: 16, alignItems: 'center', borderWidth: 1, borderColor: '#DDE8E1', backgroundColor: '#fff' },
+  logoutText: { color: '#E53935', fontWeight: '600', fontSize: 15 },
 })

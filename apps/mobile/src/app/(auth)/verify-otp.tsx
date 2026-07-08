@@ -53,13 +53,13 @@ export default function VerifyOTPScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24 },
+  container: { flex: 1, backgroundColor: '#F7FAF8', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24 },
   emoji: { fontSize: 48, marginBottom: 12 },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 8 },
-  subtitle: { fontSize: 14, color: '#6b7280', textAlign: 'center', marginBottom: 32 },
-  phone: { fontWeight: '700', color: '#111827' },
-  otpInput: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#d1d5db', borderRadius: 12, paddingHorizontal: 20, paddingVertical: 16, fontSize: 28, letterSpacing: 12, fontFamily: 'monospace', textAlign: 'center', width: '100%', marginBottom: 20 },
-  button: { backgroundColor: '#2563eb', borderRadius: 10, paddingVertical: 15, alignItems: 'center', width: '100%' },
+  subtitle: { fontSize: 14, color: '#6D7A72', textAlign: 'center', marginBottom: 32 },
+  phone: { fontWeight: '700', color: '#1F2A24' },
+  otpInput: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#DDE8E1', borderRadius: 12, paddingHorizontal: 20, paddingVertical: 16, fontSize: 28, letterSpacing: 12, fontFamily: 'monospace', textAlign: 'center', width: '100%', marginBottom: 20 },
+  button: { backgroundColor: '#0F8F4F', borderRadius: 10, paddingVertical: 15, alignItems: 'center', width: '100%' },
   buttonDisabled: { opacity: 0.5 },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
 })

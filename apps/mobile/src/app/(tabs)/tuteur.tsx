@@ -171,7 +171,7 @@ export default function TuteurScreen() {
         <TextInput
           style={styles.input}
           placeholder="Pose ta question..."
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor="#6D7A72"
           value={input}
           onChangeText={setInput}
           multiline
@@ -195,37 +195,37 @@ export default function TuteurScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
-  header: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#fff', paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#f3f4f6' },
-  avatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#16a34a', alignItems: 'center', justifyContent: 'center' },
+  container: { flex: 1, backgroundColor: '#F7FAF8' },
+  header: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#fff', paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#EEF8F4' },
+  avatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#0F8F4F', alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontSize: 18 },
-  headerTitle: { fontSize: 15, fontWeight: '700', color: '#111827' },
-  headerSub: { fontSize: 11, color: '#6b7280' },
-  quotaBadge: { marginLeft: 'auto', backgroundColor: '#f3f4f6', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
-  quotaBadgeLow: { backgroundColor: '#fef2f2' },
-  quotaText: { fontSize: 11, color: '#6b7280', fontWeight: '600' },
-  quotaTextLow: { color: '#ef4444' },
+  headerTitle: { fontSize: 15, fontWeight: '700', color: '#1F2A24' },
+  headerSub: { fontSize: 11, color: '#6D7A72' },
+  quotaBadge: { marginLeft: 'auto', backgroundColor: '#EEF8F4', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
+  quotaBadgeLow: { backgroundColor: '#FCE9E8' },
+  quotaText: { fontSize: 11, color: '#6D7A72', fontWeight: '600' },
+  quotaTextLow: { color: '#E53935' },
   messageList: { flex: 1 },
   messageContent: { padding: 16, gap: 12, flexGrow: 1 },
   emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 40 },
   emptyIcon: { fontSize: 48, marginBottom: 12 },
-  emptyTitle: { fontSize: 17, fontWeight: '700', color: '#111827', marginBottom: 6 },
-  emptySub: { fontSize: 13, color: '#6b7280', textAlign: 'center', marginBottom: 20, paddingHorizontal: 24 },
+  emptyTitle: { fontSize: 17, fontWeight: '700', color: '#1F2A24', marginBottom: 6 },
+  emptySub: { fontSize: 13, color: '#6D7A72', textAlign: 'center', marginBottom: 20, paddingHorizontal: 24 },
   suggestions: { gap: 8, width: '100%' },
-  suggestion: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#e5e7eb', borderRadius: 12, paddingVertical: 10, paddingHorizontal: 14 },
-  suggestionText: { fontSize: 13, color: '#374151' },
+  suggestion: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#DDE8E1', borderRadius: 12, paddingVertical: 10, paddingHorizontal: 14 },
+  suggestionText: { fontSize: 13, color: '#1F2A24' },
   msgRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
   msgRowUser: { justifyContent: 'flex-end' },
-  msgAvatar: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#16a34a', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  msgAvatar: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#0F8F4F', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   bubble: { maxWidth: '80%', paddingHorizontal: 14, paddingVertical: 10, borderRadius: 18 },
-  bubbleUser: { backgroundColor: '#16a34a', borderBottomRightRadius: 4 },
-  bubbleAssistant: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#f3f4f6', borderBottomLeftRadius: 4 },
-  bubbleText: { fontSize: 14, color: '#111827', lineHeight: 20 },
+  bubbleUser: { backgroundColor: '#0F8F4F', borderBottomRightRadius: 4 },
+  bubbleAssistant: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#EEF8F4', borderBottomLeftRadius: 4 },
+  bubbleText: { fontSize: 14, color: '#1F2A24', lineHeight: 20 },
   bubbleTextUser: { color: '#fff' },
-  cursor: { color: '#86efac' },
-  inputBar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#f3f4f6', padding: 12 },
-  input: { flex: 1, backgroundColor: '#f9fafb', borderWidth: 1, borderColor: '#e5e7eb', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 10, fontSize: 14, color: '#111827', maxHeight: 120 },
-  sendBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#16a34a', alignItems: 'center', justifyContent: 'center' },
+  cursor: { color: '#EAF5EC' },
+  inputBar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#EEF8F4', padding: 12 },
+  input: { flex: 1, backgroundColor: '#F7FAF8', borderWidth: 1, borderColor: '#DDE8E1', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 10, fontSize: 14, color: '#1F2A24', maxHeight: 120 },
+  sendBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#0F8F4F', alignItems: 'center', justifyContent: 'center' },
   sendBtnDisabled: { opacity: 0.4 },
   sendBtnText: { color: '#fff', fontSize: 18, fontWeight: '700' },
 })

@@ -87,7 +87,7 @@ export default function PlanningScreen() {
     await api(`/sessions/${s.id}`, { method: 'PATCH', body: JSON.stringify({ is_done: !s.is_done }) })
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#2563eb" />
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
 
   const today = new Date().toISOString().slice(0, 10)
   const todaySessions = sessions.filter((s) => s.scheduled_date === today)
@@ -166,38 +166,38 @@ export default function PlanningScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: '#F7FAF8' },
   content: { padding: 20, paddingTop: 60 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 },
-  back: { fontSize: 22, color: '#6b7280' },
-  title: { fontSize: 18, fontWeight: '700', color: '#111827' },
-  card: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#f3f4f6' },
-  cardTitle: { fontSize: 15, fontWeight: '700', color: '#111827', marginBottom: 12 },
-  empty: { fontSize: 13, color: '#9ca3af' },
-  examRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderTopWidth: 1, borderTopColor: '#f3f4f6' },
-  examLabel: { fontSize: 14, fontWeight: '600', color: '#111827' },
-  examDate: { fontSize: 13, color: '#6b7280' },
-  countdown: { backgroundColor: '#2563eb', borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 16 },
-  cdTitle: { fontSize: 13, color: '#bfdbfe' },
+  back: { fontSize: 22, color: '#6D7A72' },
+  title: { fontSize: 18, fontWeight: '700', color: '#1F2A24' },
+  card: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#EEF8F4' },
+  cardTitle: { fontSize: 15, fontWeight: '700', color: '#1F2A24', marginBottom: 12 },
+  empty: { fontSize: 13, color: '#6D7A72' },
+  examRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderTopWidth: 1, borderTopColor: '#EEF8F4' },
+  examLabel: { fontSize: 14, fontWeight: '600', color: '#1F2A24' },
+  examDate: { fontSize: 13, color: '#6D7A72' },
+  countdown: { backgroundColor: '#0F8F4F', borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 16 },
+  cdTitle: { fontSize: 13, color: '#EAF5EC' },
   cdDays: { fontSize: 52, fontWeight: '800', color: '#fff', marginVertical: 4 },
-  cdLabel: { fontSize: 13, color: '#bfdbfe' },
+  cdLabel: { fontSize: 13, color: '#EAF5EC' },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 14 },
-  chip: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 20, borderWidth: 1, borderColor: '#d1d5db' },
-  chipOn: { backgroundColor: '#2563eb', borderColor: '#2563eb' },
-  chipText: { fontSize: 13, color: '#6b7280' },
+  chip: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 20, borderWidth: 1, borderColor: '#DDE8E1' },
+  chipOn: { backgroundColor: '#0F8F4F', borderColor: '#0F8F4F' },
+  chipText: { fontSize: 13, color: '#6D7A72' },
   chipTextOn: { color: '#fff', fontWeight: '600' },
   perDayRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 14 },
-  perDayLabel: { fontSize: 13, color: '#6b7280', marginRight: 4 },
-  perDayBtn: { width: 34, height: 34, borderRadius: 10, borderWidth: 1, borderColor: '#d1d5db', alignItems: 'center', justifyContent: 'center' },
-  perDayBtnOn: { backgroundColor: '#111827', borderColor: '#111827' },
-  perDayText: { fontSize: 14, color: '#6b7280', fontWeight: '600' },
+  perDayLabel: { fontSize: 13, color: '#6D7A72', marginRight: 4 },
+  perDayBtn: { width: 34, height: 34, borderRadius: 10, borderWidth: 1, borderColor: '#DDE8E1', alignItems: 'center', justifyContent: 'center' },
+  perDayBtnOn: { backgroundColor: '#1F2A24', borderColor: '#1F2A24' },
+  perDayText: { fontSize: 14, color: '#6D7A72', fontWeight: '600' },
   perDayTextOn: { color: '#fff' },
-  genBtn: { backgroundColor: '#2563eb', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
+  genBtn: { backgroundColor: '#0F8F4F', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
   genText: { color: '#fff', fontWeight: '700', fontSize: 15 },
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#111827', marginBottom: 10 },
-  sessionRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: '#f3f4f6' },
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1F2A24', marginBottom: 10 },
+  sessionRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: '#EEF8F4' },
   checkbox: { fontSize: 18, marginRight: 12 },
-  sessionTitle: { flex: 1, fontSize: 14, color: '#111827' },
-  sessionDone: { textDecorationLine: 'line-through', color: '#9ca3af' },
-  sessionDur: { fontSize: 12, color: '#9ca3af' },
+  sessionTitle: { flex: 1, fontSize: 14, color: '#1F2A24' },
+  sessionDone: { textDecorationLine: 'line-through', color: '#6D7A72' },
+  sessionDur: { fontSize: 12, color: '#6D7A72' },
 })

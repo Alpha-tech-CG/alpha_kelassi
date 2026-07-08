@@ -41,7 +41,7 @@ export default function ExamenDetailScreen() {
     load()
   }, [id])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#7c3aed" />
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0B6B3A" />
 
   if (isPremiumBlocked) {
     return (
@@ -90,21 +90,21 @@ export default function ExamenDetailScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  docHeader: { padding: 16, borderBottomWidth: 1, borderBottomColor: '#f3f4f6' },
-  docTitle: { fontSize: 17, fontWeight: '700', color: '#111827', marginBottom: 6 },
+  docHeader: { padding: 16, borderBottomWidth: 1, borderBottomColor: '#EEF8F4' },
+  docTitle: { fontSize: 17, fontWeight: '700', color: '#1F2A24', marginBottom: 6 },
   docMeta: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 4 },
-  levelBadge: { fontSize: 11, backgroundColor: '#f3e8ff', color: '#7c3aed', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, fontWeight: '600' },
-  metaText: { fontSize: 13, color: '#6b7280' },
-  sessionBadge: { fontSize: 11, backgroundColor: '#dcfce7', color: '#16a34a', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-  rattrapageBadge: { backgroundColor: '#ffedd5', color: '#ea580c' },
-  subject: { fontSize: 12, color: '#9ca3af' },
+  levelBadge: { fontSize: 11, backgroundColor: '#F0ECFA', color: '#0B6B3A', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, fontWeight: '600' },
+  metaText: { fontSize: 13, color: '#6D7A72' },
+  sessionBadge: { fontSize: 11, backgroundColor: '#EAF5EC', color: '#0F8F4F', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
+  rattrapageBadge: { backgroundColor: '#FFF7CC', color: '#0B6B3A' },
+  subject: { fontSize: 12, color: '#6D7A72' },
   pdf: { flex: 1 },
   noPdf: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  noPdfText: { fontSize: 14, color: '#9ca3af' },
+  noPdfText: { fontSize: 14, color: '#6D7A72' },
   blocked: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
   blockedIcon: { fontSize: 56, marginBottom: 16 },
-  blockedTitle: { fontSize: 20, fontWeight: '700', color: '#111827', marginBottom: 8 },
-  blockedSub: { fontSize: 14, color: '#6b7280', textAlign: 'center', marginBottom: 24 },
-  upgradeBtn: { backgroundColor: '#7c3aed', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 28 },
+  blockedTitle: { fontSize: 20, fontWeight: '700', color: '#1F2A24', marginBottom: 8 },
+  blockedSub: { fontSize: 14, color: '#6D7A72', textAlign: 'center', marginBottom: 24 },
+  upgradeBtn: { backgroundColor: '#0B6B3A', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 28 },
   upgradeBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 })

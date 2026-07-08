@@ -72,7 +72,7 @@ export default function RootLayout() {
         <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar style="dark" backgroundColor="#F7FAF8" />
     </DatabaseProvider>
   )
 }

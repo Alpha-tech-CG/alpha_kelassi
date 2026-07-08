@@ -37,7 +37,7 @@ export default function QuizListScreen() {
     load()
   }, [])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#2563eb" />
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -86,19 +86,19 @@ export default function QuizListScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: '#F7FAF8' },
   content: { padding: 20, paddingTop: 60 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 },
-  back: { fontSize: 22, color: '#6b7280' },
-  title: { fontSize: 18, fontWeight: '700', color: '#111827' },
-  weakCard: { backgroundColor: '#fffbeb', borderWidth: 1, borderColor: '#fde68a', borderRadius: 14, padding: 14, marginBottom: 16 },
-  weakTitle: { fontSize: 13, fontWeight: '700', color: '#92400e', marginBottom: 8 },
+  back: { fontSize: 22, color: '#6D7A72' },
+  title: { fontSize: 18, fontWeight: '700', color: '#1F2A24' },
+  weakCard: { backgroundColor: '#FFF7CC', borderWidth: 1, borderColor: '#F7D64A', borderRadius: 14, padding: 14, marginBottom: 16 },
+  weakTitle: { fontSize: 13, fontWeight: '700', color: '#1F2A24', marginBottom: 8 },
   weakRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-  weakSubject: { fontSize: 13, color: '#92400e' },
-  weakRate: { fontSize: 13, fontWeight: '600', color: '#b45309' },
-  empty: { textAlign: 'center', color: '#9ca3af', marginTop: 40 },
-  quizCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 10, borderWidth: 1, borderColor: '#f3f4f6' },
-  quizTitle: { fontSize: 15, fontWeight: '600', color: '#111827' },
-  quizMeta: { fontSize: 12, color: '#9ca3af', marginTop: 3 },
-  chevron: { fontSize: 24, color: '#d1d5db' },
+  weakSubject: { fontSize: 13, color: '#1F2A24' },
+  weakRate: { fontSize: 13, fontWeight: '600', color: '#0B6B3A' },
+  empty: { textAlign: 'center', color: '#6D7A72', marginTop: 40 },
+  quizCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 10, borderWidth: 1, borderColor: '#EEF8F4' },
+  quizTitle: { fontSize: 15, fontWeight: '600', color: '#1F2A24' },
+  quizMeta: { fontSize: 12, color: '#6D7A72', marginTop: 3 },
+  chevron: { fontSize: 24, color: '#DDE8E1' },
 })

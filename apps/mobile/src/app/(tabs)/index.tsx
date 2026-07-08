@@ -35,16 +35,16 @@ export default function HomeScreen() {
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir'
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#2563eb" />
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
 
   const shortcuts = [
-    { label: 'Cours', icon: '📚', color: '#eff6ff', route: '/(tabs)/cours' },
-    { label: 'Examens', icon: '📝', color: '#f5f3ff', route: '/(tabs)/examens' },
-    { label: 'Kelassi IA', icon: '🤖', color: '#f0fdf4', route: '/(tabs)/tuteur' },
-    { label: 'Flashcards', icon: '🃏', color: '#fffbeb', route: '/flashcards/index' },
-    { label: 'QCM', icon: '✅', color: '#eef2ff', route: '/quiz/index' },
-    { label: 'Planning', icon: '📅', color: '#eff6ff', route: '/planning/index' },
-    { label: 'Vidéos', icon: '🎬', color: '#fef2f2', route: '/videos/index' },
+    { label: 'Cours', icon: '📚', color: '#EAF5EC', route: '/(tabs)/cours' },
+    { label: 'Examens', icon: '📝', color: '#F0ECFA', route: '/(tabs)/examens' },
+    { label: 'Kelassi IA', icon: '🤖', color: '#EAF5EC', route: '/(tabs)/tuteur' },
+    { label: 'Flashcards', icon: '🃏', color: '#FFF7CC', route: '/flashcards/index' },
+    { label: 'QCM', icon: '✅', color: '#EEF8F4', route: '/quiz/index' },
+    { label: 'Planning', icon: '📅', color: '#EAF5EC', route: '/planning/index' },
+    { label: 'Vidéos', icon: '🎬', color: '#FCE9E8', route: '/videos/index' },
   ]
 
   return (
@@ -122,31 +122,31 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: '#F7FAF8' },
   content: { padding: 20, paddingTop: 60 },
   header: { marginBottom: 24 },
-  greeting: { fontSize: 22, fontWeight: '700', color: '#111827' },
-  subGreeting: { fontSize: 14, color: '#6b7280', marginTop: 4 },
+  greeting: { fontSize: 22, fontWeight: '700', color: '#1F2A24' },
+  subGreeting: { fontSize: 14, color: '#6D7A72', marginTop: 4 },
   shortcuts: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 24 },
   shortcut: { width: '47%', borderRadius: 14, padding: 16, alignItems: 'center' },
   shortcutIcon: { fontSize: 28, marginBottom: 6 },
-  shortcutLabel: { fontSize: 13, fontWeight: '600', color: '#374151' },
-  card: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#f3f4f6' },
+  shortcutLabel: { fontSize: 13, fontWeight: '600', color: '#1F2A24' },
+  card: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#DDE8E1' },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  cardTitle: { fontSize: 15, fontWeight: '600', color: '#111827', marginBottom: 12 },
-  seeAll: { fontSize: 12, color: '#2563eb' },
+  cardTitle: { fontSize: 15, fontWeight: '600', color: '#1F2A24', marginBottom: 12 },
+  seeAll: { fontSize: 12, color: '#0F8F4F' },
   progressRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-  progressSubject: { fontSize: 13, color: '#374151', width: 100 },
-  progressBar: { flex: 1, height: 6, backgroundColor: '#f3f4f6', borderRadius: 3, marginHorizontal: 8, overflow: 'hidden' },
-  progressFill: { height: '100%', backgroundColor: '#3b82f6', borderRadius: 3 },
-  streak: { fontSize: 12, color: '#6b7280', width: 30, textAlign: 'right' },
-  docRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8, borderTopWidth: 1, borderTopColor: '#f9fafb' },
+  progressSubject: { fontSize: 13, color: '#1F2A24', width: 100 },
+  progressBar: { flex: 1, height: 6, backgroundColor: '#EEF8F4', borderRadius: 3, marginHorizontal: 8, overflow: 'hidden' },
+  progressFill: { height: '100%', backgroundColor: '#0F8F4F', borderRadius: 3 },
+  streak: { fontSize: 12, color: '#6D7A72', width: 30, textAlign: 'right' },
+  docRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8, borderTopWidth: 1, borderTopColor: '#F7FAF8' },
   docIcon: { fontSize: 22, marginRight: 12 },
-  docTitle: { fontSize: 13, fontWeight: '500', color: '#111827' },
-  docLevel: { fontSize: 11, color: '#9ca3af', marginTop: 2 },
-  premiumBanner: { borderRadius: 16, padding: 20, backgroundColor: '#2563eb', marginBottom: 16 },
+  docTitle: { fontSize: 13, fontWeight: '500', color: '#1F2A24' },
+  docLevel: { fontSize: 11, color: '#6D7A72', marginTop: 2 },
+  premiumBanner: { borderRadius: 16, padding: 20, backgroundColor: '#0F8F4F', marginBottom: 16 },
   premiumTitle: { fontSize: 16, fontWeight: '700', color: '#fff' },
-  premiumSub: { fontSize: 13, color: '#bfdbfe', marginTop: 4, marginBottom: 12 },
+  premiumSub: { fontSize: 13, color: '#EAF5EC', marginTop: 4, marginBottom: 12 },
   premiumButton: { backgroundColor: '#fff', borderRadius: 10, paddingVertical: 10, alignItems: 'center' },
-  premiumButtonText: { color: '#1d4ed8', fontWeight: '700', fontSize: 14 },
+  premiumButtonText: { color: '#0B6B3A', fontWeight: '700', fontSize: 14 },
 })

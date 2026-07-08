@@ -99,7 +99,7 @@ export default function CoursDetailScreen() {
     setDownloading(false)
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#2563eb" />
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
 
   if (isPremiumBlocked) {
     return (
@@ -136,7 +136,7 @@ export default function CoursDetailScreen() {
               onPress={downloadForOffline}
               disabled={!signedUrl || downloading}
             >
-              {downloading ? <ActivityIndicator size="small" color="#2563eb" /> : <Text style={styles.downloadBtnText}>⬇️ Télécharger hors-ligne</Text>}
+              {downloading ? <ActivityIndicator size="small" color="#0F8F4F" /> : <Text style={styles.downloadBtnText}>⬇️ Télécharger hors-ligne</Text>}
             </TouchableOpacity>
           ) : (
             <View style={styles.downloadedBadge}>
@@ -167,24 +167,24 @@ export default function CoursDetailScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  docHeader: { padding: 16, borderBottomWidth: 1, borderBottomColor: '#f3f4f6' },
-  docTitle: { fontSize: 17, fontWeight: '700', color: '#111827', marginBottom: 6 },
+  docHeader: { padding: 16, borderBottomWidth: 1, borderBottomColor: '#EEF8F4' },
+  docTitle: { fontSize: 17, fontWeight: '700', color: '#1F2A24', marginBottom: 6 },
   docMeta: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
-  levelBadge: { fontSize: 11, backgroundColor: '#eff6ff', color: '#2563eb', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, fontWeight: '600' },
-  metaText: { fontSize: 13, color: '#6b7280' },
+  levelBadge: { fontSize: 11, backgroundColor: '#EAF5EC', color: '#0F8F4F', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, fontWeight: '600' },
+  metaText: { fontSize: 13, color: '#6D7A72' },
   actions: { flexDirection: 'row' },
-  downloadBtn: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10, backgroundColor: '#eff6ff', gap: 6 },
+  downloadBtn: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10, backgroundColor: '#EAF5EC', gap: 6 },
   downloadBtnDisabled: { opacity: 0.5 },
-  downloadBtnText: { fontSize: 13, color: '#2563eb', fontWeight: '600' },
-  downloadedBadge: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 10, backgroundColor: '#f0fdf4' },
-  downloadedText: { fontSize: 13, color: '#16a34a', fontWeight: '600' },
+  downloadBtnText: { fontSize: 13, color: '#0F8F4F', fontWeight: '600' },
+  downloadedBadge: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 10, backgroundColor: '#EAF5EC' },
+  downloadedText: { fontSize: 13, color: '#0F8F4F', fontWeight: '600' },
   pdf: { flex: 1 },
   noPdf: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  noPdfText: { fontSize: 14, color: '#9ca3af', textAlign: 'center', paddingHorizontal: 40 },
+  noPdfText: { fontSize: 14, color: '#6D7A72', textAlign: 'center', paddingHorizontal: 40 },
   blocked: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
   blockedIcon: { fontSize: 56, marginBottom: 16 },
-  blockedTitle: { fontSize: 20, fontWeight: '700', color: '#111827', marginBottom: 8 },
-  blockedSub: { fontSize: 14, color: '#6b7280', textAlign: 'center', marginBottom: 24 },
-  upgradeBtn: { backgroundColor: '#7c3aed', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 28 },
+  blockedTitle: { fontSize: 20, fontWeight: '700', color: '#1F2A24', marginBottom: 8 },
+  blockedSub: { fontSize: 14, color: '#6D7A72', textAlign: 'center', marginBottom: 24 },
+  upgradeBtn: { backgroundColor: '#0B6B3A', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 28 },
   upgradeBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 })

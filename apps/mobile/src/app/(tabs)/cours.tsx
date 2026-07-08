@@ -85,7 +85,7 @@ export default function CoursScreen() {
     index,
   }), [])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#2563eb" />
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
 
   return (
     <View style={styles.container}>
@@ -96,7 +96,7 @@ export default function CoursScreen() {
           placeholder="Rechercher un cours..."
           value={search}
           onChangeText={setSearch}
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor="#6D7A72"
         />
         <View style={styles.levels}>
           {LEVELS.map((l) => (
@@ -140,24 +140,24 @@ export default function CoursScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
-  header: { backgroundColor: '#fff', paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#f3f4f6' },
-  title: { fontSize: 22, fontWeight: '700', color: '#111827', marginBottom: 12 },
-  search: { backgroundColor: '#f3f4f6', borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, fontSize: 15, color: '#111827', marginBottom: 10 },
+  container: { flex: 1, backgroundColor: '#F7FAF8' },
+  header: { backgroundColor: '#EAF5EC', paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#DDE8E1' },
+  title: { fontSize: 22, fontWeight: '700', color: '#1F2A24', marginBottom: 12 },
+  search: { backgroundColor: '#EEF8F4', borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, fontSize: 15, color: '#1F2A24', marginBottom: 10 },
   levels: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  levelChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, backgroundColor: '#f3f4f6', borderWidth: 1, borderColor: '#e5e7eb' },
-  levelChipActive: { backgroundColor: '#2563eb', borderColor: '#2563eb' },
-  levelChipText: { fontSize: 12, fontWeight: '600', color: '#6b7280' },
+  levelChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, backgroundColor: '#EEF8F4', borderWidth: 1, borderColor: '#DDE8E1' },
+  levelChipActive: { backgroundColor: '#0F8F4F', borderColor: '#0F8F4F' },
+  levelChipText: { fontSize: 12, fontWeight: '600', color: '#6D7A72' },
   levelChipTextActive: { color: '#fff' },
-  offlineNote: { fontSize: 12, color: '#d97706', marginTop: 8 },
+  offlineNote: { fontSize: 12, color: '#0B6B3A', marginTop: 8 },
   list: { padding: 16, gap: 10 },
-  card: { backgroundColor: '#fff', borderRadius: 14, padding: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: 1, borderColor: '#f3f4f6' },
+  card: { backgroundColor: '#fff', borderRadius: 14, padding: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: 1, borderColor: '#DDE8E1' },
   cardLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   cardIcon: { fontSize: 24, marginRight: 12 },
-  cardTitle: { fontSize: 14, fontWeight: '500', color: '#111827' },
-  cardLevel: { fontSize: 11, color: '#9ca3af', marginTop: 2 },
+  cardTitle: { fontSize: 14, fontWeight: '500', color: '#1F2A24' },
+  cardLevel: { fontSize: 11, color: '#6D7A72', marginTop: 2 },
   premium: { fontSize: 16, marginLeft: 8 },
   empty: { paddingTop: 60, alignItems: 'center' },
   emptyIcon: { fontSize: 40, marginBottom: 8 },
-  emptyText: { fontSize: 14, color: '#9ca3af' },
+  emptyText: { fontSize: 14, color: '#6D7A72' },
 })

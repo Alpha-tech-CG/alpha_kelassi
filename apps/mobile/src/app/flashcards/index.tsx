@@ -18,10 +18,10 @@ interface Flashcard {
 const API_URL = process.env['EXPO_PUBLIC_API_URL'] ?? 'http://localhost:3001'
 
 const QUALITIES = [
-  { q: 0, label: 'Oublié', bg: '#ef4444' },
+  { q: 0, label: 'Oublié', bg: '#E53935' },
   { q: 2, label: 'Difficile', bg: '#f97316' },
-  { q: 3, label: 'Correct', bg: '#eab308' },
-  { q: 5, label: 'Parfait', bg: '#22c55e' },
+  { q: 3, label: 'Correct', bg: '#F7D64A' },
+  { q: 5, label: 'Parfait', bg: '#0F8F4F' },
 ]
 
 export default function FlashcardsScreen() {
@@ -81,7 +81,7 @@ export default function FlashcardsScreen() {
     }
   }, [cards, index])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#3b82f6" />
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
 
   if (done) {
     const pct = stats.reviewed > 0 ? Math.round((stats.correct / stats.reviewed) * 100) : 0
@@ -129,7 +129,7 @@ export default function FlashcardsScreen() {
           <Text style={styles.tapHint}>Appuie pour voir la réponse</Text>
         </Animated.View>
         <Animated.View style={[styles.cardFace, styles.cardBack, { transform: [{ rotateY: backInterpolate }] }]}>
-          <Text style={[styles.cardLabel, { color: '#6366f1' }]}>Réponse</Text>
+          <Text style={[styles.cardLabel, { color: '#0F8F4F' }]}>Réponse</Text>
           <Text style={styles.cardText}>{card.back}</Text>
         </Animated.View>
       </TouchableOpacity>
@@ -156,34 +156,34 @@ export default function FlashcardsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb', paddingTop: 60 },
+  container: { flex: 1, backgroundColor: '#F7FAF8', paddingTop: 60 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, marginBottom: 12 },
-  back: { fontSize: 22, color: '#6b7280' },
-  counter: { fontSize: 14, color: '#6b7280', fontWeight: '600' },
-  progressBar: { height: 4, backgroundColor: '#e5e7eb', marginHorizontal: 20, borderRadius: 2, overflow: 'hidden', marginBottom: 12 },
-  progressFill: { height: '100%', backgroundColor: '#3b82f6', borderRadius: 2 },
-  context: { textAlign: 'center', fontSize: 11, color: '#9ca3af', marginBottom: 16 },
+  back: { fontSize: 22, color: '#6D7A72' },
+  counter: { fontSize: 14, color: '#6D7A72', fontWeight: '600' },
+  progressBar: { height: 4, backgroundColor: '#DDE8E1', marginHorizontal: 20, borderRadius: 2, overflow: 'hidden', marginBottom: 12 },
+  progressFill: { height: '100%', backgroundColor: '#0F8F4F', borderRadius: 2 },
+  context: { textAlign: 'center', fontSize: 11, color: '#6D7A72', marginBottom: 16 },
   cardContainer: { marginHorizontal: 20, height: 220, marginBottom: 24 },
   cardFace: { position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center', padding: 24, backfaceVisibility: 'hidden' },
-  cardFront: { backgroundColor: '#fff', borderWidth: 2, borderColor: '#dbeafe', shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 12, elevation: 3 },
-  cardBack: { backgroundColor: '#eef2ff', borderWidth: 2, borderColor: '#c7d2fe' },
-  cardLabel: { fontSize: 11, fontWeight: '700', color: '#3b82f6', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 },
+  cardFront: { backgroundColor: '#fff', borderWidth: 2, borderColor: '#DDE8E1', shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 12, elevation: 3 },
+  cardBack: { backgroundColor: '#EEF8F4', borderWidth: 2, borderColor: '#DDE8E1' },
+  cardLabel: { fontSize: 11, fontWeight: '700', color: '#0F8F4F', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 },
   cardText: { fontSize: 16, fontWeight: '500', color: '#1f2937', textAlign: 'center', lineHeight: 24 },
-  tapHint: { position: 'absolute', bottom: 16, fontSize: 11, color: '#d1d5db' },
+  tapHint: { position: 'absolute', bottom: 16, fontSize: 11, color: '#DDE8E1' },
   qualities: { paddingHorizontal: 20 },
-  qualityHint: { textAlign: 'center', fontSize: 13, color: '#6b7280', marginBottom: 10 },
+  qualityHint: { textAlign: 'center', fontSize: 13, color: '#6D7A72', marginBottom: 10 },
   qualityRow: { flexDirection: 'row', gap: 8 },
   qualityBtn: { flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center' },
   qualityText: { color: '#fff', fontWeight: '700', fontSize: 13 },
-  flipBtn: { marginHorizontal: 20, backgroundColor: '#3b82f6', borderRadius: 16, paddingVertical: 16, alignItems: 'center' },
+  flipBtn: { marginHorizontal: 20, backgroundColor: '#0F8F4F', borderRadius: 16, paddingVertical: 16, alignItems: 'center' },
   flipBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
   doneEmoji: { fontSize: 56, marginBottom: 16 },
-  doneTitle: { fontSize: 22, fontWeight: '700', color: '#111827', marginBottom: 8 },
-  doneScore: { fontSize: 28, fontWeight: '800', color: '#16a34a', marginBottom: 24 },
-  doneSub: { fontSize: 14, color: '#6b7280', marginBottom: 24 },
-  restartBtn: { backgroundColor: '#3b82f6', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 32, marginBottom: 10 },
+  doneTitle: { fontSize: 22, fontWeight: '700', color: '#1F2A24', marginBottom: 8 },
+  doneScore: { fontSize: 28, fontWeight: '800', color: '#0F8F4F', marginBottom: 24 },
+  doneSub: { fontSize: 14, color: '#6D7A72', marginBottom: 24 },
+  restartBtn: { backgroundColor: '#0F8F4F', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 32, marginBottom: 10 },
   restartText: { color: '#fff', fontWeight: '700', fontSize: 15 },
   backBtn: { paddingVertical: 10 },
-  backText: { color: '#6b7280', fontSize: 14 },
+  backText: { color: '#6D7A72', fontSize: 14 },
 })
