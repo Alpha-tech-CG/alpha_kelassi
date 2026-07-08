@@ -6,7 +6,11 @@ import { usePathname } from 'next/navigation'
 const NAV = [
   { href: '/admin', label: 'Vue d\'ensemble', icon: '📊' },
   { href: '/admin/documents', label: 'Documents', icon: '📚' },
-  { href: '/admin/notifications', label: 'Notifications', icon: '🔔' },
+  { href: '/admin/quiz', label: 'QCM', icon: '✅' },
+  { href: '/admin/videos', label: 'Vidéos', icon: '🎬' },
+  { href: '/admin/exams', label: 'Dates d\'examen', icon: '📅' },
+  { href: '/admin/subscriptions', label: 'Abonnements', icon: '💳' },
+  { href: '/admin/notifications', label: 'Annonces', icon: '🔔' },
   { href: '/admin/users', label: 'Utilisateurs', icon: '👥' },
 ]
 

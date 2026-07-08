@@ -29,6 +29,24 @@ function parseVideoUrl(url: string): { provider: 'youtube' | 'vimeo'; external_i
   } catch { return null }
 }
 
+/** GET /api/admin/videos — liste toutes les vidéos (admin) */
+export async function GET(req: NextRequest) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+  const { data: profile } = await supabaseAdmin.from('users').select('role').eq('id', user.id).single()
+  if (profile?.role !== 'admin') return NextResponse.json({ error: 'Admin requis' }, { status: 403 })
+
+  const { data, error } = await supabaseAdmin
+    .from('videos')
+    .select('id, title, level, provider, url, is_premium, thumbnail_url, subjects(name)')
+    .order('created_at', { ascending: false })
+    .limit(300)
+
+  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  return NextResponse.json({ data: data ?? [] })
+}
+
 const schema = z.object({
   subject_id:   z.string().uuid(),
   title:        z.string().min(3).max(200),
