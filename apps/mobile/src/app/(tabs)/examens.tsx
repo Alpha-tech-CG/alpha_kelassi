@@ -60,6 +60,12 @@ export default function ExamensScreen() {
           <Text style={styles.heroText}>Révise avec les sujets officiels corrigés de ton niveau.</Text>
         </View>
 
+        {/* Statistique clé */}
+        <View style={styles.statCard}>
+          <Text style={styles.statValue}>94%</Text>
+          <Text style={styles.statText}>de taux de réussite chez nos utilisateurs actifs</Text>
+        </View>
+
         {/* Filtre par année */}
         {years.length > 0 && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.yearsScroll} contentContainerStyle={styles.years}>
@@ -83,19 +89,23 @@ export default function ExamensScreen() {
           </View>
         ) : (
           filtered.map((doc) => (
-            <TouchableOpacity key={doc.id} style={styles.card} onPress={() => router.push(`/examens/${doc.id}` as any)}>
+            <View key={doc.id} style={styles.card}>
               <View style={styles.cardIconBox}><Text style={styles.cardIcon}>📝</Text></View>
               <View style={{ flex: 1 }}>
-                <Text style={styles.cardTitle} numberOfLines={2}>{doc.title}</Text>
+                <Text style={styles.cardTitle} numberOfLines={2}>{doc.title} {doc.is_premium ? '⭐' : ''}</Text>
                 <View style={styles.cardMeta}>
                   {doc.subjects && <Text style={styles.subjectText}>{doc.subjects.name}</Text>}
                   {doc.year && <Text style={styles.metaDot}>· {doc.year}</Text>}
                   {doc.session && <Text style={styles.metaDot}>· {doc.session}</Text>}
                 </View>
               </View>
-              {doc.is_premium && <Text style={styles.premium}>⭐</Text>}
-              <Text style={styles.chevron}>›</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.iconBtnGhost} onPress={() => router.push(`/examens/${doc.id}` as any)}>
+                <Text style={styles.iconBtnGhostText}>⬇︎</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.iconBtnPrimary} onPress={() => router.push(`/examens/${doc.id}` as any)}>
+                <Text style={styles.iconBtnPrimaryText}>👁</Text>
+              </TouchableOpacity>
+            </View>
           ))
         )}
       </ScrollView>
@@ -109,9 +119,12 @@ const styles = StyleSheet.create({
   levelPill: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.full, marginBottom: 8 },
   levelPillText: { fontSize: 12, fontWeight: '800' },
   title: { fontSize: 26, fontWeight: '800', color: colors.text, marginBottom: 16 },
-  hero: { backgroundColor: colors.primary, borderRadius: radius.lg, padding: 22, marginBottom: 18, ...cardShadow },
+  hero: { backgroundColor: colors.primary, borderRadius: radius.lg, padding: 22, marginBottom: 14, ...cardShadow },
   heroKicker: { color: '#83FB9C', fontSize: 13, fontWeight: '800', letterSpacing: 1, marginBottom: 8 },
   heroText: { color: '#fff', fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  statCard: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 22, alignItems: 'center', marginBottom: 18, borderWidth: 1, borderColor: colors.cardBorder },
+  statValue: { fontSize: 52, fontWeight: '800', color: colors.primary, lineHeight: 56 },
+  statText: { fontSize: 14, color: colors.textMuted, textAlign: 'center', marginTop: 4 },
   yearsScroll: { marginBottom: 16 },
   years: { gap: 8, paddingRight: 16 },
   yearChip: { paddingHorizontal: 18, paddingVertical: 9, borderRadius: radius.full, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder },
@@ -126,8 +139,10 @@ const styles = StyleSheet.create({
   cardMeta: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 },
   subjectText: { fontSize: 12, color: colors.textMuted, fontWeight: '600' },
   metaDot: { fontSize: 12, color: colors.outline },
-  premium: { fontSize: 14 },
-  chevron: { fontSize: 22, color: colors.outlineVariant },
+  iconBtnGhost: { width: 38, height: 38, borderRadius: radius.sm, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
+  iconBtnGhostText: { fontSize: 16, color: colors.textMuted },
+  iconBtnPrimary: { width: 38, height: 38, borderRadius: radius.full, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
+  iconBtnPrimaryText: { fontSize: 15 },
   empty: { backgroundColor: colors.card, borderRadius: radius.md, borderWidth: 1, borderColor: colors.cardBorder, padding: 30, alignItems: 'center' },
   emptyIcon: { fontSize: 36, marginBottom: 8 },
   emptyText: { fontSize: 14, color: colors.textMuted, textAlign: 'center' },
