@@ -8,10 +8,10 @@ import { supabase } from '../lib/supabase'
 import { API_URL } from '../lib/config'
 
 const LEVELS = [
-  { value: 'bepc',  label: 'BEPC',  sub: '3ème', color: '#0F8F4F' },
-  { value: 'bac_c', label: 'BAC C', sub: 'Maths-Sciences', color: '#0B6B3A' },
-  { value: 'bac_d', label: 'BAC D', sub: 'Sciences Naturelles', color: '#0B6B3A' },
-  { value: 'bac_a', label: 'BAC A', sub: 'Lettres & Philo', color: '#0B6B3A' },
+  { value: 'bepc',  label: 'BEPC',  sub: '3ème', color: '#006B2E' },
+  { value: 'bac_c', label: 'BAC C', sub: 'Maths-Sciences', color: '#006B2E' },
+  { value: 'bac_d', label: 'BAC D', sub: 'Sciences Naturelles', color: '#006B2E' },
+  { value: 'bac_a', label: 'BAC A', sub: 'Lettres & Philo', color: '#006B2E' },
 ]
 
 const KELASSI_TIPS = [
@@ -128,7 +128,7 @@ export default function OnboardingScreen() {
             <Text style={styles.title}>Tes matières principales</Text>
             <Text style={styles.subtitle}>Sélectionne celles que tu veux réviser en priorité</Text>
             {subjectsLoading ? (
-              <ActivityIndicator color="#0F8F4F" style={{ marginTop: 24 }} />
+              <ActivityIndicator color="#006B2E" style={{ marginTop: 24 }} />
             ) : (
               <ScrollView style={styles.subjectList} showsVerticalScrollIndicator={false}>
                 <View style={styles.subjectChips}>
@@ -213,35 +213,35 @@ export default function OnboardingScreen() {
 }
 
 const styles = StyleSheet.create({
-  container:    { flex: 1, backgroundColor: '#F7FAF8', paddingTop: 60 },
+  container:    { flex: 1, backgroundColor: '#F5FBF0', paddingTop: 60 },
   dots:         { flexDirection: 'row', justifyContent: 'center', gap: 8, marginBottom: 32 },
-  dot:          { width: 8, height: 8, borderRadius: 4, backgroundColor: '#DDE8E1' },
-  dotActive:    { backgroundColor: '#0F8F4F', width: 24 },
+  dot:          { width: 8, height: 8, borderRadius: 4, backgroundColor: '#E3EADF' },
+  dotActive:    { backgroundColor: '#006B2E', width: 24 },
   content:      { flex: 1, paddingHorizontal: 24 },
   step:         { flex: 1 },
   emoji:        { fontSize: 48, textAlign: 'center', marginBottom: 16 },
-  title:        { fontSize: 24, fontWeight: '700', color: '#1F2A24', textAlign: 'center', marginBottom: 8 },
-  subtitle:     { fontSize: 15, color: '#6D7A72', textAlign: 'center', marginBottom: 24, lineHeight: 22 },
+  title:        { fontSize: 24, fontWeight: '700', color: '#171D17', textAlign: 'center', marginBottom: 8 },
+  subtitle:     { fontSize: 15, color: '#3E4A3E', textAlign: 'center', marginBottom: 24, lineHeight: 22 },
   levelGrid:    { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'center' },
   levelCard:    { width: '44%', borderWidth: 2, borderRadius: 16, padding: 16, alignItems: 'center', backgroundColor: '#fff' },
   levelLabel:   { fontSize: 20, fontWeight: '700', marginBottom: 4 },
-  levelSub:     { fontSize: 12, color: '#6D7A72', textAlign: 'center' },
+  levelSub:     { fontSize: 12, color: '#3E4A3E', textAlign: 'center' },
   subjectList:  { flex: 1, marginBottom: 16 },
   subjectChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chip:         { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, borderWidth: 1.5, borderColor: '#DDE8E1', backgroundColor: '#fff' },
-  chipActive:   { backgroundColor: '#0F8F4F', borderColor: '#0F8F4F' },
-  chipText:     { fontSize: 13, fontWeight: '500', color: '#1F2A24' },
+  chip:         { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, borderWidth: 1.5, borderColor: '#E3EADF', backgroundColor: '#fff' },
+  chipActive:   { backgroundColor: '#006B2E', borderColor: '#006B2E' },
+  chipText:     { fontSize: 13, fontWeight: '500', color: '#171D17' },
   chipTextActive: { color: '#fff' },
   tips:         { gap: 16, marginBottom: 32 },
-  tip:          { flexDirection: 'row', gap: 12, backgroundColor: '#fff', borderRadius: 14, padding: 14, borderWidth: 1, borderColor: '#EEF8F4' },
+  tip:          { flexDirection: 'row', gap: 12, backgroundColor: '#fff', borderRadius: 14, padding: 14, borderWidth: 1, borderColor: '#EFF6EB' },
   tipIcon:      { fontSize: 24 },
-  tipTitle:     { fontSize: 14, fontWeight: '600', color: '#1F2A24', marginBottom: 2 },
-  tipDesc:      { fontSize: 12, color: '#6D7A72', lineHeight: 18 },
+  tipTitle:     { fontSize: 14, fontWeight: '600', color: '#171D17', marginBottom: 2 },
+  tipDesc:      { fontSize: 12, color: '#3E4A3E', lineHeight: 18 },
   featureList:  { gap: 12, marginBottom: 40 },
   featureRow:   { flexDirection: 'row', alignItems: 'center', gap: 10 },
   featureCheck: { fontSize: 16 },
-  featureText:  { fontSize: 14, color: '#1F2A24' },
-  btn:          { backgroundColor: '#0F8F4F', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 'auto' as any, marginBottom: 32 },
+  featureText:  { fontSize: 14, color: '#171D17' },
+  btn:          { backgroundColor: '#006B2E', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 'auto' as any, marginBottom: 32 },
   btnDisabled:  { opacity: 0.5 },
   btnText:      { color: '#fff', fontSize: 16, fontWeight: '700' },
 })

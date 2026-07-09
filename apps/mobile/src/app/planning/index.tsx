@@ -3,6 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
+import { colors, radius, cardShadow } from '../../lib/theme'
 
 interface Plan { id: string; level: string; title: string; exam_date: string; days_remaining: number }
 interface ExamEvent { id: string; level: string; label: string; exam_date: string }
@@ -86,7 +87,7 @@ export default function PlanningScreen() {
     await api(`/sessions/${s.id}`, { method: 'PATCH', body: JSON.stringify({ is_done: !s.is_done }) })
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
+  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
 
   const today = new Date().toISOString().slice(0, 10)
   const todaySessions = sessions.filter((s) => s.scheduled_date === today)
@@ -165,38 +166,38 @@ export default function PlanningScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F7FAF8' },
-  content: { padding: 20, paddingTop: 60 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 },
-  back: { fontSize: 22, color: '#6D7A72' },
-  title: { fontSize: 18, fontWeight: '700', color: '#1F2A24' },
-  card: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#EEF8F4' },
-  cardTitle: { fontSize: 15, fontWeight: '700', color: '#1F2A24', marginBottom: 12 },
-  empty: { fontSize: 13, color: '#6D7A72' },
-  examRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderTopWidth: 1, borderTopColor: '#EEF8F4' },
-  examLabel: { fontSize: 14, fontWeight: '600', color: '#1F2A24' },
-  examDate: { fontSize: 13, color: '#6D7A72' },
-  countdown: { backgroundColor: '#0F8F4F', borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 16 },
-  cdTitle: { fontSize: 13, color: '#EAF5EC' },
-  cdDays: { fontSize: 52, fontWeight: '800', color: '#fff', marginVertical: 4 },
+  container: { flex: 1, backgroundColor: colors.background },
+  content: { padding: 16, paddingTop: 56 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 },
+  back: { fontSize: 24, color: colors.text },
+  title: { fontSize: 20, fontWeight: '800', color: colors.text },
+  card: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
+  cardTitle: { fontSize: 16, fontWeight: '800', color: colors.text, marginBottom: 12 },
+  empty: { fontSize: 13, color: colors.textMuted },
+  examRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 13, borderTopWidth: 1, borderTopColor: colors.background },
+  examLabel: { fontSize: 15, fontWeight: '700', color: colors.text },
+  examDate: { fontSize: 13, color: colors.textMuted },
+  countdown: { backgroundColor: colors.primary, borderRadius: radius.lg, padding: 24, alignItems: 'center', marginBottom: 16, ...cardShadow },
+  cdTitle: { fontSize: 13, color: '#EAF5EC', fontWeight: '600' },
+  cdDays: { fontSize: 56, fontWeight: '800', color: '#fff', marginVertical: 4 },
   cdLabel: { fontSize: 13, color: '#EAF5EC' },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 14 },
-  chip: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 20, borderWidth: 1, borderColor: '#DDE8E1' },
-  chipOn: { backgroundColor: '#0F8F4F', borderColor: '#0F8F4F' },
-  chipText: { fontSize: 13, color: '#6D7A72' },
-  chipTextOn: { color: '#fff', fontWeight: '600' },
+  chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.full, borderWidth: 1, borderColor: colors.cardBorder, backgroundColor: colors.card },
+  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
+  chipText: { fontSize: 13, color: colors.textMuted, fontWeight: '600' },
+  chipTextOn: { color: '#fff', fontWeight: '700' },
   perDayRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 14 },
-  perDayLabel: { fontSize: 13, color: '#6D7A72', marginRight: 4 },
-  perDayBtn: { width: 34, height: 34, borderRadius: 10, borderWidth: 1, borderColor: '#DDE8E1', alignItems: 'center', justifyContent: 'center' },
-  perDayBtnOn: { backgroundColor: '#1F2A24', borderColor: '#1F2A24' },
-  perDayText: { fontSize: 14, color: '#6D7A72', fontWeight: '600' },
+  perDayLabel: { fontSize: 13, color: colors.textMuted, marginRight: 4 },
+  perDayBtn: { width: 38, height: 38, borderRadius: radius.sm, borderWidth: 1, borderColor: colors.cardBorder, alignItems: 'center', justifyContent: 'center' },
+  perDayBtnOn: { backgroundColor: colors.primary, borderColor: colors.primary },
+  perDayText: { fontSize: 15, color: colors.textMuted, fontWeight: '700' },
   perDayTextOn: { color: '#fff' },
-  genBtn: { backgroundColor: '#0F8F4F', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-  genText: { color: '#fff', fontWeight: '700', fontSize: 15 },
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1F2A24', marginBottom: 10 },
-  sessionRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: '#EEF8F4' },
+  genBtn: { backgroundColor: colors.primary, borderRadius: radius.md, paddingVertical: 15, alignItems: 'center' },
+  genText: { color: '#fff', fontWeight: '800', fontSize: 15 },
+  sectionTitle: { fontSize: 16, fontWeight: '800', color: colors.text, marginBottom: 10 },
+  sessionRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: radius.md, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
   checkbox: { fontSize: 18, marginRight: 12 },
-  sessionTitle: { flex: 1, fontSize: 14, color: '#1F2A24' },
-  sessionDone: { textDecorationLine: 'line-through', color: '#6D7A72' },
-  sessionDur: { fontSize: 12, color: '#6D7A72' },
+  sessionTitle: { flex: 1, fontSize: 15, color: colors.text, fontWeight: '600' },
+  sessionDone: { textDecorationLine: 'line-through', color: colors.textMuted },
+  sessionDur: { fontSize: 12, color: colors.textMuted },
 })

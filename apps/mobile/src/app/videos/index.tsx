@@ -3,6 +3,8 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
+import { useLevel } from '../../hooks/useLevel'
+import { colors, radius, cardShadow } from '../../lib/theme'
 
 interface Video {
   id: string
@@ -17,40 +19,46 @@ interface Video {
 
 export default function VideosScreen() {
   const router = useRouter()
+  const { level, ready } = useLevel()
   const [videos, setVideos] = useState<Video[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!ready) return
     async function load() {
       const { data: { session } } = await supabase.auth.getSession()
-      const res = await fetch(`${API_URL}/api/videos`, { headers: { Authorization: `Bearer ${session?.access_token}` } })
+      const q = level ? `?level=${level}` : ''
+      const res = await fetch(`${API_URL}/api/videos${q}`, { headers: { Authorization: `Bearer ${session?.access_token}` } })
       const json = await res.json()
       setVideos(json.data ?? [])
       setLoading(false)
     }
     load()
-  }, [])
+  }, [ready, level])
 
   // Ouvre dans l'app YouTube / le navigateur : lecteur natif, adaptation au débit, offline géré par YouTube
   function watch(v: Video) {
     Linking.openURL(v.url).catch(() => null)
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#E53935" />
+  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
         <Text style={styles.title}>Cours vidéo</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: 24 }} />
       </View>
 
       {videos.length === 0 ? (
-        <Text style={styles.empty}>Aucune vidéo disponible pour le moment.</Text>
+        <View style={styles.empty}>
+          <Text style={styles.emptyIcon}>🎬</Text>
+          <Text style={styles.emptyText}>Aucune vidéo disponible pour le moment.</Text>
+        </View>
       ) : (
         videos.map((v) => (
-          <TouchableOpacity key={v.id} style={styles.card} onPress={() => watch(v)}>
+          <TouchableOpacity key={v.id} style={styles.card} onPress={() => watch(v)} activeOpacity={0.85}>
             <View style={styles.thumbWrap}>
               {v.thumbnail_url
                 ? <Image source={{ uri: v.thumbnail_url }} style={styles.thumb} />
@@ -60,7 +68,7 @@ export default function VideosScreen() {
             <View style={styles.meta}>
               <Text style={styles.videoTitle} numberOfLines={2}>{v.title} {v.is_premium ? '⭐' : ''}</Text>
               <Text style={styles.videoSub}>
-                {v.subjects?.name ? `${v.subjects.name} · ` : ''}{v.level.replace('_', ' ').toUpperCase()}
+                {v.subjects?.name ? `${v.subjects.name}` : ''}
                 {v.duration_sec ? ` · ${Math.floor(v.duration_sec / 60)} min` : ''}
               </Text>
             </View>
@@ -72,20 +80,22 @@ export default function VideosScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F7FAF8' },
-  content: { padding: 20, paddingTop: 60 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 },
-  back: { fontSize: 22, color: '#6D7A72' },
-  title: { fontSize: 18, fontWeight: '700', color: '#1F2A24' },
-  empty: { textAlign: 'center', color: '#6D7A72', marginTop: 40 },
-  card: { backgroundColor: '#fff', borderRadius: 16, overflow: 'hidden', marginBottom: 14, borderWidth: 1, borderColor: '#EEF8F4' },
+  container: { flex: 1, backgroundColor: colors.background },
+  content: { padding: 16, paddingTop: 56 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 },
+  back: { fontSize: 24, color: colors.text },
+  title: { fontSize: 20, fontWeight: '800', color: colors.text },
+  empty: { alignItems: 'center', paddingTop: 50 },
+  emptyIcon: { fontSize: 40, marginBottom: 12 },
+  emptyText: { fontSize: 14, color: colors.textMuted, textAlign: 'center' },
+  card: { backgroundColor: colors.card, borderRadius: radius.lg, overflow: 'hidden', marginBottom: 14, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
   thumbWrap: { position: 'relative', width: '100%', aspectRatio: 16 / 9, backgroundColor: '#DDE8E1' },
   thumb: { width: '100%', height: '100%' },
   thumbEmpty: { alignItems: 'center', justifyContent: 'center' },
-  playIcon: { fontSize: 32, color: '#6D7A72' },
-  playBadge: { position: 'absolute', top: '50%', left: '50%', marginLeft: -22, marginTop: -22, width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(220,38,38,0.9)', alignItems: 'center', justifyContent: 'center' },
-  playBadgeText: { color: '#fff', fontSize: 16, marginLeft: 3 },
-  meta: { padding: 12 },
-  videoTitle: { fontSize: 14, fontWeight: '600', color: '#1F2A24' },
-  videoSub: { fontSize: 12, color: '#6D7A72', marginTop: 3 },
+  playIcon: { fontSize: 32, color: colors.outline },
+  playBadge: { position: 'absolute', top: '50%', left: '50%', marginLeft: -24, marginTop: -24, width: 48, height: 48, borderRadius: 24, backgroundColor: 'rgba(0,107,46,0.92)', alignItems: 'center', justifyContent: 'center' },
+  playBadgeText: { color: '#fff', fontSize: 18, marginLeft: 3 },
+  meta: { padding: 14 },
+  videoTitle: { fontSize: 15, fontWeight: '700', color: colors.text },
+  videoSub: { fontSize: 12, color: colors.textMuted, marginTop: 3 },
 })

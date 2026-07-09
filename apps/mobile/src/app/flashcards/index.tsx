@@ -5,6 +5,7 @@ import {
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
+import { colors, radius, cardShadow } from '../../lib/theme'
 
 interface Flashcard {
   id: string
@@ -17,10 +18,10 @@ interface Flashcard {
 }
 
 const QUALITIES = [
-  { q: 0, label: 'Oublié', bg: '#E53935' },
-  { q: 2, label: 'Difficile', bg: '#f97316' },
-  { q: 3, label: 'Correct', bg: '#F7D64A' },
-  { q: 5, label: 'Parfait', bg: '#0F8F4F' },
+  { q: 0, label: 'Oublié', bg: colors.red },
+  { q: 2, label: 'Difficile', bg: '#F97316' },
+  { q: 3, label: 'Correct', bg: '#B7791F' },
+  { q: 5, label: 'Parfait', bg: colors.primary },
 ]
 
 export default function FlashcardsScreen() {
@@ -80,7 +81,7 @@ export default function FlashcardsScreen() {
     }
   }, [cards, index])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0F8F4F" />
+  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
 
   if (done) {
     const pct = stats.reviewed > 0 ? Math.round((stats.correct / stats.reviewed) * 100) : 0
@@ -114,9 +115,9 @@ export default function FlashcardsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
         <Text style={styles.counter}>{index + 1} / {cards.length}</Text>
-        <View />
+        <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.progressBar}>
@@ -135,7 +136,7 @@ export default function FlashcardsScreen() {
           <Text style={styles.tapHint}>Appuie pour voir la réponse</Text>
         </Animated.View>
         <Animated.View style={[styles.cardFace, styles.cardBack, { transform: [{ rotateY: backInterpolate }] }]}>
-          <Text style={[styles.cardLabel, { color: '#0F8F4F' }]}>Réponse</Text>
+          <Text style={[styles.cardLabel, { color: colors.primary }]}>Réponse</Text>
           <Text style={styles.cardText}>{card.back}</Text>
         </Animated.View>
       </TouchableOpacity>
@@ -162,34 +163,34 @@ export default function FlashcardsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F7FAF8', paddingTop: 60 },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
+  container: { flex: 1, backgroundColor: colors.background, paddingTop: 56 },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: colors.background },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, marginBottom: 12 },
-  back: { fontSize: 22, color: '#6D7A72' },
-  counter: { fontSize: 14, color: '#6D7A72', fontWeight: '600' },
-  progressBar: { height: 4, backgroundColor: '#DDE8E1', marginHorizontal: 20, borderRadius: 2, overflow: 'hidden', marginBottom: 12 },
-  progressFill: { height: '100%', backgroundColor: '#0F8F4F', borderRadius: 2 },
-  context: { textAlign: 'center', fontSize: 11, color: '#6D7A72', marginBottom: 16 },
-  cardContainer: { marginHorizontal: 20, height: 220, marginBottom: 24 },
-  cardFace: { position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: 20, alignItems: 'center', justifyContent: 'center', padding: 24, backfaceVisibility: 'hidden' },
-  cardFront: { backgroundColor: '#fff', borderWidth: 2, borderColor: '#DDE8E1', shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 12, elevation: 3 },
-  cardBack: { backgroundColor: '#EEF8F4', borderWidth: 2, borderColor: '#DDE8E1' },
-  cardLabel: { fontSize: 11, fontWeight: '700', color: '#0F8F4F', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 },
-  cardText: { fontSize: 16, fontWeight: '500', color: '#1f2937', textAlign: 'center', lineHeight: 24 },
-  tapHint: { position: 'absolute', bottom: 16, fontSize: 11, color: '#DDE8E1' },
+  back: { fontSize: 24, color: colors.text },
+  counter: { fontSize: 14, color: colors.textMuted, fontWeight: '700' },
+  progressBar: { height: 6, backgroundColor: colors.primaryTint, marginHorizontal: 20, borderRadius: radius.full, overflow: 'hidden', marginBottom: 12 },
+  progressFill: { height: '100%', backgroundColor: colors.primary, borderRadius: radius.full },
+  context: { textAlign: 'center', fontSize: 12, color: colors.textMuted, marginBottom: 16 },
+  cardContainer: { marginHorizontal: 20, height: 240, marginBottom: 24 },
+  cardFace: { position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: radius.xl, alignItems: 'center', justifyContent: 'center', padding: 24, backfaceVisibility: 'hidden' },
+  cardFront: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
+  cardBack: { backgroundColor: '#EAF6EE', borderWidth: 1, borderColor: colors.primary },
+  cardLabel: { fontSize: 11, fontWeight: '800', color: colors.outline, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 },
+  cardText: { fontSize: 18, fontWeight: '600', color: colors.text, textAlign: 'center', lineHeight: 26 },
+  tapHint: { position: 'absolute', bottom: 16, fontSize: 11, color: colors.outlineVariant },
   qualities: { paddingHorizontal: 20 },
-  qualityHint: { textAlign: 'center', fontSize: 13, color: '#6D7A72', marginBottom: 10 },
+  qualityHint: { textAlign: 'center', fontSize: 13, color: colors.textMuted, marginBottom: 10 },
   qualityRow: { flexDirection: 'row', gap: 8 },
-  qualityBtn: { flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center' },
-  qualityText: { color: '#fff', fontWeight: '700', fontSize: 13 },
-  flipBtn: { marginHorizontal: 20, backgroundColor: '#0F8F4F', borderRadius: 16, paddingVertical: 16, alignItems: 'center' },
-  flipBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
+  qualityBtn: { flex: 1, paddingVertical: 14, borderRadius: radius.md, alignItems: 'center' },
+  qualityText: { color: '#fff', fontWeight: '800', fontSize: 13 },
+  flipBtn: { marginHorizontal: 20, backgroundColor: colors.primary, borderRadius: radius.lg, paddingVertical: 16, alignItems: 'center', ...cardShadow },
+  flipBtnText: { color: '#fff', fontWeight: '800', fontSize: 15 },
   doneEmoji: { fontSize: 56, marginBottom: 16 },
-  doneTitle: { fontSize: 22, fontWeight: '700', color: '#1F2A24', marginBottom: 8 },
-  doneScore: { fontSize: 28, fontWeight: '800', color: '#0F8F4F', marginBottom: 24 },
-  doneSub: { fontSize: 14, color: '#6D7A72', marginBottom: 24 },
-  restartBtn: { backgroundColor: '#0F8F4F', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 32, marginBottom: 10 },
-  restartText: { color: '#fff', fontWeight: '700', fontSize: 15 },
+  doneTitle: { fontSize: 22, fontWeight: '800', color: colors.text, marginBottom: 8 },
+  doneScore: { fontSize: 30, fontWeight: '800', color: colors.primary, marginBottom: 24 },
+  doneSub: { fontSize: 14, color: colors.textMuted, marginBottom: 24 },
+  restartBtn: { backgroundColor: colors.primary, borderRadius: radius.md, paddingVertical: 14, paddingHorizontal: 32, marginBottom: 10 },
+  restartText: { color: '#fff', fontWeight: '800', fontSize: 15 },
   backBtn: { paddingVertical: 10 },
-  backText: { color: '#6D7A72', fontSize: 14 },
+  backText: { color: colors.textMuted, fontSize: 14 },
 })

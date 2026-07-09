@@ -60,7 +60,7 @@ export default function RootLayout() {
         <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
       </Stack>
-      <StatusBar style="dark" backgroundColor="#F7FAF8" />
+      <StatusBar style="dark" backgroundColor="#F5FBF0" />
     </>
   )
 }

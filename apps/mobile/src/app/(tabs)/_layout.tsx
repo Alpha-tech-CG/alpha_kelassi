@@ -18,9 +18,9 @@ export default function TabsLayout() {
       <OfflineBanner />
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: '#0F8F4F',
-          tabBarInactiveTintColor: '#6D7A72',
-          tabBarStyle: { borderTopColor: '#DDE8E1', backgroundColor: '#FFFFFF' },
+          tabBarActiveTintColor: '#006B2E',
+          tabBarInactiveTintColor: '#3E4A3E',
+          tabBarStyle: { borderTopColor: '#E3EADF', backgroundColor: '#FFFFFF' },
           headerShown: false,
         }}
       >
