@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Stack, useRouter, useSegments } from 'expo-router'
+import { Stack, useRouter, useSegments, useRootNavigationState } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { supabase } from '../lib/supabase'
 import type { Session } from '@supabase/supabase-js'
@@ -11,47 +11,12 @@ import type { Session } from '@supabase/supabase-js'
 // proprement (setup natif JSI + babel legacy decorators) quand la vraie feature
 // offline-first sera implémentée.
 
-function AuthGuard({ session }: { session: Session | null }) {
-  const segments = useSegments()
-  const router = useRouter()
-
-  useEffect(() => {
-    const inAuth       = segments[0] === '(auth)'
-    const inOnboarding = segments[0] === 'onboarding'
-
-    if (!session && !inAuth) {
-      router.replace('/(auth)/login')
-      return
-    }
-    if (session && inAuth) {
-      // Vérifie si l'onboarding est déjà fait
-      supabase.from('users').select('onboarding_completed').eq('id', session.user.id).single()
-        .then(({ data }) => {
-          if (!data?.onboarding_completed) {
-            router.replace('/onboarding' as any)
-          } else {
-            router.replace('/(tabs)/')
-          }
-        })
-      return
-    }
-    if (session && !inOnboarding && !inAuth) {
-      // Vérifie onboarding seulement au premier rendu (segments[0] === undefined = root)
-      if (!segments[0]) {
-        supabase.from('users').select('onboarding_completed').eq('id', session.user.id).single()
-          .then(({ data }) => {
-            if (!data?.onboarding_completed) router.replace('/onboarding' as any)
-          })
-      }
-    }
-  }, [session, segments])
-
-  return null
-}
-
 export default function RootLayout() {
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
+  const segments = useSegments()
+  const router = useRouter()
+  const navState = useRootNavigationState()
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -64,11 +29,29 @@ export default function RootLayout() {
     return () => subscription.unsubscribe()
   }, [])
 
-  if (!ready) return null
+  // Redirection selon l'état d'auth — UNIQUEMENT une fois la session connue ET le
+  // navigateur racine monté (navState?.key). Sans ce garde, router.replace() était
+  // appelé avant le montage du Stack → crash "Attempted to navigate before
+  // mounting the Root Layout component".
+  useEffect(() => {
+    if (!ready || !navState?.key) return
+
+    const inAuth = segments[0] === '(auth)'
+
+    if (!session && !inAuth) {
+      router.replace('/(auth)/login')
+      return
+    }
+    if (session && inAuth) {
+      supabase.from('users').select('onboarding_completed').eq('id', session.user.id).single()
+        .then(({ data }) => {
+          router.replace(data?.onboarding_completed ? '/(tabs)' : ('/onboarding' as any))
+        })
+    }
+  }, [ready, navState?.key, session, segments, router])
 
   return (
     <>
-      <AuthGuard session={session} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
