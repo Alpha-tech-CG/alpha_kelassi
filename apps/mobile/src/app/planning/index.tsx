@@ -2,13 +2,12 @@ import { useEffect, useState, useCallback } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
+import { API_URL } from '../../lib/config'
 
 interface Plan { id: string; level: string; title: string; exam_date: string; days_remaining: number }
 interface ExamEvent { id: string; level: string; label: string; exam_date: string }
 interface Subject { id: string; name: string }
 interface Session { id: string; title: string; scheduled_date: string; duration_min: number; is_done: boolean }
-
-const API_URL = process.env['EXPO_PUBLIC_API_URL'] ?? 'http://localhost:3001'
 
 async function token() {
   const { data: { session } } = await supabase.auth.getSession()

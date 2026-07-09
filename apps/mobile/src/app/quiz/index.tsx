@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
+import { API_URL } from '../../lib/config'
 
 interface Quiz {
   id: string
@@ -12,8 +13,6 @@ interface Quiz {
   subjects: { name: string } | null
 }
 interface WeakArea { subject_id: string; subject_name: string; error_rate: number }
-
-const API_URL = process.env['EXPO_PUBLIC_API_URL'] ?? 'http://localhost:3001'
 
 export default function QuizListScreen() {
   const router = useRouter()

@@ -4,10 +4,9 @@ import {
   StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
 } from 'react-native'
 import { supabase } from '../../lib/supabase'
+import { API_URL } from '../../lib/config'
 
 interface Message { id: string; role: 'user' | 'assistant'; content: string; streaming?: boolean }
-
-const API_URL = process.env['EXPO_PUBLIC_API_URL'] ?? 'http://localhost:3001'
 
 export default function TuteurScreen() {
   const [messages, setMessages] = useState<Message[]>([])

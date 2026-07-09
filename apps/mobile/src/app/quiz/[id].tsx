@@ -2,13 +2,12 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
+import { API_URL } from '../../lib/config'
 
 interface Question { id: string; position: number; prompt: string; options: string[] }
 interface Quiz { id: string; title: string; time_limit_sec: number; questions: Question[] }
 interface Correction { question_id: string; correct_index: number; explanation: string | null }
 interface Result { attempt_id: string; score: number; total: number; corrections: Correction[] }
-
-const API_URL = process.env['EXPO_PUBLIC_API_URL'] ?? 'http://localhost:3001'
 
 function fmt(sec: number) {
   const m = Math.floor(sec / 60)

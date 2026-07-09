@@ -12,7 +12,10 @@
         "gradleCommand": ":app:assembleDebug"
       },
       "env": {
-        "EXPO_PUBLIC_APP_ENV": "development"
+        "EXPO_PUBLIC_APP_ENV": "development",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://evtqdztycnttegzoleqb.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_W8oU1xSuAm-w3OyyyiyCWA_44vLMC1P",
+        "EXPO_PUBLIC_API_URL": "https://alpha-kelassi-web.vercel.app"
       }
     },
     "preview": {
@@ -21,7 +24,10 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_APP_ENV": "preview"
+        "EXPO_PUBLIC_APP_ENV": "preview",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://evtqdztycnttegzoleqb.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_W8oU1xSuAm-w3OyyyiyCWA_44vLMC1P",
+        "EXPO_PUBLIC_API_URL": "https://alpha-kelassi-web.vercel.app"
       }
     },
     "production": {
@@ -30,7 +36,10 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "EXPO_PUBLIC_APP_ENV": "production"
+        "EXPO_PUBLIC_APP_ENV": "production",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://evtqdztycnttegzoleqb.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_W8oU1xSuAm-w3OyyyiyCWA_44vLMC1P",
+        "EXPO_PUBLIC_API_URL": "https://alpha-kelassi-web.vercel.app"
       }
     }
   },

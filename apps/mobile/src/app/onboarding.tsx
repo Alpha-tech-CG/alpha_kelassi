@@ -5,8 +5,7 @@ import {
 } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../lib/supabase'
-
-const API_URL = process.env['EXPO_PUBLIC_API_URL'] ?? 'http://localhost:3001'
+import { API_URL } from '../lib/config'
 
 const LEVELS = [
   { value: 'bepc',  label: 'BEPC',  sub: '3ème', color: '#0F8F4F' },

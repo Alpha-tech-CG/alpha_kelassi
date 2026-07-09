@@ -4,6 +4,7 @@ import {
 } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
+import { API_URL } from '../../lib/config'
 
 interface Flashcard {
   id: string
@@ -14,8 +15,6 @@ interface Flashcard {
   reps: number
   documents: { title: string; subjects: { name: string } | null } | null
 }
-
-const API_URL = process.env['EXPO_PUBLIC_API_URL'] ?? 'http://localhost:3001'
 
 const QUALITIES = [
   { q: 0, label: 'Oublié', bg: '#E53935' },

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image, Linking } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
+import { API_URL } from '../../lib/config'
 
 interface Video {
   id: string
@@ -13,8 +14,6 @@ interface Video {
   is_premium: boolean
   subjects: { name: string } | null
 }
-
-const API_URL = process.env['EXPO_PUBLIC_API_URL'] ?? 'http://localhost:3001'
 
 export default function VideosScreen() {
   const router = useRouter()
