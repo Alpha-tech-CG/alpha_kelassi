@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/api'
 import { GoogleGenAI } from '@google/genai'
 import { z } from 'zod'
 
@@ -18,8 +18,7 @@ const schema = z.object({
 
 /** POST /api/flashcards/generate — génère des flashcards IA depuis un document */
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   let body: z.infer<typeof schema>

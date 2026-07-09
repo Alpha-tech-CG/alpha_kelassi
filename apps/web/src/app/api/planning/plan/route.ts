@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/api'
 import { z } from 'zod'
 
 /** GET /api/planning/plan — plan actif de l'élève + compte à rebours */
-export async function GET() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+export async function GET(req: Request) {
+  const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   const { data: plan } = await supabase
@@ -31,8 +30,7 @@ const schema = z.object({
 
 /** POST /api/planning/plan — crée (ou remplace) le plan actif */
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   let body: z.infer<typeof schema>

@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/api'
 
 /** GET /api/quiz/weak-areas — matières où l'élève rate le plus (RLS filtre par user) */
-export async function GET() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+export async function GET(req: Request) {
+  const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   const { data, error } = await supabase

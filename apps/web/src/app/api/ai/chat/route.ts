@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/api'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { GoogleGenAI } from '@google/genai'
 import { z } from 'zod'
@@ -105,9 +105,8 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  // Auth via cookie Supabase SSR
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  // Auth : cookies (web) ou Bearer token (mobile)
+  const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   // Validation du body

@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/api'
 
 /**
  * GET /api/quiz/:id — un QCM et ses questions POUR PASSAGE.
  * Ne renvoie JAMAIS correct_index ni explanation (anti-triche) :
  * le corrigé n'arrive qu'après soumission via la RPC.
  */
-export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   const { data: quiz, error } = await supabase

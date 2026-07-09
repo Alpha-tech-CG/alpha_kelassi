@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/api'
 import { z } from 'zod'
 
 const schema = z.object({ is_done: z.boolean() })
@@ -7,8 +7,7 @@ const schema = z.object({ is_done: z.boolean() })
 /** PATCH /api/planning/sessions/:id — coche/décoche une séance (award XP si faite) */
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   let body: z.infer<typeof schema>
@@ -34,10 +33,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 }
 
 /** DELETE /api/planning/sessions/:id */
-export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   await supabase.from('revision_sessions').delete().eq('id', id).eq('user_id', user.id)
