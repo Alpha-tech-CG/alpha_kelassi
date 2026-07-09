@@ -114,7 +114,7 @@ export default function QuizTakeScreen() {
           )
         })}
 
-        <TouchableOpacity style={styles.primaryBtn} onPress={() => router.replace('/quiz/index' as any)}>
+        <TouchableOpacity style={styles.primaryBtn} onPress={() => router.replace('/quiz' as any)}>
           <Text style={styles.primaryBtnText}>Retour aux QCM</Text>
         </TouchableOpacity>
       </ScrollView>

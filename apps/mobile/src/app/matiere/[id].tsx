@@ -47,7 +47,7 @@ export default function MatiereDetailScreen() {
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Accès QCM de la matière */}
-        <TouchableOpacity style={[styles.quizBanner, { backgroundColor: accent }]} onPress={() => router.push('/quiz/index' as any)}>
+        <TouchableOpacity style={[styles.quizBanner, { backgroundColor: accent }]} onPress={() => router.push('/quiz' as any)}>
           <View>
             <Text style={styles.quizBannerTitle}>QCM chronométrés</Text>
             <Text style={styles.quizBannerSub}>{quizCount} quiz disponible{quizCount > 1 ? 's' : ''} pour t'entraîner</Text>

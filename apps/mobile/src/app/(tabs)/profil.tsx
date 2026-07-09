@@ -145,7 +145,7 @@ export default function ProfilScreen() {
         {plan === 'free' && (
           <>
             <View style={styles.divider} />
-            <TouchableOpacity style={styles.settingRow} onPress={() => router.push('/planning/index' as any)}>
+            <TouchableOpacity style={styles.settingRow} onPress={() => router.push('/planning' as any)}>
               <View style={[styles.settingIcon, { backgroundColor: '#FDE2E1' }]}><Text style={{ fontSize: 18 }}>⭐</Text></View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.settingTitle}>Passer à Premium</Text>

@@ -9,10 +9,10 @@ const SHORTCUTS = [
   { label: 'Matières', icon: '📚', route: '/(tabs)/cours' },
   { label: 'Examens', icon: '📝', route: '/(tabs)/examens' },
   { label: 'Kelassi IA', icon: '🤖', route: '/(tabs)/tuteur' },
-  { label: 'Flashcards', icon: '🃏', route: '/flashcards/index' },
-  { label: 'QCM', icon: '✅', route: '/quiz/index' },
-  { label: 'Planning', icon: '📅', route: '/planning/index' },
-  { label: 'Vidéos', icon: '🎬', route: '/videos/index' },
+  { label: 'Flashcards', icon: '🃏', route: '/flashcards' },
+  { label: 'QCM', icon: '✅', route: '/quiz' },
+  { label: 'Planning', icon: '📅', route: '/planning' },
+  { label: 'Vidéos', icon: '🎬', route: '/videos' },
 ]
 
 const DAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
