@@ -47,3 +47,10 @@ coverage/
 
 # EAS
 .eas/
+
+# Outils locaux (JDK/SDK Android téléchargés pour debug de build) — jamais committer
+.tools/
+
+# Natif régénéré par `expo prebuild` (managed workflow) — jamais committer
+apps/mobile/android/
+apps/mobile/ios/
