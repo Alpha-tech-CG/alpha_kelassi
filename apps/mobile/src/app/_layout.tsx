@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Stack, useRouter, useSegments } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { DatabaseProvider } from '@nozbe/watermelondb/react'
-import { database } from '../db'
 import { supabase } from '../lib/supabase'
 import type { Session } from '@supabase/supabase-js'
+
+// NOTE : WatermelonDB (cache offline) est temporairement retiré du chemin de
+// démarrage. Il s'initialisait ici (`jsi: true` + décorateurs sans babel config
+// legacy) et faisait planter l'app entière au lancement, alors qu'aucun écran ne
+// l'utilise encore. Les fichiers src/db/ restent en place ; à re-brancher
+// proprement (setup natif JSI + babel legacy decorators) quand la vraie feature
+// offline-first sera implémentée.
 
 function AuthGuard({ session }: { session: Session | null }) {
   const segments = useSegments()
@@ -62,7 +67,7 @@ export default function RootLayout() {
   if (!ready) return null
 
   return (
-    <DatabaseProvider database={database}>
+    <>
       <AuthGuard session={session} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" />
@@ -73,6 +78,6 @@ export default function RootLayout() {
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
       </Stack>
       <StatusBar style="dark" backgroundColor="#F7FAF8" />
-    </DatabaseProvider>
+    </>
   )
 }
