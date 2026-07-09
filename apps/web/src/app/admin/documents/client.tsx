@@ -78,7 +78,7 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
         </div>
         <button
           onClick={() => setShowForm((v) => !v)}
-          className="px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 shadow-sm"
+          className="px-4 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 shadow-sm"
         >
           {showForm ? '✕ Annuler' : '+ Uploader un PDF'}
         </button>
@@ -100,7 +100,7 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
           placeholder="Rechercher..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
         />
         <div className="flex bg-gray-100 rounded-xl p-1">
           {(['all', 'cours', 'examen'] as const).map((t) => (
@@ -131,7 +131,7 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
                 <td className="px-4 py-3 font-medium text-gray-900 max-w-[200px] truncate">{doc.title}</td>
                 <td className="px-4 py-3 text-gray-500">{doc.subjects?.name ?? '—'}</td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${doc.type === 'examen' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${doc.type === 'examen' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-800'}`}>
                     {doc.type}
                   </span>
                 </td>
@@ -148,7 +148,7 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
                     <button
                       onClick={() => { setCorrigeDocId(doc.id); setTimeout(() => corrigeRef.current?.click(), 50) }}
                       disabled={uploadingCorrige}
-                      className="text-xs text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
+                      className="text-xs text-green-700 hover:text-green-800 font-medium disabled:opacity-50"
                     >
                       {uploadingCorrige && corrigeDocId === doc.id ? 'Upload…' : '+ Ajouter'}
                     </button>

@@ -14,7 +14,7 @@ interface Summary {
 
 const STATUS_STYLE: Record<string, string> = {
   active:   'bg-emerald-100 text-emerald-700',
-  trialing: 'bg-blue-100 text-blue-700',
+  trialing: 'bg-green-100 text-green-800',
   past_due: 'bg-amber-100 text-amber-700',
   canceled: 'bg-gray-100 text-gray-500',
 }
@@ -70,7 +70,7 @@ export default function AdminSubscriptionsPage() {
           <button
             key={s || 'all'}
             onClick={() => setStatus(s)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium ${status === s ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium ${status === s ? 'bg-green-700 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
           >
             {s === '' ? 'Tous' : s === 'active' ? 'Actifs' : s === 'trialing' ? 'Essai' : s === 'past_due' ? 'Impayés' : 'Annulés'}
           </button>
@@ -81,7 +81,7 @@ export default function AdminSubscriptionsPage() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : subs.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-12">Aucun abonnement.</p>

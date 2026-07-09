@@ -93,7 +93,7 @@ export default function AdminVideosPage() {
             <input type="checkbox" checked={form.is_premium} onChange={(e) => setForm((f) => ({ ...f, is_premium: e.target.checked }))} className="w-4 h-4" />
             <span className="text-sm text-gray-700 font-medium">Réservé aux abonnés Premium</span>
           </label>
-          <button type="submit" disabled={saving} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-50">
+          <button type="submit" disabled={saving} className="px-6 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
             {saving ? 'Ajout…' : 'Ajouter la vidéo'}
           </button>
         </div>
@@ -101,7 +101,7 @@ export default function AdminVideosPage() {
 
       {/* Liste */}
       {loading ? (
-        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : videos.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucune vidéo.</div>
       ) : (

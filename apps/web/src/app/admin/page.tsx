@@ -84,7 +84,7 @@ export default async function AdminOverviewPage() {
   const recentQ = analytics?.recent_questions ?? []
 
   const statCards = [
-    { label: 'Utilisateurs inscrits', value: totals.users.toLocaleString('fr'), icon: '👥', color: 'from-blue-500 to-blue-600' },
+    { label: 'Utilisateurs inscrits', value: totals.users.toLocaleString('fr'), icon: '👥', color: 'from-green-600 to-green-700' },
     { label: 'Abonnés Premium', value: totals.active_subs.toLocaleString('fr'), icon: '⭐', color: 'from-amber-500 to-orange-500' },
     { label: 'Revenus du mois', value: `${revenue.monthly_revenue_fcfa.toLocaleString('fr')} FCFA`, icon: '💰', color: 'from-emerald-500 to-teal-600' },
     { label: 'Paiements Mobile Money', value: revenue.cinetpay_count.toLocaleString('fr'), icon: '📱', color: 'from-violet-500 to-purple-600' },
@@ -125,7 +125,7 @@ export default async function AdminOverviewPage() {
                     <p className="text-sm font-medium text-gray-800 truncate">{d.title}</p>
                     <p className="text-xs text-gray-400 uppercase">{d.type} · {d.level.replace('_', ' ')}</p>
                   </div>
-                  <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full flex-shrink-0">
+                  <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full flex-shrink-0">
                     {d.count} vues
                   </span>
                 </div>
@@ -143,7 +143,7 @@ export default async function AdminOverviewPage() {
             <div className="space-y-3">
               {recentQ.map((q, i) => (
                 <div key={i} className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0 mt-0.5">🤖</span>
+                  <span className="text-green-500 flex-shrink-0 mt-0.5">🤖</span>
                   <div className="min-w-0">
                     <p className="text-sm text-gray-700 leading-snug line-clamp-2">{q.content}</p>
                     <p className="text-xs text-gray-400 mt-0.5">

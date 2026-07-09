@@ -68,14 +68,14 @@ export default function AdminExamsPage() {
             <input required type="date" value={form.exam_date} onChange={(e) => setForm((f) => ({ ...f, exam_date: e.target.value }))}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <button type="submit" disabled={saving} className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-50">
+          <button type="submit" disabled={saving} className="px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
             {saving ? '…' : 'Ajouter'}
           </button>
         </div>
       </form>
 
       {loading ? (
-        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : exams.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucune date d&apos;examen.</div>
       ) : (
@@ -83,7 +83,7 @@ export default function AdminExamsPage() {
           {exams.map((e) => (
             <div key={e.id} className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-3 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase">{e.level.replace('_', ' ')}</span>
+                <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full uppercase">{e.level.replace('_', ' ')}</span>
                 <span className="font-semibold text-gray-900">{e.label}</span>
               </div>
               <div className="flex items-center gap-4">

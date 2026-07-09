@@ -39,7 +39,7 @@ export function AdminUsersClient({ users: initial }: { users: User[] }) {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         {[
-          { label: 'Total', value: users.length, color: 'bg-blue-50 text-blue-700' },
+          { label: 'Total', value: users.length, color: 'bg-green-50 text-green-800' },
           { label: 'Gratuits', value: users.filter((u) => u.plan === 'free').length, color: 'bg-gray-50 text-gray-700' },
           { label: 'Premium', value: users.filter((u) => u.plan === 'premium').length, color: 'bg-amber-50 text-amber-700' },
         ].map((s) => (
@@ -55,7 +55,7 @@ export function AdminUsersClient({ users: initial }: { users: User[] }) {
         <input
           type="text" placeholder="Rechercher par nom, email, téléphone…"
           value={search} onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
         />
         <div className="flex bg-gray-100 rounded-xl p-1">
           {(['all', 'free', 'premium'] as const).map((p) => (
@@ -85,7 +85,7 @@ export function AdminUsersClient({ users: initial }: { users: User[] }) {
               <tr key={u.id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-violet-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                       {(u.full_name ?? u.email ?? '?').charAt(0).toUpperCase()}
                     </div>
                     <span className="font-medium text-gray-900 truncate max-w-[160px]">
@@ -103,7 +103,7 @@ export function AdminUsersClient({ users: initial }: { users: User[] }) {
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${u.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-blue-50 text-blue-600'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${u.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-green-50 text-green-700'}`}>
                     {u.role === 'admin' ? '🛡 Admin' : 'Élève'}
                   </span>
                 </td>

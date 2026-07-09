@@ -22,7 +22,7 @@ export function AdminSidebar({ name }: { name: string }) {
       {/* Logo */}
       <div className="px-5 py-5 border-b border-gray-800">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-violet-600 rounded-lg flex items-center justify-center text-white text-sm font-black">
+          <div className="w-8 h-8 bg-gradient-to-br from-green-600 to-violet-600 rounded-lg flex items-center justify-center text-white text-sm font-black">
             K
           </div>
           <div>
@@ -42,7 +42,7 @@ export function AdminSidebar({ name }: { name: string }) {
               href={href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 active
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                  ? 'bg-green-700 text-white shadow-lg shadow-green-700/20'
                   : 'text-gray-400 hover:text-white hover:bg-gray-800'
               }`}
             >
@@ -56,7 +56,7 @@ export function AdminSidebar({ name }: { name: string }) {
       {/* User */}
       <div className="px-4 py-4 border-t border-gray-800">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-green-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
             {name.charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0">

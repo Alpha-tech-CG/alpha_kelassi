@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 const API_URL = ''  // routes Next.js locales
 
 const TYPE_CONFIG = {
-  annonce: { label: 'Annonce', color: 'bg-blue-100 text-blue-700', emoji: '📢' },
+  annonce: { label: 'Annonce', color: 'bg-green-100 text-green-800', emoji: '📢' },
   promo:   { label: 'Promotion', color: 'bg-amber-100 text-amber-700', emoji: '🎁' },
   pub:     { label: 'Publicité', color: 'bg-violet-100 text-violet-700', emoji: '📣' },
   alerte:  { label: 'Alerte', color: 'bg-red-100 text-red-700', emoji: '⚠️' },
@@ -83,7 +83,7 @@ export default function AdminNotificationsPage() {
         </div>
         <button
           onClick={() => setShowForm((v) => !v)}
-          className="px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 shadow-sm"
+          className="px-4 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 shadow-sm"
         >
           {showForm ? '✕ Annuler' : '+ Nouvelle notification'}
         </button>
@@ -101,7 +101,7 @@ export default function AdminNotificationsPage() {
               <select
                 value={form.type}
                 onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as any }))}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
               >
                 {Object.entries(TYPE_CONFIG).map(([k, v]) => (
                   <option key={k} value={k}>{v.emoji} {v.label}</option>
@@ -113,7 +113,7 @@ export default function AdminNotificationsPage() {
               <select
                 value={form.target_plan}
                 onChange={(e) => setForm((f) => ({ ...f, target_plan: e.target.value }))}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
               >
                 <option value="all">Tous les utilisateurs</option>
                 <option value="free">Utilisateurs gratuits</option>
@@ -126,7 +126,7 @@ export default function AdminNotificationsPage() {
                 type="datetime-local"
                 value={form.expires_at}
                 onChange={(e) => setForm((f) => ({ ...f, expires_at: e.target.value }))}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
               />
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function AdminNotificationsPage() {
               type="text" required value={form.title}
               onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
               placeholder="ex: Nouvelle application disponible !"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
             />
           </div>
 
@@ -147,7 +147,7 @@ export default function AdminNotificationsPage() {
               required value={form.message} rows={3}
               onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
               placeholder="Contenu de la notification…"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 resize-none"
             />
           </div>
 
@@ -158,7 +158,7 @@ export default function AdminNotificationsPage() {
                 type="text" value={form.cta_label}
                 onChange={(e) => setForm((f) => ({ ...f, cta_label: e.target.value }))}
                 placeholder="ex: Découvrir →"
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
               />
             </div>
             <div>
@@ -167,7 +167,7 @@ export default function AdminNotificationsPage() {
                 type="url" value={form.cta_url}
                 onChange={(e) => setForm((f) => ({ ...f, cta_url: e.target.value }))}
                 placeholder="https://…"
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
               />
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function AdminNotificationsPage() {
               />
               <span className="text-sm text-gray-700 font-medium">Activer immédiatement</span>
             </label>
-            <button type="submit" disabled={saving} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-50">
+            <button type="submit" disabled={saving} className="px-6 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
               {saving ? 'Envoi…' : 'Publier la notification'}
             </button>
           </div>
@@ -191,7 +191,7 @@ export default function AdminNotificationsPage() {
       {/* List */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : notifs.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
@@ -222,7 +222,7 @@ export default function AdminNotificationsPage() {
                       )}
                     </div>
                     <p className="text-sm text-gray-600 leading-relaxed">{n.message}</p>
-                    {n.cta_label && <p className="text-xs text-blue-600 mt-1.5 font-medium">🔗 {n.cta_label}</p>}
+                    {n.cta_label && <p className="text-xs text-green-700 mt-1.5 font-medium">🔗 {n.cta_label}</p>}
                     <p className="text-xs text-gray-400 mt-2">
                       Créée le {new Date(n.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </p>

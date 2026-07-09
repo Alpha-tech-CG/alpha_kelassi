@@ -198,7 +198,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
           accept="application/pdf,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx,text/plain,.txt"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           required
-          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-50 file:text-green-800 hover:file:bg-green-100"
         />
         {file && (
           <p className="text-xs text-gray-500 mt-1">
@@ -213,7 +213,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-medium text-sm hover:bg-blue-700 disabled:opacity-50"
+        className="w-full py-2.5 bg-green-700 text-white rounded-lg font-medium text-sm hover:bg-green-800 disabled:opacity-50"
       >
         {loading ? (progress ?? 'Upload en cours…') : 'Uploader le document'}
       </button>

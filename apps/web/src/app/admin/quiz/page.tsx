@@ -58,7 +58,7 @@ export default function AdminQuizPage() {
 
       {/* Générateur */}
       <form onSubmit={generate} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 space-y-4">
-        {msg && <div className="p-3 bg-blue-50 text-blue-700 rounded-xl text-sm">{msg}</div>}
+        {msg && <div className="p-3 bg-green-50 text-green-800 rounded-xl text-sm">{msg}</div>}
         <div className="grid grid-cols-3 gap-4">
           <div className="col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Cours source</label>
@@ -81,7 +81,7 @@ export default function AdminQuizPage() {
             <input type="checkbox" checked={isPremium} onChange={(e) => setIsPremium(e.target.checked)} className="w-4 h-4" />
             <span className="text-sm text-gray-700 font-medium">Réservé aux abonnés Premium</span>
           </label>
-          <button type="submit" disabled={generating || !documentId} className="px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-50">
+          <button type="submit" disabled={generating || !documentId} className="px-6 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
             {generating ? 'Génération IA…' : '✨ Générer le QCM'}
           </button>
         </div>
@@ -89,7 +89,7 @@ export default function AdminQuizPage() {
 
       {/* Liste */}
       {loading ? (
-        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : quizzes.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucun QCM.</div>
       ) : (
