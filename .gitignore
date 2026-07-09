@@ -54,3 +54,6 @@ coverage/
 # Natif régénéré par `expo prebuild` (managed workflow) — jamais committer
 apps/mobile/android/
 apps/mobile/ios/
+
+# Maquettes de design (référence locale, pas du code)
+stitch_*.zip

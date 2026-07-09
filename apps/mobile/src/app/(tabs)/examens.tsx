@@ -1,129 +1,134 @@
-import { useEffect, useState } from 'react'
-import { FlatList, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { useEffect, useState, useMemo } from 'react'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
+import { useLevel } from '../../hooks/useLevel'
+import { colors, radius, cardShadow, LEVEL_LABEL, levelBadgeStyle } from '../../lib/theme'
 
 interface Doc { id: string; title: string; level: string; year: number | null; session: string | null; is_premium: boolean; subjects: { name: string } | null }
 
-const LEVELS = ['', 'bepc', 'bac_a', 'bac_c', 'bac_d'] as const
-const LEVEL_LABELS: Record<string, string> = { '': 'Tous', bepc: 'BEPC', bac_a: 'BAC A', bac_c: 'BAC C', bac_d: 'BAC D' }
-
 export default function ExamensScreen() {
   const router = useRouter()
+  const { level, ready } = useLevel()
   const [docs, setDocs] = useState<Doc[]>([])
   const [loading, setLoading] = useState(true)
-  const [level, setLevel] = useState('')
+  const [year, setYear] = useState<string>('') // '' = toutes
 
   useEffect(() => {
-    supabase
+    if (!ready) return
+    let q = supabase
       .from('documents')
       .select('id, title, level, year, session, is_premium, subjects(name)')
       .eq('type', 'examen')
       .order('year', { ascending: false })
-      .limit(100)
-      .then(({ data }) => {
-        setDocs((data ?? []).map((doc) => ({
-          ...doc,
-          subjects: Array.isArray(doc.subjects) ? (doc.subjects[0] ?? null) : doc.subjects,
-        })) as Doc[])
-        setLoading(false)
-      })
-  }, [])
+      .limit(200)
+    if (level) q = q.eq('level', level) // uniquement les annales du niveau de l'élève
+    q.then(({ data }) => {
+      setDocs((data ?? []).map((doc) => ({
+        ...doc,
+        subjects: Array.isArray(doc.subjects) ? (doc.subjects[0] ?? null) : doc.subjects,
+      })) as Doc[])
+      setLoading(false)
+    })
+  }, [ready, level])
 
-  const filtered = level ? docs.filter((d) => d.level === level) : docs
+  const years = useMemo(() => {
+    const set = new Set<string>()
+    for (const d of docs) if (d.year) set.add(String(d.year))
+    return [...set].sort((a, b) => b.localeCompare(a))
+  }, [docs])
 
-  const byYear = filtered.reduce<Record<string, Doc[]>>((acc, d) => {
-    const y = d.year?.toString() ?? 'N/A'
-    if (!acc[y]) acc[y] = []
-    acc[y].push(d)
-    return acc
-  }, {})
-  const sections = Object.entries(byYear).sort((a, b) => b[0].localeCompare(a[0]))
+  const filtered = year ? docs.filter((d) => String(d.year) === year) : docs
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#0B6B3A" />
+  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+
+  const badge = level ? levelBadgeStyle(level) : { bg: colors.red, fg: colors.onRed }
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Examens d'État</Text>
-        <View style={styles.levels}>
-          {LEVELS.map((l) => (
-            <TouchableOpacity
-              key={l}
-              style={[styles.levelChip, level === l && styles.levelChipActive]}
-              onPress={() => setLevel(l)}
-            >
-              <Text style={[styles.levelChipText, level === l && styles.levelChipTextActive]}>
-                {LEVEL_LABELS[l]}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
-      <FlatList
-        data={sections}
-        keyExtractor={([year]) => year}
-        contentContainerStyle={styles.list}
-        renderItem={({ item: [year, yearDocs] }) => (
-          <View style={styles.section}>
-            <Text style={styles.yearLabel}>📅 {year}</Text>
-            {yearDocs.map((doc) => (
-              <TouchableOpacity
-                key={doc.id}
-                style={styles.card}
-                onPress={() => router.push(`/examens/${doc.id}` as any)}
-              >
-                <Text style={styles.cardIcon}>📝</Text>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.cardTitle} numberOfLines={2}>{doc.title}</Text>
-                  <View style={styles.cardMeta}>
-                    <Text style={styles.levelBadge}>{doc.level.replace('_', ' ').toUpperCase()}</Text>
-                    {doc.session && (
-                      <Text style={[styles.sessionBadge, doc.session === 'rattrapage' && styles.rattrapageBadge]}>
-                        {doc.session}
-                      </Text>
-                    )}
-                    {doc.subjects && <Text style={styles.subjectText}>{doc.subjects.name}</Text>}
-                  </View>
-                </View>
-                {doc.is_premium && <Text style={{ fontSize: 14 }}>⭐</Text>}
-              </TouchableOpacity>
-            ))}
+      <ScrollView contentContainerStyle={styles.content}>
+        {level && (
+          <View style={[styles.levelPill, { backgroundColor: badge.bg }]}>
+            <Text style={[styles.levelPillText, { color: badge.fg }]}>{LEVEL_LABEL[level]}</Text>
           </View>
         )}
-        ListEmptyComponent={
+        <Text style={styles.title}>Annales & Examens</Text>
+
+        {/* Hero */}
+        <View style={styles.hero}>
+          <Text style={styles.heroKicker}>OBJECTIF MENTION</Text>
+          <Text style={styles.heroText}>Révise avec les sujets officiels corrigés de ton niveau.</Text>
+        </View>
+
+        {/* Filtre par année */}
+        {years.length > 0 && (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.yearsScroll} contentContainerStyle={styles.years}>
+            <TouchableOpacity style={[styles.yearChip, year === '' && styles.yearChipActive]} onPress={() => setYear('')}>
+              <Text style={[styles.yearChipText, year === '' && styles.yearChipTextActive]}>Toutes</Text>
+            </TouchableOpacity>
+            {years.map((y) => (
+              <TouchableOpacity key={y} style={[styles.yearChip, year === y && styles.yearChipActive]} onPress={() => setYear(y)}>
+                <Text style={[styles.yearChipText, year === y && styles.yearChipTextActive]}>{y}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
+
+        <Text style={styles.sectionTitle}>Sujets disponibles{year ? ` (${year})` : ''}</Text>
+
+        {filtered.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyIcon}>📭</Text>
-            <Text style={styles.emptyText}>Aucun examen disponible</Text>
+            <Text style={styles.emptyText}>Aucun sujet disponible pour le moment.</Text>
           </View>
-        }
-      />
+        ) : (
+          filtered.map((doc) => (
+            <TouchableOpacity key={doc.id} style={styles.card} onPress={() => router.push(`/examens/${doc.id}` as any)}>
+              <View style={styles.cardIconBox}><Text style={styles.cardIcon}>📝</Text></View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.cardTitle} numberOfLines={2}>{doc.title}</Text>
+                <View style={styles.cardMeta}>
+                  {doc.subjects && <Text style={styles.subjectText}>{doc.subjects.name}</Text>}
+                  {doc.year && <Text style={styles.metaDot}>· {doc.year}</Text>}
+                  {doc.session && <Text style={styles.metaDot}>· {doc.session}</Text>}
+                </View>
+              </View>
+              {doc.is_premium && <Text style={styles.premium}>⭐</Text>}
+              <Text style={styles.chevron}>›</Text>
+            </TouchableOpacity>
+          ))
+        )}
+      </ScrollView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F7FAF8' },
-  header: { backgroundColor: '#F0ECFA', paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#DDE8E1' },
-  title: { fontSize: 22, fontWeight: '700', color: '#1F2A24', marginBottom: 12 },
-  levels: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  levelChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, backgroundColor: '#EEF8F4', borderWidth: 1, borderColor: '#DDE8E1' },
-  levelChipActive: { backgroundColor: '#0B6B3A', borderColor: '#0B6B3A' },
-  levelChipText: { fontSize: 12, fontWeight: '600', color: '#6D7A72' },
-  levelChipTextActive: { color: '#fff' },
-  list: { padding: 16 },
-  section: { marginBottom: 24 },
-  yearLabel: { fontSize: 16, fontWeight: '700', color: '#1F2A24', marginBottom: 10 },
-  card: { backgroundColor: '#fff', borderRadius: 14, padding: 14, flexDirection: 'row', alignItems: 'center', marginBottom: 8, borderWidth: 1, borderColor: '#EEF8F4' },
-  cardIcon: { fontSize: 22, marginRight: 12 },
-  cardTitle: { fontSize: 14, fontWeight: '500', color: '#1F2A24', marginBottom: 4 },
-  cardMeta: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, alignItems: 'center' },
-  levelBadge: { fontSize: 10, backgroundColor: '#F0ECFA', color: '#0B6B3A', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 10, fontWeight: '600' },
-  sessionBadge: { fontSize: 10, backgroundColor: '#EAF5EC', color: '#0F8F4F', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 10 },
-  rattrapageBadge: { backgroundColor: '#FFF7CC', color: '#0B6B3A' },
-  subjectText: { fontSize: 10, color: '#6D7A72' },
-  empty: { paddingTop: 60, alignItems: 'center' },
-  emptyIcon: { fontSize: 40, marginBottom: 8 },
-  emptyText: { fontSize: 14, color: '#6D7A72' },
+  container: { flex: 1, backgroundColor: colors.background },
+  content: { padding: 16, paddingTop: 56 },
+  levelPill: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.full, marginBottom: 8 },
+  levelPillText: { fontSize: 12, fontWeight: '800' },
+  title: { fontSize: 26, fontWeight: '800', color: colors.text, marginBottom: 16 },
+  hero: { backgroundColor: colors.primary, borderRadius: radius.lg, padding: 22, marginBottom: 18, ...cardShadow },
+  heroKicker: { color: '#83FB9C', fontSize: 13, fontWeight: '800', letterSpacing: 1, marginBottom: 8 },
+  heroText: { color: '#fff', fontSize: 17, fontWeight: '600', lineHeight: 24 },
+  yearsScroll: { marginBottom: 16 },
+  years: { gap: 8, paddingRight: 16 },
+  yearChip: { paddingHorizontal: 18, paddingVertical: 9, borderRadius: radius.full, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder },
+  yearChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  yearChipText: { fontSize: 14, fontWeight: '700', color: colors.textMuted },
+  yearChipTextActive: { color: '#fff' },
+  sectionTitle: { fontSize: 16, fontWeight: '800', color: colors.text, marginBottom: 10 },
+  card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: radius.md, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: colors.cardBorder, gap: 12, ...cardShadow },
+  cardIconBox: { width: 44, height: 44, borderRadius: radius.sm, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
+  cardIcon: { fontSize: 20 },
+  cardTitle: { fontSize: 15, fontWeight: '700', color: colors.text, marginBottom: 3 },
+  cardMeta: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 },
+  subjectText: { fontSize: 12, color: colors.textMuted, fontWeight: '600' },
+  metaDot: { fontSize: 12, color: colors.outline },
+  premium: { fontSize: 14 },
+  chevron: { fontSize: 22, color: colors.outlineVariant },
+  empty: { backgroundColor: colors.card, borderRadius: radius.md, borderWidth: 1, borderColor: colors.cardBorder, padding: 30, alignItems: 'center' },
+  emptyIcon: { fontSize: 36, marginBottom: 8 },
+  emptyText: { fontSize: 14, color: colors.textMuted, textAlign: 'center' },
 })
