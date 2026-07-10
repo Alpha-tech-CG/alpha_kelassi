@@ -3,6 +3,7 @@ import {
   View, Text, TextInput, TouchableOpacity, FlatList,
   StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
 } from 'react-native'
+import { fetch as expoFetch } from 'expo/fetch'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 
@@ -40,7 +41,8 @@ export default function TuteurScreen() {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) return
 
-      const res = await fetch(`${API_URL}/api/ai/chat`, {
+      // expo/fetch supporte la lecture du corps en streaming (le fetch natif RN non)
+      const res = await expoFetch(`${API_URL}/api/ai/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,30 +65,36 @@ export default function TuteurScreen() {
       if (newSessionId && !sessionId) setSessionId(newSessionId)
       if (remaining) setQuotaRemaining(parseInt(remaining, 10))
 
-      // Streaming SSE via fetch reader
-      const reader = res.body!.getReader()
-      const decoder = new TextDecoder()
-      let buffer = ''
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        buffer += decoder.decode(value, { stream: true })
-        const lines = buffer.split('\n')
-        buffer = lines.pop() ?? ''
-
-        for (const line of lines) {
-          if (line.startsWith('data: ') && !line.includes('"{}"}')) {
-            try {
-              const payload = JSON.parse(line.slice(6))
-              if (payload.text) {
-                setMessages((prev) => prev.map((m) =>
-                  m.id === asstMsgId ? { ...m, content: m.content + payload.text } : m
-                ))
-              }
-            } catch {}
+      // Applique une ligne SSE « data: {...} » au message en cours
+      const applyLine = (line: string) => {
+        if (!line.startsWith('data: ') || line.includes('"{}"}')) return
+        try {
+          const payload = JSON.parse(line.slice(6))
+          if (payload.text) {
+            setMessages((prev) => prev.map((m) =>
+              m.id === asstMsgId ? { ...m, content: m.content + payload.text } : m
+            ))
           }
+        } catch {}
+      }
+
+      // Lecture en streaming (expo/fetch), avec repli non-streaming si indisponible
+      const reader = res.body?.getReader?.()
+      if (reader) {
+        const decoder = new TextDecoder()
+        let buffer = ''
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          buffer += decoder.decode(value, { stream: true })
+          const lines = buffer.split('\n')
+          buffer = lines.pop() ?? ''
+          for (const line of lines) applyLine(line)
         }
+        if (buffer) applyLine(buffer)
+      } else {
+        const full = await res.text()
+        for (const line of full.split('\n')) applyLine(line)
       }
 
       setMessages((prev) => prev.map((m) =>
