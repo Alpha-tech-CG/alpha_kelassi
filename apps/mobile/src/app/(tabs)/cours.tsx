@@ -30,7 +30,7 @@ export default function MatieresScreen() {
       if (level) sq = sq.eq('level', level)
       const [{ data: subs }, docs, quiz, prog] = await Promise.all([
         sq,
-        supabase.from('documents').select('subject_id').eq('type', 'cours').then((r) => r.data ?? []),
+        supabase.from('courses').select('subject_id').then((r) => r.data ?? []),
         supabase.from('quizzes').select('subject_id').then((r) => r.data ?? []),
         (async () => {
           const { data: { user } } = await supabase.auth.getUser()
@@ -110,7 +110,7 @@ export default function MatieresScreen() {
                   </View>
 
                   <Text style={styles.subjectName}>{s.name}</Text>
-                  <Text style={styles.counts}>📘 {s.lessons} Leçons   ✅ {s.quizzes} Quiz</Text>
+                  <Text style={styles.counts}>📘 {s.lessons} Cours   ✅ {s.quizzes} Quiz</Text>
 
                   <View style={styles.progressRow}>
                     <Text style={styles.progressLabel}>Progression</Text>
