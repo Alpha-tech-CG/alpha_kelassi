@@ -7,6 +7,8 @@ type Block =
   | { type: 'subtitle'; text: string }
   | { type: 'paragraph'; text: string }
   | { type: 'image'; url: string; caption?: string }
+  | { type: 'formula'; latex: string }
+  | { type: 'table'; rows: string[][] }
 
 interface Lesson { title: string; content: Block[] }
 interface Objective { title: string; lessons: Lesson[] }
@@ -236,21 +238,85 @@ function LessonEditor(props: {
                     placeholder="Légende (optionnel)" className="w-full mt-1 border-0 border-b border-gray-100 px-1 py-0.5 text-xs text-gray-500 focus:outline-none" />
                 </div>
               )}
+              {b.type === 'formula' && (
+                <div>
+                  <input value={b.latex} onChange={(e) => props.updateBlock(bi, { latex: e.target.value })}
+                    placeholder="Formule LaTeX, ex: x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}"
+                    className="w-full border border-gray-100 rounded px-2 py-1.5 text-sm font-mono focus:outline-none" />
+                  <p className="text-[11px] text-gray-400 mt-1">LaTeX — s&apos;affiche en maths dans l&apos;app. Ex : <code>\frac{'{a}{b}'}</code>, <code>x^2</code>, <code>\sqrt{'{x}'}</code>, <code>\int</code></p>
+                </div>
+              )}
+              {b.type === 'table' && (
+                <TableEditor rows={b.rows} onChange={(rows) => props.updateBlock(bi, { rows })} />
+              )}
             </div>
-            <span className="text-[10px] uppercase font-bold text-gray-300">{b.type === 'subtitle' ? 'S-titre' : b.type === 'paragraph' ? 'Texte' : 'Image'}</span>
+            <span className="text-[10px] uppercase font-bold text-gray-300">{b.type === 'subtitle' ? 'S-titre' : b.type === 'paragraph' ? 'Texte' : b.type === 'formula' ? 'Formule' : b.type === 'table' ? 'Tableau' : 'Image'}</span>
             <button onClick={() => props.removeBlock(bi)} className="text-gray-300 hover:text-red-600" title="Supprimer">✕</button>
           </div>
         ))}
       </div>
 
       {/* Ajout de blocs */}
-      <div className="flex items-center gap-2 mt-3">
+      <div className="flex flex-wrap items-center gap-2 mt-3">
         <button onClick={() => props.addBlock({ type: 'subtitle', text: '' })} className="text-xs font-bold text-green-700 bg-white border border-green-200 rounded-lg px-2.5 py-1 hover:bg-green-50">+ Sous-titre</button>
         <button onClick={() => props.addBlock({ type: 'paragraph', text: '' })} className="text-xs font-bold text-green-700 bg-white border border-green-200 rounded-lg px-2.5 py-1 hover:bg-green-50">+ Paragraphe</button>
+        <button onClick={() => props.addBlock({ type: 'formula', latex: '' })} className="text-xs font-bold text-green-700 bg-white border border-green-200 rounded-lg px-2.5 py-1 hover:bg-green-50">+ Formule</button>
+        <button onClick={() => props.addBlock({ type: 'table', rows: [['', ''], ['', '']] })} className="text-xs font-bold text-green-700 bg-white border border-green-200 rounded-lg px-2.5 py-1 hover:bg-green-50">+ Tableau</button>
         <button onClick={() => fileRef.current?.click()} disabled={uploading} className="text-xs font-bold text-green-700 bg-white border border-green-200 rounded-lg px-2.5 py-1 hover:bg-green-50 disabled:opacity-50">
           {uploading ? 'Upload…' : '+ Image'}
         </button>
         <input ref={fileRef} type="file" accept="image/*" onChange={onPickImage} className="hidden" />
+      </div>
+      <p className="text-[11px] text-gray-400 mt-2">Astuce : mets un mot en <b>gras</b> en l&apos;entourant de <code>**doubles astérisques**</code> dans un paragraphe.</p>
+    </div>
+  )
+}
+
+// ── Éditeur de tableau (grille de cellules) ──────────────────────────────────
+function TableEditor({ rows, onChange }: { rows: string[][]; onChange: (rows: string[][]) => void }) {
+  const cols = rows[0]?.length ?? 0
+
+  const setCell = (r: number, c: number, v: string) =>
+    onChange(rows.map((row, ri) => (ri === r ? row.map((cell, ci) => (ci === c ? v : cell)) : row)))
+  const addRow = () => onChange([...rows, Array(cols || 1).fill('')])
+  const removeRow = (r: number) => onChange(rows.length > 1 ? rows.filter((_, ri) => ri !== r) : rows)
+  const addCol = () => onChange(rows.map((row) => [...row, '']))
+  const removeCol = (c: number) => onChange(cols > 1 ? rows.map((row) => row.filter((_, ci) => ci !== c)) : rows)
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="border-collapse">
+        <tbody>
+          {rows.map((row, ri) => (
+            <tr key={ri}>
+              {row.map((cell, ci) => (
+                <td key={ci} className="border border-gray-200 p-0">
+                  <input
+                    value={cell}
+                    onChange={(e) => setCell(ri, ci, e.target.value)}
+                    placeholder={ri === 0 ? 'En-tête' : '…'}
+                    className={`w-28 px-2 py-1 text-sm focus:outline-none ${ri === 0 ? 'font-bold bg-green-50' : ''}`}
+                  />
+                </td>
+              ))}
+              <td className="pl-1">
+                <button onClick={() => removeRow(ri)} className="text-gray-300 hover:text-red-600 text-xs" title="Supprimer la ligne">✕</button>
+              </td>
+            </tr>
+          ))}
+          <tr>
+            {Array.from({ length: cols }).map((_, ci) => (
+              <td key={ci} className="text-center">
+                <button onClick={() => removeCol(ci)} className="text-gray-300 hover:text-red-600 text-xs" title="Supprimer la colonne">✕</button>
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+      <div className="flex gap-2 mt-2">
+        <button onClick={addRow} className="text-xs font-bold text-green-700 border border-green-200 rounded px-2 py-0.5 hover:bg-green-50">+ Ligne</button>
+        <button onClick={addCol} className="text-xs font-bold text-green-700 border border-green-200 rounded px-2 py-0.5 hover:bg-green-50">+ Colonne</button>
+        <span className="text-[11px] text-gray-400 self-center">La 1re ligne est l&apos;en-tête.</span>
       </div>
     </div>
   )

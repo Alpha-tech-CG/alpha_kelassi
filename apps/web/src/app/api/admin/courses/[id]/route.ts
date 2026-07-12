@@ -44,6 +44,8 @@ const blockSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('subtitle'), text: z.string().max(300) }),
   z.object({ type: z.literal('paragraph'), text: z.string().max(20000) }),
   z.object({ type: z.literal('image'), url: z.string().url(), caption: z.string().max(300).optional() }),
+  z.object({ type: z.literal('formula'), latex: z.string().max(2000) }),
+  z.object({ type: z.literal('table'), rows: z.array(z.array(z.string().max(1000))).max(60) }),
 ])
 
 const saveSchema = z.object({
