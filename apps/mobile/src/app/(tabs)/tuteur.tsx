@@ -37,73 +37,114 @@ export default function TuteurScreen() {
       { id: asstMsgId, role: 'assistant', content: '', streaming: true },
     ])
 
+    // Rafraîchit la session pour éviter d'envoyer un token expiré
+    let token: string | undefined
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return
-
-      // expo/fetch supporte la lecture du corps en streaming (le fetch natif RN non)
-      const res = await expoFetch(`${API_URL}/api/ai/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({ question, session_id: sessionId }),
-      })
-
-      if (!res.ok) {
-        const err = await res.json()
-        setMessages((prev) => prev.map((m) =>
-          m.id === asstMsgId ? { ...m, content: `❌ ${err.error?.message ?? 'Erreur'}`, streaming: false } : m
-        ))
-        setLoading(false)
-        return
+      const { data } = await supabase.auth.getSession()
+      token = data.session?.access_token
+      if (!token) {
+        const { data: refreshed } = await supabase.auth.refreshSession()
+        token = refreshed.session?.access_token
       }
+    } catch {}
+    if (!token) {
+      setMessages((prev) => prev.map((m) =>
+        m.id === asstMsgId ? { ...m, content: '❌ Session expirée. Reconnecte-toi.', streaming: false } : m
+      ))
+      setLoading(false)
+      return
+    }
 
-      const newSessionId = res.headers.get('X-Session-Id')
-      const remaining = res.headers.get('X-Quota-Remaining')
-      if (newSessionId && !sessionId) setSessionId(newSessionId)
-      if (remaining) setQuotaRemaining(parseInt(remaining, 10))
+    let received = 0 // nb de caractères reçus (pour préserver le texte partiel)
 
-      // Applique une ligne SSE « data: {...} » au message en cours
-      const applyLine = (line: string) => {
-        if (!line.startsWith('data: ') || line.includes('"{}"}')) return
-        try {
-          const payload = JSON.parse(line.slice(6))
-          if (payload.text) {
-            setMessages((prev) => prev.map((m) =>
-              m.id === asstMsgId ? { ...m, content: m.content + payload.text } : m
-            ))
-          }
-        } catch {}
-      }
-
-      // Lecture en streaming (expo/fetch), avec repli non-streaming si indisponible
-      const reader = res.body?.getReader?.()
-      if (reader) {
-        const decoder = new TextDecoder()
-        let buffer = ''
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-          buffer += decoder.decode(value, { stream: true })
-          const lines = buffer.split('\n')
-          buffer = lines.pop() ?? ''
-          for (const line of lines) applyLine(line)
+    // Applique une ligne SSE « data: {...} » au message en cours
+    const applyLine = (line: string) => {
+      if (!line.startsWith('data: ') || line.includes('"{}"}')) return
+      try {
+        const payload = JSON.parse(line.slice(6))
+        if (payload.text) {
+          received += payload.text.length
+          setMessages((prev) => prev.map((m) =>
+            m.id === asstMsgId ? { ...m, content: m.content + payload.text } : m
+          ))
         }
-        if (buffer) applyLine(buffer)
-      } else {
-        const full = await res.text()
-        for (const line of full.split('\n')) applyLine(line)
-      }
+      } catch {}
+    }
 
+    // Une tentative complète : renvoie 'ok' | 'http' (erreur métier affichée) | throw (réseau)
+    const runOnce = async (): Promise<'ok' | 'http'> => {
+      const controller = new AbortController()
+      const timer = setTimeout(() => controller.abort(), 45000)
+      try {
+        const res = await expoFetch(`${API_URL}/api/ai/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ question, session_id: sessionId }),
+          signal: controller.signal,
+        })
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}))
+          setMessages((prev) => prev.map((m) =>
+            m.id === asstMsgId ? { ...m, content: `❌ ${err.error?.message ?? 'Erreur'}`, streaming: false } : m
+          ))
+          return 'http'
+        }
+
+        const newSessionId = res.headers.get('X-Session-Id')
+        const remaining = res.headers.get('X-Quota-Remaining')
+        if (newSessionId && !sessionId) setSessionId(newSessionId)
+        if (remaining) setQuotaRemaining(parseInt(remaining, 10))
+
+        const reader = res.body?.getReader?.()
+        if (reader) {
+          const decoder = new TextDecoder()
+          let buffer = ''
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+            buffer += decoder.decode(value, { stream: true })
+            const lines = buffer.split('\n')
+            buffer = lines.pop() ?? ''
+            for (const line of lines) applyLine(line)
+          }
+          if (buffer) applyLine(buffer)
+        } else {
+          const full = await res.text()
+          for (const line of full.split('\n')) applyLine(line)
+        }
+        return 'ok'
+      } finally {
+        clearTimeout(timer)
+      }
+    }
+
+    try {
+      await runOnce()
       setMessages((prev) => prev.map((m) =>
         m.id === asstMsgId ? { ...m, streaming: false } : m
       ))
     } catch {
-      setMessages((prev) => prev.map((m) =>
-        m.id === asstMsgId ? { ...m, content: '❌ Erreur réseau. Vérifie ta connexion.', streaming: false } : m
-      ))
+      if (received > 0) {
+        // La connexion a lâché en cours de route : on garde le texte déjà reçu
+        setMessages((prev) => prev.map((m) =>
+          m.id === asstMsgId ? { ...m, streaming: false } : m
+        ))
+      } else {
+        // Rien reçu : on réessaie une fois avant d'abandonner
+        try {
+          await runOnce()
+          setMessages((prev) => prev.map((m) =>
+            m.id === asstMsgId ? { ...m, streaming: false } : m
+          ))
+        } catch {
+          setMessages((prev) => prev.map((m) =>
+            m.id === asstMsgId
+              ? { ...m, content: received > 0 ? m.content : '❌ Connexion instable. Réessaie dans un instant.', streaming: false }
+              : m
+          ))
+        }
+      }
     } finally {
       setLoading(false)
     }
