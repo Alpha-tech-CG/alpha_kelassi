@@ -55,7 +55,7 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="cours/[id]" options={{ headerShown: true, title: '' }} />
+        <Stack.Screen name="cours/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="examens/[id]" options={{ headerShown: true, title: '' }} />
         <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />

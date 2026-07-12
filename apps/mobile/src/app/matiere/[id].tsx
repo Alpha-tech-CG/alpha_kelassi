@@ -4,27 +4,27 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, subjectAccent, subjectIcon } from '../../lib/theme'
 
-interface Doc { id: string; title: string; year: number | null; is_premium: boolean }
+interface Course { id: string; title: string; subtitle: string | null; is_premium: boolean }
 
 export default function MatiereDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
   const [name, setName] = useState('')
   const [icon, setIcon] = useState<string | null>(null)
-  const [lessons, setLessons] = useState<Doc[]>([])
+  const [lessons, setLessons] = useState<Course[]>([])
   const [quizCount, setQuizCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function load() {
-      const [{ data: subj }, { data: docs }, { count }] = await Promise.all([
+      const [{ data: subj }, { data: courses }, { count }] = await Promise.all([
         supabase.from('subjects').select('name, icon').eq('id', id).single(),
-        supabase.from('documents').select('id, title, year, is_premium').eq('subject_id', id).eq('type', 'cours').order('created_at', { ascending: false }),
+        supabase.from('courses').select('id, title, subtitle, is_premium').eq('subject_id', id).order('position', { ascending: true }).order('created_at', { ascending: false }),
         supabase.from('quizzes').select('id', { count: 'exact', head: true }).eq('subject_id', id),
       ])
       setName((subj as { name?: string })?.name ?? 'Matière')
       setIcon((subj as { icon?: string | null })?.icon ?? null)
-      setLessons((docs ?? []) as Doc[])
+      setLessons((courses ?? []) as Course[])
       setQuizCount(count ?? 0)
       setLoading(false)
     }
@@ -55,10 +55,10 @@ export default function MatiereDetailScreen() {
           <Text style={styles.quizBannerArrow}>›</Text>
         </TouchableOpacity>
 
-        <Text style={styles.sectionTitle}>Leçons</Text>
+        <Text style={styles.sectionTitle}>Cours</Text>
         {lessons.length === 0 ? (
           <View style={styles.empty}>
-            <Text style={styles.emptyText}>Aucune leçon pour cette matière pour le moment.</Text>
+            <Text style={styles.emptyText}>Aucun cours pour cette matière pour le moment.</Text>
           </View>
         ) : (
           lessons.map((d, i) => (
@@ -66,7 +66,10 @@ export default function MatiereDetailScreen() {
               <View style={[styles.lessonNum, { backgroundColor: accent + '1A' }]}>
                 <Text style={[styles.lessonNumText, { color: accent }]}>{i + 1}</Text>
               </View>
-              <Text style={styles.lessonTitle} numberOfLines={2}>{d.title}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.lessonTitle} numberOfLines={2}>{d.title}</Text>
+                {d.subtitle ? <Text style={styles.lessonSub} numberOfLines={1}>{d.subtitle}</Text> : null}
+              </View>
               {d.is_premium && <Text style={styles.premium}>⭐</Text>}
               <Text style={styles.chevron}>›</Text>
             </TouchableOpacity>
@@ -96,7 +99,8 @@ const styles = StyleSheet.create({
   },
   lessonNum: { width: 32, height: 32, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
   lessonNumText: { fontSize: 14, fontWeight: '800' },
-  lessonTitle: { flex: 1, fontSize: 15, fontWeight: '600', color: colors.text },
+  lessonTitle: { fontSize: 15, fontWeight: '600', color: colors.text },
+  lessonSub: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
   premium: { fontSize: 14 },
   chevron: { fontSize: 22, color: colors.outlineVariant },
   empty: { backgroundColor: colors.card, borderRadius: radius.md, borderWidth: 1, borderColor: colors.cardBorder, padding: 24, alignItems: 'center' },
