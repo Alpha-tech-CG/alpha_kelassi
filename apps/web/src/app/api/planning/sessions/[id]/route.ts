@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
+import { supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
 
 const schema = z.object({ is_done: z.boolean() })
@@ -24,9 +25,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
 
-  // +5 XP quand une séance passe à "faite" (best-effort)
+  // +5 XP quand une séance passe à "faite" (best-effort, via service role)
   if (body.is_done) {
-    supabase.rpc('increment_xp', { p_user_id: user.id, p_amount: 5 }).then(() => {}, () => {})
+    supabaseAdmin.rpc('increment_xp', { p_user_id: user.id, p_amount: 5 }).then(() => {}, () => {})
   }
 
   return NextResponse.json({ data })

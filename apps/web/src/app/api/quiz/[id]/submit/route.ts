@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
+import { supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -39,10 +40,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: { code: 'DB_ERROR', message: msg } }, { status: 500 })
   }
 
-  // XP : 5 par bonne réponse (non bloquant, best-effort)
+  // XP : 5 par bonne réponse (non bloquant, best-effort).
+  // Via le client admin : la RPC increment_xp n'est plus exposée aux clients.
   const score = (data as { score?: number })?.score ?? 0
   if (score > 0) {
-    supabase.rpc('increment_xp', { p_user_id: user.id, p_amount: score * 5 }).then(() => {}, () => {})
+    supabaseAdmin.rpc('increment_xp', { p_user_id: user.id, p_amount: score * 5 }).then(() => {}, () => {})
   }
 
   return NextResponse.json({ data })
