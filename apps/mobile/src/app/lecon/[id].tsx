@@ -27,7 +27,7 @@ function buildHtml(title: string, blocks: Block[]): string {
     if (b.type === 'subtitle') return `<h2>${inline(b.text)}</h2>`
     if (b.type === 'paragraph') return `<p>${inline(b.text).replace(/\n/g, '<br/>')}</p>`
     if (b.type === 'image') return `<figure><img src="${esc(b.url)}"/>${b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : ''}</figure>`
-    if (b.type === 'formula') return `<div class="formula">\\[${b.latex}\\]</div>`
+    if (b.type === 'formula') return `<div class="formula">\\[${esc(b.latex)}\\]</div>`
     if (b.type === 'table') {
       const rows = Array.isArray(b.rows) ? b.rows : []
       const head = rows[0] ? `<tr>${rows[0].map((c) => `<th>${inline(c)}</th>`).join('')}</tr>` : ''
