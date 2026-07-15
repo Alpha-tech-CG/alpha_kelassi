@@ -1,6 +1,6 @@
 ﻿import { Hono } from 'hono'
 import Stripe from 'stripe'
-import { createHash } from 'crypto'
+import { createHash, timingSafeEqual } from 'crypto'
 import { supabaseAdmin as supabase } from '../lib/supabase.js'
 
 const router = new Hono()
@@ -96,7 +96,10 @@ router.post('/cinetpay', async (c) => {
     )
     .digest('hex')
 
-  if (body.signature !== expectedSig) {
+  // Comparaison en temps constant (évite les attaques par timing)
+  const sigBuf = Buffer.from(body.signature ?? '', 'utf8')
+  const expBuf = Buffer.from(expectedSig, 'utf8')
+  if (sigBuf.length !== expBuf.length || !timingSafeEqual(sigBuf, expBuf)) {
     return c.json({ error: 'Invalid signature' }, 400)
   }
 
