@@ -1,26 +1,27 @@
 // Système de design « L'Élan National » — tokens exacts des maquettes Stitch.
 // Thème vert Congo, cartes blanches, badges de niveau, accents par matière.
 
+// Palette EXACTE du design final Alpha Kelassi (maquettes « designe final »).
 export const colors = {
-  primary: '#006B2E',            // vert Congo (actions, progression)
-  primaryContainer: '#00873C',
-  onPrimary: '#FFFFFF',
-  primaryTint: '#EFF6EB',        // fond vert très clair (chips, pistes de barre)
+  primary: '#0F8F4F',            // primary
+  primaryContainer: '#0B6B3A',   // secondary
+  onPrimary: '#FFFFFF',          // primary-foreground
+  primaryTint: '#EAF5EC',        // fond vert très clair (icônes matières, pistes)
 
-  background: '#F5FBF0',         // fond de page
-  card: '#FFFFFF',
-  cardBorder: '#E3EADF',
+  background: '#F7FAF8',         // background
+  card: '#FFFFFF',               // card
+  cardBorder: '#E2E8F0',         // border
 
-  text: '#171D17',               // on-surface
-  textMuted: '#3E4A3E',          // on-surface-variant
-  outline: '#6E7A6D',
-  outlineVariant: '#BDCABA',
+  text: '#1F2A24',               // foreground
+  textMuted: '#6D7A72',          // muted-foreground
+  outline: '#6D7A72',
+  outlineVariant: '#C7D2CC',
 
-  yellow: '#FCDF4B',             // secondary container (badge BEPC)
-  onYellow: '#524600',
-  red: '#E12822',                // tertiary (badge BAC / mode examen)
+  yellow: '#F7D64A',             // accent
+  onYellow: '#1F2A24',           // accent-foreground
+  red: '#E53935',                // destructive
   onRed: '#FFFFFF',
-  blue: '#3B82F6',               // bleu académique (matière littéraire)
+  blue: '#2980B9',               // chart-2
 } as const
 
 export const radius = { sm: 8, md: 12, lg: 16, xl: 24, full: 9999 } as const
@@ -47,13 +48,10 @@ export function levelBadgeStyle(level: string): { bg: string; fg: string } {
   return { bg: colors.red, fg: colors.onRed }
 }
 
-// Palette d'accents par matière (barre latérale + icône). Déterministe par nom.
-const ACCENTS = ['#006B2E', '#3B82F6', '#B7791F', '#9333EA', '#DB2777', '#0891B2', '#DC2626']
-
-export function subjectAccent(name: string): string {
-  let h = 0
-  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0
-  return ACCENTS[h % ACCENTS.length]!
+// Design final : les icônes matières sont en vert primary sur fond vert clair
+// (une seule matière peut être mise en accent jaune, gérée au cas par cas).
+export function subjectAccent(_name: string): string {
+  return colors.primary
 }
 
 /** Émoji d'icône par matière (fallback si la colonne icon est vide). */

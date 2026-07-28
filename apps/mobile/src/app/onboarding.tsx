@@ -126,7 +126,7 @@ export default function OnboardingScreen() {
             <Text style={styles.emoji}>🧭</Text>
             <Text style={styles.title}>Ton parcours</Text>
             <Text style={styles.subtitle}>Sélectionne ton examen / ta série.</Text>
-            {stepLoading ? <ActivityIndicator color="#006B2E" style={{ marginTop: 24 }} /> : seriesList.length === 0 ? (
+            {stepLoading ? <ActivityIndicator color="#0F8F4F" style={{ marginTop: 24 }} /> : seriesList.length === 0 ? (
               <Text style={styles.emptyText}>Aucun parcours pour cette filière pour l'instant.</Text>
             ) : (
               <View style={styles.parcoursGrid}>
@@ -217,10 +217,10 @@ export default function OnboardingScreen() {
 }
 
 const styles = StyleSheet.create({
-  container:    { flex: 1, backgroundColor: '#F5FBF0', paddingTop: 60 },
+  container:    { flex: 1, backgroundColor: '#F7FAF8', paddingTop: 60 },
   dots:         { flexDirection: 'row', justifyContent: 'center', gap: 8, marginBottom: 32 },
   dot:          { width: 8, height: 8, borderRadius: 4, backgroundColor: '#E3EADF' },
-  dotActive:    { backgroundColor: '#006B2E', width: 24 },
+  dotActive:    { backgroundColor: '#0F8F4F', width: 24 },
   content:      { flex: 1, paddingHorizontal: 24 },
   step:         { flex: 1 },
   backLink:     { color: '#3E4A3E', fontSize: 13, marginBottom: 8 },
@@ -228,18 +228,18 @@ const styles = StyleSheet.create({
   title:        { fontSize: 24, fontWeight: '700', color: '#171D17', textAlign: 'center', marginBottom: 8 },
   subtitle:     { fontSize: 15, color: '#3E4A3E', textAlign: 'center', marginBottom: 24, lineHeight: 22 },
   emptyText:    { fontSize: 14, color: '#3E4A3E', textAlign: 'center', paddingVertical: 24 },
-  trackCard:    { flexDirection: 'row', alignItems: 'center', gap: 14, borderWidth: 2, borderColor: '#006B2E', borderRadius: 16, padding: 18, backgroundColor: '#fff' },
+  trackCard:    { flexDirection: 'row', alignItems: 'center', gap: 14, borderWidth: 2, borderColor: '#0F8F4F', borderRadius: 16, padding: 18, backgroundColor: '#fff' },
   trackEmoji:   { fontSize: 32 },
   trackTitle:   { fontSize: 17, fontWeight: '700', color: '#171D17' },
   trackDesc:    { fontSize: 12, color: '#3E4A3E', marginTop: 2 },
   parcoursGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'center' },
   parcoursCard: { width: '44%', borderWidth: 2, borderColor: '#E3EADF', borderRadius: 14, padding: 14, alignItems: 'center', backgroundColor: '#fff' },
-  parcoursCode: { fontSize: 20, fontWeight: '800', color: '#006B2E' },
+  parcoursCode: { fontSize: 20, fontWeight: '800', color: '#0F8F4F' },
   parcoursLabel:{ fontSize: 11, color: '#3E4A3E', textAlign: 'center', marginTop: 4 },
   subjectList:  { flex: 1, marginBottom: 16 },
   subjectChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip:         { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, borderWidth: 1.5, borderColor: '#E3EADF', backgroundColor: '#fff' },
-  chipActive:   { backgroundColor: '#006B2E', borderColor: '#006B2E' },
+  chipActive:   { backgroundColor: '#0F8F4F', borderColor: '#0F8F4F' },
   chipText:     { fontSize: 13, fontWeight: '500', color: '#171D17' },
   chipTextActive: { color: '#fff' },
   tips:         { gap: 16, marginBottom: 32 },
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   featureRow:   { flexDirection: 'row', alignItems: 'center', gap: 10 },
   featureCheck: { fontSize: 16 },
   featureText:  { fontSize: 14, color: '#171D17' },
-  btn:          { backgroundColor: '#006B2E', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 'auto' as any, marginBottom: 32 },
+  btn:          { backgroundColor: '#0F8F4F', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 'auto' as any, marginBottom: 32 },
   btnDisabled:  { opacity: 0.5 },
   btnText:      { color: '#fff', fontSize: 16, fontWeight: '700' },
 })

@@ -127,9 +127,9 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5FBF0' },
+  container: { flex: 1, backgroundColor: '#F7FAF8' },
   inner: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
-  title: { fontSize: 36, fontWeight: '800', textAlign: 'center', color: '#006B2E', marginBottom: 4 },
+  title: { fontSize: 36, fontWeight: '800', textAlign: 'center', color: '#0F8F4F', marginBottom: 4 },
   subtitle: { fontSize: 14, color: '#3E4A3E', textAlign: 'center', marginBottom: 32 },
   tabs: { flexDirection: 'row', backgroundColor: '#E3EADF', borderRadius: 10, padding: 4, marginBottom: 20 },
   tab: { flex: 1, paddingVertical: 8, borderRadius: 8, alignItems: 'center' },
@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
   prefix: { backgroundColor: '#EFF6EB', borderWidth: 1, borderColor: '#E3EADF', borderRightWidth: 0, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, paddingHorizontal: 14, justifyContent: 'center' },
   prefixText: { fontSize: 15, color: '#171D17' },
   phoneInput: { flex: 1, borderTopLeftRadius: 0, borderBottomLeftRadius: 0, marginBottom: 0 },
-  button: { backgroundColor: '#006B2E', borderRadius: 10, paddingVertical: 15, alignItems: 'center', marginBottom: 16 },
+  button: { backgroundColor: '#0F8F4F', borderRadius: 10, paddingVertical: 15, alignItems: 'center', marginBottom: 16 },
   buttonDisabled: { opacity: 0.5 },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-  link: { textAlign: 'center', color: '#006B2E', fontSize: 14 },
+  link: { textAlign: 'center', color: '#0F8F4F', fontSize: 14 },
 })

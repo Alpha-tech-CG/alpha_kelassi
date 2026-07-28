@@ -3,37 +3,24 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
-import { colors, radius, cardShadow, LEVEL_LABEL } from '../../lib/theme'
+import { colors, radius, cardShadow, LEVEL_LABEL, subjectIcon } from '../../lib/theme'
 
-const SHORTCUTS = [
-  { label: 'Matières', icon: '📚', route: '/(tabs)/cours' },
-  { label: 'Examens', icon: '📝', route: '/(tabs)/examens' },
-  { label: 'Kelassi IA', icon: '🤖', route: '/(tabs)/tuteur' },
-  { label: 'Flashcards', icon: '🃏', route: '/flashcards' },
-  { label: 'QCM', icon: '✅', route: '/quiz' },
-  { label: 'Planning', icon: '📅', route: '/planning' },
-  { label: 'Vidéos', icon: '🎬', route: '/videos' },
+interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
+
+const ACTIONS = [
+  { label: 'Tuteur',  icon: '💬', route: '/(tabs)/tuteur' },
+  { label: 'Cards',   icon: '🃏', route: '/flashcards' },
+  { label: 'Examens', icon: '📄', route: '/(tabs)/examens' },
+  { label: 'Vidéos',  icon: '🎬', route: '/videos' },
 ]
-
-const DAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
-
-function startOfWeek(): Date {
-  const d = new Date()
-  const day = (d.getDay() + 6) % 7
-  d.setHours(0, 0, 0, 0)
-  d.setDate(d.getDate() - day)
-  return d
-}
-
-interface Countdown { label: string; days: number; hours: number; mins: number }
 
 export default function HomeScreen() {
   const router = useRouter()
-  const { level, ready } = useLevel()
+  const { level, track, ready } = useLevel()
   const [name, setName] = useState('')
-  const [countdown, setCountdown] = useState<Countdown | null>(null)
-  const [weekPct, setWeekPct] = useState(0)
-  const [weekBars, setWeekBars] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
+  const [xp, setXp] = useState(0)
+  const [streak, setStreak] = useState(0)
+  const [subjects, setSubjects] = useState<SubjectVM[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -41,123 +28,126 @@ export default function HomeScreen() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setLoading(false); return }
-      const today = new Date().toISOString().slice(0, 10)
-      const wkStart = startOfWeek()
 
-      let examQ = supabase.from('exam_events').select('label, exam_date').gte('exam_date', today).order('exam_date', { ascending: true }).limit(1)
-      if (level) examQ = examQ.eq('level', level)
-
-      const [{ data: profile }, { data: exams }, { data: sessions }] = await Promise.all([
-        supabase.from('users').select('full_name').eq('id', user.id).single(),
-        examQ,
-        supabase.from('revision_sessions').select('scheduled_date, is_done')
-          .eq('user_id', user.id)
-          .gte('scheduled_date', wkStart.toISOString().slice(0, 10)),
+      const [{ data: profile }, { data: prog }] = await Promise.all([
+        supabase.from('users').select('full_name, xp').eq('id', user.id).single(),
+        supabase.from('user_progress').select('streak_days').eq('user_id', user.id),
       ])
-
       setName((profile as { full_name?: string })?.full_name?.split(' ')[0] ?? 'Élève')
+      setXp((profile as { xp?: number })?.xp ?? 0)
+      setStreak(Math.max(0, ...((prog ?? []) as { streak_days: number }[]).map((p) => p.streak_days)))
 
-      // Compte à rebours
-      const ex = (exams ?? [])[0] as { label: string; exam_date: string } | undefined
-      if (ex) {
-        const ms = new Date(ex.exam_date + 'T08:00:00').getTime() - Date.now()
-        if (ms > 0) {
-          setCountdown({
-            label: ex.label,
-            days: Math.floor(ms / 86400000),
-            hours: Math.floor((ms % 86400000) / 3600000),
-            mins: Math.floor((ms % 3600000) / 60000),
-          })
-        }
-      }
+      // Matières du parcours + progression réelle
+      let sq = supabase.from('subjects').select('id, name, icon').order('name')
+      if (level) sq = sq.eq('level', level)
+      if (track) sq = sq.eq('track_type', track)
+      const { data: subs } = await sq
+      const rows = (subs ?? []) as { id: string; name: string; icon: string | null }[]
+      const ids = rows.map((s) => s.id)
 
-      // Progression de la semaine (séances de révision du planning)
-      const bars = [0, 0, 0, 0, 0, 0, 0]
-      let done = 0, tot = 0
-      for (const s of (sessions ?? []) as { scheduled_date: string; is_done: boolean }[]) {
-        tot++
-        if (s.is_done) {
-          done++
-          const idx = (new Date(s.scheduled_date + 'T00:00:00').getDay() + 6) % 7
-          bars[idx]!++
-        }
+      const chapters = ids.length ? ((await supabase.from('chapters').select('id, subject_id').in('subject_id', ids)).data ?? []) as any[] : []
+      const chIds = chapters.map((c) => c.id)
+      const lessons = chIds.length ? ((await supabase.from('lessons').select('id, chapter_id').in('chapter_id', chIds)).data ?? []) as any[] : []
+      const lIds = lessons.map((l) => l.id)
+      const done = lIds.length ? ((await supabase.from('lesson_progress').select('lesson_id').eq('user_id', user.id).eq('completed', true).in('lesson_id', lIds)).data ?? []) as any[] : []
+      const doneSet = new Set(done.map((d) => d.lesson_id))
+      const chToSub = new Map(chapters.map((c) => [c.id, c.subject_id]))
+      const tot = new Map<string, number>(), dn = new Map<string, number>()
+      for (const l of lessons) {
+        const sid = chToSub.get(l.chapter_id); if (!sid) continue
+        tot.set(sid, (tot.get(sid) ?? 0) + 1)
+        if (doneSet.has(l.id)) dn.set(sid, (dn.get(sid) ?? 0) + 1)
       }
-      setWeekBars(bars)
-      setWeekPct(tot > 0 ? Math.round((done / tot) * 100) : 0)
+      setSubjects(rows.map((s) => {
+        const t = tot.get(s.id) ?? 0
+        return { id: s.id, name: s.name, icon: s.icon, progress: t ? Math.round(((dn.get(s.id) ?? 0) / t) * 100) : 0 }
+      }))
       setLoading(false)
     }
     load()
-  }, [ready, level])
-
-  const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir'
-  const maxBar = Math.max(1, ...weekBars)
+  }, [ready, level, track])
 
   if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
 
+  const total = subjects.length
+  const started = subjects.filter((s) => s.progress > 0).length
+  const overall = total ? Math.round(subjects.reduce((a, s) => a + s.progress, 0) / total) : 0
+  const lvl = level ? LEVEL_LABEL[level] : '—'
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      {/* Header */}
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+      {/* Header vert arrondi */}
       <View style={styles.header}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.greeting}>{greeting}, {name} 👋</Text>
-          <Text style={styles.subGreeting}>Prêt à réviser aujourd'hui ?</Text>
+        <View style={styles.headerRow}>
+          <View style={styles.headerLeft}>
+            <TouchableOpacity style={styles.avatar} onPress={() => router.push('/(tabs)/profil')}>
+              <Text style={styles.avatarText}>{name[0]?.toUpperCase() ?? '?'}</Text>
+              <View style={styles.avatarBadge}><Text style={styles.avatarBadgeText}>{lvl}</Text></View>
+            </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.hello} numberOfLines={1}>Salut, {name} ! 👋</Text>
+              <View style={styles.chips}>
+                <View style={styles.chip}><Text style={styles.chipText}>🔥 {streak} Jours</Text></View>
+                <View style={styles.chip}><Text style={styles.chipText}>⭐ {xp.toLocaleString('fr-FR')} XP</Text></View>
+              </View>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.bell}><Text style={{ fontSize: 20 }}>🔔</Text></TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.avatar} onPress={() => router.push('/(tabs)/profil')}>
-          <Text style={styles.avatarText}>{name[0]?.toUpperCase()}</Text>
-        </TouchableOpacity>
+
+        {/* Carte progression (chevauche le header) */}
+        <View style={styles.progCard}>
+          <View style={styles.progTop}>
+            <Text style={styles.progTitle}>PROGRESSION {lvl}</Text>
+            <Text style={styles.progCount}>{started} / {total} matières</Text>
+          </View>
+          <View style={styles.progTrack}><View style={[styles.progFill, { width: `${overall}%` }]} /></View>
+          <Text style={styles.progHint}>🎖️ Continue — {overall}% de ton parcours complété !</Text>
+        </View>
       </View>
 
-      {/* Compte à rebours */}
-      {countdown ? (
-        <View style={styles.countdownCard}>
-          <View style={styles.examBadge}><Text style={styles.examBadgeText}>{countdown.label.toUpperCase()}</Text></View>
-          <View style={styles.countdownRow}>
-            {[
-              { n: countdown.days, l: 'JOURS' },
-              { n: countdown.hours, l: 'HEURES' },
-              { n: countdown.mins, l: 'MIN' },
-            ].map((c, i) => (
-              <View key={c.l} style={styles.countdownCol}>
-                {i > 0 && <View style={styles.countdownSep} />}
-                <Text style={styles.countdownNum}>{String(c.n).padStart(2, '0')}</Text>
-                <Text style={styles.countdownLabel}>{c.l}</Text>
-              </View>
-            ))}
-          </View>
-          <Text style={styles.quote}>« L'éducation est l'arme la plus puissante pour changer le monde. »</Text>
-        </View>
-      ) : (
-        <View style={styles.countdownCard}>
-          <Text style={styles.quote}>{level ? `Objectif ${LEVEL_LABEL[level]} — reste concentré, chaque jour compte.` : 'Termine ton inscription pour activer le compte à rebours.'}</Text>
-        </View>
-      )}
-
-      {/* Progression hebdomadaire */}
-      <View style={styles.card}>
-        <View style={styles.progHeader}>
-          <Text style={styles.cardTitle}>Ta progression cette semaine</Text>
-          <Text style={styles.progPct}>{weekPct}%</Text>
-        </View>
-        <View style={styles.progTrack}><View style={[styles.progFill, { width: `${weekPct}%` }]} /></View>
-        <View style={styles.chart}>
-          {weekBars.map((v, i) => (
-            <View key={i} style={styles.chartCol}>
-              <View style={[styles.chartBar, { height: 8 + (v / maxBar) * 56, backgroundColor: v > 0 ? colors.primary : colors.primaryTint }]} />
-              <Text style={styles.chartLabel}>{DAY_LABELS[i]}</Text>
-            </View>
+      <View style={styles.body}>
+        {/* Raccourcis */}
+        <View style={styles.actions}>
+          {ACTIONS.map((a) => (
+            <TouchableOpacity key={a.label} style={styles.action} onPress={() => router.push(a.route as any)}>
+              <View style={styles.actionBox}><Text style={{ fontSize: 24 }}>{a.icon}</Text></View>
+              <Text style={styles.actionLabel}>{a.label}</Text>
+            </TouchableOpacity>
           ))}
         </View>
-      </View>
 
-      {/* Raccourcis */}
-      <View style={styles.shortcuts}>
-        {SHORTCUTS.map((s) => (
-          <TouchableOpacity key={s.label} style={styles.shortcut} onPress={() => router.push(s.route as any)}>
-            <Text style={styles.shortcutIcon}>{s.icon}</Text>
-            <Text style={styles.shortcutLabel}>{s.label}</Text>
-          </TouchableOpacity>
-        ))}
+        {/* Tes Matières */}
+        <View style={styles.sectionHead}>
+          <Text style={styles.sectionTitle}>Tes Matières</Text>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/cours')}><Text style={styles.seeAll}>VOIR TOUT</Text></TouchableOpacity>
+        </View>
+        {subjects.length === 0 ? (
+          <Text style={styles.empty}>Choisis ton parcours pour voir tes matières.</Text>
+        ) : (
+          <View style={styles.grid}>
+            {subjects.slice(0, 6).map((s) => (
+              <TouchableOpacity key={s.id} style={styles.subjectCard} onPress={() => router.push(`/parcours/${s.id}` as any)}>
+                <View style={styles.subjectIcon}><Text style={{ fontSize: 24 }}>{s.icon ?? subjectIcon(s.name)}</Text></View>
+                <Text style={styles.subjectName} numberOfLines={1}>{s.name}</Text>
+                <View style={styles.subjectProgRow}>
+                  <View style={styles.subjectTrack}><View style={[styles.subjectFill, { width: `${s.progress}%` }]} /></View>
+                  <Text style={styles.subjectPct}>{s.progress}%</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+
+        {/* CTA Kelassi */}
+        <TouchableOpacity style={styles.cta} onPress={() => router.push('/(tabs)/tuteur')}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.ctaTitle}>Besoin d'aide ?</Text>
+            <Text style={styles.ctaSub}>Demande à Kelassi, ton tuteur IA !</Text>
+            <View style={styles.ctaBtn}><Text style={styles.ctaBtnText}>PARLER À KELASSI →</Text></View>
+          </View>
+          <Text style={{ fontSize: 56 }}>🤖</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   )
@@ -165,33 +155,45 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 16, paddingTop: 56 },
-  header: { flexDirection: 'row', alignItems: 'center', marginBottom: 18 },
-  greeting: { fontSize: 24, fontWeight: '800', color: colors.text },
-  subGreeting: { fontSize: 14, color: colors.textMuted, marginTop: 2 },
-  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
-  avatarText: { color: '#fff', fontSize: 18, fontWeight: '800' },
-  countdownCard: { backgroundColor: colors.primary, borderRadius: radius.lg, padding: 22, marginBottom: 16, ...cardShadow },
-  examBadge: { alignSelf: 'flex-start', backgroundColor: colors.yellow, paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.full, marginBottom: 16 },
-  examBadgeText: { color: colors.onYellow, fontSize: 12, fontWeight: '800', letterSpacing: 0.5 },
-  countdownRow: { flexDirection: 'row', justifyContent: 'space-around' },
-  countdownCol: { flex: 1, alignItems: 'center', position: 'relative' },
-  countdownSep: { position: 'absolute', left: 0, top: 6, bottom: 18, width: 1, backgroundColor: '#ffffff33' },
-  countdownNum: { color: '#fff', fontSize: 46, fontWeight: '800', lineHeight: 50 },
-  countdownLabel: { color: '#ffffffcc', fontSize: 12, fontWeight: '700', letterSpacing: 1, marginTop: 2 },
-  quote: { color: '#ffffffe6', fontSize: 14, fontStyle: 'italic', lineHeight: 21, marginTop: 18 },
-  card: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 18, marginBottom: 16, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
-  progHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  cardTitle: { fontSize: 16, fontWeight: '800', color: colors.text, flex: 1 },
-  progPct: { fontSize: 26, fontWeight: '800', color: colors.primary },
-  progTrack: { height: 8, backgroundColor: colors.primaryTint, borderRadius: radius.full, marginTop: 12, overflow: 'hidden' },
+  header: { backgroundColor: colors.primary, paddingTop: 52, paddingBottom: 56, paddingHorizontal: 20, borderBottomLeftRadius: 40, borderBottomRightRadius: 40 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  headerLeft: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12 },
+  avatar: { width: 54, height: 54, borderRadius: 18, backgroundColor: '#ffffff33', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: '#ffffff80' },
+  avatarText: { color: '#fff', fontSize: 22, fontWeight: '800' },
+  avatarBadge: { position: 'absolute', bottom: -6, right: -6, backgroundColor: colors.yellow, borderRadius: 10, paddingHorizontal: 5, paddingVertical: 1, borderWidth: 2, borderColor: colors.primary },
+  avatarBadgeText: { color: colors.onYellow, fontSize: 9, fontWeight: '800' },
+  hello: { color: '#fff', fontSize: 19, fontWeight: '900' },
+  chips: { flexDirection: 'row', gap: 8, marginTop: 6 },
+  chip: { backgroundColor: '#ffffff2e', paddingHorizontal: 9, paddingVertical: 3, borderRadius: radius.full },
+  chipText: { color: '#fff', fontSize: 11, fontWeight: '700' },
+  bell: { width: 46, height: 46, borderRadius: 16, backgroundColor: '#ffffff2e', alignItems: 'center', justifyContent: 'center' },
+  progCard: { backgroundColor: '#fff', borderRadius: 26, padding: 20, marginTop: 22, ...cardShadow },
+  progTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+  progTitle: { color: colors.text, fontSize: 13, fontWeight: '900', letterSpacing: 0.3 },
+  progCount: { color: colors.primary, fontSize: 13, fontWeight: '900' },
+  progTrack: { height: 16, backgroundColor: colors.primaryTint, borderRadius: radius.full, padding: 3, overflow: 'hidden' },
   progFill: { height: '100%', backgroundColor: colors.primary, borderRadius: radius.full },
-  chart: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 18, height: 84 },
-  chartCol: { flex: 1, alignItems: 'center', justifyContent: 'flex-end' },
-  chartBar: { width: 22, borderRadius: 6 },
-  chartLabel: { fontSize: 12, color: colors.outline, marginTop: 6 },
-  shortcuts: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
-  shortcut: { width: '47%', borderRadius: radius.md, padding: 16, alignItems: 'center', backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
-  shortcutIcon: { fontSize: 26, marginBottom: 6 },
-  shortcutLabel: { fontSize: 13, fontWeight: '700', color: colors.text },
+  progHint: { color: colors.textMuted, fontSize: 11, fontWeight: '700', marginTop: 14 },
+  body: { paddingHorizontal: 20, marginTop: 20 },
+  actions: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28 },
+  action: { alignItems: 'center', gap: 6, width: '23%' },
+  actionBox: { width: 56, height: 56, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
+  actionLabel: { fontSize: 10, fontWeight: '900', color: colors.textMuted, textTransform: 'uppercase' },
+  sectionHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  sectionTitle: { fontSize: 20, fontWeight: '900', color: colors.text },
+  seeAll: { color: colors.primary, fontSize: 11, fontWeight: '900', letterSpacing: 1 },
+  empty: { color: colors.textMuted, fontSize: 14, paddingVertical: 20, textAlign: 'center' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
+  subjectCard: { width: '46%', flexGrow: 1, backgroundColor: '#fff', borderRadius: 26, padding: 18, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
+  subjectIcon: { width: 52, height: 52, borderRadius: 16, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center', marginBottom: 14 },
+  subjectName: { fontSize: 15, fontWeight: '900', color: colors.text, marginBottom: 8 },
+  subjectProgRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  subjectTrack: { flex: 1, height: 5, backgroundColor: colors.primaryTint, borderRadius: radius.full, overflow: 'hidden' },
+  subjectFill: { height: '100%', backgroundColor: colors.primary, borderRadius: radius.full },
+  subjectPct: { fontSize: 10, fontWeight: '900', color: colors.primary },
+  cta: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.primary, borderRadius: 32, padding: 24, marginTop: 28, ...cardShadow },
+  ctaTitle: { color: '#fff', fontSize: 19, fontWeight: '900', marginBottom: 4 },
+  ctaSub: { color: '#ffffffcc', fontSize: 12, fontWeight: '700', marginBottom: 14 },
+  ctaBtn: { alignSelf: 'flex-start', backgroundColor: colors.yellow, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 16 },
+  ctaBtnText: { color: colors.onYellow, fontSize: 12, fontWeight: '900' },
 })
