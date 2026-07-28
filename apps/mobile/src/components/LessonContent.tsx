@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { colors } from '../lib/theme'
 
 /**
@@ -39,6 +39,18 @@ export function LessonContent({ content }: { content: string }) {
 
     // Séparateur horizontal
     if (/^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) { out.push(<View key={key++} style={styles.hr} />); i++; continue }
+
+    // Image : ![légende](url) → schéma
+    const img = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
+    if (img) {
+      out.push(
+        <View key={key++} style={styles.figure}>
+          <Image source={{ uri: img[2] }} style={styles.image} resizeMode="contain" />
+          {img[1] ? <Text style={styles.caption}>{img[1]}</Text> : null}
+        </View>
+      )
+      i++; continue
+    }
 
     // Titre : #..###### → gras (sans le #)
     const h = trimmed.match(/^(#{1,6})\s+(.*)$/)
@@ -120,6 +132,9 @@ const styles = StyleSheet.create({
   h3:        { fontSize: 15.5, color: colors.primary },
   p:         { fontSize: 15, lineHeight: 23, color: colors.text },
   hr:        { height: 1, backgroundColor: colors.cardBorder, marginVertical: 10 },
+  figure:    { marginVertical: 10, alignItems: 'center' },
+  image:     { width: '100%', height: 240, borderRadius: 8, backgroundColor: '#fff' },
+  caption:   { fontSize: 12, color: colors.textMuted, fontStyle: 'italic', marginTop: 6, textAlign: 'center' },
   li:        { flexDirection: 'row', gap: 8, paddingLeft: 4, marginVertical: 2 },
   bullet:    { fontSize: 15, color: colors.primary, fontWeight: '700', minWidth: 16 },
   liText:    { flex: 1, fontSize: 15, lineHeight: 22, color: colors.text },
