@@ -1875,6 +1875,519 @@ Jura, mais un peu tard, qu'on ne l'y prendrait plus.
 
 ---
 
+---
+
+# SCIENCES DE LA VIE ET DE LA TERRE (SVT)
+
+---
+
+## Leçon 1 : Les fonctions vitales de l'homme
+**Date :** Mercredi 08 Octobre 2025
+
+### Définition
+Les **fonctions vitales** sont les activités indispensables à la vie de l'homme.
+
+### Les 5 fonctions vitales
+
+| Fonction | Description |
+|---|---|
+| **1. Nutrition** | Se nourrir pour avoir de l'énergie |
+| **2. Respiration** | Absorber l'oxygène et rejeter le gaz carbonique |
+| **3. Locomotion** | Se déplacer d'un endroit à un autre |
+| **4. Reproduction** | Donner naissance à des êtres de la même espèce |
+| **5. Excrétion** | Éliminer les déchets du corps |
+
+### 💡 Astuce CEPE
+Retiens les 5 fonctions vitales avec l'initiale : **N-R-L-R-E** : Nutrition, Respiration, Locomotion, Reproduction, Excrétion.
+
+### ✏️ Exercice
+Cite les 5 fonctions vitales de l'homme et explique chacune en une phrase.
+
+---
+
+## Leçon 2 : Le Globe terrestre — Structure de la Terre
+**Date :** Mardi 28 Avril 2026
+
+### Le Globe terrestre
+Le **globe terrestre** est une maquette (modèle réduit) de la **planète Terre**. La Terre est recouverte de continents, d'océans, de végétaux et d'animaux. Elle est entourée d'une couche de gaz appelée **l'atmosphère**.
+
+### Structure interne de la Terre
+
+| Couche | Description |
+|---|---|
+| **L'écorce terrestre** | Couche externe solide (la surface où nous vivons) |
+| **Le manteau** | Couche intermédiaire de roches en fusion |
+| **Le noyau** | Centre de la Terre, très chaud |
+
+### 💡 Astuce CEPE
+La Terre est comme un œuf : la **coquille** = l'écorce, le **blanc** = le manteau, le **jaune** = le noyau.
+
+### ✏️ Exercice
+1. Qu'est-ce que le globe terrestre ?
+2. Cite les trois couches internes de la Terre.
+3. Comment s'appelle la couche de gaz qui entoure la Terre ?
+
+---
+
+## Leçon 3 : Les types de roches
+**Date :** Mars 2026
+
+### Définition
+Une **roche** est un produit naturel, une matière première qui se trouve dans le sous-sol. Une roche est l'ensemble des minéraux.
+
+### Les trois types de roches
+
+| Type de roche | Formation | Exemples |
+|---|---|---|
+| **Roches magmatiques** | Formées à partir du **magma** (roche en fusion) | Granite, basalte |
+| **Roches sédimentaires** | Formées par des **dépôts** dans la mer ou les lacs | Sable, argile, calcaire |
+| **Roches métamorphiques** | Formées par la **transformation** d'autres roches sous l'effet de la chaleur et de la pression | Marbre, ardoise |
+
+### ⚠️ Piège à éviter
+Les roches **magmatiques** viennent du **magma** (intérieur de la Terre), les roches **sédimentaires** se forment à la **surface** (mers, lacs, rivières).
+
+### ✏️ Exercice
+Classe ces roches dans le bon tableau : *calcaire, granite, argile, basalte, marbre, sable.*
+
+---
+
+## Leçon 4 : Les types de sol et leur utilité
+*(Leçon consolidée)*
+
+### Les types de sol
+
+| Type de sol | Caractéristiques |
+|---|---|
+| **Sol sableux** | Grains fins, perméable (laisse passer l'eau) |
+| **Sol argileux** | Imperméable, retient l'eau, difficile à labourer |
+| **Sol calcaire** | Riche en calcaire, imperméable |
+| **Sol caillouteux** | Riche en pierres, pauvre en eau |
+| **Sol humide** | Riche en eau |
+
+### Perméabilité des sols
+- **Sols perméables** : sableux (l'eau traverse facilement)
+- **Sols imperméables** : argileux, calcaire (l'eau ne traverse pas)
+- **Sol meuble** : sol qui se laboure facilement
+
+### Utilité des sols
+Les sols sont très utiles pour la vie de l'homme. Grâce aux différents types de sols, l'homme :
+- **Construit** des maisons (argile, calcaire)
+- **Pratique l'agriculture** (sol meuble et humide)
+- **Fabrique** des pots, du ciment (argile)
+- **Extrait** des minéraux et des ressources
+
+### 💡 Astuce CEPE
+Retiens : **Sol perméable = sableux** (le sable laisse passer l'eau comme dans un filtre) — **Sol imperméable = argileux** (l'argile retient l'eau comme une bassine).
+
+### ✏️ Exercice
+1. Qu'est-ce qu'un sol meuble ? Donne un exemple.
+2. Cite deux utilités des sols pour l'homme.
+3. Quel type de sol est le plus adapté à l'agriculture ? Pourquoi ?
+
+---
+
+## Leçon 5 : Un séisme (tremblement de terre)
+**Date :** Mardi 21 Avril 2026
+
+### Définition
+Un **séisme** (ou **tremblement de terre**) est des violentes secousses qui se manifestent à la surface de la Terre et qui durent de quelques secondes à quelques minutes.
+
+### Causes et conséquences
+
+| | Description |
+|---|---|
+| **Origine** | Un séisme prend naissance dans les profondeurs de la Terre à partir d'un point appelé le **foyer** |
+| **Conséquences** | Destruction des habitations, des ponts, des rails de chemin de fer, nombreuses victimes humaines |
+
+### 💡 Astuce CEPE
+Le point d'origine d'un séisme en profondeur s'appelle le **foyer**. Le point à la surface directement au-dessus du foyer s'appelle l'**épicentre**.
+
+### ✏️ Exercice
+1. Qu'est-ce qu'un séisme ?
+2. Quel est le nom du point d'origine d'un séisme ?
+3. Cite deux conséquences d'un séisme.
+
+---
+
+## Leçon 6 : La circulation du sang
+**Date :** Lundi 24 Novembre 2025
+
+### Le cœur et la circulation
+Le **cœur** est le moteur de la circulation du sang. Il est divisé en 4 parties : l'oreillette droite, l'oreillette gauche, le ventricule droit, le ventricule gauche.
+
+### Les deux circulations
+
+| Circulation | Trajet | Rôle |
+|---|---|---|
+| **Petite circulation** (pulmonaire) | Ventricule droit → Poumons → Oreillette gauche | Oxygéner le sang dans les poumons |
+| **Grande circulation** (générale) | Ventricule gauche → Tous les organes (sauf poumons) → Oreillette droite | Apporter l'oxygène à tous les organes |
+
+### Schéma simplifié de l'appareil circulatoire
+```
+Cœur → Artères → Capillaires → Organes → Veines → Cœur
+```
+
+Éléments : artère pulmonaire, veines pulmonaires, capillaire pulmonaire, ventricules, oreillettes, artères, veines.
+
+### 💡 Astuce CEPE
+- Les **artères** transportent le sang du cœur vers les organes
+- Les **veines** transportent le sang des organes vers le cœur
+- **Petite circulation** = poumons / **Grande circulation** = tout le corps
+
+### ✏️ Exercice
+1. Décris le trajet de la petite circulation.
+2. Quel est le rôle de la grande circulation ?
+3. Quelle est la différence entre une artère et une veine ?
+
+---
+
+## Leçon 7 : L'appareil digestif et la digestion
+**Date :** Vendredi 17 Octobre 2025 / Jeudi 16 Octobre 2025
+
+### Définition
+La **digestion** est la transformation des aliments dans le **tube digestif**. Elle permet de réduire les aliments en nutriments qui passent ensuite dans le sang. Ce passage s'appelle l'**absorption intestinale**.
+
+### Le tube digestif — Trajet des aliments
+
+```
+Bouche → Pharynx → Œsophage (25 cm) → Estomac → Intestin grêle → Gros intestin → Anus
+```
+
+| Organe | Rôle |
+|---|---|
+| **Bouche** | Broie les aliments (dents) et les mélange à la salive |
+| **Pharynx** | Carrefour entre la bouche et l'œsophage |
+| **Œsophage** | Conduit les aliments à l'estomac (25 cm) |
+| **Estomac** | Digère les aliments grâce aux sucs gastriques |
+| **Foie** | Produit la bile pour aider la digestion |
+| **Intestin grêle** | Absorption des nutriments dans le sang |
+| **Gros intestin** | Absorbe l'eau, forme les selles |
+| **Anus** | Évacuation des déchets |
+
+### ⚠️ Piège à éviter
+Le **foie** n'est pas dans le trajet principal des aliments. Il produit la **bile** qui aide à digérer les graisses dans l'intestin grêle.
+
+### ✏️ Exercice
+Remets dans l'ordre le trajet des aliments : *anus, intestin grêle, estomac, bouche, gros intestin, œsophage, pharynx.*
+
+---
+
+## Leçon 8 : La respiration
+**Date :** Lundi 24 Novembre 2025
+
+### Définition
+La **respiration** est une **fonction vitale** commune à tous les êtres vivants. Elle consiste à **absorber de l'oxygène (O₂)** et à **rejeter du gaz carbonique (CO₂)**.
+
+### Les mouvements respiratoires
+
+| Mouvement | Description |
+|---|---|
+| **Inspiration** | Entrée de l'air (oxygène) dans les poumons |
+| **Expiration** | Sortie de l'air (gaz carbonique) hors des poumons |
+
+### L'appareil respiratoire — Trajet de l'air
+```
+Narines → Larynx → Trachée (1–2 cm) → Bronches → Poumons (droit et gauche)
+```
+
+Au cours de la respiration, l'homme :
+- **Absorbe** l'oxygène (O₂)
+- **Rejette** le gaz carbonique (CO₂)
+
+### 💡 Astuce CEPE
+**Inspiration = entrée d'O₂ — Expiration = sortie de CO₂**. La respiration se fait grâce aux poumons et au diaphragme.
+
+### ✏️ Exercice
+1. Qu'est-ce que la respiration ?
+2. Cite les deux mouvements respiratoires.
+3. Quel gaz absorbe-t-on lors de l'inspiration ? Quel gaz rejette-t-on lors de l'expiration ?
+
+---
+
+## Leçon 9 : Les os et le squelette
+**Date :** Mardi 18 Novembre 2025 / Vendredi 03 Novembre 2025
+
+### Définitions
+- Les **os** sont les parties **dures** du corps humain.
+- Le **squelette** est l'ensemble de tous les os du corps.
+- Le corps humain comprend **208 os**.
+
+### Les 4 types d'os
+
+| Type | Caractéristique | Exemple |
+|---|---|---|
+| **Os longs** | Plus longs que larges, creux, contiennent de la moelle | Fémur, humérus |
+| **Os plats** | Larges et plats | Phalanges, omoplate |
+| **Os ronds** | En forme de roue ou de disque | Rotule |
+| **Os napiformes** | Forme irrégulière | Os du poignet |
+
+### Composition d'un os
+Les os sont composés de **deux éléments** :
+- **L'ossine** (protéine) : donne la souplesse à l'os
+- **Le calcaire (calcium)** : donne la dureté et la rigidité à l'os
+
+### Structure interne d'un os long (schéma)
+- **Épiphyse** (extrémités arrondies)
+- **Diaphyse** (partie centrale/tige)
+- **Cartilage articulaire** (aux extrémités)
+- **Périoste** (enveloppe externe)
+- **Tissu osseux compact** (couche dure)
+- **Tissu osseux spongieux** (à l'intérieur)
+- **Cavité médullaire** (contient la moelle osseuse)
+
+### Les grandes parties du squelette
+- **La tête** : crâne + face
+- **Le tronc** : colonne vertébrale + côtes + sternum
+- **Les membres** : os des bras, des jambes, des pieds, des mains, des phalanges
+
+### 💡 Astuce CEPE
+Le squelette humain = **208 os**. Le plus long os du corps est le **fémur** (os de la cuisse).
+
+### ✏️ Exercice
+1. Qu'est-ce que le squelette ?
+2. Donne le nombre d'os du corps humain.
+3. Cite les 4 types d'os avec un exemple pour chacun.
+4. De quoi sont composés les os ?
+
+---
+
+## Leçon 10 : Les articulations
+**Date :** Lundi 30 Mars 2025
+
+### Définition
+Une **articulation** est le lieu où se **rencontrent deux os**. Les articulations permettent les mouvements du corps.
+
+### Types d'articulations
+- **Articulations fixes** : les os ne bougent pas (ex. : os du crâne)
+- **Articulations mobiles** : les os peuvent bouger (ex. : genou, coude, épaule)
+
+### Structure d'une articulation mobile (schéma)
+- **Cartilage articulaire** : protège les extrémités des os
+- **Capsule articulaire** : enveloppe l'articulation
+- **Membrane synoviale** : produit le liquide synovial
+- **Liquide synovial** : lubrifie l'articulation (permet le glissement)
+- **Ligament articulaire** : relie les os entre eux
+- **Tendon** : relie le muscle à l'os
+- **Muscle** : produit le mouvement
+
+### 💡 Astuce CEPE
+Le **ligament** relie **os à os**. Le **tendon** relie **muscle à os**.
+
+### ✏️ Exercice
+1. Qu'est-ce qu'une articulation ?
+2. Quelle est la différence entre une articulation fixe et une articulation mobile ? Donne un exemple de chacune.
+3. Quel est le rôle du liquide synovial ?
+
+---
+
+## Leçon 11 : Les muscles
+**Date :** Jeudi 20 Novembre 2025
+
+### Définition
+Les **muscles** sont des organes mous et contractiles (que l'on appelle aussi la **viande**). Ils permettent les mouvements du corps en se **contractant** et en se **relâchant**.
+
+### Fonctionnement des muscles
+
+| Mouvement | Description |
+|---|---|
+| **Flexion** | Le muscle se **contracte** et se raccourcit (le biceps se durcit et se gonfle) |
+| **Extension** | Le muscle se **relâche** et s'allonge |
+
+### Les muscles antagonistes
+Les muscles travaillent **par paires antagonistes** :
+- **Biceps** (devant du bras) → assure la **flexion** → se gonfle et se durcit
+- **Triceps** (derrière du bras) → assure l'**extension** → se contracte quand le biceps se relâche
+
+> Un muscle ne peut produire qu'un seul mouvement à la fois (contraction ou relâchement).
+
+### ⚠️ Piège à éviter
+Un muscle **ne peut pas se contracter et s'étirer en même temps**. C'est pourquoi les muscles fonctionnent toujours en **paires antagonistes** : quand l'un se contracte, l'autre se relâche.
+
+### ✏️ Exercice
+1. Qu'est-ce qu'un muscle ?
+2. Quels sont les deux mouvements produits par les muscles ?
+3. Quel muscle assure la flexion du bras ? Lequel assure l'extension ?
+
+---
+
+## Leçon 12 : La dent
+**Date :** Lundi 19 Janvier 2026
+
+### Définition
+Une **dent** est un organe dur formé d'**ivoire** couvert d'**émail** sur la couronne.
+
+### Les 3 types de dents
+
+| Type | Rôle | Localisation |
+|---|---|---|
+| **Incisives** | **Couper** les aliments | Devant de la bouche |
+| **Canines** | **Déchirer** les aliments | À côté des incisives |
+| **Molaires** | **Broyer et écraser** les aliments | Fond de la bouche |
+
+### Structure d'une dent (schéma)
+- **Couronne** : partie visible au-dessus de la gencive (couverte d'émail)
+- **Collet** : partie à la gencive
+- **Racine** : partie dans l'os de la mâchoire
+- **Émail** : couche dure externe
+- **Ivoire** : couche interne
+- **Pulpe** : contient les nerfs et vaisseaux sanguins
+- **Cément** : recouvre la racine
+- **Artériole, nerf, veinule** : à l'intérieur de la racine
+
+### La formule dentaire
+
+| | Formule |
+|---|---|
+| **Adulte** | I 4/4 + C 2/2 + PM 4/4 + M 6/6 = **32 dents** |
+| **Enfant** | I 4/4 + C 2/2 + PM 4/4 = **20 dents de lait** |
+
+*(I = Incisives, C = Canines, PM = Prémolaires, M = Molaires)*
+
+### Le rôle des dents
+Les dents servent à **réduire les aliments en petits morceaux** pour faciliter la digestion.
+
+### 💡 Astuce CEPE
+**Incisives = couper** (comme des ciseaux) / **Canines = déchirer** (comme des crocs) / **Molaires = broyer** (comme un pilon).
+
+### ✏️ Exercice
+1. Qu'est-ce qu'une dent ?
+2. Cite les 3 types de dents et le rôle de chacune.
+3. Combien de dents a un adulte ? Un enfant ?
+
+---
+
+## Leçon 13 : Les microbes
+**Date :** Jeudi 08 Janvier 2026
+
+### Définition
+Les **microbes** sont des **êtres vivants très petits**, invisibles à l'œil nu. On les observe au **microscope**. Ils ont été découverts par le savant français **Louis Pasteur**.
+
+### Les deux types de microbes
+
+| Type | Caractéristique |
+|---|---|
+| **Microbes pathogènes** | Donnent des **maladies** (ex. : microbe de la tuberculose) |
+| **Microbes non pathogènes** | Ne donnent **pas de maladies** (utiles ou neutres) |
+
+### Les 4 groupes de microbes
+
+| Groupe | Exemples |
+|---|---|
+| **Bactéries** | Staphylocoque, salmonelle |
+| **Champignons** | Candida, levures |
+| **Protozoaires** | Plasmodium (paludisme) |
+| **Virus** | Grippe, rougeole, COVID-19 |
+
+### 💡 Astuce CEPE
+Les microbes **pathogènes** sont dangereux → ils causent des maladies. Les microbes **non pathogènes** peuvent être utiles (ex. : les bactéries qui fabriquent le yaourt).
+
+### ✏️ Exercice
+1. Qu'est-ce qu'un microbe ?
+2. Qui a découvert les microbes ?
+3. Quelle est la différence entre un microbe pathogène et non pathogène ?
+4. Cite les 4 groupes de microbes.
+
+---
+
+## Leçon 14 : Les modes de déplacement chez les vertébrés
+**Date :** Mercredi 07 Janvier 2026
+
+### Définition
+Les **animaux vertébrés** sont des animaux qui possèdent une colonne vertébrale. Ils se déplacent de différentes manières.
+
+### Les modes de déplacement
+
+| Mode | Milieu | Animaux concernés |
+|---|---|---|
+| **Marcher / Courir / Sauter** | Sur le sol (en prenant appui) | Animaux à pattes : chien, lion, grenouille |
+| **Nager** | Dans l'eau | Animaux aquatiques : poissons, baleines |
+| **Voler** | Dans l'air | Oiseaux (grâce à leurs ailes) |
+| **Ramper** | Sur le sol | Vertébrés sans organes de déplacement : serpents |
+
+### Le cas des oiseaux
+Les oiseaux ont **deux modes de déplacement** :
+- Grâce à leurs **pattes** → ils **marchent**
+- Grâce à leurs **ailes** → ils **volent**
+
+### ⚠️ Piège à éviter
+Les vertébrés **sans organes de déplacement** (comme le serpent) ne peuvent pas marcher. Ils se déplacent en **rampant**.
+
+### ✏️ Exercice
+1. Cite 4 modes de déplacement chez les vertébrés.
+2. Comment se déplace un oiseau ? Explique.
+3. Comment se déplace un serpent ? Pourquoi ?
+
+---
+
+## Leçon 15 : Le système nerveux
+**Date :** Lundi 09 Février 2026
+
+### Définition
+Le **système nerveux** est l'ensemble des organes qui mettent le corps en contact avec le **milieu extérieur**. Il reçoit les informations et commande les réactions du corps.
+
+### Les composants du système nerveux
+
+| Composant | Description |
+|---|---|
+| **Les centres nerveux** | L'encéphale (cerveau + cervelet + bulbe rachidien) + la moelle épinière |
+| **Les nerfs** | Canaux qui transmettent les informations |
+
+### Les types de nerfs
+
+| Type de nerf | Origine | Rôle |
+|---|---|---|
+| **Nerfs crâniens** | Partent de l'**encéphale** | Relient le cerveau aux organes de la tête |
+| **Nerfs rachidiens** | Partent de la **moelle épinière** | Relient la moelle aux organes du corps |
+
+### Les nerfs selon leur fonction
+
+| Nerf | Rôle |
+|---|---|
+| **Nerf sensitif** | Conduit les **excitations** (informations sensorielles) vers le cerveau |
+| **Nerf moteur** | Transmet les **informations** du cerveau aux muscles et tissus (provoque le mouvement) |
+
+### 💡 Astuce CEPE
+**Sensitif → vers le cerveau** (on reçoit une info) / **Moteur → du cerveau vers les muscles** (on réagit, on bouge).
+
+### ✏️ Exercice
+1. Qu'est-ce que le système nerveux ?
+2. Cite les deux centres nerveux principaux.
+3. Quelle est la différence entre un nerf sensitif et un nerf moteur ?
+
+---
+
+## Leçon 16 : Sciences-Physique — Les caractéristiques d'une force
+**Date :** Octobre 2025
+
+### Définition
+Une **force** est une action exercée sur un objet qui peut le déplacer, le déformer ou l'arrêter.
+
+### Les 4 caractéristiques d'une force
+
+| Caractéristique | Description | Exemple |
+|---|---|---|
+| **Point d'application** | L'endroit où la force s'applique sur l'objet | Le pied qui frappe le ballon |
+| **Intensité** | La valeur (la puissance) de la force (mesurée en Newton, N) | Pousser fort ou doucement |
+| **Direction** | La ligne sur laquelle agit la force | Vers le haut, vers le bas, en diagonal |
+| **Sens** | La direction précise (aller ou retour) | Vers la gauche, vers la droite |
+
+### Représentation d'une force
+Une force se représente par une **flèche** (vecteur) :
+- La **longueur** de la flèche = l'intensité
+- La **direction** de la flèche = la direction
+- La **pointe** de la flèche = le sens
+- Le **point de départ** = le point d'application
+
+### 💡 Astuce CEPE
+Pour retenir les 4 caractéristiques : **P.I.D.S** = **P**oint d'application, **I**ntensité, **D**irection, **S**ens.
+
+### ✏️ Exercice
+1. Cite les 4 caractéristiques d'une force.
+2. Dans quelle unité mesure-t-on l'intensité d'une force ?
+3. Comment représente-t-on une force sur un schéma ?
+
+---
+
 *📖 Fin du cahier de cours CM2 — Bon courage pour le CEPE !*
 
 > **Rappel :** Révise chaque leçon régulièrement, fais les exercices, et relis tes rédactions modèles. La régularité est la clé du succès !
