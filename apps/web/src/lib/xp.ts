@@ -19,6 +19,12 @@ export const XP = {
   FLASHCARD_PASS:    2,
   FLASHCARD_PERFECT: 3,
   STREAK_DAILY:      5,
+  // Architecture pédagogique structurée (migr. 027)
+  LESSON_COURS:      3,
+  LESSON_RESUME:     2,
+  LESSON_QUIZ_PASS:  5,   // score >= 80
+  LESSON_VIDEO:      2,
+  CHAPTER_COMPLETE:  10,
 } as const
 
 // ── Badges ───────────────────────────────────────────────────────────────────
@@ -28,9 +34,19 @@ export const BADGES = {
   streak_7:          { label: 'Une semaine !',        icon: '💪', description: 'Révise 7 jours d\'affilée'       },
   flashcard_veteran: { label: 'Flashcard veteran',   icon: '🃏', description: '50 flashcards révisées'          },
   curious_mind:      { label: 'Esprit curieux',      icon: '🤔', description: '10 questions posées à Kelassi'   },
+  chapter_master:    { label: 'Maître de chapitre',  icon: '🎓', description: 'Premier chapitre complété à 100%' },
 } as const
 
 export type BadgeCode = keyof typeof BADGES
+
+/** Attribue un ou plusieurs badges de façon idempotente (upsert, ignore les doublons). */
+export async function awardBadges(userId: string, codes: BadgeCode[]): Promise<void> {
+  if (codes.length === 0) return
+  await getAdmin().from('user_badges').upsert(
+    codes.map((badge_code) => ({ user_id: userId, badge_code })),
+    { onConflict: 'user_id,badge_code', ignoreDuplicates: true }
+  )
+}
 
 // ── Niveaux ──────────────────────────────────────────────────────────────────
 export function computeLevel(xp: number): { level: number; label: string; nextXp: number } {

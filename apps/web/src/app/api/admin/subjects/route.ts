@@ -9,7 +9,8 @@ export async function GET(_req: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from('subjects')
-    .select('id, name, level, country_code, icon, documents(count), videos(count)')
+    .select('id, name, level, track_type, country_code, icon, documents(count), videos(count)')
+    .order('track_type', { ascending: true })
     .order('level', { ascending: true })
     .order('name', { ascending: true })
 
@@ -21,6 +22,7 @@ export async function GET(_req: NextRequest) {
     name: s['name'],
     level: s['level'],
     country_code: s['country_code'],
+    track_type: s['track_type'],
     icon: s['icon'],
     doc_count: (s['documents'] as { count: number }[] | null)?.[0]?.count ?? 0,
     video_count: (s['videos'] as { count: number }[] | null)?.[0]?.count ?? 0,
@@ -31,7 +33,8 @@ export async function GET(_req: NextRequest) {
 
 const schema = z.object({
   name: z.string().min(2).max(60),
-  level: z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  level: z.string().min(2).max(40).transform((v) => v.trim().toLowerCase().replace(/\s+/g, '_')),
+  track_type: z.enum(['generale', 'technique']).default('generale'),
   icon: z.string().max(8).optional(),
   country_code: z.string().length(2).default('CG'),
 })
@@ -51,9 +54,10 @@ export async function POST(req: NextRequest) {
       name: body.name.trim(),
       level: body.level,
       icon: body.icon ?? null,
+      track_type: body.track_type,
       country_code: body.country_code.toUpperCase(),
     })
-    .select('id, name, level, country_code, icon')
+    .select('id, name, level, track_type, country_code, icon')
     .single()
 
   if (error) {

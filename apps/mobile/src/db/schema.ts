@@ -1,8 +1,19 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export const schema = appSchema({
-  version: 1,
+  version: 2,
   tables: [
+    // Cache offline des leçons (résumé / cours) — architecture structurée (migr. 027).
+    // Table dormante tant que WatermelonDB n'est pas rebranché au démarrage.
+    tableSchema({
+      name: 'lesson_cache',
+      columns: [
+        { name: 'lesson_id', type: 'string', isIndexed: true },
+        { name: 'type', type: 'string' },
+        { name: 'content', type: 'string' },
+        { name: 'cached_at', type: 'number' },
+      ],
+    }),
     tableSchema({
       name: 'subjects',
       columns: [

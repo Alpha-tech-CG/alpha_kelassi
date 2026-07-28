@@ -1,10 +1,13 @@
 import { Database } from '@nozbe/watermelondb'
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
 import { schema } from './schema'
+import { migrations } from './migrations'
 import { DocumentModel } from './models/Document'
+import { LessonCacheModel } from './models/LessonCache'
 
 const adapter = new SQLiteAdapter({
   schema,
+  migrations,
   dbName: 'kelassi',
   jsi: true,
   onSetUpError: (error) => {
@@ -14,7 +17,7 @@ const adapter = new SQLiteAdapter({
 
 export const database = new Database({
   adapter,
-  modelClasses: [DocumentModel],
+  modelClasses: [DocumentModel, LessonCacheModel],
 })
 
-export { DocumentModel }
+export { DocumentModel, LessonCacheModel }

@@ -7,8 +7,10 @@ import { authRouter } from './routes/auth.js'
 import { billingRouter } from './routes/billing.js'
 import { webhooksRouter } from './routes/webhooks.js'
 import { subjectsRouter } from './routes/subjects.js'
+import { curriculumRouter } from './routes/curriculum.js'
 import { documentsRouter } from './routes/documents.js'
 import { adminDocumentsRouter } from './routes/admin/documents.js'
+import { adminCurriculumRouter } from './routes/admin/curriculum.js'
 import { aiRouter } from './routes/ai.js'
 import { flashcardsRouter } from './routes/flashcards.js'
 import { quizRouter } from './routes/quiz.js'
@@ -64,8 +66,10 @@ app.get('/metrics', (c) => {
 app.route('/api/auth', authRouter)
 app.route('/api/billing', billingRouter)
 app.route('/api/subjects', subjectsRouter)
+app.route('/api/curriculum', curriculumRouter)
 app.route('/api/documents', documentsRouter)
 app.route('/api/admin/documents', adminDocumentsRouter)
+app.route('/api/admin/curriculum', adminCurriculumRouter)
 app.route('/api/ai', aiRouter)
 app.route('/api/flashcards', flashcardsRouter)
 app.route('/api/quiz', quizRouter)

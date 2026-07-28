@@ -187,12 +187,25 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
     <div className="max-w-5xl mx-auto px-4 py-8">
 
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-3xl font-black text-gray-900">Cours & Révisions</h1>
         <p className="text-gray-400 mt-1 text-sm">
           {sortedSubjects.length} matière{sortedSubjects.length !== 1 ? 's' : ''} disponible{sortedSubjects.length !== 1 ? 's' : ''}
         </p>
       </div>
+
+      {/* Entrée parcours structuré (filière → série → chapitres → 4 blocs) */}
+      <Link
+        href="/cours/matiere"
+        className="flex items-center gap-3 mb-8 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-5 py-4 hover:border-blue-400 hover:shadow-md transition-all"
+      >
+        <span className="text-2xl">🎓</span>
+        <div className="flex-1 min-w-0">
+          <p className="font-bold text-gray-900 text-sm">Parcours structuré <span className="ml-1 text-[10px] uppercase tracking-wide bg-blue-600 text-white px-1.5 py-0.5 rounded-full align-middle">Nouveau</span></p>
+          <p className="text-xs text-gray-500">Filière → série → chapitres → cours, résumé, quiz & vidéo</p>
+        </div>
+        <span className="text-blue-600 font-bold">→</span>
+      </Link>
 
       {/* Onglets niveau */}
       <div className="flex gap-2 mb-8 flex-wrap">

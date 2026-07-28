@@ -57,3 +57,5 @@ apps/mobile/ios/
 
 # Maquettes de design (référence locale, pas du code)
 stitch_*.zip
+
+.vercel

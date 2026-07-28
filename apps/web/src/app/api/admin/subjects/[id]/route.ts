@@ -5,6 +5,7 @@ import { z } from 'zod'
 const patchSchema = z.object({
   name: z.string().min(2).max(60).optional(),
   icon: z.string().max(8).nullable().optional(),
+  track_type: z.enum(['generale', 'technique']).optional(),
 })
 
 /** PATCH /api/admin/subjects/:id — renomme / change l'icône d'une matière */
@@ -20,6 +21,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const patch: Record<string, unknown> = {}
   if (body.name !== undefined) patch['name'] = body.name.trim()
   if (body.icon !== undefined) patch['icon'] = body.icon
+  if (body.track_type !== undefined) patch['track_type'] = body.track_type
   if (Object.keys(patch).length === 0) {
     return NextResponse.json({ error: 'Rien à modifier' }, { status: 400 })
   }
@@ -28,7 +30,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     .from('subjects')
     .update(patch)
     .eq('id', id)
-    .select('id, name, level, country_code, icon')
+    .select('id, name, level, track_type, country_code, icon')
     .single()
 
   if (error) {
