@@ -171,7 +171,7 @@ router.post('/chat', async (c) => {
 
   // 7. Streaming Gemini
   const stream = await getGenai().models.generateContentStream({
-    model: 'gemini-1.5-flash',
+    model: 'gemini-2.5-flash',
     config: { systemInstruction: SYSTEM_PROMPT },
     contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
   })

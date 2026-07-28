@@ -134,7 +134,7 @@ Contenu du cours :
 ${context}`
 
     const response = await getGenai().models.generateContent({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
     })
     const raw = response.text ?? ''

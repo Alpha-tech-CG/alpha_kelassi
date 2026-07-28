@@ -73,6 +73,12 @@ export default function ChapitreScreen() {
   }, [chapterId])
 
   async function complete(l: LessonVM) {
+    if (l.type === 'cours') {
+      const qz = lessons.filter((x) => x.type === 'quiz')
+      if (qz.length > 0 && !qz.every((q) => done[q.id]?.completed)) {
+        setFlash("Valide d'abord le quiz du chapitre."); setTimeout(() => setFlash(null), 3000); return
+      }
+    }
     if (!isOnline) { setFlash('Reconnecte-toi pour valider ta progression.'); setTimeout(() => setFlash(null), 3000); return }
     setBusy(l.id)
     try {
@@ -99,6 +105,9 @@ export default function ChapitreScreen() {
 
   const visibleTabs = TABS.filter((x) => lessons.some((l) => l.type === x.type))
   const items = lessons.filter((l) => l.type === tab).sort((a, b) => a.order_index - b.order_index)
+  // Un cours ne peut être marqué "lu" qu'une fois le(s) quiz du chapitre validé(s)
+  const quizLessons = lessons.filter((l) => l.type === 'quiz')
+  const quizzesValidated = quizLessons.length === 0 || quizLessons.every((q) => done[q.id]?.completed)
 
   return (
     <View style={styles.container}>
@@ -158,6 +167,10 @@ export default function ChapitreScreen() {
 
                   {isDone ? (
                     <Text style={styles.doneText}>✅ Complété{l.type === 'quiz' && done[l.id]?.score != null ? ` — ${done[l.id]?.score}%` : ''}</Text>
+                  ) : (l.type === 'cours' && !quizzesValidated) ? (
+                    <View style={styles.gated}>
+                      <Text style={styles.gatedText}>🔒 Valide d'abord le quiz du chapitre pour marquer le cours comme lu.</Text>
+                    </View>
                   ) : (
                     <TouchableOpacity style={[styles.cta, (busy === l.id || fromCache) && styles.ctaDisabled]} disabled={busy === l.id || fromCache} onPress={() => complete(l)}>
                       <Text style={styles.ctaText}>
@@ -204,6 +217,8 @@ const styles = StyleSheet.create({
   ctaDisabled: { opacity: 0.5 },
   ctaText: { color: '#fff', fontWeight: '800', fontSize: 15 },
   doneText: { marginTop: 14, color: '#16a34a', fontWeight: '800', fontSize: 14 },
+  gated: { marginTop: 14, backgroundColor: '#FEF3C7', borderRadius: radius.md, padding: 12 },
+  gatedText: { color: '#92400E', fontWeight: '600', fontSize: 13, lineHeight: 18 },
   empty: { alignItems: 'center', paddingTop: 60 },
   emptyText: { fontSize: 14, color: colors.textMuted },
   toast: { position: 'absolute', bottom: 30, alignSelf: 'center', backgroundColor: '#111827', paddingHorizontal: 18, paddingVertical: 10, borderRadius: radius.full },

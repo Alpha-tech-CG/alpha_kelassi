@@ -29,31 +29,47 @@ export default function MatieresScreen() {
       let sq = supabase.from('subjects').select('id, name, level, icon').order('name')
       if (level) sq = sq.eq('level', level)
       if (track) sq = sq.eq('track_type', track)
-      const [{ data: subs }, docs, quiz, prog] = await Promise.all([
-        sq,
-        supabase.from('courses').select('subject_id').then((r) => r.data ?? []),
-        supabase.from('quizzes').select('subject_id').then((r) => r.data ?? []),
-        (async () => {
-          const { data: { user } } = await supabase.auth.getUser()
-          if (!user) return []
-          const { data } = await supabase.from('user_progress').select('subject_id, score_avg').eq('user_id', user.id)
-          return data ?? []
-        })(),
-      ])
+      const { data: subs } = await sq
+      const rows = (subs ?? []) as any[]
+      const subjectIds = rows.map((s) => s.id)
 
-      const lessonCount = new Map<string, number>()
-      for (const d of docs as { subject_id: string }[]) lessonCount.set(d.subject_id, (lessonCount.get(d.subject_id) ?? 0) + 1)
+      // Contenu structuré (027) : chapitres → leçons → progression réelle
+      const { data: { user } } = await supabase.auth.getUser()
+      const chapters = subjectIds.length
+        ? ((await supabase.from('chapters').select('id, subject_id').in('subject_id', subjectIds)).data ?? []) as any[]
+        : []
+      const chapterIds = chapters.map((c) => c.id)
+      const lessons = chapterIds.length
+        ? ((await supabase.from('lessons').select('id, chapter_id, type').in('chapter_id', chapterIds)).data ?? []) as any[]
+        : []
+      const lessonIds = lessons.map((l) => l.id)
+      const prog = (user && lessonIds.length)
+        ? ((await supabase.from('lesson_progress').select('lesson_id, completed').eq('user_id', user.id).in('lesson_id', lessonIds)).data ?? []) as any[]
+        : []
+      const doneSet = new Set(prog.filter((p) => p.completed).map((p) => p.lesson_id))
+      const chapToSubject = new Map(chapters.map((c) => [c.id, c.subject_id]))
+
+      const chapCount = new Map<string, number>()
+      for (const c of chapters) chapCount.set(c.subject_id, (chapCount.get(c.subject_id) ?? 0) + 1)
       const quizCount = new Map<string, number>()
-      for (const q of quiz as { subject_id: string }[]) quizCount.set(q.subject_id, (quizCount.get(q.subject_id) ?? 0) + 1)
-      const progMap = new Map<string, number>()
-      for (const p of prog as { subject_id: string; score_avg: number | null }[]) progMap.set(p.subject_id, Math.round((p.score_avg ?? 0) * 100))
+      const totalC = new Map<string, number>()
+      const doneC = new Map<string, number>()
+      for (const l of lessons) {
+        const sid = chapToSubject.get(l.chapter_id); if (!sid) continue
+        totalC.set(sid, (totalC.get(sid) ?? 0) + 1)
+        if (l.type === 'quiz') quizCount.set(sid, (quizCount.get(sid) ?? 0) + 1)
+        if (doneSet.has(l.id)) doneC.set(sid, (doneC.get(sid) ?? 0) + 1)
+      }
 
-      setSubjects((subs ?? []).map((s: any) => ({
-        id: s.id, name: s.name, level: s.level, icon: s.icon,
-        lessons: lessonCount.get(s.id) ?? 0,
-        quizzes: quizCount.get(s.id) ?? 0,
-        progress: Math.min(progMap.get(s.id) ?? 0, 100),
-      })))
+      setSubjects(rows.map((s) => {
+        const t = totalC.get(s.id) ?? 0
+        return {
+          id: s.id, name: s.name, level: s.level, icon: s.icon,
+          lessons: chapCount.get(s.id) ?? 0,
+          quizzes: quizCount.get(s.id) ?? 0,
+          progress: t ? Math.round(((doneC.get(s.id) ?? 0) / t) * 100) : 0,
+        }
+      }))
       setLoading(false)
     }
     load()
