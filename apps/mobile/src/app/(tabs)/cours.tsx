@@ -17,7 +17,7 @@ interface Subject {
 
 export default function MatieresScreen() {
   const router = useRouter()
-  const { level, ready } = useLevel()
+  const { level, track, ready } = useLevel()
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -25,9 +25,10 @@ export default function MatieresScreen() {
   useEffect(() => {
     if (!ready) return
     async function load() {
-      // Matières du niveau de l'élève uniquement
+      // Matières du parcours ET de la filière de l'élève uniquement
       let sq = supabase.from('subjects').select('id, name, level, icon').order('name')
       if (level) sq = sq.eq('level', level)
+      if (track) sq = sq.eq('track_type', track)
       const [{ data: subs }, docs, quiz, prog] = await Promise.all([
         sq,
         supabase.from('courses').select('subject_id').then((r) => r.data ?? []),
@@ -56,7 +57,7 @@ export default function MatieresScreen() {
       setLoading(false)
     }
     load()
-  }, [ready, level])
+  }, [ready, level, track])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()

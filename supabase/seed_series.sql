@@ -9,6 +9,9 @@
 -- officielle des BAC techniques sera figée).
 
 insert into public.series (code, label, track, level, country_code) values
+  -- ── Examens généraux (primaire / collège) ──
+  ('CEPE', 'CEPE — École primaire',   'generale', 'cepe', 'CG'),
+  ('BEPC', 'BEPC — Collège (3ème)',   'generale', 'bepc', 'CG'),
   -- ── BAC Général ──
   ('A',  'Série A — Lettres et Sciences Humaines',        'generale',  'bac_a', 'CG'),
   ('C',  'Série C — Mathématiques et Sciences Physiques',  'generale',  'bac_c', 'CG'),
