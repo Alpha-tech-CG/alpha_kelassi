@@ -87,10 +87,10 @@ export default function ParcoursSubjectScreen() {
           <TouchableOpacity key={ch.id} style={styles.card} activeOpacity={0.85} onPress={() => router.push(`/chapitre/${ch.id}` as any)}>
             <View style={styles.cardTop}>
               <Text style={styles.cardTitle} numberOfLines={2}>{ch.title}</Text>
-              <Text style={[styles.pct, { color: accent }]}>{ch.pct}%</Text>
+              <Text style={[styles.pct, { color: colors.primary }]}>{ch.pct}%</Text>
             </View>
             {ch.description ? <Text style={styles.cardDesc} numberOfLines={2}>{ch.description}</Text> : null}
-            <View style={styles.track}><View style={[styles.fill, { width: `${ch.pct}%`, backgroundColor: accent }]} /></View>
+            <View style={styles.track}><View style={[styles.fill, { width: `${ch.pct}%`, backgroundColor: colors.primary }]} /></View>
             <View style={styles.icons}>
               {BLOCKS.map((b) => {
                 const done = ch.typeHas[b.type] && ch.typeDone[b.type]

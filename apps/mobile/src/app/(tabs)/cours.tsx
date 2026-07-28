@@ -97,7 +97,7 @@ export default function MatieresScreen() {
                 key={s.id}
                 activeOpacity={0.85}
                 style={styles.card}
-                onPress={() => router.push(`/matiere/${s.id}` as any)}
+                onPress={() => router.push(`/parcours/${s.id}` as any)}
               >
                 <View style={[styles.accent, { backgroundColor: accent }]} />
                 <View style={styles.cardBody}>
@@ -115,10 +115,10 @@ export default function MatieresScreen() {
 
                   <View style={styles.progressRow}>
                     <Text style={styles.progressLabel}>Progression</Text>
-                    <Text style={[styles.progressPct, { color: accent }]}>{s.progress}%</Text>
+                    <Text style={[styles.progressPct, { color: colors.primary }]}>{s.progress}%</Text>
                   </View>
                   <View style={styles.progressTrack}>
-                    <View style={[styles.progressFill, { width: `${s.progress}%`, backgroundColor: accent }]} />
+                    <View style={[styles.progressFill, { width: `${s.progress}%`, backgroundColor: colors.primary }]} />
                   </View>
                 </View>
               </TouchableOpacity>
