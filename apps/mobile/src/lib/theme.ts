@@ -34,6 +34,7 @@ export const cardShadow = {
 } as const
 
 export const LEVEL_LABEL: Record<string, string> = {
+  cepe: 'CEPE',
   bepc: 'BEPC',
   bac_a: 'BAC A',
   bac_c: 'BAC C',

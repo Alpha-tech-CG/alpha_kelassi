@@ -6,6 +6,7 @@ import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow } from '../../lib/theme'
 import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
+import { LessonContent } from '../../components/LessonContent'
 
 type LessonType = 'cours' | 'resume' | 'quiz' | 'video'
 interface LessonVM {
@@ -131,7 +132,7 @@ export default function ChapitreScreen() {
                   </View>
 
                   {(l.type === 'cours' || l.type === 'resume') && l.content ? (
-                    <Text style={styles.body}>{l.content}</Text>
+                    <View style={{ marginTop: 6 }}><LessonContent content={l.content} /></View>
                   ) : null}
 
                   {l.type === 'video' && l.video_url ? (
@@ -142,7 +143,7 @@ export default function ChapitreScreen() {
 
                   {l.type === 'quiz' ? (
                     <View style={styles.quizRow}>
-                      {l.content ? <Text style={styles.body}>{l.content}</Text> : null}
+                      {l.content ? <LessonContent content={l.content} /> : null}
                       {!isDone && (
                         <View style={styles.scoreRow}>
                           <Text style={styles.scoreLabel}>Ton score :</Text>
