@@ -1,27 +1,28 @@
 // Système de design « L'Élan National » — tokens exacts des maquettes Stitch.
 // Thème vert Congo, cartes blanches, badges de niveau, accents par matière.
 
-// Palette EXACTE du design final Alpha Kelassi (maquettes « designe final »).
+// Palette EXACTE du logo Cognix (bleu / blanc, fond navy).
 export const colors = {
-  primary: '#0F8F4F',            // primary
-  primaryContainer: '#0B6B3A',   // secondary
-  onPrimary: '#FFFFFF',          // primary-foreground
-  primaryTint: '#EAF5EC',        // fond vert très clair (icônes matières, pistes)
+  primary: '#1E74E8',            // bleu Cognix (C du logo)
+  primaryContainer: '#145CC0',   // bleu foncé
+  onPrimary: '#FFFFFF',
+  primaryTint: '#E7F0FD',        // bleu très clair (icônes, pistes)
 
-  background: '#F7FAF8',         // background
-  card: '#FFFFFF',               // card
-  cardBorder: '#E2E8F0',         // border
+  background: '#F4F8FE',         // fond blanc bleuté
+  card: '#FFFFFF',
+  cardBorder: '#DCE6F5',
 
-  text: '#1F2A24',               // foreground
-  textMuted: '#6D7A72',          // muted-foreground
-  outline: '#6D7A72',
-  outlineVariant: '#C7D2CC',
+  text: '#0F1B2D',               // navy (texte)
+  textMuted: '#5B6B82',
+  outline: '#5B6B82',
+  outlineVariant: '#C3D2E8',
 
-  yellow: '#F7D64A',             // accent
-  onYellow: '#1F2A24',           // accent-foreground
+  navy: '#0A0F1C',               // fond du logo / splash
+  yellow: '#35C0F0',             // accent = cyan Cognix (nom conservé pour compat)
+  onYellow: '#0A2A3D',           // texte sur accent cyan
   red: '#E53935',                // destructive
   onRed: '#FFFFFF',
-  blue: '#2980B9',               // chart-2
+  blue: '#1E74E8',
 } as const
 
 export const radius = { sm: 8, md: 12, lg: 16, xl: 24, full: 9999 } as const

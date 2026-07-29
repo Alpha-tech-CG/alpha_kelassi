@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Kelassi",
+    "name": "Cognix",
     "slug": "kelassi",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
@@ -9,9 +9,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/cognix-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0F8F4F"
+      "backgroundColor": "#0A0F1C"
     },
     "ios": {
       "supportsTablet": false,

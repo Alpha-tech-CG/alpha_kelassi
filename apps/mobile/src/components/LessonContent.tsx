@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import { colors, fonts } from '../lib/theme'
 
 /**
- * Rendu Markdown léger pour les leçons (design final Alpha Kelassi).
+ * Rendu Markdown léger pour les leçons (design final Cognix).
  * Titres → gras, **gras**, listes, tableaux, images, et encarts colorés
  * pour « Astuce CEPE » (jaune), « Piège à éviter » (rouge), « Exercice » (vert).
  */
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   calloutTitle: { fontFamily: fonts.heading, fontSize: 13, color: colors.text, textTransform: 'uppercase', letterSpacing: 0.5 },
   astuce: { backgroundColor: '#FEF9E7', borderColor: '#F7D64A66' },
   piege: { backgroundColor: '#FDECEA', borderColor: '#E5393566' },
-  exo: { backgroundColor: '#EAF5EC', borderColor: '#0F8F4F44' },
+  exo: { backgroundColor: '#EAF5EC', borderColor: '#1E74E844' },
   badgeAstuce: { backgroundColor: colors.yellow },
   badgePiege: { backgroundColor: colors.red },
   badgeExo: { backgroundColor: colors.primary },

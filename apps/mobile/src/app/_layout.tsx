@@ -31,6 +31,7 @@ export default function RootLayout() {
   })
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
+  const [minSplash, setMinSplash] = useState(false)  // logo Cognix visible ≥ 3s
   const segments = useSegments()
   const router = useRouter()
   const navState = useRootNavigationState()
@@ -43,7 +44,8 @@ export default function RootLayout() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s)
     })
-    return () => subscription.unsubscribe()
+    const t = setTimeout(() => setMinSplash(true), 3000)
+    return () => { subscription.unsubscribe(); clearTimeout(t) }
   }, [])
 
   // Redirection selon l'état d'auth — UNIQUEMENT une fois la session connue ET le
@@ -67,7 +69,7 @@ export default function RootLayout() {
     }
   }, [ready, navState?.key, session, segments, router])
 
-  if (!fontsLoaded || !ready) return <Splash />
+  if (!fontsLoaded || !ready || !minSplash) return <Splash />
 
   return (
     <>
@@ -79,7 +81,7 @@ export default function RootLayout() {
         <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
       </Stack>
-      <StatusBar style="dark" backgroundColor="#F7FAF8" />
+      <StatusBar style="dark" backgroundColor="#F4F8FE" />
     </>
   )
 }

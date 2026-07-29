@@ -140,11 +140,11 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {/* CTA Kelassi */}
+        {/* CTA Cognix */}
         <TouchableOpacity style={styles.cta} onPress={() => router.push('/(tabs)/tuteur')}>
           <View style={{ flex: 1 }}>
             <Text style={styles.ctaTitle}>Besoin d'aide ?</Text>
-            <Text style={styles.ctaSub}>Demande à Kelassi, ton tuteur IA !</Text>
+            <Text style={styles.ctaSub}>Demande à Cognix, ton tuteur IA !</Text>
             <View style={styles.ctaBtn}><Text style={styles.ctaBtnText}>PARLER À KELASSI →</Text></View>
           </View>
           <Image source={require('../../../assets/kelassi-mascot.png')} style={{ width: 92, height: 92 }} resizeMode="contain" />

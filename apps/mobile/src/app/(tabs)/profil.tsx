@@ -42,7 +42,7 @@ export default function ProfilScreen() {
     if (user) await supabase.from('users').update({ whatsapp_opt_in: value }).eq('id', user.id)
   }
   async function share() {
-    await Share.share({ message: 'Je révise pour mon examen d\'État avec Kelassi 🎓 — cours, QCM et IA. Rejoins-moi !' }).catch(() => null)
+    await Share.share({ message: 'Je révise pour mon examen d\'État avec Cognix 🎓 — cours, QCM et IA. Rejoins-moi !' }).catch(() => null)
   }
   function signOut() {
     Alert.alert('Déconnexion', 'Voulez-vous vous déconnecter ?', [

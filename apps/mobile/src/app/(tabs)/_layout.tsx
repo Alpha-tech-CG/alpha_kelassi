@@ -38,7 +38,7 @@ export default function TabsLayout() {
       >
         <Tabs.Screen name="index"  options={{ title: 'Accueil', tabBarIcon: ({ color }) => <SolarIcon name="home" size={26} color={color} /> }} />
         <Tabs.Screen name="cours"  options={{ title: 'Cours',   tabBarIcon: ({ color }) => <SolarIcon name="play" size={26} color={color} /> }} />
-        <Tabs.Screen name="tuteur" options={{ title: 'Kelassi', tabBarIcon: ({ color }) => <SolarIcon name="chat" size={26} color={color} /> }} />
+        <Tabs.Screen name="tuteur" options={{ title: 'Cognix', tabBarIcon: ({ color }) => <SolarIcon name="chat" size={26} color={color} /> }} />
         <Tabs.Screen name="profil" options={{ title: 'Profil',  tabBarIcon: ({ color }) => <SolarIcon name="user" size={26} color={color} /> }} />
         {/* Examens : accessible via le raccourci Accueil, masqué de la barre (design = 4 onglets) */}
         <Tabs.Screen name="examens" options={{ href: null }} />

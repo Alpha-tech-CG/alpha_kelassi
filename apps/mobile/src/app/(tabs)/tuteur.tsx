@@ -166,7 +166,7 @@ export default function TuteurScreen() {
       <View style={styles.header}>
         <View style={styles.avatar}><Text style={styles.avatarText}>🤖</Text></View>
         <View>
-          <Text style={styles.headerTitle}>Kelassi IA</Text>
+          <Text style={styles.headerTitle}>Cognix IA</Text>
           <Text style={styles.headerSub}>Tuteur · Méthode Feynman</Text>
         </View>
         {quotaRemaining !== null && (
@@ -188,7 +188,7 @@ export default function TuteurScreen() {
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyIcon}>🤖</Text>
-            <Text style={styles.emptyTitle}>Bonjour ! Je suis Kelassi</Text>
+            <Text style={styles.emptyTitle}>Bonjour ! Je suis Cognix</Text>
             <Text style={styles.emptySub}>Pose-moi n'importe quelle question sur tes cours.</Text>
             <View style={styles.suggestions}>
               {SUGGESTIONS.map((s) => (
@@ -243,9 +243,9 @@ export default function TuteurScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F7FAF8' },
+  container: { flex: 1, backgroundColor: '#F4F8FE' },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#fff', paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#EFF6EB' },
-  avatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#0F8F4F', alignItems: 'center', justifyContent: 'center' },
+  avatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#1E74E8', alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontSize: 18 },
   headerTitle: { fontSize: 15, fontWeight: '700', color: '#171D17' },
   headerSub: { fontSize: 11, color: '#3E4A3E' },
@@ -264,16 +264,16 @@ const styles = StyleSheet.create({
   suggestionText: { fontSize: 13, color: '#171D17' },
   msgRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
   msgRowUser: { justifyContent: 'flex-end' },
-  msgAvatar: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#0F8F4F', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  msgAvatar: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#1E74E8', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   bubble: { maxWidth: '80%', paddingHorizontal: 14, paddingVertical: 10, borderRadius: 18 },
-  bubbleUser: { backgroundColor: '#0F8F4F', borderBottomRightRadius: 4 },
+  bubbleUser: { backgroundColor: '#1E74E8', borderBottomRightRadius: 4 },
   bubbleAssistant: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#EFF6EB', borderBottomLeftRadius: 4 },
   bubbleText: { fontSize: 14, color: '#171D17', lineHeight: 20 },
   bubbleTextUser: { color: '#fff' },
   cursor: { color: '#EFF6EB' },
   inputBar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#EFF6EB', padding: 12 },
-  input: { flex: 1, backgroundColor: '#F7FAF8', borderWidth: 1, borderColor: '#E3EADF', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 10, fontSize: 14, color: '#171D17', maxHeight: 120 },
-  sendBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#0F8F4F', alignItems: 'center', justifyContent: 'center' },
+  input: { flex: 1, backgroundColor: '#F4F8FE', borderWidth: 1, borderColor: '#E3EADF', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 10, fontSize: 14, color: '#171D17', maxHeight: 120 },
+  sendBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#1E74E8', alignItems: 'center', justifyContent: 'center' },
   sendBtnDisabled: { opacity: 0.4 },
   sendBtnText: { color: '#fff', fontSize: 18, fontWeight: '700' },
 })
