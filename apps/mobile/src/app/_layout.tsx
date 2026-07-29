@@ -8,6 +8,7 @@ import {
 } from '@expo-google-fonts/nunito'
 import { Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins'
 import { supabase } from '../lib/supabase'
+import { Splash } from '../components/Splash'
 import type { Session } from '@supabase/supabase-js'
 
 // Police par défaut de toute l'app = Nunito (design final). Les titres passent
@@ -66,7 +67,7 @@ export default function RootLayout() {
     }
   }, [ready, navState?.key, session, segments, router])
 
-  if (!fontsLoaded) return null
+  if (!fontsLoaded || !ready) return <Splash />
 
   return (
     <>

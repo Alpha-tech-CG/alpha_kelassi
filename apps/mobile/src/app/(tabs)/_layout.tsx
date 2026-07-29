@@ -2,6 +2,10 @@ import { Tabs } from 'expo-router'
 import { View, Text, StyleSheet } from 'react-native'
 import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 import { colors } from '../../lib/theme'
+import HomeIcon from '../../icons/home-smile-bold-duotone.svg'
+import PlayIcon from '../../icons/play-bold-duotone.svg'
+import ChatIcon from '../../icons/chat-round-dots-bold-duotone.svg'
+import UserIcon from '../../icons/user-bold-duotone.svg'
 
 function OfflineBanner() {
   const { isOnline } = useNetworkStatus()
@@ -35,10 +39,10 @@ export default function TabsLayout() {
           headerShown: false,
         }}
       >
-        <Tabs.Screen name="index"  options={{ title: 'Accueil', tabBarIcon: () => <Text style={{ fontSize: 22 }}>🏠</Text> }} />
-        <Tabs.Screen name="cours"  options={{ title: 'Cours',   tabBarIcon: () => <Text style={{ fontSize: 22 }}>📖</Text> }} />
-        <Tabs.Screen name="tuteur" options={{ title: 'Kelassi', tabBarIcon: () => <Text style={{ fontSize: 22 }}>💬</Text> }} />
-        <Tabs.Screen name="profil" options={{ title: 'Profil',  tabBarIcon: () => <Text style={{ fontSize: 22 }}>👤</Text> }} />
+        <Tabs.Screen name="index"  options={{ title: 'Accueil', tabBarIcon: ({ color }) => <HomeIcon width={26} height={26} color={color} /> }} />
+        <Tabs.Screen name="cours"  options={{ title: 'Cours',   tabBarIcon: ({ color }) => <PlayIcon width={26} height={26} color={color} /> }} />
+        <Tabs.Screen name="tuteur" options={{ title: 'Kelassi', tabBarIcon: ({ color }) => <ChatIcon width={26} height={26} color={color} /> }} />
+        <Tabs.Screen name="profil" options={{ title: 'Profil',  tabBarIcon: ({ color }) => <UserIcon width={26} height={26} color={color} /> }} />
         {/* Examens : accessible via le raccourci Accueil, masqué de la barre (design = 4 onglets) */}
         <Tabs.Screen name="examens" options={{ href: null }} />
       </Tabs>
