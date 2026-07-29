@@ -2,10 +2,7 @@ import { Tabs } from 'expo-router'
 import { View, Text, StyleSheet } from 'react-native'
 import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 import { colors } from '../../lib/theme'
-import HomeIcon from '../../icons/home-smile-bold-duotone.svg'
-import PlayIcon from '../../icons/play-bold-duotone.svg'
-import ChatIcon from '../../icons/chat-round-dots-bold-duotone.svg'
-import UserIcon from '../../icons/user-bold-duotone.svg'
+import { SolarIcon } from '../../icons/solar'
 
 function OfflineBanner() {
   const { isOnline } = useNetworkStatus()
@@ -39,10 +36,10 @@ export default function TabsLayout() {
           headerShown: false,
         }}
       >
-        <Tabs.Screen name="index"  options={{ title: 'Accueil', tabBarIcon: ({ color }) => <HomeIcon width={26} height={26} color={color} /> }} />
-        <Tabs.Screen name="cours"  options={{ title: 'Cours',   tabBarIcon: ({ color }) => <PlayIcon width={26} height={26} color={color} /> }} />
-        <Tabs.Screen name="tuteur" options={{ title: 'Kelassi', tabBarIcon: ({ color }) => <ChatIcon width={26} height={26} color={color} /> }} />
-        <Tabs.Screen name="profil" options={{ title: 'Profil',  tabBarIcon: ({ color }) => <UserIcon width={26} height={26} color={color} /> }} />
+        <Tabs.Screen name="index"  options={{ title: 'Accueil', tabBarIcon: ({ color }) => <SolarIcon name="home" size={26} color={color} /> }} />
+        <Tabs.Screen name="cours"  options={{ title: 'Cours',   tabBarIcon: ({ color }) => <SolarIcon name="play" size={26} color={color} /> }} />
+        <Tabs.Screen name="tuteur" options={{ title: 'Kelassi', tabBarIcon: ({ color }) => <SolarIcon name="chat" size={26} color={color} /> }} />
+        <Tabs.Screen name="profil" options={{ title: 'Profil',  tabBarIcon: ({ color }) => <SolarIcon name="user" size={26} color={color} /> }} />
         {/* Examens : accessible via le raccourci Accueil, masqué de la barre (design = 4 onglets) */}
         <Tabs.Screen name="examens" options={{ href: null }} />
       </Tabs>

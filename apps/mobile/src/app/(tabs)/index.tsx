@@ -4,21 +4,15 @@ import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL, subjectIcon, fonts } from '../../lib/theme'
-import ChatIcon from '../../icons/chat-round-dots-bold-duotone.svg'
-import CardIcon from '../../icons/card-2-bold-duotone.svg'
-import DocIcon from '../../icons/document-text-bold-duotone.svg'
-import PlayCircleIcon from '../../icons/play-circle-bold-duotone.svg'
-import FireIcon from '../../icons/fire-bold.svg'
-import StarIcon from '../../icons/star-bold.svg'
-import BellIcon from '../../icons/bell-bing-bold-duotone.svg'
+import { SolarIcon } from '../../icons/solar'
 
 interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
 
 const ACTIONS = [
-  { label: 'Tuteur',  Icon: ChatIcon,       route: '/(tabs)/tuteur' },
-  { label: 'Cards',   Icon: CardIcon,       route: '/flashcards' },
-  { label: 'Examens', Icon: DocIcon,        route: '/(tabs)/examens' },
-  { label: 'Vidéos',  Icon: PlayCircleIcon, route: '/videos' },
+  { label: 'Tuteur',  icon: 'chat',       route: '/(tabs)/tuteur' },
+  { label: 'Cards',   icon: 'card',       route: '/flashcards' },
+  { label: 'Examens', icon: 'document',   route: '/(tabs)/examens' },
+  { label: 'Vidéos',  icon: 'playCircle', route: '/videos' },
 ]
 
 export default function HomeScreen() {
@@ -94,12 +88,12 @@ export default function HomeScreen() {
             <View style={{ flex: 1 }}>
               <Text style={styles.hello} numberOfLines={1}>Salut, {name} ! 👋</Text>
               <View style={styles.chips}>
-                <View style={styles.chip}><FireIcon width={12} height={12} color="#FDBA31" /><Text style={styles.chipText}>{streak} Jours</Text></View>
-                <View style={styles.chip}><StarIcon width={12} height={12} color={colors.yellow} /><Text style={styles.chipText}>{xp.toLocaleString('fr-FR')} XP</Text></View>
+                <View style={styles.chip}><SolarIcon name="fire" size={12} color="#FDBA31" /><Text style={styles.chipText}>{streak} Jours</Text></View>
+                <View style={styles.chip}><SolarIcon name="star" size={12} color={colors.yellow} /><Text style={styles.chipText}>{xp.toLocaleString('fr-FR')} XP</Text></View>
               </View>
             </View>
           </View>
-          <TouchableOpacity style={styles.bell}><BellIcon width={22} height={22} color="#fff" /></TouchableOpacity>
+          <TouchableOpacity style={styles.bell}><SolarIcon name="bell" size={22} color="#fff" /></TouchableOpacity>
         </View>
 
         {/* Carte progression (chevauche le header) */}
@@ -118,7 +112,7 @@ export default function HomeScreen() {
         <View style={styles.actions}>
           {ACTIONS.map((a) => (
             <TouchableOpacity key={a.label} style={styles.action} onPress={() => router.push(a.route as any)}>
-              <View style={styles.actionBox}><a.Icon width={26} height={26} color={colors.primary} /></View>
+              <View style={styles.actionBox}><SolarIcon name={a.icon} size={26} color={colors.primary} /></View>
               <Text style={styles.actionLabel}>{a.label}</Text>
             </TouchableOpacity>
           ))}
@@ -153,7 +147,7 @@ export default function HomeScreen() {
             <Text style={styles.ctaSub}>Demande à Kelassi, ton tuteur IA !</Text>
             <View style={styles.ctaBtn}><Text style={styles.ctaBtnText}>PARLER À KELASSI →</Text></View>
           </View>
-          <Image source={require('../../assets/kelassi-mascot.png')} style={{ width: 92, height: 92 }} resizeMode="contain" />
+          <Image source={require('../../../assets/kelassi-mascot.png')} style={{ width: 92, height: 92 }} resizeMode="contain" />
         </TouchableOpacity>
       </View>
     </ScrollView>
