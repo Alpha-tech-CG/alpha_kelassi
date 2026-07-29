@@ -1,8 +1,20 @@
 import { useEffect, useState } from 'react'
+import { Text as RNText } from 'react-native'
 import { Stack, useRouter, useSegments, useRootNavigationState } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import {
+  useFonts,
+  Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold, Nunito_900Black,
+} from '@expo-google-fonts/nunito'
+import { Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins'
 import { supabase } from '../lib/supabase'
 import type { Session } from '@supabase/supabase-js'
+
+// Police par défaut de toute l'app = Nunito (design final). Les titres passent
+// en Poppins via `fonts.heading` dans les styles.
+const RNTextAny = RNText as unknown as { defaultProps?: { style?: unknown } }
+RNTextAny.defaultProps = RNTextAny.defaultProps || {}
+RNTextAny.defaultProps.style = { fontFamily: 'Nunito_700Bold' }
 
 // NOTE : WatermelonDB (cache offline) est temporairement retiré du chemin de
 // démarrage. Il s'initialisait ici (`jsi: true` + décorateurs sans babel config
@@ -12,6 +24,10 @@ import type { Session } from '@supabase/supabase-js'
 // offline-first sera implémentée.
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold, Nunito_900Black,
+    Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black,
+  })
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
   const segments = useSegments()
@@ -49,6 +65,8 @@ export default function RootLayout() {
         })
     }
   }, [ready, navState?.key, session, segments, router])
+
+  if (!fontsLoaded) return null
 
   return (
     <>

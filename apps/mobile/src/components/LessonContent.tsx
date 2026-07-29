@@ -1,14 +1,13 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
-import { colors } from '../lib/theme'
+import { colors, fonts } from '../lib/theme'
 
 /**
- * Rendu Markdown léger pour les leçons (pas de dépendance native).
- * Gère : titres (# → gras, sans le #), **gras**, listes à puces / numérotées,
- * tableaux |a|b|, citations >, séparateurs ---.
+ * Rendu Markdown léger pour les leçons (design final Alpha Kelassi).
+ * Titres → gras, **gras**, listes, tableaux, images, et encarts colorés
+ * pour « Astuce CEPE » (jaune), « Piège à éviter » (rouge), « Exercice » (vert).
  */
 
-// Découpe un texte en segments gras (**…**) → tableau de <Text>
 function inline(text: string, keyBase: string): React.ReactNode[] {
   const parts = text.split(/\*\*/)
   return parts.map((p, i) =>
@@ -17,30 +16,39 @@ function inline(text: string, keyBase: string): React.ReactNode[] {
       : <Text key={`${keyBase}-t${i}`}>{p}</Text>
   )
 }
+const isTableRow = (l: string) => /^\s*\|.*\|\s*$/.test(l)
+const isSeparator = (l: string) => /^\s*\|?[\s:|-]+\|?\s*$/.test(l) && l.includes('-')
+const cells = (l: string) => l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim())
 
-function isTableRow(l: string) { return /^\s*\|.*\|\s*$/.test(l) }
-function isSeparator(l: string) { return /^\s*\|?[\s:|-]+\|?\s*$/.test(l) && l.includes('-') }
-function cells(l: string) {
-  return l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim())
+type Callout = { kind: 'astuce' | 'piege' | 'exo'; label: string; icon: string }
+function detectCallout(text: string): Callout | null {
+  const t = text.toLowerCase()
+  if (/astuce|💡/.test(t)) return { kind: 'astuce', label: 'Astuce CEPE', icon: '💡' }
+  if (/piège|piege|attention|danger|⚠️/.test(t)) return { kind: 'piege', label: 'Piège à éviter', icon: '⚠️' }
+  if (/exercice|✏️|✍️/.test(t)) return { kind: 'exo', label: 'Exercice', icon: '✏️' }
+  return null
 }
 
 export function LessonContent({ content }: { content: string }) {
   const lines = content.split(/\r?\n/)
   const out: React.ReactNode[] = []
-  let i = 0
-  let key = 0
+  let i = 0, key = 0
+
+  const renderBlock = (raw: string, k: string): React.ReactNode | null => {
+    const trimmed = raw.trim()
+    if (trimmed === '') return null
+    const b = trimmed.match(/^[-*]\s+(.*)$/)
+    if (b) return <View key={k} style={styles.li}><Text style={styles.bullet}>•</Text><Text style={styles.liText}>{inline(b[1] ?? '', k)}</Text></View>
+    return <Text key={k} style={styles.p}>{inline(trimmed, k)}</Text>
+  }
 
   while (i < lines.length) {
     const line = lines[i] ?? ''
     const trimmed = line.trim()
 
-    // Ligne vide → petit espace
     if (trimmed === '') { out.push(<View key={key++} style={{ height: 8 }} />); i++; continue }
-
-    // Séparateur horizontal
     if (/^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) { out.push(<View key={key++} style={styles.hr} />); i++; continue }
 
-    // Image : ![légende](url) → schéma
     const img = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
     if (img) {
       out.push(
@@ -52,19 +60,38 @@ export function LessonContent({ content }: { content: string }) {
       i++; continue
     }
 
-    // Titre : #..###### → gras (sans le #)
     const h = trimmed.match(/^(#{1,6})\s+(.*)$/)
     if (h) {
-      const level = (h[1] ?? '').length
-      out.push(
-        <Text key={key++} style={[styles.heading, level <= 2 ? styles.h2 : styles.h3]}>
-          {inline(h[2] ?? '', `h${key}`)}
-        </Text>
-      )
+      const htext = h[2] ?? ''
+      const callout = detectCallout(htext)
+      if (callout) {
+        // Collecte le corps jusqu'au prochain titre
+        i++
+        const body: React.ReactNode[] = []
+        let bk = 0
+        while (i < lines.length && !/^#{1,6}\s/.test((lines[i] ?? '').trim())) {
+          const node = renderBlock(lines[i] ?? '', `co${key}-${bk++}`)
+          if (node) body.push(node)
+          i++
+        }
+        const st = callout.kind === 'astuce' ? styles.astuce : callout.kind === 'piege' ? styles.piege : styles.exo
+        const badge = callout.kind === 'astuce' ? styles.badgeAstuce : callout.kind === 'piege' ? styles.badgePiege : styles.badgeExo
+        out.push(
+          <View key={key++} style={[styles.callout, st]}>
+            <View style={styles.calloutHead}>
+              <View style={[styles.calloutIcon, badge]}><Text style={{ fontSize: 16 }}>{callout.icon}</Text></View>
+              <Text style={styles.calloutTitle}>{callout.label}</Text>
+            </View>
+            {body}
+          </View>
+        )
+        continue
+      }
+      const lvl = (h[1] ?? '').length
+      out.push(<Text key={key++} style={[styles.heading, lvl <= 2 ? styles.h2 : styles.h3]}>{inline(htext, `h${key}`)}</Text>)
       i++; continue
     }
 
-    // Tableau : regroupe les lignes |...|
     if (isTableRow(line)) {
       const rows: string[] = []
       while (i < lines.length && isTableRow(lines[i] ?? '')) { rows.push(lines[i] ?? ''); i++ }
@@ -73,9 +100,7 @@ export function LessonContent({ content }: { content: string }) {
         <View key={key++} style={styles.table}>
           {dataRows.map((row, r) => (
             <View key={r} style={[styles.trow, r === 0 && styles.thead]}>
-              {row.map((cell, cIdx) => (
-                <Text key={cIdx} style={[styles.cell, r === 0 && styles.bold]}>{inline(cell, `c${r}-${cIdx}`)}</Text>
-              ))}
+              {row.map((cell, c) => <Text key={c} style={[styles.cell, r === 0 && styles.bold]}>{inline(cell, `c${r}-${c}`)}</Text>)}
             </View>
           ))}
         </View>
@@ -83,42 +108,13 @@ export function LessonContent({ content }: { content: string }) {
       continue
     }
 
-    // Citation
     if (/^>\s?/.test(trimmed)) {
-      out.push(
-        <View key={key++} style={styles.quote}>
-          <Text style={styles.quoteText}>{inline(trimmed.replace(/^>\s?/, ''), `q${key}`)}</Text>
-        </View>
-      )
+      out.push(<View key={key++} style={styles.quote}><Text style={styles.quoteText}>{inline(trimmed.replace(/^>\s?/, ''), `q${key}`)}</Text></View>)
       i++; continue
     }
 
-    // Liste à puces
-    const b = trimmed.match(/^[-*]\s+(.*)$/)
-    if (b) {
-      out.push(
-        <View key={key++} style={styles.li}>
-          <Text style={styles.bullet}>•</Text>
-          <Text style={styles.liText}>{inline(b[1] ?? '', `li${key}`)}</Text>
-        </View>
-      )
-      i++; continue
-    }
-
-    // Liste numérotée
-    const n = trimmed.match(/^(\d+)\.\s+(.*)$/)
-    if (n) {
-      out.push(
-        <View key={key++} style={styles.li}>
-          <Text style={styles.bullet}>{n[1] ?? ''}.</Text>
-          <Text style={styles.liText}>{inline(n[2] ?? '', `ol${key}`)}</Text>
-        </View>
-      )
-      i++; continue
-    }
-
-    // Paragraphe
-    out.push(<Text key={key++} style={styles.p}>{inline(trimmed, `p${key}`)}</Text>)
+    const node = renderBlock(line, `p${key}`)
+    if (node) out.push(<View key={key++}>{node}</View>)
     i++
   }
 
@@ -126,22 +122,33 @@ export function LessonContent({ content }: { content: string }) {
 }
 
 const styles = StyleSheet.create({
-  bold:      { fontWeight: '800', color: colors.text },
-  heading:   { fontWeight: '800', color: colors.text, marginTop: 14, marginBottom: 4 },
-  h2:        { fontSize: 18 },
-  h3:        { fontSize: 15.5, color: colors.primary },
-  p:         { fontSize: 15, lineHeight: 23, color: colors.text },
-  hr:        { height: 1, backgroundColor: colors.cardBorder, marginVertical: 10 },
-  figure:    { marginVertical: 10, alignItems: 'center' },
-  image:     { width: '100%', height: 240, borderRadius: 8, backgroundColor: '#fff' },
-  caption:   { fontSize: 12, color: colors.textMuted, fontStyle: 'italic', marginTop: 6, textAlign: 'center' },
-  li:        { flexDirection: 'row', gap: 8, paddingLeft: 4, marginVertical: 2 },
-  bullet:    { fontSize: 15, color: colors.primary, fontWeight: '700', minWidth: 16 },
-  liText:    { flex: 1, fontSize: 15, lineHeight: 22, color: colors.text },
-  quote:     { borderLeftWidth: 3, borderLeftColor: colors.primary, paddingLeft: 10, marginVertical: 4 },
+  bold: { fontFamily: fonts.body, color: colors.text },
+  heading: { fontFamily: fonts.heading, color: colors.text, marginTop: 16, marginBottom: 4 },
+  h2: { fontSize: 18 },
+  h3: { fontSize: 15.5, color: colors.primary },
+  p: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 23, color: colors.text },
+  hr: { height: 1, backgroundColor: colors.cardBorder, marginVertical: 10 },
+  li: { flexDirection: 'row', gap: 8, paddingLeft: 4, marginVertical: 2 },
+  bullet: { fontSize: 15, color: colors.primary, fontFamily: fonts.body, minWidth: 16 },
+  liText: { flex: 1, fontFamily: fonts.regular, fontSize: 15, lineHeight: 22, color: colors.text },
+  quote: { borderLeftWidth: 3, borderLeftColor: colors.primary, paddingLeft: 10, marginVertical: 4 },
   quoteText: { fontSize: 14, fontStyle: 'italic', color: colors.textMuted },
-  table:     { borderWidth: 1, borderColor: colors.cardBorder, borderRadius: 8, overflow: 'hidden', marginVertical: 8 },
-  trow:      { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: colors.cardBorder },
-  thead:     { backgroundColor: colors.primaryTint },
-  cell:      { flex: 1, fontSize: 13, lineHeight: 19, color: colors.text, padding: 8, borderRightWidth: 1, borderRightColor: colors.cardBorder },
+  table: { borderWidth: 1, borderColor: colors.cardBorder, borderRadius: 12, overflow: 'hidden', marginVertical: 8 },
+  trow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: colors.cardBorder },
+  thead: { backgroundColor: colors.primaryTint },
+  cell: { flex: 1, fontFamily: fonts.regular, fontSize: 13, lineHeight: 19, color: colors.text, padding: 8, borderRightWidth: 1, borderRightColor: colors.cardBorder },
+  figure: { marginVertical: 10, alignItems: 'center' },
+  image: { width: '100%', height: 240, borderRadius: 16, backgroundColor: '#fff' },
+  caption: { fontSize: 12, color: colors.textMuted, fontStyle: 'italic', marginTop: 6, textAlign: 'center' },
+  // Encarts
+  callout: { borderRadius: 24, borderWidth: 2, padding: 16, marginVertical: 10 },
+  calloutHead: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
+  calloutIcon: { width: 34, height: 34, borderRadius: 11, alignItems: 'center', justifyContent: 'center' },
+  calloutTitle: { fontFamily: fonts.heading, fontSize: 13, color: colors.text, textTransform: 'uppercase', letterSpacing: 0.5 },
+  astuce: { backgroundColor: '#FEF9E7', borderColor: '#F7D64A66' },
+  piege: { backgroundColor: '#FDECEA', borderColor: '#E5393566' },
+  exo: { backgroundColor: '#EAF5EC', borderColor: '#0F8F4F44' },
+  badgeAstuce: { backgroundColor: colors.yellow },
+  badgePiege: { backgroundColor: colors.red },
+  badgeExo: { backgroundColor: colors.primary },
 })

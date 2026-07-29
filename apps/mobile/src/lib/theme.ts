@@ -26,6 +26,14 @@ export const colors = {
 
 export const radius = { sm: 8, md: 12, lg: 16, xl: 24, full: 9999 } as const
 
+// Polices du design final : Nunito (corps) + Poppins (titres).
+export const fonts = {
+  body: 'Nunito_700Bold',
+  regular: 'Nunito_600SemiBold',
+  heading: 'Poppins_800ExtraBold',
+  headingBlack: 'Poppins_900Black',
+} as const
+
 export const cardShadow = {
   shadowColor: '#000',
   shadowOffset: { width: 0, height: 4 },

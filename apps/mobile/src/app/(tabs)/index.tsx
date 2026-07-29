@@ -3,7 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
-import { colors, radius, cardShadow, LEVEL_LABEL, subjectIcon } from '../../lib/theme'
+import { colors, radius, cardShadow, LEVEL_LABEL, subjectIcon, fonts } from '../../lib/theme'
 
 interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
 
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   avatarText: { color: '#fff', fontSize: 22, fontWeight: '800' },
   avatarBadge: { position: 'absolute', bottom: -6, right: -6, backgroundColor: colors.yellow, borderRadius: 10, paddingHorizontal: 5, paddingVertical: 1, borderWidth: 2, borderColor: colors.primary },
   avatarBadgeText: { color: colors.onYellow, fontSize: 9, fontWeight: '800' },
-  hello: { color: '#fff', fontSize: 19, fontWeight: '900' },
+  hello: { color: '#fff', fontSize: 19, fontFamily: fonts.headingBlack },
   chips: { flexDirection: 'row', gap: 8, marginTop: 6 },
   chip: { backgroundColor: '#ffffff2e', paddingHorizontal: 9, paddingVertical: 3, borderRadius: radius.full },
   chipText: { color: '#fff', fontSize: 11, fontWeight: '700' },
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   actionBox: { width: 56, height: 56, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
   actionLabel: { fontSize: 10, fontWeight: '900', color: colors.textMuted, textTransform: 'uppercase' },
   sectionHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  sectionTitle: { fontSize: 20, fontWeight: '900', color: colors.text },
+  sectionTitle: { fontSize: 20, fontFamily: fonts.headingBlack, color: colors.text },
   seeAll: { color: colors.primary, fontSize: 11, fontWeight: '900', letterSpacing: 1 },
   empty: { color: colors.textMuted, fontSize: 14, paddingVertical: 20, textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   subjectFill: { height: '100%', backgroundColor: colors.primary, borderRadius: radius.full },
   subjectPct: { fontSize: 10, fontWeight: '900', color: colors.primary },
   cta: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.primary, borderRadius: 32, padding: 24, marginTop: 28, ...cardShadow },
-  ctaTitle: { color: '#fff', fontSize: 19, fontWeight: '900', marginBottom: 4 },
+  ctaTitle: { color: '#fff', fontSize: 19, fontFamily: fonts.headingBlack, marginBottom: 4 },
   ctaSub: { color: '#ffffffcc', fontSize: 12, fontWeight: '700', marginBottom: 14 },
   ctaBtn: { alignSelf: 'flex-start', backgroundColor: colors.yellow, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 16 },
   ctaBtnText: { color: colors.onYellow, fontSize: 12, fontWeight: '900' },
