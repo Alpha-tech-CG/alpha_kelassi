@@ -32,6 +32,8 @@ alpha-kelassi/
 │   ├── types/        # Types TypeScript partagés
 │   ├── ui/           # Composants UI partagés (web)
 │   └── config/       # ESLint, Prettier, TS configs
+├── docs/             # Documentation, cours CM2, spécifications et store metadata
+├── resources/        # Médias, schémas anatomiques et archives de maquettes design
 └── supabase/
     └── migrations/   # Schema PostgreSQL + RLS
 ```
