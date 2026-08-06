@@ -2,6 +2,7 @@
 
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
+import remarkGfm from 'remark-gfm'
 import rehypeKatex from 'rehype-katex'
 // katex.min.css est chargé globalement via globals.css
 
@@ -48,7 +49,7 @@ export function MarkdownRenderer({ content, className = '', prose = false }: Pro
   return (
     <div className={`${proseClasses} ${className}`}>
       <ReactMarkdown
-        remarkPlugins={[remarkMath]}
+        remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
       >
         {content}

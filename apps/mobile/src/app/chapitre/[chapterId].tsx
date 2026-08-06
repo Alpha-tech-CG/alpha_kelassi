@@ -7,6 +7,10 @@ import { colors, radius, cardShadow } from '../../lib/theme'
 import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
 import { LessonContent } from '../../components/LessonContent'
+import { MathLessonView } from '../../components/MathLessonView'
+
+// Contenu avec formules LaTeX ($...$) → rendu math natif ; sinon rendu léger (encarts BEPC).
+const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$/.test(s)
 
 type LessonType = 'cours' | 'resume' | 'quiz' | 'video'
 interface LessonVM {
@@ -141,7 +145,9 @@ export default function ChapitreScreen() {
                   </View>
 
                   {(l.type === 'cours' || l.type === 'resume') && l.content ? (
-                    <View style={{ marginTop: 6 }}><LessonContent content={l.content} /></View>
+                    <View style={{ marginTop: 6 }}>
+                      {hasMath(l.content) ? <MathLessonView content={l.content} /> : <LessonContent content={l.content} />}
+                    </View>
                   ) : null}
 
                   {l.type === 'video' && l.video_url ? (
@@ -152,7 +158,7 @@ export default function ChapitreScreen() {
 
                   {l.type === 'quiz' ? (
                     <View style={styles.quizRow}>
-                      {l.content ? <LessonContent content={l.content} /> : null}
+                      {l.content ? (hasMath(l.content) ? <MathLessonView content={l.content} /> : <LessonContent content={l.content} />) : null}
                       {!isDone && (
                         <View style={styles.scoreRow}>
                           <Text style={styles.scoreLabel}>Ton score :</Text>
