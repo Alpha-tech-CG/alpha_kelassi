@@ -28,6 +28,7 @@ export function LessonBlocks({ lessons, initialDone }: Props) {
   const [busy, setBusy] = useState<string | null>(null)
   const [flash, setFlash] = useState<string | null>(null)
   const [quizScores, setQuizScores] = useState<Record<string, number>>({})
+  const [openSub, setOpenSub] = useState<string | null>(null) // sous-chapitre ouvert (drill-down)
 
   const grouped = useMemo(() => {
     const g: Record<LessonType, (Lesson & { type: LessonType })[]> = { cours: [], resume: [], quiz: [], video: [] }
@@ -62,6 +63,50 @@ export function LessonBlocks({ lessons, initialDone }: Props) {
 
   if (lessons.length === 0) {
     return <p className="text-center text-gray-400 py-12">Contenu de ce chapitre bientôt disponible.</p>
+  }
+
+  // Mode drill-down : plusieurs cours = plusieurs sous-chapitres (ex. Maths Terminale)
+  const coursList = [...lessons].filter((l) => l.type === 'cours').sort((a, b) => a.order_index - b.order_index)
+  const subMode = coursList.length > 1
+  const openLesson = openSub ? lessons.find((l) => l.id === openSub) ?? null : null
+
+  if (subMode) {
+    return (
+      <div className="space-y-4">
+        {flash && (
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg">{flash}</div>
+        )}
+        {openLesson ? (
+          <div className="space-y-4">
+            <button onClick={() => setOpenSub(null)} className="text-sm font-semibold text-blue-600 hover:text-blue-700">← Sous-chapitres</button>
+            <section className="bg-white rounded-2xl border border-gray-100 p-5">
+              <h2 className="font-bold text-gray-900 text-lg mb-3">{openLesson.title}</h2>
+              {openLesson.content && <MarkdownRenderer content={openLesson.content} prose />}
+              <div className="mt-4">
+                {done[openLesson.id]?.completed ? (
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-600">✅ Complété</span>
+                ) : (
+                  <button onClick={() => complete(openLesson.id)} disabled={busy === openLesson.id}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 px-4 py-2 rounded-xl transition-colors">
+                    {busy === openLesson.id ? '…' : 'Marquer comme lu'}
+                  </button>
+                )}
+              </div>
+            </section>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {coursList.map((l) => (
+              <button key={l.id} onClick={() => setOpenSub(l.id)}
+                className="w-full text-left flex items-center justify-between gap-3 bg-white rounded-xl border border-gray-100 px-4 py-4 hover:bg-gray-50 transition-colors">
+                <span className="font-semibold text-gray-800">{l.title}</span>
+                <span className="text-blue-600 shrink-0">{done[l.id]?.completed ? '✅' : '›'}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (

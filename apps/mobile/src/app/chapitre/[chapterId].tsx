@@ -35,6 +35,7 @@ export default function ChapitreScreen() {
   const [busy, setBusy] = useState<string | null>(null)
   const [flash, setFlash] = useState<string | null>(null)
   const [scores, setScores] = useState<Record<string, string>>({})
+  const [openSub, setOpenSub] = useState<string | null>(null) // sous-chapitre ouvert (mode drill-down)
 
   useEffect(() => {
     async function load() {
@@ -112,6 +113,10 @@ export default function ChapitreScreen() {
   // Un cours ne peut être marqué "lu" qu'une fois le(s) quiz du chapitre validé(s)
   const quizLessons = lessons.filter((l) => l.type === 'quiz')
   const quizzesValidated = quizLessons.length === 0 || quizLessons.every((q) => done[q.id]?.completed)
+  // Mode drill-down : un chapitre avec plusieurs cours = plusieurs sous-chapitres (ex. Maths Terminale)
+  const coursList = lessons.filter((l) => l.type === 'cours').sort((a, b) => a.order_index - b.order_index)
+  const subMode = coursList.length > 1
+  const openLesson = openSub ? lessons.find((l) => l.id === openSub) ?? null : null
 
   return (
     <View style={styles.container}>
@@ -123,6 +128,40 @@ export default function ChapitreScreen() {
 
       {lessons.length === 0 ? (
         <View style={styles.empty}><Text style={styles.emptyText}>Contenu bientôt disponible.</Text></View>
+      ) : subMode ? (
+        openLesson ? (
+          /* Détail d'un sous-chapitre */
+          <ScrollView contentContainerStyle={styles.content}>
+            <TouchableOpacity onPress={() => setOpenSub(null)} style={styles.subBack} hitSlop={10}>
+              <Text style={styles.subBackText}>← Sous-chapitres</Text>
+            </TouchableOpacity>
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>{openLesson.title}</Text>
+              {openLesson.content ? (
+                <View style={{ marginTop: 8 }}>
+                  {hasMath(openLesson.content) ? <MathLessonView content={openLesson.content} /> : <LessonContent content={openLesson.content} />}
+                </View>
+              ) : null}
+              {done[openLesson.id]?.completed ? (
+                <Text style={styles.doneText}>✅ Complété</Text>
+              ) : (
+                <TouchableOpacity style={[styles.cta, (busy === openLesson.id || fromCache) && styles.ctaDisabled]} disabled={busy === openLesson.id || fromCache} onPress={() => complete(openLesson)}>
+                  <Text style={styles.ctaText}>{busy === openLesson.id ? '…' : 'Marquer comme lu'}</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </ScrollView>
+        ) : (
+          /* Liste des sous-chapitres */
+          <ScrollView contentContainerStyle={styles.content}>
+            {coursList.map((l) => (
+              <TouchableOpacity key={l.id} style={styles.subRow} onPress={() => setOpenSub(l.id)}>
+                <Text style={styles.subRowText} numberOfLines={2}>{l.title}</Text>
+                <Text style={styles.subRowChevron}>{done[l.id]?.completed ? '✅' : '›'}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )
       ) : (
         <>
           {/* Onglets segmentés */}
@@ -225,6 +264,11 @@ const styles = StyleSheet.create({
   doneText: { marginTop: 14, color: '#16a34a', fontWeight: '800', fontSize: 14 },
   gated: { marginTop: 14, backgroundColor: '#FEF3C7', borderRadius: radius.md, padding: 12 },
   gatedText: { color: '#92400E', fontWeight: '600', fontSize: 13, lineHeight: 18 },
+  subRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: radius.md, borderWidth: 1, borderColor: colors.cardBorder, paddingVertical: 16, paddingHorizontal: 16, ...cardShadow },
+  subRowText: { flex: 1, fontSize: 15, fontWeight: '700', color: colors.text },
+  subRowChevron: { fontSize: 20, color: colors.primary, marginLeft: 8 },
+  subBack: { paddingVertical: 6, marginBottom: 4 },
+  subBackText: { fontSize: 14, fontWeight: '700', color: colors.primary },
   empty: { alignItems: 'center', paddingTop: 60 },
   emptyText: { fontSize: 14, color: colors.textMuted },
   toast: { position: 'absolute', bottom: 30, alignSelf: 'center', backgroundColor: '#111827', paddingHorizontal: 18, paddingVertical: 10, borderRadius: radius.full },
