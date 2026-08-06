@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { WebView } from 'react-native-webview'
 import { colors, fonts } from '../lib/theme'
+import { KATEX_CSS, KATEX_JS_B64, MARKED_JS_B64 } from '../lib/katexBundle'
 
 /**
  * Rendu des leçons avec mathématiques natives (Markdown + LaTeX).
@@ -39,9 +40,13 @@ function buildHtml(md: string): string {
   return `<!DOCTYPE html><html><head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<style>${KATEX_CSS}</style>
+<script>
+(function(){
+  function add(b64){ var s=document.createElement('script'); s.text=decodeURIComponent(escape(atob(b64))); document.head.appendChild(s); }
+  try { add("${MARKED_JS_B64}"); add("${KATEX_JS_B64}"); } catch(e){}
+})();
+</script>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html,body { margin:0; padding:0; background:transparent; }
