@@ -36,7 +36,7 @@ export default async function DashboardPage() {
     <div className="px-6 py-8 max-w-5xl mx-auto space-y-8">
 
       {/* ── HERO GREETING ── */}
-      <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-violet-700 rounded-3xl px-8 py-10 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-[#1e3a8a] via-[#172554] to-[#111827] rounded-3xl px-8 py-10 overflow-hidden shadow-xl">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
         <div className="absolute bottom-0 left-1/2 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 pointer-events-none" />
         <div className="relative">

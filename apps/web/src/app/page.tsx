@@ -1,354 +1,198 @@
+import Image from 'next/image'
 import Link from 'next/link'
+import {
+  ArrowRight, BarChart3, BookOpen, Bot, CalendarDays, Check, Clock3, CloudDownload,
+  FileCheck2, GraduationCap, Layers3, Medal, Menu, MessageCircle, Play, Search,
+  ShieldCheck, Sparkles, Smartphone, Star, TrendingUp, Trophy,
+  UserRoundCheck, UsersRound, WifiOff,
+} from 'lucide-react'
 
-const FEATURES = [
-  {
-    icon: '📚',
-    title: 'Cours résumés',
-    desc: 'Tous les cours BEPC & BAC par matière, rédigés en fiches claires et structurées.',
-    color: 'from-blue-500 to-blue-600',
-    bg: 'bg-blue-50',
-  },
-  {
-    icon: '📝',
-    title: 'Examens officiels',
-    desc: 'Sujets d\'État 2010–2024 avec corrigés détaillés étape par étape.',
-    color: 'from-violet-500 to-violet-600',
-    bg: 'bg-violet-50',
-  },
-  {
-    icon: '🤖',
-    title: 'Tuteur IA Kelassi',
-    desc: 'Pose n\'importe quelle question. Kelassi explique avec la méthode Feynman 24h/24.',
-    color: 'from-emerald-500 to-emerald-600',
-    bg: 'bg-emerald-50',
-  },
-  {
-    icon: '🃏',
-    title: 'Flashcards SM-2',
-    desc: 'Algorithme de répétition espacée. Mémorise sans effort, révise au bon moment.',
-    color: 'from-amber-500 to-orange-500',
-    bg: 'bg-amber-50',
-  },
-  {
-    icon: '📴',
-    title: 'Mode hors-ligne',
-    desc: 'Télécharge tes cours. Révise dans le bus, au marché — sans connexion.',
-    color: 'from-rose-500 to-pink-500',
-    bg: 'bg-rose-50',
-  },
-  {
-    icon: '🏆',
-    title: 'Progression gamifiée',
-    desc: 'XP, niveaux, badges et streak quotidien. La révision devient un jeu.',
-    color: 'from-cyan-500 to-sky-500',
-    bg: 'bg-cyan-50',
-  },
+const services = [
+  { Icon: BookOpen, title: 'Cours & fiches', text: 'Des leçons claires, structurées par niveau et adaptées au programme congolais.', tone: 'navy' },
+  { Icon: GraduationCap, title: 'Prépa examens', text: 'Annales BEPC et BAC, simulations chronométrées et corrigés détaillés.', tone: 'violet' },
+  { Icon: Bot, title: 'Tuteur IA', text: 'Des explications simples et personnalisées, disponibles à tout moment.', tone: 'amber' },
+  { Icon: CloudDownload, title: 'Mode hors ligne', text: 'Télécharge tes cours et continue de réviser même sans Internet.', tone: 'green' },
 ]
 
-const LEVELS = [
-  { label: 'BEPC', sub: '3ème', color: 'bg-blue-600' },
-  { label: 'BAC C', sub: 'Maths-Sciences', color: 'bg-violet-600' },
-  { label: 'BAC D', sub: 'Sciences Nat.', color: 'bg-emerald-600' },
-  { label: 'BAC A', sub: 'Lettres', color: 'bg-amber-500' },
+const reasons = [
+  ['100% adapté au Congo', 'Des contenus alignés sur les réalités et programmes scolaires congolais.'],
+  ['IA + accompagnement humain', 'Une aide rapide avec Kelassi IA, renforcée par des tuteurs qualifiés.'],
+  ['Motivation quotidienne', 'Des objectifs, des XP et des badges pour progresser un peu chaque jour.'],
 ]
 
-const STATS = [
-  { value: '50+', label: 'Beta testeurs actifs' },
-  { value: '12', label: 'Matières couvertes' },
-  { value: '2010–2024', label: 'Années d\'examens' },
-  { value: '24/7', label: 'Tuteur IA disponible' },
-]
-
-const TESTIMONIALS = [
-  {
-    quote: 'Kelassi m\'a aidé à comprendre les intégrales en 20 minutes. Le tuteur IA explique mieux que certains profs.',
-    name: 'Étudiant BAC C',
-    school: 'Lycée Savorgnan de Brazza · Brazzaville',
-    avatar: 'K',
-    color: 'bg-blue-600',
-  },
-  {
-    quote: 'J\'adore les flashcards. Je révise dans le bus maintenant ! Mon niveau en SVT a vraiment progressé.',
-    name: 'Élève BEPC',
-    school: 'Lycée Victor Augagneur · Brazzaville',
-    avatar: 'A',
-    color: 'bg-violet-600',
-  },
-  {
-    quote: 'Les corrigés détaillés des examens d\'État sont incroyables. Je comprends enfin la méthode à suivre.',
-    name: 'Étudiant BAC D',
-    school: 'Lycée Saint-Exupéry · Pointe-Noire',
-    avatar: 'M',
-    color: 'bg-emerald-600',
-  },
-]
+function Brand({ light = false }: { light?: boolean }) {
+  return (
+    <span className={`inline-flex items-center gap-2.5 font-black tracking-tight ${light ? 'text-white' : 'text-[#172554]'}`}>
+      <span className={`grid h-10 w-10 place-items-center rounded-2xl ${light ? 'bg-white/10 text-[#f5a623]' : 'bg-[#172554] text-white'}`}>
+        <BookOpen className="h-5 w-5" strokeWidth={2.4} />
+      </span>
+      <span className="text-xl">Cognix <span className="font-semibold text-zinc-400">/ Kelassi</span></span>
+    </span>
+  )
+}
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-white">
-
-      {/* ── NAV ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-black text-sm">K</span>
-            </div>
-            <span className="text-xl font-black text-gray-900">Kelassi</span>
+    <main className="min-h-screen overflow-hidden bg-[#fcfbf9] text-zinc-900">
+      <nav className="fixed inset-x-0 top-0 z-50 border-b border-zinc-200/70 bg-[#fcfbf9]/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
+          <Link href="/" aria-label="Accueil Alpha Kelassi"><Brand /></Link>
+          <div className="hidden items-center gap-8 text-sm font-semibold text-zinc-600 md:flex">
+            <a href="#services" className="transition hover:text-[#1e3a8a]">Nos services</a>
+            <a href="#apercus" className="transition hover:text-[#1e3a8a]">L’application</a>
+            <a href="#parents" className="transition hover:text-[#1e3a8a]">Parents</a>
+            <Link href="/cours" className="transition hover:text-[#1e3a8a]">Découvrir l’application</Link>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm text-gray-600">
-            <a href="#features" className="hover:text-gray-900 transition-colors">Fonctionnalités</a>
-            <a href="#niveaux" className="hover:text-gray-900 transition-colors">Niveaux</a>
-            <a href="#temoignages" className="hover:text-gray-900 transition-colors">Témoignages</a>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-              Connexion
-            </Link>
-            <Link
-              href="/register"
-              className="text-sm font-semibold bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors"
-            >
-              Commencer gratuit
-            </Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/login" className="hidden rounded-full px-4 py-2 text-sm font-bold text-zinc-600 hover:bg-white sm:inline-flex">Connexion</Link>
+            <Link href="/register" className="rounded-full bg-[#1e3a8a] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#172554]">S’inscrire</Link>
+            <Menu className="h-5 w-5 text-[#1e3a8a] md:hidden" />
           </div>
         </div>
       </nav>
 
-      {/* ── HERO ── */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        {/* Background gradient blobs */}
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-60 pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-violet-100 rounded-full blur-3xl opacity-40 pointer-events-none" />
-
-        <div className="relative max-w-4xl mx-auto text-center">
-          {/* Badge Congo */}
-          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 text-blue-700 text-sm font-semibold px-5 py-2 rounded-full mb-8">
-            🇨🇬 Fait pour les élèves congolais
+      <header className="relative px-5 pb-20 pt-32 lg:px-8 lg:pb-28 lg:pt-40">
+        <div className="pointer-events-none absolute -right-36 top-20 h-96 w-96 rounded-full bg-amber-200/30 blur-3xl" />
+        <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.03fr_.97fr]">
+          <div className="relative z-10">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full bg-[#fef3c7] px-4 py-2 text-xs font-black uppercase tracking-[.14em] text-amber-800">
+              <Sparkles className="h-4 w-4" /> Premier assistant scolaire au Congo
+            </div>
+            <h1 className="max-w-3xl text-5xl font-black leading-[1.04] tracking-[-.045em] text-zinc-950 sm:text-6xl lg:text-7xl">
+              Ta réussite, <span className="text-[#1e3a8a]">notre mission</span> au Congo-Brazzaville.
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-600 sm:text-xl">
+              Cognix réunit cours, entraînements, intelligence artificielle et suivi personnalisé dans Alpha Kelassi, l’application pensée pour la réussite du BEPC et du BAC.
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href="/register" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#f5a623] px-7 py-4 text-base font-black text-zinc-950 shadow-lg shadow-amber-200/50 transition hover:-translate-y-0.5 hover:bg-amber-400">
+                Commence ta révision gratuite <ArrowRight className="h-5 w-5" />
+              </Link>
+              <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-zinc-200 bg-white px-7 py-4 text-base font-black text-zinc-800 transition hover:border-[#1e3a8a]/30">
+                <Smartphone className="h-5 w-5 text-[#1e3a8a]" /> Voir l’application
+              </Link>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-zinc-500">
+              <span className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> Sans carte bancaire</span>
+              <span className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-600" /> BEPC & BAC</span>
+              <span className="flex items-center gap-2"><WifiOff className="h-4 w-4 text-emerald-600" /> Accessible hors ligne</span>
+            </div>
           </div>
-
-          <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 leading-[1.05] tracking-tight">
-            Réussis ton{' '}
-            <span className="text-gradient">BEPC</span>
-            {' '}et ton{' '}
-            <span className="text-gradient">BAC</span>
-            {' '}avec l'IA
-          </h1>
-
-          <p className="text-xl md:text-2xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Cours résumés · Examens d'État officiels · Tuteur IA disponible 24h/24
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link
-              href="/register"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-700 transition-all hover:scale-105 shadow-lg shadow-blue-200"
-            >
-              Commencer gratuitement
-              <span>→</span>
-            </Link>
-            <Link
-              href="/cours"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-bold text-lg hover:border-gray-300 transition-all"
-            >
-              Voir les cours
-            </Link>
-          </div>
-
-          {/* Niveaux */}
-          <div id="niveaux" className="flex flex-wrap justify-center gap-3">
-            {LEVELS.map((l) => (
-              <div
-                key={l.label}
-                className={`${l.color} text-white px-5 py-2.5 rounded-2xl flex items-center gap-2 shadow-md`}
-              >
-                <span className="font-black text-sm">{l.label}</span>
-                <span className="text-white/70 text-xs font-medium">· {l.sub}</span>
+          <div className="relative">
+            <div className="absolute -inset-4 rotate-2 rounded-[2.5rem] bg-[#1e3a8a]" />
+            <div className="relative overflow-hidden rounded-[2.2rem] border-8 border-white bg-white shadow-2xl">
+              <Image src="/kelassi/students-library.jpeg" alt="Deux élèves congolais révisent avec Alpha Kelassi" width={1264} height={832} priority className="aspect-[1.16] w-full object-cover" />
+              <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur sm:inset-x-6 sm:bottom-6">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-11 w-11 place-items-center rounded-xl bg-emerald-100 text-emerald-700"><TrendingUp className="h-5 w-5" /></span>
+                  <div className="min-w-0 flex-1"><p className="text-xs font-bold text-zinc-400">Ta progression cette semaine</p><p className="font-black text-zinc-900">Excellent travail, continue !</p></div>
+                  <strong className="text-xl text-emerald-600">+24%</strong>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* ── STATS ── */}
-      <section className="py-12 bg-gray-950">
-        <div className="max-w-4xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {STATS.map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-3xl font-black text-white mb-1">{s.value}</p>
-              <p className="text-sm text-gray-400">{s.label}</p>
-            </div>
+      <section className="px-5 pb-20 lg:px-8">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm sm:grid-cols-3">
+          {[["150+", "cours du programme"], ["24h/24", "tuteur IA disponible"], ["100%", "pensé pour le Congo"]].map(([value, label], i) => (
+            <div key={label} className={`p-7 text-center ${i ? 'border-t border-zinc-200 sm:border-l sm:border-t-0' : ''}`}><p className={`text-4xl font-black ${i === 1 ? 'text-[#f5a623]' : i === 2 ? 'text-emerald-600' : 'text-[#1e3a8a]'}`}>{value}</p><p className="mt-1 text-sm font-semibold text-zinc-500">{label}</p></div>
           ))}
         </div>
       </section>
 
-      {/* ── FEATURES ── */}
-      <section id="features" className="py-24 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">Fonctionnalités</p>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
-              Tout ce qu'il te faut pour réussir
-            </h2>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-              Une seule application pour préparer tes examens, de la révision à la correction.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FEATURES.map((f) => (
-              <div
-                key={f.title}
-                className={`${f.bg} rounded-3xl p-7 border border-white card-hover cursor-default`}
-              >
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-2xl mb-5 shadow-md`}>
-                  {f.icon}
-                </div>
-                <h3 className="font-bold text-xl text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
+      <section id="services" className="bg-[#f4f4f5]/65 px-5 py-24 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-2xl"><p className="text-sm font-black uppercase tracking-[.2em] text-[#1e3a8a]">Nos services</p><h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">Tout ce qu’il te faut pour réussir.</h2><p className="mt-4 text-lg leading-7 text-zinc-600">Apprends, entraîne-toi et mesure tes progrès dans une seule application.</p></div>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {services.map(({ Icon, title, text, tone }) => {
+              const styles = tone === 'navy' ? 'bg-blue-50 text-[#1e3a8a]' : tone === 'violet' ? 'bg-violet-50 text-violet-700' : tone === 'amber' ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'
+              return <Link href={title.includes('Cours') ? '/cours' : title.includes('examens') ? '/examens' : title.includes('IA') ? '/tuteur' : '/register'} key={title} className="group rounded-3xl border border-white bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"><span className={`grid h-14 w-14 place-items-center rounded-2xl ${styles}`}><Icon className="h-7 w-7" /></span><h3 className="mt-6 text-xl font-black">{title}</h3><p className="mt-2 text-sm leading-6 text-zinc-500">{text}</p><span className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-[#1e3a8a]">Découvrir <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span></Link>
+            })}
           </div>
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <section className="py-24 px-6 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">Comment ça marche</p>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900">
-              3 étapes pour réussir
-            </h2>
+      <section id="apercus" className="relative overflow-hidden bg-[#0b1739] px-5 py-24 text-white lg:px-8">
+        <div className="pointer-events-none absolute -right-40 top-12 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -left-48 bottom-0 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-black uppercase tracking-[.2em] text-amber-300">Dans l’application</p>
+            <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">Une expérience simple pour avancer chaque jour.</h2>
+            <p className="mt-5 text-lg leading-8 text-blue-100/75">Découvre les principaux espaces de Cognix, conçus pour rester clairs sur téléphone comme sur ordinateur.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { step: '01', title: 'Crée ton compte', desc: 'Inscription gratuite en 30 secondes. Choisis ton niveau et tes matières.', icon: '✍️' },
-              { step: '02', title: 'Révise & entraîne-toi', desc: 'Cours, examens corrigés, flashcards et questions au tuteur IA Kelassi.', icon: '📖' },
-              { step: '03', title: 'Progresse chaque jour', desc: 'Suis ta progression, gagne des XP, maintiens ton streak de révision.', icon: '📈' },
-            ].map((item) => (
-              <div key={item.step} className="text-center">
-                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5 shadow-lg shadow-blue-200">
-                  {item.icon}
-                </div>
-                <span className="text-xs font-black text-blue-400 tracking-widest uppercase">Étape {item.step}</span>
-                <h3 className="text-xl font-bold text-gray-900 mt-2 mb-2">{item.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ── TESTIMONIALS ── */}
-      <section id="temoignages" className="py-24 px-6 bg-gray-950">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-3">Programme Beta — Brazzaville & Pointe-Noire</p>
-            <h2 className="text-4xl md:text-5xl font-black text-white">
-              Ce qu'ils disent de Kelassi
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="bg-gray-900 rounded-3xl p-7 border border-gray-800 card-hover">
-                <div className="flex gap-1 mb-5">
-                  {[1,2,3,4,5].map((s) => (
-                    <span key={s} className="text-amber-400 text-lg">★</span>
-                  ))}
+          <div className="mt-14 grid gap-6 lg:grid-cols-[1.35fr_.65fr]">
+            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#f8f7f3] p-3 shadow-2xl shadow-black/30 sm:p-5">
+              <div className="rounded-[1.5rem] bg-white p-5 text-zinc-900 sm:p-7">
+                <div className="flex items-center justify-between border-b border-zinc-100 pb-5">
+                  <Brand />
+                  <div className="flex items-center gap-3"><span className="hidden rounded-full bg-amber-50 px-3 py-1.5 text-xs font-black text-amber-700 sm:inline">🔥 Série de 7 jours</span><span className="grid h-9 w-9 place-items-center rounded-full bg-[#1e3a8a] text-xs font-black text-white">G</span></div>
                 </div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-6 italic">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className={`w-9 h-9 ${t.color} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
-                    {t.avatar}
+                <div className="mt-6 grid gap-5 md:grid-cols-[1.35fr_.65fr]">
+                  <div className="rounded-3xl bg-[#1e3a8a] p-6 text-white">
+                    <p className="text-sm font-semibold text-blue-200">Bonjour Grâce 👋</p>
+                    <h3 className="mt-1 text-2xl font-black">Continue sur ta lancée !</h3>
+                    <p className="mt-2 text-sm text-blue-100/75">Tu as déjà atteint 68% de ton objectif de la semaine.</p>
+                    <div className="mt-7 h-2 overflow-hidden rounded-full bg-white/15"><div className="h-full w-[68%] rounded-full bg-[#f5a623]" /></div>
+                    <div className="mt-3 flex justify-between text-xs font-bold text-blue-100"><span>340 XP gagnés</span><span>500 XP</span></div>
                   </div>
-                  <div>
-                    <p className="text-white font-semibold text-sm">{t.name}</p>
-                    <p className="text-gray-500 text-xs">{t.school}</p>
+                  <div className="grid grid-cols-2 gap-3 md:grid-cols-1">
+                    <div className="rounded-2xl bg-amber-50 p-4"><Trophy className="h-6 w-6 text-amber-600"/><p className="mt-3 text-2xl font-black">1 240</p><p className="text-xs font-semibold text-zinc-500">XP au total</p></div>
+                    <div className="rounded-2xl bg-emerald-50 p-4"><BarChart3 className="h-6 w-6 text-emerald-600"/><p className="mt-3 text-2xl font-black">78%</p><p className="text-xs font-semibold text-zinc-500">Progression</p></div>
                   </div>
                 </div>
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-zinc-100 p-4"><div className="flex items-center justify-between"><span className="grid h-9 w-9 place-items-center rounded-xl bg-blue-50 text-[#1e3a8a]"><BookOpen className="h-5 w-5"/></span><span className="text-xs font-bold text-zinc-400">68%</span></div><p className="mt-4 font-black">Mathématiques</p><p className="text-xs text-zinc-500">Fonctions numériques</p></div>
+                  <div className="rounded-2xl border border-zinc-100 p-4"><div className="flex items-center justify-between"><span className="grid h-9 w-9 place-items-center rounded-xl bg-violet-50 text-violet-700"><FileCheck2 className="h-5 w-5"/></span><span className="text-xs font-bold text-emerald-600">14/20</span></div><p className="mt-4 font-black">BAC blanc</p><p className="text-xs text-zinc-500">Physique · Série D</p></div>
+                  <div className="rounded-2xl border border-zinc-100 p-4"><div className="flex items-center justify-between"><span className="grid h-9 w-9 place-items-center rounded-xl bg-amber-50 text-amber-700"><Bot className="h-5 w-5"/></span><span className="h-2 w-2 rounded-full bg-emerald-500" /></div><p className="mt-4 font-black">Kelassi IA</p><p className="text-xs text-zinc-500">Prêt à t’expliquer</p></div>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── MOBILE APP ── */}
-      <section className="py-24 px-6 bg-blue-600 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full blur-3xl opacity-50 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-700 rounded-full blur-3xl opacity-50 pointer-events-none" />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <p className="text-blue-200 text-sm font-bold uppercase tracking-widest mb-4">Application mobile</p>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-            Révise même sans connexion
-          </h2>
-          <p className="text-blue-100 mb-10 max-w-lg mx-auto text-lg leading-relaxed">
-            Télécharge tes cours en avance. Révise dans le bus, sans WiFi. Tes flashcards se synchronisent quand tu te reconnectes.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="#"
-              className="inline-flex items-center gap-4 bg-black text-white px-7 py-4 rounded-2xl font-medium hover:bg-gray-900 transition-all hover:scale-105"
-            >
-              <span className="text-3xl">🍎</span>
-              <div className="text-left">
-                <p className="text-xs text-gray-400 font-medium">Disponible sur</p>
-                <p className="text-base font-bold">App Store</p>
-              </div>
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center gap-4 bg-black text-white px-7 py-4 rounded-2xl font-medium hover:bg-gray-900 transition-all hover:scale-105"
-            >
-              <span className="text-3xl">🤖</span>
-              <div className="text-left">
-                <p className="text-xs text-gray-400 font-medium">Disponible sur</p>
-                <p className="text-base font-bold">Google Play</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FINAL CTA ── */}
-      <section className="py-24 px-6 bg-white text-center">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
-            Prêt à commencer ?
-          </h2>
-          <p className="text-xl text-gray-500 mb-10">
-            10 questions IA gratuites par jour. Pas de carte bancaire requise.
-          </p>
-          <Link
-            href="/register"
-            className="inline-flex items-center gap-2 px-10 py-5 bg-blue-600 text-white rounded-2xl font-bold text-xl hover:bg-blue-700 transition-all hover:scale-105 shadow-xl shadow-blue-200"
-          >
-            Créer mon compte gratuit →
-          </Link>
-          <p className="text-sm text-gray-400 mt-5">Gratuit · Sans engagement · Pour les élèves congolais 🇨🇬</p>
-        </div>
-      </section>
-
-      {/* ── FOOTER ── */}
-      <footer className="bg-gray-950 py-12 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-black text-sm">K</span>
-              </div>
-              <span className="text-xl font-black text-white">Kelassi</span>
             </div>
-            <div className="flex gap-6 text-sm text-gray-400">
-              <Link href="/cgu" className="hover:text-white transition-colors">CGU</Link>
-              <Link href="/confidentialite" className="hover:text-white transition-colors">Confidentialité</Link>
-              <a href="mailto:support@kelassi.app" className="hover:text-white transition-colors">Contact</a>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
+              <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 backdrop-blur">
+                <div className="rounded-[1.4rem] bg-white p-5 text-zinc-900 shadow-xl">
+                  <div className="flex items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-wider text-[#1e3a8a]">Cours</p><h3 className="mt-1 text-xl font-black">Mes matières</h3></div><Search className="h-5 w-5 text-zinc-400"/></div>
+                  <div className="mt-5 space-y-3">{[['Mathématiques','12 chapitres','bg-blue-50 text-blue-700'],['Sciences de la vie','9 chapitres','bg-emerald-50 text-emerald-700'],['Français','11 chapitres','bg-amber-50 text-amber-700']].map(([name,count,tone],i)=><div key={name} className="flex items-center gap-3 rounded-2xl border border-zinc-100 p-3"><span className={`grid h-10 w-10 place-items-center rounded-xl ${tone}`}>{i===0?<Layers3 className="h-5 w-5"/>:i===1?<Sparkles className="h-5 w-5"/>:<BookOpen className="h-5 w-5"/>}</span><div className="min-w-0 flex-1"><p className="truncate text-sm font-black">{name}</p><p className="text-xs text-zinc-400">{count}</p></div><ArrowRight className="h-4 w-4 text-zinc-300"/></div>)}</div>
+                </div>
+              </div>
+              <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 backdrop-blur">
+                <div className="rounded-[1.4rem] bg-white p-5 text-zinc-900 shadow-xl">
+                  <div className="flex items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-wider text-violet-700">Examens</p><h3 className="mt-1 text-xl font-black">Prochaine simulation</h3></div><CalendarDays className="h-5 w-5 text-violet-600"/></div>
+                  <div className="mt-5 rounded-2xl bg-violet-50 p-4"><div className="flex items-center justify-between"><span className="rounded-full bg-white px-3 py-1 text-xs font-black text-violet-700">BAC D</span><span className="flex items-center gap-1 text-xs font-bold text-zinc-500"><Clock3 className="h-3.5 w-3.5"/> 3h</span></div><p className="mt-4 font-black">Mathématiques · Session 2024</p><p className="mt-1 text-xs text-zinc-500">Sujet officiel avec corrigé détaillé</p><button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-violet-700 py-3 text-sm font-black text-white"><Play className="h-4 w-4 fill-current"/> Commencer</button></div>
+                </div>
+              </div>
             </div>
-            <p className="text-sm text-gray-600">© 2026 Alpha-Tech · Congo Brazzaville 🇨🇬</p>
           </div>
         </div>
-      </footer>
+      </section>
 
+      <section className="px-5 py-24 lg:px-8">
+        <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-2">
+          <div className="relative mx-auto w-full max-w-xl rounded-[2.2rem] bg-[#172554] p-5 shadow-xl">
+            <div className="rounded-[1.6rem] bg-[#fcfbf9] p-5 sm:p-7">
+              <div className="flex items-center justify-between"><Brand /><span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-700">🔥 7 jours</span></div>
+              <div className="mt-8 rounded-3xl bg-[#1e3a8a] p-6 text-white"><p className="text-sm text-blue-200">Bonjour Grâce 👋</p><p className="mt-1 text-2xl font-black">Prête à avancer aujourd’hui ?</p><div className="mt-5 h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full w-2/3 rounded-full bg-[#f5a623]" /></div><p className="mt-2 text-xs text-blue-200">Objectif hebdomadaire · 68%</p></div>
+              <div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-2xl bg-blue-50 p-4"><BookOpen className="h-6 w-6 text-[#1e3a8a]"/><p className="mt-3 font-black">Continuer le cours</p><p className="text-xs text-zinc-500">Fonctions numériques</p></div><div className="rounded-2xl bg-amber-50 p-4"><Bot className="h-6 w-6 text-amber-600"/><p className="mt-3 font-black">Demander à l’IA</p><p className="text-xs text-zinc-500">Disponible maintenant</p></div></div>
+            </div>
+          </div>
+          <div><p className="text-sm font-black uppercase tracking-[.2em] text-[#1e3a8a]">Une app qui te comprend</p><h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">Le bon accompagnement, au bon moment.</h2><div className="mt-8 space-y-6">{reasons.map(([title, text]) => <div key={title} className="flex gap-4"><span className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-700"><Check className="h-5 w-5" /></span><div><h3 className="text-lg font-black">{title}</h3><p className="mt-1 leading-7 text-zinc-600">{text}</p></div></div>)}</div></div>
+        </div>
+      </section>
+
+      <section id="parents" className="bg-[#172554] px-5 py-24 text-white lg:px-8">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+          <div><div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-amber-300"><UsersRound className="h-4 w-4" /> Parents & tuteurs</div><h2 className="mt-6 text-4xl font-black tracking-tight sm:text-5xl">Accompagnez leur réussite en toute sérénité.</h2><p className="mt-5 max-w-xl text-lg leading-8 text-blue-100">Suivez les efforts, célébrez les progrès et offrez un environnement d’apprentissage sécurisé à votre enfant.</p><div className="mt-8 grid gap-4 sm:grid-cols-3">{[[TrendingUp,'Suivi des performances'],[ShieldCheck,'Espace sécurisé'],[UserRoundCheck,'Soutien structuré']].map(([I,label]) => { const Icon = I as typeof TrendingUp; return <div key={label as string} className="rounded-2xl border border-white/10 bg-white/5 p-4"><Icon className="h-6 w-6 text-amber-300"/><p className="mt-3 text-sm font-bold">{label as string}</p></div>})}</div><Link href="/register" className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 font-black text-[#172554]">Découvrir l’espace parent <ArrowRight className="h-5 w-5" /></Link></div>
+          <Image src="/kelassi/parent-student.jpeg" alt="Une mère accompagne son enfant dans ses révisions" width={1264} height={832} className="aspect-[1.25] w-full rounded-[2rem] object-cover shadow-2xl" />
+        </div>
+      </section>
+
+      <section className="px-5 py-24 text-center lg:px-8"><div className="mx-auto max-w-3xl"><span className="mx-auto grid h-20 w-20 place-items-center rounded-3xl bg-amber-100 text-[#f5a623]"><Medal className="h-10 w-10" /></span><h2 className="mt-7 text-4xl font-black tracking-tight sm:text-5xl">Prêt à décrocher ton diplôme ?</h2><p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-zinc-600">Révise à ton rythme, comprends réellement tes cours et avance chaque jour vers la réussite de ton BEPC ou de ton BAC.</p><Link href="/register" className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-[#f5a623] px-8 py-4 text-lg font-black text-zinc-950 shadow-lg shadow-amber-200/50">Je crée mon compte gratuit <ArrowRight className="h-5 w-5" /></Link></div></section>
+
+      <footer className="bg-zinc-950 px-5 py-14 text-zinc-400 lg:px-8"><div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.5fr_1fr_1fr]"><div><Brand light /><p className="mt-5 max-w-sm text-sm leading-6">L’assistant scolaire créé avec passion pour la jeunesse congolaise.</p><div className="mt-5 flex gap-3"><MessageCircle className="h-5 w-5"/><Star className="h-5 w-5"/></div></div><div><p className="font-bold text-white">Alpha Kelassi</p><div className="mt-4 flex flex-col gap-3 text-sm"><a href="#services">Nos services</a><Link href="/billing">Nos formules</Link><Link href="/tuteur">Tuteur IA</Link></div></div><div><p className="font-bold text-white">Informations</p><div className="mt-4 flex flex-col gap-3 text-sm"><Link href="/cgu">Conditions d’utilisation</Link><Link href="/confidentialite">Confidentialité</Link><Link href="/register">Créer un compte</Link></div></div></div><div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6 text-xs">© 2026 Alpha Kelassi. Tous droits réservés.</div></footer>
     </main>
   )
 }

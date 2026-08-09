@@ -6,23 +6,26 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://alpha-kelassi-web.vercel.app'),
   title: {
     default: 'Kelassi — Révisions BEPC & BAC Congo Brazzaville',
-    template: '%s | Kelassi',
+    template: '%s | Cognix — Alpha Kelassi',
   },
   description: 'Cours résumés, examens d\'État officiels avec corrigés et tuteur IA pour les élèves congolais. Prépare ton BEPC et ton BAC avec Kelassi.',
   keywords: ['BEPC Congo', 'BAC Congo Brazzaville', 'cours révision', 'examens état corrigés', 'tuteur IA', 'révision scolaire Congo'],
-  authors: [{ name: 'Kelassi' }],
-  creator: 'Kelassi',
+  authors: [{ name: 'Cognix' }],
+  creator: 'Cognix',
   openGraph: {
     title: 'Kelassi — Révisions BEPC & BAC Congo',
     description: 'L\'app de révision IA pour les élèves congolais',
     locale: 'fr_CG',
     type: 'website',
     siteName: 'Kelassi',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Cognix — Alpha Kelassi' }],
   },
   twitter: {
     card: 'summary',
+    images: ['/og.png'],
     title: 'Kelassi — Révisions BEPC & BAC Congo',
     description: 'Cours, examens officiels et tuteur IA pour les élèves congolais',
   },
@@ -36,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#2563eb',
+  themeColor: '#1e3a8a',
   colorScheme: 'light',
   width: 'device-width',
   initialScale: 1,
