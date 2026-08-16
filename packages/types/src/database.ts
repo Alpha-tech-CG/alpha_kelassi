@@ -19,7 +19,7 @@ export type Database = {
           phone: string | null
           full_name: string | null
           avatar_url: string | null
-          role: 'student' | 'admin'
+          role: 'student' | 'admin' | 'tutor' | 'teacher' | 'parent'
           plan: 'free' | 'premium'
           xp: number
           streak: number
@@ -37,7 +37,7 @@ export type Database = {
           phone?: string | null
           full_name?: string | null
           avatar_url?: string | null
-          role?: 'student' | 'admin'
+          role?: 'student' | 'admin' | 'tutor' | 'teacher' | 'parent'
           plan?: 'free' | 'premium'
           xp?: number
           streak?: number
@@ -55,7 +55,7 @@ export type Database = {
           phone?: string | null
           full_name?: string | null
           avatar_url?: string | null
-          role?: 'student' | 'admin'
+          role?: 'student' | 'admin' | 'tutor' | 'teacher' | 'parent'
           plan?: 'free' | 'premium'
           xp?: number
           streak?: number
@@ -987,6 +987,228 @@ export type Database = {
           }
         ]
       }
+      tutor_profiles: {
+        Row: {
+          user_id: string
+          bio: string | null
+          id_doc_url: string | null
+          bac_doc_url: string | null
+          is_verified: boolean
+          verified_at: string | null
+          score: number
+          wallet_balance: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          bio?: string | null
+          id_doc_url?: string | null
+          bac_doc_url?: string | null
+          is_verified?: boolean
+          verified_at?: string | null
+          score?: number
+          wallet_balance?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          bio?: string | null
+          id_doc_url?: string | null
+          bac_doc_url?: string | null
+          is_verified?: boolean
+          verified_at?: string | null
+          score?: number
+          wallet_balance?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tutor_subjects: {
+        Row: { tutor_id: string; subject_id: string }
+        Insert: { tutor_id: string; subject_id: string }
+        Update: { tutor_id?: string; subject_id?: string }
+        Relationships: []
+      }
+      correction_missions: {
+        Row: {
+          id: string
+          student_id: string
+          tutor_id: string | null
+          subject_id: string
+          exercise_url: string
+          work_url: string
+          status: 'pending' | 'assigned' | 'submitted' | 'delivered' | 'failed' | 'disputed'
+          accepted_at: string | null
+          due_at: string | null
+          delivered_at: string | null
+          attempts: number
+          reward_fcfa: number
+          ai_verdict: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          student_id: string
+          tutor_id?: string | null
+          subject_id: string
+          exercise_url: string
+          work_url: string
+          status?: 'pending' | 'assigned' | 'submitted' | 'delivered' | 'failed' | 'disputed'
+          accepted_at?: string | null
+          due_at?: string | null
+          delivered_at?: string | null
+          attempts?: number
+          reward_fcfa?: number
+          ai_verdict?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          student_id?: string
+          tutor_id?: string | null
+          subject_id?: string
+          exercise_url?: string
+          work_url?: string
+          status?: 'pending' | 'assigned' | 'submitted' | 'delivered' | 'failed' | 'disputed'
+          accepted_at?: string | null
+          due_at?: string | null
+          delivered_at?: string | null
+          attempts?: number
+          reward_fcfa?: number
+          ai_verdict?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      correction_solutions: {
+        Row: {
+          id: string
+          mission_id: string
+          attempt: number
+          photo_url: string
+          ai_status: 'pending' | 'ok' | 'error'
+          ai_feedback: string | null
+          submitted_at: string
+        }
+        Insert: {
+          id?: string
+          mission_id: string
+          attempt: number
+          photo_url: string
+          ai_status?: 'pending' | 'ok' | 'error'
+          ai_feedback?: string | null
+          submitted_at?: string
+        }
+        Update: {
+          id?: string
+          mission_id?: string
+          attempt?: number
+          photo_url?: string
+          ai_status?: 'pending' | 'ok' | 'error'
+          ai_feedback?: string | null
+          submitted_at?: string
+        }
+        Relationships: []
+      }
+      correction_disputes: {
+        Row: {
+          id: string
+          mission_id: string
+          student_id: string
+          description: string
+          ai_explanation: string | null
+          resolved_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          mission_id: string
+          student_id: string
+          description: string
+          ai_explanation?: string | null
+          resolved_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          mission_id?: string
+          student_id?: string
+          description?: string
+          ai_explanation?: string | null
+          resolved_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      tutor_ratings: {
+        Row: {
+          id: string
+          mission_id: string
+          student_id: string
+          tutor_id: string
+          clarity: number
+          quality: number
+          comment: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          mission_id: string
+          student_id: string
+          tutor_id: string
+          clarity: number
+          quality: number
+          comment?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          mission_id?: string
+          student_id?: string
+          tutor_id?: string
+          clarity?: number
+          quality?: number
+          comment?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      tutor_wallet_transactions: {
+        Row: {
+          id: string
+          tutor_id: string
+          mission_id: string | null
+          amount_fcfa: number
+          type: 'credit' | 'withdrawal'
+          status: 'pending' | 'completed' | 'rejected'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          tutor_id: string
+          mission_id?: string | null
+          amount_fcfa: number
+          type: 'credit' | 'withdrawal'
+          status?: 'pending' | 'completed' | 'rejected'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          tutor_id?: string
+          mission_id?: string | null
+          amount_fcfa?: number
+          type?: 'credit' | 'withdrawal'
+          status?: 'pending' | 'completed' | 'rejected'
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       quiz_weak_areas: {
@@ -1003,7 +1225,7 @@ export type Database = {
     }
     Functions: {
       submit_quiz_attempt: {
-        Args: { p_quiz_id: string; p_answers: Json; p_duration_sec: number }
+        Args: { p_quiz_id: string; p_answers: Json; p_duration_sec: number; p_mode?: string }
         Returns: Json
       }
       search_chunks: {
@@ -1027,6 +1249,10 @@ export type Database = {
       increment_xp: {
         Args: { p_user_id: string; p_amount: number }
         Returns: number
+      }
+      increment_tutor_wallet: {
+        Args: { p_tutor_id: string; p_amount: number }
+        Returns: undefined
       }
     }
     Enums: {

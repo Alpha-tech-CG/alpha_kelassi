@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { BookOpen, FileText, Bot, Layers, Crown, BarChart3, type LucideIcon } from 'lucide-react'
+import { BookOpen, FileText, Bot, Layers, Crown, BarChart3, CalendarDays, type LucideIcon } from 'lucide-react'
+import { getCurrentCalendarState } from '@/lib/academic-calendar'
 
 interface Shortcut {
   href: string; label: string; Icon: LucideIcon
@@ -20,13 +21,16 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   const [{ data: profile }, { data: progress }, { data: recentDocs }] = await Promise.all([
-    supabase.from('users').select('full_name, plan, onboarding_completed').eq('id', user!.id).single(),
+    supabase.from('users').select('full_name, plan, onboarding_completed, study_level_pref').eq('id', user!.id).single(),
     supabase.from('user_progress').select('*, subjects(name)').eq('user_id', user!.id).limit(5),
     supabase.from('documents').select('id, title, type, level').eq('is_premium', false).order('created_at', { ascending: false }).limit(4),
   ])
 
   // Redirige les nouveaux utilisateurs vers l'onboarding
   if (profile && !profile.onboarding_completed) redirect('/onboarding')
+
+  // Calendrier scolaire (migr. 045) — seul le CEPE en a un pour l'instant.
+  const calendar = profile?.study_level_pref === 'cepe' ? await getCurrentCalendarState(supabase, 'cepe', 'CG') : null
 
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir'
@@ -54,6 +58,27 @@ export default async function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* ── CALENDRIER SCOLAIRE ── */}
+      {calendar?.month && (
+        <Link
+          href="/calendrier"
+          className="flex items-center gap-4 bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:border-blue-200 hover:shadow-md transition-all"
+        >
+          <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+            <CalendarDays className="w-5 h-5 text-blue-600" strokeWidth={1.75} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-gray-900">
+              {calendar.month.label}{calendar.term ? ` · ${calendar.term.label}` : ''}
+            </p>
+            <p className="text-xs text-gray-400 mt-0.5">
+              {calendar.is_holiday ? 'Hors période scolaire' : 'Voir le programme du mois'}
+            </p>
+          </div>
+          <span className="text-gray-300">→</span>
+        </Link>
+      )}
 
       {/* ── SHORTCUTS ── */}
       <div>

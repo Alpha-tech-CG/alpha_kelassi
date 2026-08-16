@@ -13,6 +13,8 @@ interface Subject {
   lessons: number
   quizzes: number
   progress: number // 0..100
+  hasChildren: boolean
+  domains: number
 }
 
 export default function MatieresScreen() {
@@ -26,12 +28,23 @@ export default function MatieresScreen() {
     if (!ready) return
     async function load() {
       // Matières du parcours ET de la filière de l'élève uniquement
-      let sq = supabase.from('subjects').select('id, name, level, icon').order('name')
+      let sq = supabase.from('subjects').select('id, name, level, icon, parent_subject_id').order('name')
       if (level) sq = sq.eq('level', level)
       if (track) sq = sq.eq('track_type', track)
       const { data: subs } = await sq
       const rows = (subs ?? []) as any[]
       const subjectIds = rows.map((s) => s.id)
+
+      // Regroupement en domaines (migration 044) : seules les matières sans parent
+      // apparaissent dans la liste principale ; leurs enfants alimentent leurs stats.
+      const childrenByParent = new Map<string, any[]>()
+      for (const r of rows) {
+        if (!r.parent_subject_id) continue
+        const arr = childrenByParent.get(r.parent_subject_id) ?? []
+        arr.push(r)
+        childrenByParent.set(r.parent_subject_id, arr)
+      }
+      const topLevel = rows.filter((r) => !r.parent_subject_id)
 
       // Contenu structuré (027) : chapitres → leçons → progression réelle
       const { data: { user } } = await supabase.auth.getUser()
@@ -61,13 +74,18 @@ export default function MatieresScreen() {
         if (doneSet.has(l.id)) doneC.set(sid, (doneC.get(sid) ?? 0) + 1)
       }
 
-      setSubjects(rows.map((s) => {
-        const t = totalC.get(s.id) ?? 0
+      setSubjects(topLevel.map((s) => {
+        const children = childrenByParent.get(s.id) ?? []
+        const ids = children.length ? [s.id, ...children.map((c) => c.id)] : [s.id]
+        const sum = (m: Map<string, number>) => ids.reduce((acc, id) => acc + (m.get(id) ?? 0), 0)
+        const t = sum(totalC)
         return {
           id: s.id, name: s.name, level: s.level, icon: s.icon,
-          lessons: chapCount.get(s.id) ?? 0,
-          quizzes: quizCount.get(s.id) ?? 0,
-          progress: t ? Math.round(((doneC.get(s.id) ?? 0) / t) * 100) : 0,
+          lessons: sum(chapCount),
+          quizzes: sum(quizCount),
+          progress: t ? Math.round((sum(doneC) / t) * 100) : 0,
+          hasChildren: children.length > 0,
+          domains: children.length,
         }
       }))
       setLoading(false)
@@ -113,7 +131,7 @@ export default function MatieresScreen() {
                 key={s.id}
                 activeOpacity={0.85}
                 style={styles.card}
-                onPress={() => router.push(`/parcours/${s.id}` as any)}
+                onPress={() => router.push((s.hasChildren ? `/parcours/domaines/${s.id}` : `/parcours/${s.id}`) as any)}
               >
                 <View style={[styles.accent, { backgroundColor: accent }]} />
                 <View style={styles.cardBody}>
@@ -127,7 +145,9 @@ export default function MatieresScreen() {
                   </View>
 
                   <Text style={styles.subjectName}>{s.name}</Text>
-                  <Text style={styles.counts}>📘 {s.lessons} Cours   ✅ {s.quizzes} Quiz</Text>
+                  <Text style={styles.counts}>
+                    {s.hasChildren ? `📁 ${s.domains} domaines   📘 ${s.lessons} chapitres` : `📘 ${s.lessons} Cours   ✅ ${s.quizzes} Quiz`}
+                  </Text>
 
                   <View style={styles.progressRow}>
                     <Text style={styles.progressLabel}>Progression</Text>

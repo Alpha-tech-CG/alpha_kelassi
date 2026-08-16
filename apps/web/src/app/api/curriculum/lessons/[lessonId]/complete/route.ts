@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { XP, awardXP, awardBadges, checkAndAwardBadges } from '@/lib/xp'
+import { recordChapterReview } from '@/lib/curriculum-review'
 import { z } from 'zod'
 
 const schema = z.object({ score: z.number().int().min(0).max(100).optional() })
@@ -81,6 +82,11 @@ export async function POST(
   if (xp > 0) await awardXP(user.id, xp)
   if (chapterCompleted) await awardBadges(user.id, ['chapter_master'])
   await checkAndAwardBadges(user.id)
+
+  // Calendrier scolaire (migr. 045) : alimente le suivi de révision du chapitre.
+  if (lesson.type === 'quiz' && score !== undefined) {
+    recordChapterReview(supabase, user.id, lesson.chapter_id, score).catch(() => {})
+  }
 
   return NextResponse.json({ data: { completed: true, xp_awarded: xp, chapter_completed: chapterCompleted } })
 }

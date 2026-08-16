@@ -5,14 +5,18 @@ import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL, subjectIcon, fonts } from '../../lib/theme'
 import { SolarIcon } from '../../icons/solar'
+import { API_URL } from '../../lib/config'
 
 interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
+interface CalendarBanner { month: { label: string } | null; term: { label: string } | null; is_holiday: boolean }
 
 const ACTIONS = [
-  { label: 'Tuteur',  icon: 'chat',       route: '/(tabs)/tuteur' },
-  { label: 'Cards',   icon: 'card',       route: '/flashcards' },
-  { label: 'Examens', icon: 'document',   route: '/(tabs)/examens' },
-  { label: 'Vidéos',  icon: 'playCircle', route: '/videos' },
+  { label: 'Tuteur',     icon: 'chat',     route: '/(tabs)/tuteur' },
+  { label: 'Correction', icon: 'notebook', route: '/correction' },
+  { label: 'Groupe',     icon: 'group',    route: '/groupes' },
+  { label: 'Classement', icon: 'crown',    route: '/classements' },
+  { label: 'Examens',    icon: 'document', route: '/(tabs)/examens' },
+  { label: 'Cards',      icon: 'card',     route: '/flashcards' },
 ]
 
 export default function HomeScreen() {
@@ -22,6 +26,7 @@ export default function HomeScreen() {
   const [xp, setXp] = useState(0)
   const [streak, setStreak] = useState(0)
   const [subjects, setSubjects] = useState<SubjectVM[]>([])
+  const [calendar, setCalendar] = useState<CalendarBanner | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -34,6 +39,18 @@ export default function HomeScreen() {
         supabase.from('users').select('full_name, xp').eq('id', user.id).single(),
         supabase.from('user_progress').select('streak_days').eq('user_id', user.id),
       ])
+
+      // Calendrier scolaire CEPE (migr. 045) — bandeau facultatif, échoue silencieusement
+      // pour les autres niveaux (pas encore de calendrier BEPC/BAC).
+      if (level === 'cepe') {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          if (!session) return
+          fetch(`${API_URL}/api/curriculum/calendar/current`, { headers: { Authorization: `Bearer ${session.access_token}` } })
+            .then((r) => r.json())
+            .then((json) => setCalendar(json?.data ?? null))
+            .catch(() => {})
+        })
+      }
       setName((profile as { full_name?: string })?.full_name?.split(' ')[0] ?? 'Élève')
       setXp((profile as { xp?: number })?.xp ?? 0)
       setStreak(Math.max(0, ...((prog ?? []) as { streak_days: number }[]).map((p) => p.streak_days)))
@@ -108,6 +125,17 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.body}>
+        {calendar?.month && (
+          <TouchableOpacity style={styles.calBanner} onPress={() => router.push('/calendrier' as any)} activeOpacity={0.85}>
+            <Text style={styles.calIcon}>📅</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.calMonth}>{calendar.month.label}{calendar.term ? ` · ${calendar.term.label}` : ''}</Text>
+              <Text style={styles.calHint}>{calendar.is_holiday ? 'Hors période scolaire' : 'Voir le programme du mois'}</Text>
+            </View>
+            <Text style={styles.calArrow}>→</Text>
+          </TouchableOpacity>
+        )}
+
         {/* Raccourcis */}
         <View style={styles.actions}>
           {ACTIONS.map((a) => (
@@ -176,10 +204,15 @@ const styles = StyleSheet.create({
   progFill: { height: '100%', backgroundColor: colors.primary, borderRadius: radius.full },
   progHint: { color: colors.textMuted, fontSize: 11, fontWeight: '700', marginTop: 14 },
   body: { paddingHorizontal: 20, marginTop: 20 },
-  actions: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28 },
-  action: { alignItems: 'center', gap: 6, width: '23%' },
+  calBanner: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.card, borderRadius: 20, padding: 16, marginBottom: 20, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
+  calIcon: { fontSize: 24 },
+  calMonth: { fontSize: 14, fontWeight: '900', color: colors.text },
+  calHint: { fontSize: 12, color: colors.textMuted, marginTop: 2, fontWeight: '600' },
+  calArrow: { fontSize: 16, color: colors.primary, fontWeight: '900' },
+  actions: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 18, marginBottom: 28 },
+  action: { alignItems: 'center', gap: 6, width: '30%' },
   actionBox: { width: 56, height: 56, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
-  actionLabel: { fontSize: 10, fontWeight: '900', color: colors.textMuted, textTransform: 'uppercase' },
+  actionLabel: { fontSize: 10, fontWeight: '900', color: colors.textMuted, textTransform: 'uppercase', textAlign: 'center' },
   sectionHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   sectionTitle: { fontSize: 20, fontFamily: fonts.headingBlack, color: colors.text },
   seeAll: { color: colors.primary, fontSize: 11, fontWeight: '900', letterSpacing: 1 },

@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
-type LessonType = 'cours' | 'resume' | 'quiz' | 'video'
+type LessonType = 'cours' | 'resume' | 'fiche' | 'quiz' | 'video'
 interface Lesson {
   id: string; type: LessonType; title: string; content: string | null
   video_url: string | null; duration_min: number | null; is_premium: boolean; order_index: number
@@ -12,6 +12,7 @@ interface Lesson {
 
 const TYPES: { value: LessonType; label: string; icon: string }[] = [
   { value: 'cours', label: 'Cours', icon: '📖' }, { value: 'resume', label: 'Résumé', icon: '📝' },
+  { value: 'fiche', label: 'Fiche', icon: '🗂️' },
   { value: 'quiz', label: 'Quiz', icon: '✅' }, { value: 'video', label: 'Vidéo', icon: '🎥' },
 ]
 
@@ -80,8 +81,14 @@ export default function AdminLessonsPage() {
   return (
     <div className="px-8 py-8 max-w-4xl">
       <Link href="/admin/curriculum" className="text-sm text-gray-400 hover:text-gray-700">← Curriculum</Link>
-      <h1 className="text-2xl font-black text-gray-900 mt-2 mb-1">Leçons du chapitre</h1>
-      <p className="text-gray-500 text-sm mb-6">4 blocs : cours & résumé en Markdown (formules $…$ supportées côté élève), quiz, vidéo.</p>
+      <div className="flex items-center justify-between mt-2 mb-1">
+        <h1 className="text-2xl font-black text-gray-900">Leçons du chapitre</h1>
+        <Link href={`/admin/curriculum/chapter/${chapterId}/exercices`}
+          className="px-4 py-2 bg-green-50 text-green-700 rounded-xl text-sm font-bold border border-green-200 hover:bg-green-100">
+          ✏️ Gérer les exercices →
+        </Link>
+      </div>
+      <p className="text-gray-500 text-sm mb-6">Blocs : cours, résumé, fiche de révision (Markdown, formules $…$), quiz, vidéo.</p>
 
       {/* Ajout */}
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">

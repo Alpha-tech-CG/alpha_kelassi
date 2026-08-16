@@ -25,8 +25,13 @@ import { adminNotificationsRouter } from './routes/admin/notifications.js'
 import { notificationsRouter } from './routes/notifications.js'
 import { remindersRouter } from './routes/reminders.js'
 import { whatsappWebhookRouter } from './routes/whatsapp-webhook.js'
+import { trackRouter } from './routes/track.js'
+import { correctionsRouter } from './routes/corrections.js'
+import { tutorRouter } from './routes/tutor.js'
+import { adminTutorsRouter } from './routes/admin/tutors.js'
 import { startEmbedWorker } from './jobs/embed-worker.js'
 import { startReminderWorker } from './jobs/reminder-worker.js'
+import { startTutorWorker } from './jobs/tutor-worker.js'
 import { scheduleDailyReminders } from './jobs/reminder-queue.js'
 import { initSentry } from './lib/monitoring.js'
 import { metricsMiddleware, getMetrics } from './middleware/metrics.js'
@@ -37,6 +42,7 @@ const queueRedisUrl = process.env['QUEUE_REDIS_URL']
 if (queueRedisUrl && !queueRedisUrl.includes('xxxx')) {
   startEmbedWorker()
   startReminderWorker()
+  startTutorWorker()
   scheduleDailyReminders().catch((e) => console.error('[reminders] planification échouée:', e))
 }
 initSentry().catch(() => null)
@@ -84,6 +90,10 @@ app.route('/api/admin/notifications', adminNotificationsRouter)
 app.route('/api/notifications', notificationsRouter)
 app.route('/api/reminders', remindersRouter)
 app.use('/api/ai/chat', chatRateLimit)
+app.route('/api/track', trackRouter)
+app.route('/api/corrections', correctionsRouter)
+app.route('/api/tutor', tutorRouter)
+app.route('/api/admin/tutors', adminTutorsRouter)
 app.route('/webhooks', webhooksRouter)
 app.route('/webhooks/whatsapp', whatsappWebhookRouter)
 

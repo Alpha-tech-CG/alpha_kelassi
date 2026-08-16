@@ -14,6 +14,9 @@ const NAV = [
   { href: '/admin/subscriptions', label: 'Abonnements', icon: '💳' },
   { href: '/admin/notifications', label: 'Annonces', icon: '🔔' },
   { href: '/admin/users', label: 'Utilisateurs', icon: '👥' },
+  { href: '/admin/tutors', label: 'Tuteurs (validation)', icon: '🧑‍🏫' },
+  { href: '/admin/teachers', label: 'Enseignants', icon: '👨‍🏫' },
+  { href: '/admin/moderation', label: 'Modération', icon: '🛡️' },
 ]
 
 export function AdminSidebar({ name }: { name: string }) {

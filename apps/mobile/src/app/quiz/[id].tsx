@@ -7,7 +7,15 @@ import { API_URL } from '../../lib/config'
 interface Question { id: string; position: number; prompt: string; options: string[] }
 interface Quiz { id: string; title: string; time_limit_sec: number; questions: Question[] }
 interface Correction { question_id: string; correct_index: number; explanation: string | null }
-interface Result { attempt_id: string; score: number; total: number; corrections: Correction[] }
+interface Result { attempt_id: string; score: number; penalized_score?: number; wrong?: number; total: number; mode?: string; corrections: Correction[] }
+
+type Mode = 'entrainement' | 'bac_test' | 'bac_blanc' | 'bac_rouge'
+const MODE_META: Record<Mode, { label: string; emoji: string; timed: boolean }> = {
+  entrainement: { label: 'Entraînement libre', emoji: '🎯', timed: false },
+  bac_test:     { label: 'Bac test',           emoji: '⏱️', timed: true },
+  bac_blanc:    { label: 'Bac blanc',          emoji: '📝', timed: true },
+  bac_rouge:    { label: 'Bac rouge',          emoji: '🔴', timed: true },
+}
 
 function fmt(sec: number) {
   const m = Math.floor(sec / 60)
@@ -16,7 +24,9 @@ function fmt(sec: number) {
 }
 
 export default function QuizTakeScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const { id, mode: modeParam } = useLocalSearchParams<{ id: string; mode?: string }>()
+  const mode: Mode = (['entrainement', 'bac_test', 'bac_blanc', 'bac_rouge'] as const).includes(modeParam as Mode) ? (modeParam as Mode) : 'bac_blanc'
+  const meta = MODE_META[mode]
   const router = useRouter()
   const [quiz, setQuiz] = useState<Quiz | null>(null)
   const [loading, setLoading] = useState(true)
@@ -59,34 +69,38 @@ export default function QuizTakeScreen() {
     const res = await fetch(`${API_URL}/api/quiz/${id}/submit`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body:    JSON.stringify({ answers: payload, duration_sec }),
+      body:    JSON.stringify({ answers: payload, duration_sec, mode }),
     })
     const json = await res.json()
     if (json.data) setResult(json.data)
     setSubmitting(false)
-  }, [quiz, submitting, result, answers, id])
+  }, [quiz, submitting, result, answers, id, mode])
 
-  // Chrono
+  // Chrono — désactivé en mode entraînement libre (sans pression)
   useEffect(() => {
-    if (loading || result || !quiz) return
+    if (loading || result || !quiz || !meta.timed) return
     if (remaining <= 0) { submit(); return }
     const t = setTimeout(() => setRemaining((r) => r - 1), 1000)
     return () => clearTimeout(t)
-  }, [remaining, loading, result, quiz, submit])
+  }, [remaining, loading, result, quiz, submit, meta.timed])
 
   if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#1E74E8" />
   if (!quiz) return <View style={styles.center}><Text>QCM introuvable.</Text></View>
 
   // ---------- Résultat ----------
   if (result) {
-    const pct = result.total > 0 ? Math.round((100 * result.score) / result.total) : 0
+    const shownScore = mode === 'bac_rouge' && result.penalized_score != null ? result.penalized_score : result.score
+    const pct = result.total > 0 ? Math.round((100 * shownScore) / result.total) : 0
     const byId = new Map(result.corrections.map((c) => [c.question_id, c]))
     return (
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <View style={styles.resultCard}>
           <Text style={styles.resultEmoji}>{pct >= 50 ? '🏆' : '💪'}</Text>
-          <Text style={styles.resultScore}>{result.score}/{result.total}</Text>
-          <Text style={styles.resultPct}>{pct}% de bonnes réponses</Text>
+          <Text style={styles.resultScore}>{shownScore}/{result.total}</Text>
+          <Text style={styles.resultPct}>{meta.emoji} {meta.label} · {pct}%</Text>
+          {mode === 'bac_rouge' && (result.wrong ?? 0) > 0 && (
+            <Text style={styles.penalty}>🔴 {result.wrong} erreur{(result.wrong ?? 0) > 1 ? 's' : ''} · pénalité −{result.wrong} (brut : {result.score})</Text>
+          )}
           {result.score > 0 && <Text style={styles.xp}>+{result.score * 5} XP</Text>}
         </View>
 
@@ -132,8 +146,10 @@ export default function QuizTakeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Text style={styles.counter}>Question {current + 1}/{quiz.questions.length}</Text>
-        <Text style={[styles.timer, lowTime && styles.timerLow]}>⏱ {fmt(remaining)}</Text>
+        <Text style={styles.counter}>{meta.emoji} {meta.label} · {current + 1}/{quiz.questions.length}</Text>
+        {meta.timed
+          ? <Text style={[styles.timer, lowTime && styles.timerLow]}>⏱ {fmt(remaining)}</Text>
+          : <Text style={styles.timer}>Libre</Text>}
       </View>
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: `${(answeredCount / quiz.questions.length) * 100}%` }]} />
@@ -210,6 +226,7 @@ const styles = StyleSheet.create({
   resultEmoji: { fontSize: 48, marginBottom: 8 },
   resultScore: { fontSize: 34, fontWeight: '800', color: '#171D17' },
   resultPct: { fontSize: 14, color: '#3E4A3E', marginTop: 4 },
+  penalty: { fontSize: 12, fontWeight: '700', color: '#E12822', marginTop: 8, textAlign: 'center' },
   xp: { fontSize: 14, fontWeight: '700', color: '#1E74E8', marginTop: 8 },
   reviewCard: { backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 10, borderWidth: 1, borderColor: '#EFF6EB' },
   reviewPrompt: { fontSize: 14, fontWeight: '600', color: '#171D17', marginBottom: 10 },

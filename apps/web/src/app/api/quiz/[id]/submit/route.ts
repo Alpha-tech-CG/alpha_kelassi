@@ -9,6 +9,7 @@ const schema = z.object({
     selected_index: z.number().int().min(0).nullable(),
   })),
   duration_sec: z.number().int().min(0).max(86400),
+  mode: z.enum(['entrainement', 'bac_test', 'bac_blanc', 'bac_rouge']).default('bac_blanc'),
 })
 
 /**
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     p_quiz_id:      id,
     p_answers:      body.answers,
     p_duration_sec: body.duration_sec,
+    p_mode:         body.mode,
   })
 
   if (error) {

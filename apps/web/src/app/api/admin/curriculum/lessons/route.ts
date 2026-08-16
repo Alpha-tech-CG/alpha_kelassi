@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
 const schema = z.object({
   chapter_id:   z.string().uuid(),
-  type:         z.enum(['cours', 'resume', 'quiz', 'video']),
+  type:         z.enum(['cours', 'resume', 'fiche', 'quiz', 'video']),
   title:        z.string().min(2).max(160),
   content:      z.string().nullish(),
   video_url:    z.string().url().nullish(),

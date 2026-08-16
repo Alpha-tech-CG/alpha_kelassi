@@ -12,13 +12,14 @@ import { MathLessonView } from '../../components/MathLessonView'
 // Contenu avec formules LaTeX ($...$) → rendu math natif ; sinon rendu léger (encarts BEPC).
 const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$/.test(s)
 
-type LessonType = 'cours' | 'resume' | 'quiz' | 'video'
+type LessonType = 'cours' | 'resume' | 'fiche' | 'quiz' | 'video'
 interface LessonVM {
   id: string; type: LessonType; title: string
   content: string | null; video_url: string | null; duration_min: number | null; order_index: number
 }
 const TABS: { type: LessonType; icon: string; label: string }[] = [
   { type: 'cours', icon: '📖', label: 'Cours' }, { type: 'resume', icon: '📝', label: 'Résumé' },
+  { type: 'fiche', icon: '🗂️', label: 'Fiche' },
   { type: 'quiz', icon: '✅', label: 'Quiz' }, { type: 'video', icon: '🎥', label: 'Vidéo' },
 ]
 
@@ -36,6 +37,7 @@ export default function ChapitreScreen() {
   const [flash, setFlash] = useState<string | null>(null)
   const [scores, setScores] = useState<Record<string, string>>({})
   const [openSub, setOpenSub] = useState<string | null>(null) // sous-chapitre ouvert (mode drill-down)
+  const [exCount, setExCount] = useState(0)
 
   useEffect(() => {
     async function load() {
@@ -55,6 +57,10 @@ export default function ChapitreScreen() {
           : { data: [] }
         const dmap: Record<string, { completed: boolean; score: number | null }> = {}
         for (const p of (prog ?? []) as { lesson_id: string; completed: boolean; score: number | null }[]) dmap[p.lesson_id] = { completed: p.completed, score: p.score }
+
+        const { count: exc } = await supabase.from('exercises')
+          .select('id', { count: 'exact', head: true }).eq('chapter_id', chapterId)
+        setExCount(exc ?? 0)
 
         setTitle(t); setLessons(ls); setDone(dmap); setFromCache(false)
         setTab((TABS.find((x) => ls.some((l) => l.type === x.type))?.type) ?? 'cours')
@@ -126,6 +132,14 @@ export default function ChapitreScreen() {
         {fromCache && <Text style={styles.offline}>⤓ Version hors-ligne</Text>}
       </View>
 
+      {exCount > 0 && (
+        <TouchableOpacity style={styles.exBtn} onPress={() => router.push(`/exercices/${chapterId}`)} activeOpacity={0.9}>
+          <Text style={styles.exBtnIcon}>✏️</Text>
+          <Text style={styles.exBtnText}>S'entraîner — {exCount} exercice{exCount > 1 ? 's' : ''} corrigé{exCount > 1 ? 's' : ''}</Text>
+          <Text style={styles.exBtnChevron}>→</Text>
+        </TouchableOpacity>
+      )}
+
       {lessons.length === 0 ? (
         <View style={styles.empty}><Text style={styles.emptyText}>Contenu bientôt disponible.</Text></View>
       ) : subMode ? (
@@ -183,7 +197,7 @@ export default function ChapitreScreen() {
                     {l.duration_min ? <Text style={styles.dur}>{l.duration_min} min</Text> : null}
                   </View>
 
-                  {(l.type === 'cours' || l.type === 'resume') && l.content ? (
+                  {(l.type === 'cours' || l.type === 'resume' || l.type === 'fiche') && l.content ? (
                     <View style={{ marginTop: 6 }}>
                       {hasMath(l.content) ? <MathLessonView content={l.content} /> : <LessonContent content={l.content} />}
                     </View>
@@ -241,6 +255,10 @@ const styles = StyleSheet.create({
   back: { fontSize: 24, color: colors.text, marginBottom: 8 },
   title: { fontSize: 22, fontWeight: '800', color: colors.text },
   offline: { fontSize: 12, color: colors.textMuted, marginTop: 4 },
+  exBtn: { flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 16, marginBottom: 8, backgroundColor: colors.primaryTint, borderRadius: radius.md, paddingVertical: 12, paddingHorizontal: 14 },
+  exBtnIcon: { fontSize: 18 },
+  exBtnText: { flex: 1, fontSize: 14, fontWeight: '800', color: colors.primary },
+  exBtnChevron: { fontSize: 18, color: colors.primary, fontWeight: '800' },
   tabs: { flexDirection: 'row', paddingHorizontal: 16, gap: 8, marginBottom: 8, flexWrap: 'wrap' },
   tab: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.full, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder },
   tabActive: { backgroundColor: colors.primary, borderColor: colors.primary },

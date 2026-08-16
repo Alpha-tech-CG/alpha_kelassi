@@ -23,6 +23,8 @@ const schema = z.object({
   count:       z.number().int().min(3).max(20).default(10),
   is_premium:  z.boolean().default(false),
   time_limit_sec: z.number().int().min(60).max(3600).default(600),
+  is_exam:     z.boolean().default(false),          // annale (mode simulation)
+  year:        z.number().int().min(1990).max(2100).nullish(),
 })
 
 /** POST /api/admin/quiz/generate — génère un QCM IA depuis un document (admin) */
@@ -41,7 +43,7 @@ export async function POST(req: NextRequest) {
   // Récupère le document (matière/niveau) + ses chunks
   const { data: doc } = await supabaseAdmin
     .from('documents')
-    .select('id, title, subject_id, level')
+    .select('id, title, subject_id, level, year')
     .eq('id', body.document_id)
     .single()
   if (!doc) return NextResponse.json({ error: { code: 'NOT_FOUND' } }, { status: 404 })
@@ -111,6 +113,8 @@ ${context}`
       level:          doc.level,
       is_premium:     body.is_premium,
       time_limit_sec: body.time_limit_sec,
+      is_exam:        body.is_exam,
+      year:           body.year ?? (doc as { year?: number | null }).year ?? null,
     })
     .select()
     .single()

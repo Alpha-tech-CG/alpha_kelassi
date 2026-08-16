@@ -77,13 +77,24 @@ export default async function ParcoursPage({ searchParams }: { searchParams: Pro
 
   /* ── Étape 3 — Matières ────────────────────────────────────────────────── */
   let subjQuery = supabase.from('subjects')
-    .select('id, name, level, icon, track_type')
+    .select('id, name, level, icon, track_type, parent_subject_id')
     .order('name')
   if (userLevel) subjQuery = subjQuery.eq('level', userLevel)
   subjQuery = subjQuery.eq('track_type', track)
   const { data: subjects } = await subjQuery
-  const subjectRows = subjects ?? []
-  const subjectIds = subjectRows.map((s) => s.id)
+  const allRows = subjects ?? []
+  const subjectIds = allRows.map((s) => s.id)
+
+  // Regroupement en domaines (migration 044) : seules les matières sans parent
+  // apparaissent dans la grille ; leurs enfants alimentent leurs stats agrégées.
+  const childrenByParent = new Map<string, typeof allRows>()
+  for (const r of allRows) {
+    if (!r.parent_subject_id) continue
+    const arr = childrenByParent.get(r.parent_subject_id) ?? []
+    arr.push(r)
+    childrenByParent.set(r.parent_subject_id, arr)
+  }
+  const subjectRows = allRows.filter((r) => !r.parent_subject_id)
 
   // Progression par matière (défensif : tables 027)
   const chapters = await safe<{ id: string; subject_id: string }>(
@@ -123,19 +134,24 @@ export default async function ParcoursPage({ searchParams }: { searchParams: Pro
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {subjectRows.map((s) => {
-            const total = totalBySubject.get(s.id) ?? 0
-            const done = doneBySubject.get(s.id) ?? 0
+            const children = childrenByParent.get(s.id) ?? []
+            const ids = children.length ? [s.id, ...children.map((c) => c.id)] : [s.id]
+            const total = ids.reduce((a, id) => a + (totalBySubject.get(id) ?? 0), 0)
+            const done = ids.reduce((a, id) => a + (doneBySubject.get(id) ?? 0), 0)
             const pct = total ? Math.round((done / total) * 100) : 0
-            const chCount = chapterCountBySubject[s.id] ?? 0
+            const chCount = ids.reduce((a, id) => a + (chapterCountBySubject[id] ?? 0), 0)
+            const href = children.length ? `/cours/matiere/domaines/${s.id}` : `/cours/matiere/${s.id}`
             return (
-              <Link key={s.id} href={`/cours/matiere/${s.id}`}
+              <Link key={s.id} href={href}
                 className="group flex flex-col rounded-2xl border-2 border-gray-100 bg-white overflow-hidden hover:border-blue-200 hover:shadow-lg hover:-translate-y-1 transition-all">
                 <div className="flex-1 flex items-center justify-center py-6 bg-blue-50 text-3xl">
                   {s.icon ?? '📘'}
                 </div>
                 <div className="px-3 py-2.5 border-t border-gray-100">
                   <p className="text-sm font-bold text-gray-800 leading-tight line-clamp-2">{s.name}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{chCount} chapitre{chCount !== 1 ? 's' : ''}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {children.length ? `${children.length} domaine${children.length !== 1 ? 's' : ''} · ${chCount} chapitre${chCount !== 1 ? 's' : ''}` : `${chCount} chapitre${chCount !== 1 ? 's' : ''}`}
+                  </p>
                   {total > 0 && (
                     <div className="mt-2">
                       <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">

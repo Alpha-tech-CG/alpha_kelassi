@@ -26,7 +26,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0F8F4F"
+        "backgroundColor": "#1E74E8"
       },
       "package": "com.kelassi.app",
       "versionCode": 1,
@@ -46,7 +46,13 @@
         "expo-file-system",
         {}
       ],
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Utilisé pour joindre la photo de ton énoncé et de ton travail à corriger."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

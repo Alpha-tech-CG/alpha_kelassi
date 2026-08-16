@@ -3,7 +3,7 @@ import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
 
 const schema = z.object({
-  type:         z.enum(['cours', 'resume', 'quiz', 'video']),
+  type:         z.enum(['cours', 'resume', 'fiche', 'quiz', 'video']),
   title:        z.string().min(2).max(160),
   content:      z.string().nullish(),
   video_url:    z.string().url().nullish(),
