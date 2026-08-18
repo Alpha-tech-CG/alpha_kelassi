@@ -1,7 +1,19 @@
 import { Hono } from 'hono'
+import { createHmac, timingSafeEqual } from 'node:crypto'
 import { supabaseAdmin } from '../lib/supabase.js'
 
 const router = new Hono()
+
+// Vérifie la signature Meta X-Hub-Signature-256 = "sha256=" + HMAC-SHA256(app secret, corps brut).
+// Fail-closed : sans WHATSAPP_APP_SECRET configuré ou signature invalide → rejet.
+function verifySignature(rawBody: string, header: string | undefined): boolean {
+  const secret = process.env['WHATSAPP_APP_SECRET']
+  if (!secret || !header) return false
+  const expected = 'sha256=' + createHmac('sha256', secret).update(rawBody).digest('hex')
+  const received = Buffer.from(header)
+  const digest = Buffer.from(expected)
+  return received.length === digest.length && timingSafeEqual(received, digest)
+}
 
 // GET /webhooks/whatsapp — vérification de l'abonnement (handshake Meta)
 router.get('/', (c) => {
@@ -16,8 +28,14 @@ router.get('/', (c) => {
 
 // POST /webhooks/whatsapp — messages entrants + statuts de livraison
 router.post('/', async (c) => {
+  // Corps brut requis pour valider la signature avant tout traitement.
+  const raw = await c.req.text()
+  if (!verifySignature(raw, c.req.header('x-hub-signature-256'))) {
+    return c.text('Forbidden', 403)
+  }
+
   let payload: any
-  try { payload = await c.req.json() } catch { return c.json({ ok: true }) }
+  try { payload = JSON.parse(raw) } catch { return c.json({ ok: true }) }
 
   try {
     const changes = payload?.entry?.[0]?.changes ?? []
@@ -26,13 +44,15 @@ router.post('/', async (c) => {
 
       // 1. Messages entrants : gérer le désabonnement "STOP"
       for (const msg of value.messages ?? []) {
-        const from = msg.from as string | undefined
+        // msg.from est fourni par l'expéditeur : on le réduit aux chiffres pour
+        // éviter toute injection dans le filtre PostgREST, puis on requête via .in().
+        const from = typeof msg.from === 'string' ? msg.from.replace(/[^0-9]/g, '') : ''
         const text = (msg.text?.body ?? '').trim().toUpperCase()
         if (from && ['STOP', 'ARRET', 'ARRÊT'].includes(text)) {
           await supabaseAdmin
             .from('users')
             .update({ whatsapp_opt_in: false })
-            .or(`phone.eq.+${from},phone.eq.${from}`)
+            .in('phone', [`+${from}`, from])
         }
       }
 
