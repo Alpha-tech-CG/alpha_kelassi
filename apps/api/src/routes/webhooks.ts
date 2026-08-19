@@ -84,7 +84,7 @@ router.post('/cinetpay', async (c) => {
     signature: string
   }>()
 
-  // VÃ©rification HMAC CinetPay â€” prÃ©vient les faux paiements
+  // Vérification HMAC CinetPay — prévient les faux paiements
   const apiKey = process.env['CINETPAY_API_KEY']!
   const expectedSig = createHash('sha256')
     .update(
@@ -111,16 +111,36 @@ router.post('/cinetpay', async (c) => {
   const { user_id: userId, plan } = meta
   if (!userId) return c.json({ received: true })
 
+  // Prix serveur de référence (XAF) — doit rester synchronisé avec billing.ts.
+  // On revalide le montant reçu : la signature couvre le montant, mais rien ne
+  // garantissait jusqu'ici qu'il corresponde au plan demandé dans cpm_custom.
+  const EXPECTED_AMOUNT: Record<string, number> = { monthly: 2000, yearly: 20000 }
+  const expectedAmount = EXPECTED_AMOUNT[plan ?? 'monthly'] ?? EXPECTED_AMOUNT['monthly']!
+  if (Number(body.cpm_amount) !== expectedAmount) {
+    console.warn(
+      `[cinetpay-webhook] montant incohérent pour ${body.cpm_trans_id}: ` +
+      `reçu=${body.cpm_amount}, attendu=${expectedAmount} (plan=${plan}) — rejeté`
+    )
+    return c.json({ error: 'Amount mismatch' }, 400)
+  }
+
   const expiresAt = new Date()
   expiresAt.setMonth(expiresAt.getMonth() + (plan === 'yearly' ? 12 : 1))
 
-  await supabase.from('subscriptions').insert({
+  // Idempotent : CinetPay peut rejouer le webhook. `cinetpay_ref` est unique en
+  // base — on upsert pour ne jamais créer de doublon ni prolonger indûment.
+  const { error: subError } = await supabase.from('subscriptions').upsert({
     user_id: userId,
     cinetpay_ref: body.cpm_trans_id,
     plan: 'premium',
     status: 'active',
     expires_at: expiresAt.toISOString(),
-  })
+  }, { onConflict: 'cinetpay_ref' })
+
+  if (subError) {
+    console.error(`[cinetpay-webhook] échec upsert abonnement ${body.cpm_trans_id}:`, subError.message)
+    return c.json({ error: 'DB error' }, 500)
+  }
 
   await supabase.from('users').update({ plan: 'premium' }).eq('id', userId)
 

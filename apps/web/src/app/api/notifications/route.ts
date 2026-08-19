@@ -13,9 +13,15 @@ function getAdmin() {
   return _admin
 }
 
+// Valeurs autorisées pour le ciblage — whitelist stricte pour empêcher toute
+// injection dans le filtre PostgREST via le paramètre `?plan=`.
+const ALLOWED_PLANS = new Set(['free', 'premium'])
+
 /** GET /api/notifications?plan=free — notifs actives affichées dans le dashboard */
 export async function GET(req: NextRequest) {
-  const plan = req.nextUrl.searchParams.get('plan') ?? 'free'
+  const rawPlan = req.nextUrl.searchParams.get('plan') ?? 'free'
+  // Toute valeur inattendue retombe sur 'free' — jamais interpolée telle quelle.
+  const plan = ALLOWED_PLANS.has(rawPlan) ? rawPlan : 'free'
 
   const { data } = await getAdmin()
     .from('notifications')
