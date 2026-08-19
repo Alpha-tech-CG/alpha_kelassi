@@ -140,7 +140,8 @@ export default async function ParcoursPage({ searchParams }: { searchParams: Pro
             const done = ids.reduce((a, id) => a + (doneBySubject.get(id) ?? 0), 0)
             const pct = total ? Math.round((done / total) * 100) : 0
             const chCount = ids.reduce((a, id) => a + (chapterCountBySubject[id] ?? 0), 0)
-            const href = children.length ? `/cours/matiere/domaines/${s.id}` : `/cours/matiere/${s.id}`
+            const hasCalendar = s.level === 'cepe' || s.level === 'bepc'
+            const href = hasCalendar ? `/progression-cepe?subject=${s.id}` : `/cours/matiere/${s.id}`
             return (
               <Link key={s.id} href={href}
                 className="group flex flex-col rounded-2xl border-2 border-gray-100 bg-white overflow-hidden hover:border-blue-200 hover:shadow-lg hover:-translate-y-1 transition-all">

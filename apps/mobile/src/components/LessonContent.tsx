@@ -1,6 +1,32 @@
-import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
 import { colors, fonts } from '../lib/theme'
+
+const SCREEN_WIDTH = Dimensions.get('window').width
+
+/**
+ * Affiche une image de leçon à sa vraie taille : on mesure ses dimensions
+ * naturelles pour calculer la hauteur d'affichage à partir de la largeur
+ * disponible, plutôt que de forcer une hauteur fixe qui écrase les schémas
+ * (beaucoup contiennent du texte/légendes qui doit rester lisible).
+ */
+function LessonImage({ uri }: { uri: string }) {
+  const [ratio, setRatio] = useState<number | null>(null)
+  const displayWidth = SCREEN_WIDTH - 40 // marge horizontale de l'écran leçon
+  const height = ratio ? Math.min(displayWidth / ratio, 520) : 260
+
+  return (
+    <Image
+      source={{ uri }}
+      style={[styles.image, { width: displayWidth, height }]}
+      resizeMode="contain"
+      onLoad={(e) => {
+        const { width, height: h } = e.nativeEvent.source
+        if (width && h) setRatio(width / h)
+      }}
+    />
+  )
+}
 
 /**
  * Rendu Markdown léger pour les leçons (design final Cognix).
@@ -49,14 +75,31 @@ export function LessonContent({ content }: { content: string }) {
     if (trimmed === '') { out.push(<View key={key++} style={{ height: 8 }} />); i++; continue }
     if (/^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) { out.push(<View key={key++} style={styles.hr} />); i++; continue }
 
-    const img = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
-    if (img) {
-      out.push(
-        <View key={key++} style={styles.figure}>
-          <Image source={{ uri: img[2] }} style={styles.image} resizeMode="contain" />
-          {img[1] ? <Text style={styles.caption}>{img[1]}</Text> : null}
-        </View>
-      )
+    // Matches an image anywhere in the line, not just when it's the sole
+    // content — source content occasionally has trailing punctuation (e.g.
+    // interval notation "]a, b[") right after the image on the same line,
+    // which a fully-anchored regex would miss entirely, leaving the raw
+    // "![...](...)" markdown visible as plain text (looks like a stray link).
+    const imgLineRegex = /!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g
+    if (imgLineRegex.test(trimmed)) {
+      imgLineRegex.lastIndex = 0
+      const segments: React.ReactNode[] = []
+      let lastIndex = 0
+      let m: RegExpExecArray | null
+      while ((m = imgLineRegex.exec(trimmed))) {
+        const before = trimmed.slice(lastIndex, m.index).trim()
+        if (before) { const node = renderBlock(before, `imgseg${key}-${segments.length}`); if (node) segments.push(node) }
+        segments.push(
+          <View key={`img${key}-${segments.length}`} style={styles.figure}>
+            <LessonImage uri={m[2] ?? ''} />
+            {m[1] ? <Text style={styles.caption}>{m[1]}</Text> : null}
+          </View>
+        )
+        lastIndex = m.index + m[0].length
+      }
+      const after = trimmed.slice(lastIndex).trim()
+      if (after) { const node = renderBlock(after, `imgseg${key}-${segments.length}`); if (node) segments.push(node) }
+      out.push(<View key={key++}>{segments}</View>)
       i++; continue
     }
 
@@ -138,7 +181,7 @@ const styles = StyleSheet.create({
   thead: { backgroundColor: colors.primaryTint },
   cell: { flex: 1, fontFamily: fonts.regular, fontSize: 13, lineHeight: 19, color: colors.text, padding: 8, borderRightWidth: 1, borderRightColor: colors.cardBorder },
   figure: { marginVertical: 10, alignItems: 'center' },
-  image: { width: '100%', height: 240, borderRadius: 16, backgroundColor: '#fff' },
+  image: { borderRadius: 16, backgroundColor: '#fff' },
   caption: { fontSize: 12, color: colors.textMuted, fontStyle: 'italic', marginTop: 6, textAlign: 'center' },
   // Encarts
   callout: { borderRadius: 24, borderWidth: 2, padding: 16, marginVertical: 10 },

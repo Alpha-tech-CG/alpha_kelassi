@@ -131,7 +131,7 @@ export default function MatieresScreen() {
                 key={s.id}
                 activeOpacity={0.85}
                 style={styles.card}
-                onPress={() => router.push((s.hasChildren ? `/parcours/domaines/${s.id}` : `/parcours/${s.id}`) as any)}
+                onPress={() => router.push(((s.level === 'cepe' || s.level === 'bepc') ? `/progression?subject=${s.id}` : `/parcours/${s.id}`) as any)}
               >
                 <View style={[styles.accent, { backgroundColor: accent }]} />
                 <View style={styles.cardBody}>

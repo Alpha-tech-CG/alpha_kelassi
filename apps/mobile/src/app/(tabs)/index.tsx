@@ -5,10 +5,8 @@ import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL, subjectIcon, fonts } from '../../lib/theme'
 import { SolarIcon } from '../../icons/solar'
-import { API_URL } from '../../lib/config'
 
 interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
-interface CalendarBanner { month: { label: string } | null; term: { label: string } | null; is_holiday: boolean }
 
 const ACTIONS = [
   { label: 'Tuteur',     icon: 'chat',     route: '/(tabs)/tuteur' },
@@ -26,7 +24,6 @@ export default function HomeScreen() {
   const [xp, setXp] = useState(0)
   const [streak, setStreak] = useState(0)
   const [subjects, setSubjects] = useState<SubjectVM[]>([])
-  const [calendar, setCalendar] = useState<CalendarBanner | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -40,17 +37,6 @@ export default function HomeScreen() {
         supabase.from('user_progress').select('streak_days').eq('user_id', user.id),
       ])
 
-      // Calendrier scolaire CEPE (migr. 045) — bandeau facultatif, échoue silencieusement
-      // pour les autres niveaux (pas encore de calendrier BEPC/BAC).
-      if (level === 'cepe') {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-          if (!session) return
-          fetch(`${API_URL}/api/curriculum/calendar/current`, { headers: { Authorization: `Bearer ${session.access_token}` } })
-            .then((r) => r.json())
-            .then((json) => setCalendar(json?.data ?? null))
-            .catch(() => {})
-        })
-      }
       setName((profile as { full_name?: string })?.full_name?.split(' ')[0] ?? 'Élève')
       setXp((profile as { xp?: number })?.xp ?? 0)
       setStreak(Math.max(0, ...((prog ?? []) as { streak_days: number }[]).map((p) => p.streak_days)))
@@ -125,17 +111,6 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.body}>
-        {calendar?.month && (
-          <TouchableOpacity style={styles.calBanner} onPress={() => router.push('/calendrier' as any)} activeOpacity={0.85}>
-            <Text style={styles.calIcon}>📅</Text>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.calMonth}>{calendar.month.label}{calendar.term ? ` · ${calendar.term.label}` : ''}</Text>
-              <Text style={styles.calHint}>{calendar.is_holiday ? 'Hors période scolaire' : 'Voir le programme du mois'}</Text>
-            </View>
-            <Text style={styles.calArrow}>→</Text>
-          </TouchableOpacity>
-        )}
-
         {/* Raccourcis */}
         <View style={styles.actions}>
           {ACTIONS.map((a) => (
