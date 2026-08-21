@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
+import { parseUuidParam } from '@/lib/query-validation'
 
 /**
  * GET /api/curriculum/progression?subject=<uuid matière top-level>
@@ -19,8 +20,8 @@ export async function GET(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
-  const subjectId = req.nextUrl.searchParams.get('subject')
-  if (!subjectId) return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Paramètre "subject" requis' } }, { status: 400 })
+  const subjectId = parseUuidParam(req.nextUrl.searchParams.get('subject'))
+  if (!subjectId) return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Paramètre "subject" requis et doit être un UUID valide' } }, { status: 400 })
 
   const { data: subject } = await supabase.from('subjects').select('id, name').eq('id', subjectId).maybeSingle()
   if (!subject) return NextResponse.json({ error: { code: 'NOT_FOUND' } }, { status: 404 })

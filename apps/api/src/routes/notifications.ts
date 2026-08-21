@@ -3,9 +3,13 @@ import { supabaseAdmin as supabase } from '../lib/supabase.js'
 
 const router = new Hono()
 
+// Whitelist stricte — empêche toute injection dans le filtre PostgREST via ?plan=.
+const ALLOWED_PLANS = new Set(['free', 'premium'])
+
 // GET /api/notifications?plan=free  — notifs actives pour le dashboard étudiant (endpoint public)
 router.get('/', async (c) => {
-  const plan = c.req.query('plan') ?? 'free'
+  const rawPlan = c.req.query('plan') ?? 'free'
+  const plan = ALLOWED_PLANS.has(rawPlan) ? rawPlan : 'free'
   const { data } = await supabase.from('notifications')
     .select('id, type, title, message, cta_label, cta_url')
     .eq('is_active', true)

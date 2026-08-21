@@ -40,10 +40,20 @@ import { chatRateLimit } from './middleware/rate-limit.js'
 // Démarre les workers BullMQ uniquement si Redis est configuré
 const queueRedisUrl = process.env['QUEUE_REDIS_URL']
 if (queueRedisUrl && !queueRedisUrl.includes('xxxx')) {
-  startEmbedWorker()
-  startReminderWorker()
-  startTutorWorker()
+  const embedWorker = startEmbedWorker()
+  const reminderWorker = startReminderWorker()
+  const tutorWorker = startTutorWorker()
   scheduleDailyReminders().catch((e) => console.error('[reminders] planification échouée:', e))
+
+  // Arrêt propre : ferme les workers (et leurs listeners/connexions Redis)
+  // au lieu de laisser le process les tuer brutalement.
+  async function shutdown(signal: string) {
+    console.log(`[api] ${signal} reçu, arrêt des workers…`)
+    await Promise.allSettled([embedWorker.close(), reminderWorker.close(), tutorWorker.close()])
+    process.exit(0)
+  }
+  process.on('SIGTERM', () => void shutdown('SIGTERM'))
+  process.on('SIGINT', () => void shutdown('SIGINT'))
 }
 initSentry().catch(() => null)
 

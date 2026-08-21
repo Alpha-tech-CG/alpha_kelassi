@@ -4,6 +4,22 @@ import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
+const TRUSTED_REDIRECT_HOSTS = ['checkout.stripe.com']
+
+/** N'autorise une redirection client que vers un hôte de paiement connu (anti open-redirect). */
+function redirectToTrustedUrl(url: string): boolean {
+  try {
+    const { protocol, hostname } = new URL(url)
+    if (protocol === 'https:' && TRUSTED_REDIRECT_HOSTS.includes(hostname)) {
+      window.location.href = url
+      return true
+    }
+  } catch {
+    // URL malformée — traité comme non fiable ci-dessous
+  }
+  return false
+}
+
 const FEATURES_FREE = [
   '5 questions IA par jour',
   'Cours BEPC & BAC (gratuits)',
@@ -81,11 +97,7 @@ function BillingContent() {
       })
       const json = (await res.json()) as { data?: { url?: string } }
       const checkoutUrl = json.data?.url
-      // Défense en profondeur : l'URL vient de notre propre route serveur
-      // (Stripe Checkout), mais on valide l'hôte avant toute redirection.
-      if (checkoutUrl && /^https:\/\/checkout\.stripe\.com\//.test(checkoutUrl)) {
-        window.location.href = checkoutUrl
-      } else if (checkoutUrl) {
+      if (checkoutUrl && !redirectToTrustedUrl(checkoutUrl)) {
         setError('Lien de paiement invalide. Réessaie.')
       }
       setLoading(null)

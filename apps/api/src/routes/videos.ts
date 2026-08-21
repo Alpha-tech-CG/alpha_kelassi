@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { type AppVariables, parseStudyLevel } from '../lib/types.js'
+import { type AppVariables, parseStudyLevel, parseUuidParam } from '../lib/types.js'
 import { authMiddleware } from '../middleware/auth.js'
 
 const router = new Hono<{ Variables: AppVariables }>()
@@ -7,7 +7,11 @@ router.use('*', authMiddleware)
 
 // GET /videos?subject_id=&level= — liste des cours vidéo accessibles
 router.get('/', async (c) => {
-  const subjectId = c.req.query('subject_id')
+  const rawSubjectId = c.req.query('subject_id')
+  if (rawSubjectId !== undefined && parseUuidParam(rawSubjectId) === undefined) {
+    return c.json({ error: { code: 'BAD_REQUEST', message: 'Paramètre subject_id invalide.' } }, 400)
+  }
+  const subjectId = rawSubjectId
   const level = parseStudyLevel(c.req.query('level'))
 
   let query = c.get('supabase').from('videos')
