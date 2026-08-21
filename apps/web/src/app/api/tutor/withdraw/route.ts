@@ -5,7 +5,7 @@ import { admin } from '@/lib/tutor'
 
 const schema = z.object({ amount: z.number().int().min(500) })
 
-/** POST /api/tutor/withdraw — demande de retrait (CinetPay en prod ; débit + trace). */
+/** POST /api/tutor/withdraw — demande de retrait (FeexPay payout en prod ; débit + trace). */
 export async function POST(req: Request) {
   const { user } = await authenticate(req)
   if (!user) return NextResponse.json({ error: { code: 'UNAUTHORIZED' } }, { status: 401 })

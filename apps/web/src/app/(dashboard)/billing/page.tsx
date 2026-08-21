@@ -2,7 +2,6 @@
 
 import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 
 const FEATURES_FREE = [
@@ -50,23 +49,69 @@ function BillingContent() {
   const [loading, setLoading] = useState<string | null>(null)
   const [payMethod, setPayMethod] = useState<'mobile_money' | 'card'>('mobile_money')
   const [phone, setPhone] = useState('')
+  // Réseau Mobile Money (Congo) — doit correspondre à un opérateur activé sur
+  // la boutique FeexPay.
+  const [network, setNetwork] = useState<'MTN' | 'AIRTEL'>('MTN')
+  const [pending, setPending] = useState<string | null>(null) // message d'attente push
+  const [error, setError] = useState<string | null>(null)
+
+  // Sonde le statut d'abonnement jusqu'à activation (le webhook FeexPay le passe
+  // à « active » une fois le paiement confirmé sur le téléphone).
+  async function pollSubscription(): Promise<boolean> {
+    for (let i = 0; i < 40; i++) { // ~2 min (40 × 3 s)
+      await new Promise((r) => setTimeout(r, 3000))
+      const res = await fetch('/api/billing/subscription', { credentials: 'include' })
+      const json = (await res.json().catch(() => ({}))) as { data?: { status?: string } | null }
+      if (json.data?.status === 'active') return true
+    }
+    return false
+  }
 
   async function handleSubscribe(plan: 'monthly' | 'yearly') {
+    setError(null)
     setLoading(plan)
-    const supabase = createClient()
-    const { data: { session } } = await supabase.auth.getSession()
-    const token = session?.access_token
-    const endpoint = payMethod === 'card' ? '/api/billing/checkout' : '/api/billing/cinetpay'
-    const body = payMethod === 'card' ? { plan } : { plan, phone }
-    const res = await fetch(endpoint, {
-      method:      'POST',
-      headers:     { 'Content-Type': 'application/json' },
+
+    // Carte bancaire → Stripe Checkout (redirection classique).
+    if (payMethod === 'card') {
+      const res = await fetch('/api/billing/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ plan }),
+      })
+      const json = (await res.json()) as { data?: { url?: string } }
+      if (json.data?.url) window.location.href = json.data.url
+      setLoading(null)
+      return
+    }
+
+    // Mobile Money → FeexPay (paiement push : l'utilisateur confirme sur son tél.)
+    const localDigits = phone.replace(/[^0-9]/g, '')
+    const res = await fetch('/api/billing/feexpay', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body:        JSON.stringify(body),
+      body: JSON.stringify({ plan, phone: `242${localDigits}`, network }),
     })
-    const json = (await res.json()) as { data?: { url?: string } }
-    if (json.data?.url) window.location.href = json.data.url
+    const json = (await res.json().catch(() => ({}))) as {
+      data?: { reference?: string }
+      error?: { message?: string }
+    }
+    if (!res.ok || !json.data?.reference) {
+      setError(json.error?.message ?? 'Le paiement n\'a pas pu être initié. Réessaie.')
+      setLoading(null)
+      return
+    }
+
+    setPending('Confirme le paiement sur ton téléphone (code Mobile Money), puis patiente…')
+    const ok = await pollSubscription()
+    setPending(null)
     setLoading(null)
+    if (ok) {
+      window.location.href = '/billing?success=true'
+    } else {
+      setError('Paiement non confirmé à temps. Si tu as validé sur ton téléphone, actualise dans un instant.')
+    }
   }
 
   if (success) {
@@ -148,7 +193,21 @@ function BillingContent() {
 
         {payMethod === 'mobile_money' && (
           <div className="mb-5">
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Numéro MTN / Orange Money</label>
+            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Opérateur</label>
+            <div className="flex rounded-xl bg-gray-100 p-1 mb-4">
+              {(['MTN', 'AIRTEL'] as const).map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setNetwork(n)}
+                  className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
+                    network === n ? 'bg-white shadow text-gray-900' : 'text-gray-500'
+                  }`}
+                >
+                  {n === 'MTN' ? 'MTN MoMo' : 'Airtel Money'}
+                </button>
+              ))}
+            </div>
+            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Numéro Mobile Money</label>
             <div className="flex">
               <span className="px-4 py-3 bg-gray-100 border border-gray-200 border-r-0 rounded-l-xl text-gray-600 text-sm font-medium">
                 🇨🇬 +242
@@ -162,6 +221,16 @@ function BillingContent() {
               />
             </div>
           </div>
+        )}
+
+        {pending && (
+          <div className="mb-5 flex items-start gap-3 rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800">
+            <span className="mt-0.5 animate-pulse">⏳</span>
+            <span>{pending}</span>
+          </div>
+        )}
+        {error && (
+          <div className="mb-5 rounded-xl bg-red-50 border border-red-200 p-4 text-sm text-red-700">{error}</div>
         )}
 
         {/* Plans */}
@@ -195,7 +264,7 @@ function BillingContent() {
                     : 'bg-gray-900 text-white hover:bg-gray-700'
                 }`}
               >
-                {loading === plan.id ? 'Redirection…' : 'Choisir ce plan'}
+                {loading === plan.id ? (pending ? 'En attente…' : 'Traitement…') : 'Choisir ce plan'}
               </button>
             </div>
           ))}
@@ -203,7 +272,7 @@ function BillingContent() {
       </div>
 
       <p className="text-center text-xs text-gray-400">
-        Essai gratuit 14 jours · Annulation à tout moment · Paiement sécurisé CinetPay
+        Essai gratuit 14 jours · Annulation à tout moment · Paiement sécurisé FeexPay
       </p>
     </div>
   )

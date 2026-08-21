@@ -49,7 +49,7 @@ router.get('/', async (c) => {
     // Abonnements actifs
     supabase
       .from('subscriptions')
-      .select('plan, status, stripe_sub_id, cinetpay_ref, expires_at, created_at')
+      .select('plan, status, stripe_sub_id, cinetpay_ref, feexpay_ref, expires_at, created_at')
       .eq('status', 'active'),
 
     // Questions récentes (pour cache prioritaire)
@@ -140,12 +140,12 @@ router.get('/', async (c) => {
 
   // ── Revenus estimés ─────────────────────────────────────────────────────────
   const stripeCount = (activeSubs ?? []).filter((s) => s.stripe_sub_id).length
-  const cinetpayCount = (activeSubs ?? []).filter((s) => s.cinetpay_ref).length
+  const mobileMoneyCount = (activeSubs ?? []).filter((s) => s.feexpay_ref || s.cinetpay_ref).length
   const revenueEstimate = {
     active_subscriptions: (activeSubs ?? []).length,
     stripe_count: stripeCount,
-    cinetpay_count: cinetpayCount,
-    monthly_revenue_fcfa: stripeCount * 2000 + cinetpayCount * 2000,
+    mobile_money_count: mobileMoneyCount,
+    monthly_revenue_fcfa: stripeCount * 2000 + mobileMoneyCount * 2000,
   }
 
   // ── Top pages (agrégé côté JS) ──────────────────────────────────────────────

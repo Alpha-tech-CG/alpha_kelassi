@@ -1,7 +1,8 @@
 ﻿import { Hono } from 'hono'
 import Stripe from 'stripe'
-import { createHash, timingSafeEqual } from 'crypto'
 import { supabaseAdmin as supabase } from '../lib/supabase.js'
+import { redis } from '../lib/redis.js'
+import { PLAN_AMOUNT } from './billing.js'
 
 const router = new Hono()
 
@@ -72,54 +73,53 @@ router.post('/stripe', async (c) => {
   return c.json({ received: true })
 })
 
-// POST /webhooks/cinetpay
-router.post('/cinetpay', async (c) => {
-  const body = await c.req.json<{
-    cpm_trans_id: string
-    cpm_result: string
-    cpm_custom: string
-    cpm_site_id: string
-    cpm_amount: string
-    cpm_currency: string
-    signature: string
-  }>()
+// POST /webhooks/feexpay — notification de paiement Mobile Money
+//
+// SÉCURITÉ : FeexPay ne signe pas ses callbacks. On ne fait donc AUCUNE
+// confiance au corps reçu (un attaquant pourrait poster une fausse notif). Le
+// callback ne sert que de déclencheur : on récupère la `reference`, on relit
+// l'intention d'achat mémorisée à l'init (Redis, liée au vrai user), puis on
+// RE-VÉRIFIE le statut et le montant directement auprès de l'API FeexPay.
+router.post('/feexpay', async (c) => {
+  const body = await c.req.json<Record<string, unknown>>().catch(() => ({} as Record<string, unknown>))
 
-  // Vérification HMAC CinetPay — prévient les faux paiements
-  const apiKey = process.env['CINETPAY_API_KEY']!
-  const expectedSig = createHash('sha256')
-    .update(
-      apiKey +
-      body.cpm_amount +
-      body.cpm_currency +
-      body.cpm_trans_id +
-      body.cpm_custom
-    )
-    .digest('hex')
-
-  // Comparaison en temps constant (évite les attaques par timing)
-  const sigBuf = Buffer.from(body.signature ?? '', 'utf8')
-  const expBuf = Buffer.from(expectedSig, 'utf8')
-  if (sigBuf.length !== expBuf.length || !timingSafeEqual(sigBuf, expBuf)) {
-    return c.json({ error: 'Invalid signature' }, 400)
+  // La référence est renvoyée dans `reference` ou dans `callback_info`.
+  const reference =
+    (typeof body['reference'] === 'string' && body['reference']) ||
+    (typeof body['callback_info'] === 'string' && body['callback_info']) ||
+    ''
+  if (!reference || !/^klsi_[a-f0-9]{18}$/.test(reference)) {
+    return c.json({ received: true })
   }
 
-  if (body.cpm_result !== '00') return c.json({ received: true })
+  const token = process.env['FEEXPAY_TOKEN']
+  if (!token) return c.json({ received: true })
 
-  let meta: { user_id?: string; plan?: string } = {}
-  try { meta = JSON.parse(body.cpm_custom) } catch { return c.json({ received: true }) }
+  // Intention d'achat liée au serveur à l'init — SEULE source fiable du user/plan.
+  const raw = await redis.get<string>(`feexpay:intent:${reference}`)
+  if (!raw) return c.json({ received: true }) // inconnue / expirée / déjà traitée
+  let intent: { user_id?: string; plan?: 'monthly' | 'yearly' }
+  try { intent = typeof raw === 'string' ? JSON.parse(raw) : (raw as never) } catch { return c.json({ received: true }) }
+  const { user_id: userId, plan } = intent
+  if (!userId || !plan) return c.json({ received: true })
 
-  const { user_id: userId, plan } = meta
-  if (!userId) return c.json({ received: true })
+  // Re-vérification serveur → serveur du statut réel de la transaction.
+  const statusRes = await fetch(
+    `https://api.feexpay.me/api/transactions/public/${encodeURIComponent(reference)}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  const tx = (await statusRes.json().catch(() => ({}))) as { status?: string; amount?: number | string }
 
-  // Prix serveur de référence (XAF) — doit rester synchronisé avec billing.ts.
-  // On revalide le montant reçu : la signature couvre le montant, mais rien ne
-  // garantissait jusqu'ici qu'il corresponde au plan demandé dans cpm_custom.
-  const EXPECTED_AMOUNT: Record<string, number> = { monthly: 2000, yearly: 20000 }
-  const expectedAmount = EXPECTED_AMOUNT[plan ?? 'monthly'] ?? EXPECTED_AMOUNT['monthly']!
-  if (Number(body.cpm_amount) !== expectedAmount) {
+  if (!statusRes.ok || tx.status !== 'SUCCESSFUL') {
+    return c.json({ received: true }) // pas (encore) payé — on ne fait rien
+  }
+
+  // Le montant réel doit correspondre au prix du plan demandé.
+  const expectedAmount = PLAN_AMOUNT[plan]
+  if (Number(tx.amount) !== expectedAmount) {
     console.warn(
-      `[cinetpay-webhook] montant incohérent pour ${body.cpm_trans_id}: ` +
-      `reçu=${body.cpm_amount}, attendu=${expectedAmount} (plan=${plan}) — rejeté`
+      `[feexpay-webhook] montant incohérent pour ${reference}: ` +
+      `reçu=${tx.amount}, attendu=${expectedAmount} (plan=${plan}) — rejeté`
     )
     return c.json({ error: 'Amount mismatch' }, 400)
   }
@@ -127,22 +127,23 @@ router.post('/cinetpay', async (c) => {
   const expiresAt = new Date()
   expiresAt.setMonth(expiresAt.getMonth() + (plan === 'yearly' ? 12 : 1))
 
-  // Idempotent : CinetPay peut rejouer le webhook. `cinetpay_ref` est unique en
-  // base — on upsert pour ne jamais créer de doublon ni prolonger indûment.
+  // Idempotent : `feexpay_ref` est unique en base — upsert pour ne jamais créer
+  // de doublon ni prolonger indûment si le callback est rejoué.
   const { error: subError } = await supabase.from('subscriptions').upsert({
     user_id: userId,
-    cinetpay_ref: body.cpm_trans_id,
+    feexpay_ref: reference,
     plan: 'premium',
     status: 'active',
     expires_at: expiresAt.toISOString(),
-  }, { onConflict: 'cinetpay_ref' })
+  }, { onConflict: 'feexpay_ref' })
 
   if (subError) {
-    console.error(`[cinetpay-webhook] échec upsert abonnement ${body.cpm_trans_id}:`, subError.message)
-    return c.json({ error: 'DB error' }, 500)
+    console.error(`[feexpay-webhook] échec upsert abonnement ${reference}:`, subError.message)
+    return c.json({ error: 'DB error' }, 500) // FeexPay rejouera
   }
 
   await supabase.from('users').update({ plan: 'premium' }).eq('id', userId)
+  await redis.del(`feexpay:intent:${reference}`) // consommée
 
   return c.json({ received: true })
 })

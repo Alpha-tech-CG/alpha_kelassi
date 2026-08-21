@@ -498,6 +498,7 @@ export type Database = {
           user_id: string
           stripe_sub_id: string | null
           cinetpay_ref: string | null
+          feexpay_ref: string | null
           plan: 'free' | 'premium'
           status: 'active' | 'canceled' | 'past_due' | 'trialing'
           expires_at: string | null
@@ -508,6 +509,7 @@ export type Database = {
           user_id: string
           stripe_sub_id?: string | null
           cinetpay_ref?: string | null
+          feexpay_ref?: string | null
           plan?: 'free' | 'premium'
           status?: 'active' | 'canceled' | 'past_due' | 'trialing'
           expires_at?: string | null
@@ -518,6 +520,7 @@ export type Database = {
           user_id?: string
           stripe_sub_id?: string | null
           cinetpay_ref?: string | null
+          feexpay_ref?: string | null
           plan?: 'free' | 'premium'
           status?: 'active' | 'canceled' | 'past_due' | 'trialing'
           expires_at?: string | null

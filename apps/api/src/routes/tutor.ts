@@ -188,7 +188,7 @@ router.get('/wallet', async (c) => {
   return c.json({ data: { balance: profile.wallet_balance, transactions: txns ?? [] } })
 })
 
-// POST /tutor/withdraw — demande de retrait (CinetPay en prod ; ici on débite + trace).
+// POST /tutor/withdraw — demande de retrait (FeexPay payout en prod ; ici on débite + trace).
 router.post('/withdraw', zValidator('json', z.object({
   amount: z.number().int().min(500),   // retrait minimum 500 FCFA
 })), async (c) => {
@@ -207,7 +207,7 @@ router.post('/withdraw', zValidator('json', z.object({
     await supabaseAdmin.rpc('increment_tutor_wallet', { p_tutor_id: userId, p_amount: amount })  // rollback
     return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
   }
-  // TODO(prod) : appeler CinetPay ici, puis passer la transaction à 'completed'/'rejected'.
+  // TODO(prod) : appeler FeexPay payout ici, puis passer la transaction à 'completed'/'rejected'.
   return c.json({ data: txn }, 201)
 })
 

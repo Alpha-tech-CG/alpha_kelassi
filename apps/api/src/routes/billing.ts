@@ -1,10 +1,15 @@
 ﻿import { Hono } from 'hono'
+import { randomBytes } from 'node:crypto'
 import type { AppVariables } from '../lib/types.js'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 import Stripe from 'stripe'
 
 import { authMiddleware } from '../middleware/auth.js'
+import { redis } from '../lib/redis.js'
+
+// Prix serveur de référence (XAF) — source de vérité, revalidée au webhook.
+export const PLAN_AMOUNT: Record<'monthly' | 'yearly', number> = { monthly: 2000, yearly: 20000 }
 
 const router = new Hono<{ Variables: AppVariables }>()
 
@@ -52,42 +57,85 @@ router.post(
   }
 )
 
-// POST /api/billing/cinetpay â€” initie un paiement CinetPay Mobile Money
+// POST /api/billing/feexpay — initie un paiement FeexPay Mobile Money (push)
+//
+// FeexPay envoie une invite Mobile Money sur le téléphone de l'utilisateur
+// (« requesttopay »). On génère notre propre `reference`, on mémorise le lien
+// reference → {user_id, plan} côté serveur (Redis, TTL 1h), puis le webhook
+// FeexPay confirmera en re-vérifiant le statut. Le `callback_info` du callback
+// n'est JAMAIS considéré comme fiable — l'intention d'achat est liée ici.
 router.post(
-  '/cinetpay',
-  zValidator('json', z.object({ plan: z.enum(['monthly', 'yearly']), phone: z.string() })),
+  '/feexpay',
+  zValidator(
+    'json',
+    z.object({
+      plan: z.enum(['monthly', 'yearly']),
+      phone: z.string().regex(/^\+?[0-9]{8,15}$/),
+      // Réseau Mobile Money — doit correspondre à un opérateur activé sur la
+      // boutique FeexPay (ex. Congo : MTN, AIRTEL). Validé en format simple.
+      network: z.string().regex(/^[A-Z][A-Z _]{1,20}$/),
+    })
+  ),
   async (c) => {
     const userId = c.get('userId') as string
-    const { plan, phone } = c.req.valid('json')
+    const { plan, phone, network } = c.req.valid('json')
 
-    const amount = plan === 'monthly' ? 2000 : 20000 // XAF
+    const token = process.env['FEEXPAY_TOKEN']
+    const shop = process.env['FEEXPAY_SHOP']
+    if (!token || !shop) {
+      return c.json({ error: { code: 'FEEXPAY_NOT_CONFIGURED', message: 'Paiement indisponible' } }, 503)
+    }
 
-    const transactionId = `kelassi_${userId}_${Date.now()}`
+    const amount = PLAN_AMOUNT[plan]
 
-    const response = await fetch('https://api-checkout.cinetpay.com/v2/payment', {
+    // Coordonnées client (facultatives pour FeexPay mais recommandées)
+    const { data: user } = await c.get('supabase').from('users')
+      .select('email, full_name')
+      .eq('id', userId)
+      .single()
+
+    // Référence unique de transaction (aussi clé d'idempotence en base)
+    const reference = `klsi_${randomBytes(9).toString('hex')}`
+
+    // Lien serveur reference → intention d'achat, seule source fiable au webhook.
+    await redis.set(
+      `feexpay:intent:${reference}`,
+      JSON.stringify({ user_id: userId, plan }),
+      { ex: 3600 }
+    )
+
+    const response = await fetch('https://api.feexpay.me/api/transactions/requesttopay/integration', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        apikey: process.env['CINETPAY_API_KEY'],
-        site_id: process.env['CINETPAY_SITE_ID'],
-        transaction_id: transactionId,
+        phoneNumber: phone,
         amount,
-        currency: 'XAF',
-        description: `Kelassi Premium â€” ${plan === 'monthly' ? 'Mensuel' : 'Annuel'}`,
-        customer_phone_number: phone,
-        notify_url: process.env['CINETPAY_NOTIFY_URL'],
-        return_url: `${process.env['NEXT_PUBLIC_SITE_URL']}/billing?success=true`,
-        metadata: JSON.stringify({ user_id: userId, plan }),
+        reseau: network,
+        token,
+        shop,
+        first_name: user?.full_name ?? 'Client',
+        email: user?.email ?? '',
+        reference,
+        callback_info: reference,
+        callback_url: process.env['FEEXPAY_CALLBACK_URL'] ?? '',
+        description: `Kelassi Premium — ${plan === 'monthly' ? 'Mensuel' : 'Annuel'}`,
       }),
     })
 
-    const data = (await response.json()) as { data?: { payment_url?: string }; message?: string }
-
-    if (!response.ok || !data.data?.payment_url) {
-      return c.json({ error: { code: 'CINETPAY_ERROR', message: data.message ?? 'Erreur paiement' } }, 500)
+    const data = (await response.json().catch(() => ({}))) as {
+      reference?: string
+      status?: string
+      message?: string
     }
 
-    return c.json({ data: { url: data.data.payment_url, transaction_id: transactionId } })
+    if (!response.ok || data.status === 'FAILED') {
+      await redis.del(`feexpay:intent:${reference}`)
+      return c.json({ error: { code: 'FEEXPAY_ERROR', message: data.message ?? 'Erreur paiement' } }, 502)
+    }
+
+    // On renvoie la référence : le client affiche « confirmez sur votre
+    // téléphone » et interroge /billing/subscription jusqu'à activation.
+    return c.json({ data: { reference, status: data.status ?? 'PENDING' } })
   }
 )
 

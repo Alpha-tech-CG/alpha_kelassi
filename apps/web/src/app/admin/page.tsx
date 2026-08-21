@@ -22,7 +22,7 @@ async function getAnalytics() {
 
       supabaseAdmin
         .from('subscriptions')
-        .select('plan, status, stripe_sub_id, cinetpay_ref, expires_at, created_at')
+        .select('plan, status, stripe_sub_id, cinetpay_ref, feexpay_ref, expires_at, created_at')
         .eq('status', 'active'),
 
       supabaseAdmin
@@ -48,15 +48,15 @@ async function getAnalytics() {
       .slice(0, 10)
 
     const stripeCount = (activeSubs ?? []).filter((s) => s.stripe_sub_id).length
-    const cinetpayCount = (activeSubs ?? []).filter((s) => s.cinetpay_ref).length
+    const mobileMoneyCount = (activeSubs ?? []).filter((s) => s.feexpay_ref || s.cinetpay_ref).length
 
     return {
       top_documents: topDocsSorted,
       revenue: {
         active_subscriptions: (activeSubs ?? []).length,
         stripe_count: stripeCount,
-        cinetpay_count: cinetpayCount,
-        monthly_revenue_fcfa: stripeCount * 2000 + cinetpayCount * 2000,
+        mobile_money_count: mobileMoneyCount,
+        monthly_revenue_fcfa: stripeCount * 2000 + mobileMoneyCount * 2000,
       },
       recent_questions: (recentQuestions ?? []).slice(0, 20).map((q) => ({
         content: q.content.slice(0, 120),
@@ -79,7 +79,7 @@ export default async function AdminOverviewPage() {
   const analytics = user ? await getAnalytics() : null
 
   const totals = analytics?.totals ?? { users: 0, active_subs: 0 }
-  const revenue = analytics?.revenue ?? { monthly_revenue_fcfa: 0, active_subscriptions: 0, stripe_count: 0, cinetpay_count: 0 }
+  const revenue = analytics?.revenue ?? { monthly_revenue_fcfa: 0, active_subscriptions: 0, stripe_count: 0, mobile_money_count: 0 }
   const topDocs = analytics?.top_documents ?? []
   const recentQ = analytics?.recent_questions ?? []
 
@@ -87,7 +87,7 @@ export default async function AdminOverviewPage() {
     { label: 'Utilisateurs inscrits', value: totals.users.toLocaleString('fr'), icon: '👥', color: 'from-green-600 to-green-700' },
     { label: 'Abonnés Premium', value: totals.active_subs.toLocaleString('fr'), icon: '⭐', color: 'from-amber-500 to-orange-500' },
     { label: 'Revenus du mois', value: `${revenue.monthly_revenue_fcfa.toLocaleString('fr')} FCFA`, icon: '💰', color: 'from-emerald-500 to-teal-600' },
-    { label: 'Paiements Mobile Money', value: revenue.cinetpay_count.toLocaleString('fr'), icon: '📱', color: 'from-violet-500 to-purple-600' },
+    { label: 'Paiements Mobile Money', value: revenue.mobile_money_count.toLocaleString('fr'), icon: '📱', color: 'from-violet-500 to-purple-600' },
   ]
 
   return (

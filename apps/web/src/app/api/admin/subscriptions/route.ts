@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabaseAdmin
     .from('subscriptions')
-    .select('id, user_id, plan, status, stripe_sub_id, cinetpay_ref, expires_at, created_at, users(email, full_name, phone)')
+    .select('id, user_id, plan, status, stripe_sub_id, cinetpay_ref, feexpay_ref, expires_at, created_at, users(email, full_name, phone)')
     .order('created_at', { ascending: false })
 
   if (status) query = query.eq('status', status)
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 
   const rows = (data ?? []).map((s) => {
     const u = s.users as unknown as { email: string | null; full_name: string | null; phone: string | null } | null
-    const provider = s.stripe_sub_id ? 'stripe' : s.cinetpay_ref ? 'cinetpay' : 'inconnu'
+    const provider = s.stripe_sub_id ? 'stripe' : (s.feexpay_ref || s.cinetpay_ref) ? 'mobile_money' : 'inconnu'
     const daysLeft = s.expires_at ? Math.ceil((new Date(s.expires_at).getTime() - Date.now()) / 86400000) : null
     return {
       id: s.id, user_id: s.user_id, plan: s.plan, status: s.status,
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
     total: rows.length,
     active: active.length,
     stripe: active.filter((r) => r.provider === 'stripe').length,
-    cinetpay: active.filter((r) => r.provider === 'cinetpay').length,
+    mobile_money: active.filter((r) => r.provider === 'mobile_money').length,
     expiring_7d: active.filter((r) => r.days_left !== null && r.days_left >= 0 && r.days_left <= 7).length,
     monthly_revenue_fcfa: active.length * 2000,
   }

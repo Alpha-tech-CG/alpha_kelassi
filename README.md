@@ -30,7 +30,7 @@ Cours structurés, annales officielles corrigées, tuteur IA hors-ligne, groupes
 | **Base de données** | Supabase (PostgreSQL + pgvector + Auth + Storage), RLS sur toutes les tables |
 | **Cache / quotas / queue** | Upstash Redis |
 | **IA** | Google Gemini (`@google/genai`) + embeddings `text-embedding-004` (vecteurs 768d, index HNSW) |
-| **Paiements** | Stripe + CinetPay (Mobile Money XAF) |
+| **Paiements** | Stripe (carte) + FeexPay (Mobile Money, paiement push) |
 | **Messagerie** | WhatsApp Cloud API + SMS OTP (Africa's Talking) |
 | **Monitoring** | Sentry (web + api) |
 | **Monorepo** | pnpm workspaces + Turborepo |
@@ -47,7 +47,7 @@ alpha-kelassi/
 ├── apps/
 │   ├── web/            # Next.js — site élève + API REST (route handlers)
 │   ├── mobile/         # Expo — app Android/iOS
-│   └── api/            # Hono — webhooks (Stripe/CinetPay/WhatsApp) + worker rappels
+│   └── api/            # Hono — webhooks (Stripe/FeexPay/WhatsApp) + worker rappels
 ├── packages/
 │   ├── types/          # Types TS partagés (dont Database générés par Supabase)
 │   ├── ui/             # Composants UI web partagés
@@ -112,7 +112,7 @@ Copier `.env.example` → `.env.local` et renseigner. Groupes principaux :
 | **Redis / Queue** | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `QUEUE_REDIS_URL` |
 | **IA** | `GEMINI_API_KEY` |
 | **Stripe** | `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PREMIUM_MONTHLY`, `STRIPE_PRICE_PREMIUM_YEARLY` |
-| **CinetPay** | `CINETPAY_API_KEY`, `CINETPAY_SITE_ID`, `CINETPAY_SECRET_KEY`, `CINETPAY_NOTIFY_URL` |
+| **FeexPay** | `FEEXPAY_TOKEN`, `FEEXPAY_SHOP`, `FEEXPAY_CALLBACK_URL` |
 | **WhatsApp** | `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_API_VERSION`, `WHATSAPP_VERIFY_TOKEN`, `WHATSAPP_APP_SECRET` |
 | **SMS OTP** | `AT_API_KEY`, `AT_USERNAME`, `AT_SENDER_ID` |
 | **App** | `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_APP_ENV`, `NODE_ENV` |
@@ -140,7 +140,7 @@ supabase gen types typescript --local > packages/types/src/database.ts
 Le projet a fait l'objet de plusieurs audits (voir historique des migrations `022`–`024`, `043`, `046`, `047`).
 
 - **RLS** sur l'intégralité des tables ; anti-escalade de privilèges (grants au niveau colonne).
-- **Webhooks signés** : Stripe (`constructEvent`), CinetPay (HMAC + `timingSafeEqual` + validation du montant), WhatsApp (`X-Hub-Signature-256`, fail-closed).
+- **Webhooks paiement** : Stripe (`constructEvent`), FeexPay (callback non signé → l'intention d'achat est liée au serveur à l'init, puis **re-vérification du statut et du montant** côté serveur avant d'accorder le premium), WhatsApp (`X-Hub-Signature-256`, fail-closed).
 - **En-têtes HTTP** : CSP, HSTS (`preload`), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`.
 - **Storage** : bucket premium privé (accès gated par plan), uploads limités (5 Mo, images uniquement), écriture admin-only sur les buckets publics.
 - **Rate-limiting & quotas IA** via Upstash Redis (fail-open pour ne jamais casser l'appelant).

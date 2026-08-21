@@ -8,7 +8,7 @@ interface Sub {
   email: string | null; full_name: string | null; phone: string | null
 }
 interface Summary {
-  total: number; active: number; stripe: number; cinetpay: number
+  total: number; active: number; stripe: number; mobile_money: number
   expiring_7d: number; monthly_revenue_fcfa: number
 }
 
@@ -40,7 +40,7 @@ export default function AdminSubscriptionsPage() {
   const cards = summary ? [
     { label: 'Abonnés actifs', value: summary.active, icon: '⭐', color: 'from-amber-500 to-orange-500' },
     { label: 'Revenus / mois', value: `${summary.monthly_revenue_fcfa.toLocaleString('fr')} FCFA`, icon: '💰', color: 'from-emerald-500 to-teal-600' },
-    { label: 'Mobile Money', value: summary.cinetpay, icon: '📱', color: 'from-violet-500 to-purple-600' },
+    { label: 'Mobile Money', value: summary.mobile_money, icon: '📱', color: 'from-violet-500 to-purple-600' },
     { label: 'Expirent < 7j', value: summary.expiring_7d, icon: '⏳', color: 'from-red-500 to-rose-600' },
   ] : []
 
@@ -106,7 +106,7 @@ export default function AdminSubscriptionsPage() {
                     <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${STATUS_STYLE[s.status] ?? 'bg-gray-100 text-gray-500'}`}>{s.status}</span>
                   </td>
                   <td className="px-5 py-3">
-                    <span className="text-gray-600">{s.provider === 'stripe' ? '💳 Stripe' : s.provider === 'cinetpay' ? '📱 Mobile Money' : '—'}</span>
+                    <span className="text-gray-600">{s.provider === 'stripe' ? '💳 Stripe' : s.provider === 'mobile_money' ? '📱 Mobile Money' : '—'}</span>
                   </td>
                   <td className="px-5 py-3">
                     {s.expires_at ? (

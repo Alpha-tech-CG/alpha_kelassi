@@ -54,7 +54,7 @@ export default function CguPage() {
           <h2 className="text-lg font-semibold mb-3">4. Abonnement Premium</h2>
           <ul className="list-disc pl-6 space-y-1">
             <li>Tarif : 2 000 FCFA/mois ou 20 000 FCFA/an (tarifs indicatifs, susceptibles d'évoluer)</li>
-            <li>Paiement via Stripe (carte internationale) ou CinetPay (Mobile Money, carte africaine)</li>
+            <li>Paiement via Stripe (carte internationale) ou FeexPay (Mobile Money)</li>
             <li>Renouvellement automatique sauf résiliation</li>
             <li>Résiliation possible à tout moment depuis les paramètres — effet à la fin de la période en cours</li>
             <li>Pas de remboursement pour les périodes entamées, sauf défaillance technique majeure de notre part</li>

@@ -21,6 +21,7 @@ export interface Subscription {
   user_id: string
   stripe_sub_id: string | null
   cinetpay_ref: string | null
+  feexpay_ref: string | null
   plan: UserPlan
   status: SubscriptionStatus
   expires_at: string | null
