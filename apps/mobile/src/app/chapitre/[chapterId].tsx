@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Linking } from 'react-native'
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Linking } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
@@ -8,6 +8,7 @@ import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
 import { LessonContent } from '../../components/LessonContent'
 import { MathLessonView } from '../../components/MathLessonView'
+import { ChapterSkeleton } from '../../components/Skeleton'
 
 // Contenu avec formules LaTeX ($...$) → rendu math natif ; sinon rendu léger (encarts BEPC).
 const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$/.test(s)
@@ -40,47 +41,82 @@ export default function ChapitreScreen() {
   const [exCount, setExCount] = useState(0)
 
   useEffect(() => {
+    let cancelled = false
+
+    function applyCached(parsed: { title: string; lessons: LessonVM[] }, isFromCache: boolean) {
+      if (cancelled) return
+      setTitle(parsed.title); setLessons(parsed.lessons); setFromCache(isFromCache)
+      setTab((TABS.find((x) => parsed.lessons.some((l) => l.type === x.type))?.type) ?? 'cours')
+    }
+
     async function load() {
+      // 1) Cache d'abord : si présent, affichage instantané — indépendant de la
+      // rapidité/fiabilité du réseau (une requête qui reste bloquée plusieurs
+      // secondes avant d'échouer, plutôt que de rejeter tout de suite, ne doit
+      // jamais empêcher de lire un cours déjà téléchargé).
+      let hasCache = false
       try {
-        const { data: chapter } = await supabase.from('chapters').select('title').eq('id', chapterId).maybeSingle()
-        const { data: rows, error } = await supabase
-          .from('lessons')
-          .select('id, type, title, content, video_url, duration_min, order_index')
-          .eq('chapter_id', chapterId).order('order_index')
-        if (error) throw error
+        const cached = await readCachedLesson(`chapter:${chapterId}`)
+        if (cached) {
+          const parsed = JSON.parse(cached) as { title: string; lessons: LessonVM[] }
+          applyCached(parsed, true)
+          hasCache = true
+          setLoading(false)
+        }
+      } catch { /* cache absent/corrompu — on tentera le réseau ci-dessous */ }
+
+      // 2) Réseau ensuite, avec timeout : rafraîchit si ça répond, sinon on
+      // garde ce qui a déjà été affiché depuis le cache (ou l'état vide s'il
+      // n'y en avait pas). Toutes les requêtes indépendantes partent en
+      // parallèle (plutôt qu'enchaînées une par une) pour limiter l'attente
+      // sur une connexion lente — c'est là que se jouait l'essentiel de la
+      // lenteur perçue.
+      try {
+        // Sur un cache déjà affiché, ce n'est qu'un rafraîchissement en tâche
+        // de fond : pas la peine d'attendre longtemps. Sans cache, c'est le
+        // seul chemin vers le contenu : on laisse un peu plus de marge.
+        const timeoutMs = hasCache ? 4000 : 6000
+        const timeout = new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), timeoutMs))
+
+        const fetchAll = (async () => {
+          const [{ data: chapter }, { data: rows, error }, { count: exc }] = await Promise.all([
+            supabase.from('chapters').select('title').eq('id', chapterId).maybeSingle(),
+            supabase.from('lessons')
+              .select('id, type, title, content, video_url, duration_min, order_index')
+              .eq('chapter_id', chapterId).order('order_index'),
+            supabase.from('exercises').select('id', { count: 'exact', head: true }).eq('chapter_id', chapterId),
+          ])
+          if (error) throw error
+          const { data: { user } } = await supabase.auth.getUser()
+          const { data: prog } = user
+            ? await supabase.from('lesson_progress').select('lesson_id, completed, score').eq('user_id', user.id)
+            : { data: [] }
+          return { chapter, rows, exc, prog }
+        })()
+
+        const { chapter, rows, exc, prog } = await Promise.race([fetchAll, timeout])
+        if (cancelled) return
 
         const ls = (rows ?? []) as LessonVM[]
         const t = (chapter as { title?: string } | null)?.title ?? 'Chapitre'
-        const { data: { user } } = await supabase.auth.getUser()
-        const { data: prog } = user
-          ? await supabase.from('lesson_progress').select('lesson_id, completed, score').eq('user_id', user.id)
-          : { data: [] }
         const dmap: Record<string, { completed: boolean; score: number | null }> = {}
         for (const p of (prog ?? []) as { lesson_id: string; completed: boolean; score: number | null }[]) dmap[p.lesson_id] = { completed: p.completed, score: p.score }
 
-        const { count: exc } = await supabase.from('exercises')
-          .select('id', { count: 'exact', head: true }).eq('chapter_id', chapterId)
         setExCount(exc ?? 0)
-
-        setTitle(t); setLessons(ls); setDone(dmap); setFromCache(false)
-        setTab((TABS.find((x) => ls.some((l) => l.type === x.type))?.type) ?? 'cours')
-        // Cache offline (contenu texte lisible plus tard sans réseau)
+        setDone(dmap)
+        applyCached({ title: t, lessons: ls }, false)
+        // Cache offline (texte + images, lisibles plus tard sans réseau)
         writeCachedLesson(`chapter:${chapterId}`, 'chapter', JSON.stringify({ title: t, lessons: ls }))
       } catch {
-        // Hors-ligne : repli sur le cache
-        const cached = await readCachedLesson(`chapter:${chapterId}`)
-        if (cached) {
-          try {
-            const parsed = JSON.parse(cached) as { title: string; lessons: LessonVM[] }
-            setTitle(parsed.title); setLessons(parsed.lessons); setFromCache(true)
-            setTab((TABS.find((x) => parsed.lessons.some((l) => l.type === x.type))?.type) ?? 'cours')
-          } catch { /* cache corrompu */ }
-        }
+        // Réseau indisponible ou trop lent : on garde le cache déjà affiché
+        // (le cas échéant) — rien à faire de plus ici.
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
+    setLoading(true)
     load()
+    return () => { cancelled = true }
   }, [chapterId])
 
   async function complete(l: LessonVM) {
@@ -112,7 +148,7 @@ export default function ChapitreScreen() {
     }
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <ChapterSkeleton />
 
   const visibleTabs = TABS.filter((x) => lessons.some((l) => l.type === x.type))
   const items = lessons.filter((l) => l.type === tab).sort((a, b) => a.order_index - b.order_index)

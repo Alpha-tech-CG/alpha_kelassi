@@ -80,7 +80,9 @@ export function LessonContent({ content }: { content: string }) {
     // interval notation "]a, b[") right after the image on the same line,
     // which a fully-anchored regex would miss entirely, leaving the raw
     // "![...](...)" markdown visible as plain text (looks like a stray link).
-    const imgLineRegex = /!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g
+    // Accepte les URLs distantes (https, en ligne) et les chemins locaux
+    // (file://, servis depuis le cache hors-ligne — cf. lib/lessonCache.ts).
+    const imgLineRegex = /!\[([^\]]*)\]\(((?:https?|file):\/\/[^\s)]+)\)/g
     if (imgLineRegex.test(trimmed)) {
       imgLineRegex.lastIndex = 0
       const segments: React.ReactNode[] = []

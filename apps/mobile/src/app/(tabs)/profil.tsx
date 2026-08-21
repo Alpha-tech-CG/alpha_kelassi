@@ -4,10 +4,11 @@ import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL } from '../../lib/theme'
+import { syncAllForOffline, type SyncProgress } from '../../lib/offlineSync'
 
 export default function ProfilScreen() {
   const router = useRouter()
-  const { level } = useLevel()
+  const { level, track } = useLevel()
   const [name, setName] = useState('Élève')
   const [plan, setPlan] = useState('free')
   const [xp, setXp] = useState(0)
@@ -15,6 +16,8 @@ export default function ProfilScreen() {
   const [badges, setBadges] = useState(0)
   const [notif, setNotif] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+  const [syncProgress, setSyncProgress] = useState<SyncProgress | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -41,6 +44,27 @@ export default function ProfilScreen() {
     const { data: { user } } = await supabase.auth.getUser()
     if (user) await supabase.from('users').update({ whatsapp_opt_in: value }).eq('id', user.id)
   }
+  async function downloadForOffline() {
+    if (syncing) return
+    if (!level) { Alert.alert('Niveau manquant', 'Définis d\'abord ton niveau d\'examen (ci-dessus) avant de télécharger tes cours.'); return }
+    setSyncing(true)
+    setSyncProgress({ done: 0, total: 0, label: '' })
+    try {
+      const { synced, failed, total } = await syncAllForOffline(level, track, (p) => setSyncProgress(p))
+      Alert.alert(
+        'Téléchargement terminé',
+        failed > 0
+          ? `${synced}/${total} chapitres téléchargés pour hors-ligne. ${failed} chapitre(s) n'ont pas pu être téléchargés (vérifie ta connexion et réessaie).`
+          : `Les ${synced} chapitres de ton programme sont maintenant disponibles hors-ligne, images comprises.`
+      )
+    } catch {
+      Alert.alert('Erreur', 'Le téléchargement a été interrompu. Vérifie ta connexion et réessaie.')
+    } finally {
+      setSyncing(false)
+      setSyncProgress(null)
+    }
+  }
+
   async function share() {
     await Share.share({ message: 'Je révise pour mon examen d\'État avec Cognix 🎓 — cours, QCM et IA. Rejoins-moi !' }).catch(() => null)
   }
@@ -100,6 +124,23 @@ export default function ProfilScreen() {
               <Text style={styles.settingSub}>Actuel : {level ? LEVEL_LABEL[level] : 'non défini'}</Text>
             </View>
             <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow} onPress={downloadForOffline} disabled={syncing}>
+            <View style={[styles.settingIcon, { backgroundColor: '#E0F2FE' }]}>
+              <Text style={{ fontSize: 18 }}>⤓</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.settingTitle}>Télécharger pour hors-ligne</Text>
+              <Text style={styles.settingSub}>
+                {syncing
+                  ? syncProgress && syncProgress.total > 0
+                    ? `Téléchargement… ${syncProgress.done}/${syncProgress.total}`
+                    : 'Préparation…'
+                  : 'Tout ton programme, cours et images'}
+              </Text>
+            </View>
+            {syncing ? <ActivityIndicator color={colors.primary} /> : <Text style={styles.chevron}>›</Text>}
           </TouchableOpacity>
           {plan === 'free' && (
             <>
