@@ -1190,6 +1190,7 @@ export type Database = {
           amount_fcfa: number
           type: 'credit' | 'withdrawal'
           status: 'pending' | 'completed' | 'rejected'
+          provider_ref: string | null
           created_at: string
         }
         Insert: {
@@ -1199,6 +1200,7 @@ export type Database = {
           amount_fcfa: number
           type: 'credit' | 'withdrawal'
           status?: 'pending' | 'completed' | 'rejected'
+          provider_ref?: string | null
           created_at?: string
         }
         Update: {
@@ -1208,6 +1210,7 @@ export type Database = {
           amount_fcfa?: number
           type?: 'credit' | 'withdrawal'
           status?: 'pending' | 'completed' | 'rejected'
+          provider_ref?: string | null
           created_at?: string
         }
         Relationships: []
@@ -1256,6 +1259,10 @@ export type Database = {
       increment_tutor_wallet: {
         Args: { p_tutor_id: string; p_amount: number }
         Returns: undefined
+      }
+      debit_tutor_wallet: {
+        Args: { p_tutor_id: string; p_amount: number }
+        Returns: number | null
       }
     }
     Enums: {

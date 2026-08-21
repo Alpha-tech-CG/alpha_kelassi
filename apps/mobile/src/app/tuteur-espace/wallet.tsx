@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Alert } from 'react-native'
 import { useRouter, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
@@ -28,6 +28,8 @@ export default function WalletScreen() {
   const [balance, setBalance] = useState(0)
   const [txns, setTxns] = useState<Txn[]>([])
   const [withdrawing, setWithdrawing] = useState(false)
+  const [phone, setPhone] = useState('')
+  const [network, setNetwork] = useState<'MTN' | 'AIRTEL'>('MTN')
 
   const load = useCallback(async () => {
     const { json } = await api('/wallet')
@@ -39,15 +41,17 @@ export default function WalletScreen() {
 
   async function withdraw(amount: number) {
     if (amount > balance) return Alert.alert('Solde insuffisant', 'Tu ne peux pas retirer plus que ton solde.')
-    Alert.alert('Confirmer le retrait', `Retirer ${amount.toLocaleString('fr-FR')} FCFA ?`, [
+    const digits = phone.replace(/[^0-9]/g, '')
+    if (digits.length < 8) return Alert.alert('Numéro invalide', 'Saisis ton numéro Mobile Money.')
+    Alert.alert('Confirmer le retrait', `Retirer ${amount.toLocaleString('fr-FR')} FCFA vers ${network} +242 ${digits} ?`, [
       { text: 'Annuler', style: 'cancel' },
       { text: 'Retirer', onPress: async () => {
         setWithdrawing(true)
-        const { ok, json } = await api('/withdraw', { method: 'POST', body: JSON.stringify({ amount }) })
+        const { ok, json } = await api('/withdraw', { method: 'POST', body: JSON.stringify({ amount, phone: digits, network }) })
         setWithdrawing(false)
         if (!ok) return Alert.alert('Erreur', json.error?.message ?? 'Retrait impossible.')
         await load()
-        Alert.alert('Demande envoyée', 'Ton retrait est en cours de traitement.')
+        Alert.alert('Retrait envoyé', 'Le transfert Mobile Money est en cours.')
       } },
     ])
   }
@@ -68,6 +72,32 @@ export default function WalletScreen() {
       </View>
 
       <Text style={styles.sectionTitle}>Retirer</Text>
+
+      <View style={styles.operatorRow}>
+        {(['MTN', 'AIRTEL'] as const).map((n) => (
+          <TouchableOpacity
+            key={n}
+            style={[styles.operatorBtn, network === n && styles.operatorBtnActive]}
+            onPress={() => setNetwork(n)}
+          >
+            <Text style={[styles.operatorText, network === n && styles.operatorTextActive]}>
+              {n === 'MTN' ? 'MTN MoMo' : 'Airtel Money'}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={styles.phoneRow}>
+        <Text style={styles.phonePrefix}>🇨🇬 +242</Text>
+        <TextInput
+          style={styles.phoneInput}
+          placeholder="06 XXX XX XX"
+          placeholderTextColor={colors.textMuted}
+          keyboardType="phone-pad"
+          value={phone}
+          onChangeText={setPhone}
+        />
+      </View>
+
       <View style={styles.amounts}>
         {AMOUNTS.map((a) => (
           <TouchableOpacity key={a} style={[styles.amountBtn, (a > balance || withdrawing) && { opacity: 0.4 }]} onPress={() => withdraw(a)} disabled={a > balance || withdrawing}>
@@ -109,6 +139,14 @@ const styles = StyleSheet.create({
   balanceValue: { color: '#fff', fontSize: 40, fontWeight: '900', marginTop: 6 },
   balanceUnit: { fontSize: 18, fontWeight: '700' },
   sectionTitle: { fontSize: 16, fontWeight: '900', color: colors.text, marginTop: 26, marginBottom: 12 },
+  operatorRow: { flexDirection: 'row', gap: 8, marginBottom: 10 },
+  operatorBtn: { flex: 1, backgroundColor: colors.card, borderRadius: radius.md, paddingVertical: 12, alignItems: 'center', borderWidth: 1, borderColor: colors.cardBorder },
+  operatorBtnActive: { borderColor: colors.primary, backgroundColor: colors.primaryTint },
+  operatorText: { fontSize: 13, fontWeight: '700', color: colors.textMuted },
+  operatorTextActive: { color: colors.primary },
+  phoneRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: radius.md, borderWidth: 1, borderColor: colors.cardBorder, marginBottom: 14, overflow: 'hidden' },
+  phonePrefix: { paddingHorizontal: 14, paddingVertical: 14, fontSize: 14, fontWeight: '700', color: colors.text, backgroundColor: colors.primaryTint },
+  phoneInput: { flex: 1, paddingHorizontal: 12, paddingVertical: 14, fontSize: 15, color: colors.text },
   amounts: { flexDirection: 'row', gap: 10 },
   amountBtn: { flex: 1, backgroundColor: colors.card, borderRadius: radius.md, paddingVertical: 16, alignItems: 'center', borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
   amountText: { fontSize: 15, fontWeight: '800', color: colors.primary },

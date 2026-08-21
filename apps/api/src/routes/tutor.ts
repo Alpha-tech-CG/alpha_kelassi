@@ -188,27 +188,75 @@ router.get('/wallet', async (c) => {
   return c.json({ data: { balance: profile.wallet_balance, transactions: txns ?? [] } })
 })
 
-// POST /tutor/withdraw — demande de retrait (FeexPay payout en prod ; ici on débite + trace).
+// POST /tutor/withdraw — retrait du wallet tuteur via payout FeexPay (Mobile Money).
 router.post('/withdraw', zValidator('json', z.object({
-  amount: z.number().int().min(500),   // retrait minimum 500 FCFA
+  amount:  z.number().int().min(500),                 // retrait minimum 500 FCFA
+  phone:   z.string().regex(/^\+?[0-9]{8,15}$/),        // numéro Mobile Money de destination
+  network: z.string().regex(/^[A-Z][A-Z _]{1,20}$/),   // opérateur (ex. MTN, AIRTEL)
 })), async (c) => {
   const userId = c.get('userId') as string
-  const { amount } = c.req.valid('json')
+  const { amount, phone, network } = c.req.valid('json')
   const profile = await loadProfile(userId)
   if (!profile) return c.json({ error: { code: 'NOT_TUTOR' } }, 403)
-  if (profile.wallet_balance < amount) return c.json({ error: { code: 'INSUFFICIENT_FUNDS' } }, 422)
 
-  // Débit atomique via l'incrément négatif (réutilise la fonction de wallet).
-  await supabaseAdmin.rpc('increment_tutor_wallet', { p_tutor_id: userId, p_amount: -amount })
-  const { data: txn, error } = await supabaseAdmin.from('tutor_wallet_transactions')
+  const token = process.env['FEEXPAY_TOKEN']
+  const shop  = process.env['FEEXPAY_SHOP']
+  if (!token || !shop) return c.json({ error: { code: 'FEEXPAY_NOT_CONFIGURED', message: 'Retraits indisponibles' } }, 503)
+
+  // Débit ATOMIQUE avec plancher (anti-TOCTOU) : renvoie le nouveau solde, ou
+  // null si le solde est insuffisant — aucun débit n'a alors eu lieu.
+  const { data: newBalance, error: debitErr } = await supabaseAdmin
+    .rpc('debit_tutor_wallet', { p_tutor_id: userId, p_amount: amount })
+  if (debitErr) return c.json({ error: { code: 'DB_ERROR', message: debitErr.message } }, 500)
+  if (newBalance === null || newBalance === undefined) {
+    return c.json({ error: { code: 'INSUFFICIENT_FUNDS' } }, 422)
+  }
+
+  // On trace la transaction en 'pending' AVANT le transfert : tout débit est tracé.
+  const { data: txn, error: txErr } = await supabaseAdmin.from('tutor_wallet_transactions')
     .insert({ tutor_id: userId, amount_fcfa: amount, type: 'withdrawal', status: 'pending' })
     .select('id, amount_fcfa, status, created_at').single()
-  if (error) {
-    await supabaseAdmin.rpc('increment_tutor_wallet', { p_tutor_id: userId, p_amount: amount })  // rollback
-    return c.json({ error: { code: 'DB_ERROR', message: error.message } }, 500)
+  if (txErr) {
+    await supabaseAdmin.rpc('increment_tutor_wallet', { p_tutor_id: userId, p_amount: amount }) // remboursement
+    return c.json({ error: { code: 'DB_ERROR', message: txErr.message } }, 500)
   }
-  // TODO(prod) : appeler FeexPay payout ici, puis passer la transaction à 'completed'/'rejected'.
-  return c.json({ data: txn }, 201)
+
+  // Payout FeexPay — FeexPay génère la référence, renvoyée dans la réponse.
+  let status: string | undefined
+  let ref: string | undefined
+  try {
+    const res = await fetch('https://api.feexpay.me/api/payouts/public/transfer/global', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        phoneNumber: `242${phone.replace(/[^0-9]/g, '')}`,
+        amount,
+        shop,
+        network,
+        motif: 'Retrait Kelassi tuteur',
+      }),
+    })
+    const data = (await res.json().catch(() => ({}))) as { status?: string; reference?: string }
+    status = res.ok ? (data.status ?? 'PENDING') : 'FAILED'
+    ref = data.reference
+  } catch {
+    status = 'FAILED'
+  }
+
+  if (status === 'FAILED') {
+    // Échec du transfert : on recrédite le wallet et on marque la transaction rejetée.
+    await supabaseAdmin.rpc('increment_tutor_wallet', { p_tutor_id: userId, p_amount: amount })
+    await supabaseAdmin.from('tutor_wallet_transactions').update({ status: 'rejected' }).eq('id', txn.id)
+    return c.json({ error: { code: 'PAYOUT_FAILED', message: 'Le transfert a échoué. Solde recrédité.' } }, 502)
+  }
+
+  // SUCCESSFUL → complété ; PENDING → transfert en cours (reste 'pending').
+  const finalStatus = status === 'SUCCESSFUL' ? 'completed' : 'pending'
+  await supabaseAdmin.from('tutor_wallet_transactions')
+    .update({ status: finalStatus, provider_ref: ref ?? null })
+    .eq('id', txn.id)
+
+  return c.json({ data: { ...txn, status: finalStatus, provider_ref: ref ?? null } }, 201)
 })
 
 // GET /tutor/score — score global + avis récents des élèves.
