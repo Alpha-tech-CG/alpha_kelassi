@@ -8,7 +8,10 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const { id } = await params
 
   const { error } = await supabaseAdmin.from('teacher_profiles').delete().eq('user_id', id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/teachers/[id]/reject]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   await supabaseAdmin.from('users').update({ role: 'student' }).eq('id', id)
   return NextResponse.json({ data: { ok: true } })
 }

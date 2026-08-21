@@ -14,7 +14,10 @@ export async function GET(req: NextRequest) {
     .from('exercises')
     .select('id, chapter_id, title, statement, difficulty, is_premium, order_index, exercise_solutions(solution)')
     .eq('chapter_id', chapterId).order('order_index')
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/curriculum/exercises]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: data ?? [] })
 }
 
@@ -41,7 +44,10 @@ export async function POST(req: NextRequest) {
     chapter_id: b.chapter_id, title: b.title, statement: b.statement,
     difficulty: b.difficulty, is_premium: b.is_premium, order_index: b.order_index,
   }).select('id').single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/curriculum/exercises]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   const { error: sErr } = await supabaseAdmin.from('exercise_solutions')
     .insert({ exercise_id: ex.id, solution: b.solution })

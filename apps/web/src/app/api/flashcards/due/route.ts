@@ -16,6 +16,15 @@ export async function GET(req: NextRequest) {
     .order('next_review', { ascending: true })
     .limit(limit)
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+
+    console.error('[/api/flashcards/due]', error)
+
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+
+  }
   return NextResponse.json({ data: data ?? [], count: data?.length ?? 0 })
 }

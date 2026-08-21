@@ -67,7 +67,7 @@ export default function ConfidentialitePage() {
         <section>
           <h2 className="text-lg font-semibold mb-3">5. Durée de conservation</h2>
           <ul className="list-disc pl-6 space-y-1">
-            <li>Données de compte : jusqu'à la suppression du compte + 30 jours</li>
+            <li>Données de compte : conservées tant que le compte est actif ; supprimées immédiatement et définitivement lors de la suppression du compte, sans période de rétention supplémentaire</li>
             <li>Historique de chat IA : 12 mois glissants</li>
             <li>Logs techniques : 90 jours</li>
             <li>Données de paiement : 5 ans (obligation légale)</li>

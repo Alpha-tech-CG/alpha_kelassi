@@ -22,9 +22,21 @@ export default function LoginPage(): React.JSX.Element {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) setError(error.message)
-    else router.push('/dashboard')
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const json = await res.json()
+      if (!res.ok) setError(json.error?.message ?? 'Une erreur est survenue.')
+      else {
+        router.push(json.data.redirectTo)
+        router.refresh()
+      }
+    } catch {
+      setError('Une erreur est survenue.')
+    }
     setLoading(false)
   }
 
@@ -39,11 +51,18 @@ export default function LoginPage(): React.JSX.Element {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: phone.startsWith('+') ? phone : `+242${phone}`,
-    })
-    if (error) setError(error.message)
-    else router.push(`/verify-otp?phone=${encodeURIComponent(phone)}`)
+    try {
+      const res = await fetch('/api/auth/otp/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone.startsWith('+') ? phone : `+242${phone}` }),
+      })
+      const json = await res.json()
+      if (!res.ok) setError(json.error?.message ?? 'Une erreur est survenue.')
+      else router.push(`/verify-otp?phone=${encodeURIComponent(phone)}`)
+    } catch {
+      setError('Une erreur est survenue.')
+    }
     setLoading(false)
   }
 

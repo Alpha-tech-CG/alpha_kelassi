@@ -49,7 +49,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const { data: msg, error } = await supabaseAdmin.from('group_messages')
     .insert({ group_id: id, sender_id: user.id, content: body.content, ai_blocked: false })
     .select('id, group_id, sender_id, content, created_at').single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/groups/[id]/messages]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   return NextResponse.json({ data: msg }, { status: 201 })
 }

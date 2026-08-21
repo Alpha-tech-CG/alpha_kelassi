@@ -21,7 +21,13 @@ export async function DELETE() {
 
   // Supprime l'entrée users (cascade PostgreSQL supprime tout le reste)
   const { error } = await supabase.from('users').delete().eq('id', user.id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/account]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
 
   // Supprime aussi l'utilisateur Auth via le service role
   await getAdmin().auth.admin.deleteUser(user.id).catch(() => null)

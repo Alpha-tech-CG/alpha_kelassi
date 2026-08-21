@@ -31,7 +31,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   })
   if (error) {
     if (error.code === '23505') return NextResponse.json({ error: { code: 'ALREADY_RATED' } }, { status: 409 })
-    return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+    console.error('[/corrections/[id]/rate]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
   await recomputeTutorScore(mission.tutor_id)
   return NextResponse.json({ data: { ok: true } }, { status: 201 })

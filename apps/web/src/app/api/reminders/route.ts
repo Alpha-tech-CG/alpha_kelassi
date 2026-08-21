@@ -14,7 +14,13 @@ export async function GET() {
     .eq('id', user.id)
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/reminders]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data })
 }
 
@@ -40,6 +46,12 @@ export async function PATCH(req: NextRequest) {
     .select('whatsapp_opt_in, reminder_hour')
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/reminders]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data })
 }

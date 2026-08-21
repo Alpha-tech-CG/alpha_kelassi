@@ -12,7 +12,13 @@ export async function GET() {
     .select('id, code, label, track, level, country_code')
     .order('track').order('code')
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/curriculum/series]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data: data ?? [] })
 }
 
@@ -36,7 +42,8 @@ export async function POST(req: NextRequest) {
   const { data, error } = await supabaseAdmin.from('series').insert(body).select().single()
   if (error) {
     if (error.code === '23505') return NextResponse.json({ error: { code: 'DUPLICATE', message: 'Cette série existe déjà pour ce niveau.' } }, { status: 409 })
-    return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+    console.error('[/admin/curriculum/series]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
   return NextResponse.json({ data }, { status: 201 })
 }

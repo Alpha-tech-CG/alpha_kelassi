@@ -14,7 +14,13 @@ export async function GET(_req: NextRequest) {
     .order('level', { ascending: true })
     .order('name', { ascending: true })
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/subjects]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
 
   // Aplatit les compteurs agrégés ([{ count }]) en nombres simples
   const rows = (data ?? []).map((s: Record<string, unknown>) => ({
@@ -68,7 +74,8 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       )
     }
-    return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+    console.error('[/admin/subjects]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
 
   return NextResponse.json({ data: { ...data, doc_count: 0, video_count: 0 } }, { status: 201 })

@@ -80,7 +80,10 @@ export async function POST(req: NextRequest) {
     .eq('is_done', false)
 
   const { error } = await supabase.from('revision_sessions').insert(rows)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/planning/generate]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   return NextResponse.json({ data: { created: rows.length, days: totalDays } }, { status: 201 })
 }

@@ -23,6 +23,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   }
 
   const { error } = await supabaseAdmin.from('documents').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/documents/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: { deleted: true } })
 }

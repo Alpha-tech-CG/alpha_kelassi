@@ -27,6 +27,12 @@ export async function GET(req: NextRequest) {
     .order('scheduled_date', { ascending: true })
     .limit(200)
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/planning/sessions]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data: data ?? [] })
 }

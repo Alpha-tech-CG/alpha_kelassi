@@ -11,7 +11,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const { data: mission, error } = await supabase.from('correction_missions')
     .select('id, subject_id, status, accepted_at, due_at, delivered_at, attempts, reward_fcfa, ai_verdict, created_at, subjects(name)')
     .eq('id', id).eq('student_id', user.id).maybeSingle()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/corrections/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   if (!mission) return NextResponse.json({ error: { code: 'NOT_FOUND' } }, { status: 404 })
 
   let solution_url: string | null = null

@@ -27,6 +27,15 @@ export async function POST(req: NextRequest) {
     app_version: body.app_version ?? null,
   })
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+
+    console.error('[/api/feedback]', error)
+
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+
+  }
   return NextResponse.json({ data: { submitted: true } }, { status: 201 })
 }

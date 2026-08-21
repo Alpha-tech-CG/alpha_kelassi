@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { BetaFeedbackButton } from '@/components/beta-feedback-button'
 import { NotificationBanner } from '@/components/notification-banner'
+import { SignOutButton } from './_components/sign-out-button'
 import {
   Home, BookOpen, FileText, Bot, Layers, TrendingUp,
   Crown, Wrench, ListChecks, CalendarClock, PlayCircle, type LucideIcon,
@@ -115,8 +116,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </div>
           </div>
 
+          {/* Déconnexion */}
+          <SignOutButton />
+
           {/* Links */}
-          <div className="flex gap-3 px-2 text-xs text-gray-400">
+          <div className="flex flex-wrap gap-3 px-2 text-xs text-gray-400">
+            <Link href="/compte/securite" className="hover:text-gray-600 transition-colors">Sécurité</Link>
             <Link href="/cgu" className="hover:text-gray-600 transition-colors">CGU</Link>
             <Link href="/confidentialite" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
             <Link href="/compte/supprimer" className="hover:text-red-500 transition-colors">Supprimer</Link>
@@ -126,6 +131,21 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
       {/* Main content */}
       <main id="main-content" className="flex-1 overflow-auto bg-[#fcfbf9] pb-20 md:pb-0">
+        {/* Barre compte mobile — sidebar desktop cachée en dessous de md, donc seul accès à la déconnexion/sécurité/suppression sur mobile web */}
+        <div className="md:hidden flex items-center justify-between gap-3 px-4 py-2.5 bg-[#172554] text-white">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-blue-600 font-bold text-[11px]">
+                {(profile?.full_name ?? user.email ?? 'U')[0].toUpperCase()}
+              </span>
+            </div>
+            <span className="text-xs text-blue-100 truncate">{profile?.full_name ?? user.email}</span>
+          </div>
+          <div className="flex items-center gap-3 flex-shrink-0 text-xs text-blue-100">
+            <Link href="/compte/securite" className="hover:text-white transition-colors">Compte</Link>
+            <SignOutButton className="flex items-center gap-1 hover:text-white transition-colors" />
+          </div>
+        </div>
         <NotificationBanner plan={profile?.plan ?? 'free'} />
         {children}
       </main>

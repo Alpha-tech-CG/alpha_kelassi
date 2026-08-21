@@ -22,7 +22,10 @@ export async function GET(req: NextRequest) {
   if (plan) query = query.eq('plan', plan)
 
   const { data, error } = await query.limit(500)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/subscriptions]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   const rows = (data ?? []).map((s) => {
     const u = s.users as unknown as { email: string | null; full_name: string | null; phone: string | null } | null

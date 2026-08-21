@@ -10,7 +10,10 @@ export async function GET() {
   const { data: profiles, error } = await supabaseAdmin.from('teacher_profiles')
     .select('user_id, school, id_doc_url, teaching_certificate_url, created_at, users(full_name, email, phone)')
     .eq('is_verified', false).order('created_at', { ascending: true }).limit(100)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/teachers/pending]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   const data = await Promise.all((profiles ?? []).map(async (p: Record<string, unknown>) => ({
     ...p,

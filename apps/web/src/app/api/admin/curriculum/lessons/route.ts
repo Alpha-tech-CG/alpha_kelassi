@@ -16,7 +16,13 @@ export async function GET(req: NextRequest) {
     .eq('chapter_id', chapterId)
     .order('order_index')
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/curriculum/lessons]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data: data ?? [] })
 }
 
@@ -46,6 +52,12 @@ export async function POST(req: NextRequest) {
     duration_min: b.duration_min ?? null, is_premium: b.is_premium, order_index: b.order_index,
   }).select().single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/curriculum/lessons]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data }, { status: 201 })
 }

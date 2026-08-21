@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import { withSentryConfig } from '@sentry/nextjs'
 
 const nextConfig: NextConfig = {
   compress: true,
@@ -84,4 +85,14 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+// Wrap avec Sentry : upload des source maps au build (no-op silencieux si
+// SENTRY_AUTH_TOKEN n'est pas configuré) + instrumentation auto des routes.
+export default withSentryConfig(nextConfig, {
+  silent: true,
+  org: process.env['SENTRY_ORG'],
+  project: process.env['SENTRY_PROJECT'],
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  disableLogger: true,
+  automaticVercelMonitors: true,
+})

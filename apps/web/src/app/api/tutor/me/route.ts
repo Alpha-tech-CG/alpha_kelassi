@@ -37,6 +37,9 @@ export async function PATCH(req: Request) {
   if (Object.keys(patch).length === 0) return NextResponse.json({ data: { ok: true } })
 
   const { error } = await admin().from('tutor_profiles').update(patch).eq('user_id', user.id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/tutor/me]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: { ok: true } })
 }

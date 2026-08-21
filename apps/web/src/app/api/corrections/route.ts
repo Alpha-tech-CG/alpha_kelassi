@@ -20,7 +20,10 @@ export async function GET(req: Request) {
   const { data, error } = await supabase.from('correction_missions')
     .select('id, subject_id, status, reward_fcfa, due_at, delivered_at, created_at, subjects(name)')
     .eq('student_id', user.id).order('created_at', { ascending: false }).limit(50)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/corrections]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: data ?? [] })
 }
 
@@ -49,7 +52,10 @@ export async function POST(req: Request) {
   const { data: mission, error } = await admin().from('correction_missions').insert({
     student_id: user.id, subject_id: body.subject_id, exercise_url: body.exercise_url, work_url: body.work_url, status: 'pending',
   }).select('id, status, created_at').single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/corrections]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   // La mission apparaît dans le pool des tuteurs (GET /api/tutor/missions).
   return NextResponse.json({ data: mission }, { status: 201 })

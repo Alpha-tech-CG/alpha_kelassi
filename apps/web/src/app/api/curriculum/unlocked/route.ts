@@ -28,7 +28,10 @@ export async function GET(req: NextRequest) {
     .eq('item_type', 'chapter')
     .in('school_month_id', unlockedMonthIds)
     .order('order_index')
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/curriculum/unlocked]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   const monthById = new Map((months ?? []).map((m) => [m.id, m]))
   const enriched = (items ?? []).map((it) => ({

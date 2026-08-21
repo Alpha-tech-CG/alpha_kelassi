@@ -9,7 +9,10 @@ export async function GET() {
   const { data: flags, error } = await supabaseAdmin.from('moderation_flags')
     .select('id, reason, status, created_at, message_id, flagged_user_id, reporter_id, group_messages(content, ai_blocked, group_id)')
     .eq('status', 'open').order('created_at', { ascending: false }).limit(200)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/moderation]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   // Résout les noms (service role → bypass RLS).
   const ids = Array.from(new Set((flags ?? []).flatMap((f: Record<string, unknown>) =>

@@ -31,7 +31,10 @@ export async function POST(req: Request) {
     user_id: user.id, school: body.school, id_doc_url: body.id_doc_url,
     teaching_certificate_url: body.teaching_certificate_url, is_verified: false,
   })
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/teacher/register]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   await supabaseAdmin.from('users').update({ role: 'teacher' }).eq('id', user.id)
   return NextResponse.json({ data: { status: 'pending_verification' } }, { status: 201 })

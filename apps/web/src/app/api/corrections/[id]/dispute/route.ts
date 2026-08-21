@@ -24,7 +24,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const { data: dispute, error } = await admin().from('correction_disputes')
     .insert({ mission_id: id, student_id: user.id, description: body.description }).select('id').single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/corrections/[id]/dispute]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   await admin().from('correction_missions').update({ status: 'disputed' }).eq('id', id)
 

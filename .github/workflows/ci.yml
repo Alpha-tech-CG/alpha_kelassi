@@ -34,6 +34,32 @@ jobs:
       - name: Type check
         run: pnpm type-check
 
+  audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # continue-on-error: le repo a déjà des vulnérabilités high/critical
+      # non actionnables immédiatement (transitives via apps/mobile → expo
+      # toolchain). On garde le check visible en CI sans bloquer les PR —
+      # à durcir (retirer continue-on-error) une fois ces deps assainies.
+      - name: pnpm audit (high+)
+        run: pnpm audit --audit-level=high
+        continue-on-error: true
+
   test:
     name: Tests
     runs-on: ubuntu-latest

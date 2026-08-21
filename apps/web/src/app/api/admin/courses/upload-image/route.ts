@@ -28,7 +28,13 @@ export async function POST(req: NextRequest) {
     .from('course-images')
     .upload(path, buffer, { contentType: file.type, upsert: false })
 
-  if (error) return NextResponse.json({ error: { code: 'UPLOAD_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/courses/upload-image]', error)
+
+    return NextResponse.json({ error: { code: 'UPLOAD_ERROR', message: "Échec de l'envoi du fichier, réessaie plus tard." } }, { status: 500 })
+
+  }
 
   const { data } = supabaseAdmin.storage.from('course-images').getPublicUrl(path)
   return NextResponse.json({ data: { url: data.publicUrl } }, { status: 201 })

@@ -13,7 +13,13 @@ export async function GET() {
     .order('created_at', { ascending: false })
     .limit(100)
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/notifications]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data: data ?? [] })
 }
 
@@ -38,6 +44,9 @@ export async function POST(req: NextRequest) {
   catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
 
   const { data, error } = await supabaseAdmin.from('notifications').insert(body).select().single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/notifications]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data }, { status: 201 })
 }

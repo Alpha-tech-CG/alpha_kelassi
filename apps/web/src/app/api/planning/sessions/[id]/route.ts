@@ -23,7 +23,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     .select('id, is_done')
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/planning/sessions/[id]]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
 
   // +5 XP quand une séance passe à "faite" (best-effort, via service role)
   if (body.is_done) {

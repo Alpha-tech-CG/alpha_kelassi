@@ -24,12 +24,18 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const { solution, ...exFields } = b
   if (Object.keys(exFields).length > 0) {
     const { error } = await supabaseAdmin.from('exercises').update(exFields).eq('id', id)
-    if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+    if (error) {
+      console.error('[/api/admin/curriculum/exercises/[id]]', error)
+      return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+    }
   }
   if (solution !== undefined) {
     const { error } = await supabaseAdmin.from('exercise_solutions')
       .upsert({ exercise_id: id, solution }, { onConflict: 'exercise_id' })
-    if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+    if (error) {
+      console.error('[/api/admin/curriculum/exercises/[id]]', error)
+      return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+    }
   }
   return NextResponse.json({ data: { ok: true } })
 }
@@ -41,6 +47,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   const { id } = await params
 
   const { error } = await supabaseAdmin.from('exercises').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/curriculum/exercises/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: { ok: true } })
 }

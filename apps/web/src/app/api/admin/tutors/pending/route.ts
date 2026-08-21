@@ -10,7 +10,10 @@ export async function GET() {
   const { data: profiles, error } = await admin().from('tutor_profiles')
     .select('user_id, bio, id_doc_url, bac_doc_url, created_at, users(full_name, email, phone)')
     .eq('is_verified', false).order('created_at', { ascending: true }).limit(100)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/tutors/pending]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   const data = await Promise.all((profiles ?? []).map(async (p) => ({
     ...p,

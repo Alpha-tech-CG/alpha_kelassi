@@ -64,7 +64,10 @@ ${source}`
   }
 
   const { data, error } = await supabaseAdmin.from('lessons').update({ content: resume }).eq('id', id).select().single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/curriculum/lessons/[id]/generate-resume]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   return NextResponse.json({ data })
 }

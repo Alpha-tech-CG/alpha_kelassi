@@ -20,5 +20,12 @@ export async function requireAdmin(): Promise<{ userId: string } | { error: Next
   const { data: profile } = await supabaseAdmin.from('users').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') return { error: NextResponse.json({ error: 'Admin requis' }, { status: 403 }) }
 
+  // Les comptes admin doivent avoir validé la double authentification (TOTP)
+  // sur la session en cours (AAL2) pour accéder aux routes d'administration.
+  const { data: aal, error: aalError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+  if (aalError || aal?.currentLevel !== 'aal2') {
+    return { error: NextResponse.json({ error: 'Double authentification requise' }, { status: 403 }) }
+  }
+
   return { userId: user.id }
 }

@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { authenticate } from '@/lib/supabase/api'
 import { admin, aiVerifySolution, aiGenerateSolution, creditTutor, recomputeTutorScore, rewardForAttempt, MAX_ATTEMPTS } from '@/lib/tutor'
 import { rateLimit, tooMany } from '@/lib/rate-limit'
+import { assertTrustedOrigin } from '@/lib/origin-check'
 
 export const maxDuration = 60
 
@@ -11,6 +12,10 @@ const schema = z.object({ photo_url: z.string().min(3).max(512) })
 
 /** POST /api/tutor/missions/:id/submit — soumet la correction ; vérif IA SYNCHRONE. */
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (!assertTrustedOrigin(req)) {
+    return NextResponse.json({ error: { code: 'FORBIDDEN', message: 'Origine non autorisée.' } }, { status: 403 })
+  }
+
   const { id } = await params
   const { user } = await authenticate(req)
   if (!user) return NextResponse.json({ error: { code: 'UNAUTHORIZED' } }, { status: 401 })
@@ -32,7 +37,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const { data: sol, error } = await admin().from('correction_solutions')
     .insert({ mission_id: id, attempt, photo_url: body.photo_url }).select('id').single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/tutor/missions/[id]/submit]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   await admin().from('correction_missions').update({ status: 'submitted' }).eq('id', id)
 
   // ── Vérification IA synchrone ──

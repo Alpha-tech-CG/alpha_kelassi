@@ -7,6 +7,8 @@ import { createHash } from 'crypto'
 import { redis } from '@/lib/redis'
 import { searchRelevantChunks } from '@/lib/ai/vector-search'
 import { checkAndIncrementQuota } from '@/lib/ai/quota'
+import { rateLimit, tooMany } from '@/lib/rate-limit'
+import { detectInjectionAttempt } from '@/lib/ai/prompt-guard'
 
 export const maxDuration = 60
 
@@ -109,12 +111,35 @@ export async function POST(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
+  // Rate limit court terme (anti-burst) — vérifié AVANT le quota journalier
+  // pour économiser l'appel Gemini si l'utilisateur spam le endpoint.
+  const withinBurstLimit = await rateLimit(`ai-chat:${user.id}`, 5, 60)
+  if (!withinBurstLimit) return tooMany()
+
   // Validation du body
   let body: z.infer<typeof chatSchema>
   try {
     body = chatSchema.parse(await req.json())
   } catch {
     return NextResponse.json({ error: 'Corps invalide' }, { status: 400 })
+  }
+
+  const question = sanitize(body.question)
+
+  // Détection basique de tentative de prompt injection (override du system
+  // prompt). On reste bienveillant : ce sont des élèves, pas des attaquants
+  // professionnels — objectif = filtrer les tentatives évidentes, pas
+  // bloquer agressivement des questions légitimes. Placée AVANT
+  // checkAndIncrementQuota (qui incrémente inconditionnellement, cf.
+  // lib/ai/quota.ts) pour ne pas consommer le quota journalier de l'élève
+  // sur une requête qui de toute façon n'appellera jamais Gemini.
+  if (detectInjectionAttempt(question)) {
+    return NextResponse.json({
+      error: {
+        code: 'INJECTION_BLOCKED',
+        message: 'Je ne peux pas traiter cette demande. Reformule ta question sur le cours et je serai ravi de t’aider !',
+      },
+    }, { status: 400 })
   }
 
   // Plan + quota
@@ -134,8 +159,6 @@ export async function POST(req: NextRequest) {
       },
     }, { status: 429 })
   }
-
-  const question = sanitize(body.question)
 
   // Session : crée ou récupère
   let sessionId = body.session_id

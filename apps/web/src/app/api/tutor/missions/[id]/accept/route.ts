@@ -25,7 +25,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     .update({ status: 'assigned', tutor_id: user.id, accepted_at: new Date().toISOString(), due_at: dueAt })
     .eq('id', id).eq('status', 'pending')
     .select('id, exercise_url, work_url, due_at').maybeSingle()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/tutor/missions/[id]/accept]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   if (!updated) return NextResponse.json({ error: { code: 'ALREADY_TAKEN', message: 'Mission déjà prise ou expirée.' } }, { status: 409 })
 
   const [exercise_url, work_url] = await Promise.all([

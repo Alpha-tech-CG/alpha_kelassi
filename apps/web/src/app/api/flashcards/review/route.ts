@@ -46,7 +46,16 @@ export async function POST(req: NextRequest) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+
+    console.error('[/api/flashcards/review]', error)
+
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+
+  }
 
   // XP + badges en arrière-plan
   const xpAmount = quality >= 4 ? 3 : quality >= 3 ? 2 : 0

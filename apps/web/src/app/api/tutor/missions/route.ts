@@ -20,6 +20,9 @@ export async function GET(req: Request) {
     .select('id, subject_id, created_at, subjects(name)')
     .eq('status', 'pending').in('subject_id', subjectIds)
     .order('created_at', { ascending: true }).limit(30)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/tutor/missions]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: data ?? [] })
 }

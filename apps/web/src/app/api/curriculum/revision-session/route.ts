@@ -33,7 +33,10 @@ export async function GET(req: NextRequest) {
     .select('id, chapter_id, subject_id, chapters(id, title), subjects(id, name, parent_subject_id)')
     .eq('item_type', 'chapter')
     .in('school_month_id', unlockedMonthIds)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/curriculum/revision-session]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   const candidates = items ?? []
   if (candidates.length === 0) return NextResponse.json({ data: { calendar: state, items: [] } })
 

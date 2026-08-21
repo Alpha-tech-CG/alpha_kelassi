@@ -16,7 +16,13 @@ export async function GET(req: NextRequest) {
     .eq('subject_id', subjectId)
     .order('order_index')
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/curriculum/chapters]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
 
   const rows = (data ?? []).map((c: Record<string, unknown>) => ({
     id: c['id'], subject_id: c['subject_id'], series_id: c['series_id'],
@@ -48,6 +54,12 @@ export async function POST(req: NextRequest) {
     order_index: b.order_index, description: b.description ?? null,
   }).select().single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/curriculum/chapters]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data: { ...data, lesson_count: 0 } }, { status: 201 })
 }

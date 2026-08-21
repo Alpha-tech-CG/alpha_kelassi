@@ -40,7 +40,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         { status: 409 }
       )
     }
-    return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+    console.error('[/admin/subjects/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
 
   return NextResponse.json({ data })
@@ -74,6 +75,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   }
 
   const { error } = await supabaseAdmin.from('subjects').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/subjects/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: { deleted: true } })
 }

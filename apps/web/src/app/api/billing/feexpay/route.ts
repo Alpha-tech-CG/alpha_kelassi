@@ -3,6 +3,8 @@ import { randomBytes } from 'crypto'
 import { z } from 'zod'
 import { authenticate } from '@/lib/supabase/api'
 import { redis } from '@/lib/redis'
+import { rateLimit, tooMany } from '@/lib/rate-limit'
+import { assertTrustedOrigin } from '@/lib/origin-check'
 
 // Prix serveur de référence (XAF). Doit rester synchronisé avec le webhook
 // (apps/api/src/routes/webhooks.ts → PLAN_AMOUNT).
@@ -22,8 +24,13 @@ const schema = z.object({
  * au webhook `/webhooks/feexpay` (hébergé par apps/api, même Redis + même DB).
  */
 export async function POST(req: Request) {
+  if (!assertTrustedOrigin(req)) {
+    return NextResponse.json({ error: { code: 'FORBIDDEN', message: 'Origine non autorisée.' } }, { status: 403 })
+  }
+
   const { user } = await authenticate(req)
   if (!user) return NextResponse.json({ error: { code: 'UNAUTHORIZED' } }, { status: 401 })
+  if (!(await rateLimit(`feexpay:${user.id}`, 5, 3600))) return tooMany()
 
   let body: z.infer<typeof schema>
   try { body = schema.parse(await req.json()) }

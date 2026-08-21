@@ -19,7 +19,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const { data: flag, error } = await supabaseAdmin.from('moderation_flags')
     .update({ status: body.action }).eq('id', id).select('message_id').maybeSingle()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/moderation/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   if (!flag) return NextResponse.json({ error: { code: 'NOT_FOUND' } }, { status: 404 })
 
   // Suppression du message signalé (masquage définitif) si l'admin le décide.

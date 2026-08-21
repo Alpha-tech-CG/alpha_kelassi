@@ -10,7 +10,10 @@ export async function GET() {
     .from('exam_events')
     .select('id, level, label, exam_date')
     .order('exam_date', { ascending: true })
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/exams]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: data ?? [] })
 }
 
@@ -29,6 +32,9 @@ export async function POST(req: NextRequest) {
   catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
 
   const { data, error } = await supabaseAdmin.from('exam_events').insert(body).select().single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/exams]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data }, { status: 201 })
 }

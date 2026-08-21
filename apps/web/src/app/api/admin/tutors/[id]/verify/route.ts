@@ -11,7 +11,10 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const { data, error } = await admin().from('tutor_profiles')
     .update({ is_verified: true, verified_at: new Date().toISOString(), is_active: true })
     .eq('user_id', id).select('user_id').maybeSingle()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/tutors/[id]/verify]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   if (!data) return NextResponse.json({ error: { code: 'NOT_FOUND' } }, { status: 404 })
 
   await admin().from('users').update({ role: 'tutor' }).eq('id', id)

@@ -6,6 +6,7 @@
     "runtimeVersion": "1.0.0",
     "scheme": "kelassi",
     "orientation": "portrait",
+    "jsEngine": "hermes",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -18,8 +19,8 @@
       "bundleIdentifier": "com.kelassi.app",
       "buildNumber": "1",
       "infoPlist": {
-        "NSCameraUsageDescription": "UtilisÃ© pour scanner des documents de cours",
-        "NSMicrophoneUsageDescription": "UtilisÃ© pour les questions vocales Ã  Kelassi",
+        "NSCameraUsageDescription": "Utilisé pour scanner des documents de cours",
+        "NSFaceIDUsageDescription": "Utilisé pour déverrouiller l'application après une période d'inactivité",
         "ITSAppUsesNonExemptEncryption": false
       }
     },
@@ -34,14 +35,13 @@
       "targetSdkVersion": 35,
       "minSdkVersion": 24,
       "permissions": [
-        "android.permission.INTERNET",
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.INTERNET"
       ]
     },
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      "expo-local-authentication",
       [
         "expo-file-system",
         {}

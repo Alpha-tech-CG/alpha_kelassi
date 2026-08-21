@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 
 const LEVELS = [
@@ -48,8 +47,6 @@ const LEVELS = [
 ]
 
 export default function RegisterPage() {
-  const supabase = createClient()
-
   // Step 1 fields
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -58,6 +55,7 @@ export default function RegisterPage() {
 
   // Step 2 field
   const [level, setLevel] = useState('')
+  const [consent, setConsent] = useState(false)
 
   // UI state
   const [step, setStep] = useState(1)
@@ -81,23 +79,26 @@ export default function RegisterPage() {
 
   async function handleSubmit() {
     if (!level) { setError('Choisis ton niveau.'); return }
+    if (!consent) { setError('Tu dois accepter les CGU et la politique de confidentialité.'); return }
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName, study_level: level },
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    })
-
-    if (error) {
-      setError(error.message)
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, password, level }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setError(json.error?.message ?? 'Une erreur est survenue.')
+        setStep(1)
+      } else {
+        setSuccess(true)
+      }
+    } catch {
+      setError('Une erreur est survenue.')
       setStep(1)
-    } else {
-      setSuccess(true)
     }
     setLoading(false)
   }
@@ -303,18 +304,30 @@ export default function RegisterPage() {
                   ))}
                 </div>
 
+                <label className="flex items-start gap-2.5 mb-5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => { setConsent(e.target.checked); setError(null) }}
+                    className="mt-0.5 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="text-xs text-gray-500 leading-relaxed">
+                    J'accepte les{' '}
+                    <Link href="/cgu" target="_blank" className="underline hover:text-gray-700">CGU</Link>
+                    {' '}et la{' '}
+                    <Link href="/confidentialite" target="_blank" className="underline hover:text-gray-700">
+                      politique de confidentialité
+                    </Link>
+                  </span>
+                </label>
+
                 <button
                   onClick={handleSubmit}
-                  disabled={!level || loading}
+                  disabled={!level || !consent || loading}
                   className="w-full py-3.5 bg-blue-600 text-white rounded-2xl font-bold text-sm hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
                   {loading ? 'Création du compte…' : 'Créer mon compte 🚀'}
                 </button>
-
-                <p className="text-center text-xs text-gray-400 mt-4">
-                  En créant un compte, tu acceptes nos{' '}
-                  <Link href="/cgu" className="underline hover:text-gray-600">CGU</Link>
-                </p>
               </>
             )}
 

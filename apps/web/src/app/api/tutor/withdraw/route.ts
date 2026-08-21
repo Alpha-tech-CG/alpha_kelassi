@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { authenticate } from '@/lib/supabase/api'
 import { admin } from '@/lib/tutor'
+import { rateLimit, tooMany } from '@/lib/rate-limit'
+import { assertTrustedOrigin } from '@/lib/origin-check'
 
 const schema = z.object({
   amount:  z.number().int().min(500),                 // retrait minimum 500 FCFA
@@ -11,8 +13,13 @@ const schema = z.object({
 
 /** POST /api/tutor/withdraw — retrait du wallet tuteur via payout FeexPay (Mobile Money). */
 export async function POST(req: Request) {
+  if (!assertTrustedOrigin(req)) {
+    return NextResponse.json({ error: { code: 'FORBIDDEN', message: 'Origine non autorisée.' } }, { status: 403 })
+  }
+
   const { user } = await authenticate(req)
   if (!user) return NextResponse.json({ error: { code: 'UNAUTHORIZED' } }, { status: 401 })
+  if (!(await rateLimit(`withdraw:${user.id}`, 3, 3600))) return tooMany()
 
   let body: z.infer<typeof schema>
   try { body = schema.parse(await req.json()) }
@@ -31,7 +38,10 @@ export async function POST(req: Request) {
   // null si le solde est insuffisant — aucun débit n'a alors eu lieu.
   const { data: newBalance, error: debitErr } = await admin()
     .rpc('debit_tutor_wallet', { p_tutor_id: user.id, p_amount: body.amount })
-  if (debitErr) return NextResponse.json({ error: { code: 'DB_ERROR', message: debitErr.message } }, { status: 500 })
+  if (debitErr) {
+    console.error('[/api/tutor/withdraw]', debitErr)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   if (newBalance === null || newBalance === undefined) {
     return NextResponse.json({ error: { code: 'INSUFFICIENT_FUNDS' } }, { status: 422 })
   }
@@ -42,7 +52,8 @@ export async function POST(req: Request) {
     .select('id, amount_fcfa, status, created_at').single()
   if (error) {
     await admin().rpc('increment_tutor_wallet', { p_tutor_id: user.id, p_amount: body.amount }) // remboursement
-    return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+    console.error('[/api/tutor/withdraw]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
 
   // Payout FeexPay — FeexPay génère la référence, renvoyée dans la réponse.

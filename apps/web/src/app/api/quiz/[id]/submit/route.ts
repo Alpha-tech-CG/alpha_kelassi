@@ -39,7 +39,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       return NextResponse.json({ error: { code: 'PREMIUM_REQUIRED', message: 'Ce QCM est réservé aux abonnés premium.' } }, { status: 403 })
     if (msg.includes('QUIZ_NOT_FOUND'))
       return NextResponse.json({ error: { code: 'NOT_FOUND' } }, { status: 404 })
-    return NextResponse.json({ error: { code: 'DB_ERROR', message: msg } }, { status: 500 })
+    console.error('[/quiz/[id]/submit]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
 
   // XP : 5 par bonne réponse (non bloquant, best-effort).

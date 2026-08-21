@@ -20,7 +20,10 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
 
   const { data, error } = await supabaseAdmin.from('chapters').update(updates).eq('id', id).select().single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/curriculum/chapters/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data })
 }
 
@@ -31,6 +34,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   const { id } = await params
 
   const { error } = await supabaseAdmin.from('chapters').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/curriculum/chapters/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: { deleted: true } })
 }

@@ -34,7 +34,10 @@ export async function GET(req: NextRequest) {
     .select('chapter_id, subject_id, order_index, chapters(id, title), school_months(order_index, label)')
     .eq('item_type', 'chapter')
     .in('subject_id', domainIds)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/curriculum/progression]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
 
   const rows = (items ?? [])
     .filter((it) => it.chapters)

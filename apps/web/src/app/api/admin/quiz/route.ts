@@ -12,7 +12,13 @@ export async function GET() {
     .order('created_at', { ascending: false })
     .limit(300)
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/quiz]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
 
   const rows = (data ?? []).map((q) => {
     const qc = q.quiz_questions as unknown as Array<{ count: number }> | null
