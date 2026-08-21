@@ -49,7 +49,7 @@ export default function ExamenDetailScreen() {
         <Text style={styles.blockedIcon}>⭐</Text>
         <Text style={styles.blockedTitle}>Contenu Premium</Text>
         <Text style={styles.blockedSub}>Cet examen est réservé aux abonnés Premium.</Text>
-        <TouchableOpacity style={styles.upgradeBtn} onPress={() => router.push('/(tabs)/profil')}>
+        <TouchableOpacity style={styles.upgradeBtn} onPress={() => router.push('/abonnement' as any)}>
           <Text style={styles.upgradeBtnText}>Passer à Premium</Text>
         </TouchableOpacity>
       </View>

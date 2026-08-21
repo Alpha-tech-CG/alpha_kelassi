@@ -97,9 +97,9 @@ export default function NouvelleCorrection() {
       </View>
 
       {!isPremium && (
-        <View style={styles.premiumBanner}>
-          <Text style={styles.premiumText}>⭐ La correction par un tuteur est une fonctionnalité Premium.</Text>
-        </View>
+        <TouchableOpacity style={styles.premiumBanner} onPress={() => router.push('/abonnement' as any)} activeOpacity={0.85}>
+          <Text style={styles.premiumText}>⭐ La correction par un tuteur est une fonctionnalité Premium. Appuie pour t’abonner →</Text>
+        </TouchableOpacity>
       )}
 
       <Text style={styles.label}>1 · Matière</Text>
