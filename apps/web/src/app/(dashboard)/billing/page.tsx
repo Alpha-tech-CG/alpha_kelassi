@@ -80,7 +80,14 @@ function BillingContent() {
         body: JSON.stringify({ plan }),
       })
       const json = (await res.json()) as { data?: { url?: string } }
-      if (json.data?.url) window.location.href = json.data.url
+      const checkoutUrl = json.data?.url
+      // Défense en profondeur : l'URL vient de notre propre route serveur
+      // (Stripe Checkout), mais on valide l'hôte avant toute redirection.
+      if (checkoutUrl && /^https:\/\/checkout\.stripe\.com\//.test(checkoutUrl)) {
+        window.location.href = checkoutUrl
+      } else if (checkoutUrl) {
+        setError('Lien de paiement invalide. Réessaie.')
+      }
       setLoading(null)
       return
     }

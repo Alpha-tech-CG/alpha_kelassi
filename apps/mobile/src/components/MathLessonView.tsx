@@ -81,6 +81,17 @@ function buildHtml(md: string): string {
     );
     if(h > 0 && h !== lastH && window.ReactNativeWebView){ lastH = h; window.ReactNativeWebView.postMessage(String(h)); }
   }
+  // Filet de sécurité avant innerHTML : le contenu vient des cours (rédigés
+  // par l'équipe pédagogique), mais on ne fait pas confiance à 100% à la
+  // chaîne d'import — on retire scripts, gestionnaires d'événements inline
+  // et URLs javascript:/data: avant d'injecter le HTML rendu par marked/katex.
+  function sanitize(html){
+    return html
+      .replace(/<script[\s\S]*?<\/script>/gi, '')
+      .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+      .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+      .replace(/(href|src)\s*=\s*("javascript:[^"]*"|'javascript:[^']*'|"data:text\/html[^"]*"|'data:text\/html[^']*')/gi, '$1="#"');
+  }
   function build(){
     if(!window.marked || !window.katex){ return setTimeout(build, 80); }
     var maths=[];
@@ -93,7 +104,7 @@ function buildHtml(md: string): string {
       catch(e){ return o.t; }
     });
     var c = document.getElementById('c');
-    c.innerHTML = html;
+    c.innerHTML = sanitize(html);
     // Enveloppe les tableaux larges dans un conteneur défilable (jamais coupé).
     var tables = c.querySelectorAll('table');
     for(var i=0;i<tables.length;i++){ var w=document.createElement('div'); w.className='tw'; var t=tables[i]; t.parentNode.insertBefore(w,t); w.appendChild(t); }
