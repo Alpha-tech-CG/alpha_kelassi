@@ -87,7 +87,16 @@ begin
 end;
 $$;
 
-revoke execute on function public.purge_expired_data() from anon, authenticated;
+-- REVOKE explicite depuis PUBLIC (et pas seulement anon/authenticated) : Postgres
+-- accorde EXECUTE à PUBLIC par défaut à la création d'une fonction, un revoke
+-- limité à anon/authenticated seuls est donc inefficace pour une fonction
+-- SECURITY DEFINER — même bug déjà corrigé deux fois dans ce projet (migrations
+-- 024_revoke_definer_functions_from_public.sql et 043_security_hardening_v2.sql).
+-- Sans ce revoke, n'importe quel client authentifié pourrait appeler
+-- POST /rest/v1/rpc/purge_expired_data et déclencher une suppression massive
+-- (bypass RLS via SECURITY DEFINER) du chat et des logs de tous les utilisateurs.
+revoke execute on function public.purge_expired_data() from public, anon, authenticated;
+grant execute on function public.purge_expired_data() to service_role;
 
 -- ── Planification quotidienne ───────────────────────────────────────────────
 -- 3h du matin (heure du serveur cron, généralement UTC sur Supabase) :
