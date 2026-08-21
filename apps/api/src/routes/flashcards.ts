@@ -22,7 +22,8 @@ router.use('*', authMiddleware)
 // GET /flashcards/due — cartes à réviser aujourd'hui
 router.get('/due', async (c) => {
   const userId = c.get('userId') as string
-  const limit = parseInt(c.req.query('limit') ?? '20', 10)
+  const rawLimit = parseInt(c.req.query('limit') ?? '20', 10)
+  const limit = Number.isFinite(rawLimit) ? Math.min(50, Math.max(1, rawLimit)) : 20
 
   const { data, error } = await c.get('supabase').from('flashcards')
     .select('*, documents(title, subjects(name))')

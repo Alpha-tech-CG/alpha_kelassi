@@ -92,8 +92,11 @@ function buildHtml(md: string): string {
       .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]*)/gi, '')
       .replace(/(href|src)\s*=\s*("javascript:[^"]*"|'javascript:[^']*'|"data:text\/html[^"]*"|'data:text\/html[^']*')/gi, '$1="#"');
   }
+  var built = false;
   function build(){
+    if(built) return;
     if(!window.marked || !window.katex){ return setTimeout(build, 80); }
+    built = true;
     var maths=[];
     md = md.replace(/\\$\\$([\\s\\S]+?)\\$\\$/g,function(_,x){maths.push({d:true,t:x});return '@@M'+(maths.length-1)+'@@';});
     md = md.replace(/\\$([^\\n$]+?)\\$/g,function(_,x){maths.push({d:false,t:x});return '@@M'+(maths.length-1)+'@@';});

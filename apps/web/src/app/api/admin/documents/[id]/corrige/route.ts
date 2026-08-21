@@ -20,6 +20,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const file = formData.get('file') as File | null
   if (!file) return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Fichier requis' } }, { status: 400 })
 
+  if (file.size > 20 * 1024 * 1024) {
+    return NextResponse.json({ error: { code: 'TOO_BIG', message: 'Fichier trop lourd (max 20 Mo).' } }, { status: 422 })
+  }
+
   // Vérifie les magic bytes PDF (%PDF)
   const headerBytes = new Uint8Array(await file.slice(0, 4).arrayBuffer())
   if (!String.fromCharCode(...headerBytes).startsWith('%PDF')) {

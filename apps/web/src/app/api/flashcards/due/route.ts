@@ -6,7 +6,8 @@ export async function GET(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
-  const limit = Math.min(parseInt(req.nextUrl.searchParams.get('limit') ?? '20', 10), 50)
+  const rawLimit = parseInt(req.nextUrl.searchParams.get('limit') ?? '20', 10)
+  const limit = Number.isFinite(rawLimit) ? Math.min(50, Math.max(1, rawLimit)) : 20
 
   const { data, error } = await supabase
     .from('flashcards')

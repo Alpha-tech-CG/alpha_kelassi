@@ -43,6 +43,9 @@ export async function sendSlackAlert(message: string, level: 'warning' | 'critic
         username: 'Kelassi Monitor',
         icon_emoji: ':robot_face:',
       }),
+      // Slack peut traîner indéfiniment sur un webhook qui ne répond pas —
+      // borne l'appel pour ne jamais laisser la promesse (et le socket) pendre.
+      signal: AbortSignal.timeout(5_000),
     })
   } catch (err) {
     console.error('[monitoring] Slack alert failed:', err)
