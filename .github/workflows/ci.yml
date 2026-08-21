@@ -63,6 +63,46 @@ jobs:
         run: pnpm audit --audit-level=high
         continue-on-error: true
 
+  security-scan:
+    name: Security Scan (Herozion)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      - name: Install Herozion
+        run: npm install -g herozion@1.2.27
+
+      # Volontairement SANS `pnpm install` : l'analyse porte sur le code source,
+      # et l'absence de node_modules rend le scan nettement plus rapide.
+      #
+      # --offline : aucun appel réseau, donc aucune authentification requise en
+      #   CI. Les CVE de dépendances sont déjà couvertes par le job `audit`
+      #   ci-dessus et par Dependabot — le rôle d'Herozion ici est l'analyse de
+      #   motifs dans le code, pas l'audit de dépendances.
+      #
+      # --fail-on critical : ne bloque que sur du `critical`. Le scan remonte
+      #   aujourd'hui 18 findings `high` + 8 `medium`, et 0 `critical`. Ces
+      #   `high` ont été vérifiés un par un : ce sont des faux positifs (la
+      #   règle de validation d'entrée est purement syntaxique — elle signale la
+      #   ligne qui LIT un query param sans voir la ligne suivante qui le
+      #   VALIDE, et flague donc notre propre code de validation). Bloquer sur
+      #   `high` rendrait la CI rouge en permanence sans rien protéger.
+      #
+      # --min-score 0 : INDISPENSABLE. Un seuil de score de 60 s'applique par
+      #   défaut, EN PLUS de --fail-on. Les faux positifs ci-dessus plombent le
+      #   score à 16/100, donc sans ce flag le job échouerait systématiquement
+      #   même avec 0 finding `critical`. Vérifié en local : sans le flag exit 1,
+      #   avec exit 0.
+      #
+      # L'intérêt réel de ce job est la détection de régression : un finding
+      # `critical` est un signal neuf, qui mérite d'être examiné.
+      - name: Herozion scan (critical only)
+        run: herozion scan --offline --fail-on critical --min-score 0
+
   test:
     name: Tests
     runs-on: ubuntu-latest
