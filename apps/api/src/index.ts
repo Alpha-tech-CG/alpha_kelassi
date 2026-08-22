@@ -1,8 +1,10 @@
+import { timingSafeEqual } from 'node:crypto'
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { secureHeaders } from 'hono/secure-headers'
+import { bodyLimit } from 'hono/body-limit'
 import { authRouter } from './routes/auth.js'
 import { billingRouter } from './routes/billing.js'
 import { webhooksRouter } from './routes/webhooks.js'
@@ -62,6 +64,32 @@ const app = new Hono()
 app.use('*', logger())
 app.use('*', secureHeaders())
 app.use('*', metricsMiddleware())
+
+// Plafond global de taille de corps : sans lui, n'importe quel POST peut faire
+// grossir la mémoire du process sans limite. Les routes d'upload admin ont
+// leur propre plafond plus fin (20 Mo par fichier).
+app.use(
+  '*',
+  bodyLimit({
+    maxSize: 25 * 1024 * 1024,  // 25 Mo
+    onError: (c) =>
+      c.json({ error: { code: 'PAYLOAD_TOO_LARGE', message: 'Requête trop volumineuse (max 25 Mo).' } }, 413),
+  }),
+)
+
+// Plafond plus strict pour les routes JSON — aucune d'entre elles n'a besoin
+// de plus de 1 Mo. Seules les routes d'upload admin gardent les 20 Mo.
+const UPLOAD_PREFIXES = ['/api/admin/documents']
+const jsonBodyLimit = bodyLimit({
+  maxSize: 1024 * 1024,  // 1 Mo
+  onError: (c) =>
+    c.json({ error: { code: 'PAYLOAD_TOO_LARGE', message: 'Requête trop volumineuse (max 1 Mo).' } }, 413),
+})
+app.use('/api/*', async (c, next) => {
+  const path = new URL(c.req.url).pathname
+  if (UPLOAD_PREFIXES.some((p) => path.startsWith(p))) return next()
+  return jsonBodyLimit(c, next)
+})
 app.use(
   '/api/*',
   cors({
@@ -75,7 +103,12 @@ app.get('/health', (c) => c.json({ status: 'ok', service: 'alpha-kelassi-api' })
 // Endpoint Prometheus — accès restreint par IP ou token interne
 app.get('/metrics', (c) => {
   const token = c.req.header('x-metrics-token')
-  if (token !== process.env['METRICS_TOKEN']) return c.text('Forbidden', 403)
+  const expected = process.env['METRICS_TOKEN']
+  // Fail-closed + comparaison à temps constant du jeton interne.
+  if (!expected || !token) return c.text('Forbidden', 403)
+  const a = Buffer.from(token)
+  const b = Buffer.from(expected)
+  if (a.length !== b.length || !timingSafeEqual(a, b)) return c.text('Forbidden', 403)
   return c.text(getMetrics(), 200, { 'Content-Type': 'text/plain; version=0.0.4' })
 })
 

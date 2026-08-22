@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
+import { parseIntParam } from '@/lib/query-validation'
 
 /** GET /api/flashcards/due?limit=20 — cartes à réviser aujourd'hui */
 export async function GET(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
-  const rawLimit = parseInt(req.nextUrl.searchParams.get('limit') ?? '20', 10)
-  const limit = Number.isFinite(rawLimit) ? Math.min(50, Math.max(1, rawLimit)) : 20
+  const limit = parseIntParam(req.nextUrl.searchParams.get('limit'), { min: 1, max: 50, fallback: 20 })
 
   const { data, error } = await supabase
     .from('flashcards')

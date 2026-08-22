@@ -93,6 +93,7 @@ function buildHtml(md: string): string {
       .replace(/(href|src)\s*=\s*("javascript:[^"]*"|'javascript:[^']*'|"data:text\/html[^"]*"|'data:text\/html[^']*')/gi, '$1="#"');
   }
   var built = false;
+  var ro = null;
   function build(){
     if(built) return;
     if(!window.marked || !window.katex){ return setTimeout(build, 80); }
@@ -113,16 +114,27 @@ function buildHtml(md: string): string {
     for(var i=0;i<tables.length;i++){ var w=document.createElement('div'); w.className='tw'; var t=tables[i]; t.parentNode.insertBefore(w,t); w.appendChild(t); }
     // Re-mesure quand chaque image (figure) charge.
     var imgs = c.querySelectorAll('img');
-    for(var j=0;j<imgs.length;j++){ imgs[j].addEventListener('load', post); imgs[j].addEventListener('error', post); }
+    // { once:true } : le listener se retire tout seul après la première mesure.
+    for(var j=0;j<imgs.length;j++){
+      imgs[j].addEventListener('load', post, { once:true });
+      imgs[j].addEventListener('error', post, { once:true });
+    }
     // Re-mesure quand les polices KaTeX sont prêtes.
     if(document.fonts && document.fonts.ready){ document.fonts.ready.then(post); }
-    // Observe tout changement de taille du contenu.
-    if(window.ResizeObserver){ try { new ResizeObserver(post).observe(c); } catch(e){} }
+    // Observe tout changement de taille du contenu (déconnecté au teardown).
+    if(window.ResizeObserver){ try { ro = new ResizeObserver(post); ro.observe(c); } catch(e){} }
     // Filet de sécurité : plusieurs mesures échelonnées après le rendu.
     [60,200,500,1000,1800,3000].forEach(function(t){ setTimeout(post, t); });
   }
-  window.addEventListener('load', build);
+  window.addEventListener('load', build, { once:true });
   window.addEventListener('resize', post);
+  // Teardown : le listener 'resize' est le seul persistant, on le retire quand
+  // le document est déchargé (navigation WebView, remontée du composant).
+  window.addEventListener('pagehide', function(){
+    window.removeEventListener('resize', post);
+    window.removeEventListener('load', build);
+    if(ro){ try { ro.disconnect(); } catch(e){} ro = null; }
+  }, { once:true });
   build();
 })();
 </script>

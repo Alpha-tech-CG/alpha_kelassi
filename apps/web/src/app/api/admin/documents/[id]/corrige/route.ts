@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
+import { isUuid } from '@/lib/query-validation'
 
 export const maxDuration = 60
 
@@ -8,6 +9,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const guard = await requireAdmin()
   if ('error' in guard) return guard.error
   const { id } = await params
+  if (!isUuid(id)) {
+    return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Identifiant invalide.' } }, { status: 400 })
+  }
 
   const { data: doc } = await supabaseAdmin
     .from('documents')
@@ -22,6 +26,11 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   if (file.size > 20 * 1024 * 1024) {
     return NextResponse.json({ error: { code: 'TOO_BIG', message: 'Fichier trop lourd (max 20 Mo).' } }, { status: 422 })
+  }
+
+  // Liste blanche d'extension + de type MIME, en plus des magic bytes ci-dessous.
+  if (!/\.pdf$/i.test(file.name) || (file.type && file.type !== 'application/pdf')) {
+    return NextResponse.json({ error: { code: 'INVALID_FILE', message: 'Seuls les fichiers .pdf sont acceptés.' } }, { status: 422 })
   }
 
   // Vérifie les magic bytes PDF (%PDF)

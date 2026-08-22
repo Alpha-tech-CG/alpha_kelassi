@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { getCurrentCalendarState } from '@/lib/academic-calendar'
+import { parseIntParam } from '@/lib/query-validation'
 
 /**
  * GET /api/curriculum/revision-session?limit=15
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
-  const limit = Math.min(30, Math.max(1, Number(req.nextUrl.searchParams.get('limit') ?? 15)))
+  const limit = parseIntParam(req.nextUrl.searchParams.get('limit'), { min: 1, max: 30, fallback: 15 })
 
   const state = await getCurrentCalendarState(supabase, 'cepe', 'CG')
   if (!state?.month) return NextResponse.json({ data: { calendar: state, items: [] } })

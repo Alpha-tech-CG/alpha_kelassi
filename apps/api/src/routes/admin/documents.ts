@@ -1,5 +1,5 @@
 ﻿import { Hono } from 'hono'
-import type { AppVariables } from '../../lib/types.js'
+import { type AppVariables, parseUuidParam } from '../../lib/types.js'
 import { z } from 'zod'
 // @ts-ignore
 import { zValidator } from '@hono/zod-validator'
@@ -22,6 +22,16 @@ router.use('*', async (c, next) => {
   await next()
 })
 
+// Plafonds d'upload — sans limite explicite, un seul POST peut faire exploser
+// la mémoire du process (le fichier est entièrement chargé en Buffer).
+const MAX_UPLOAD_BYTES = 20 * 1024 * 1024   // 20 Mo (cours / annales)
+const MAX_CORRIGE_BYTES = 20 * 1024 * 1024  // 20 Mo (PDF corrigé)
+
+/** Rejette un upload trop lourd avant toute lecture en mémoire. */
+function tooLarge(file: File, max: number): boolean {
+  return typeof file.size === 'number' && file.size > max
+}
+
 const uploadSchema = z.object({
   subject_id: z.string().uuid(),
   type: z.enum(['cours', 'examen']),
@@ -42,8 +52,16 @@ router.post('/', async (c) => {
   if (!file || !metaRaw) {
     return c.json({ error: { code: 'BAD_REQUEST', message: 'Fichier et métadonnées requis' } }, 400)
   }
+  if (tooLarge(file, MAX_UPLOAD_BYTES)) {
+    return c.json({ error: { code: 'TOO_BIG', message: 'Fichier trop lourd (max 20 Mo).' } }, 413)
+  }
+  if (metaRaw.length > 10_000) {
+    return c.json({ error: { code: 'BAD_REQUEST', message: 'Métadonnées trop volumineuses.' } }, 413)
+  }
 
-  const meta = uploadSchema.parse(JSON.parse(metaRaw))
+  let meta: z.infer<typeof uploadSchema>
+  try { meta = uploadSchema.parse(JSON.parse(metaRaw)) }
+  catch { return c.json({ error: { code: 'BAD_REQUEST', message: 'Métadonnées invalides.' } }, 400) }
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
 
@@ -136,7 +154,8 @@ router.post('/', async (c) => {
 
 // PUT /api/admin/documents/:id â€” mise Ã  jour mÃ©tadonnÃ©es
 router.put('/:id', zValidator('json', uploadSchema.partial()), async (c) => {
-  const id = c.req.param('id')
+  const id = parseUuidParam(c.req.param('id'))
+  if (!id) return c.json({ error: { code: 'BAD_REQUEST', message: 'Identifiant invalide.' } }, 400)
   const updates = (c.req.valid as any)('json')
 
   const { data, error } = await supabase
@@ -152,7 +171,8 @@ router.put('/:id', zValidator('json', uploadSchema.partial()), async (c) => {
 
 // PATCH /api/admin/documents/:id/corrige â€” upload du PDF corrigÃ©
 router.patch('/:id/corrige', async (c) => {
-  const id = c.req.param('id')
+  const id = parseUuidParam(c.req.param('id'))
+  if (!id) return c.json({ error: { code: 'BAD_REQUEST', message: 'Identifiant invalide.' } }, 400)
 
   const { data: doc } = await supabase.from('documents').select('id, is_premium').eq('id', id).single()
   if (!doc) return c.json({ error: { code: 'NOT_FOUND', message: 'Document introuvable' } }, 404)
@@ -160,6 +180,12 @@ router.patch('/:id/corrige', async (c) => {
   const formData = await c.req.formData()
   const file = formData.get('file') as File | null
   if (!file) return c.json({ error: { code: 'BAD_REQUEST', message: 'Fichier requis' } }, 400)
+  if (tooLarge(file, MAX_CORRIGE_BYTES)) {
+    return c.json({ error: { code: 'TOO_BIG', message: 'Fichier trop lourd (max 20 Mo).' } }, 413)
+  }
+  if (!/\.pdf$/i.test(file.name)) {
+    return c.json({ error: { code: 'INVALID_FILE', message: 'Seuls les fichiers .pdf sont acceptés.' } }, 400)
+  }
 
   // Magic bytes PDF
   const headerBytes = new Uint8Array(await file.slice(0, 4).arrayBuffer())
@@ -198,7 +224,8 @@ router.patch('/:id/corrige', async (c) => {
 
 // DELETE /api/admin/documents/:id
 router.delete('/:id', async (c) => {
-  const id = c.req.param('id')
+  const id = parseUuidParam(c.req.param('id'))
+  if (!id) return c.json({ error: { code: 'BAD_REQUEST', message: 'Identifiant invalide.' } }, 400)
 
   const { data: doc } = await supabase.from('documents').select('pdf_url, is_premium').eq('id', id).single()
   if (!doc) return c.json({ error: { code: 'NOT_FOUND', message: 'Introuvable' } }, 404)

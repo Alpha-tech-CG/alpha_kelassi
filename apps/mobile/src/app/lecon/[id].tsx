@@ -69,7 +69,7 @@ function buildHtml(title: string, blocks: Block[]): string {
     function render(){ if(window.renderMathInElement){ renderMathInElement(document.body, {
       delimiters:[{left:'\\\\[',right:'\\\\]',display:true},{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
       throwOnError:false }); } else { setTimeout(render, 120); } }
-    window.addEventListener('load', render);
+    window.addEventListener('load', render, { once: true });
   </script>
 </body></html>`
 }

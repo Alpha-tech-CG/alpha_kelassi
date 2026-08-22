@@ -21,3 +21,23 @@ export function parseLevelParam(raw: string | null): (typeof LEVELS)[number] | n
   const result = levelSchema.safeParse(raw)
   return result.success ? result.data : undefined
 }
+
+/**
+ * Valide un paramètre de requête numérique borné (?limit=, ?page=…).
+ * Toute valeur absente, non entière ou hors bornes retombe sur `fallback` :
+ * jamais de NaN ni de valeur arbitraire transmise à la base.
+ */
+export function parseIntParam(
+  raw: string | null,
+  { min, max, fallback }: { min: number; max: number; fallback: number },
+): number {
+  if (raw === null) return fallback
+  const parsed = z.coerce.number().int().safeParse(raw)
+  if (!parsed.success) return fallback
+  return Math.min(max, Math.max(min, parsed.data))
+}
+
+/** Valide un identifiant de route (`/api/…/[id]`) face au format UUID. */
+export function isUuid(raw: string | null | undefined): raw is string {
+  return typeof raw === 'string' && uuidSchema.safeParse(raw).success
+}

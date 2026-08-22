@@ -275,8 +275,22 @@ export function startTutorWorker() {
     connection: { url: process.env['QUEUE_REDIS_URL']! },
     concurrency: 4,
   })
-  worker.on('completed', (job, res) => console.log(`[tutor-worker] ${job.name} ${job.id} — ${JSON.stringify(res)}`))
-  worker.on('failed', (job, err) => console.error(`[tutor-worker] ${job?.name} ${job?.id} échoué:`, err.message))
+
+  const onCompleted = (job: Job, res: unknown) =>
+    console.log(`[tutor-worker] ${job.name} ${job.id} — ${JSON.stringify(res)}`)
+  const onFailed = (job: Job | undefined, err: Error) =>
+    console.error(`[tutor-worker] ${job?.name} ${job?.id} échoué:`, err.message)
+
+  worker.on('completed', onCompleted)
+  worker.on('failed', onFailed)
+
+  // Teardown : chaque .on() a son .off() à la fermeture du worker.
+  worker.once('closed', () => {
+    worker.off('completed', onCompleted)
+    worker.off('failed', onFailed)
+    worker.removeAllListeners()
+  })
+
   return worker
 }
 

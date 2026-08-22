@@ -20,3 +20,26 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 export function parseUuidParam(value: string | undefined): string | undefined {
   return value !== undefined && UUID_RE.test(value) ? value : undefined
 }
+
+/**
+ * Valide un paramètre de requête numérique borné (?limit=, ?page=…).
+ * Toute valeur absente, non entière ou hors bornes retombe sur `fallback` :
+ * jamais de NaN ni de valeur arbitraire transmise à la base.
+ */
+export function parseIntParam(
+  value: string | undefined,
+  { min, max, fallback }: { min: number; max: number; fallback: number },
+): number {
+  if (value === undefined || !/^-?\d{1,9}$/.test(value)) return fallback
+  const n = Number.parseInt(value, 10)
+  if (!Number.isFinite(n)) return fallback
+  return Math.min(max, Math.max(min, n))
+}
+
+/** Valide un paramètre de requête face à une liste blanche de valeurs autorisées. */
+export function parseEnumParam<T extends string>(
+  value: string | undefined,
+  allowed: readonly T[],
+): T | undefined {
+  return allowed.includes(value as T) ? (value as T) : undefined
+}

@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { AppVariables } from '../lib/types.js'
+import { type AppVariables, parseIntParam, parseUuidParam } from '../lib/types.js'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { GoogleGenAI } from '@google/genai'
@@ -22,8 +22,7 @@ router.use('*', authMiddleware)
 // GET /flashcards/due — cartes à réviser aujourd'hui
 router.get('/due', async (c) => {
   const userId = c.get('userId') as string
-  const rawLimit = parseInt(c.req.query('limit') ?? '20', 10)
-  const limit = Number.isFinite(rawLimit) ? Math.min(50, Math.max(1, rawLimit)) : 20
+  const limit = parseIntParam(c.req.query('limit'), { min: 1, max: 50, fallback: 20 })
 
   const { data, error } = await c.get('supabase').from('flashcards')
     .select('*, documents(title, subjects(name))')
@@ -39,7 +38,11 @@ router.get('/due', async (c) => {
 // GET /flashcards — toutes les cartes (avec filtre optionnel)
 router.get('/', async (c) => {
   const userId = c.get('userId') as string
-  const documentId = c.req.query('document_id')
+  const rawDocumentId = c.req.query('document_id')
+  if (rawDocumentId !== undefined && parseUuidParam(rawDocumentId) === undefined) {
+    return c.json({ error: { code: 'BAD_REQUEST', message: 'Paramètre document_id invalide.' } }, 400)
+  }
+  const documentId = rawDocumentId
 
   let query = c.get('supabase').from('flashcards')
     .select('*, documents(title, subjects(name))')

@@ -100,18 +100,28 @@ export function startEmbedWorker() {
     concurrency: 2,
   })
 
-  worker.on('completed', (job) => {
-    console.log(`[embed-worker] Job ${job.id} terminÃ©`)
-  })
+  const onCompleted = (job: Job<EmbedJobData>) => {
+    console.log(`[embed-worker] Job ${job.id} terminé`)
+  }
+  const onFailed = (job: Job<EmbedJobData> | undefined, err: Error) => {
+    console.error(`[embed-worker] Job ${job?.id} échoué:`, err.message)
+  }
+  const onProgress = (job: Job<EmbedJobData>, progress: unknown) => {
+    console.log(`[embed-worker] Job ${job.id} — ${progress}%`)
+  }
 
-  worker.on('failed', (job, err) => {
-    console.error(`[embed-worker] Job ${job?.id} Ã©chouÃ©:`, err.message)
-  })
+  worker.on('completed', onCompleted)
+  worker.on('failed', onFailed)
+  worker.on('progress', onProgress)
 
-  worker.on('progress', (job, progress) => {
-    console.log(`[embed-worker] Job ${job.id} â€” ${progress}%`)
+  // Teardown : chaque .on() a son .off() à la fermeture du worker, sinon les
+  // handlers (et le closure qu'ils retiennent) survivent à l'instance.
+  worker.once('closed', () => {
+    worker.off('completed', onCompleted)
+    worker.off('failed', onFailed)
+    worker.off('progress', onProgress)
+    worker.removeAllListeners()
   })
 
   return worker
 }
-

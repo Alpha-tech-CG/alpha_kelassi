@@ -1,4 +1,4 @@
-import { Worker } from 'bullmq'
+import { Worker, type Job } from 'bullmq'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { notifyUser } from '../lib/messaging.js'
 
@@ -49,11 +49,23 @@ export function startReminderWorker() {
     connection: { url: process.env['QUEUE_REDIS_URL']! },
     concurrency: 1,
   })
-  worker.on('completed', (job, res) => {
+
+  const onCompleted = (job: Job, res: unknown) => {
     console.log(`[reminder-worker] tick ${job.id} — ${JSON.stringify(res)}`)
-  })
-  worker.on('failed', (job, err) => {
+  }
+  const onFailed = (job: Job | undefined, err: Error) => {
     console.error(`[reminder-worker] tick ${job?.id} échoué:`, err.message)
+  }
+
+  worker.on('completed', onCompleted)
+  worker.on('failed', onFailed)
+
+  // Teardown : chaque .on() a son .off() à la fermeture du worker.
+  worker.once('closed', () => {
+    worker.off('completed', onCompleted)
+    worker.off('failed', onFailed)
+    worker.removeAllListeners()
   })
+
   return worker
 }

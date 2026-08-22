@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
   // Réduit le JS importé pour les libs lourdes
   experimental: {
     optimizePackageImports: ['recharts', 'react-pdf', 'lucide-react'],
+    // Plafond explicite du corps des Server Actions (défaut Next = 1 Mo) :
+    // les uploads passent par les Route Handlers, qui vérifient file.size.
+    serverActions: {
+      bodySizeLimit: '1mb',
+    },
   },
 
   webpack(config) {

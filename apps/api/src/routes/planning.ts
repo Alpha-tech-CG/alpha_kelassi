@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { type AppVariables, parseStudyLevel } from '../lib/types.js'
+import { type AppVariables, parseEnumParam, parseStudyLevel } from '../lib/types.js'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { authMiddleware } from '../middleware/auth.js'
@@ -99,7 +99,7 @@ router.post('/generate', zValidator('json', z.object({
 // GET /planning/sessions?scope=today|upcoming
 router.get('/sessions', async (c) => {
   const userId = c.get('userId') as string
-  const scope = c.req.query('scope')
+  const scope = parseEnumParam(c.req.query('scope'), ['today', 'upcoming'] as const)
   const today = new Date().toISOString().slice(0, 10)
   let from = today, to = today
   if (scope === 'upcoming') { from = today; to = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10) }

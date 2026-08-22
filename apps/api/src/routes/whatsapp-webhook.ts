@@ -4,6 +4,13 @@ import { supabaseAdmin } from '../lib/supabase.js'
 
 const router = new Hono()
 
+/** Comparaison à temps constant de deux secrets (évite les attaques temporelles). */
+function safeEqual(a: string, b: string): boolean {
+  const ab = Buffer.from(a)
+  const bb = Buffer.from(b)
+  return ab.length === bb.length && timingSafeEqual(ab, bb)
+}
+
 // Vérifie la signature Meta X-Hub-Signature-256 = "sha256=" + HMAC-SHA256(app secret, corps brut).
 // Fail-closed : sans WHATSAPP_APP_SECRET configuré ou signature invalide → rejet.
 function verifySignature(rawBody: string, header: string | undefined): boolean {
@@ -20,10 +27,19 @@ router.get('/', (c) => {
   const mode = c.req.query('hub.mode')
   const token = c.req.query('hub.verify_token')
   const challenge = c.req.query('hub.challenge')
-  if (mode === 'subscribe' && token === process.env['WHATSAPP_VERIFY_TOKEN']) {
-    return c.text(challenge ?? '', 200)
+  const expected = process.env['WHATSAPP_VERIFY_TOKEN']
+
+  // Fail-closed : sans token configuré, aucun handshake n'est accepté.
+  if (!expected || mode !== 'subscribe' || !token || !safeEqual(token, expected)) {
+    return c.text('Forbidden', 403)
   }
-  return c.text('Forbidden', 403)
+
+  // Le challenge est renvoyé tel quel au client : on le contraint à un jeton
+  // court et alphanumérique (format Meta) pour ne rien refléter d'arbitraire.
+  if (!challenge || !/^[A-Za-z0-9_-]{1,128}$/.test(challenge)) {
+    return c.text('Bad Request', 400)
+  }
+  return c.text(challenge, 200)
 })
 
 // POST /webhooks/whatsapp — messages entrants + statuts de livraison

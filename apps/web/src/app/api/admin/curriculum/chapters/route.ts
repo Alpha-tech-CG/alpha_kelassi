@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { isUuid } from '@/lib/query-validation'
 
 /** GET /api/admin/curriculum/chapters?subjectId= — chapitres d'une matière */
 export async function GET(req: NextRequest) {
@@ -8,7 +9,9 @@ export async function GET(req: NextRequest) {
   if ('error' in guard) return guard.error
 
   const subjectId = req.nextUrl.searchParams.get('subjectId')
-  if (!subjectId) return NextResponse.json({ error: 'subjectId requis' }, { status: 400 })
+  if (!isUuid(subjectId)) {
+    return NextResponse.json({ error: 'subjectId requis (UUID valide)' }, { status: 400 })
+  }
 
   const { data, error } = await supabaseAdmin
     .from('chapters')
