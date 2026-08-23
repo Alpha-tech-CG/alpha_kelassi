@@ -35,7 +35,7 @@ export default async function SubjectChaptersPage({ params }: { params: Promise<
   )
   const lessonIds = lessons.map((l) => l.id)
   const progress = await safe<{ lesson_id: string; score: number | null; completed: boolean }>(
-    lessonIds.length ? supabase.from('lesson_progress').select('lesson_id, score, completed').eq('user_id', user!.id).in('lesson_id', lessonIds) : Promise.resolve({ data: [], error: null })
+    lessonIds.length && user ? supabase.from('lesson_progress').select('lesson_id, score, completed').eq('user_id', user.id).in('lesson_id', lessonIds) : Promise.resolve({ data: [], error: null })
   )
   const progByLesson = new Map(progress.map((p) => [p.lesson_id, p]))
 

@@ -1,37 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { BetaFeedbackButton } from '@/components/beta-feedback-button'
-import { NotificationBanner } from '@/components/notification-banner'
-import { SignOutButton } from './_components/sign-out-button'
-import {
-  Home, BookOpen, FileText, Bot, Layers, TrendingUp,
-  Crown, Wrench, ListChecks, CalendarClock, PlayCircle, type LucideIcon,
-} from 'lucide-react'
+import { AppShell, type ShellProfile } from '@/components/app-shell'
 
-interface NavItem { href: string; label: string; Icon: LucideIcon }
-
-const NAV: NavItem[] = [
-  { href: '/dashboard',  label: 'Accueil',    Icon: Home       },
-  { href: '/cours',      label: 'Cours',       Icon: BookOpen   },
-  { href: '/examens',    label: 'Examens',     Icon: FileText   },
-  { href: '/videos',     label: 'Vidéos',      Icon: PlayCircle },
-  { href: '/tuteur',     label: 'Kelassi IA',  Icon: Bot        },
-  { href: '/flashcards', label: 'Flashcards',  Icon: Layers     },
-  { href: '/quiz',       label: 'QCM',         Icon: ListChecks },
-  { href: '/planning',   label: 'Planning',    Icon: CalendarClock },
-  { href: '/progression',label: 'Progression', Icon: TrendingUp },
-  { href: '/billing',    label: 'Premium',     Icon: Crown      },
-]
-
-const MOBILE_NAV: NavItem[] = [
-  { href: '/dashboard',   label: 'Accueil', Icon: Home       },
-  { href: '/cours',       label: 'Cours',   Icon: BookOpen   },
-  { href: '/tuteur',      label: 'IA',      Icon: Bot        },
-  { href: '/flashcards',  label: 'Cartes',  Icon: Layers     },
-  { href: '/progression', label: 'Progrès', Icon: TrendingUp },
-]
-
+/**
+ * Espace connecté. La coque (barre latérale, navigation) vit dans `AppShell`,
+ * partagée avec le catalogue public — ici on ne garde que la garde d'accès.
+ */
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -44,127 +18,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .single()
 
   return (
-    <div className="min-h-screen flex">
-      {/* Skip to content — accessibilité clavier */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold"
-      >
-        Aller au contenu principal
-      </a>
-
-      {/* Sidebar */}
-      <aside className="hidden md:flex w-64 flex-col border-r border-white/10 bg-[#172554] px-4 py-6 text-white" aria-label="Navigation principale">
-        {/* Logo */}
-        <Link href="/dashboard" className="flex items-center gap-2 mb-8 px-2" aria-label="Kelassi — Accueil">
-          <div className="w-9 h-9 bg-[#f5a623] rounded-xl flex items-center justify-center" aria-hidden="true">
-            <BookOpen className="h-5 w-5 text-[#172554]" />
-          </div>
-          <span className="text-xl font-black text-white">Alpha Kelassi</span>
-        </Link>
-
-        {/* Nav */}
-        <nav className="flex-1 space-y-0.5" aria-label="Menu principal">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-blue-100 hover:bg-white/10 hover:text-white transition-colors"
-            >
-              <item.Icon className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} aria-hidden="true" />
-              {item.label}
-            </Link>
-          ))}
-          {profile?.role === 'admin' && (
-            <>
-              <div className="pt-3 pb-1 px-3">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Admin</p>
-              </div>
-              <Link
-                href="/admin"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-100 transition-colors"
-              >
-                <Wrench className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} />
-                Console admin
-              </Link>
-            </>
-          )}
-        </nav>
-
-        {/* Footer sidebar */}
-        <div className="border-t border-white/10 pt-4 space-y-3">
-          {/* User info */}
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-blue-600 font-bold text-sm">
-                {(profile?.full_name ?? user.email ?? 'U')[0].toUpperCase()}
-              </span>
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-semibold text-gray-900 truncate">
-                {profile?.full_name ?? user.email}
-              </p>
-              <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full mt-0.5 ${
-                profile?.plan === 'premium'
-                  ? 'bg-amber-100 text-amber-700'
-                  : 'bg-gray-100 text-gray-500'
-              }`}>
-                {profile?.plan === 'premium'
-                  ? <><Crown className="w-3 h-3" /> Premium</>
-                  : 'Gratuit'}
-              </span>
-            </div>
-          </div>
-
-          {/* Déconnexion */}
-          <SignOutButton />
-
-          {/* Links */}
-          <div className="flex flex-wrap gap-3 px-2 text-xs text-gray-400">
-            <Link href="/compte/securite" className="hover:text-gray-600 transition-colors">Sécurité</Link>
-            <Link href="/cgu" className="hover:text-gray-600 transition-colors">CGU</Link>
-            <Link href="/confidentialite" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
-            <Link href="/compte/supprimer" className="hover:text-red-500 transition-colors">Supprimer</Link>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main content */}
-      <main id="main-content" className="flex-1 overflow-auto bg-[#fcfbf9] pb-20 md:pb-0">
-        {/* Barre compte mobile — sidebar desktop cachée en dessous de md, donc seul accès à la déconnexion/sécurité/suppression sur mobile web */}
-        <div className="md:hidden flex items-center justify-between gap-3 px-4 py-2.5 bg-[#172554] text-white">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-blue-600 font-bold text-[11px]">
-                {(profile?.full_name ?? user.email ?? 'U')[0].toUpperCase()}
-              </span>
-            </div>
-            <span className="text-xs text-blue-100 truncate">{profile?.full_name ?? user.email}</span>
-          </div>
-          <div className="flex items-center gap-3 flex-shrink-0 text-xs text-blue-100">
-            <Link href="/compte/securite" className="hover:text-white transition-colors">Compte</Link>
-            <SignOutButton className="flex items-center gap-1 hover:text-white transition-colors" />
-          </div>
-        </div>
-        <NotificationBanner plan={profile?.plan ?? 'free'} />
-        {children}
-      </main>
-
-      <BetaFeedbackButton />
-
-      {/* Bottom nav mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#172554] border-t border-white/10 px-2 py-2 flex items-center justify-around" aria-label="Navigation mobile">
-        {MOBILE_NAV.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-blue-200 hover:text-[#f5a623] hover:bg-white/10 transition-all"
-          >
-            <item.Icon className="w-5 h-5" strokeWidth={1.75} aria-hidden="true" />
-            <span className="text-[10px] font-semibold">{item.label}</span>
-          </Link>
-        ))}
-      </nav>
-    </div>
+    <AppShell email={user.email ?? null} profile={(profile as ShellProfile | null) ?? null}>
+      {children}
+    </AppShell>
   )
 }

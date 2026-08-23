@@ -1,8 +1,16 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const PUBLIC_ROUTES = ['/', '/login', '/register', '/forgot-password', '/update-password', '/verify-otp', '/mfa-challenge']
+const PUBLIC_ROUTES = ['/', '/login', '/register', '/forgot-password', '/update-password', '/verify-otp', '/mfa-challenge', '/cgu', '/confidentialite']
 const AUTH_ROUTES = ['/login', '/register']
+
+/**
+ * Préfixes consultables sans compte : le catalogue de cours est ouvert pour que
+ * n'importe qui puisse découvrir le programme (et pour le référencement). La
+ * lecture du contenu d'une leçon reste protégée — la garde est posée dans la
+ * page de chapitre, pas ici, car elle dépend du contenu affiché.
+ */
+const PUBLIC_PREFIXES = ['/cours']
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
@@ -37,6 +45,7 @@ export async function middleware(request: NextRequest) {
   // Redirige vers /login si non connecté et sur une page protégée
   // Les routes /api/ gèrent leur propre authentification (pas de redirect)
   const isPublic = PUBLIC_ROUTES.some((r) => pathname === r || pathname.startsWith('/auth'))
+    || PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
     || pathname.startsWith('/api/')
   if (!user && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url))

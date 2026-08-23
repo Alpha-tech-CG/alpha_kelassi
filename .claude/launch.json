@@ -3,14 +3,14 @@
   "configurations": [
     {
       "name": "kelassi-web",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--workspace=apps/web"],
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@alpha-kelassi/web", "dev"],
       "port": 3000
     },
     {
       "name": "kelassi-api",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--workspace=apps/api"],
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@alpha-kelassi/api", "dev"],
       "port": 3001
     }
   ]

@@ -27,7 +27,7 @@ export default async function ParcoursPage({ searchParams }: { searchParams: Pro
 
   const { data: { user } } = await supabase.auth.getUser()
   const { data: profile } = await supabase
-    .from('users').select('study_level_pref').eq('id', user!.id).maybeSingle()
+    .from('users').select('study_level_pref').eq('id', user?.id ?? '00000000-0000-0000-0000-000000000000').maybeSingle()
   const userLevel = (profile?.study_level_pref as string | null) ?? null
   const isBepc = userLevel === 'bepc'
 
@@ -106,7 +106,7 @@ export default async function ParcoursPage({ searchParams }: { searchParams: Pro
   )
   const lessonIds = lessons.map((l) => l.id)
   const progress = await safe<{ lesson_id: string }>(
-    lessonIds.length ? supabase.from('lesson_progress').select('lesson_id').eq('user_id', user!.id).eq('completed', true).in('lesson_id', lessonIds) : Promise.resolve({ data: [], error: null })
+    lessonIds.length && user ? supabase.from('lesson_progress').select('lesson_id').eq('user_id', user.id).eq('completed', true).in('lesson_id', lessonIds) : Promise.resolve({ data: [], error: null })
   )
   const doneLessons = new Set(progress.map((p) => p.lesson_id))
   const chapterToSubject = new Map(chapters.map((c) => [c.id, c.subject_id]))
