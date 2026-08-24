@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AdminSidebar } from './_components/sidebar'
-import { isAllowedAdminEmail } from '@/lib/admin-allowlist'
+import { isAllowedAdminEmail, adminMfaRequired } from '@/lib/admin-allowlist'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -14,16 +14,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const { data: profile } = await supabase.from('users').select('role, full_name, email').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  // Les comptes admin doivent avoir une session élevée en AAL2 (double
-  // authentification TOTP vérifiée) pour accéder à la console admin.
-  const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-  if (aal?.currentLevel !== 'aal2') {
-    if (aal?.nextLevel === 'aal2') {
-      // Un facteur MFA est déjà enrôlé mais pas encore vérifié sur cette session.
+  // Double authentification : exigée seulement si ADMIN_REQUIRE_MFA=true.
+  // Si un facteur est déjà enrôlé, on demande quand même de l'utiliser — sinon
+  // l'activer n'aurait aucun effet réel sur la session en cours.
+  if (adminMfaRequired()) {
+    const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+    if (aal?.currentLevel !== 'aal2') {
+      if (aal?.nextLevel === 'aal2') redirect('/mfa-challenge?next=/admin')
+      redirect('/compte/securite?required=admin')
+    }
+  } else {
+    const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+    if (aal?.currentLevel === 'aal1' && aal?.nextLevel === 'aal2') {
       redirect('/mfa-challenge?next=/admin')
     }
-    // Aucun facteur MFA enrôlé : bloque l'accès admin tant que ce n'est pas fait.
-    redirect('/compte/securite?required=admin')
   }
 
   return (
