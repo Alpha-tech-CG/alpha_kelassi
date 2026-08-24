@@ -6,11 +6,13 @@ import { useParams } from 'next/navigation'
 
 interface Chapter { id: string; title: string; description: string | null; order_index: number; series_id: string | null; lesson_count: number }
 interface Series { id: string; code: string; label: string }
+interface SubjectInfo { id: string; name: string; level: string }
 
 export default function AdminChaptersPage() {
   const { subjectId } = useParams<{ subjectId: string }>()
   const [rows, setRows] = useState<Chapter[]>([])
   const [series, setSeries] = useState<Series[]>([])
+  const [subject, setSubject] = useState<SubjectInfo | null>(null)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [seriesId, setSeriesId] = useState('')
@@ -19,11 +21,15 @@ export default function AdminChaptersPage() {
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    const [c, s] = await Promise.all([
+    const [c, s, subs] = await Promise.all([
       fetch(`/api/admin/curriculum/chapters?subjectId=${subjectId}`, { credentials: 'include' }).then((r) => r.json()),
       fetch('/api/admin/curriculum/series', { credentials: 'include' }).then((r) => r.json()),
+      // Sert au fil d'Ariane : permet de remonter à la classe de la matière.
+      fetch('/api/admin/subjects', { credentials: 'include' }).then((r) => r.json()).catch(() => ({ data: [] })),
     ])
-    setRows(c.data ?? []); setSeries(s.data ?? []); setLoading(false)
+    setRows(c.data ?? []); setSeries(s.data ?? [])
+    setSubject(((subs.data ?? []) as SubjectInfo[]).find((x) => x.id === subjectId) ?? null)
+    setLoading(false)
   }, [subjectId])
   useEffect(() => { load() }, [load])
 
@@ -57,8 +63,22 @@ export default function AdminChaptersPage() {
 
   return (
     <div className="px-8 py-8 max-w-4xl">
-      <Link href="/admin/curriculum" className="text-sm text-gray-400 hover:text-gray-700">← Curriculum</Link>
-      <h1 className="text-2xl font-black text-gray-900 mt-2 mb-1">Chapitres</h1>
+      <nav className="flex items-center gap-1.5 text-sm text-gray-400 flex-wrap">
+        <Link href="/admin/curriculum" className="hover:text-gray-700">Classes</Link>
+        {subject && (
+          <>
+            <span>›</span>
+            <Link href={`/admin/curriculum/classe/${subject.level}`} className="hover:text-gray-700">
+              {subject.level.replace('bac_', 'BAC ').toUpperCase()}
+            </Link>
+          </>
+        )}
+        <span>›</span>
+        <span className="text-gray-700 font-semibold">{subject?.name ?? 'Matière'}</span>
+      </nav>
+      <h1 className="text-2xl font-black text-gray-900 mt-2 mb-1">
+        Chapitres{subject ? ` — ${subject.name}` : ''}
+      </h1>
       <p className="text-gray-500 text-sm mb-6">Organise la matière en chapitres. Chaque chapitre contient 4 blocs (cours, résumé, quiz, vidéo).</p>
 
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">

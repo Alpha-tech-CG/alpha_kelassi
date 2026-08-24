@@ -9,7 +9,7 @@ export async function GET(_req: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from('subjects')
-    .select('id, name, level, track_type, country_code, icon, documents(count), videos(count)')
+    .select('id, name, level, track_type, country_code, icon, parent_subject_id, documents(count), videos(count)')
     .order('track_type', { ascending: true })
     .order('level', { ascending: true })
     .order('name', { ascending: true })
@@ -30,6 +30,7 @@ export async function GET(_req: NextRequest) {
     country_code: s['country_code'],
     track_type: s['track_type'],
     icon: s['icon'],
+    parent_subject_id: s['parent_subject_id'] ?? null,
     doc_count: (s['documents'] as { count: number }[] | null)?.[0]?.count ?? 0,
     video_count: (s['videos'] as { count: number }[] | null)?.[0]?.count ?? 0,
   }))
