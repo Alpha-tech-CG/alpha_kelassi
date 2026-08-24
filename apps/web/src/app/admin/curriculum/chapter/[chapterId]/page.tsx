@@ -81,14 +81,23 @@ export default function AdminLessonsPage() {
   return (
     <div className="px-8 py-8 max-w-4xl">
       <Link href="/admin/curriculum" className="text-sm text-gray-400 hover:text-gray-700">← Curriculum</Link>
-      <div className="flex items-center justify-between mt-2 mb-1">
+      <div className="flex items-center justify-between mt-2 mb-1 gap-3 flex-wrap">
         <h1 className="text-2xl font-black text-gray-900">Leçons du chapitre</h1>
-        <Link href={`/admin/curriculum/chapter/${chapterId}/exercices`}
-          className="px-4 py-2 bg-green-50 text-green-700 rounded-xl text-sm font-bold border border-green-200 hover:bg-green-100">
-          ✏️ Gérer les exercices →
-        </Link>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Link href={`/admin/curriculum/chapter/${chapterId}/qcm`}
+            className="px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-bold border border-blue-200 hover:bg-blue-100">
+            ✅ QCM de fin de chapitre →
+          </Link>
+          <Link href={`/admin/curriculum/chapter/${chapterId}/exercices`}
+            className="px-4 py-2 bg-green-50 text-green-700 rounded-xl text-sm font-bold border border-green-200 hover:bg-green-100">
+            ✏️ Gérer les exercices →
+          </Link>
+        </div>
       </div>
-      <p className="text-gray-500 text-sm mb-6">Blocs : cours, résumé, fiche de révision (Markdown, formules $…$), quiz, vidéo.</p>
+      <p className="text-gray-500 text-sm mb-6">
+        Blocs : cours, résumé, fiche de révision (Markdown, formules $…$), quiz, vidéo.
+        Le bloc « quiz » est un simple texte — pour un QCM corrigé et noté automatiquement, utilise « QCM de fin de chapitre ».
+      </p>
 
       {/* Ajout */}
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">

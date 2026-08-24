@@ -104,13 +104,23 @@ export default async function ChapterPage({ params }: { params: Promise<{ subjec
     )
   }
 
-  const { data: progress } = await supabase
-    .from('lesson_progress')
-    .select('lesson_id, completed, score')
-    .eq('user_id', user.id)
+  /* Le QCM de fin de chapitre (migration 053) n'est interrogé que pour un
+     utilisateur connecté : le rôle anonyme n'a pas de privilège sur `quizzes`. */
+  const [{ data: progress }, { data: chapterQuiz }] = await Promise.all([
+    supabase.from('lesson_progress').select('lesson_id, completed, score').eq('user_id', user.id),
+    supabase
+      .from('quizzes')
+      .select('id, title, time_limit_sec, quiz_questions(count)')
+      .eq('chapter_id', chapterId)
+      .maybeSingle(),
+  ])
 
   const initialDone: Record<string, { completed: boolean; score: number | null }> = {}
   for (const p of progress ?? []) initialDone[p.lesson_id] = { completed: p.completed, score: p.score }
+
+  // Un QCM sans question n'est pas proposé — il mènerait à un écran vide.
+  const quizCount = (chapterQuiz?.quiz_questions as unknown as Array<{ count: number }> | null)?.[0]?.count ?? 0
+  const quiz = chapterQuiz && quizCount > 0 ? { ...chapterQuiz, count: quizCount } : null
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -119,6 +129,22 @@ export default async function ChapterPage({ params }: { params: Promise<{ subjec
       {chapter.description && <p className="text-gray-400 text-sm mb-8">{chapter.description}</p>}
 
       <LessonBlocks lessons={lessonList} initialDone={initialDone} />
+
+      {quiz && (
+        <Link
+          href={`/quiz/${quiz.id}`}
+          className="mt-8 flex items-center gap-4 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-5 py-4 hover:border-blue-400 hover:shadow-md transition-all"
+        >
+          <span className="text-2xl" aria-hidden="true">✅</span>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-gray-900 text-sm">{quiz.title}</p>
+            <p className="text-xs text-gray-500">
+              {quiz.count} question{quiz.count !== 1 ? 's' : ''} · {Math.round(quiz.time_limit_sec / 60)} min · corrigé automatiquement
+            </p>
+          </div>
+          <span className="text-blue-600 font-bold">→</span>
+        </Link>
+      )}
     </div>
   )
 }
