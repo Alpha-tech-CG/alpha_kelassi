@@ -19,7 +19,7 @@ async function safe<T>(p: PromiseLike<{ data: T[] | null }>): Promise<T[]> {
 const COLORS: Record<string, { color: string; ring: string }> = {
   cepe:   { color: 'from-rose-500 to-rose-600',       ring: 'hover:border-rose-300'    },
   bepc:   { color: 'from-blue-500 to-blue-600',       ring: 'hover:border-blue-300'    },
-  bg:     { color: 'from-cyan-500 to-cyan-600',       ring: 'hover:border-cyan-300'    },
+  bac_bg: { color: 'from-cyan-500 to-cyan-600',       ring: 'hover:border-cyan-300'    },
   bac_a:  { color: 'from-amber-500 to-amber-600',     ring: 'hover:border-amber-300'   },
   bac_c:  { color: 'from-violet-500 to-violet-600',   ring: 'hover:border-violet-300'  },
   bac_d:  { color: 'from-emerald-500 to-emerald-600', ring: 'hover:border-emerald-300' },

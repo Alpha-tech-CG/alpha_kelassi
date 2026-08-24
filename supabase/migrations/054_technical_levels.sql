@@ -10,19 +10,32 @@
 -- ⚠ EXÉCUTION EN DEUX TEMPS
 -- PostgreSQL refuse d'utiliser une valeur d'enum dans la même transaction que
 -- sa création (« unsafe use of new value of enum type »). La PARTIE 1 doit
--- donc être validée avant de lancer la PARTIE 2. Si l'outil de migration
--- enveloppe tout dans une transaction, jouer les deux blocs séparément.
+-- donc être validée avant de lancer la PARTIE 2.
 
 -- ════════════════════ PARTIE 1 — valeurs d'enum ════════════════════
--- Baccalauréats techniques.
+-- Toutes les classes ajoutées ici sont des baccalauréats techniques, d'où le
+-- préfixe `bac_` commun aux séries du baccalauréat.
 alter type study_level add value if not exists 'bac_e';
 alter type study_level add value if not exists 'bac_f3';
 alter type study_level add value if not exists 'bac_g2';
 alter type study_level add value if not exists 'bac_g3';
 alter type study_level add value if not exists 'bac_h';
--- Brevet de Gestion : examen distinct, pas une série du baccalauréat — d'où
--- l'absence de préfixe `bac_`, comme pour `cepe` et `bepc`.
-alter type study_level add value if not exists 'bg';
+alter type study_level add value if not exists 'bac_bg';
+
+-- Filet de rattrapage : une première version de cette migration nommait BG
+-- `bg`, en le prenant pour un examen distinct. Si cette valeur a été créée
+-- entre-temps, on la renomme au lieu de laisser deux entrées pour la même
+-- classe — PostgreSQL ne permettant pas de supprimer une valeur d'enum.
+do $$
+begin
+  if exists (
+    select 1 from pg_enum e
+    join pg_type t on t.oid = e.enumtypid
+    where t.typname = 'study_level' and e.enumlabel = 'bg'
+  ) then
+    alter type study_level rename value 'bg' to 'bac_bg_legacy';
+  end if;
+end $$;
 
 -- ════════════════════ PARTIE 2 — séries ════════════════════
 -- (à exécuter après validation de la partie 1)
@@ -36,8 +49,8 @@ update public.series set level = 'bac_f3' where code = 'F3' and track = 'techniq
 -- Séries manquantes. `unique(code, track, level, country_code)` rend
 -- l'insertion idempotente.
 insert into public.series (code, label, track, level, country_code) values
-  ('G3', 'Série G3 — Techniques Commerciales',            'technique', 'bac_g3', 'CG'),
-  ('H',  'Série H — Techniques Informatiques',            'technique', 'bac_h',  'CG'),
-  ('E',  'Série E — Mathématiques et Technique',          'technique', 'bac_e',  'CG'),
-  ('BG', 'BG — Brevet de Gestion',                        'technique', 'bg',     'CG')
+  ('G3', 'Série G3 — Techniques Commerciales',   'technique', 'bac_g3', 'CG'),
+  ('H',  'Série H — Techniques Informatiques',   'technique', 'bac_h',  'CG'),
+  ('E',  'Série E — Mathématiques et Technique', 'technique', 'bac_e',  'CG'),
+  ('BG', 'Série BG',                             'technique', 'bac_bg', 'CG')
 on conflict (code, track, level, country_code) do nothing;

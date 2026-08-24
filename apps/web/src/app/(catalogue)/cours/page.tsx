@@ -31,7 +31,7 @@ const LEVEL_CONFIG: Record<string, {
 }> = {
   cepe:   { label: 'CEPE',   color: 'text-rose-700',    bg: 'bg-rose-50',    border: 'border-rose-300',    headerBg: 'bg-rose-500',    dot: 'bg-rose-500'    },
   bepc:   { label: 'BEPC',   color: 'text-blue-700',    bg: 'bg-blue-50',    border: 'border-blue-300',    headerBg: 'bg-blue-500',    dot: 'bg-blue-500'    },
-  bg:     { label: 'BG',     color: 'text-cyan-700',    bg: 'bg-cyan-50',    border: 'border-cyan-300',    headerBg: 'bg-cyan-600',    dot: 'bg-cyan-600'    },
+  bac_bg: { label: 'BAC BG', color: 'text-cyan-700',    bg: 'bg-cyan-50',    border: 'border-cyan-300',    headerBg: 'bg-cyan-600',    dot: 'bg-cyan-600'    },
   bac_a:  { label: 'BAC A',  color: 'text-amber-700',   bg: 'bg-amber-50',   border: 'border-amber-300',   headerBg: 'bg-amber-500',   dot: 'bg-amber-500'   },
   bac_c:  { label: 'BAC C',  color: 'text-violet-700',  bg: 'bg-violet-50',  border: 'border-violet-300',  headerBg: 'bg-violet-500',  dot: 'bg-violet-500'  },
   bac_d:  { label: 'BAC D',  color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-300', headerBg: 'bg-emerald-500', dot: 'bg-emerald-500' },

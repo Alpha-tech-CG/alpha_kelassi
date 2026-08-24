@@ -6,14 +6,14 @@
  * listes doivent rester alignées, sinon une classe existante en base serait
  * rejetée par la validation applicative (ou l'inverse).
  *
- * Le préfixe `bac_` marque les séries du baccalauréat ; `cepe`, `bepc` et `bg`
- * sont des examens distincts, pas des séries.
+ * Le préfixe `bac_` marque les séries du baccalauréat (général comme
+ * technique) ; `cepe` et `bepc` sont des examens distincts.
  */
 
 export const STUDY_LEVELS = [
   'cepe',
   'bepc',
-  'bg',
+  'bac_bg',
   'bac_a',
   'bac_c',
   'bac_d',
@@ -40,7 +40,6 @@ export interface LevelMeta {
 export const LEVEL_META: Record<StudyLevel, LevelMeta> = {
   cepe:   { label: 'CEPE',   classe: 'CM2',         track: 'generale' },
   bepc:   { label: 'BEPC',   classe: '3e',          track: 'generale' },
-  bg:     { label: 'BG',     classe: 'Lycée technique', track: 'technique', description: 'Brevet de Gestion' },
   bac_a:  { label: 'BAC A',  classe: 'Terminale A', track: 'generale',  description: 'Lettres et Sciences Humaines' },
   bac_c:  { label: 'BAC C',  classe: 'Terminale C', track: 'generale',  description: 'Mathématiques et Sciences Physiques' },
   bac_d:  { label: 'BAC D',  classe: 'Terminale D', track: 'generale',  description: 'Sciences de la Vie et de la Terre' },
@@ -49,6 +48,7 @@ export const LEVEL_META: Record<StudyLevel, LevelMeta> = {
   bac_g2: { label: 'BAC G2', classe: 'Terminale G2', track: 'technique', description: 'Techniques Quantitatives de Gestion' },
   bac_g3: { label: 'BAC G3', classe: 'Terminale G3', track: 'technique', description: 'Techniques Commerciales' },
   bac_h:  { label: 'BAC H',  classe: 'Terminale H', track: 'technique', description: 'Techniques Informatiques' },
+  bac_bg: { label: 'BAC BG', classe: 'Terminale BG', track: 'technique' },
 }
 
 /** Cette chaîne correspond-elle à une classe connue ? */
