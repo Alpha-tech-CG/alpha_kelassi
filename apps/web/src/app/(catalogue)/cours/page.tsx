@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 import {
   Calculator, FlaskConical, Leaf, BookOpen, Globe, Brain,
   Languages, TrendingUp, Monitor, Activity, BookMarked, Sparkles,
@@ -28,14 +29,21 @@ const LEVEL_CONFIG: Record<string, {
   label: string; color: string; bg: string; border: string
   headerBg: string; dot: string
 }> = {
-  cepe:  { label: 'CEPE',  color: 'text-rose-700',    bg: 'bg-rose-50',    border: 'border-rose-300',    headerBg: 'bg-rose-500',    dot: 'bg-rose-500'    },
-  bepc:  { label: 'BEPC',  color: 'text-blue-700',    bg: 'bg-blue-50',    border: 'border-blue-300',    headerBg: 'bg-blue-500',    dot: 'bg-blue-500'    },
-  bac_a: { label: 'BAC A', color: 'text-amber-700',   bg: 'bg-amber-50',   border: 'border-amber-300',   headerBg: 'bg-amber-500',   dot: 'bg-amber-500'   },
-  bac_c: { label: 'BAC C', color: 'text-violet-700',  bg: 'bg-violet-50',  border: 'border-violet-300',  headerBg: 'bg-violet-500',  dot: 'bg-violet-500'  },
-  bac_d: { label: 'BAC D', color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-300', headerBg: 'bg-emerald-500', dot: 'bg-emerald-500' },
+  cepe:   { label: 'CEPE',   color: 'text-rose-700',    bg: 'bg-rose-50',    border: 'border-rose-300',    headerBg: 'bg-rose-500',    dot: 'bg-rose-500'    },
+  bepc:   { label: 'BEPC',   color: 'text-blue-700',    bg: 'bg-blue-50',    border: 'border-blue-300',    headerBg: 'bg-blue-500',    dot: 'bg-blue-500'    },
+  bg:     { label: 'BG',     color: 'text-cyan-700',    bg: 'bg-cyan-50',    border: 'border-cyan-300',    headerBg: 'bg-cyan-600',    dot: 'bg-cyan-600'    },
+  bac_a:  { label: 'BAC A',  color: 'text-amber-700',   bg: 'bg-amber-50',   border: 'border-amber-300',   headerBg: 'bg-amber-500',   dot: 'bg-amber-500'   },
+  bac_c:  { label: 'BAC C',  color: 'text-violet-700',  bg: 'bg-violet-50',  border: 'border-violet-300',  headerBg: 'bg-violet-500',  dot: 'bg-violet-500'  },
+  bac_d:  { label: 'BAC D',  color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-300', headerBg: 'bg-emerald-500', dot: 'bg-emerald-500' },
+  bac_e:  { label: 'BAC E',  color: 'text-orange-700',  bg: 'bg-orange-50',  border: 'border-orange-300',  headerBg: 'bg-orange-500',  dot: 'bg-orange-500'  },
+  bac_f3: { label: 'BAC F3', color: 'text-slate-700',   bg: 'bg-slate-50',   border: 'border-slate-300',   headerBg: 'bg-slate-600',   dot: 'bg-slate-600'   },
+  bac_g2: { label: 'BAC G2', color: 'text-teal-700',    bg: 'bg-teal-50',    border: 'border-teal-300',    headerBg: 'bg-teal-600',    dot: 'bg-teal-600'    },
+  bac_g3: { label: 'BAC G3', color: 'text-lime-700',    bg: 'bg-lime-50',    border: 'border-lime-300',    headerBg: 'bg-lime-600',    dot: 'bg-lime-600'    },
+  bac_h:  { label: 'BAC H',  color: 'text-indigo-700',  bg: 'bg-indigo-50',  border: 'border-indigo-300',  headerBg: 'bg-indigo-500',  dot: 'bg-indigo-500'  },
 }
 
-const LEVEL_ORDER = ['cepe', 'bepc', 'bac_a', 'bac_c', 'bac_d'] as const
+// Ordre d'affichage aligné sur la source partagée (packages/types/src/levels.ts).
+const LEVEL_ORDER = STUDY_LEVELS
 
 /* ── Icônes par matière ──────────────────────────────────────────────────── */
 function SubjectIcon({ name, className }: { name: string; className?: string }) {

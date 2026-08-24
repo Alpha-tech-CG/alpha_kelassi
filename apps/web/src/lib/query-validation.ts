@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 /**
  * Valide les paramètres de requête `?subject_id=`/`?level=` utilisés comme
@@ -7,7 +8,9 @@ import { z } from 'zod'
  */
 
 const uuidSchema = z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)
-const LEVELS = ['bepc', 'bac_a', 'bac_c', 'bac_d'] as const
+// Liste partagée, alignée sur l'enum PostgreSQL : une liste écrite en dur ici
+// finissait par diverger de la base et rejetait des classes pourtant valides.
+const LEVELS = STUDY_LEVELS
 const levelSchema = z.enum(LEVELS)
 
 export function parseUuidParam(raw: string | null): string | null | undefined {

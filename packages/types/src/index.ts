@@ -1,4 +1,5 @@
 export type { Database } from './database'
+export * from './levels'
 export * from './models'
 export * from './api'
 export * from './curriculum'

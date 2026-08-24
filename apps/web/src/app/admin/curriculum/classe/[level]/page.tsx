@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { LEVEL_META, isStudyLevel } from '@alpha-kelassi/types'
 
 /**
  * Curriculum — étape 2 : les matières d'une classe.
@@ -18,17 +19,11 @@ interface Subject {
   doc_count: number; video_count: number
 }
 
-const CLASS_LABEL: Record<string, { label: string; classe: string }> = {
-  cepe:  { label: 'CEPE',  classe: 'CM2' },
-  bepc:  { label: 'BEPC',  classe: '3e' },
-  bac_a: { label: 'BAC A', classe: 'Terminale A' },
-  bac_c: { label: 'BAC C', classe: 'Terminale C' },
-  bac_d: { label: 'BAC D', classe: 'Terminale D' },
-}
-
 export default function AdminClassSubjectsPage() {
   const { level } = useParams<{ level: string }>()
-  const meta = CLASS_LABEL[level] ?? { label: level?.toUpperCase() ?? '?', classe: '' }
+  const meta = isStudyLevel(level)
+    ? LEVEL_META[level]
+    : { label: level?.toUpperCase() ?? '?', classe: '', track: 'generale' as const, description: undefined }
 
   const [rows, setRows] = useState<Subject[]>([])
   const [chapCount, setChapCount] = useState<Record<string, number>>({})
@@ -39,7 +34,7 @@ export default function AdminClassSubjectsPage() {
 
   const [name, setName] = useState('')
   const [icon, setIcon] = useState('')
-  const [track, setTrack] = useState<'generale' | 'technique'>('generale')
+  const [track, setTrack] = useState<'generale' | 'technique'>(meta.track)
 
   const load = useCallback(async () => {
     const [s, c] = await Promise.all([

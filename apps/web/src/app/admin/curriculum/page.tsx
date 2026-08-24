@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { supabaseAdmin } from '@/lib/admin-guard'
+import { STUDY_LEVELS, LEVEL_META } from '@alpha-kelassi/types'
 
 /**
  * Curriculum — étape 1 : les classes.
@@ -14,14 +15,26 @@ async function safe<T>(p: PromiseLike<{ data: T[] | null }>): Promise<T[]> {
   try { const { data } = await p; return data ?? [] } catch { return [] }
 }
 
-/** Les niveaux sont un enum PostgreSQL (`study_level`) : cette liste le reflète. */
-const CLASSES = [
-  { level: 'cepe',  label: 'CEPE',  classe: 'CM2',          color: 'from-rose-500 to-rose-600',       ring: 'hover:border-rose-300'   },
-  { level: 'bepc',  label: 'BEPC',  classe: '3e',           color: 'from-blue-500 to-blue-600',       ring: 'hover:border-blue-300'   },
-  { level: 'bac_a', label: 'BAC A', classe: 'Terminale A',  color: 'from-amber-500 to-amber-600',     ring: 'hover:border-amber-300'  },
-  { level: 'bac_c', label: 'BAC C', classe: 'Terminale C',  color: 'from-violet-500 to-violet-600',   ring: 'hover:border-violet-300' },
-  { level: 'bac_d', label: 'BAC D', classe: 'Terminale D',  color: 'from-emerald-500 to-emerald-600', ring: 'hover:border-emerald-300'},
-] as const
+/** Couleur par classe ; la liste elle-même vient de la source partagée. */
+const COLORS: Record<string, { color: string; ring: string }> = {
+  cepe:   { color: 'from-rose-500 to-rose-600',       ring: 'hover:border-rose-300'    },
+  bepc:   { color: 'from-blue-500 to-blue-600',       ring: 'hover:border-blue-300'    },
+  bg:     { color: 'from-cyan-500 to-cyan-600',       ring: 'hover:border-cyan-300'    },
+  bac_a:  { color: 'from-amber-500 to-amber-600',     ring: 'hover:border-amber-300'   },
+  bac_c:  { color: 'from-violet-500 to-violet-600',   ring: 'hover:border-violet-300'  },
+  bac_d:  { color: 'from-emerald-500 to-emerald-600', ring: 'hover:border-emerald-300' },
+  bac_e:  { color: 'from-orange-500 to-orange-600',   ring: 'hover:border-orange-300'  },
+  bac_f3: { color: 'from-slate-500 to-slate-600',     ring: 'hover:border-slate-300'   },
+  bac_g2: { color: 'from-teal-500 to-teal-600',       ring: 'hover:border-teal-300'    },
+  bac_g3: { color: 'from-lime-600 to-lime-700',       ring: 'hover:border-lime-300'    },
+  bac_h:  { color: 'from-indigo-500 to-indigo-600',   ring: 'hover:border-indigo-300'  },
+}
+
+const CLASSES = STUDY_LEVELS.map((level) => ({
+  level,
+  ...LEVEL_META[level],
+  ...(COLORS[level] ?? { color: 'from-gray-500 to-gray-600', ring: 'hover:border-gray-300' }),
+}))
 
 export default async function CurriculumHubPage() {
   const [subjects, chapters, lessons, series] = await Promise.all([
@@ -70,8 +83,15 @@ export default async function CurriculumHubPage() {
                 {c.label.replace('BAC ', '')}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-black text-gray-900">{c.label}</p>
-                <p className="text-xs text-gray-400">{c.classe}</p>
+                <p className="font-black text-gray-900">
+                  {c.label}
+                  {c.track === 'technique' && (
+                    <span className="ml-2 text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full align-middle">
+                      technique
+                    </span>
+                  )}
+                </p>
+                <p className="text-xs text-gray-400">{c.description ?? c.classe}</p>
                 <p className="text-xs text-gray-500 mt-1.5">
                   {st.subjects} matière{st.subjects !== 1 ? 's' : ''}
                   {' · '}{st.chapters} chapitre{st.chapters !== 1 ? 's' : ''}

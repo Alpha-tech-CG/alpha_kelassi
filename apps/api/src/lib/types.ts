@@ -1,13 +1,15 @@
 ﻿import { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '@alpha-kelassi/types'
+import type { Database, StudyLevel as SharedStudyLevel } from '@alpha-kelassi/types'
+import { STUDY_LEVELS as SHARED_LEVELS } from '@alpha-kelassi/types'
 
 export type AppVariables = {
   userId: string
   supabase: SupabaseClient<Database>
 }
 
-export type StudyLevel = 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
-const STUDY_LEVELS: readonly StudyLevel[] = ['bepc', 'bac_a', 'bac_c', 'bac_d']
+// Liste partagee, alignee sur l'enum PostgreSQL (packages/types/src/levels.ts).
+export type StudyLevel = SharedStudyLevel
+const STUDY_LEVELS: readonly StudyLevel[] = SHARED_LEVELS
 
 /** Valide un paramètre de requête ?level= face à l'enum réel, sans jamais faire confiance à l'input brut. */
 export function parseStudyLevel(value: string | undefined): StudyLevel | undefined {

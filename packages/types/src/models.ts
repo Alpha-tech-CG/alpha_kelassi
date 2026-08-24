@@ -3,7 +3,8 @@ export type UserPlan = 'free' | 'premium'
 export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'trialing'
 export type DocumentType = 'cours' | 'examen'
 export type ExamSession = 'normale' | 'rattrapage'
-export type Level = 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+/** @deprecated Utiliser `StudyLevel` de `./levels`, aligné sur l'enum PostgreSQL. */
+export type Level = import('./levels').StudyLevel
 export type MessageRole = 'user' | 'assistant'
 
 export interface User {
