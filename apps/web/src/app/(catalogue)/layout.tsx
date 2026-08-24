@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { AppShell, type ShellProfile } from '@/components/app-shell'
 import { PublicShell } from '@/components/public-shell'
+import { isAllowedAdminEmail } from '@/lib/admin-allowlist'
 
 /**
  * Catalogue de cours — accessible sans compte.
@@ -25,8 +26,10 @@ export default async function CatalogueLayout({ children }: { children: React.Re
     .eq('id', user.id)
     .maybeSingle()
 
+  const isAdmin = isAllowedAdminEmail(user.email) && (profile as ShellProfile | null)?.role === 'admin'
+
   return (
-    <AppShell email={user.email ?? null} profile={(profile as ShellProfile | null) ?? null}>
+    <AppShell email={user.email ?? null} profile={(profile as ShellProfile | null) ?? null} isAdmin={isAdmin}>
       {children}
     </AppShell>
   )

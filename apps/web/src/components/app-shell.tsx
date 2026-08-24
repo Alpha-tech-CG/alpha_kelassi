@@ -49,10 +49,13 @@ export interface ShellProfile {
 export function AppShell({
   email,
   profile,
+  isAdmin = false,
   children,
 }: {
   email: string | null
   profile: ShellProfile | null
+  /** Affiche l'accès à la console admin. Calculé côté serveur (liste blanche + rôle). */
+  isAdmin?: boolean
   children: React.ReactNode
 }) {
   const initial = (profile?.full_name ?? email ?? 'U')[0]!.toUpperCase()
@@ -88,16 +91,18 @@ export function AppShell({
               {item.label}
             </Link>
           ))}
-          {profile?.role === 'admin' && (
+          {isAdmin && (
             <>
-              <div className="pt-3 pb-1 px-3">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Admin</p>
+              <div className="pt-4 pb-1 px-3">
+                <p className="text-[10px] font-bold text-blue-300/70 uppercase tracking-wider">Administration</p>
               </div>
+              {/* Couleurs explicites : la barre latérale est bleu marine, un gris
+                  foncé hérité rendait ce lien pratiquement illisible. */}
               <Link
                 href="/admin"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-100 transition-colors"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold bg-[#f5a623] text-[#172554] hover:brightness-105 transition-all"
               >
-                <Wrench className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} />
+                <Wrench className="w-4 h-4 flex-shrink-0" strokeWidth={2} aria-hidden="true" />
                 Console admin
               </Link>
             </>
@@ -142,6 +147,9 @@ export function AppShell({
             <span className="text-xs text-blue-100 truncate">{displayName}</span>
           </div>
           <div className="flex items-center gap-3 flex-shrink-0 text-xs text-blue-100">
+            {isAdmin && (
+              <Link href="/admin" className="font-bold text-[#f5a623] hover:brightness-110 transition-all">Admin</Link>
+            )}
             <Link href="/compte/securite" className="hover:text-white transition-colors">Compte</Link>
             <SignOutButton className="flex items-center gap-1 hover:text-white transition-colors" />
           </div>

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AppShell, type ShellProfile } from '@/components/app-shell'
+import { isAllowedAdminEmail } from '@/lib/admin-allowlist'
 
 /**
  * Espace connecté. La coque (barre latérale, navigation) vit dans `AppShell`,
@@ -17,8 +18,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .eq('id', user.id)
     .single()
 
+  // Mêmes deux conditions que la garde du back office : liste blanche ET rôle.
+  const isAdmin = isAllowedAdminEmail(user.email) && (profile as ShellProfile | null)?.role === 'admin'
+
   return (
-    <AppShell email={user.email ?? null} profile={(profile as ShellProfile | null) ?? null}>
+    <AppShell email={user.email ?? null} profile={(profile as ShellProfile | null) ?? null} isAdmin={isAdmin}>
       {children}
     </AppShell>
   )
