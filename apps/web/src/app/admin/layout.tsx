@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AdminSidebar } from './_components/sidebar'
-import { isAllowedAdminEmail, adminMfaRequired } from '@/lib/admin-allowlist'
+import { isAllowedAdminEmail } from '@/lib/admin-allowlist'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -14,21 +14,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const { data: profile } = await supabase.from('users').select('role, full_name, email').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  // Double authentification : exigée seulement si ADMIN_REQUIRE_MFA=true.
-  // Si un facteur est déjà enrôlé, on demande quand même de l'utiliser — sinon
-  // l'activer n'aurait aucun effet réel sur la session en cours.
-  if (adminMfaRequired()) {
-    const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-    if (aal?.currentLevel !== 'aal2') {
-      if (aal?.nextLevel === 'aal2') redirect('/mfa-challenge?next=/admin')
-      redirect('/compte/securite?required=admin')
-    }
-  } else {
-    const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-    if (aal?.currentLevel === 'aal1' && aal?.nextLevel === 'aal2') {
-      redirect('/mfa-challenge?next=/admin')
-    }
-  }
+  // Aucune double authentification exigée : l'accès admin repose uniquement sur
+  // la liste blanche d'adresses ET le rôle `admin` en base.
 
   return (
     <div className="min-h-screen bg-gray-950 flex">

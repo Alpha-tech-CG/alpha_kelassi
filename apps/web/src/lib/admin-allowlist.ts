@@ -25,18 +25,3 @@ export function isAllowedAdminEmail(email: string | null | undefined): boolean {
   if (!email) return false
   return allowlist().includes(email.toLowerCase())
 }
-
-/**
- * La double authentification est-elle exigée pour ouvrir le back office ?
- *
- * Désactivée par défaut, sur décision explicite : l'accès reste protégé par la
- * liste blanche d'adresses ET le rôle `admin` en base. Le compromis assumé est
- * qu'un mot de passe administrateur volé suffirait alors à entrer — la page
- * /compte/securite reste disponible pour activer le TOTP quand souhaité.
- *
- * Pour re-verrouiller : `ADMIN_REQUIRE_MFA=true` dans les variables
- * d'environnement, sans modification de code.
- */
-export function adminMfaRequired(): boolean {
-  return process.env['ADMIN_REQUIRE_MFA'] === 'true'
-}
