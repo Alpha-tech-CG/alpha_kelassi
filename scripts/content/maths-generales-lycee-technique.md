@@ -152,7 +152,7 @@ $x \to + 0 x \to + \infty$
 
 ##### d. Limites et Branches infinies
 
-Soit ( ∁), la courbe représentant les variations de f dans un repère (o, i⃗ , j⃗ )
+Soit ( ∁), la courbe représentant les variations de f dans un repère (o, i , j )
 On dit qu’une droite (D) : x = a($a \in \mathbb{R}$) est asymptote verticale
 à( ∁) si lim f(x) = +$\infty$
 
@@ -400,25 +400,25 @@ f’{x ⟶ f’(x)
 
 | Fonction ( f ) | Dérivée ( f ’ ) |  |
 | --- | --- | --- |
-| ( ) a a \in \mathbb{R} | 0 |  |
+| $( ) a a \in \mathbb{R}$ | 0 |  |
 | x | 1 |  |
-| x^{n} | - 1 nx^{n} |  |
-| ( )^{n} ax + b | 1 ( )^{n-} an ax + b |  |
-| ax^{2} + bx + c | 2 ax + b |  |
+| $x^{n}$ | $- 1 nx^{n}$ |  |
+| $( )^{n} ax + b$ | $1 ( )^{n-} an ax + b$ |  |
+| $ax^{2} + bx + c$ | 2 ax + b |  |
 | 1 | 1 - |  |
-| x | x^{2} |  |
-| x \sqrt | 1 |  |
-|  | 2 x \sqrt |  |
-| U \pm V | U’ \pm V’ |  |
+| x | $x^{2}$ |  |
+| $x \sqrt{\;}$ | 1 |  |
+|  | $2 x \sqrt{\;}$ |  |
+| $U \pm V$ | $U’ \pm V’$ |  |
 | U . V | U’ . V + U . V’ |  |
 | U | U’ . V - U . V ’ |  |
-| V | V^{2} |  |
-| U^{n} | - 1 n U’ . U^{n} |  |
+| V | $V^{2}$ |  |
+| $U^{n}$ | $- 1 n U’ . U^{n}$ |  |
 |  | U ’ |  |
-| \sqrt U |  |  |
-|  | 2 U \sqrt |  |
+| $\sqrt{U}$ |  |  |
+|  | $2 U \sqrt{\;}$ |  |
 | 1 | U ’ - |  |
-| U | U^{2} |  |
+| U | $U^{2}$ |  |
 | cos x | - sin x |  |
 | sin x | cos x |  |
 | tan x | 1 1 + tan ² x = |  |
@@ -427,7 +427,7 @@ f’{x ⟶ f’(x)
 |  | sin ² x |  |
 | ( ) cos ax + b | ( ) - a sin ax + b |  |
 | ( ) sin ax + b | ( ) cos ax + b |  |
-| λ . U avec λε \mathbb{R} | λ . U ’ |  |
+| $λ . U avec λε \mathbb{R}$ | λ . U ’ |  |
 |  |  | 19 |
 
 #### 3. Sens de variation
@@ -563,7 +563,7 @@ f(x) = { $\frac{4}{x - 3}$
 
 ##### x - 3 + , si x > - 1
 
-(C) désigne la courbe représentative de f dans un repère orthonormé (O, i⃗ , j⃗ ) du plan
+(C) désigne la courbe représentative de f dans un repère orthonormé (O, i , j ) du plan
 (Unité graphique 1 cm).
 - 1. Déterminer a pour que la fonction f soit continue en $x_{0} =$ - 1
 - 2. On pose a = - 8, Etudier la dérivabilité de f au point $x_{0} =$ - 1
@@ -717,7 +717,7 @@ $. Z_{4} =$ - 3 - 7$i \to Z_{4}$ = 3 + 7i $;$ si Z = $ib \to Z$ = - ib
 
 #### 2. Représentation géométrique d’un nombre complexe
 
-Le plan P est muni d’un repère orthonormé direct (o$, e_{1}$⃗ ⃗ ⃗ ⃗ , $e_{2}$⃗ ⃗ ⃗ ⃗ ) (plan complexe)
+Le plan P est muni d’un repère orthonormé direct (o$, e_{1} , e_{2}$ ) (plan complexe)
 Tout nombre complexe correspond à un point et un seul. Au nombre complexe
 Z = a + ib correspond le point M(a). On dit que M(a) est le point image de
 
@@ -725,18 +725,18 @@ $b b$
 
 $Z = a + ib , Z$ est l’affixe du point $M$
 
-| u ⃗ ⃗ | axe réel |  |
+| u | axe réel |  |
 | --- | --- | --- |
-| ⃗ e_{1} ⃗ ⃗ ⃗ | a |  |
+| $e_{1}$ | a |  |
 |  |  | 28 |
 
 $b M$
 
 axe imaginaire
 
-$e_{2}$⃗ ⃗⃗ ⃗
+$e_{2}$
 
-U⃗⃗⃗ = ⃗OM⃗ ⃗ ⃗ ⃗ ⃗ ⃗
+$U = OM$
 
 #### 3. Propriétés
 
@@ -784,13 +784,13 @@ $\sqrt{2}$
 
 $b$
 
-$e_{2}$⃗ ⃗⃗ ⃗
+$e_{2}$
 
-0 ⃗$e_{1}$⃗ ⃗ ⃗ a
+0 $e_{1} a$
 
 ##### b. Interprétation géométrique
 
-|Z| = ‖⃗OM⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ‖ = OM
+|Z| = ‖OM ‖ = OM
 Exemple :
 Calculons les modules des nombres complexes suivants.
 
@@ -851,20 +851,21 @@ $2$
 
 1.1. Définition
 Soit Z un nombre complexe non nul et M son image dans le plan complexe.
-On appelle argument de Z toute mesure de l’angle orienté ($e_{1}$⃗ ⃗ ⃗ ⃗ , ⃗OM⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ) en
+On appelle argument de Z toute mesure de l’angle orienté ($e_{1}$ , OM ) en
 radian.
 |Z| = OM
 
 $b$
 
-e⃗ ⃗⃗ ⃗
+$e$
 
-$\frac{2}{0 a} \frac{θ}{⃗ e_{1} ⃗ ⃗ ⃗}$
+$\frac{2}{0 a} \frac{θ}{e_{1}}$
 
 NB :
 Pour trouver l’argument d’un nombre complexe, Z,
 On calcul :
-- 1) Son module |Z| = $ρ$ = ‖⃗OM⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ‖ = $\sqrt{a^{2} + b^{2}}$
+
+#### 1) Son module |Z| = $ρ$ = ‖OM ‖ = $\sqrt{a^{2} + b^{2}}$
 
 #### 2) On pose $θ$ = arg(Z)[2$π$]
 
@@ -945,11 +946,8 @@ Or arg(Z){
 
 $sinθ = \frac{| Z b |}{| Z |}$ ⟹ b = |Z|$sinθ$
 
-Ainsi Z = a + ib ⟹ Z = |Z|$cosθ$ + i|Z|$sinθ$
-
-$\frac{⟹ Z = | Z | [ cosθ + i sinθ ]}{Z = | Z | [ cosθ + i sinθ ]}$
-
-On appelle forme trigonométrique de Z l’écriture
+Ainsi Z = a + ib ⟹ Z = |Z|$cosθ$ + i|Z|$sinθ$ ⟹ Z = |Z|[$cosθ$ + i $sinθ$]
+On appelle forme trigonométrique de Z l’écriture Z = |Z|[$cosθ$ + i $sinθ$]
 Activité :
 Déterminons la forme trigonométrique des nombres complexes suivants.
 
@@ -967,7 +965,7 @@ Or $Z_{1}$ = |$Z_{1}$ |[$cosθ$ + isinθ] d’où
 
 | 2π 2π |  |
 | --- | --- |
-| Z_{1} = cos + i sin |  |
+| $Z_{1} = cos + i sin$ |  |
 | 3 3 | 34 |
 
 $Z_{2} = \sqrt{\;}$3 + $i \to$ |$Z_{2}$ | = 2
@@ -1121,11 +1119,9 @@ $cosθ = \sqrt{2}$
 
 |$Z_{1}$ | = 2 ⟹ arg($Z_{1}$ ){ ⟹ $θ = \frac{π}{4}$ [2$π$] ⟹ $Z_{1}$ = [$\sqrt{\;}$2; $\frac{π}{4}$]
 
-$sinθ \sqrt{2}$
+$sinθ = \sqrt{2}$
 
-$\frac{=}{\frac{π}{4}}$
-
-arg$( Z_{1}$ ) = [$2π$]
+arg$( Z_{1}$ ) = $\frac{π}{4}$ [$2π$]
 
 cos$\theta = \frac{1}{2}$
 
@@ -1173,7 +1169,7 @@ sin = =
 
 { 2$\sqrt{\;}$
 
-| 7 π 2 - 6 \sqrt \sqrt cos = | 7 π 2 + 6 \sqrt \sqrt sin = |
+| $7 π 2 - 6 \sqrt{\sqrt{\;} cos =}$ | $7 π 2 + 6 \sqrt{\sqrt{\;} sin =}$ |
 | --- | --- |
 | 12 4 | 12 4 |
 
@@ -1192,7 +1188,7 @@ $\frac{1}{Z} = cosθ$ - isinθ = $e^{-iθ}$
 
 Z $+ \frac{1}{Z}$ = 2$cosθ = e^{iθ} + e^{-} iθ \Rightarrow cosθ = \frac{e^{iθ} + e^{-} iθ}{2}$
 
-| e^{iθ} - e^{-iθ} |  |
+| $e^{iθ} - e^{-iθ}$ |  |
 | --- | --- |
 | sinθ = |  |
 | 2i | 39 |
@@ -1391,11 +1387,12 @@ $\sqrt{\;}$
 $Z_{0} = 3 \sqrt{2}$[$cos \frac{π}{9} +$ i $sin \frac{π}{9}$]
 
 Si k = 0 :
-Si k = 1 : 3
 
-$\frac{Z_{1} = \sqrt{2}^{[} cos \frac{7π}{9}}{+ i sin 7π ]}$
+Si k = 1 : $Z_{1} = 3 \sqrt{2}$[$cos \frac{7π}{9}$
 
-$\frac{9}{3 \frac{13π}{9} \frac{13π}{9}}$
+$7π$
+
+$\frac{+ i sin 9 ]}{3 \frac{13π}{9} \frac{13π}{9}}$
 
 Si k = 2 : $Z_{2} = \sqrt{2}$[cos + i sin ]
 
@@ -1411,11 +1408,11 @@ $\Rightarrow$ [|$Z |^{4}$ ;4$θ$] = [$\sqrt{\;}$2; $\frac{3 π}{4}$] $\Rightarro
 
 4$\sqrt{\;}$
 
-|Z| $\sqrt{4 \frac{3 π}{16} \frac{kπ}{2}}$
+|Z| = $\sqrt{4 \frac{3 π}{16} \frac{kπ}{2}}$
 
-{ d’où$Z_{k}$ = [$\sqrt{\sqrt{\;}}$2; + ]
+{ 3$π$ d’où$Z_{k}$ = [$\sqrt{\sqrt{\;}}$2; + ]
 
-$θ = \frac{= 3 π}{16} + \frac{kπ 2}{2}$
+$θ$ = + $\frac{kπ 2}{2}$
 
 $Z_{k} = \sqrt{\sqrt{\;}}$2[cos $( \frac{3 π}{16} + \frac{kπ}{2}$) + i sin $( \frac{3 π}{16} + \frac{kπ}{2}$)]
 
@@ -1432,7 +1429,7 @@ $4$
 
 - si k = 2 ; $Z_{2} = \sqrt{\sqrt{\;} 2}$ [$cos \frac{19π}{16}$ + +i $sin \frac{19π}{16}$]
 
-| 4 27π 27π \sqrt Z_{3} = 2 [ cos + i sin ] \sqrt |  |
+| $4 27π 27π \sqrt{Z_{3} = 2 [ cos + i sin ] \sqrt{\;}}$ |  |
 | --- | --- |
 | 16 16 |  |
 |  | 44 |
@@ -1480,16 +1477,14 @@ distinctes
 
 $Z_{1} = \frac{- b’- \sqrt{\;} \Delta’}{a}$ ⟹ $Z_{1} =$ - 2i $- \sqrt{\;}$4 ⟹ $Z_{1} =$ - 2 - 2i
 
-$Z_{2} = \frac{- b’+ \sqrt{\Delta’}}{a}$ ⟹ $Z_{2} = - 2 i$
+$Z_{2} = \frac{- b’+ \sqrt{\Delta’}}{a}$ ⟹ $Z_{2} =$ - 2i $+ \sqrt{\;}$4 ⟹ $Z_{2}$ = 2 - 2i
 
-$\frac{- 2 i + \sqrt{\;} 4 ⟹ Z_{2} = 2}{S = { - 2 - 2i ; 2 - 2i }}$
-
-D’où
+D’où S = {- 2 - 2i$;$2 - 2i}
 $2^{ème}$ Cas $si \Delta =$ 0 $ou \Delta’=$ 0, alors l’équation admet une racine double.
 
-| - b Z_{1} = Z_{2} = |  | - b ’ |
+| $- b Z_{1} = Z_{2} =$ |  | - b ’ |
 | --- | --- | --- |
-|  | o u | Z_{1} = Z_{2} = |
+|  | o u | $Z_{1} = Z_{2} =$ |
 | 2 a |  | a |
 
 Exemple : Résolvons dans $\mathbb{C}$ l’équation suivante :
@@ -1506,9 +1501,9 @@ D’où S = {$- \frac{1}{2}$}
 3ème Cas $si \Delta$< 0 $ou \Delta’$ < 0, alors l’équation admet deux racines complexes
 conjuguées
 
-|  |  | \sqrt \| \| \| \| - b ’ - i \Delta ’ - b ’ + i \sqrt \Delta |
+|  |  | $\sqrt{\| \| \| \| - b ’ - i \Delta ’ - b ’ + i \sqrt{\;} \Delta}$ |
 | --- | --- | --- |
-| - b - i \sqrt \| \Delta ’ \| - b + i \sqrt \| \Delta \| Z_{1} = et Z_{2} = |  | Z_{1} = et Z_{2} = |
+| $- b - i \sqrt{\| \Delta ’ \| - b + i \sqrt{\;} \| \Delta \| Z_{1} = et Z_{2} =}$ |  | $Z_{1} = et Z_{2} =$ |
 | a 2a | ou | a a |
 
 Exemple :
@@ -1524,11 +1519,9 @@ $Z_{1} = \frac{- b - i \sqrt{| \Delta’|}}{a}$ ⟹ $Z_{1} = \frac{- ( 2 + i ) -
 
 $Z_{1} = \frac{- 2 - 2 i}{1 + i} \Rightarrow Z_{1} = \frac{- 2 ( 1 + i ) ( 1 - i )}{( 1 + i ) ( 1 - i )} \Rightarrow Z_{1} = -$2
 
-$Z_{2} = \frac{- ( 2 + i ) + i \sqrt{| - 1 |}}{1 + i} \Rightarrow Z = \frac{- 2 - i + i}{1 + i} \Rightarrow Z_{2} = \frac{- 2 ( 1 - i )}{( 1 + i ) ( 1 - i )} \Rightarrow Z_{2} =$ - 1 + i
+$Z_{2} = \frac{- ( 2 + i ) + i \sqrt{| - 1 |}}{1 + i} \Rightarrow Z_{2} = \frac{- 2 - i + i}{1 + i} \Rightarrow Z_{2} = \frac{- 2 ( 1 - i )}{( 1 + i ) ( 1 - i )} \Rightarrow Z_{2} =$ - 1 + i
 
-$\frac{2}{S = { - 2 ; - 1 + i }}$
-
-D’où
+D’où S = {- 2$;$ - 1 + i}
 - b) $Z^{2} -$ (2 + i) Z + 3 + i = 0 avec a = 1; b = - (2 + i) et c = 3 + i
 
 $\Delta = b^{2} -$ 4$ac \Rightarrow \Delta$= [- (2 + i$) ]^{2} -$ 4(1)(3 + i)
@@ -1538,11 +1531,9 @@ deux racines complexes conjuguées
 
 $Z_{1} = \frac{- b - i \sqrt{| \Delta |}}{2 a} \Rightarrow Z_{1} = \frac{2 + i - i \sqrt{| - 9 |}}{2} \Rightarrow Z_{1} = \frac{2 + i - 3 i}{2} \Rightarrow Z_{1}$ = 1 - i
 
-$Z_{2} = \frac{- b + i \sqrt{| \Delta |}}{2 a} \frac{2 + i + i \sqrt{| - 9 |}}{2} \Rightarrow Z_{2} = \frac{2 + i + 3 i}{2} \Rightarrow Z_{2}$ = 1 + i
+$Z_{2} = \frac{- b + i \sqrt{| \Delta |}}{2 a} \Rightarrow Z_{2} = \frac{2 + i + i \sqrt{| - 9 |}}{2} \Rightarrow Z_{2} = \frac{2 + i + 3 i}{2} \Rightarrow Z_{2}$ = 1 + i
 
-$\frac{\Rightarrow Z_{2} =}{S = { 1 - i ; 1 + 2i }}$
-
-D’où
+D’où S = {1 - i$;$ 1+ 2i}
 
 4ème Cas $si \Delta =$ a + ib $ou \Delta’=$ a + ib($b \neq 0$)
 
@@ -1597,20 +1588,18 @@ $Z_{1} =$ - 1 + 2i
 
 $Z_{2} = \frac{- b - \sqrt{\;} \Delta}{2 a} \Rightarrow Z_{2} = \frac{- b + z_{1}}{2 a} \Rightarrow Z_{2} = \frac{- 1 + 3 + 2 i}{2 i} \Rightarrow$
 
-$Z_{2}$
+$Z_{2}$ = 2 + 2$i \Rightarrow Z_{2}$ = 1 - i
 
-$\frac{= 2 + 2 i \Rightarrow Z_{2} = 1 - i}{S = { - 1 + 2i ; 1 - i }}$
-
-D’où
+D’où S = {- 1 + 2i$;$ 1 - i}
 - Exercice : Résoudre dans $\mathbb{C}$ les équations suivantes
 
 #### 1. $Z^{2} -$ (1 + 4i) Z + 7i - 9 = 0
 
-#### 2. $Z^{2} -$ 4Z + 5 + (Z + 1) 0
+#### 2. $Z^{2} -$ 4Z + 5 + (Z + 1) = 0
 
-$\frac{i}{3} \frac{=}{3}$
+$\frac{i}{3}$
 
-#### 3. $Z^{2} -$ 2(1 + $i \sqrt{)}$Z + 2$i \sqrt{\;}$ = 0
+#### 3. $Z^{2} -$ 2(1 + $i \sqrt{)}$Z + 2$i \sqrt{\;}$3 = 0
 
 #### 4. $Z^{2} -$ 2iZ - 2 = 0
 
@@ -1648,7 +1637,10 @@ $\Rightarrow$ {
 
 $α$ = 7 à retenir
 D’où $α$ = 7 est la solution réelle de P
-- 8. $\frac{Déterminons le polynôme du second degré tel que :}{P ( Z ) = ( Z - 7 ) ( aZ^{2} + bZ + c )}$
+
+#### 8. Déterminons le polynôme du second degré tel que :
+
+P(Z) = (Z - 7)($aZ^{2} +$ bZ + c)
 Schéma de HORNER
 
 |  | 1 | - 11 - 2i | 34 + 14i | - 42 |  |
@@ -1710,7 +1702,7 @@ Trouvons Q(z) = $aZ^{2} +$ bZ + c par le schéma de HORNER
 |  | 1 | - 2 - 4i | 7i | 3 - 9i |  |
 | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  | D’où a = 1 ; b = - 2 - i et c = 3 + i |
-| z_{i} |  | 3i | 3 - 6i | - 3 + 9i |  |
+| $z_{i}$ |  | 3i | 3 - 6i | - 3 + 9i |  |
 |  | 1 | - 2 - i | 3 + i | 0 |  |
 
 Donc
@@ -1758,9 +1750,9 @@ configuration du plan)
 
 .$\forall ($a, b$) \in \mathbb{R} ^{2} ( n \in \mathbb{N}$)
 
-| n | n ’ C^{P}_{n} = |
+| n | $n ’ C^{P}_{n} =$ |
 | --- | --- |
-| ( )^{n} a + b = \sum C^{P}_{n} a^{n-P} b^{P} P = 0 | ( ) P ! n - P ! |
+| $( )^{n} a + b = \sum C^{P}_{n} a^{n-P} b^{P} P = 0$ | ( ) P ! n - P ! |
 
 NB :
 Les valeurs de $C_{n}^{P}$ sont données par le triangle de PASCAL
@@ -1824,10 +1816,10 @@ cos4x + isin4x $= cos^{4} x$ + 4$i cos^{3}$ xsinx - 6c$o s^{2} x sin^{2} x$ - 4i
 
 D’où
 
-| cos4x = cos^{4} x - 6 cos^{2} x sin^{2} x |  |
+| $cos4x = cos^{4} x - 6 cos^{2} x sin^{2} x$ |  |
 | --- | --- |
-| + sin^{4} x | 53 |
-| sin4x = 4cos^{3} x sinx - 4cos sin^{3} x |  |
+| $+ sin^{4} x$ | 53 |
+| $sin4x = 4cos^{3} x sinx - 4cos sin^{3} x$ |  |
 
 1.2. Linéarisation
 Linéariser c’est transformer un polynôme en cosx et sinx en une somme
@@ -1902,38 +1894,36 @@ $C_{3}^{3} ( e^{ix}$ )($- e^{-} ix )^{3}$
 
 .($e^{ix} - e^{-} ix )^{3}$ = 2isin3x - 6isinx
 
-Or $sin^{3} x = \frac{1}{8} ix$ - ix 3 3 $\frac{1}{8} 3$x - 6isinx]
+Or $sin^{3} x = \frac{1}{8} i ( e^{ix} - e^{-} ix )^{3} \Rightarrow sin^{3} x = \frac{1}{8} i$[2isin3x - 6isinx]
 
-$\frac{i ( e - e ) \Rightarrow sin x = i [ 2 isin}{3}$
-
-sin x $= \frac{3}{4}$ sinx $- \frac{1}{4}$ sin3x
+$sin^{3} x = \frac{3}{4}$ sinx $- \frac{1}{4}$ sin3x
 
 #### 2. Nombre complexe et configuration du plan
 
 | Configuration |  |  |  |  | C | aracté risation geométrique | C aracterisation complexe |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  | A ̂ AB = AC et mes A = α | Z_{C} - Z_{A} = e^{iα} |  |
-| Triangle ABC isocèle en A |  | ⃗ | e_{2} ⃗ | ⃗ ⃗ |  | α ( ) 0 < α \leq π | Z_{B} - Z_{A} Ou Z_{C} - Z_{A} iα = e^{-} |  |
-|  |  |  |  |  | C | B | Z_{B} - Z_{A} |  |
-|  |  |  |  | 0 |  | e_{1} ⃗ ⃗ ⃗ ⃗ | k \neq kπ ( k \in \mathbb{Z} ) |  |
-|  |  |  |  |  |  | A \frac{π}{3} ̂ AB = AC et mes A = | Z_{C} - Z_{A} π / 3 = e^{i} |  |
-| Triangle ABC équilatéral | e_{2} ⃗ ⃗ ⃗ ⃗ |  |  |  | C | α B | Z_{B} - Z_{A} Ou Z_{C} - Z_{A} π i / 3 |  |
-|  |  |  |  |  |  |  | = e^{-} |  |
-|  | 0 |  |  |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ | Z_{B} - Z_{A} |  |
-|  |  |  |  |  |  | A \frac{π}{2} ̂ AB = AC et mes A = | Z_{C} - Z_{A} = i |  |
-| Triangle ABC rectangle et isocèle en A | e_{2} ⃗ ⃗ ⃗ ⃗ |  |  | C |  | α B | Z_{B} - Z_{A} Ou Z_{C} - Z_{A} = - i |  |
-|  | 0 |  |  |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ | Z_{B} - Z_{A} |  |
-| Triangle ABC | e_{2} ⃗ ⃗ ⃗ ⃗ |  |  |  | B | \frac{π}{2} \frac{π}{2} ̂ mes A = ou - | Z_{C} - Z_{A} = ib |  |
-| rectangle en A |  |  |  |  | A | C | Z_{B} - Z_{A} ( ) b \in \mathbb{R} ^{∗} |  |
-|  | 0 |  |  |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ |  |  |
-| Points A , B , C alignés | e_{2} ⃗ ⃗ ⃗ ⃗ |  |  |  |  | ̂ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ mes ( AB , AC ) = 0 ou π | Z_{C} - Z_{A} \in \mathbb{R} ^{∗} |  |
-|  |  |  |  |  |  |  | Z_{B} - Z_{A} |  |
-|  | 0 |  |  |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ |  |  |
-| Points ABC et D |  |  |  |  |  | ̂ ̂ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ A mes ( AB , AC ) = mes ( DA , DB ) = 0 ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ( ) mes ( CA , CB ) \neq 0 π | Z_{C} - Z_{B} |  |
-| cocycliques | e_{2} ⃗ ⃗ ⃗ ⃗ |  |  |  |  |  | Z_{C} - Z_{A} \in \mathbb{R} ^{∗} |  |
-|  |  |  |  |  |  |  | Z_{D} - Z_{B} |  |
-|  |  |  |  |  | C | B | Z_{D} - Z_{A} |  |
-|  |  | 0 |  |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ |  | 56 |
+|  |  |  |  |  |  | A AB = AC et mes A = α | $Z_{C} - Z_{A} = e^{iα}$ |  |
+| Triangle ABC isocèle en A |  |  | $e_{2}$ |  |  | $α ( ) 0 < α \leq π$ | $Z_{B} - Z_{A} Ou Z_{C} - Z_{A} iα = e^{-}$ |  |
+|  |  |  |  |  | C | B | $Z_{B} - Z_{A}$ |  |
+|  |  |  |  | 0 |  | $e_{1}$ | $k \neq kπ ( k \in \mathbb{Z} )$ |  |
+|  |  |  |  |  |  | $A \frac{π}{3} AB = AC et mes A =$ | $Z_{C} - Z_{A} π / 3 = e^{i}$ |  |
+| Triangle ABC équilatéral | $e_{2}$ |  |  |  | C | α B | $Z_{B} - Z_{A} Ou Z_{C} - Z_{A} π i / 3$ |  |
+|  |  |  |  |  |  |  | $= e^{-}$ |  |
+|  | 0 |  |  |  |  | $e_{1}$ | $Z_{B} - Z_{A}$ |  |
+|  |  |  |  |  |  | $A \frac{π}{2} AB = AC et mes A =$ | $Z_{C} - Z_{A} = i$ |  |
+| Triangle ABC rectangle et isocèle en A | $e_{2}$ |  |  | C |  | α B | $Z_{B} - Z_{A} Ou Z_{C} - Z_{A} = - i$ |  |
+|  | 0 |  |  |  |  | $e_{1}$ | $Z_{B} - Z_{A}$ |  |
+| Triangle ABC | $e_{2}$ |  |  |  | B | $\frac{π}{2} \frac{π}{2} mes A = ou -$ | $Z_{C} - Z_{A} = ib$ |  |
+| rectangle en A |  |  |  |  | A | C | $Z_{B} - Z_{A} ( ) b \in \mathbb{R} ^{∗}$ |  |
+|  | 0 |  |  |  |  | $e_{1}$ |  |  |
+| Points A , B , C alignés | $e_{2}$ |  |  |  |  | mes ( AB , AC ) = 0 ou π | $Z_{C} - Z_{A} \in \mathbb{R} ^{∗}$ |  |
+|  |  |  |  |  |  |  | $Z_{B} - Z_{A}$ |  |
+|  | 0 |  |  |  |  | $e_{1}$ |  |  |
+| Points ABC et D |  |  |  |  |  | $A mes ( AB , AC ) = mes ( DA , DB ) = 0 ( ) mes ( CA , CB ) \neq 0 π$ | $Z_{C} - Z_{B}$ |  |
+| cocycliques | $e_{2}$ |  |  |  |  |  | $Z_{C} - Z_{A} \in \mathbb{R} ^{∗}$ |  |
+|  |  |  |  |  |  |  | $Z_{D} - Z_{B}$ |  |
+|  |  |  |  |  | C | B | $Z_{D} - Z_{A}$ |  |
+|  |  | 0 |  |  |  | $e_{1}$ |  | 56 |
 
 - 3. Ecritures complexes des transformations ponctuelles(spécial TBG)
 3.1. Définition
@@ -2009,11 +1999,11 @@ Soit Z’= 2iZ + 1 - 2i l'écriture complexe d'une transformation ponctuelle
 
 3.2.2. Translation
 .Z’= aZ + b est une translation si a = 1 $\Rightarrow Z’$ = Z + b
-L’élément caractéristique est le vecteur de la translation v⃗ d’affixe b
+L’élément caractéristique est le vecteur de la translation v d’affixe b
 
 $R_{e} ( b$)
 
-⃗v⃗⃗ ( )
+v ( )
 
 $I_{m} ( b$)
 
@@ -2025,7 +2015,7 @@ L’écriture complexe est de la forme = aZ + b avec a = 1 et b = 3 - i. Il s’
 $\frac{Z’}{3}$
 
 d’une translation du vecteur
-v⃗⃗ ⃗ ( )
+v ( )
 
 $- 1$
 
@@ -2095,7 +2085,7 @@ $sinθ = - \sqrt{2}$
 
 - 1. Résous dans $\mathbb{C}$ l’équation :$Z^{3}$ + (4 - 4i$) Z^{2} -$ 12iZ - 8 - 8i = 0 sachant
 qu’elle admet une solution réelle et une solution imaginaire pure.
-- 2. On considère dans le plan complexe muni d’un repère (o$, e_{1}$⃗ ⃗ ⃗ ⃗ , $e_{2}$⃗ ⃗ ⃗ ⃗ ) les points
+- 2. On considère dans le plan complexe muni d’un repère (o$, e_{1} , e_{2}$ ) les points
 A, B et C d’affixes respectives $Z_{A}$ = 2i$; Z_{B} =$ - 2 + 2i $et Z_{C} =$ - 2
 - a. Calcule $\frac{Z_{A} - Z_{B}}{Z_{C} - Z_{B}}$ en déduire la nature du triangle ABC.
 - 3. Soit S la similitude plane directe telle que : S(A) = B et S(B) = C
@@ -2123,32 +2113,31 @@ transformations du plan.
 Dans ce tableau, M(Z) et M’(Z’) désignent un point et son image ainsi que leurs affixes,
 par chacune de ces transformations.
 
-| Transformation |  |  |  |  | Image | M ’ d’un point | M | Définition géométrique | Ecriture complexe |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Translation de vecteur u ⃗ ⃗ ( a ) | ⃗ ⃗ | e_{2} ⃗ ⃗ |  |  |  |  |  | ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ MM ’ = u ⃗ ⃗ | Z’ = Z + a |
-|  | 0 |  |  |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ |  |  |  |
-| Symétrie de centre \Omega ( ω ) |  |  |  |  |  |  |  | ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ \Omega M ’ = - \Omega M | ( ) Z’ - ω = - Z - ω |
-|  | 0 | e_{2} ⃗ ⃗ | ⃗ ⃗ |  | ⃗ | e_{1} ⃗ ⃗ ⃗ |  |  |  |
-| Symétrie par rapport |  |  |  |  |  |  | M | O M’ = OM { | Z ’ = Z |
-|  |  |  |  |  |  |  |  | ̂ ̂ |  |
-| à l’axe réel | 0 | ⃗ ⃗ | e_{2} ⃗ ⃗ |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ | M’ | ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ (_{1} e ⃗ ⃗ ⃗ ⃗ , OM ) = - ( e_{1} ⃗ ⃗ ⃗ ⃗ , OM ) |  |
-| Symétrie p ar rapport |  |  |  |  |  | M |  |  |  |
-| à l’axe imaginaire |  | M’ |  | ⃗ | e_{2} ⃗ ⃗ ⃗ |  |  | O M’ = OM { ̂ ̂ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ( e_{1} ⃗ ⃗ ⃗ ⃗ , OM ’ ) = - ( e_{1} ⃗ ⃗ ⃗ ⃗ , OM ) | Z ’ = - Z |
-|  |  |  |  |  | 0 | ⃗ e_{1} ⃗ ⃗ ⃗ |  |  |  |
-| Homothétie de centre \Omega ( ω ) et de rapport k | e_{2} ⃗ ⃗ ⃗ ⃗ |  |  |  |  |  |  | ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ \Omega M ’ = k \Omega M | Z’ - ω = k ( Z - ω ) |
-|  |  |  | 0 |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ |  |  |  |
-| Rotation de ce ntre \Omega ( ω ) et d’angle α | e_{2} ⃗ ⃗ ⃗ ⃗ |  |  |  |  | α |  | \Omega M’ = \Omega M { ̂ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ ⃗ [ ] Mes ( \Omega M , \Omega M ’ ) = α 2 π | ( ) Z’ - ω = e^{iα} Z - ω ou z ’ - ω = e^{iα} |
-|  |  |  |  |  |  |  |  |  | z - ω |
-|  |  |  |  |  |  | ⃗ e_{1} ⃗ ⃗ ⃗ | M’ |  |  |
+| Transformation |  |  |  | Image | M ’ d’un point | M | Définition géométrique | Ecriture complexe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Translation de vecteur u ( a ) |  | $e_{2}$ |  |  |  |  | MM ’ = u | Z’ = Z + a |
+|  | 0 |  |  |  | $e_{1}$ |  |  |  |
+| $Symétrie de centre \Omega ( ω )$ |  |  |  |  |  |  | $\Omega M ’ = - \Omega M$ | ( ) Z’ - ω = - Z - ω |
+|  | 0 | $e_{2}$ |  |  | $e_{1}$ |  |  |  |
+| Symétrie par rapport |  |  |  |  |  | M | O M’ = OM { | Z ’ = Z |
+| à l’axe réel | 0 |  | $e_{2}$ |  | $e_{1}$ | M’ | $(_{1} e , OM ) = - ( e_{1} , OM )$ |  |
+| Symétrie p ar rapport |  |  |  |  | M |  |  |  |
+| à l’axe imaginaire |  | M’ |  | $e_{2}$ |  |  | $O M’ = OM { ( e_{1} , OM ’ ) = - ( e_{1} , OM )}$ | Z ’ = - Z |
+|  |  |  |  | 0 | $e_{1}$ |  |  |  |
+| $Homothétie de centre \Omega ( ω ) et de rapport k$ | $e_{2}$ |  |  |  |  |  | $\Omega M ’ = k \Omega M$ | Z’ - ω = k ( Z - ω ) |
+|  |  |  | 0 |  | $e_{1}$ |  |  |  |
+| $Rotation de ce ntre \Omega ( ω ) et d’angle α$ | $e_{2}$ |  |  |  | α |  | $\Omega M’ = \Omega M { [ ] Mes ( \Omega M , \Omega M ’ ) = α 2 π}$ | $( ) Z’ - ω = e^{iα} Z - ω ou z ’ - ω = e^{iα}$ |
+|  |  |  |  |  |  |  |  | z - ω |
+|  |  |  |  |  | $e_{1}$ | M’ |  |  |
 
 Tableau trigonométrique des valeurs utiles
 
 | 0 | 0 0° | π / 6 30° | π / 4 45° | π / 3 60 ° | π / 2 90° | 2 π / 3 120° | 3 π / 4 135° | 5 π / 6 150° | π 180° | 7 π / 6 210° | 5 π / 4 225° | 4 π / 3 240° | 3 π / 2 270° | 5 π / 3 300° | 7 π / 4 315° | 11 π / 6 330° | 2 π 360° |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| sinθ | 0 | 1 / 2 | 2 \sqrt / 2 | 3 \sqrt / 2 | 1 | 3 \sqrt / 2 | 2 \sqrt / 2 | 1 / 2 | 0 | - 1 / 2 | - 2 \sqrt / 2 | - 3 \sqrt / 2 | - 1 | - 3 \sqrt / 2 | - 2 \sqrt / 2 | - 1 / 2 | 0 |
-| cosθ | 1 | 3 \sqrt / 2 | 2 \sqrt / 2 | 1 / 2 | 0 | - 1 / 2 | - 2 \sqrt / 2 | - 3 \sqrt / 2 | - 1 | - 3 \sqrt / 2 | - 2 \sqrt / 2 | - 1 / 2 | 0 | 1 / 2 | 2 / 2 | 3 \sqrt / 2 | 1 |
-| tanθ | 0 | 3 \sqrt / 3 | 1 | \sqrt 3 |  | - \sqrt 3 | - 1 | - 3 \sqrt / 3 | 0 | 3 \sqrt / 3 | 1 | \sqrt 3 |  | - \sqrt 3 | - 1 | - 3 \sqrt / 3 | 0 |
-| cotanθ |  | \sqrt 3 | 1 / 2 | 3 \sqrt / 3 | 0 | - 3 \sqrt / 3 | - 1 | - \sqrt 3 |  | \sqrt 3 | 1 | 3 \sqrt / 3 | 0 | - 3 \sqrt / 3 | - 1 | - \sqrt 3 |  |
+| sinθ | 0 | 1 / 2 | $2 \sqrt{/ 2}$ | $3 \sqrt{/ 2}$ | 1 | $3 \sqrt{/ 2}$ | $2 \sqrt{/ 2}$ | 1 / 2 | 0 | - 1 / 2 | $- 2 \sqrt{/ 2}$ | $- 3 \sqrt{/ 2}$ | - 1 | $- 3 \sqrt{/ 2}$ | $- 2 \sqrt{/ 2}$ | - 1 / 2 | 0 |
+| cosθ | 1 | $3 \sqrt{/ 2}$ | $2 \sqrt{/ 2}$ | 1 / 2 | 0 | - 1 / 2 | $- 2 \sqrt{/ 2}$ | $- 3 \sqrt{/ 2}$ | - 1 | $- 3 \sqrt{/ 2}$ | $- 2 \sqrt{/ 2}$ | - 1 / 2 | 0 | 1 / 2 | 2 / 2 | $3 \sqrt{/ 2}$ | 1 |
+| tanθ | 0 | $3 \sqrt{/ 3}$ | 1 | $\sqrt{3}$ |  | $- \sqrt{3}$ | - 1 | $- 3 \sqrt{/ 3}$ | 0 | $3 \sqrt{/ 3}$ | 1 | $\sqrt{3}$ |  | $- \sqrt{3}$ | - 1 | $- 3 \sqrt{/ 3}$ | 0 |
+| cotanθ |  | $\sqrt{3}$ | 1 / 2 | $3 \sqrt{/ 3}$ | 0 | $- 3 \sqrt{/ 3}$ | - 1 | $- \sqrt{3}$ |  | $\sqrt{3}$ | 1 | $3 \sqrt{/ 3}$ | 0 | $- 3 \sqrt{/ 3}$ | - 1 | $- \sqrt{3}$ |  |
 
 Principales relations
 
@@ -2168,16 +2157,16 @@ $\frac{π}{2} \frac{sinθ}{cosθ} . sin^{2} θ + cos^{2} θ$ = 1
 | --- | --- | --- | --- |
 | ( ) sin θ + π = - sinθ | ( ) cos θ + π = - cosθ | ( ) tan θ + π = tanθ | ( ) cotan θ + π = cotanθ |
 | ( ) sin π - θ = sinθ | ( ) cos π - θ = - cosθ | ( ) tan π - θ = - tanθ | ( ) cotan π - θ = - cotanθ |
-| \frac{π}{2} sin ( θ + ) = cosθ | \frac{π}{2} cos ( θ + ) = - sinθ | \frac{π}{2} tan ( θ + ) = - cotanθ | \frac{π}{2} cotan ( θ + ) = - tanθ |
-| \frac{π}{2} sin ( - θ ) = cosθ | \frac{π}{2} cos ( - θ ) = sinθ | \frac{π}{2} tan ( - θ ) = cotanθ | \frac{π}{2} cotan ( - θ ) = tanθ |
+| $\frac{π}{2} sin ( θ + ) = cosθ$ | $\frac{π}{2} cos ( θ + ) = - sinθ$ | $\frac{π}{2} tan ( θ + ) = - cotanθ$ | $\frac{π}{2} cotan ( θ + ) = - tanθ$ |
+| $\frac{π}{2} sin ( - θ ) = cosθ$ | $\frac{π}{2} cos ( - θ ) = sinθ$ | $\frac{π}{2} tan ( - θ ) = cotanθ$ | $\frac{π}{2} cotan ( - θ ) = tanθ$ |
 
-| π / 4 |  |  | 2 2 \sqrt{2} / 2 |  | π / 4 |
+| π / 4 |  |  | $2 2 \sqrt{2} / 2$ |  | π / 4 |
 | --- | --- | --- | --- | --- | --- |
 |  |  |  | 1 / 2 |  |  |
-| 2 / 3 \sqrt - | 2 / 2 \sqrt - | - 1 / 2 | sin co s | 1 / 2 | \sqrt{2} / 2 |
+| $2 / 3 \sqrt{-}$ | $2 / 2 \sqrt{-}$ | - 1 / 2 | sin co s | 1 / 2 | $\sqrt{2} / 2$ |
 |  |  |  | - 1 / 2 |  |  |
-|  |  |  | - \sqrt{2} / 2 |  |  |
-| π / 4 |  |  | - \sqrt{3} / 2 |  | 7 |
+|  |  |  | $- \sqrt{2} / 2$ |  |  |
+| π / 4 |  |  | $- \sqrt{3} / 2$ |  | 7 |
 
 2$π / π π$
 
@@ -2205,14 +2194,14 @@ $π / = - \frac{π}{4}$
 
 Formules d’addition Formules de duplication
 
-| ( ) cos θ + θ ’ = cosθ . cos θ’ - sinθ . sinθ ’ | ( ) cos θ - θ ’ = cosθ . cos θ’ + sinθ . sinθ ’ | cos 2 θ = cos^{2} θ - sin^{2} θ | 1 + cos 2 θ cos^{2} θ = |
+| ( ) cos θ + θ ’ = cosθ . cos θ’ - sinθ . sinθ ’ | ( ) cos θ - θ ’ = cosθ . cos θ’ + sinθ . sinθ ’ | $cos 2 θ = cos^{2} θ - sin^{2} θ$ | $1 + cos 2 θ cos^{2} θ =$ |
 | --- | --- | --- | --- |
 |  |  |  | 2 |
-| ( ) sin θ + θ ’ = sinθ . cos θ’ + cosθ . sinθ ’ | ( ) sin θ - θ ’ = sinθ . cos θ’ - cosθ . sinθ ’ | cos 2 θ = 2 cos^{2} θ - 1 | 1 - cos 2 θ sin^{2} θ = |
+| ( ) sin θ + θ ’ = sinθ . cos θ’ + cosθ . sinθ ’ | ( ) sin θ - θ ’ = sinθ . cos θ’ - cosθ . sinθ ’ | $cos 2 θ = 2 cos^{2} θ - 1$ | $1 - cos 2 θ sin^{2} θ =$ |
 |  |  |  | 2 |
 | tanθ + tanθ ’ | tanθ - tanθ ’ ( ) an θ - θ ’ = |  | 2 tanθ tan 2 θ = |
-| ( ) tan θ + θ’ = |  | cos 2 θ = 1 - 2 sin^{2} θ |  |
-| 1 - tanθ . tanθ ’ | 1 + tanθ . tanθ ’ |  | 1 tan^{2} θ |
+| ( ) tan θ + θ’ = |  | $cos 2 θ = 1 - 2 sin^{2} θ$ |  |
+| 1 - tanθ . tanθ ’ | 1 + tanθ . tanθ ’ |  | $1 tan^{2} θ$ |
 |  |  | sin 2 θ = 2 sinθ . cosθ |  |
 
 | Transformation de somme en produit | Transformation de produit en somme |
@@ -2229,19 +2218,19 @@ Formules d’addition Formules de duplication
 
 Tangente de l’angle moitié
 
-| Etant donné α réel, \frac{α}{2} \frac{α}{2} 1 + cosα = 2 cos^{2} 1 - sinα = 2 sin^{2} | \frac{π}{2} \frac{α}{2 ,} ( ) Pour tout α \neq π 2 π et α \neq ( π ) , en posant t = tan 2 t 2 t 1 - t^{2} tanα = sinα = cosα = |
+| $Etant donné α réel, \frac{α}{2} \frac{α}{2} 1 + cosα = 2 cos^{2} 1 - sinα = 2 sin^{2}$ | $\frac{π}{2} \frac{α}{2 ,} ( ) Pour tout α \neq π 2 π et α \neq ( π ) , en posant t = tan 2 t 2 t 1 - t^{2} tanα = sinα = cosα =$ |
 | --- | --- |
-|  | 1 - t^{2} 1 + t^{2} 1 + t^{2} |
+|  | $1 - t^{2} 1 + t^{2} 1 + t^{2}$ |
 
 Equations trigonométriques
 
-| α est un élément donné de l’ensemble | Equation : x \in R | Les solutions de l’équation |
+| α est un élément donné de l’ensemble | $Equation : x \in R$ | Les solutions de l’équation |
 | --- | --- | --- |
-| R | sinx = sinα | α + 2 kπ et π - α + 2 kπ , avec kε \mathbb{Z} |
-| R | cosx = cosα | α + 2 kπ - α + 2 kπ , avec kε \mathbb{Z} |
-| π R - { + kπ } | tanx = tanα | α + kπ , avec kε \mathbb{Z} |
+| R | sinx = sinα | $α + 2 kπ et π - α + 2 kπ , avec kε \mathbb{Z}$ |
+| R | cosx = cosα | $α + 2 kπ - α + 2 kπ , avec kε \mathbb{Z}$ |
+| π R - { + kπ } | tanx = tanα | $α + kπ , avec kε \mathbb{Z}$ |
 | 2 |  |  |
-| { } R - 0 + kπ | cotanx = cotanα | α + kπ , avec kε \mathbb{Z} |
+| { } R - 0 + kπ | cotanx = cotanα | $α + kπ , avec kε \mathbb{Z}$ |
 
 ### FICHE N° 3
 
@@ -2317,27 +2306,27 @@ F$( x_{0}$ ) = $y_{0}$
 
 | Fonctions f | Primitives F |
 | --- | --- |
-| a , ( a \in \mathbb{R} ) | ax + C |
-|  | + 1 x^{n} + C |
-| x^{n} , ( n \neq - 1 ) | n + 1 |
-| a , ( n \neq 1 ) | a - + C |
-| x^{n} | - 1 ( n - 1 ) n^{n} |
-| ( ax + b )^{n} , ( n \neq - 1 ) | + 1 1 ( ax + b )^{n} + C |
+| $a , ( a \in \mathbb{R} )$ | ax + C |
+|  | $+ 1 x^{n} + C$ |
+| $x^{n} , ( n \neq - 1 )$ | n + 1 |
+| $a , ( n \neq 1 )$ | a - + C |
+| $x^{n}$ | $- 1 ( n - 1 ) n^{n}$ |
+| $( ax + b )^{n} , ( n \neq - 1 )$ | $+ 1 1 ( ax + b )^{n} + C$ |
 |  | a n + 1 |
-| U’ U^{n} , ( n \neq - 1 ) | + 1 U^{n} + C |
+| $U’ U^{n} , ( n \neq - 1 )$ | $+ 1 U^{n} + C$ |
 |  | n + 1 |
 | U ’ | 1 - + C |
-| , ( n \neq - 1 ) |  |
-| U^{n} | - 1 ( n - 1 ) U^{n} |
+| $, ( n \neq - 1 )$ |  |
+| $U^{n}$ | $- 1 ( n - 1 ) U^{n}$ |
 | U ’ |  |
-| U \sqrt | 2 \sqrt U + C |
-| U ’ e^{U} | e^{U} + C |
+| $U \sqrt{\;}$ | $2 \sqrt{U + C}$ |
+| $U ’ e^{U}$ | $e^{U} + C$ |
 | U ’ |  |
 | U | \| \| ln U + C |
-| ( ) cos ax + b , ( a \neq 0 ) | \frac{1}{a} ( ) sin ax + b + C |
-| ( ) sin ax + b , ( a \neq 0 ) | \frac{1}{a} ( ) - cos ax + b + C |
-| 1 + t g^{2} x | ( ) tg x + C |
-| 1 + cot g^{-2} x | - coygx + C |
+| $( ) cos ax + b , ( a \neq 0 )$ | $\frac{1}{a} ( ) sin ax + b + C$ |
+| $( ) sin ax + b , ( a \neq 0 )$ | $\frac{1}{a} ( ) - cos ax + b + C$ |
+| $1 + t g^{2} x$ | ( ) tg x + C |
+| $1 + cot g^{-2} x$ | - coygx + C |
 
 ### Exercice n°1 :
 
@@ -2574,7 +2563,7 @@ On écrit : { A $= \int a$ (y - f(x)) dx. ua
 0 $\leq y \leq$ 0
 
 Calculer l’aire de la partie du plan limitée par la courbe (Cf) et la courbe ($C_{g}$ )
-représentation graphiques dans un repère (0, i⃗ , j⃗ ) des fonctions f et g continues sur [a, b]
+représentation graphiques dans un repère (0, i , j ) des fonctions f et g continues sur [a, b]
 et les droites d’équation $x = a et x = b$
 Soit la courbe ($C_{f}$ ) est au-dessus de la courbe ($C_{g}$ )⟹ (g < f)
 
@@ -2596,11 +2585,11 @@ Remarque :
 
 ##### u. a = unité d’aire
 
-Si le repère orthonormé (0, i⃗ , j⃗ ) a pour unité 1cm, alors on :
+Si le repère orthonormé (0, i , j ) a pour unité 1cm, alors on :
 
 ##### u. a = 1$cm \times 1$cm = 1$cm^{2}$
 
-Si le repère orthonormé 0, i⃗ , j⃗ ) a pour unité 2cm, alors on :
+Si le repère orthonormé 0, i , j ) a pour unité 2cm, alors on :
 
 ##### u. a = 2$cm \times 2$cm = 4$cm^{2}$
 
@@ -2834,9 +2823,9 @@ l n(x - 1) + ln(x + 2) = 2lnx
 l n(x - 1)(x + 2) = $ln x^{2}$
 (x - 1)(x + 2) = $x^{2}$
 
-##### x - 2 = 2 $\in E$.
+##### x - 2 = 0 ⟹ x = 2 $\in E$.
 
-$\frac{0 ⟹ x =}{S = { 2 }}$
+S = {2}
 
 ##### b) ln2x – ln(x - 2) = ln3
 
@@ -2848,10 +2837,9 @@ l’équation a un sens⟺ ln2x - ln(x - 2) = ln3
 
 $ln \frac{2 x}{x - 2} = ln$3
 
-$\frac{2 x}{x - 2}$ = 6 $\in E$
+$\frac{2 x}{x - 2}$ = 3 ⟹ x = 6 $\in E$
 
-$\frac{3 ⟹ x =}{S = { 6 }}$
-
+S = {6}
 Résoudre dans $\mathbb{R} ^{2}$ les systèmes suivants :
 
 $x + y = \frac{10}{3}$
@@ -2867,13 +2855,11 @@ $x + y = \frac{10}{3} x + y = \frac{10}{3}$
 Ainsi : { ⟹ {
 ln(x. y) = ln1 x. y = 1
 
-xet y solutions de l’équation $t^{2} -$
-
-$\frac{St + P = 0}{\frac{1}{3} \frac{1}{3}}$
+xet y solutions de l’équation $t^{2} -$ St + P = 0
 
 $t_{1} = \frac{1}{3}$
 
-$t^{2} - \frac{10}{3} t$ + 1 = 0 ⟹ { { S = {( ; 3)(3; )}
+$t^{2} - \frac{10}{3} t$ + 1 = 0 ⟹ { { S = {($\frac{1}{3} ;$ 3)(3$; \frac{1}{3}$)}
 
 $t_{2}$ = 3
 
@@ -3296,9 +3282,9 @@ Pour t = 5 ⟹ $e^{x}$ = 5 ⟹ x = ln5
 Pour t = - 1 ⟹ $e^{x} =$ - 1 impossible S = {ln5}
 Résoudre dans $\mathbb{R} ^{2}$ les systèmes suivants :
 
-| a) 2a + 5b = 16 { ( ) } { S = 3 ; 2 3a + 3b = 15 | En déduire la solution du système + ln 2 + ln 5 e^{x} + e^{y} = 16 { ( ) } { S = ln3 ; ln2 + ln 3 + ln 3 e^{x} + e^{y} = 15 |
+| a) 2a + 5b = 16 { ( ) } { S = 3 ; 2 3a + 3b = 15 | $En déduire la solution du système + ln 2 + ln 5 e^{x} + e^{y} = 16 { ( ) } { S = ln3 ; ln2 + ln 3 + ln 3 e^{x} + e^{y} = 15}$ |
 | --- | --- |
-| b) 3a + 2b = 11 { ( ) } { S = 3 ; 1 a - b = 2 | En déduire la solution du système x + 1 y 3 e^{2} + 2 e^{2} = 11 { ( ) } { S = ln3 ; ln2 x + + ln 3 e^{2} + e^{y} = 15 |
+| b) 3a + 2b = 11 { ( ) } { S = 3 ; 1 a - b = 2 | $En déduire la solution du système x + 1 y 3 e^{2} + 2 e^{2} = 11 { ( ) } { S = ln3 ; ln2 x + + ln 3 e^{2} + e^{y} = 15}$ |
 
 Résoudre dans $\mathbb{R} ^{2}$ l'inéquation : $e^{5x} -$3 < 1
 
@@ -3524,15 +3510,15 @@ la fonction f(x) = [U(x$) ]^{v(x)}$
 
 ##### b. Ensemble de définition
 
-f existe ⟺ U(x)
+f existe ⟺ U(x) > 0. On écrit :
 
-$\frac{> 0 . On écrit :}{f ( x ) = [ U ( x ) ]^{v} ( x ) = e^{v} ( x ) lnU ( x )}$
+f(x) = [U(x$) ]^{v} ($x) = $e^{v} ($x) lnU(x)
 
 ##### c. Dérivée
 
 Si u et v sont dérivables sur un intervalle I, alors f l’est aussi et on a :
 
-f(x) = [U(x$) ]^{v(x}$ ) = $e^{v(x}$ ) lnU(x)
+f(x) = [U(x$) ]^{v} ($x) = $e^{v} ($x) lnU(x)
 
 ⟹ f’(x) = [v’(x) lnU(x) + $\frac{v ( x ) U’( x )}{U ( x )}$]$e^{v} ($x) lnU(x)
 
@@ -3560,7 +3546,7 @@ Soit la fonction f définie par :
 
 f(x) = $\frac{e^{x} - 3}{e^{x} - 1}$
 
-(C) désigne sa courbe représentative dans un repère orthonormé (0, i⃗ , j⃗ )
+(C) désigne sa courbe représentative dans un repère orthonormé (0, i , j )
 
 #### 1. Etudier les variations de f
 
@@ -3814,11 +3800,11 @@ $a r^{2} + br + c = 0$
 On calcule par la suite le discriminant $\Delta$ ou $\Delta’$ : puis trois cas
 peuvent se présenter.
 
-| Signe de \Delta | Racines | Solution générale |
+| $Signe de \Delta$ | Racines | Solution générale |
 | --- | --- | --- |
-| \Delta > 0 | r \neq r_{2} (réelles) 1 | x x 1 2 y = C_{1} . e^{r} + C_{2} . e^{r} |
-| \Delta = 0 | r = r_{2} = r 1 (réelles) | x 0 y = ( C_{1} + C_{2} x ) e^{r} |
-| \Delta < 0 | r = α + iβ 1 r_{2} = α - iβ | y = [ C_{1} cos βx C_{2} sin βx ] e^{2x} |
+| $\Delta > 0$ | $r \neq r_{2} (réelles) 1$ | $x x 1 2 y = C_{1} . e^{r} + C_{2} . e^{r}$ |
+| $\Delta = 0$ | $r = r_{2} = r 1 (réelles)$ | $x 0 y = ( C_{1} + C_{2} x ) e^{r}$ |
+| $\Delta < 0$ | $r = α + iβ 1 r_{2} = α - iβ$ | $y = [ C_{1} cos βx C_{2} sin βx ] e^{2x}$ |
 
 Remarques :
 $C_{1} et C_{2}$ sont des constantes réelles, elles sont définies à partir des
@@ -3914,11 +3900,9 @@ y’= f(x) ⟺ $\int y’= \int f$(x) dx
 
 ⟺ y’= F(x) + $C_{1}$ , avec F la primitive de f sur $\mathbb{R}$
 
-⟺ $’dx$
+⟺ $\int y’= \int ($f(x) + $C_{1} )$dx
 
-$\frac{\int y = \int ( f ( x ) + C_{1} )}{y = G ( x ) + C x + C}$
-
-⟺ 1 2 G étant une primitive de F
+⟺ y = G(x) + $C_{1} x + C_{2} G$ étant une primitive de F
 
 $C_{1} et C_{2}$ sont des réels
 
@@ -3940,10 +3924,9 @@ $\int y’= \int ( - \frac{1}{2} e^{-} 2 x + C_{1} ) dx$
 $b_{2}$ ) Forme : ay’+ by + cy = g(x) ($a \in \mathbb{R} ^{∗}$ )
 
 La solution générale de cette équation est la somme de la
+- solution homogène($y_{h}$ ) et de la solution non homogène($y_{n}$ ).
 
-### solution homogène et de la solution non homogène($y_{n}$ ).
-
-$\frac{( y_{h} )}{y_{G} = y_{h} + y_{n}}$
+$y_{G} = y_{h} + y_{n}$
 
 Exemple :
 Intégrer l’équation différentielle : (E): y’+ 2y + y = x
@@ -3973,11 +3956,9 @@ $b = -$2
 
 D’où la solution non homogène est : $y_{n} =$ x - 2
 
-$y_{G}$ =
+$y_{G} = y_{H} + y_{n}$
 
-$\frac{y_{H} + y_{n}}{D onc y = ( C + C x ) e^{-} x + x - 2}$
-
-$G 1 2$
+Donc $y_{G}$ = ($C_{1} + C_{2} x ) e^{-x} +$ x - 2
 
 ### Exercice :
 
@@ -4206,12 +4187,12 @@ $On a : U_{n+1} - U n = \frac{3 n + 5}{2 n + 1} - \frac{3 n + 2}{2 n - 1}$
 
 $U_{n}$ +1 $- U_{n} = \frac{- 7}{( 2 n + 1 ) ( 2 n - 1 )}$
 
-| x | - \infty - | \frac{1}{2} 0 | \frac{1}{2} | 1 | + \infty |
+| x | $- \infty -$ | $\frac{1}{2} 0$ | $\frac{1}{2}$ | 1 | $+ \infty$ |
 | --- | --- | --- | --- | --- | --- |
 | - 7 | - | - | - | - | - |
 | 2 n + 1 | - | + | + | + | + |
 | 2 n - 1 | - | - | - | + | + |
-| U_{n-1} - U_{n} | - | + | + | - | - |
+| $U_{n-1} - U_{n}$ | - | + | + | - | - |
 
 Or n ϵ $\mathbb{N}$*, alors l’entier le plus proche de $\frac{1}{2}$ est 1.
 
@@ -4222,11 +4203,11 @@ D’où $\forall n \geq$ 1, $U_{n+1} - U_{n}$ < 0.
 $U_{n+1} - U_{n}$ < 0 donc $\forall n \geq$ 1, la suite U est strictement décroissante.
 Représentation graphique
 
-|  |  |  |  | 3 + 2 U_{1} = | = 5 |
+|  |  |  |  | $3 + 2 U_{1} =$ | = 5 |
 | --- | --- | --- | --- | --- | --- |
-|  |  |  |  | 1 6 + 2 U_{2} = | 8 = = 2 , 7 |
-| 5 |  |  |  | 4 - 1 9 + U_{3} = | 3 2 11 = = 2 , 2 |
-| 4 |  |  |  | 5 17 U_{5} = | 5 ≃ 1 , 9 |
+|  |  |  |  | $1 6 + 2 U_{2} =$ | 8 = = 2 , 7 |
+| 5 |  |  |  | $4 - 1 9 + U_{3} =$ | 3 2 11 = = 2 , 2 |
+| 4 |  |  |  | $5 17 U_{5} =$ | 5 ≃ 1 , 9 |
 | 3 |  |  |  | 9 |  |
 | 2 |  |  |  |  |  |
 | 1 |  |  |  |  |  |
@@ -4244,7 +4225,7 @@ Dérivée
 
 f’(x) = $\frac{3 ( 2 x - 1 ) - 2 ( 3 x + 2 )}{( 2 x - 1^{2} )} = \frac{6 x - 3 + 6 x - 4}{( 2 x - 1^{2} )} = - \frac{7}{( 2 x - 1^{2} )}$ or $- \frac{7}{( 2 x - 1^{2} )}$ < 0
 
-| x | - \infty 0 | \frac{1}{2} | 1 | + \infty |
+| x | $- \infty 0$ | $\frac{1}{2}$ | 1 | $+ \infty$ |
 | --- | --- | --- | --- | --- |
 | f ’ ( x ) | - | - | - | - |
 
@@ -4287,9 +4268,9 @@ x’$= \frac{- b’+ \sqrt{\;} \Delta}{a} = \frac{1 + \sqrt{\;} 2}{1}$ = 1 + $\s
 
 {
 
-| n | - \infty 1 - | \sqrt{2} | 0 1 | + \sqrt{2} 3 | + \infty |
+| n | $- \infty 1 -$ | $\sqrt{2}$ | 0 1 | $+ \sqrt{2} 3$ | $+ \infty$ |
 | --- | --- | --- | --- | --- | --- |
-| n^{2} - 2 n - 1 | + | - | - | + | + |
+| $n^{2} - 2 n - 1$ | + | - | - | + | + |
 
 ]$- \infty$, 0] $\notin \mathbb{N} ^{∗}$ , d’où $\forall n$ > 3, Vn $- U_{n}$ > 0.
 
@@ -4349,17 +4330,19 @@ $\forall$ x $\in R, (3+x^{2} )^{2}$ > 0, d’où f est du signe de -2x
 
 f’(x) = 0 ⟺ - 2x = 0 ⟺ x = 0
 
-| x | - \infty 0 | + \infty |
+| x | $- \infty 0$ | $+ \infty$ |
 | --- | --- | --- |
 | f ’ ( x ) | + | - |
 
-lim f(x)= lim $\frac{1}{3 + x^{2} = 0} ;$ f(0) = $\frac{1}{3}$
+1 $\frac{1}{3}$
+
+lim f(x)= lim 3+$x^{2}$ =0 ; f(0) =
 
 $n \to + \infty n \to + \infty$
 
 Tableau de variation.
 
-| x | - \infty | 0 + \infty |
+| x | $- \infty$ | $0 + \infty$ |
 | --- | --- | --- |
 | f ’ ( x ) | + | - |
 | f ( x ) | 1 3 | 0 |
@@ -5362,17 +5345,17 @@ Card($E \cup F$) = Card (E) + Card(F) - Card($E \cap ($F)
 
 ##### b) Conséquence
 
-| E F |  | Si E et F sont disjoints c’est - à - dire E \cap F = \emptyset , |
+| E F |  | $Si E et F sont disjoints c’est - à - dire E \cap F = \emptyset ,$ |
 | --- | --- | --- |
-|  | Alors | ( ) ( ) Card E \cup F = Card E + Card ( F ) |
+|  | Alors | $( ) ( ) Card E \cup F = Card E + Card ( F )$ |
 
 EUF
 Remarques
 Soit E et F deux ensembles finis quelconques, alors : E x F est aussi un ensemble fini :
 
-$\frac{Card Card ( F )}{\frac{( E \times F ) = Card ( E ) \times}{Card ( E ) \leq Card ( F )}}$
+Card($E \times F$) = Card (E$) \times Card$(F)
 
-$Si E \subset F$ alors
+Si $E \subset F$ alors Card(E$) \leq Card$(F)
 
 Applications
 - 1. Dans une classe de 30 élèves, 20 étudient l’anglais et 15 l’allemand. Sachant que
@@ -5520,10 +5503,9 @@ p
 n 0 1 2 3 4 5 6 7 8 9
 7 Ligne 7
 Colonnes 3
+Exemples
 
-$\frac{Exemples}{( x + y )^{5} =}$
-
-$x^{5}$ + 5$x^{4} y$ + 10$x^{3} y^{2}$ + 10$x^{2} y^{3}$ + 5$x y^{4} + y^{5}$
+(x + $y )^{5} = x^{5}$ + 5$x^{4} y$ + 10$x^{3} y^{2}$ + 10$x^{2} y^{3}$ + 5$x y^{4} + y^{5}$
 
 (x + $y )^{5} = x^{5} - 5 x^{4} y$ + 10$x^{3} y^{2} - 10 x^{2} y^{3}$ + 5$x y^{4} - y^{5}$
 
@@ -5556,10 +5538,10 @@ nombreux problèmes de dénombrement.
 |  |  | On effectue p tirages |  | Résultat |
 | --- | --- | --- | --- | --- |
 | Modélisation | Les p éléments sont ordonnés | Les p éléments sont distincts | Outil | (Nombre de tirages) |
-| Tirages successifs avec remise | Oui | Non | p - uplet de E | p n^{p} = A_{n} |
-|  |  |  | Arrangement de p | n ! p A_{n} = Avec |
-| Tirages successifs sans remise | Oui | Oui | élémen ts de E | ( ) n - p ! p \leq n |
-| Tirages simultanés | Non | Oui | Combinaison de p | n ! p C_{n} = |
+| Tirages successifs avec remise | Oui | Non | p - uplet de E | $p n^{p} = A_{n}$ |
+|  |  |  | Arrangement de p | $n ! p A_{n} = Avec$ |
+| Tirages successifs sans remise | Oui | Oui | élémen ts de E | $( ) n - p ! p \leq n$ |
+| Tirages simultanés | Non | Oui | Combinaison de p | $n ! p C_{n} =$ |
 |  |  |  | éléments de E | ( ) p ! n - p ! |
 
 NB : $A_{n} p$ = ordre ; $C_{n} p$ = désordre
@@ -5760,19 +5742,15 @@ Card(A) = 3 $\times 4 \times$ 5 + 3 $\times$ 5 + $\times$ 5 + 3 $\times$ + 4 $\t
 
 3! $\times 2 \times$ 1!
 
-Card(A) = 60 + 15 + 30 + 30 + 40 + 10 = 185
-
-$\frac{C ard ( A ) = 185 tirages}{"}$
-
-- b) Soit B l’événement “Il y a aux plus deux couleurs distincts dans le tirage
+Card(A) = 60 + 15 + 30 + 30 + 40 + 10 = 185 Card(A) = 185 tirages
+- b) Soit B l’événement “Il y a aux plus deux couleurs distincts dans le tirage"
 
 Card(B) = $C_{3} 1 \times C_{4}$2 + $C_{3} 1 \times C_{5}$2 + $C_{4} 1 \times C_{3}$2 + $C_{5} 1 \times C_{3}$2 + $C_{3}$3 + $C_{4}$3 + $C_{5}$3 + $C_{4} 1 \times C_{5}$2
 
 + $C_{5}^{1} \times C_{4}^{2}$
 
-Card(B) = 18 + 30 + 12 = 160
-
-$\frac{+ 15 + 1 + 4 + 10 + 40 + 20}{Card ( B ) = 160 tirages}$
+Card(B) = 18 + 30 + 12 + 15 + 1 + 4 + 10 + 40 + 20 = 160
+Card(B) = 160 tirages
 
 ### Exercice 8
 
@@ -6002,11 +5980,9 @@ est égale à 1.
 
 On a : $A \cup A = \Omega et A \cap A = \emptyset$ alors
 
-$p ( A \cup$
+p($A \cup A$) = p$( \Omega$) <=> p(A) + p(A) = p$( \Omega$)
 
-$\frac{A ) = p ( \Omega ) < = > p ( A ) + p ( A ) = p ( \Omega )}{p ( A ) + p ( A ) = 1 ou p ( A ) = 1 - p ( A )}$
-
-<=>
+<=> p(A) + p(A ) = 1 ou p(A ) = 1 - p(A)
 Si A et B sont deux événements quelconques, alors:
 
 p($A \cup B$) = p(A) + p(B) - p($A \cap B$)
@@ -6184,9 +6160,9 @@ NB :
 La loi de probabilité d’une variable aléatoire X est souvent numérique et
 représentée par un tableau :
 
-| Valeurs de x ou x_{i} , | x_{1} | x_{2} | ------ | x_{n} |  |
+| $Valeurs de x ou x_{i} ,$ | $x_{1}$ | $x_{2}$ | ------ | $x_{n}$ |  |
 | --- | --- | --- | --- | --- | --- |
-| P(X= x_{i} ) ou P_{i} | P_{1} | P_{2} | ------ | P_{n} | \sum P_{i} = 1 |
+| $P(X= x_{i} ) ou P_{i}$ | $P_{1}$ | $P_{2}$ | ------ | $P_{n}$ | $\sum P_{i} = 1$ |
 
 Univers image de X :
 C’est l’ensemble de toutes les valeurs $x_{i}$ prisent par la variable aléatoire réelle X.
@@ -6225,7 +6201,7 @@ Alors V(x) = E(x - $m )^{2}$
 
 = $E ( x^{2} ) - m^{2}$
 
-| ( ) ( ) V x = E x^{2} - [ E ( x ) ]^{2} |  |
+| $( ) ( ) V x = E x^{2} - [ E ( x ) ]^{2}$ |  |
 | --- | --- |
 |  | 170 |
 
@@ -6298,7 +6274,7 @@ D’où X($Ω$) = {- 300$;$ 0$;$ 300$;$ 600}
 
 | Xi | - 300 | 0 | 300 | 600 |
 | --- | --- | --- | --- | --- |
-| ( ) P x = x_{i} ou P_{i} | \frac{1}{8} | \frac{3}{8} | \frac{3}{8} | \frac{1}{8} |
+| $( ) P x = x_{i} ou P_{i}$ | $\frac{1}{8}$ | $\frac{3}{8}$ | $\frac{3}{8}$ | $\frac{1}{8}$ |
 
 $\sum P_{i} = \frac{8}{8}$ = 1
 
@@ -6312,9 +6288,9 @@ i=1
 
 | Xi | - 300 | 0 | 300 | 600 |
 | --- | --- | --- | --- | --- |
-| ( ) P x = x_{i} = P_{i} | \frac{1}{8} | \frac{3}{8} | \frac{3}{8} | \frac{1}{8} |
+| $( ) P x = x_{i} = P_{i}$ | $\frac{1}{8}$ | $\frac{3}{8}$ | $\frac{3}{8}$ | $\frac{1}{8}$ |
 |  | 300 - | 0 | 900 | 600 |
-| x_{i} P_{i} | 8 |  | 8 | 8 |
+| $x_{i} P_{i}$ | 8 |  | 8 | 8 |
 
 E(x) = $- \frac{300}{8} + \frac{0}{8} + \frac{900}{8} + \frac{600}{8} = \frac{1200}{8}$ = 150 E(x) = 150
 
@@ -6324,15 +6300,13 @@ V(x) = P$1 x_{1}^{2} + P_{2} x_{2}^{2}$ + ⋯ + P$n x_{n}^{2} -$ [E(x$) ]^{2}$
 
 | Xi | - 300 | 0 | 300 | 600 |
 | --- | --- | --- | --- | --- |
-| ( ) P x = x_{i} = P_{i} | \frac{1}{8} | \frac{3}{8} | \frac{3}{8} | \frac{1}{8} |
-| x_{i}^{2} P_{i} | 90000 | 0 | 27000 | 36000 |
+| $( ) P x = x_{i} = P_{i}$ | $\frac{1}{8}$ | $\frac{3}{8}$ | $\frac{3}{8}$ | $\frac{1}{8}$ |
+| $x_{i}^{2} P_{i}$ | 90000 | 0 | 27000 | 36000 |
 |  | 8 |  | 8 | 8 |
 
-V(x) = $\frac{90000}{8}$ + 0 + $\frac{270000}{8} \frac{360000}{8} -$ (150$)^{2}$
+V(x) = $\frac{90000}{8}$ + 0 + $\frac{270000}{8} + \frac{360000}{8} -$ (150$)^{2}$
 
-$\frac{+}{V (x) = 67500}$
-
-= 90.000 – 22 500 =>
+= 90.000 – 22 500 => V (x) = 67500
 Ecart-type
 $σ$(x) = $\sqrt{V}$(x) = $\sqrt{\;}$67500 = 259,8 => $σ$(x) = 259, 8
 
@@ -6344,9 +6318,9 @@ Ce diagramme est déterminé à partir du tableau donnant la loi de probabilité
 A partir du tableau donnant la loi de probabilité de X, on déduit le tableau
 ci-dessous qui détermine la fonction de répartition de X.
 
-| xi | - \infty - |  | 300 |  |  | 0 |  | 300 |  |  | 600 | + \infty |
+| xi | $- \infty -$ |  | 300 |  |  | 0 |  | 300 |  |  | 600 | $+ \infty$ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| P ( X < x_{i} ) | 0 | 1 8 |  | 1 8 | 4 8 |  | 4 8 | 7 8 | 7 8 | 1 |  | - 1 |
+| $P ( X < x_{i} )$ | 0 | 1 8 |  | 1 8 | 4 8 |  | 4 8 | 7 8 | 7 8 | 1 |  | - 1 |
 
 Pour $x \in$ ] $- \infty ;$ - 300[, F(x) = 0
 
@@ -6489,7 +6463,7 @@ Dans une population donnée 15% des individus ont une malad$ie M_{A}$ . Parmi le
 
 $individus atteints par la maladie M_{A}$ , 20% ont $une maladie M_{B}$ et parmi les
 
-$individus non atteints par la maladie M_{A} , 4% ont la maladie M_{B}$ .
+$individus non atteints par la maladie M_{A} , 4\% ont la maladie M_{B}$ .
 
 On prend un individu de cette population au hasard et on considère les
 évènements :
@@ -6533,11 +6507,11 @@ $P_{A} ($B )= 096
 
 Or = B = ($A \cap B ) \cup ($A$\cap B$) . Les événements $A \cap B$ et A$\cap B$ sont incompatibles.
 
-| NB : Si les événements B_{1} , B_{2} | ,…,B_{n} | En forment une partition de l’univers | \Omega , alors |
+| $NB : Si les événements B_{1} , B_{2}$ | $,…,B_{n}$ | En forment une partition de l’univers | $\Omega , alors$ |
 | --- | --- | --- | --- |
-| Pour tout événement A : | ( ) P A | ( ) ( ) = P A \cap B_{1} + P A \cap B_{2} + ⋯ + P | ( A \cap B_{n} ) |
+| Pour tout événement A : | ( ) P A | $( ) ( ) = P A \cap B_{1} + P A \cap B_{2} + ⋯ + P$ | $( A \cap B_{n} )$ |
 |  |  | Formule des probabilités totales |  |
-| Pour tout i tel que 1 \leq i | \leq n | ( ) ( ) P A \cap B_{i} = P_{B} A \times P ( B_{i} ) i |  |
+| $Pour tout i tel que 1 \leq i$ | $\leq n$ | $( ) ( ) P A \cap B_{i} = P_{B} A \times P ( B_{i} ) i$ |  |
 
 Ainsi, d’après la formule des probabilités totales, on a :
 P(B) = P($A \cap B$) + P(A$\cap B$) = 0,03 + 0,034
@@ -6586,17 +6560,17 @@ P(X = 0) = =
 
 P(X = 1) = $\frac{36 18}{36} = \frac{2 1}{2}$
 
-| x_{i} | 0 | 1 |
+| $x_{i}$ | 0 | 1 |
 | --- | --- | --- |
-| P ( X = x_{i} ) | \frac{1}{2} | \frac{1}{2} |
+| $P ( X = x_{i} )$ | $\frac{1}{2}$ | $\frac{1}{2}$ |
 
 Loi de probabilité de Y. $Y \in$ {0,1}
 
 P(Y = 0) = $\frac{18}{36} = \frac{1}{2} ;$ P(Y = 1) = $\frac{18}{36} = \frac{1}{2}$ ;
 
-| x_{i} | 0 | 1 |
+| $x_{i}$ | 0 | 1 |
 | --- | --- | --- |
-| P ( X = yj ) | \frac{1}{2} | \frac{1}{2} |
+| P ( X = yj ) | $\frac{1}{2}$ | $\frac{1}{2}$ |
 
 - 2. Les variables X et Y sont indépendante <=> $\forall ($i, j$) \in$ {0,1} $\times$ {0,1}
 
@@ -6633,11 +6607,8 @@ Cette loi de probabilité de X est appelée loi Binomiale de paramètres n et p.
 L’univers image X ou l’ensemble des valeurs de X est {0,1,2, … , n - 1}
 
 Remarques
-Quand on fait un arbre, on a
-
-$\frac{: p ( X = k ) = n_{k} p^{k} q^{n} - k}{; k= nombre de succès}$
-
-Avec n= nombre d’épreuves ; p= probabilité de succès ;
+Quand on fait un arbre, on a : p(X = k) = $n_{k} p^{k} q^{n-k}$
+Avec n= nombre d’épreuves ; k= nombre de succès ; p= probabilité de succès ;
 $n_{K}$ = nombre de probabilité comportant cas succès
 
 | Espérance mathématique | ( ) E X = np |
@@ -6725,36 +6696,40 @@ L’ensemble E est muni d’une loi de composition interne notée +, appelée :
 addition qui fait de E un groupe commutatif (ou abélien), d’où les quatre premiers
 axiomes.
 La loi + est associative dans E.
-$\forall ($u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) $\in E^{3}$ , on a : (u⃗ ⃗ + v⃗ ) + w⃗⃗ ⃗ = u⃗ ⃗ + (v ⃗⃗⃗ ⃗ + w⃗⃗ ⃗ ).
-La loi + admet o⃗ comme élément neutre dans E.
-$\forall u$⃗ ⃗ $\in E$, on a : (u⃗ ⃗ + o⃗ ) = u⃗ ⃗
+$\forall ($u , v , w$) \in E^{3}$ , on a : (u + v ) + w = u + (v + w ).
+La loi + admet o comme élément neutre dans E.
+
+$\forall u \in E$, on a : (u + o ) = u
+
 Tout élément de E a un symétrique, car la loi + admet un élément
 symétrique.
-$\forall u$⃗ ⃗ $\in E$, le symétrique de u⃗ ⃗ est - u⃗ ⃗ car : u⃗⃗ ⃗ + (- u⃗⃗ ⃗ ) = ⃗0⃗ ⃗
+$\forall u \in E$, le symétrique de u est - u car : u + (- u ) = 0
 La loi + est commutative.
-$\forall ($u⃗ ⃗ , v⃗ ) $\in E^{2} ,$ u⃗⃗ ⃗ + v⃗⃗ ⃗ = v⃗⃗ ⃗ + u⃗⃗ ⃗
+
+$\forall ( u , v ) \in E^{2} , u + v = v + u$
+
 L’ensemble E est muni d’une loi de composition externe notée ∗ appelée :
 multiplication, à opérations dans $\mathbb{R}$, satisfaisant les quatre axiomes suivants :
 
-$\forall ($u⃗ ⃗ , v⃗ ) $\in E^{2} , \forall α \in \mathbb{R} α$(u⃗⃗ ⃗ + v⃗⃗ ⃗ ) = $α$u⃗⃗ ⃗ + $α$v⃗⃗ ⃗
+$\forall ($u , v$) \in E^{2} , \forall α \in \mathbb{R} α$(u + v ) = $α$u + $α$v
 
-$\forall u$⃗ ⃗ $\in E , \forall ( α$, $β ) \in \mathbb{R} ^{2}$ : ($α$ + $β$) u⃗⃗ ⃗ = $α$u⃗⃗ ⃗ + $β$u⃗⃗ ⃗
+$\forall u \in E , \forall ( α$, $β ) \in \mathbb{R} ^{2}$ : ($α$ + $β$) u = $α$u + $β$u
 
-$\forall u$⃗ ⃗ $\in E , \forall ( α$, $β ) \in \mathbb{R} ^{2} : α$($β$u⃗⃗ ⃗ ) = ($αβ$) u⃗⃗ ⃗
+$\forall u \in E , \forall ( α$, $β ) \in \mathbb{R} ^{2} : α$($β$u ) = ($αβ$) u
 
-$\forall u$⃗ ⃗ $\in E$, 1u⃗⃗ ⃗ = u⃗⃗ ⃗
+$\forall u \in E , 1 u = u$
 
 Remarque
 Les éléments de E sont appelés vecteur et ceux de $\mathbb{R}$ sont des scalaires ou
 opérateurs.
 Conséquence
 
-$\forall ($u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ), éléments de E, $\forall α \in \mathbb{R}$
+$\forall ($u , v , w ), éléments de E, $\forall α \in \mathbb{R}$
 
 on a :
-(u⃗ ⃗ + v⃗ ) + w⃗⃗ ⃗ = u⃗ ⃗ + (v ⃗⃗⃗ ⃗ + w⃗⃗ ⃗ ) = u⃗ ⃗ + v⃗ + w⃗⃗ ⃗
+(u + v ) + w = u + (v + w ) = u + v + w
 
-$α$ u⃗ ⃗ = ⃗0⃗ $\Leftrightarrow α$ = 0 ou u⃗ ⃗ = ⃗0⃗
+$α$ u = 0$\Leftrightarrow α$ = 0 ou u = 0
 
 Exemples d’espaces vectoriels
 ($\mathbb{R}$, +, *) est un espace vectoriel.
@@ -6767,9 +6742,9 @@ $F \subset E$ est un sous-espace vectoriel de l’espace vectoriel E, si est seu
 
 F est non vide ($F \neq \emptyset$)
 
-F est un stable pour la loi + de E, c’est-à-dire : $\forall ($u⃗ ⃗ , $θ$⃗ ) $\in F^{2} ,$ U⃗⃗⃗ + $θ$⃗ $\in F$
+F est un stable pour la loi + de E, c’est-à-dire : $\forall ($u , $θ ) \in F^{2} ,$ U + $θ \in F$
 
-F est stable pour la loi de E, c’est-à-dire : $\forall$ ⋋$\in \mathbb{R} , \forall θ$⃗ $\in F$, ⋋. $θ$⃗ $\in F$
+F est stable pour la loi de E, c’est-à-dire : $\forall$ ⋋$\in \mathbb{R} , \forall θ \in F$, ⋋. $θ \in F$
 
 ### Exercice d’application
 
@@ -6781,19 +6756,21 @@ espace vectoriel de $\mathbb{R} ^{2}$ .
 
 E est une partie de $\mathbb{R} ^{2}$ , non vide, car (0 ;0) $\in E$, donc $E \neq \emptyset$
 
-Soit u⃗ ⃗ (2x$;$ x) et $θ$⃗ (2x’$;$ x’)
-Montrons que u⃗ ⃗ + v⃗ $\in E$
-On a : u⃗ ⃗ + v⃗ = (2x$;$ x) + (2x’$;$ x’)
+Soit u (2x$;$ x) et $θ$ (2x’$;$ x’)
+
+Montrons que $u + v \in E$
+
+On a : u + v = (2x$;$ x) + (2x’$;$ x’)
 = (2x + 2x’$;$ x + x’)
 = [2(x + x’); x + x’]
 
-$\forall$ ⋋$\in \mathbb{R} , \forall u$⃗ ⃗ (2x$;$ x$) \in E$ . Montrons que : ⋋ u⃗ ⃗ $\in E$.
+$\forall$ ⋋$\in \mathbb{R} , \forall u$ (2x$;$ x$) \in E$ . Montrons que : ⋋ u$\in E$.
 
-On a : ⋋ u⃗ ⃗ =⋋ (2x$;$ x)
+On a : ⋋ u =⋋ (2x$;$ x)
 
 = (2 ⋋ x;⋋ x$) \in E$
 
-D’où ⋋ u⃗ ⃗ $\in E$
+D’où ⋋ u$\in E$
 
 ### Conclusion :
 
@@ -6816,7 +6793,7 @@ appelle somme des sous-$espaces vectoriels E_{1} et E_{2} , notée E_{1} + E_{2}
 
 des vecteurs :
 
-w⃗⃗ ⃗ = u⃗ ⃗ + $θ$⃗ où u⃗ ⃗ $\in E_{1}$ et $θ$⃗ $\in E_{2}$ .
+w = u + $θ$ où u$\in E_{1}$ et $θ \in E_{2}$ .
 
 Remarque
 
@@ -6831,16 +6808,16 @@ $E_{1} \cup E_{2}$ est l’ensemble de deux droites vectorielles.
 $Si E_{1} et E_{2}$ sont deux sous espaces vectoriels d’un espace vectoriel E sur $\mathbb{R}$ tels
 que :
 
-$E_{1} \cap E_{2}$ ={o⃗ }$, alors la somme E_{1} + E_{2}$ est dite directe.
+$E_{1} \cap E_{2}$ ={o }$, alors la somme E_{1} + E_{2}$ est dite directe.
 
 $La somme directe est notée E_{1}$ ⨁ $E_{2}$ .
 
-$\forall w$⃗⃗ ⃗ $\in ( E_{1}$ ⨁$E_{2}$ ), la décomposition w⃗⃗ ⃗ = u⃗ ⃗ + v⃗ avec u⃗ ⃗ $\in E_{1}$ et v⃗ $\in E_{2}$ , se fait de
+$\forall w \in ( E_{1}$ ⨁$E_{2}$ ), la décomposition w = u + v avec u$\in E_{1}$ et v$\in E_{2}$ , se fait de
 
 façon unique.
 Théorème :
 
-On a l’équivalence $: E_{1}$ ⨁ $E_{2}$ ⟺ $E_{1} \cap E_{2}$ = {o⃗ }
+On a l’équivalence $: E_{1}$ ⨁ $E_{2}$ ⟺ $E_{1} \cap E_{2}$ = {o }
 
 #### 4. Sous-espaces vectoriels supplémentaires
 
@@ -6853,7 +6830,7 @@ E = $E_{1} + E_{2}$
 
 $E_{1}$ ⊕ $E_{2}$ = E ⟺ {
 
-$E_{1} \cap E_{2}$ = {o⃗ }
+$E_{1} \cap E_{2}$ = {o }
 
 ### Exercice d’application
 
@@ -6865,19 +6842,20 @@ $Montrer que E_{1} et E_{2}$ sont deux sous-espaces vectoriels supplémentaires 
 
 Montrons que E = $E_{1} + E_{2}$ avec E $= \mathbb{R} ^{2}$
 
-Soit u⃗ ⃗ (x, 0) $\in E_{1}$ et v⃗ (0, y$) \in E_{2}$ on a :
-u⃗ ⃗ + v⃗ = (x, 0) + (0, y)
+Soit u (x, 0) $\in E_{1}$ et v (0, y$) \in E_{2}$ on a :
+
+u + v = (x, 0) + (0, y)
 
 = (x + 0,0 + y) = (x, y$) \in \mathbb{R} ^{2}$ d’où E = $E_{1} + E_{2}$
 
-Montrons que $E_{1} \cap E_{2}$ = {o⃗ }.
+Montrons que $E_{1} \cap E_{2}$ = {o }.
 
-On a : u ⃗⃗⃗ ⃗ $\in E_{1} \cap E_{2}$ ⟺ u ⃗⃗⃗ ⃗ $\in E_{1} et$ u ⃗⃗⃗ ⃗ $\in E_{2}$
+On a : u $\in E_{1} \cap E_{2}$ ⟺ u $\in E_{1} et$ u $\in E_{2}$
 
-⟺ u ⃗⃗⃗ ⃗ (x, 0) et u ⃗⃗⃗ ⃗ (0, y)
-⟺ u ⃗⃗⃗ ⃗ (0,0)
+⟺ u (x, 0) et u (0, y)
+⟺ u (0,0)
 
-d’où $E_{1} \cap E_{2}$ = {o⃗ }.
+d’où $E_{1} \cap E_{2}$ = {o }.
 
 ### Conclusion
 
@@ -6888,48 +6866,48 @@ de E= $\mathbb{R} ^{2}$ .
 #### 5. Combinaisons linéaires
 
 Définition
-Soit une famille ($U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … , $U_{n}$⃗⃗⃗ ) des vecteurs d’un espace vectoriel. On dit qu’un
-vecteur U⃗⃗⃗ de E est une combinaison linéaire de vecteurs $U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , …, $U_{n}$⃗⃗⃗ si et
+Soit une famille ($U_{1} , U_{2}$ , … , $U_{n}$ ) des vecteurs d’un espace vectoriel. On dit qu’un
+vecteur U de E est une combinaison linéaire de vecteurs $U_{1} , U_{2}$ , …, $U_{n}$ si et
 seulement s’il existe une famille ($α_{1} , α_{2}$ , … , $α_{n}$ ) de nombres réels tels que :
 
-U⃗⃗⃗ =$α_{1} U_{1}$⃗⃗⃗ + $α_{2} U_{2}$⃗⃗⃗ , … , $α_{n} U_{n}$⃗⃗⃗
+U$= α_{1} U_{1} + α_{2} U_{2}$ , … , $α_{n} U_{n}$
 
-On écrit : U⃗⃗⃗ = $\sum ^{n}_{i=} 1 α_{i} U_{i}$⃗⃗⃗
+On écrit : U$= \sum ^{n}_{i=} 1 α_{i} U_{i}$
 
 NB :
-L’ensemble des combinaisons linéaires de n vecteurs $U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … , $U_{n}$⃗⃗⃗ d’un espace
+L’ensemble des combinaisons linéaires de n vecteurs $U_{1} , U_{2}$ , … , $U_{n}$ d’un espace
 vectoriel E est un sous-espace vectoriel $E_{1}$ de E.
-On dit que les n vecteurs $U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … , $U_{n}$⃗⃗⃗ engendrent $E_{1}$ ou bien $E_{1}$ est engendré
+On dit que les n vecteurs $U_{1} , U_{2}$ , … , $U_{n}$ engendrent $E_{1}$ ou bien $E_{1}$ est engendré
 par n vecteurs.
 
 #### 6. Famille génératrice
 
 Définition
-Soit E un espace vectoriel. Une famille ($U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … , $U_{n}$⃗⃗⃗ ) d’éléments de E est dite
-génératrice, si tout élément v⃗ de E est une combinaison linéaire de cette famille,
+Soit E un espace vectoriel. Une famille ($U_{1} , U_{2}$ , … , $U_{n}$ ) d’éléments de E est dite
+génératrice, si tout élément v de E est une combinaison linéaire de cette famille,
 c’est-à-dire :
 
-$\forall v$⃗ $\in E , \exists ( α_{1} , α_{2}$ , … , $α_{n} ) \in \mathbb{R} ^{n} /$v⃗ = $α_{1} U_{1}$⃗⃗⃗ + $α_{2} U_{2}$⃗⃗⃗ , … , $α_{n} U_{n}$⃗⃗⃗
+$\forall v \in E , \exists ( α_{1} , α_{2}$ , … , $α_{n} ) \in \mathbb{R} ^{n} /$v$= α_{1} U_{1} + α_{2} U_{2}$ , … , $α_{n} U_{n}$
 
 NB :
-On dit aussi que ($U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … , $U_{n}$⃗⃗⃗ ) forment un système générateur.
+On dit aussi que ($U_{1} , U_{2}$ , … , $U_{n}$ ) forment un système générateur.
 
 ### Exercice d’application
 
-Démontrer que les vecteurs $U_{1}$⃗⃗⃗ (3) $et U_{2}$⃗⃗⃗ (1) forment une famille génératrice de
+Démontrer que les vecteurs $U_{1}$ (3) $et U_{2}$ (1) forment une famille génératrice de
 2 5
 
 $\mathbb{R} ^{2}$ .
 
-$U_{1}$⃗⃗⃗ et $U_{2}$⃗⃗⃗ est une famille génératrice de $\mathbb{R} ^{2}$ si et seulement
+$U_{1}$ et $U_{2}$ est une famille génératrice de $\mathbb{R} ^{2}$ si et seulement
 
-Si $\forall v$⃗ $\in \mathbb{R} ^{2} , \exists ( α_{1} , α_{2} ) \in \mathbb{R} ^{2} /$v⃗ = $α_{1} U_{1}$⃗⃗⃗ + $α_{2} U_{2}$⃗⃗⃗
+Si $\forall v \in \mathbb{R} ^{2} , \exists ( α_{1} , α_{2} ) \in \mathbb{R} ^{2} / v = α_{1} U_{1} + α_{2} U_{2}$
 
 $x$
 
-Posons : v⃗ = (y) donc on a :
+Posons : v = (y) donc on a :
 
-v⃗ = $α_{1} U_{1}$⃗⃗⃗ + $α_{2} U_{2}$⃗⃗⃗ ⟺ (x) = $α_{1}$ (3) + $α_{2}$ (1) ⟺ (s) = x(- 5)
+v$= α_{1} U_{1} + α_{2} U_{2}$ ⟺ (x) = $α_{1}$ (3) + $α_{2}$ (1) ⟺ (s) = x(- 5)
 
 y 2 5
 
@@ -6958,39 +6936,39 @@ x = 3 ($\frac{5 x - y}{13}$) + $α_{2}$ soit : $α_{2} = \frac{15 x - 3 y}{13}$
 
 ### Conclusion
 
-⃗$U_{1}$⃗ ⃗ et ⃗$U_{2}$⃗ ⃗ est une famille génératrice de $\mathbb{R} ^{2}$ .
+$U_{1}$ et $U_{2}$ est une famille génératrice de $\mathbb{R} ^{2}$ .
 
 #### 7. Famille libre
 
 Définition
-Soit F une famille de vecteurs ($U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … , $U_{n}$⃗⃗⃗ ) d’un espace vectoriel E. On dit
+Soit F une famille de vecteurs ($U_{1} , U_{2}$ , … , $U_{n}$ ) d’un espace vectoriel E. On dit
 que F est une famille libre, si et seulement s’il existe une famille
 
 ($α_{1} , α_{2}$ , … , $α_{n}$ ) de réels tels que :
 
-$α_{1}$ ⃗$U_{1}$⃗ ⃗ + $α_{2}$ ⃗$U_{2}$⃗ ⃗ , … , $α_{n}$ ⃗$U_{n}$⃗ ⃗ = o⃗⃗⃗ ⟹ $α_{1} = α_{2}$ = ⋯ = $α_{n} =$ 0
+$α_{1} U_{1} + α_{2} U_{2}$ , … , $α_{n} U_{n}$ = o ⟹ $α_{1} = α_{2}$ = ⋯ = $α_{n} =$ 0
 
 NB
-On dit aussi que les n vecteurs $U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … $U_{n}$⃗⃗⃗ sont linéairement indépendants,
+On dit aussi que les n vecteurs $U_{1} , U_{2}$ , … $U_{n}$ sont linéairement indépendants,
 
-d’où dans $\mathbb{R} ^{2}$ et $\mathbb{R} ^{3}$ toute famille ($U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … , $U_{n}$⃗⃗⃗ ) est libre si dét
+d’où dans $\mathbb{R} ^{2}$ et $\mathbb{R} ^{3}$ toute famille ($U_{1} , U_{2}$ , … , $U_{n}$ ) est libre si dét
 
-($U_{1}$⃗⃗⃗ , $U_{2}$⃗⃗⃗ , … , $U_{n}$⃗⃗⃗ ) $\neq$ 0.
+($U_{1} , U_{2}$ , … , $U_{n} ) \neq$ 0.
 
 Exercices d’applications
 
 ### Exercice 1
 
-Dans $\mathbb{R} ^{2}$ , on considère U⃗⃗⃗ (3) et v⃗ (1). Montrer que la famille (u⃗ ⃗ , v⃗ ) est libre.
+Dans $\mathbb{R} ^{2}$ , on considère U (3) et v (1). Montrer que la famille (u , v ) est libre.
 4 2
 
 ### Solution
 
-$1^{ère}$ méthode : (u⃗ ⃗ , v⃗ ) est une famille libre dans $\mathbb{R} ^{2}$ si et seulement s’il existe
+$1^{ère}$ méthode : (u , v ) est une famille libre dans $\mathbb{R} ^{2}$ si et seulement s’il existe
 
-($α_{1} , α_{2} ) \in \mathbb{R} ^{2} / α_{1} u_{1}$⃗ ⃗ + $α_{2} v_{2}$⃗ = ⃗0⃗ ⟹ $α_{1} = α_{2}$ = 0
+($α_{1} , α_{2} ) \in \mathbb{R} ^{2} / α_{1} u_{1} + α_{2} v_{2}$ = 0 ⟹ $α_{1} = α_{2}$ = 0
 
-On a : $α_{1} u_{1}$⃗ ⃗ + $α_{2} v_{2}$⃗ = ⃗0⃗
+On a : $α_{1} u_{1} + α_{2} v_{2}$ = 0
 
 3 1 0 3$α_{1} + α_{2}$ = 0 3$α_{1} + α_{2}$ = 0
 
@@ -7010,25 +6988,25 @@ $α_{1}$ = 0
 
 ### Conclusion
 
-(u⃗ ⃗ , v⃗ ) est une famille libre.
+(u , v ) est une famille libre.
 
 $2^{ème}$ méthode :
 
-(u⃗ ⃗ , v⃗ ) est libre ⟺ dét (u⃗ ⃗ , v⃗ $\neq$ 0)
-Dét (u⃗ ⃗ , v⃗ ) = |3 1| = 6 - 4 = 2 $\neq$ 0
+(u , v ) est libre ⟺ dét (u , v$\neq$ 0)
+Dét (u , v ) = |3 1| = 6 - 4 = 2 $\neq$ 0
 4 2
-Comme Dét (u⃗ ⃗ , v⃗ ) $\neq$ 0, d’où(u⃗ ⃗ , v⃗ ) est une famille libre.
+Comme Dét (u , v$) \neq$ 0, d’où(u , v ) est une famille libre.
 
 ### Exercice 2
 
-Dans $\mathbb{R} ^{3}$ , on donne u⃗ ⃗ = (1; 1; - 2); v⃗ (1; 2; - 3) et w⃗⃗ ⃗ (1; 1; 1)
-Montrer que(u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) est une famille libre.
+Dans $\mathbb{R} ^{3}$ , on donne u = (1; 1; - 2); v (1; 2; - 3) et w (1; 1; 1)
+Montrer que(u , v , w ) est une famille libre.
 
 ### Solution
 
-(u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) est une famille libre dans $\mathbb{R} ^{3}$ si et seulement s’il existe trois réels $α_{1}$ ,
+(u , v , w ) est une famille libre dans $\mathbb{R} ^{3}$ si et seulement s’il existe trois réels $α_{1}$ ,
 
-$α_{2}$ , et $α_{3}$ tels que : $α_{1} u$⃗ ⃗ + $α_{2} v$⃗ + $α_{3} w$⃗⃗ ⃗ = ⃗0⃗ ⟹ $α_{1} = α_{2} = α_{3}$ = 0
+$α_{2}$ , et $α_{3}$ tels que : $α_{1} u + α_{2} v + α_{3} w$ = 0 ⟹ $α_{1} = α_{2} = α_{3}$ = 0
 
 1 1 1 0 $α_{1} + α_{2} + α_{3}$ = 0 (1)
 
@@ -7052,42 +7030,42 @@ Ainsi : $α_{1} = α_{2} = α_{3}$ = 0
 
 ### Conclusion
 
-(u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) est une famille libre.
+(u , v , w ) est une famille libre.
 
 $2^{ème}$ méthode
 
-Dans $\mathbb{R} ^{3}$ , (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) est libre ⟺ dét (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) $\neq$ 0
+Dans $\mathbb{R} ^{3}$ , (u , v , w ) est libre ⟺ dét (u , v , w$) \neq$ 0
 
-dét (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) $\neq$ 0
+dét (u , v , w$) \neq$ 0
 1 1 1 1 1
-dét (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) = | 1 2 1 | 1 2 = 2 - 2 - 3 + 4 + 3 - 1 = 3
+dét (u , v , w ) = | 1 2 1 | 1 2 = 2 - 2 - 3 + 4 + 3 - 1 = 3
 - 2 - 3 1 - 2 - 3
-dét (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) = 3
+dét (u , v , w ) = 3
 
 ### Conclusion
 
-Comme dét (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) $\neq$ 0 , alors (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) est une famille libre.
+Comme dét (u , v , w$) \neq$ 0 , alors (u , v , w ) est une famille libre.
 Remarque
-On peut aussi calculer dét(u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) par la méthode cofacteurs (ou méthode
+On peut aussi calculer dét(u , v , w ) par la méthode cofacteurs (ou méthode
 des mineurs).
 1 1 1
-dét (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) = | | = 1 | 2 1| - 1 |1 1 | + 1| 1 2 |
+dét (u , v , w ) = | | = 1 | 2 1| - 1 |1 1 | + 1| 1 2 |
 1 2 1
 - 3 1 - 2 1 - 2 - 3
 - 2 - 3 1
-dét (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) = (2 + 3) - (1 + 2) + (- 3 + 4) = 5 - 3 + 1 = 3
-dét (u⃗ ⃗ , v⃗ , w⃗⃗ ⃗ ) = 3
+dét (u , v , w ) = (2 + 3) - (1 + 2) + (- 3 + 4) = 5 - 3 + 1 = 3
+dét (u , v , w ) = 3
 On retrouve le même résultat.
 
 #### 8. Famille
 
 Définition
-Une famille F de n vecteurs ($u_{1}$⃗ ⃗ , $u_{2}$⃗ ⃗ ,….$u_{n}$⃗ ⃗ ) d’un espace vectoriel est dite liée
+Une famille F de n vecteurs ($u_{1} , u_{2}$ ,….$u_{n}$ ) d’un espace vectoriel est dite liée
 sil elle est non libre, c’est-à-dire s’il existe une famille($α_{1} , α_{2,…} α_{n}$ ) des réels
 
-non tous nuls tel que : $α_{1} u_{1,}$⃗ ⃗ + $α_{2} u_{2}$⃗ ⃗ +⋯+ $α_{n} u_{n}$⃗ ⃗ = $\to$
+non tous nuls tel que : $α_{1} u_{1,} + α_{2} u_{2}$ +⋯+ $α_{n} u_{n} = \to$
 
-On dit alors que les n vecteurs ($u_{1,}$⃗ ⃗ $u_{2}$⃗ ⃗ ,….$u_{n}$⃗ ⃗ ) sont linéairement dépendants. Ils
+On dit alors que les n vecteurs ($u_{1,} u_{2}$ ,….$u_{n}$ ) sont linéairement dépendants. Ils
 forment une partie liée de E.
 
 #### 1 - 2 - 1 0
@@ -7111,38 +7089,41 @@ Finalement, on a : {$α_{2} = - \frac{3 5}{5} α_{3}$
 
 $α_{3} \neq$ 0
 
-Donc ($u_{1}$⃗ ⃗ , $u_{2}$⃗ ⃗ ,$u_{3}$⃗ ⃗ ) est une famille liée.
+Donc ($u_{1} , u_{2} , u_{3}$ ) est une famille liée.
+
 2ème méthode
-Calculons le déterminant de ($u_{1}$⃗ ⃗ , $u_{2,}$⃗ ⃗ $u_{3}$⃗ ⃗ )
+
+Calculons le déterminant de ($u_{1} , u_{2,} u_{3}$ )
 
 #### 1 - 2 - 1
 
-dét($u_{1}$⃗ ⃗ $u_{2}$⃗ ⃗ $u_{3}$⃗ ⃗ )=| |=1|7 5|+2|4 5| -1 |4|
+dét($u_{1} u_{2} u_{3}$ )=| |=1|7 5|+2|4 5| -1 |4|
 , , 4 7 5
 1 1 2 1 2
 2 1 1
-dét($u_{1}$⃗ ⃗ , $u_{2}$⃗ ⃗ ,$u_{3}$⃗ ⃗ ) = (7 - 5) + 2 (4 - 10) - (4 - 14) = 0
-comme dét ($u_{1}$⃗ ⃗ , $u_{2}$⃗ ⃗ ,$u_{3}$⃗ ⃗ ) = 0, alors la famille ($u_{1}$⃗ ⃗ , $u_{2,}$⃗ ⃗ $u_{3}$⃗ ⃗ ) est liée.
+dét($u_{1} , u_{2} , u_{3}$ ) = (7 - 5) + 2 (4 - 10) - (4 - 14) = 0
+
+comme dét ($u_{1} , u_{2} , u_{3}$ ) = 0, alors la famille ($u_{1} , u_{2,} u_{3}$ ) est liée.
 
 #### 9. Base d’un espace vectoriel.
 
 Définition
-Une famille ($u_{1}$⃗ ⃗ , $u_{2}$⃗ ⃗ , … $u_{n}$⃗ ⃗ ) est une base de l’espace vectoriel E si, et seulement
+Une famille ($u_{1} , u_{2}$ , … $u_{n}$ ) est une base de l’espace vectoriel E si, et seulement
 si cette famille est à la fois génératrice de E et libre.
 Exemple
 
-Dans $\mathbb{R} ^{2,}$ on considère u⃗ ⃗ (1; 2) et v⃗ (1; 1) . Montrer que (u⃗ ⃗ , v⃗ ) est une base
+Dans $\mathbb{R} ^{2,}$ on considère u (1; 2) et v (1; 1) . Montrer que (u , v ) est une base
 
 de $\mathbb{R} ^{2}$
 
-Montrons que (u⃗⃗ ⃗ , v⃗⃗ ⃗ ) est une famille génératrice.
+Montrons que (u , v ) est une famille génératrice.
 Rappel
 
-(u⃗ ⃗ , v⃗ ) est une famille génératrice de $\mathbb{R} ^{2}$ ⟺$\forall w$⃗⃗ ⃗ $\in \mathbb{R} ^{2} , \exists ( α_{1} , α_{2} ) \in$
+(u , v ) est une famille génératrice de $\mathbb{R} ^{2}$ ⟺$\forall w \in \mathbb{R} ^{2} , \exists ( α_{1} , α_{2} ) \in$
 
-$\mathbb{R} ^{2} /$ w⃗⃗⃗ ⃗ = $α_{1} u$⃗⃗ ⃗ + $α_{2} v$⃗⃗ ⃗
+$\mathbb{R} ^{2} / w = α_{1} u + α_{2} v$
 
-Posons w⃗⃗ ⃗ = ( x, y).
+Posons w = ( x, y).
 
 x 1 1 x $= α_{1} + α_{2}$ (1)
 
@@ -7158,18 +7139,18 @@ Remplaçons $α_{1}$ par sa valeur dans (1), on a :
 
 x = y - x $+ α_{2} \Rightarrow α_{2}$ = 2x - y
 
-D’où (u⃗ ⃗ , v⃗ ) est une famille génératrice de $\mathbb{R} ^{2}$
-Montrons que (u⃗⃗ ⃗ , v⃗⃗ ⃗ ) est libre.
+D’où (u , v ) est une famille génératrice de $\mathbb{R} ^{2}$
+Montrons que (u , v ) est libre.
 Rappel
-(u⃗⃗ ⃗ , v⃗⃗ ⃗ ) est libre ⟺ dét (u⃗⃗ ⃗ , v⃗⃗ ⃗ ) $\neq 0$
-On a dét (u⃗ ⃗ , v⃗ ) = |1 1| = 1-2 = -1.
+(u , v ) est libre ⟺ dét (u , v$) \neq 0$
+On a dét (u , v ) = |1 1| = 1-2 = -1.
 2 1
-dét (u⃗ ⃗ , v⃗ ) = -1. -1$\neq$ 0
-d’où (u⃗⃗ ⃗ , v⃗⃗ ⃗ ) est libre.
+dét (u , v ) = -1. -1$\neq$ 0
+d’où (u , v ) est libre.
 
 ### Conclusion
 
-(u⃗ ⃗ , v⃗ ) étant génératrice et libre, est une base $\mathbb{R} ^{2}$ .
+(u , v ) étant génératrice et libre, est une base $\mathbb{R} ^{2}$ .
 
 #### 10. Dimension d’un espace vectoriel.
 
@@ -7185,7 +7166,7 @@ Conséquences
 Dans un espace vectoriel de dimension n, toute famille libre de n éléments
 est une base.
 De même, toute famille génératrice de n éléments est une base.
-Un espace vectoriel de dimension 0 est réduit au vecteur nul ⃗0⃗
+Un espace vectoriel de dimension 0 est réduit au vecteur nul $0$
 Corollaires
 - a) Si un espace vectoriel E admet une base ayant n éléments, alors toute partie
 contenante plus de n éléments est liée.
@@ -7198,10 +7179,10 @@ libre admet au plus n éléments.
 
 #### 11. Coordonnées d’un vecteur
 
-Soit $β$ = ($e_{1}$⃗ , $e_{2}$⃗ , … $e_{n}$⃗ ) est une base d’un espace vectoriel E. On appelle
-coordonnées d’un vecteur u⃗ ⃗ de E, les réels $x_{1} , x_{2}$ , … , $x_{n}$ , tels que u⃗ ⃗ = $x_{1} e_{1}$⃗ +
+Soit $β$ = ($e_{1} , e_{2}$ , … $e_{n}$ ) est une base d’un espace vectoriel E. On appelle
+coordonnées d’un vecteur u de E, les réels $x_{1} , x_{2}$ , … , $x_{n}$ , tels que u$= x_{1} e_{1}$ +
 
-$x_{2} e_{2}$⃗ + …+$x_{n} e_{n}$⃗
+$x_{2} e_{2}$ + …+$x_{n} e_{n}$
 
 ### II. Applications linéaires
 
@@ -7209,10 +7190,10 @@ $x_{2} e_{2}$⃗ + …+$x_{n} e_{n}$⃗
 
 E et F étant deux espaces vectoriels sur $\mathbb{R}$ , on dit qu’une application f de E
 vers F est linéaire si et seulement si f vérifie les deux propriétés suivantes :
-- 1) $\forall ($u ⃗ , v ⃗ ) $\in E$2, f (u ⃗ + v ⃗ ) = f (u ⃗ ) + f (v ⃗ ).
-- 2) $\forall f$(⋋, u⃗ ⃗ )$\in \mathbb{R}$ x E, f (⋋.u⃗ ⃗ ) = ⋋ f (u⃗ ⃗ )
+- 1) $\forall ($u , v $) \in E$2, f (u + v ) = f (u ) + f (v ).
+- 2) $\forall f$(⋋, u$) \in \mathbb{R}$ x E, f (⋋.u ) = ⋋ f (u )
 Remarque
-f (u⃗ ⃗ ), f ( v⃗ ), f (u⃗ ⃗ + v⃗ ), f(⋋, u ⃗ ), ⋋ f (u⃗ ⃗ ) sont des éléments de F.
+f (u ), f ( v ), f (u + v ), f(⋋, u ), ⋋ f (u ) sont des éléments de F.
 Vocabulaire
 Soit f une application linéaire de E vers F.
 Si $E \neq F$, alors f est un homomorphisme.
@@ -7225,35 +7206,32 @@ F : $\mathbb{R} ^{2} \to \mathbb{R} ^{3}$
 
 $x$
 
-u⃗ ⃗ (y$) \to$ f (u⃗ ⃗ ) = (x +2y ; -x 3y).
+u (y$) \to$ f (u ) = (x +2y ; -x 3y).
 Démontrer que f est une application linéaire de $\mathbb{R} ^{2}$ vers$\mathbb{R} ^{3}$
 
 ### Solution
 
 Démontrons que f est une application linéaire.
-f (u⃗ ⃗ ) = (x + 2y $;$ - x ; 3y)
+f (u ) = (x + 2y $;$ - x ; 3y)
 
 $x x’$
 
-$\forall u$⃗ ⃗ (y$) \in \mathbb{R} ^{2} , \forall v$⃗ ( ) $\in \mathbb{R} ^{2}$
+$\forall u$ (y$) \in \mathbb{R} ^{2} , \forall v$ ( ) $\in \mathbb{R} ^{2}$
 
 $y’$
 
-On a : f (u⃗ ⃗ ) = (x + 2y $;$ - x ; 3y)
-f ( v⃗ ) = (x’+ 2y’; - x’; 3y’)
-f (u⃗ ⃗ + v⃗ ) = [(x + 2y + x’+ 2y’); (- x - x’); (3y + 3y’)]
+On a : f (u ) = (x + 2y $;$ - x ; 3y)
+f ( v ) = (x’+ 2y’; - x’; 3y’)
+f (u + v ) = [(x + 2y + x’+ 2y’); (- x - x’); (3y + 3y’)]
 = (x + 2y $;$- x ; 3y) + (x’+ 2y’;- x’; 3y’)
-= f (u⃗ ⃗
-
-$\frac{) + f ( v ⃗ )}{f ( u ⃗ ⃗ ⃗ + v ⃗ ⃗ ⃗ ) = f ( u ⃗ ⃗ ⃗ ) + f ( v ⃗ ⃗ ⃗ )}$
-
-Alors
-f(⋋ u⃗ ⃗ ) = ?
-f(⋋u⃗ ⃗ ) = f(⋋ x,⋋ y)
+= f (u ) + f ( v )
+Alors f (u + v ) = f (u ) + f ( v )
+f(⋋ u ) = ?
+f(⋋u ) = f(⋋ x,⋋ y)
 = ((⋋ x + 2 ⋋ y$;$ - ⋋ x; 3 ⋋ y)
 = ⋋ ( x + 2y$;$ - x; 3y)
-= ⋋ f(u⃗ ⃗ )
-Alors : f(⋋u⃗⃗ ⃗ ) = ⋋ f(u⃗⃗ ⃗ )
+= ⋋ f(u )
+Alors : f(⋋u ) = ⋋ f(u )
 
 ### Conclusion
 
@@ -7262,18 +7240,18 @@ NB :
 Une application linéaire est totalement déterminée si l’on connait les images
 des vecteurs de base.
 Exemple
-Soit E l’espace vectoriel de base (i⃗ , j⃗ , k⃗⃗ ), f est l’application linéaire de E
+Soit E l’espace vectoriel de base (i , j , k ), f est l’application linéaire de E
 dans E telle que :
-f(i⃗ ) = 2 i⃗ - j⃗ ; f (j⃗ ) = j⃗ + k⃗⃗ ; f (3 i⃗ - k⃗⃗ ) = f(j⃗ )
-Déterminer le vecteur f (k⃗⃗ )
+f(i ) = 2 i - j$;$ f (j ) = j + k$;$ f (3 i - k ) = f(j )
+Déterminer le vecteur f (k )
 
 ### Solution
 
-Déterminons le vecteur f (k⃗⃗ )
-On sait que f (3i⃗ ) - f(k⃗⃗ ) = f(j⃗ ) ⟺ f (k⃗⃗ ) = 3 f (i⃗ ) – f(j⃗ )
-f (k⃗⃗ )= 3 (2i⃗ - j⃗ ) - (j⃗ + k⃗⃗ )
-f (k⃗⃗ )= 6i⃗ - 3 j⃗ - j⃗ - k⃗⃗
-D’où f (⃗k⃗ ⃗ ) = 6i⃗ - 4j⃗ - ⃗k⃗ ⃗
+Déterminons le vecteur f (k )
+On sait que f (3i ) - f(k ) = f(j ) ⟺ f (k ) = 3 f (i ) – f(j )
+f (k )= 3 (2i - j ) - (j + k )
+f (k )= 6i - 3 j - j - k
+D’où f (k ) = 6i - 4j - k
 
 #### 2. Noyau et image d’une application linéaire.
 
@@ -7282,31 +7260,36 @@ vectoriel F.
 
 ##### a) Noyau
 
-On appelle noyau de f et on noté Kerf l’ensemble des vecteurs u⃗ ⃗ de E
-tels que f(u⃗ ⃗ )= ⃗0⃗
-Kerf = u⃗⃗ ⃗ $\in /$f(u⃗⃗ ⃗ ) = ⃗0⃗ ⃗
+On appelle noyau de f et on noté Kerf l’ensemble des vecteurs u de E
+
+tels que $f ( u )= 0$
+
+Kerf = $u \in / f ( u ) = 0$
+
 Image
 On appelle image de f et on note Imf, l’image f(E) de E par f.
 F : E ⟶ F
-u⃗ ⃗ ⟶ ⃗u’⃗ ⃗ ⃗ = f(u⃗ ⃗ )
-Imf = {f(u⃗⃗ ⃗ ) $\in F /$ u⃗⃗ ⃗ $\in E$}
+u ⟶ u’= f(u )
+
+Imf = {f(u$) \in F /$ u$\in E$}
+
 Théorèmes
 Th1 : Kerf est un sous-espace vectoriel de E.
 Th2 : Imf est un sous-espace vectoriel de F.
 Th3 : f est surjective si et seulement si Imf = F.
-Th4 : f est injective si et seulement si Kerf = {⃗0⃗ }, ou f$( u_{1}$⃗ ⃗ ) =
+Th4 : f est injective si et seulement si Kerf = {0 }, ou f$( u_{1}$ ) =
 
-f$( u_{2}$⃗ ⃗ ) ⟺ $u_{1}$⃗ ⃗ = $u_{2}$⃗ ⃗
+f$( u_{2}$ ) ⟺ $u_{1} = u_{2}$
 
 Remarque 1
 Si f est un endomorphisme de E alors :
 dimKerf + dimImf = dimE
 Remarque 2
-Si ($\Delta$): ax + by + c = 0, alors un vecteur directeur est u⃗⃗ ⃗ (- b)
+Si ($\Delta$): ax + by + c = 0, alors un vecteur directeur est u (- b)
 
 $a$
 
-Si ($\Delta$): y = ax + b , alors un vecteur directeur est u⃗⃗ ⃗ (1)
+Si ($\Delta$): y = ax + b , alors un vecteur directeur est u (1)
 
 $a$
 
@@ -7314,7 +7297,7 @@ Exercices d’application
 
 ### Exercice 1
 
-Dans l’espace vectoriel $\mathbb{R} ^{2}$ muni de la base $β$ = ($e_{1}$⃗ , $e_{2}$⃗ ), on considère l’application
+Dans l’espace vectoriel $\mathbb{R} ^{2}$ muni de la base $β$ = ($e_{1} , e_{2}$ ), on considère l’application
 linéaire f définie par :
 x’= - x + 3y
 {
@@ -7332,12 +7315,14 @@ y’= 2x - 6y
 
 #### 1. Noyau de f
 
-x ⃗⃗⃗ ⃗ x’
-Posons u⃗ ⃗ (y) alors f (u⃗ ⃗ ) = u’( )
+$x x’$
+
+Posons u (y) alors f (u ) = u’( )
 
 $y’$
 
-Par définition Kerf = u⃗ ⃗ $\in \mathbb{R} ^{2} /$ f (u⃗ ⃗ ) = ⃗0⃗
+Par définition Kerf = u$\in \mathbb{R} ^{2} /$ f (u ) = 0
+
 x’= 0 - x + 3y = 0
 ⟺ { ⟺ {
 y’= 0 2x - 6y = 0
@@ -7364,10 +7349,10 @@ d’équation x - 3y = 0
 $ou y = \frac{1}{3} x$.
 
 Base :
-Une base de Kerf est $e_{1}$⃗ (3) ou $e_{1}$⃗ = 3i⃗ + j⃗
+Une base de Kerf est $e_{1}$ (3) ou $e_{1}$ = 3i + j
 2 Image de f
 
-Par définition Imf = f (u⃗ ⃗ ) $\in \mathbb{R} ^{2} /$ u⃗ ⃗ $\in \mathbb{R} ^{2}$
+Par définition Imf = f (u$) \in \mathbb{R} ^{2} /$ u$\in \mathbb{R} ^{2}$
 
 x’= - x + 3y (1) 2x’= - 2x + 6y
 
@@ -7380,11 +7365,11 @@ y’= 2x - 6y (2) y’= 2x - 6y
 
 Imf est la droite vectorielle d’équation 2x’+ y’= 0
 Base
-Une base de Imf est $e_{2}$⃗ (- 1) ou $e_{2}$⃗ = - i⃗ + 2 j⃗
+Une base de Imf est $e_{2}$ (- 1) ou $e_{2}$ = - i + 2 j
 
 ### Exercice 2
 
-Soit $β$= (i⃗ , j⃗ ) une base de l’espace vectoriel E. On considère l’endomorphisme f
+Soit $β$= (i , j ) une base de l’espace vectoriel E. On considère l’endomorphisme f
 
 $x’= x - 2 y$
 
@@ -7400,7 +7385,7 @@ y’= 3x + y
 ##### a) Déterminons Kerf et Imf
 
 x x’= 0 x - 2y = 0
-u⃗ ⃗ ( ) $\in$ kerf ⟺ f(u⃗ ⃗ ) = ⃗0⃗ ⟺⟺ { ⟺ {
+u ( ) $\in$ kerf ⟺ f(u ) = 0 ⟺⟺ { ⟺ {
 y y’= 0 3x + y = 0
 Calculons le déterminant du système
 dét = d | 1 - 2 |= 1+6 = 7 ⟹ 7 $\neq$ 0
@@ -7409,20 +7394,22 @@ Comme d $\neq$ 0, le système admet une solution unique.
 Résolvons le système par une méthode de notre choix.
 Utilisons la méthode d’addition.
 
-##### x - 2y = 0 $\frac{x - 2y = 0}{{ 6 x + 2 y =}}$
+##### x - 2y = 0 x - 2y = 0
 
-⟺ { | ⟹
-3x + y = 0 $\times$ (2) 0
+⟺ { | ⟹ {
+3x + y = 0 $\times$ (2) 6x + 2y = 0
 
 7x = 0 $\Rightarrow$ x = 0
 
 x = 0 dans (1) $\Rightarrow$ -2y = 0 $\Rightarrow$ y = 0
 
 D’où S ={(0,0)}
-Alors Kerf = {⃗0⃗ } donc f est injective.
+Alors Kerf = {0 } donc f est injective.
 Image de f :
 x’= x - 2y
-f(u⃗ ⃗ ) $\in I$mf ⟺ {
+
+f(u$) \in I$mf ⟺ {
+
 y’= 3x + y
 d= | 1 - 2 | = 1+6 = 7 $\neq$ 0
 3 1
@@ -7435,45 +7422,48 @@ y’= 3x + y
 #### 3. $Ensemble de vecteurs W_{1}$ invariants par f
 
 Soit f : E ⟶ E
-u⃗ ⃗ ⟶ ⃗u⃗⃗ ⃗’= f(u⃗ ⃗ ), un endomorphisme de E.
-u⃗ ⃗ et invariant par f ⟺ f(u⃗ ⃗ ) = u⃗ ⃗
-L’ensemble des vecteurs invariants est $: W_{1}$ = {u⃗ ⃗ $\in E$ /f(u⃗ ⃗ ) = u⃗ ⃗ }
+u ⟶ u’= f(u ), un endomorphisme de E.
+u et invariant par f ⟺ f(u ) = u
+L’ensemble des vecteurs invariants est $: W_{1}$ = {u$\in E$ /f(u ) = u }
 
 #### 4. Ensemble de vecteurs W2 transformés en leurs opposés
 
 Soit f : E ⟶ E
-u⃗ ⃗ ⟶ ⃗u⃗⃗ ⃗’= f(u⃗ ⃗ ) = - u⃗ ⃗ , un endomorphisme de E.
-$W_{2}$ = {u⃗ ⃗ $\in E$ /f(u⃗ ⃗ ) = - u⃗ ⃗ }
+u ⟶ u’= f(u ) = - u , un endomorphisme de E.
+
+$W_{2}$ = {u$\in E$ /f(u ) = - u }
 
 #### 5. Expression analytique d’une application linéaire
 
 Soit f $:$ E ⟶ F
-u⃗ ⃗ ⟶ ⃗u⃗⃗ ⃗’= f(u⃗ ⃗ ), une application linéaire.
+u ⟶ u’= f(u ), une application linéaire.
 Déterminer l’expression analytique de l’application linéaire f revient à exprimer les
-composantes de ⃗u⃗⃗ ⃗’en fonction de celles de u⃗ ⃗
-Soit (i⃗ , j⃗ , k⃗⃗ ) une base de E, ⃗u⃗⃗ ⃗’(x’, y’, z’) image par f d’un vecteur u⃗ ⃗ (x, y, z) de E. Si
-Mf est la matrice de f dans la base (i⃗ , j⃗ , k⃗⃗ ), alors f(u⃗ ⃗ )= u⃗ ⃗ ⟺ Mf u⃗ ⃗ = ⃗u⃗⃗ ⃗’
+composantes de u’en fonction de celles de u
+Soit (i , j , k ) une base de E, u’(x’, y’, z’) image par f d’un vecteur u (x, y, z) de E. Si
+Mf est la matrice de f dans la base (i , j , k ), alors f(u )= u ⟺ Mf u = u’
 a b c x x’x’= ax + by + cz
 Ainsi : (a’b’c’) (y) = (y’) ⟹ {y’= a’x + b’y + c’z
 a" b" c" z z’z’= ax + by + c"z
-est l’expression analytique de f dans la base (i⃗ , j⃗ , k⃗⃗ ).
+est l’expression analytique de f dans la base (i , j , k ).
 Exemple
-Soit E l’espace vectoriel de base (i⃗ , j⃗ ) et soit f : E↦ E l’application linéaire définie.
-telle que f (i⃗ ) = 3i⃗ + j⃗ et f (j⃗ ) = - i⃗ + j⃗ . Déterminer l’expression analytique de f.
+Soit E l’espace vectoriel de base (i , j ) et soit f : E↦ E l’application linéaire définie.
+telle que f (i ) = 3i + j et f (j ) = - i + j . Déterminer l’expression analytique de f.
 
 ### Solution
 
 On a : f : E ↦ E
-x ⃗⃗⃗ ⃗ x’
-u⃗ ⃗ (y) ↦ u’( ) = f (u⃗ ⃗ )
+
+$x x’$
+
+u (y) ↦ u’( ) = f (u )
 
 $y’$
 
-On a : x’i⃗ +y’j⃗ = f (xi⃗ + yj⃗ )
-= x f (i⃗ )+y f (j⃗ )
-= x (3i⃗ +j⃗ ) + y (-i⃗ +j⃗ )
-= 3 x i⃗ +x j⃗ - yi⃗ + y j⃗
-x’i⃗ + y’j⃗ = ( 3x - y) i⃗ + (x + y) j⃗
+On a : x’i +y’j = f (xi + yj )
+= x f (i )+y f (j )
+= x (3i +j ) + y (-i +j )
+= 3 x i +x j - yi + y j
+x’i + y’j = ( 3x - y) i + (x + y) j
 Par identification
 x’= 3x – y
 {
@@ -7486,13 +7476,13 @@ La matrice d’une application linéaire s’obtient à partir de l’expression
 
 $f$.
 
-Dans la base $β$ = (i⃗ , j⃗ ) , si f est définie par :
+Dans la base $β$ = (i , j ) , si f est définie par :
 x’= ax+ cy
 y’= bx +dy
 
 $x x’$
 
-Avec u⃗ ⃗ (y) et f (u⃗ ⃗ ) =( ), on convient d’écrire :
+Avec u (y) et f (u ) =( ), on convient d’écrire :
 
 $y’$
 
@@ -7511,41 +7501,42 @@ Elle est parfois notée $M_{f}$ = [ ] et est appelé matrice carrée d’ordre 2
 b d
 Remarques
 Une matrice est dite carrée si le nombre de lignes est égal au nombre de colonnes.
-Exemples 1 : dans la base (i⃗ , j⃗ ), la matrice associée de l’application linéaire f définie
+Exemples 1 : dans la base (i , j ), la matrice associée de l’application linéaire f définie
 x’= 3x - y 3 - 1
 par { est : Mf = ( )
 y’= x + y 1 1
 Exemple 2
-Dans la base (i⃗ , j⃗⃗⃗ , ⃗k⃗⃗ ⃗ , ), la matrice associée à l’application linéaire
+Dans la base (i , j , k , ), la matrice associée à l’application linéaire
 x’= 2x - y + z 2 - 1 1
 f $: \mathbb{R} ^{3}$ ⟶ $\mathbb{R} ^{3}$ définie par : {y’= - x + 2y - 4z est Mf = [- 1 2 - 4]
 
 $z’= x + y 1 1 0$
 
 Rappels
-La base canonique de $\mathbb{R}$² est = {i⃗ $(_{0}$1), j⃗ $(_{1}$0)}
+La base canonique de $\mathbb{R}$² est = {i$(_{0}$1), j$(_{1}$0)}
 1 0 0
-La base canonique de $\mathbb{R} ^{3}$ est $: \beta =$ {i⃗ (0) ; j⃗ (1) ; k⃗⃗ (0)}
+La base canonique de $\mathbb{R} ^{3}$ est $: \beta =$ {i (0) ; j (1) ; k (0)}
 0 0 1
 Théorème
-Soit f : E E ; U⃗⃗⃗ ⃗U⃗ ⃗ ⃗’= f(U⃗⃗⃗ ) un endomorphisme de E et Mf la matrice de f
+Soit f : E E ; UU’= f(U ) un endomorphisme de E et Mf la matrice de f
 dans la base canonique.
 f est bijective si, et seulement si dét M$f \neq$ 0.
 Remarques importantes
 Remarque 1
-Si f est un endomorphisme de $\mathbb{R}$² muni de la base (i⃗ , j⃗ ) et si on connaît f(i⃗ )
-et f(j⃗ ), alors la matrice de f est telle que :
+Si f est un endomorphisme de $\mathbb{R}$² muni de la base (i , j ) et si on connaît f(i )
+et f(j ), alors la matrice de f est telle que :
 
-f(i⃗ ) f(j⃗ )
+$f ( i ) f ( j$ )
+
 Mf = ( ⋮ ⋮ )
 ⋮ ⋮
 
 ### Exercice 1 d’application
 
-Soit f un endomorphisme de $\mathbb{R} ^{2}$ muni de la base (i⃗ , j ⃗⃗ ⃗ ) est défini tel que :
-f(i⃗ ) = - i⃗ + 2j⃗
+Soit f un endomorphisme de $\mathbb{R} ^{2}$ muni de la base (i , j ) est défini tel que :
+f(i ) = - i + 2j
 {
-f(j⃗ ) = 3i⃗ - 4j⃗
+f(j ) = 3i - 4j
 Déterminons la matrice de f.
 
 ### Solution la matrice de f est M = (- 1 3)
@@ -7553,21 +7544,23 @@ Déterminons la matrice de f.
 $f 2 -$ 4
 
 Remarque 2
-Soit f un endomorphisme de $\mathbb{R} ^{3}$ muni de la base (i⃗ , j⃗⃗⃗ , ⃗k⃗⃗ ⃗ , ) et si on connait
-f(i⃗ ), f(j⃗ ), f(k⃗⃗ ), alors la matrice de f est telle que :
-f(i⃗ ) f(j⃗ ) f(k⃗⃗ )
+Soit f un endomorphisme de $\mathbb{R} ^{3}$ muni de la base (i , j , k , ) et si on connait
+f(i ), f(j ), f(k ), alors la matrice de f est telle que :
+
+$f ( i ) f ( j ) f ( k$ )
+
 Mf = ( ⋮ ⋮ ⋮ )
 ⋮ ⋮ ⋮
 
 ### Exercice 2 d’application
 
-Soit E un espace vectoriel rapporté à une base ($e_{1}$⃗ ⃗ ⃗ ⃗ , $e_{2}$⃗ ⃗ ⃗ ⃗ ⃗, ⃗$e_{3}$⃗ ⃗ ⃗ ⃗ , ). Soit f
+Soit E un espace vectoriel rapporté à une base ($e_{1} , e_{2}$, $e_{3}$ , ). Soit f
 
-f$( e_{1}$⃗ ) = 3$e_{1}$⃗ $- e_{2}$⃗ + $e_{3}$⃗
+f$( e_{1}$ ) = 3$e_{1} - e_{2} + e_{3}$
 
-l’endomorphisme de E défini tel que : { f$( e_{2}$⃗ ) = $e_{1}$⃗ + $e_{2}$⃗ + 2$e_{3}$⃗
+l’endomorphisme de E défini tel que : { f$( e_{2}$ ) = $e_{1} + e_{2}$ + 2$e_{3}$
 
-f $( e_{3}$⃗ ) = $- e_{1}$⃗ + $e_{2}$⃗ + 3$e_{3}$⃗
+f $( e_{3}$ ) = $- e_{1} + e_{2}$ + 3$e_{3}$
 
 Trouver la matrice de f.
 
@@ -7580,7 +7573,7 @@ La matrice de f est : Mf =[ 1 1 2]
 
 ### Exercice 3 d’application
 
-Dans la base (i⃗ , j⃗⃗⃗ , ⃗k⃗⃗ ⃗, ), on considère l’application linéaire dont la matrice est
+Dans la base (i , j , k, ), on considère l’application linéaire dont la matrice est
 
 #### 0 - 2 2
 
@@ -7604,19 +7597,19 @@ Comme le dét de $M_{f}$ = 0, alors f n’est pas bijective
 
 ### Exercice
 
-Dans l’espace vectoriel E de base (i⃗ , j⃗⃗⃗ , ⃗k⃗⃗ ⃗ , ), on considère l’endomorphisme f qui à tout
+Dans l’espace vectoriel E de base (i , j , k , ), on considère l’endomorphisme f qui à tout
 x x’x’= - 2x + 4y + 2z
-vecteur u⃗ ⃗ (y) associe le vecteur u’⃗ ⃗ (y’) tel que : {y’= - 4x + 8y + 4z
+vecteur u (y) associe le vecteur u’(y’) tel que : {y’= - 4x + 8y + 4z
 z z’z’= 5x - 10y - 5z
 
 #### 1. Déterminer la matrice M de f
 
-- 2. Déterminer le noyau de f, puis en donner une base ($e_{1,}$⃗ $e_{2}$⃗ ).
-- 3. Déterminer l’image de f, puis en donner une base ($e_{3}$⃗ )
-- 4. Déterminer l’ensemble des vecteurs invariants par f, puis en donner une base ($e_{4}$⃗ )
-- 5. Montrer que ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) est une base de E, puis écrire la matrice M de f dans la base
+- 2. Déterminer le noyau de f, puis en donner une base ($e_{1,} e_{2}$ ).
+- 3. Déterminer l’image de f, puis en donner une base ($e_{3}$ )
+- 4. Déterminer l’ensemble des vecteurs invariants par f, puis en donner une base ($e_{4}$ )
+- 5. Montrer que ($e_{1} , e_{2} , e_{3}$ ) est une base de E, puis écrire la matrice M de f dans la base
 
-($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ).
+($e_{1} , e_{2} , e_{3}$ ).
 
 ### Solution
 
@@ -7627,7 +7620,7 @@ z’= 5x - 10y - 5z 5 - 10 - 5
 #### 2. Déterminons le noyau de f
 
 x’= 0 - 2x + 4y + 2z = 0
-Kerf = { u⃗ ⃗ $\in E /$f(u⃗ ⃗ ) = u⃗ ⃗ } ⟹ {y’= 0 ⟺ {- 4x + 8y + 4z = 0
+Kerf = { u$\in E /$f(u ) = u } ⟹ {y’= 0 ⟺ {- 4x + 8y + 4z = 0
 z’= 0 5x - 10y - 5z = 0
 Calculons le déterminant du système
 - 2 4 2 - 2 4
@@ -7650,21 +7643,22 @@ En effet, les trois équations sont équivalentes :
 Kerf est un plan vectoriel d’équation x - 2y – z = 0.
 Donnons une base de kerf
 On fixe x.
-x = 2y + z avec u⃗ ⃗ (x, y, z) ; u⃗ ⃗ = (2y + z, y, z) ⟹ u⃗ ⃗ = (2y, y, 0)+(z ; 0 ; z) ⟹
-u⃗ ⃗ = y(2; 1; 0) + z(1; 0; 1)
+x = 2y + z avec u (x, y, z) ; u = (2y + z, y, z) ⟹ u = (2y, y, 0)+(z ; 0 ; z) ⟹
+u = y(2; 1; 0) + z(1; 0; 1)
 
-D’où u⃗ ⃗ = $y e_{1}$⃗ + $z e_{2}$⃗
+D’où $u = y e_{1} + z e_{2}$
 
 Kerf est un plan vectoriel d’équation x - 2y - z = 0 engendré par les vecteurs
 2 1
 
-$e_{1}$⃗ (1) et $e_{2}$⃗ (0)
+$e_{1}$ (1) et $e_{2}$ (0)
 
 0 1
 
 #### 3) $\frac{Déterminons l’image Imf}{’}$
 
-Imf = { u⃗ ⃗ $ε$ E $/ \exists u$⃗ ⃗ $\in$ E et u’⃗ ⃗ = f( u⃗ ⃗ )}
+Imf = { u$ε$ E $/ \exists u \in$ E et u’= f( u )}
+
 x’= - 2x + 4y + 2z x’= - 2x + 4y + 2z
 {y’= - 4x + 8 y + 4 z |∗ (2) ⟹ { 2y’= - 8x + 16y + 8z
 z’= 5x - 10y - 5z ∗ (2) 2z’= 10x - 20 y - 10z
@@ -7675,7 +7669,7 @@ $\frac{Donnons une base de Imf}{x}$
 
 $- 2 y - 2 z - 2 y - 2 z -$2
 
-u⃗ ⃗ (y) $ε$ Inf ⟺ x = 2y -2z ⟹ u⃗ ⃗ ( y ) ⟹ ( y ) + ( 0 ) ⟹ y ( 1 ) +
+u (y) $ε$ Inf ⟺ x = 2y -2z ⟹ u ( y ) ⟹ ( y ) + ( 0 ) ⟹ y ( 1 ) +
 
 $z z 0 z$ 0
 
@@ -7685,11 +7679,11 @@ z ( 0 )
 
 $- 2 -$1
 
-Une base de Imf est $e_{3}$⃗ ( 1 ) et $e_{4}$⃗ ( 0 )
+Une base de Imf est $e_{3}$ ( 1 ) et $e_{4}$ ( 0 )
 0 1
 Déterminons l’ensemble des vecteurs invariants par f
 x x’= x - 2x + 4y + 2z = x
-u⃗ ⃗ (y) $ε$ Invf ⟺ f(u⃗ ⃗ ) = u⃗ ⃗ ⟺ {z’= y ⟺ {- 4x + 8y + 4z = y ⟺
+u (y) $ε$ Invf ⟺ f(u ) = u ⟺ {z’= y ⟺ {- 4x + 8y + 4z = y ⟺
 
 $z z’= z 5 x - 10 y - 5 y = z$
 
@@ -7707,11 +7701,11 @@ $z = - x ; xε \mathbb{R}$
 
 $x x$ 1
 
-D’où u⃗ ⃗ (y) $ε$ Inf ⟺ u⃗ ⃗ ( 2 ) = x ( )
+D’où u (y) $ε$ Inf ⟺ u ( 2 ) = x ( )
 
 $z - \frac{5 x}{2} x \frac{- 2 5}{2}$
 
-Donc Invf est une droite vectorielle engendrée par $e_{5}$⃗ ( ) ou = i⃗ + 2j⃗ $- \frac{5}{2 ⃗}$ ℎ⃗
+Donc Invf est une droite vectorielle engendrée par $e_{5}$ ( ) ou = i + 2j$- \frac{5}{2}$ ℎ
 
 $\frac{- 2 5}{2}$
 
@@ -7719,44 +7713,54 @@ On fixe y = $λ$, alors (2) ⟹ x $= \frac{1}{2} λ$
 
 $x \frac{1}{2} λ \frac{1}{2}$
 
-U⃗⃗⃗ (y) ⟹ U⃗⃗⃗ ( ) = $λ$ ( )
+U (y) ⟹ U ( ) = $λ$ ( )
 
 $z \frac{- 5 λ}{4} λ \frac{- 1 5}{4}$
 
 1/2
-Donc Invf est une droite vectorielle d’équation y =-$\frac{4}{5}$ z engendrée par $e_{1}$⃗ ( 1 ) ou
+Donc Invf est une droite vectorielle d’équation y =-$\frac{4}{5}$ z engendrée par $e_{1}$ ( 1 ) ou
 - 5/4
 
-$e_{1}$⃗ = $\frac{1}{2 ⃗} i$+j⃗ - $\frac{5}{4 ⃗} k$⃗
+$e_{1} = \frac{1}{2} i + j - \frac{5}{4} k$
 
-5.- Montrons que ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) est une base de E, puis écrivons la matrice M de f dans la
+5.- Montrons que ($e_{1} , e_{2} , e_{3}$ ) est une base de E, puis écrivons la matrice M de f dans la
 
-base ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ).
+base ($e_{1} , e_{2} , e_{3}$ ).
 
-($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) est une base de E ⟺ dét ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) $\neq$ 0
+($e_{1} , e_{2} , e_{3}$ ) est une base de E ⟺ dét ($e_{1} , e_{2} , e_{3} ) \neq$ 0
 
 2 1 - 2 2 1
-dét ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) = |1 0 - 4 1 0|
+
+dét ($e_{1} , e_{2} , e_{3}$ ) = |1 0 - 4 1 0|
+
 0 1 5 0 1
-dét ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) = 0 + 0 - 2 - 0 + 8 - 5 = 1
+dét ($e_{1} , e_{2} , e_{3}$ ) = 0 + 0 - 2 - 0 + 8 - 5 = 1
 
-dét ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) = 1
+dét ($e_{1} , e_{2} , e_{3}$ ) = 1
 
-Comme dét ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) $\neq$ 0, donc ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ) est une base de E.
+Comme dét ($e_{1} , e_{2} , e_{3} ) \neq$ 0, donc ($e_{1} , e_{2} , e_{3}$ ) est une base de E.
 
-*Ecrivons la matrice de f dans la base ($e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ ).
+*Ecrivons la matrice de f dans la base ($e_{1} , e_{2} , e_{3}$ ).
 On sait que :
-$e_{1}$⃗ = 2i⃗ + j⃗ ; $e_{2}$⃗ = i⃗ + k⃗⃗ et $e_{3}$⃗ = - 2i⃗ - 4j⃗ + 5k⃗⃗
-Exprimons i⃗ , j⃗ , k⃗⃗ en fonction de $e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗
-2i⃗ + j⃗ = $e_{1}$⃗ (1)
-{ i⃗ + k⃗⃗ = $e_{2}$⃗ (2)
-- 2i⃗ - 4j⃗ + 5k⃗⃗ = $e_{3}$⃗ (3)
-(1) j⃗ = $e_{1}$⃗ - 2i⃗
+$e_{1}$ = 2i + j$; e_{2}$ = i + k et $e_{3}$ = - 2i - 4j + 5k
+Exprimons i , j , k en fonction de $e_{1} , e_{2} , e_{3}$
 
-Remplaçons j⃗ par sa valeur dans (2) et (3), on a :
-i⃗ + k⃗⃗ = $e_{2}$⃗ i⃗ + k⃗⃗ = $e_{2}$⃗
+2i + j$= e_{1}$ (1)
+
+{ i + k$= e_{2}$ (2)
+
+- 2i - 4j + 5k$= e_{3}$ (3)
+
+(1) $j = e_{1} - 2 i$
+
+Remplaçons j par sa valeur dans (2) et (3), on a :
+
+$i + k = e_{2} i + k = e_{2}$
+
 { ⟹ {
-- 2i⃗ - 4($e_{1}$⃗ - 2i⃗ ) + 5k⃗⃗ = $e_{3}$⃗ - 2i⃗ - 8i⃗ + 5k⃗⃗ = 4$e_{1}$⃗ + $e_{3}$⃗
+
+- 2i - 4($e_{1}$ - 2i ) + 5k$= e_{3}$ - 2i - 8i + 5k = 4$e_{1} + e_{3}$
+
 - 3x + 4y + 2z = 0 (1)
 ⟹ {- 4x + 7y + 4z = 0(2)
 5x - 10y - 6z = 0(3)
@@ -7775,71 +7779,72 @@ On aura : { ⟹ {
 
 5 ($\frac{7}{4} y$ + z) - 10y - 6z = 0 $\frac{35}{4} y$ - 10y + 5z - 6z = 0
 
-i⃗ + k⃗⃗ = $e_{2}$⃗ k(- 5) - 5i⃗ - 5k⃗⃗ = - $5 e_{2}$⃗
+i + k$= e_{2}$ k(- 5) - 5i - 5k = - $5 e_{2}$
 { ⌊ ⟹ {
 
-6i⃗ + 5k⃗⃗ = 4$e_{1}$⃗ + $e_{3}$⃗ 6i⃗ + 5k⃗⃗ = 4$e_{1}$⃗ + $e_{3}$⃗
+6i + 5k = 4$e_{1} + e_{3}$ 6i + 5k = 4$e_{1} + e_{3}$
 
-i⃗ = 4$e_{1}$⃗ - $5 e_{2}$⃗ + $e_{3}$⃗
+i = 4$e_{1}$ - $5 e_{2} + e_{3}$
 
-Remplaçons i⃗ par sa valeur dans (2), on a :
+Remplaçons i par sa valeur dans (2), on a :
 
-k⃗⃗ = $e_{2}$⃗ - $4 e_{1}$⃗ + 5$e_{2}$⃗ $- e_{3}$⃗ ⟹ k⃗⃗ = - $4 e_{1}$⃗ + 6$e_{2}$⃗ $- e_{3}$⃗
+k$= e_{2}$ - $4 e_{1}$ + 5$e_{2} - e_{3}$ ⟹ k = - $4 e_{1}$ + 6$e_{2} - e_{3}$
 
-Remplaçons i⃗ et k⃗⃗ par leurs valeurs dans (3), on a :
+Remplaçons i et k par leurs valeurs dans (3), on a :
 
-4j⃗ = $- e_{3}$⃗ - 2(- $4 e_{1}$⃗ + 6$e_{2}$⃗ $- e_{3}$⃗ ) + 5(- $4 e_{1}$⃗ + 6$e_{2}$⃗ $- e_{3}$⃗ )
+4j = $- e_{3}$ - 2(- $4 e_{1}$ + 6$e_{2} - e_{3}$ ) + 5(- $4 e_{1}$ + 6$e_{2} - e_{3}$ )
 
-4j⃗ = $- e_{3}$⃗ - $2 e_{3}$⃗ - $5 e_{3}$⃗ - $8 e_{1}$⃗ - $20 e_{1}$⃗ + 10$e_{2}$⃗ + 30$e_{2}$⃗
+4j = $- e_{3}$ - $2 e_{3}$ - $5 e_{3}$ - $8 e_{1}$ - $20 e_{1}$ + 10$e_{2}$ + 30$e_{2}$
 
-4j⃗ = - $28 e_{1}$⃗ + 40$e_{2}$⃗ - $8 e_{3}$⃗
+4j = - $28 e_{1}$ + 40$e_{2}$ - $8 e_{3}$
 
-Soit : j⃗ = - $7 e_{1}$⃗ - $10 e_{2}$⃗ - $2 e_{3}$⃗
+Soit : j = - $7 e_{1}$ - $10 e_{2}$ - $2 e_{3}$
 
 On sait aussi que :
-f(i⃗ ) = - 2i⃗ - 4j⃗ + 5k⃗⃗
+f(i ) = - 2i - 4j + 5k
 
-f(j⃗ ) = 4i⃗ + 8j⃗ - 10k⃗⃗
-f(k⃗⃗ ) = 2i⃗ + 4j⃗ - 5k⃗⃗
-Alors f(i⃗ ) = f(4$e_{1}$⃗ - $5 e_{2}$⃗ + $e_{3}$⃗ ) = - 2i⃗ - 4j⃗ + 5k⃗⃗ = $e_{3}$⃗
+f(j ) = 4i + 8j - 10k
+f(k ) = 2i + 4j - 5k
 
-⟹ 4f$( e_{1}$⃗ ) - 5f$( e_{2}$⃗ ) + f$( e_{3}$⃗ ) = $e_{3}$⃗
+Alors f(i ) = f(4$e_{1}$ - $5 e_{2} + e_{3}$ ) = - 2i - 4j + 5k$= e_{3}$
 
-f(j⃗ ) = f(- $7 e_{1}$⃗ + 10$e_{2}$⃗ - $2 e_{3}$⃗ ) = 4i⃗ + 8j⃗ - 10k⃗⃗ = - $2 e_{3}$⃗
+⟹ 4f$( e_{1}$ ) - 5f$( e_{2}$ ) + f$( e_{3}$ ) = $e_{3}$
 
-⟹ - 7f$( e_{1}$⃗ ) + 10f$( e_{2}$⃗ ) - 2f$( e_{3}$⃗ ) = - $2 e_{3}$⃗
+f(j ) = f(- $7 e_{1}$ + 10$e_{2}$ - $2 e_{3}$ ) = 4i + 8j - 10k = - $2 e_{3}$
 
-- 4x - 5y + z $= e_{3}$⃗ (1)
-⟹ {- 7x + 10y - 2z = - $2 e_{3}$⃗ (2)
-- 4x + 6y - z $= e_{3}$⃗ (3)
+⟹ - 7f$( e_{1}$ ) + 10f$( e_{2}$ ) - 2f$( e_{3}$ ) = - $2 e_{3}$
+
+- 4x - 5y + z $= e_{3}$ (1)
+⟹ {- 7x + 10y - 2z = - $2 e_{3}$ (2)
+- 4x + 6y - z $= e_{3}$ (3)
 Remplaçons z par sa valeur dans
-- 7x + 10y - 2(4x + 5y $+ e_{3}$⃗ ) = - $2 e_{3}$⃗
+- 7x + 10y - 2(4x + 5y $+ e_{3}$ ) = - $2 e_{3}$
 {
-- 4x + 6y - (4x + 5y $+ e_{3}$⃗ ) = $e_{3}$⃗
+- 4x + 6y - (4x + 5y $+ e_{3}$ ) = $e_{3}$
 x = 0
-{ alors : z $= e_{3}$⃗ + 4(0) + 5(2$e_{3}$⃗ )
+{ alors : z $= e_{3}$ + 4(0) + 5(2$e_{3}$ )
 
-y = 2$e_{3}$⃗
+y = 2$e_{3}$
 
 Ainsi donc :
 
-f$( e_{1}$⃗ ) = 0$e_{1}$⃗ + 0$e_{2}$⃗ + 0$e_{3}$⃗
+f$( e_{1}$ ) = 0$e_{1}$ + 0$e_{2}$ + 0$e_{3}$
 
-{ f$( e_{2}$⃗ ) = 0$e_{1}$⃗ + 0$e_{2}$⃗ + 2$e_{3}$⃗
+{ f$( e_{2}$ ) = 0$e_{1}$ + 0$e_{2}$ + 2$e_{3}$
 
-f$( e_{3}$⃗ ) = 0$e_{1}$⃗ + 0$e_{2}$⃗ + 11$e_{3}$⃗
+f$( e_{3}$ ) = 0$e_{1}$ + 0$e_{2}$ + 11$e_{3}$
 
 $0 0 0$
 
-La matrice de f dans la base $e_{1}$⃗ , $e_{2}$⃗ , $e_{3}$⃗ est : $M_{f}$ = (0 0 0)
+La matrice de f dans la base $e_{1} , e_{2} , e_{3}$ est : $M_{f}$ = (0 0 0)
 
 $0 2 11$
 
 ### Exercice :
 
-L’espace vectoriel $\mathbb{R} ^{3}$ est rapporté à une base canonique (i⃗ , j⃗ , k⃗⃗ ). On considère
-l’application f $: \mathbb{R} ^{3}$ ⟶ $\mathbb{R} ^{3}$ qui à tout vecteur u⃗ ⃗ (x, y, z) associé le vecteur ⃗u’⃗ ⃗ ⃗ (x’, y’, z’)
-u⃗ ⃗ (x, y, z) ⟶ ⃗u’⃗ ⃗ ⃗ (x’, y’, z’)
+L’espace vectoriel $\mathbb{R} ^{3}$ est rapporté à une base canonique (i , j , k ). On considère
+l’application f $: \mathbb{R} ^{3}$ ⟶ $\mathbb{R} ^{3}$ qui à tout vecteur u (x, y, z) associé le vecteur u’(x’, y’, z’)
+u (x, y, z) ⟶ u’(x’, y’, z’)
 x’= x + ay + 2z
 { y’= x + 2y + z
 
@@ -7853,8 +7858,9 @@ $z’= x + y$
 
 ##### b) Déterminer l’image de f
 
-- 3. Soit w⃗⃗ ⃗ = (1, ∝, $β$) un vecteur de $\mathbb{R} ^{3}$ .
-Déterminer ∝ et $β$ pour que w⃗⃗ ⃗ $\in$ Kerf
+#### 3. Soit w = (1, ∝, $β$) un vecteur de $\mathbb{R} ^{3}$ .
+
+Déterminer ∝ et $β$ pour que w$\in$ Kerf
 
 #### 7. Opérations sur les matrices dans $\mathbb{R}$
 
@@ -7912,20 +7918,24 @@ Un endomorphisme peut être défini par :
 
 ##### a. Projection vectorielle (ou projecteur)
 
-Soit E un espace vectoriel de base $β$ = ($e_{1}$⃗ , $e_{2}$⃗ … , $e_{n}$⃗ )
+Soit E un espace vectoriel de base $β$ = ($e_{1} , e_{2}$ … , $e_{n}$ )
 Définition
 On appelle projection vectorielle de E, tout endomorphisme f de E tel que :
 
 $f \circ f = f ou Mf \times Mf = Mf$
 
 NB :
-x ⃗ ⃗ ⃗ ⃗ x’
-Soit U⃗⃗⃗ ( ) alors f(u⃗ ⃗ ) = U’( )
+
+$x x’$
+
+Soit U ( ) alors f(u ) = U’( )
 
 $y y’$
 
-Donc $f \circ f$ = f ⟺ f[f(u⃗ ⃗ )] =f(⃗u’⃗ ⃗ ⃗ )
-⃗ ⃗ ⃗ ⃗ ⃗ x’= x’
+Donc $f \circ f$ = f ⟺ f[f(u )] =f(u’)
+
+$x’= x’$
+
 =u’’⟹ {
 
 $y’= y’$
@@ -7938,9 +7948,9 @@ $y’= y’$
 
 Les éléments caractéristiques d’une projection vectorielle sont :
 - La base (ou axe de projection) : C’est l’ensemble des vecteurs
-invariants, donc c’est $W_{1}$ = Invf = {u⃗⃗ ⃗ $\in E /$ f(u⃗⃗ ⃗ ) = u⃗⃗ ⃗ }
+invariants, donc c’est $W_{1}$ = Invf = {u$\in E /$ f(u ) = u }
 - La Direction : C’est le noyau de l’application, c’est :
-Kerf = {u⃗⃗ ⃗ $\in E /$ f(u⃗⃗ ⃗ ) = ⃗0⃗ ⃗ }
+Kerf = {u$\in E /$ f(u ) = 0 }
 
 ##### b. Symétrie vectorielle (ou involution)
 
@@ -7952,10 +7962,12 @@ $f \circ f = Id_{E} ou Mf \times Mf = M_{I}$
 $M_{I}$ est la matrice unité.
 Les éléments caractéristiques d’une symétrie vectorielle sont :
 - La base (ou axe de symétrie) : C’est l’ensemble des vecteurs
-invariants, donc c’est Invf = {u⃗⃗ ⃗ $\in E /$ f(u⃗⃗ ⃗ ) = u⃗⃗ ⃗ }
+invariants, donc c’est Invf = {u$\in E /$ f(u ) = u }
 - La Direction : C’est l’ensemble des vecteurs transformés en
 leurs opposés, c’est :
-$W_{2}$ = {u⃗⃗ ⃗ $\in E /$ f(u⃗⃗ ⃗ ) = - u⃗⃗ ⃗ }
+
+$W_{2}$ = {u$\in E /$ f(u ) = - u }
+
 NB :
 $M_{I}$ est dite matrice inversible, c’est-à-dire qu’elle admet une matrice
 symétrique pour la multiplication.
@@ -8029,8 +8041,8 @@ Exercices d’application
 
 ### Exercice 1
 
-Le plan vectoriel (P⃗⃗ ) est rapporté à une base (i⃗ , j⃗ ), Soit f un endomorphisme
-de (P⃗⃗ ) qui à tout vecteur u⃗ ⃗ (x, y) associe ⃗u’⃗ ⃗ ⃗ (x’, y’) tel que :
+Le plan vectoriel (P ) est rapporté à une base (i , j ), Soit f un endomorphisme
+de (P ) qui à tout vecteur u (x, y) associe u’(x’, y’) tel que :
 
 $x’= \frac{1}{4} x - \frac{3}{4} y$
 
@@ -8122,11 +8134,11 @@ Comme $Mf \times Mf$ = Mf ou $f \circ f$ = f donc f est une projection vectoriel
 
 #### 2. Base de f.
 
-$E_{1}$ = Invf = {u⃗ ⃗ $\in P$⃗⃗ / f(u⃗ ⃗ ) = u⃗ ⃗ }
+$E_{1}$ = Invf = {u$\in P /$ f(u ) = u }
 
 $x’= x$
 
-On a : f(u⃗ ⃗ ) = u⃗ ⃗ ⟺ {
+On a : f(u ) = u ⟺ {
 
 $y’= y$
 

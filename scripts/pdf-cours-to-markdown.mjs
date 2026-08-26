@@ -48,18 +48,23 @@ const FUNCTIONS = /^(lim|log|ln|cos|sin|tan|cotan|exp|max|min|sup|inf|arg|Card|d
 const looksMath = (s) =>
   /[\u{1D400}-\u{1D7FF}]/u.test(s) || /[ℝℕℤℚℂ∑∏∫√∞∈∉⊂∪∩∅∀∃≤≥≠≈×÷→⇒⇔⁄±∆ΣΩ]/u.test(s)
 
-/** Signes diacritiques suscrits : la barre du conjugué, Z̅ et Z̿. */
-const OVERLINE = /[̲̄̅̿]/
+/**
+ * Signes diacritiques suscrits, que KaTeX refuse tels quels : la barre du
+ * conjugue (Z̅), le chapeau d’un angle (Â) et la fleche d’un vecteur (AB⃗).
+ * Chacun a son equivalent en commande LaTeX.
+ */
+const ACCENTS = { '̄': 'overline', '̅': 'overline', '̿': 'overline', '̲': 'overline', '̂': 'hat', '⃗': 'vec' }
 
 /** Glyphes mathématiques Unicode → ASCII / commandes LaTeX. */
 function toLatex(s) {
   let out = ''
   for (const ch of s) {
-    // Une barre combinante se pose APRÈS sa lettre : on reprend celle-ci pour
-    // en faire un \overline, que KaTeX sait rendre — il rejette le diacritique.
-    if (OVERLINE.test(ch)) {
-      const m = out.match(/(\\overline\{[^{}]*\}|[A-Za-z0-9])\s*$/)
-      if (m) out = out.slice(0, m.index) + `\\overline{${m[1]}}`
+    // Un diacritique se pose APRÈS sa lettre : on reprend celle-ci pour en
+    // faire une commande, que KaTeX sait rendre — il rejette le signe seul.
+    // Deux ou trois lettres sont admises pour les vecteurs, notés AB⃗.
+    if (ACCENTS[ch]) {
+      const m = out.match(/(\\(?:overline|hat|vec)\{[^{}]*\}|[A-Za-z0-9]{1,3})\s*$/)
+      if (m) out = out.slice(0, m.index) + `\\${ACCENTS[ch]}{${m[1]}}`
       continue
     }
     if (BLACKBOARD[ch]) { out += BLACKBOARD[ch] + ' '; continue }
@@ -191,8 +196,16 @@ function detectTables({ H, V }, items) {
 
 function tableToMarkdown(table) {
   // Les cellules reçoivent des atomes déjà convertis — fractions comprises.
-  const cell = (list) => list.sort((a, b) => b.y - a.y || a.x - b.x).map((a) => a.text).join(' ')
-    .replace(/\s+/g, ' ').replace(/\|/g, '\\|').trim()
+  // Une cellule peut contenir une formule : sans les délimiteurs, « \sum A »
+  // s'afficherait tel quel à l'élève au lieu d'être composé par KaTeX.
+  const cell = (list) => {
+    const raw = list.sort((a, b) => b.y - a.y || a.x - b.x).map((a) => a.text)
+      .join(' ').replace(/\s+/g, ' ').trim()
+    if (!raw) return ''
+    if (!/\\|[_^]\{/.test(raw)) return raw.replace(/\|/g, '\\|')
+    const body = cleanupMath(raw)
+    return (body ? `$${body}$` : '').replace(/\|/g, '\\|')
+  }
   let rows = table.grid.map((r) => r.map(cell))
   if (!rows.length || !rows[0].length) return ''
   // Les gabarits Word intercalent des colonnes et des lignes d'espacement,
@@ -318,6 +331,10 @@ function foldFractions(items, bars, H) {
     // de sa barre : c'est ce qui les sépare.
     const wordy = (s) => (s.match(/[A-Za-zÀ-ÿ]{4,}/g) ?? []).some((w) => !FUNCTIONS.test(w))
     if (wordy(num) && wordy(den)) continue
+    // De même, un résultat souligné puis son libellé — « Tc = 12,5 % » au-dessus
+    // d'un trait — n'est pas un quotient : ces cours n'écrivent jamais une
+    // égalité à l'intérieur d'un numérateur.
+    if (num.includes('=') || den.includes('=')) continue
 
     for (const a of [...above, ...below]) pool.splice(pool.indexOf(a), 1)
     pool.push({
@@ -357,6 +374,41 @@ function mergeScripts(atoms, H) {
     if (!grew) break
   }
   return assemble(sorted)
+}
+
+/**
+ * Met une formule en état d'être rendue. Les glyphes viennent du PDF dans un
+ * ordre parfois arbitraire : sans ces garde-fous, une seule scorie ferait
+ * échouer toute la ligne et l'élève verrait une erreur rouge.
+ *
+ * Utilisé pour le fil du texte comme pour les cellules de tableau — les deux
+ * peuvent contenir des formules.
+ */
+function cleanupMath(raw) {
+  let body = raw.replace(/\s+/g, ' ').trim()
+
+  // Le radical du PDF couvre tout ce qui le suit ; en LaTeX il faut le dire.
+  // On ne le fait que si la suite a ses accolades équilibrées, sinon on
+  // couperait une fraction en deux.
+  body = body.replace(/\\sqrt\s+(.+)$/, (_, rest) => {
+    const r = rest.trim()
+    let depth = 0
+    for (const ch of r) { if (ch === '{') depth++; else if (ch === '}') depth-- }
+    return depth === 0 ? `\\sqrt{${r}}` : `\\sqrt ${r}`
+  })
+  // Deux exposants accolés — « e^{i}^{θ} » — sont une erreur de syntaxe : les
+  // glyphes arrivent séparés du PDF, l'exposant est le même.
+  body = body.replace(/\^\{([^{}]*)\}\s*\^\{([^{}]*)\}/g, '^{$1$2}')
+  body = body.replace(/_\{([^{}]*)\}\s*_\{([^{}]*)\}/g, '_{$1$2}')
+  // Un radical dont le radicande n'a pas pu être rattaché — radicaux imbriqués,
+  // formule coupée en fin de ligne — resterait sans argument.
+  body = body.replace(/\\sqrt(?!\s*\{)/g, '\\sqrt{\\;}')
+  // En LaTeX, « % » ouvre un commentaire : non échappé il avalerait la fin de
+  // la formule, et les taux d'amortissement en sont pleins.
+  body = body.replace(/(?<!\\)%/g, '\\%')
+  body = balanceBraces(body)
+  // Une barre oblique inverse esseulée n'est pas une formule.
+  return /^\\+$/.test(body) ? '' : body
 }
 
 /** Ferme les accolades restées ouvertes et jette les fermetures orphelines. */
@@ -402,34 +454,7 @@ function buildLine(atoms, H) {
   let out = '', prev = null, run = []
   const flush = () => {
     if (!run.length) return
-    let body = run.join(' ').replace(/\s+/g, ' ').trim()
-    // Le radical du PDF couvre tout ce qui le suit ; en LaTeX il faut le dire,
-    // sans quoi « \sqrt L \times P » ne met que le L sous la racine.
-    // Le radical du PDF couvre tout ce qui le suit ; en LaTeX il faut le dire.
-    // On ne le fait que si la suite a ses accolades équilibrées : sinon on
-    // couperait une fraction en deux et rien ne se rendrait plus.
-    body = body.replace(/\\sqrt\s+(.+)$/, (_, rest) => {
-      const r = rest.trim()
-      let depth = 0
-      for (const ch of r) { if (ch === '{') depth++; else if (ch === '}') depth-- }
-      return depth === 0 ? `\\sqrt{${r}}` : `\\sqrt ${r}`
-    })
-    // Un radical sans radicande — la formule se poursuit à la ligne suivante —
-    // ferait échouer tout le rendu KaTeX.
-    body = body.replace(/\\sqrt\s*$/, '\\sqrt{\\;}')
-    // Filet de sécurité : une accolade orpheline fait échouer TOUTE la formule
-    // chez l'élève. Les glyphes venant du PDF dans un ordre parfois arbitraire,
-    // on rééquilibre plutôt que de laisser une erreur rouge à l'écran.
-    // Deux exposants accolés — « e^{i}^{θ} » — sont une erreur de syntaxe :
-    // les glyphes du PDF arrivent séparés, l'exposant est le même.
-    body = body.replace(/\^\{([^{}]*)\}\s*\^\{([^{}]*)\}/g, '^{$1$2}')
-    body = body.replace(/_\{([^{}]*)\}\s*_\{([^{}]*)\}/g, '_{$1$2}')
-    // Dernier filet : un radical dont le radicande n'a pas pu être rattaché —
-    // radicaux imbriqués — resterait sans argument et ferait échouer la ligne.
-    body = body.replace(/\\sqrt(?!\s*\{)/g, '\\sqrt{\\;}')
-    body = balanceBraces(body)
-    // Une barre oblique inverse esseulée n'est pas une formule.
-    if (/^\\+$/.test(body)) body = ''
+    const body = cleanupMath(run.join(' '))
     if (body) out += `$${body}$`
     run = []
   }
@@ -451,7 +476,7 @@ function buildLine(atoms, H) {
 /* ── Mise en forme Markdown ─────────────────────────────────────────────── */
 
 const HEADING = [
-  [/^CHAPITRE\s+[IVX\d]+\s*[:\-–]/i, '##'],
+  [/^CHAPITRE\s+(N°\s*)?[IVX\d]+\s*[:\-–]/i, '##'],
   [/^(FICHE|THEME|TABLES? DES MATIERES|PREFACE|CONCLUSION|INTRODUCTION|SOLUTION|EXERCICE|TD)\b/i, '###'],
   [/^[IVX]+\s*[-–.)]\s+\S/, '###'],
   [/^\d+\s*[-–.)]\s+\S/, '####'],
