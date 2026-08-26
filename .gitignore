@@ -62,3 +62,6 @@ stitch_*.zip
 resources/assets/design_archives/*.zip
 
 .vercel
+
+# Sauvegardes locales ecrites par les scripts de seed avant ecrasement
+scripts/.backup-*.json
