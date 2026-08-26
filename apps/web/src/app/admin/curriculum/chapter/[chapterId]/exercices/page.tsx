@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
 
 interface Exercise {
   id: string; title: string; statement: string; difficulty: number; is_premium: boolean; order_index: number
@@ -62,7 +63,7 @@ export default function AdminExercisesPage() {
     <div className="px-8 py-8 max-w-4xl">
       <Link href={`/admin/curriculum/chapter/${chapterId}`} className="text-sm text-gray-400 hover:text-gray-700">← Leçons du chapitre</Link>
       <h1 className="text-2xl font-black text-gray-900 mt-2 mb-1">Exercices & corrigés</h1>
-      <p className="text-gray-500 text-sm mb-6">Énoncé et corrigé en Markdown (formules $…$). Le corrigé se débloque côté élève après une tentative.</p>
+      <p className="text-gray-500 text-sm mb-6">Énoncé et corrigé en Markdown (formules $…$, tableaux, schémas). Le corrigé se débloque côté élève après une tentative.</p>
 
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
@@ -76,10 +77,10 @@ export default function AdminExercisesPage() {
             </button>
           ))}
         </div>
-        <textarea required value={statement} onChange={(e) => setStatement(e.target.value)} rows={5}
-          placeholder="Énoncé de l'exercice (Markdown)…" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-mono mb-3" />
-        <textarea required value={solution} onChange={(e) => setSolution(e.target.value)} rows={6}
-          placeholder="Corrigé détaillé, étape par étape (Markdown)…" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-mono mb-3" />
+        <MarkdownEditor required value={statement} onChange={setStatement} rows={6}
+          placeholder="Énoncé de l'exercice (Markdown) — tableaux et schémas via la barre d’outils…" className="mb-3" />
+        <MarkdownEditor required value={solution} onChange={setSolution} rows={8}
+          placeholder="Corrigé détaillé, étape par étape (Markdown)…" className="mb-3" />
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 text-sm text-gray-600">
             <input type="checkbox" checked={premium} onChange={(e) => setPremium(e.target.checked)} /> Premium ⭐

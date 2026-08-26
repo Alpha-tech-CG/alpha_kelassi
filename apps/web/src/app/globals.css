@@ -79,3 +79,47 @@
   }
 }
 
+/* Contenu Markdown des cours (MarkdownRenderer) : tableaux et schémas.
+   Le plugin @tailwindcss/typography n'etant pas installe, les classes `prose-*`
+   ne produisent aucun style — ces regles dessinent donc les tableaux « comme
+   dans Word » et cadrent les images, en accord avec le rendu de l'app mobile. */
+.md-content table {
+  border-collapse: collapse;
+  width: auto;
+  max-width: 100%;
+  font-size: 0.9375rem;
+  background: #ffffff;
+}
+
+.md-content th,
+.md-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+}
+
+.md-content th {
+  background: #f0fdf4;
+  font-weight: 800;
+  color: #111827;
+  text-align: center;
+}
+
+.md-content td {
+  color: #374151;
+  /* Un tableau doit rester un tableau meme dans un bloc en gras (enonce de QCM). */
+  font-weight: 400;
+}
+
+.md-content tbody tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+.md-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+}

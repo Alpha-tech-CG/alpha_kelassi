@@ -3,6 +3,17 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
+import { LessonContent } from '../../components/LessonContent'
+
+/**
+ * Un énoncé de QCM est du texte simple dans l'immense majorité des cas, et le
+ * `Text` stylé ci-dessous lui donne le bon poids visuel. Depuis que la console
+ * admin permet d'y insérer des tableaux et des schémas, on bascule sur le rendu
+ * Markdown *uniquement* quand l'énoncé en contient — sinon les questions
+ * ordinaires perdraient leur mise en forme.
+ */
+const isRichMarkdown = (s: string) =>
+  /^\s*\|.*\|\s*$/m.test(s) || /!\[[^\]]*\]\((?:https?|file):\/\/[^\s)]+\)/.test(s)
 
 interface Question { id: string; position: number; prompt: string; options: string[] }
 interface Quiz { id: string; title: string; time_limit_sec: number; questions: Question[] }
@@ -110,7 +121,14 @@ export default function QuizTakeScreen() {
           const ok = corr && picked === corr.correct_index
           return (
             <View key={q.id} style={styles.reviewCard}>
-              <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}. {q.prompt}</Text>
+              {isRichMarkdown(q.prompt) ? (
+                <>
+                  <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}.</Text>
+                  <LessonContent content={q.prompt} />
+                </>
+              ) : (
+                <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}. {q.prompt}</Text>
+              )}
               {q.options.map((opt, i) => {
                 const isRight = corr?.correct_index === i
                 const isPicked = picked === i
@@ -123,7 +141,14 @@ export default function QuizTakeScreen() {
                   </Text>
                 )
               })}
-              {corr?.explanation && <Text style={styles.explanation}>💡 {corr.explanation}</Text>}
+              {corr?.explanation && (isRichMarkdown(corr.explanation) ? (
+                <View style={styles.explanationRich}>
+                  <Text style={styles.explanation}>💡</Text>
+                  <LessonContent content={corr.explanation} />
+                </View>
+              ) : (
+                <Text style={styles.explanation}>💡 {corr.explanation}</Text>
+              ))}
             </View>
           )
         })}
@@ -156,7 +181,9 @@ export default function QuizTakeScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.qContent}>
-        <Text style={styles.prompt}>{q.prompt}</Text>
+        {isRichMarkdown(q.prompt)
+          ? <View style={styles.promptRich}><LessonContent content={q.prompt} /></View>
+          : <Text style={styles.prompt}>{q.prompt}</Text>}
         {q.options.map((opt, i) => {
           const selected = answers[q.id] === i
           return (
@@ -209,6 +236,8 @@ const styles = StyleSheet.create({
   progressFill: { height: '100%', backgroundColor: '#1E74E8' },
   qContent: { padding: 20 },
   prompt: { fontSize: 18, fontWeight: '700', color: '#171D17', marginBottom: 20, lineHeight: 26 },
+  // Énoncé riche (tableau / schéma) : LessonContent apporte sa propre typographie.
+  promptRich: { marginBottom: 20 },
   option: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#E3EADF', borderRadius: 14, padding: 14, marginBottom: 10 },
   optionSelected: { borderColor: '#1E74E8', backgroundColor: '#EFF6EB' },
   optionLetter: { width: 26, height: 26, borderRadius: 13, borderWidth: 1, borderColor: '#E3EADF', textAlign: 'center', lineHeight: 26, fontWeight: '700', fontSize: 12, color: '#3E4A3E', marginRight: 12 },
@@ -234,6 +263,7 @@ const styles = StyleSheet.create({
   reviewRight: { backgroundColor: '#EFF6EB', color: '#1E74E8', fontWeight: '600' },
   reviewWrong: { backgroundColor: '#FCE9E8', color: '#E12822' },
   explanation: { fontSize: 13, color: '#3E4A3E', fontStyle: 'italic', marginTop: 6 },
+  explanationRich: { marginTop: 6 },
   primaryBtn: { backgroundColor: '#1E74E8', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 8 },
   primaryBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 })

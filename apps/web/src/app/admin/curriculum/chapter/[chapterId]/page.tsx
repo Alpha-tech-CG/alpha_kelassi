@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
 
 type LessonType = 'cours' | 'resume' | 'fiche' | 'quiz' | 'video'
 interface Lesson {
@@ -95,14 +96,14 @@ export default function AdminLessonsPage() {
         </div>
       </div>
       <p className="text-gray-500 text-sm mb-6">
-        Blocs : cours, résumé, fiche de révision (Markdown, formules $…$), quiz, vidéo.
+        Blocs : cours, résumé, fiche de révision (Markdown, formules $…$, tableaux, schémas), quiz, vidéo.
         Le bloc « quiz » est un simple texte — pour un QCM corrigé et noté automatiquement, utilise « QCM de fin de chapitre ».
       </p>
 
       {/* Ajout */}
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-4">
           {TYPES.map((t) => (
             <button key={t.value} type="button" onClick={() => setType(t.value)}
               className={`px-3 py-2 rounded-xl text-sm font-bold border-2 ${type === t.value ? 'border-green-600 bg-green-50 text-green-700' : 'border-gray-200 text-gray-500'}`}>
@@ -116,9 +117,9 @@ export default function AdminLessonsPage() {
           <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="URL vidéo (YouTube ou .mp4)"
             className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm mb-3" />
         ) : (
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} rows={type === 'quiz' ? 4 : 8}
-            placeholder={type === 'quiz' ? 'Énoncé du quiz (Markdown)…' : 'Contenu en Markdown…'}
-            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-mono mb-3" />
+          <MarkdownEditor value={content} onChange={setContent} rows={type === 'quiz' ? 4 : 10}
+            placeholder={type === 'quiz' ? 'Énoncé du quiz (Markdown)…' : 'Contenu en Markdown — tableaux et schémas via la barre d’outils…'}
+            className="mb-3" />
         )}
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 text-sm text-gray-600">
@@ -164,8 +165,8 @@ export default function AdminLessonsPage() {
                 </div>
                 {editing && (
                   <div className="mt-3">
-                    <textarea value={drafts[l.id]} onChange={(e) => setDrafts((d) => ({ ...d, [l.id]: e.target.value }))}
-                      rows={10} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-mono" />
+                    <MarkdownEditor value={drafts[l.id] ?? ''} onChange={(v) => setDrafts((d) => ({ ...d, [l.id]: v }))}
+                      rows={12} />
                     <button onClick={() => saveContent(l)} disabled={busy === l.id}
                       className="mt-2 px-4 py-2 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
                       {busy === l.id ? 'Enregistrement…' : 'Enregistrer'}

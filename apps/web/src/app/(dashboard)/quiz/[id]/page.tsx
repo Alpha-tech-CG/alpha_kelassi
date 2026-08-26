@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback, use } from 'react'
 import Link from 'next/link'
 import { Clock, ChevronLeft, ChevronRight, CheckCircle2, XCircle, Trophy } from 'lucide-react'
+import { MarkdownRenderer } from '@/components/markdown-renderer'
 
 interface Question {
   id: string
@@ -119,7 +120,10 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
                   {isCorrect
                     ? <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     : <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />}
-                  <p className="font-semibold text-gray-900">{q.position}. {q.prompt}</p>
+                  <div className="flex items-start gap-1.5 font-semibold text-gray-900 min-w-0">
+                    <span>{q.position}.</span>
+                    <MarkdownRenderer content={q.prompt} className="min-w-0" />
+                  </div>
                 </div>
                 <ul className="mt-3 space-y-1.5 pl-7">
                   {q.options.map((opt, i) => {
@@ -140,7 +144,10 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
                   })}
                 </ul>
                 {corr?.explanation && (
-                  <p className="mt-2 ml-7 text-sm text-gray-500 italic">💡 {corr.explanation}</p>
+                  <div className="mt-2 ml-7 text-sm text-gray-500 italic flex items-start gap-1.5">
+                    <span>💡</span>
+                    <MarkdownRenderer content={corr.explanation} className="min-w-0" />
+                  </div>
                 )}
               </div>
             )
@@ -174,7 +181,9 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
 
       {/* Question */}
       <div className="bg-white border rounded-2xl p-5">
-        <p className="font-bold text-gray-900 text-lg mb-4">{q.prompt}</p>
+        <div className="font-bold text-gray-900 text-lg mb-4">
+          <MarkdownRenderer content={q.prompt} />
+        </div>
         <div className="space-y-2">
           {q.options.map((opt, i) => {
             const selected = answers[q.id] === i

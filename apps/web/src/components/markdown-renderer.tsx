@@ -47,10 +47,21 @@ export function MarkdownRenderer({ content, className = '', prose = false }: Pro
        prose-ul:my-1 prose-ol:my-1`
 
   return (
-    <div className={`${proseClasses} ${className}`}>
+    // `md-content` porte le style des tableaux et des schémas (cf. globals.css) :
+    // le plugin @tailwindcss/typography n'est pas installé, les classes `prose-*`
+    // ci-dessus n'ont donc aucun effet tant qu'il ne l'est pas.
+    <div className={`md-content ${proseClasses} ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
+        components={{
+          // Un tableau large défile dans son propre cadre plutôt que d'élargir la page.
+          table: ({ node, ...props }) => (
+            <div className="overflow-x-auto my-4">
+              <table {...props} />
+            </div>
+          ),
+        }}
       >
         {content}
       </ReactMarkdown>

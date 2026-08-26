@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
+import { MarkdownRenderer } from '@/components/markdown-renderer'
 
 /**
  * QCM de fin de chapitre — console admin.
@@ -117,6 +119,7 @@ export default function AdminChapterQuizPage() {
       <h1 className="text-2xl font-black text-gray-900 mt-2 mb-1">QCM de fin de chapitre</h1>
       <p className="text-gray-500 text-sm mb-6">
         Corrigé et noté automatiquement, avec chrono — contrairement au bloc « quiz » d'une leçon, qui n'est qu'un texte.
+        L'énoncé et le corrigé acceptent le Markdown : formules $…$, tableaux et schémas. Les options de réponse restent du texte simple.
       </p>
 
       {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
@@ -181,9 +184,9 @@ export default function AdminChapterQuizPage() {
           <form onSubmit={addQuestion} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
             <p className="font-bold text-gray-900 mb-4">Ajouter une question</p>
 
-            <textarea required value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={2}
-              placeholder="Énoncé de la question"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm mb-3" />
+            <MarkdownEditor required value={prompt} onChange={setPrompt} rows={3}
+              placeholder="Énoncé de la question — tableaux et schémas via la barre d’outils…"
+              className="mb-3" />
 
             <p className="text-xs text-gray-500 mb-2">Coche la bonne réponse. Laisse une option vide pour ne pas l'utiliser.</p>
             {options.map((opt, i) => (
@@ -197,9 +200,9 @@ export default function AdminChapterQuizPage() {
               </div>
             ))}
 
-            <textarea value={explanation} onChange={(e) => setExplanation(e.target.value)} rows={2}
+            <MarkdownEditor value={explanation} onChange={setExplanation} rows={3}
               placeholder="Corrigé affiché après la réponse (optionnel)"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm mt-3 mb-4" />
+              className="mt-3 mb-4" />
 
             <button disabled={saving} className="bg-green-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm disabled:opacity-50">
               {saving ? 'Ajout…' : 'Ajouter la question'}
@@ -212,9 +215,10 @@ export default function AdminChapterQuizPage() {
               <div key={q.id} className="bg-white rounded-2xl border border-gray-100 p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <p className="font-semibold text-sm text-gray-900">
-                      <span className="text-gray-400 mr-2">{q.position}.</span>{q.prompt}
-                    </p>
+                    <div className="flex items-start gap-2 font-semibold text-sm text-gray-900">
+                      <span className="text-gray-400">{q.position}.</span>
+                      <div className="min-w-0"><MarkdownRenderer content={q.prompt} /></div>
+                    </div>
                     <ul className="mt-2 space-y-1">
                       {q.options.map((o, i) => (
                         <li key={i} className={`text-xs ${i === q.correct_index ? 'text-green-700 font-semibold' : 'text-gray-500'}`}>
@@ -222,7 +226,9 @@ export default function AdminChapterQuizPage() {
                         </li>
                       ))}
                     </ul>
-                    {q.explanation && <p className="text-xs text-gray-400 mt-2 italic">{q.explanation}</p>}
+                    {q.explanation && (
+                      <div className="text-xs text-gray-400 mt-2 italic"><MarkdownRenderer content={q.explanation} /></div>
+                    )}
                   </div>
                   <button onClick={() => delQuestion(q.id)} disabled={busy === q.id}
                     className="text-xs font-semibold text-red-600 hover:underline flex-shrink-0 disabled:opacity-50">
