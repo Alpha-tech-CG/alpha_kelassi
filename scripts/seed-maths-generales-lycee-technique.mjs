@@ -59,7 +59,7 @@ const TARGETS = [
   { level: 'bac_g2', series: 'ef1a3bef-4d82-4f8a-a483-57c57a02248a' },
   { level: 'bac_g3', series: '73c62a1b-1df0-4080-a297-8cedb2f71a5a' },
   { level: 'bac_bg', series: 'b2a0a771-e218-48e8-a6f3-d79f468e9f3d' },
-  { level: 'bac_r',  series: null }, // créée par la migration 055
+  { level: 'bac_r',  series: '03cc93e4-abc3-46f4-9f39-2016b933e01d' }, // créée par la migration 055
 ]
 
 /** Les dix fiches du polycopié, dans l'ordre, avec un intitulé lisible. */
