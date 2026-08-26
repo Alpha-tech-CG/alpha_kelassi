@@ -476,7 +476,9 @@ function buildLine(atoms, H) {
 /* ── Mise en forme Markdown ─────────────────────────────────────────────── */
 
 const HEADING = [
-  [/^CHAPITRE\s+(N°\s*)?[IVX\d]+\s*[:\-–]/i, '##'],
+  // Les polycopiés numérotent de plusieurs façons : « CHAPITRE 1 : »,
+  // « CHAPITRE N° 5 : », « CHAPITRE – 7 : », « CHAPITRE - VII : ».
+  [/^CHAPITRE\s*(N°)?\s*[-–]?\s*[IVX\d]+\s*[:\-–]/i, '##'],
   [/^(FICHE|THEME|TABLES? DES MATIERES|PREFACE|CONCLUSION|INTRODUCTION|SOLUTION|EXERCICE|TD)\b/i, '###'],
   [/^[IVX]+\s*[-–.)]\s+\S/, '###'],
   [/^\d+\s*[-–.)]\s+\S/, '####'],

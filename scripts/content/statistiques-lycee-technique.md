@@ -12,7 +12,8 @@ DUREE DE LA SEQUENCE DE L’ENSEIGNEMENT/D’APPRENTISSAGE :
 
 ### INTRODUCTION:
 
-CHAPITRE - I : LES INDICES
+## CHAPITRE - I : LES INDICES
+
 I-1 : Définition
 I-2 : Les indices simples
 I-3 : Les indices synthétiques ou composés
@@ -518,7 +519,8 @@ DUREE DE LA SEQUENCE DE L’ENSEIGNEMENT/D’APPRENTISSAGE :
 
 ### INTRODUCTION:
 
-CHAPITRE - I : NOTIONS DE PROBABILITE
+## CHAPITRE - I : NOTIONS DE PROBABILITE
+
 I-1 : Eléments d’Analyse combinatoire
 I-2 : Terminologie
 I-3 : Calcul des probabilités
