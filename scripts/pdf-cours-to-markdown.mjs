@@ -48,10 +48,20 @@ const FUNCTIONS = /^(lim|log|ln|cos|sin|tan|cotan|exp|max|min|sup|inf|arg|Card|d
 const looksMath = (s) =>
   /[\u{1D400}-\u{1D7FF}]/u.test(s) || /[ℝℕℤℚℂ∑∏∫√∞∈∉⊂∪∩∅∀∃≤≥≠≈×÷→⇒⇔⁄±∆ΣΩ]/u.test(s)
 
+/** Signes diacritiques suscrits : la barre du conjugué, Z̅ et Z̿. */
+const OVERLINE = /[̲̄̅̿]/
+
 /** Glyphes mathématiques Unicode → ASCII / commandes LaTeX. */
 function toLatex(s) {
   let out = ''
   for (const ch of s) {
+    // Une barre combinante se pose APRÈS sa lettre : on reprend celle-ci pour
+    // en faire un \overline, que KaTeX sait rendre — il rejette le diacritique.
+    if (OVERLINE.test(ch)) {
+      const m = out.match(/(\\overline\{[^{}]*\}|[A-Za-z0-9])\s*$/)
+      if (m) out = out.slice(0, m.index) + `\\overline{${m[1]}}`
+      continue
+    }
     if (BLACKBOARD[ch]) { out += BLACKBOARD[ch] + ' '; continue }
     if (SYMBOLS[ch]) { out += SYMBOLS[ch] + ' '; continue }
     // Les glyphes de la zone à usage privé (puces Wingdings, symboles propres
@@ -230,7 +240,10 @@ function assemble(atoms) {
       if (Math.abs(s.y - a.y) > 0.4 * a.h) continue
       s.used = true
       s.members.forEach((m) => { m.used = true })
-      const body = s.text.replace(/\s+/g, '').trim()
+      // Les espaces internes disparaissent — « t / 0 » devient « t/0 » — sauf
+      // après une commande LaTeX, où l'espace fait partie de la syntaxe :
+      // « \in N » collé donnerait la commande inconnue « \inN ».
+      const body = (/\\/.test(s.text) ? s.text.replace(/\s+/g, ' ') : s.text.replace(/\s+/g, '')).trim()
       if (!body) continue
       // Une apostrophe française est composée petite et surélevée : ce n'est
       // pas un exposant.
@@ -263,6 +276,29 @@ function foldFractions(items, bars, H) {
     // numérateur.
     const span = (a) => a.x >= bar.x1 - 3 && a.x + a.w <= bar.x2 + 3
     const near = (a) => Math.abs(a.y - bar.y) < 1.5 * H
+
+    // Un radical dessine lui aussi un trait horizontal, accroché au √ qui le
+    // précède. Le prendre pour une barre de fraction couperait « √3/2 » en
+    // deux et laisserait un \sqrt sans radicande, que KaTeX refuse.
+    const radical = pool.find((a) => /\\sqrt/.test(a.text)
+      && a.x + a.w > bar.x1 - 7 && a.x < bar.x1 + 3 && Math.abs(a.y - bar.y) < 0.8 * H)
+    if (radical) {
+      const under = pool.filter((a) => a !== radical && span(a) && a.y < bar.y + 0.5 && a.y > bar.y - 1.4 * H)
+      if (!under.length) continue
+      // Les exposants du radicande doivent être reconnus ici : sans cela,
+      // √(x² + x + 1) sortirait en « x2 », une erreur de contenu.
+      for (const a of under) {
+        a.script = under.some((o) => o !== a && a.h < o.h - 0.5
+          && a.x >= o.x + o.w - 1.5 && a.x <= o.x + o.w + 4 && Math.abs(a.y - o.y) <= 0.4 * o.h)
+      }
+      for (const a of [...under, radical]) pool.splice(pool.indexOf(a), 1)
+      pool.push({
+        x: radical.x, y: radical.y, w: bar.x2 - radical.x, h: H,
+        text: `\\sqrt{${joinAtoms(under) || '\\;'}}`, math: true, structured: true, script: false,
+      })
+      continue
+    }
+
     const above = pool.filter((a) => span(a) && near(a) && a.y > bar.y + 0.5)
     const below = pool.filter((a) => span(a) && near(a) && a.y < bar.y - 0.5)
     // Une vraie fraction a ses deux moitiés. Un trait isolé — soulignement,
@@ -277,6 +313,12 @@ function foldFractions(items, bars, H) {
       }
     }
     const num = joinAtoms(above), den = joinAtoms(below)
+    // Un titre souligné, suivi de son sous-titre, a la même signature qu'une
+    // fraction. Mais une fraction n'a pas de mots français de part et d'autre
+    // de sa barre : c'est ce qui les sépare.
+    const wordy = (s) => (s.match(/[A-Za-zÀ-ÿ]{4,}/g) ?? []).some((w) => !FUNCTIONS.test(w))
+    if (wordy(num) && wordy(den)) continue
+
     for (const a of [...above, ...below]) pool.splice(pool.indexOf(a), 1)
     pool.push({
       x: bar.x1, y: bar.y, w: bar.x2 - bar.x1, h: H,
@@ -317,6 +359,17 @@ function mergeScripts(atoms, H) {
   return assemble(sorted)
 }
 
+/** Ferme les accolades restées ouvertes et jette les fermetures orphelines. */
+function balanceBraces(s) {
+  let depth = 0, out = ''
+  for (const ch of s) {
+    if (ch === '{') depth++
+    else if (ch === '}') { if (depth === 0) continue; depth-- }
+    out += ch
+  }
+  return out + '}'.repeat(depth)
+}
+
 /* ── Assemblage d'une ligne ─────────────────────────────────────────────── */
 
 function buildLine(atoms, H) {
@@ -352,10 +405,31 @@ function buildLine(atoms, H) {
     let body = run.join(' ').replace(/\s+/g, ' ').trim()
     // Le radical du PDF couvre tout ce qui le suit ; en LaTeX il faut le dire,
     // sans quoi « \sqrt L \times P » ne met que le L sous la racine.
-    body = body.replace(/\\sqrt\s+(.+)$/, (_, rest) => `\\sqrt{${rest.trim()}}`)
+    // Le radical du PDF couvre tout ce qui le suit ; en LaTeX il faut le dire.
+    // On ne le fait que si la suite a ses accolades équilibrées : sinon on
+    // couperait une fraction en deux et rien ne se rendrait plus.
+    body = body.replace(/\\sqrt\s+(.+)$/, (_, rest) => {
+      const r = rest.trim()
+      let depth = 0
+      for (const ch of r) { if (ch === '{') depth++; else if (ch === '}') depth-- }
+      return depth === 0 ? `\\sqrt{${r}}` : `\\sqrt ${r}`
+    })
     // Un radical sans radicande — la formule se poursuit à la ligne suivante —
     // ferait échouer tout le rendu KaTeX.
     body = body.replace(/\\sqrt\s*$/, '\\sqrt{\\;}')
+    // Filet de sécurité : une accolade orpheline fait échouer TOUTE la formule
+    // chez l'élève. Les glyphes venant du PDF dans un ordre parfois arbitraire,
+    // on rééquilibre plutôt que de laisser une erreur rouge à l'écran.
+    // Deux exposants accolés — « e^{i}^{θ} » — sont une erreur de syntaxe :
+    // les glyphes du PDF arrivent séparés, l'exposant est le même.
+    body = body.replace(/\^\{([^{}]*)\}\s*\^\{([^{}]*)\}/g, '^{$1$2}')
+    body = body.replace(/_\{([^{}]*)\}\s*_\{([^{}]*)\}/g, '_{$1$2}')
+    // Dernier filet : un radical dont le radicande n'a pas pu être rattaché —
+    // radicaux imbriqués — resterait sans argument et ferait échouer la ligne.
+    body = body.replace(/\\sqrt(?!\s*\{)/g, '\\sqrt{\\;}')
+    body = balanceBraces(body)
+    // Une barre oblique inverse esseulée n'est pas une formule.
+    if (/^\\+$/.test(body)) body = ''
     if (body) out += `$${body}$`
     run = []
   }
@@ -404,6 +478,13 @@ function markdownise(lines) {
     const h = HEADING.find(([re]) => re.test(t))
     if (h && !looksQuestion) { out.push('', `${h[1]} ${t.replace(/\s+/g, ' ')}`, ''); continue }
     if (h && looksQuestion) { out.push(`- ${t}`); continue }
+
+    // En mathématiques, le retour à la ligne porte du sens : chaque étape de
+    // calcul occupe la sienne. Markdown les fusionnerait en un pavé illisible,
+    // donc une ligne surtout composée de formules est isolée.
+    const inMath = [...t.matchAll(/\$[^$]+\$/g)].reduce((n, m) => n + m[0].length, 0)
+    if (inMath > 0.4 * t.length) { out.push('', t, ''); continue }
+
     out.push(t)
   }
   return out.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n'

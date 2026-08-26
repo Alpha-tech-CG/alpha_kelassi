@@ -43,7 +43,9 @@ t = Période courante
 $G_{t}$ = Grandeur à la période courante
 $G_{0}$ = Grandeur à la période de base
 La formule de base de l’indice simple d’une grandeur donnée s’écrit :
+
 $IG_{t/0} = \frac{G_{t}}{G_{0}}$ (base 1) c’est à dire, en terme de coefficient
+
 $IG_{t/0} = \frac{G_{t}}{G_{0}} \times 100$ (base 100) c’est à dire en terme d’indice
 
 #### 3. Autres formules des indices simples
@@ -54,26 +56,45 @@ Indices simples des quantités ;
 Indices simples des chiffres d’affaires ;
 Chaque indice a pour formule :
 o En termes de coefficient :
+
 $I_{p} = \frac{p_{t}}{p_{o}}$ Indice simple de prix
+
 $t / 0$
+
 $I_{q} = \frac{q_{t}}{q_{0}}$ Indice simple de quantité
+
 $t / 0$
+
 IC$A_{t/} = \frac{C A_{t}}{C A_{0}}$ Indice simple du chiffre d’affaire
+
 $0$
+
 C$A_{t} = P_{t} x Q_{t}$
+
 Avec
+
 C$A_{0} = P_{0} x Q_{0}$
+
 o En termes d’indices :
+
 $I_{p} = \frac{p_{t}}{p_{o}}$ x 100 Indice simple de prix
+
 $t / 0$
+
 $I_{q} = \frac{q_{t}}{q_{0}}$ x 100 Indice simple des quantités
+
 $t / 0$
 
 IC$A_{t/} = \frac{C A_{t}}{C A_{0}}$ x 100 Indice simple du chiffre d’affaire
+
 $0$
+
 C$A_{t} = P_{t} x Q_{t}$
+
 Avec
+
 C$A_{0} = P_{0} x Q_{0}$
+
 Remarque :
 o Si $\Delta _{t}$ /0 > 100 , il y a augmentation entre la période 0 et t
 o Si $\Delta _{t}$ /0 < 100, il y a augmentation entre la période 0 et t
@@ -89,15 +110,23 @@ Exemple : Le tableau ci-après donne les productions de bois au Congo de 1979 à
 ### SOLUTION
 
 $I_{q} = \frac{q_{t}}{q_{0}}$ x 100
+
 $t / 0$
+
 $I_{q} = \frac{q_{79}}{q_{80}}$ x 100
+
 $79 / 80$
 
 $I_{q} = \frac{19 , 93}{19 , 64} \times 100 \to I_{q}$ = 101,53
+
 $79 / 80 79 / 80$
+
 $I_{q} = \frac{19 , 64}{19 , 64} \times 100 \to = I_{q}$ 100
+
 $80 / 80 79 / 80$
+
 $I_{q} = \frac{20 , 09}{19 , 64} \times 100 \to I_{q}$ = 102,3
+
 $81 / 80 81 / 80$
 
 | Années | 1979 | 1980 | 1981 | 1982 | 1983 | 1984 |
@@ -113,29 +142,42 @@ On distingue deux types de propriétés, à savoir :
 
 On parle d’identité lorsque les valeurs des grandeurs sont identiques ou constantes.
 Donc
+
 $G_{0} = G_{t} \to$ I$G_{0}$ / = $\frac{G_{0}}{G_{0}}$ X 100
+
 $0$
 
 ##### b) La réversibilité :
 
 Un indice est réversible lorsqu’il remplit la condition suivante :
+
 I$G_{t} /$0 x I$G_{0/} t$ = 1 ou I$G_{t} /$0 x I$G_{0/} t$ = 10000
+
 En termes de coefficients :
 
 I$G_{t} /$0 x I$G_{0} /$t = 1
+
 ($\frac{G_{t}}{G_{0}}$) x ($\frac{G_{o}}{G_{t}}$) = $\frac{G_{t} X G_{0}}{G_{0} X G_{t}}$ = 1
+
 En termes d’indices :
+
 $G_{t} /$0 x $G_{0/} t$ = 10000
+
 ($\frac{G_{t}}{G_{0}} X$ 100) X ($\frac{G_{0}}{G_{t}} X$ 100) = $\frac{G_{t} X G_{0}}{G_{0} X G_{t}}$ x 10000 = 10000
 
 ##### c) La transférabilité :
 
 Cette propriété se traduit par la possibilité de calculer l’indice de période 2 par rapport
 à la période 0 en utilisant les indices intermédiaires, soit
+
 $IG_{2} / = IG_{2} / \times IG_{1} /$ en terme d’indice
+
 $0 1 0$
+
 $IG_{2} = \frac{IG_{2} / 1 \times IG_{1} / 0}{100}$ en terme de coefficient
+
 $/ 0$
+
 NB :
 La grandeur G peut être remplacée par le prix (P), la quantité (Q) ou le chiffre
 d’affaires (CA) selon l’énoncé de l’exercice.
@@ -146,7 +188,9 @@ même marque valait 97 000 Frs en 1990.
 l’aspirateur en 1992 ?
 
 - 3) Calcule $I_{94}$ en suite vérifie la relation $I_{94} = \frac{1}{100} ( I_{94} \times I_{92}$ ). Comment
+
 $/ 92 / 90 / 92 /$90
+
 appelle-t-on cette relation ?
 - 4) Quel a été le pourcentage d’augmentation entre 1990 et 1994 ?
 
@@ -163,8 +207,11 @@ Fisher et l’Indice des Valeurs Globales (IVG).
 #### 1) La méthode de l’IMAP
 
 Il se calcule à partir de la formule suivante :
+
 $G_{t} = \frac{\sum G_{t} . q}{\sum G_{0} . q}$
+
 /$0$
+
 q coefficient de pondération
 NB :
 Cet indice est toujours réversible et transférable ;
@@ -196,24 +243,38 @@ vous ?
 | \Sigma |  |  |  |  | 2030 | 2290 | 2610 |
 
 - 1) Calculons les indices des moyennes arithmétiques pondérées
-$I_{84} = \frac{\Sigma P_{84} q}{\Sigma p_{86} q} \times 100 \to I_{84} = \frac{2030}{2290} \times 100 \to I_{84} = 84 , 64$
-$/ 86 / 86 / 86$
-$I_{88} = \frac{\Sigma P_{88} q}{\Sigma P_{86} q} \times 100 \to I_{88} = \frac{2610}{2290} \times 100 \to I_{88} = 113 , 97$
-$/ 86 / 86 / 86$
+
+$\Sigma P_{84} q \frac{2030}{2290}$
+
+$I_{84} / = \times 100 \to I_{84} / = \times 100 \to I_{84} / = 84 , 64$
+
+86 $\Sigma p_{86} q 86 86$
+
+$\Sigma P_{88} q \frac{2610}{2290}$
+
+$I_{88} / = \times 100 \to I_{88} / = \times 100 \to I_{88} / = 113 , 97$
+
+86 $\Sigma P_{86} q 86 86$
 
 #### 2) Vérifions la réversibilité
 
 La réversibilité est possible si $I_{84} / \times I_{86} /$ = 1
+
 86 84
+
 $\frac{2030}{2290} \times \frac{2290}{2030}$ = 1 La réversibilité existe.
 
 #### 2) La méthode de la MAPIS
 
 On utilise la formule suivante :
+
 $I_{1} = \frac{Σ \frac{G_{t}}{G_{0}} . q}{\sum q} \times 100$
+
 $/ 0$
+
 NB : Cet indice n’est ni réversible ni transférable ;
-$\frac{Exemple}{périodes :}$: Ce tableau retrace les prix unitaires des différents produits à différentes
+Exemple: Ce tableau retrace les prix unitaires des différents produits à différentes
+périodes :
 
 |  | 1980 | 1982 | 1984 | Pondération (q) |
 | --- | --- | --- | --- | --- |
@@ -238,10 +299,18 @@ méthode des moyennes arithmétiques des indices simples (MAPIS) des années 198
 | \Sigma |  |  |  | 14 | 17,43 | 19,58 |
 
 Calculons l’indice synthétique par la méthode MAPIS des années 1982 et 1984 :
-$I_{82} = \frac{\Sigma \frac{P_{82}}{P_{80}} q}{\Sigma q} \times 100 \to I_{82} = \frac{17 , 43}{14} \times 100 \to I_{82} = 124 , 5$
-$/ 80 / 80 / 80$
-$I_{84} = \frac{\Sigma \frac{P_{84}}{P_{80}} q}{\Sigma q} \times 100 \to I_{84} = \frac{19 , 58}{14} \times 100 \to I_{84} = 139 , 85$
-$/ 80 / 80 / 80$
+
+$\Sigma \frac{P_{82}}{P_{80}} q$
+
+$I_{82} = \times 100 \to I_{82} = \frac{17 , 43}{14} \times 100 \to I_{82} = 124 , 5$
+
+$/ 80 \Sigma q / 80 / 80$
+
+$\Sigma \frac{P_{84}}{P_{80}} q$
+
+$I_{84} = \times 100 \to I_{84} = \frac{19 , 58}{14} \times 100 \to I_{84} = 139 , 85$
+
+$/ 80 \Sigma q / 80 / 80$
 
 #### 3) Les autres indices composés
 
@@ -282,19 +351,29 @@ courante (t) comme coefficient de pondération.
 ##### b) Indices de Fischer
 
 C’est la moyenne géométrique des indices de Laspeyres et de Paasche.
+
 $I_{F} = \sqrt{L \times P}$
+
 Fischer prix :
+
 $F_{P} = \sqrt{L_{P} \times P_{P}}$
+
 Fischer quantité :
+
 $F_{q} = \sqrt{Lq \times Pq}$
 
 ##### c) L’Indice des Valeurs Globales (IVG)
 
 On peut déterminer l’IVG par 4 méthodes :
+
 IVG = $\frac{Σ P_{t} . Q_{t}}{Σ p_{0} . Q_{0}} \times 100$
+
 IVG = $\frac{L_{P} \times P_{q}}{100}$
+
 IVG = $\frac{Lq \times L_{P}}{100}$
+
 IVG = $\frac{F_{P} \times F_{q}}{100}$
+
 Exemple 7 : Soient 4 produits : Crayon, Règle, Gomme et Cahier dont les quantités et
 les prix pratiqué en 1985 et 1990 sont donnés dans le tableau ci-dessous :
 
@@ -329,24 +408,40 @@ TAF : Calcule, en considérant 1985 comme année de base :
 
 ##### a) Calculons les indices de Laspeyres
 
-$Lp_{90} = \frac{\Sigma P_{90} . q_{85}}{\Sigma P_{85} . q_{85}} \times 100 \to \frac{9700}{7300} \times 100 \to L_{p90} = 132 , 88$
-$/ 85 / 85$
-$Lp_{90} = \frac{\Sigma q_{90} . p_{85}}{\Sigma q . q} \times 100 \to \frac{6795}{7300} \times 100 \to Iq_{90} = 93 , 08$
-$/ 85 / 85$
-85 $p$
+$\Sigma P_{90} . q_{85} \frac{9700}{7300}$
+
+$Lp_{90} / = \times 100 \to \times 100 \to L_{p90} / = 132 , 88$
+
+85 $\Sigma P_{85} . q_{85} 85$
+
+$\Sigma q_{90} . p_{85} \frac{6795}{7300}$
+
+$Lp_{90} / = q \times 100 \to \times 100 \to Iq_{90} / = 93 , 08$
+
+85 $\Sigma q_{85} . 85$
+
+$p$85
 
 ##### b) Calculons les indices de Paasche
 
-$Pp_{90} = \frac{\Sigma P_{90} . q_{90}}{\Sigma P_{85} . q_{90}} \times 100 \to \frac{8780}{6795} \times 100 \to Pp_{90} = 129 , 21s$
-$/ 85 / 85$
-$Pq_{90} = \frac{\Sigma P_{90} . q_{90}}{\Sigma q_{85} . P_{90}} \times 100 \to \frac{8780}{9700} \times 100 \to Pq_{90} = 90 , 51$
-$/ 85 / 85$
+$\Sigma P_{90} . q_{90} \frac{8780}{6795}$
+
+$Pp_{90} / = \times 100 \to \times 100 \to Pp_{90} / = 129 , 21s$
+
+85 $\Sigma P_{85} . q_{90} 85$
+
+$\Sigma P_{90} . q_{90} \frac{8780}{9700}$
+
+$Pq_{90} / = \times 100 \to \times 100 \to Pq_{90} / = 90 , 51$
+
+85 $\Sigma q_{85} . P_{90} 85$
 
 ##### c) Calculons les indices de Fischer
 
 FP $= \sqrt{L_{PP} . P_{P} \to F}$P $= \sqrt{\;}$132,88 $\times$ 129,21 $\to F_{P} =$ 131, 03
 
 Fq $= \sqrt{L_{q} .}$P$q \to F$q $= \sqrt{\;}$93,08 $\times$ 90,52 $\to F_{q} =$ 91,79
+
 IVG = 120, 27
 
 ### TD
@@ -453,10 +548,13 @@ $P_{6}$ =5x4x3x2x1= 120 manières
 2-Permutation avec répétitions
 Une permutation avec répétition de ces n objets est une permutation de ces n objets,
 dans laquelle on ne distingue pas les objets d'une même sorte.
+
 $P(n_{1} , n_{2} , n_{3} ,…n_{K} )= \frac{n !}{n_{1} ! n_{2} ! n_{3} ! ,... n_{k} !}$
+
 Exemple : Combien de mots fictifs peut-on écrire avec les lettres du mot « ETAT » ?
 
 n= 4 $; n_{1} =1 ; n_{2} = 2 ; n_{3}$ =1 P (2,1,1)= $\frac{4 !}{1 ! 2 ! 1 ! ,..} \frac{!}{!}$ 12
+
 ETAT TEAT TAET TATE ETTA TETA
 ATET ATTE TTEA TTAE EATT AETT
 Cas particulier : 0! =1 et 1!=1
@@ -464,30 +562,43 @@ Cas particulier : 0! =1 et 1!=1
 a-Arrangements sans répétition
 Un arrangement sans répétitions de n objets pris p à la fois, est une manière de
 choisir p ($P \leq n$) objets parmi n. L’ordre compte.
+
 $A_{n}$P
+
 Le nombre d’arrangements sans répétitions de n objets pris p à la fois, est noté , et
+
 $A_{n}$P
+
 vaut : $\frac{n !}{( n p )!}$
+
 Exemple :
 On dispose d’une salle de classe comportant 32 élèves. On veut former un bureau de 3
 élèves constitué d’un chef de classe, d’un adjoint et d’une trésorière. Combien y’a-t-il
 de cas possibles ?
 3 32
 n= 32 ; P = 3. A32 29760
+
 (32$\frac{!}{3 )!}$
+
 b-Arrangements avec répétition
 Un arrangement avec répétitions de n objets pris p à la fois, est une manière de
 choisir p objets parmi ces$\frac{n}{' P P}$objets, le même objet pouvant être pris plusieurs fois.
 L'ordre compte.
+
 $A_{n}$ n
+
 Exemple :
 
 Combien de mots de 2 lettres peut-on écrire avec les lettres du mot BAC ?
 n= 3 ; P = 2 ; $3^{2}$ = 9 mots de deux lettres (ab ; ba ; ac ; ca ; bc ; cb ; aa ; bb ; cc)
 Cas particulier
+
 $A_{n}$n n!
+
 $A_{n} 1$ n
+
 $A_{n} 0$ 1
+
 3-Combinaisons
 a-Combinaison sans répétition
 Une combinaison sans répétitions de n objets pris p à la fois, est un choix de p ( $P \leq$
@@ -495,24 +606,34 @@ Une combinaison sans répétitions de n objets pris p à la fois, est un choix d
 ##### n ) objets parmi n. L’ordre ne compte pas.
 
 p n !
+
 $C_{n}$
+
 p!( n - p)!
 Exemple :
 Une urne contient 4 boules numérotées de 1 à 4. De combien de manière peut-on
 retirer 2 boules de l'urne ?
+
 $C_{4} 2$
+
 2!( 4$\frac{4 ! 4 ! 6}{- 2) ! 2 ! 2 !}$
+
 Il y a 6 manières (1 ;2) (1 ;3) (1 ;4) (2 ;3) (2 ;4) (3 ;4)
 b-Combinaison avec répétitions
 
 Une combinaison avec répétitions de n objets pris p à la fois, est un choix de
 P ( $P \leq n$ ) objets parmi n. L’ordre ne compte pas.
 P (n
+
 $C_{n1} \frac{p 1 )!}{! ( n 1 )!}$
+
 P
 Cas particulier :
+
 $C_{n} 1$ n
+
 $C_{n}$n 1
+
 $C_{n} 0$ 1
 
 ### II- Terminologie
@@ -527,11 +648,14 @@ Exemple : On lance un dé ou une pièce de monnaie, on tire une carte dans un je
 Seul le hasard intervient pour obtenir le résultat attendu
 - 3- Eventualité : Les différents résultats d’une expérience aléatoire s’appellent des
 éventualités. L’ensemble des éventualités s’appelle l’univers.
+
 $. Exemple : On lance un dé. Il y a 6 éventualités : 1, 2, 3, 4, 5 et 6. L’univers est \Omega =$
+
 {1 ; 2 ; 3 ; 4 ; 5 ; 6}
 4-Evénement aléatoire : C’est un événement lié au hasard.
 
 a-Événement :$C’est une partie de l'univers \Omega .$
+
 Exemple : Univers $: \Omega = Pile$ ; face}
 Epreuve : jet d’une pièce de monnaie
 Evénement : Obtenir pile ou face
@@ -571,13 +695,18 @@ C’est un tirage avec remise.
 A-Définition
 On dit que l’application p est une probabilité sur $\Omega ,$ si les conditions suivantes sont
 vérifiées :
+
 - P($\Omega )=1$
+
 - $\forall A \in P ( \Omega$), $\forall$ B $\in$ P($\Omega$) => $A \cap B = \emptyset$
+
 - P(A$\cup B$) = P(A) + P(B)
 Dans le cas des événements équiprobables, une règle simple permet d’obtenir la
 probabilité d’un événement quelconque :
 Nombrede cas favorables
+
 P(A)= $\frac{k}{n}$
+
 Nombrede cas possibles
 NB : Lorsque chaque événement élémentaire a la même probabilité, on dit qu’il y a
 équiprobabilité ou que les événements élémentaires sont équiprobables.
@@ -587,7 +716,9 @@ Réponse :
 Probabilité de tirer un cœur
 
 P(A)= 13 1 p(A) = 0,25
+
 $\frac{k}{n}$
+
 52 4
 NB :
 Il existe plusieurs jeux de cartes parmi lesquels nous avons :
@@ -613,6 +744,7 @@ A : Evènement Tirer un cœur
 B : Evènement Tirer un cœur
 AUB : Evènement Tirer un cœur et un trèfle
 P(A$\cup$B) = P(A) + P(B).
+
 P(AUB)= $\frac{8}{32} \frac{8}{32} \frac{1}{2}$
 
 #### 2- Evénements A et B compatibles A$\cap B = \exists$
@@ -628,31 +760,44 @@ A$\cap$B : Evénement tirer un roi de trèfle
 AUB : Evènement Tirer un roi ou un trèfle
 P(A$\cup$B) = P(A) + P(B) - P(A$\cap$B).
 4 8 1
+
 P(AUB)= $\frac{11}{32}$
+
 32 32 32
 3-Evénements contraires A et A
-A$\cap A$̅= Ø
-P (A$\cup A$̅ =P(A)+P(A̅$) = P(\Omega ); or P(\Omega )= 1$
-P(A) = 1 - P(A̅)
-PA+P (A̅)1 $\Rightarrow${
-P(A̅) = 1 –P(A)
+
+A$\cap A$= Ø
+
+P (A$\cup A$ =P(A)+P(A$) = P(\Omega ); or P(\Omega )= 1$
+
+P(A) = 1 - P(A)
+
+PA+P (A)1 $\Rightarrow${
+
+P(A) = 1 –P(A)
 Exemple : Deux candidats A et B passent un examen avec les probabilités d’admission
 suivante : P(A) =0,75 et P(B) = 0,6. Calculer la probabilité d’échec de chaque candidat
 _
-P(A ) = 1 – P(A) => P( A̅ ) = 1 -0,75 => P( A ) =0,25
-P (B̅ ) = 1 – P(B) => P( B̅ ) = 1 -0,60 => P(B̅ ) =0,40
+P(A ) = 1 – P(A) => P( A ) = 1 -0,75 => P( A ) =0,25
+P (B ) = 1 – P(B) => P( B ) = 1 -0,60 => P(B ) =0,40
 
 #### 4- Evénement élémentaire
 
 L’univers $\Omega$ est la réunion des événements élémentaires.
 
 n
+
 $^{P}$ (ei) 1 C’est à dire $P(e_{1} ) + P(e_{2}$ ) +…$+ P(e_{n}$ ) =1
+
 i1
 On lance un dé pipé à 6 faces et on considère les probabilités suivantes :
+
 $P_{1} =0,12 P_{2} = 0,05 P_{3} = 0,20 P_{4}$ = 0,25 $P_{5}$ =0,15. Calculer P6
+
 n
+
 $^{P}$ (ei) 1
+
 i1
 P1+P2+P3+P4+P5+P6=1 => 0,12 +0,05 +0,20+0,25 +0,15+P6 = 1
 P6=0,23
@@ -661,9 +806,13 @@ C- Probabilité conditionnelle ou composée
 #### 1- Evénements liés ou dépendants
 
 $Soit P une application sur \Omega$ et soit A un événement de probabilité non nulle. La
+
 probabilité de $B sachant que A est réalisé est l’application P_{A}$ qui, à tout événement B,
+
 B)
+
 associé le nombre P(B/A) = $\frac{P ( A}{P ( A )}$
+
 Exemple : On tire une carte au hasard dans un jeu de 32 cartes. On considère les
 événements suivants :
 A « la carte tirée est une dame »
@@ -674,9 +823,13 @@ Calculer la probabilité de B sachant A
 
 Calculer la probabilité de B sachant A
 B)
+
 P(B/A) = $\frac{P ( A}{P ( A )}$
+
 P(B / A)
+
 $\frac{32 4}{32}$
+
 P(B/A)=
 
 #### 2- Evénements non liés ou indépendants
@@ -691,5 +844,7 @@ A « La carte tirée est une dame » B « La carte tirée est noire »
 A « La carte tirée est une dame »
 B « La carte tirée est noire »
 P(A$\cap B$) = P(A).P(BS)
+
 $\frac{2}{32} \frac{4}{32}$ X $\frac{16}{32}$ => 0,0625=0,125X0,5
+
 0,0625=0,0625 C’est deux évènements sont indépendants
