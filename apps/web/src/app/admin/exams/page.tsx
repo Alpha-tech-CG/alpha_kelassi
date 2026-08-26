@@ -50,7 +50,7 @@ export default function AdminExamsPage() {
 
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-        <div className="grid grid-cols-4 gap-4 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-end">
           <div>
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Niveau</label>
             <select value={form.level} onChange={(e) => setForm((f) => ({ ...f, level: e.target.value }))}
@@ -68,7 +68,7 @@ export default function AdminExamsPage() {
             <input required type="date" value={form.exam_date} onChange={(e) => setForm((f) => ({ ...f, exam_date: e.target.value }))}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <button type="submit" disabled={saving} className="px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+          <button type="submit" disabled={saving} className="w-full px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
             {saving ? '…' : 'Ajouter'}
           </button>
         </div>

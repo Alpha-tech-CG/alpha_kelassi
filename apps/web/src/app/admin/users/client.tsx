@@ -30,14 +30,14 @@ export function AdminUsersClient({ users: initial }: { users: User[] }) {
   }
 
   return (
-    <div className="px-8 py-8 max-w-6xl">
+    <div className="px-4 md:px-8 py-6 md:py-8 max-w-6xl">
       <div className="mb-6">
         <h1 className="text-2xl font-black text-gray-900">Utilisateurs</h1>
         <p className="text-gray-500 text-sm mt-1">{users.length} compte(s) enregistré(s)</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {[
           { label: 'Total', value: users.length, color: 'bg-green-50 text-green-800' },
           { label: 'Gratuits', value: users.filter((u) => u.plan === 'free').length, color: 'bg-gray-50 text-gray-700' },
@@ -51,18 +51,18 @@ export function AdminUsersClient({ users: initial }: { users: User[] }) {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-3 mb-5">
+      <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <input
           type="text" placeholder="Rechercher par nom, email, téléphone…"
           value={search} onChange={(e) => setSearch(e.target.value)}
           className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
         />
-        <div className="flex bg-gray-100 rounded-xl p-1">
+        <div className="flex bg-gray-100 rounded-xl p-1 justify-center">
           {(['all', 'free', 'premium'] as const).map((p) => (
             <button
               key={p}
               onClick={() => setFilterPlan(p)}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${filterPlan === p ? 'bg-white shadow text-gray-900' : 'text-gray-500'}`}
+              className={`flex-1 sm:flex-initial px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${filterPlan === p ? 'bg-white shadow text-gray-900' : 'text-gray-500'}`}
             >
               {p === 'all' ? 'Tous' : p === 'free' ? 'Gratuit' : 'Premium'}
             </button>
@@ -71,7 +71,7 @@ export function AdminUsersClient({ users: initial }: { users: User[] }) {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>

@@ -97,32 +97,32 @@ export default function AdminSubjectsPage() {
       </div>
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-        <div className="grid grid-cols-12 gap-4 items-end">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+          <div className="col-span-12 sm:col-span-6 md:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Catégorie</label>
             <select value={form.track_type} onChange={(e) => setForm((f) => ({ ...f, track_type: e.target.value as 'generale' | 'technique' }))}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm">
               {TRACK_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-12 sm:col-span-6 md:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Parcours / classe</label>
             <input required value={form.level} onChange={(e) => setForm((f) => ({ ...f, level: e.target.value }))}
               placeholder="ex: bac_technique_g2 / bg" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-12 sm:col-span-6 md:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Icône</label>
             <input value={form.icon} onChange={(e) => setForm((f) => ({ ...f, icon: e.target.value }))}
               placeholder="📐" maxLength={4} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center" />
           </div>
-          <div className="col-span-5">
+          <div className="col-span-12 sm:col-span-6 md:col-span-4">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Nom de la matière</label>
             <input required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="ex: Mathématiques" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <div className="col-span-3">
+          <div className="col-span-12 md:col-span-2">
             <button type="submit" disabled={saving} className="w-full px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
-              {saving ? 'Ajout…' : 'Ajouter la matière'}
+              {saving ? 'Ajout…' : 'Ajouter'}
             </button>
           </div>
         </div>
@@ -157,7 +157,7 @@ export default function AdminSubjectsPage() {
                           <span className="text-xs font-bold text-gray-700 bg-gray-100 px-2 py-1 rounded-lg uppercase">{lvl.replaceAll('_', ' ')}</span>
                           <span className="text-xs text-gray-400">{items.length} matière{items.length > 1 ? 's' : ''}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {items.map((s) => (
                             <div key={s.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm px-4 py-3 flex items-center gap-3">
                               <span className="text-2xl w-9 text-center flex-shrink-0">{s.icon ?? '📘'}</span>

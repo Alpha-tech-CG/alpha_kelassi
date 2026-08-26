@@ -50,32 +50,32 @@ export default function AdminSeriesPage() {
 
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-        <div className="grid grid-cols-12 gap-3 items-end">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+          <div className="col-span-12 sm:col-span-6 md:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Code</label>
             <input required value={form.code} onChange={(e) => setForm((f) => ({ ...f, code: e.target.value }))}
               placeholder="C / G1" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-12 sm:col-span-6 md:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Filière</label>
             <select value={form.track} onChange={(e) => setForm((f) => ({ ...f, track: e.target.value }))}
               className="w-full border border-gray-200 rounded-xl px-2 py-2.5 text-sm">
               {TRACKS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-12 sm:col-span-6 md:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Niveau</label>
             <select value={form.level} onChange={(e) => setForm((f) => ({ ...f, level: e.target.value }))}
               className="w-full border border-gray-200 rounded-xl px-2 py-2.5 text-sm">
               {LEVELS.map((l) => <option key={l} value={l}>{l.replace('_', ' ')}</option>)}
             </select>
           </div>
-          <div className="col-span-4">
+          <div className="col-span-12 sm:col-span-6 md:col-span-4">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Libellé</label>
             <input required value={form.label} onChange={(e) => setForm((f) => ({ ...f, label: e.target.value }))}
               placeholder="Série C — Maths-Sciences" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-12 md:col-span-2">
             <button type="submit" disabled={saving} className="w-full px-4 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
               {saving ? '…' : 'Ajouter'}
             </button>

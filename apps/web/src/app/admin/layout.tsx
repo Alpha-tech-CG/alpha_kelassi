@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { AdminSidebar } from './_components/sidebar'
+import { AdminLayoutClient } from './_components/admin-layout-client'
 import { isAllowedAdminEmail } from '@/lib/admin-allowlist'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -18,11 +18,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // la liste blanche d'adresses ET le rôle `admin` en base.
 
   return (
-    <div className="min-h-screen bg-gray-950 flex">
-      <AdminSidebar name={profile?.full_name ?? profile?.email ?? 'Admin'} />
-      <main className="flex-1 ml-64 min-h-screen bg-gray-50">
-        {children}
-      </main>
-    </div>
+    <AdminLayoutClient name={profile?.full_name ?? profile?.email ?? 'Admin'}>
+      {children}
+    </AdminLayoutClient>
   )
 }

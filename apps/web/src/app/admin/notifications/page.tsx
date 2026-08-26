@@ -95,7 +95,7 @@ export default function AdminNotificationsPage() {
           <h2 className="font-bold text-gray-900">Créer une notification</h2>
           {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Type</label>
               <select
@@ -151,7 +151,7 @@ export default function AdminNotificationsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Texte du bouton (optionnel)</label>
               <input

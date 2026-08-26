@@ -61,3 +61,21 @@
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
   }
 }
+
+/* Surcharge adaptative des marges pour les pages d'administration */
+.admin-content-override > div {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
+}
+
+@media (min-width: 768px) {
+  .admin-content-override > div {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
+

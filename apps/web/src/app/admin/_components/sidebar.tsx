@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { SignOutButton } from '@/components/sign-out-button'
+import { X } from 'lucide-react'
 
 /**
  * Navigation de la console admin.
@@ -50,13 +51,21 @@ const GROUPS: NavGroup[] = [
   },
 ]
 
-export function AdminSidebar({ name }: { name: string }) {
+export function AdminSidebar({
+  name,
+  isOpen = false,
+  onClose,
+}: {
+  name: string
+  isOpen?: boolean
+  onClose?: () => void
+}) {
   const pathname = usePathname()
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 bg-gray-950 border-r border-gray-800 flex flex-col z-50">
+    <aside className={`fixed left-0 top-0 h-full w-64 bg-gray-950 border-r border-gray-800 flex flex-col z-50 transition-transform duration-300 md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-gray-800 flex-shrink-0">
+      <div className="px-5 py-5 border-b border-gray-800 flex-shrink-0 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-gradient-to-br from-green-600 to-violet-600 rounded-lg flex items-center justify-center text-white text-sm font-black">
             K
@@ -66,6 +75,15 @@ export function AdminSidebar({ name }: { name: string }) {
             <p className="text-gray-500 text-xs mt-0.5">Console Admin</p>
           </div>
         </div>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="md:hidden text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition-colors"
+            aria-label="Fermer le menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Nav groupée */}
@@ -83,6 +101,7 @@ export function AdminSidebar({ name }: { name: string }) {
                     key={href}
                     href={href}
                     aria-current={active ? 'page' : undefined}
+                    onClick={onClose}
                     className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                       active
                         ? 'bg-green-700 text-white shadow-lg shadow-green-700/20'
@@ -120,6 +139,7 @@ export function AdminSidebar({ name }: { name: string }) {
 
         <Link
           href="/dashboard"
+          onClick={onClose}
           className="mt-3 flex items-center gap-2 text-xs text-gray-500 hover:text-gray-300 transition-colors"
         >
           ← Retour au dashboard élève

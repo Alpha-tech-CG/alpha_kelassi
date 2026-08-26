@@ -89,18 +89,18 @@ export default function AdminClassSubjectsPage() {
       {/* Ajout d'une matière */}
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-        <div className="grid grid-cols-12 gap-3 items-end">
-          <div className="col-span-5">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+          <div className="col-span-12 md:col-span-5">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Nom de la matière</label>
             <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Mathématiques"
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <div className="col-span-2">
+          <div className="col-span-12 sm:col-span-4 md:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Icône</label>
             <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder="📐" maxLength={4}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-center" />
           </div>
-          <div className="col-span-3">
+          <div className="col-span-12 sm:col-span-8 md:col-span-3">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Filière</label>
             <select value={track} onChange={(e) => setTrack(e.target.value as 'generale' | 'technique')}
               className="w-full border border-gray-200 rounded-xl px-2 py-2.5 text-sm">
@@ -108,7 +108,7 @@ export default function AdminClassSubjectsPage() {
               <option value="technique">Technique</option>
             </select>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-12 md:col-span-2">
             <button type="submit" disabled={saving}
               className="w-full px-4 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
               {saving ? '…' : 'Ajouter'}

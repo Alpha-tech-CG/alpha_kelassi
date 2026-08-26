@@ -83,16 +83,16 @@ export default function AdminChaptersPage() {
 
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-        <div className="grid grid-cols-12 gap-3 items-end">
-          <div className="col-span-5">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+          <div className="col-span-12 md:col-span-5">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Titre</label>
             <input required value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Chapitre 1 — Les limites" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <div className="col-span-4">
+          <div className="col-span-12 md:col-span-4">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Description (option.)</label>
             <input value={description} onChange={(e) => setDescription(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
-          <div className="col-span-3">
+          <div className="col-span-12 md:col-span-3">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Série (option.)</label>
             <select value={seriesId} onChange={(e) => setSeriesId(e.target.value)} className="w-full border border-gray-200 rounded-xl px-2 py-2.5 text-sm">
               <option value="">Toutes</option>

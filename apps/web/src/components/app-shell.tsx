@@ -162,7 +162,7 @@ export function AppShell({
 
       {/* Bottom nav mobile */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#172554] border-t border-white/10 px-2 py-2 flex items-center justify-around" aria-label="Navigation mobile">
-        {MOBILE_NAV.map((item) => (
+        {(isAdmin ? [...MOBILE_NAV, { href: '/admin', label: 'Console', Icon: Wrench }] : MOBILE_NAV).map((item) => (
           <Link
             key={item.href}
             href={item.href}

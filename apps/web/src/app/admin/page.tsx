@@ -91,14 +91,14 @@ export default async function AdminOverviewPage() {
   ]
 
   return (
-    <div className="px-8 py-8 max-w-6xl">
+    <div className="px-4 md:px-8 py-6 md:py-8 max-w-6xl">
       <div className="mb-8">
         <h1 className="text-2xl font-black text-gray-900">Vue d&apos;ensemble</h1>
         <p className="text-gray-500 text-sm mt-1">Tableau de bord administrateur Kelassi</p>
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-4 gap-5 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         {statCards.map((s) => (
           <div key={s.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <div className={`w-10 h-10 bg-gradient-to-br ${s.color} rounded-xl flex items-center justify-center text-xl mb-3`}>
@@ -110,7 +110,7 @@ export default async function AdminOverviewPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top documents */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
           <h2 className="font-bold text-gray-900 mb-4">Documents les plus consultés (7j)</h2>

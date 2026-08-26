@@ -61,7 +61,7 @@ export default function AdminVideosPage() {
       {/* Form ajout */}
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 space-y-4">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Matière</label>
             <select required value={form.subject_id} onChange={(e) => setForm((f) => ({ ...f, subject_id: e.target.value }))}
@@ -105,7 +105,7 @@ export default function AdminVideosPage() {
       ) : videos.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucune vidéo.</div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {videos.map((v) => (
             <div key={v.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-3">
               {v.thumbnail_url && (

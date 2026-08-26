@@ -45,7 +45,7 @@ export default function AdminSubscriptionsPage() {
   ] : []
 
   return (
-    <div className="px-8 py-8 max-w-6xl">
+    <div className="px-4 md:px-8 py-6 md:py-8 max-w-6xl">
       <div className="mb-6">
         <h1 className="text-2xl font-black text-gray-900">Abonnements</h1>
         <p className="text-gray-500 text-sm mt-1">Suivi des abonnements Premium (Stripe + Mobile Money)</p>
@@ -53,7 +53,7 @@ export default function AdminSubscriptionsPage() {
 
       {/* KPIs */}
       {summary && (
-        <div className="grid grid-cols-4 gap-5 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
           {cards.map((c) => (
             <div key={c.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
               <div className={`w-10 h-10 bg-gradient-to-br ${c.color} rounded-xl flex items-center justify-center text-xl mb-3`}>{c.icon}</div>
@@ -65,7 +65,7 @@ export default function AdminSubscriptionsPage() {
       )}
 
       {/* Filtres */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-4">
         {['', 'active', 'trialing', 'past_due', 'canceled'].map((s) => (
           <button
             key={s || 'all'}
@@ -78,7 +78,7 @@ export default function AdminSubscriptionsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-x-auto">
         {loading ? (
           <div className="flex items-center justify-center py-16">
             <div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" />
