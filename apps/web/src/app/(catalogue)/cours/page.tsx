@@ -40,6 +40,7 @@ const LEVEL_CONFIG: Record<string, {
   bac_g2: { label: 'BAC G2', color: 'text-teal-700',    bg: 'bg-teal-50',    border: 'border-teal-300',    headerBg: 'bg-teal-600',    dot: 'bg-teal-600'    },
   bac_g3: { label: 'BAC G3', color: 'text-lime-700',    bg: 'bg-lime-50',    border: 'border-lime-300',    headerBg: 'bg-lime-600',    dot: 'bg-lime-600'    },
   bac_h:  { label: 'BAC H',  color: 'text-indigo-700',  bg: 'bg-indigo-50',  border: 'border-indigo-300',  headerBg: 'bg-indigo-500',  dot: 'bg-indigo-500'  },
+  bac_r:  { label: 'BAC R',  color: 'text-fuchsia-700', bg: 'bg-fuchsia-50', border: 'border-fuchsia-300', headerBg: 'bg-fuchsia-600', dot: 'bg-fuchsia-600' },
 }
 
 // Ordre d'affichage aligné sur la source partagée (packages/types/src/levels.ts).

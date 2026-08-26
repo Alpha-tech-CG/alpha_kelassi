@@ -28,6 +28,7 @@ const COLORS: Record<string, { color: string; ring: string }> = {
   bac_g2: { color: 'from-teal-500 to-teal-600',       ring: 'hover:border-teal-300'    },
   bac_g3: { color: 'from-lime-600 to-lime-700',       ring: 'hover:border-lime-300'    },
   bac_h:  { color: 'from-indigo-500 to-indigo-600',   ring: 'hover:border-indigo-300'  },
+  bac_r:  { color: 'from-fuchsia-500 to-fuchsia-600', ring: 'hover:border-fuchsia-300' },
 }
 
 const CLASSES = STUDY_LEVELS.map((level) => ({

@@ -22,6 +22,7 @@ export const STUDY_LEVELS = [
   'bac_g2',
   'bac_g3',
   'bac_h',
+  'bac_r',
 ] as const
 
 export type StudyLevel = (typeof STUDY_LEVELS)[number]
@@ -49,6 +50,7 @@ export const LEVEL_META: Record<StudyLevel, LevelMeta> = {
   bac_g3: { label: 'BAC G3', classe: 'Terminale G3', track: 'technique', description: 'Techniques Commerciales' },
   bac_h:  { label: 'BAC H',  classe: 'Terminale H', track: 'technique', description: 'Techniques Informatiques' },
   bac_bg: { label: 'BAC BG', classe: 'Terminale BG', track: 'technique' },
+  bac_r:  { label: 'BAC R',  classe: 'Terminale R', track: 'technique' },
 }
 
 /** Cette chaîne correspond-elle à une classe connue ? */
