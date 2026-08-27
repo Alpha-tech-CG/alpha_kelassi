@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Pending {
   user_id: string; school: string | null; created_at: string
@@ -12,25 +13,33 @@ export default function AdminTeachersPage() {
   const [rows, setRows] = useState<Pending[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    const res = await fetch('/api/admin/teachers/pending', { credentials: 'include' })
-    const json = await res.json()
-    setRows(json.data ?? []); setLoading(false)
+    const res = await adminFetch<Pending[]>('/api/admin/teachers/pending')
+    if (res.ok) setRows(res.data ?? [])
+    else setError(res.error)
+    setLoading(false)
   }, [])
   useEffect(() => { load() }, [load])
 
   async function act(id: string, kind: 'verify' | 'reject') {
-    setBusy(id)
-    const res = await fetch(`/api/admin/teachers/${id}/${kind}`, { method: 'POST', credentials: 'include' })
-    setBusy(null)
-    if (res.ok) setRows((r) => r.filter((x) => x.user_id !== id)); else alert('Erreur')
+    setBusy(id); setError(null)
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch(`/api/admin/teachers/${id}/${kind}`, { method: 'POST' })
+      if (res.ok) setRows((r) => r.filter((x) => x.user_id !== id))
+      else setError(res.error)
+    } finally {
+      setBusy(null)
+    }
   }
 
   return (
     <div className="px-8 py-8 max-w-4xl">
       <h1 className="text-2xl font-black text-gray-900 mb-1">Validation des enseignants</h1>
       <p className="text-gray-500 text-sm mb-6">Vérifie la pièce d&apos;identité et le justificatif d&apos;enseignement (délai cible : 48h).</p>
+      {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
 
       {loading ? (
         <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>

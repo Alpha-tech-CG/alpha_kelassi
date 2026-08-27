@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
 import { MarkdownRenderer } from '@/components/markdown-renderer'
+import { adminFetch } from '@/lib/admin-fetch'
 
 /**
  * QCM de fin de chapitre — console admin.
@@ -47,9 +48,9 @@ export default function AdminChapterQuizPage() {
   const [saving, setSaving] = useState(false)
 
   const load = useCallback(async () => {
-    const res = await fetch(`/api/admin/curriculum/quiz?chapterId=${chapterId}`, { credentials: 'include' })
-    const json = await res.json()
-    setQuiz(json.data ?? null)
+    const res = await adminFetch<Quiz | null>(`/api/admin/curriculum/quiz?chapterId=${chapterId}`)
+    if (res.ok) setQuiz(res.data ?? null)
+    else setError(res.error)
     setLoading(false)
   }, [chapterId])
   useEffect(() => { load() }, [load])
@@ -57,14 +58,19 @@ export default function AdminChapterQuizPage() {
   async function createQuiz(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/curriculum/quiz', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ chapter_id: chapterId, title, time_limit_sec: minutes * 60, is_premium: premium }),
-    })
-    const json = await res.json()
-    setSaving(false)
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); return }
-    setTitle(''); await load()
+    // `finally` garantit la réactivation du bouton : sans lui, une réponse
+    // inattendue laissait le formulaire bloqué.
+    try {
+      const res = await adminFetch('/api/admin/curriculum/quiz', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chapter_id: chapterId, title, time_limit_sec: minutes * 60, is_premium: premium }),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setTitle('')
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function addQuestion(e: React.FormEvent) {
@@ -79,36 +85,45 @@ export default function AdminChapterQuizPage() {
     const newCorrect = kept.findIndex((x) => x.i === correct)
 
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/curriculum/quiz/questions', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({
-        quiz_id: quiz.id, prompt, options: kept.map((x) => x.o),
-        correct_index: newCorrect, explanation: explanation || null,
-      }),
-    })
-    const json = await res.json()
-    setSaving(false)
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); return }
-    setPrompt(''); setOptions(EMPTY_OPTIONS); setCorrect(0); setExplanation(''); await load()
+    try {
+      const res = await adminFetch('/api/admin/curriculum/quiz/questions', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quiz_id: quiz.id, prompt, options: kept.map((x) => x.o),
+          correct_index: newCorrect, explanation: explanation || null,
+        }),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setPrompt(''); setOptions(EMPTY_OPTIONS); setCorrect(0); setExplanation('')
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function delQuestion(id: string) {
     if (!confirm('Supprimer cette question ?')) return
-    setBusy(id)
-    const res = await fetch(`/api/admin/curriculum/quiz/questions?id=${id}`, { method: 'DELETE', credentials: 'include' })
-    setBusy(null)
-    if (res.ok) await load()
-    else alert((await res.json()).error?.message ?? 'Erreur')
+    setBusy(id); setError(null)
+    try {
+      const res = await adminFetch(`/api/admin/curriculum/quiz/questions?id=${id}`, { method: 'DELETE' })
+      if (res.ok) await load()
+      else setError(res.error)
+    } finally {
+      setBusy(null)
+    }
   }
 
   async function delQuiz() {
     if (!quiz) return
     if (!confirm(`Supprimer le QCM « ${quiz.title} » et ses ${quiz.quiz_questions.length} question(s) ?`)) return
-    setBusy(quiz.id)
-    const res = await fetch(`/api/admin/curriculum/quiz?id=${quiz.id}`, { method: 'DELETE', credentials: 'include' })
-    setBusy(null)
-    if (res.ok) { setQuiz(null); await load() }
-    else alert((await res.json()).error?.message ?? 'Erreur')
+    setBusy(quiz.id); setError(null)
+    try {
+      const res = await adminFetch(`/api/admin/curriculum/quiz?id=${quiz.id}`, { method: 'DELETE' })
+      if (res.ok) { setQuiz(null); await load() }
+      else setError(res.error)
+    } finally {
+      setBusy(null)
+    }
   }
 
   if (loading) return <div className="px-8 py-8 text-sm text-gray-400">Chargement…</div>

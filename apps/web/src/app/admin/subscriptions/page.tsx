@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Sub {
   id: string; plan: string; status: string; provider: string
@@ -24,14 +25,18 @@ export default function AdminSubscriptionsPage() {
   const [summary, setSummary] = useState<Summary | null>(null)
   const [loading, setLoading] = useState(true)
   const [status, setStatus] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
     const qs = status ? `?status=${status}` : ''
-    const res = await fetch(`/api/admin/subscriptions${qs}`, { credentials: 'include' })
-    const json = await res.json()
-    setSubs(json.data ?? [])
-    setSummary(json.summary ?? null)
+    const res = await adminFetch<Sub[]>(`/api/admin/subscriptions${qs}`)
+    if (res.ok) {
+      setSubs(res.data ?? [])
+      setSummary((res.body as { summary?: Summary })?.summary ?? null)
+    } else {
+      setError(res.error)
+    }
     setLoading(false)
   }, [status])
 
@@ -50,6 +55,7 @@ export default function AdminSubscriptionsPage() {
         <h1 className="text-2xl font-black text-gray-900">Abonnements</h1>
         <p className="text-gray-500 text-sm mt-1">Suivi des abonnements Premium (Stripe + Mobile Money)</p>
       </div>
+      {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
 
       {/* KPIs */}
       {summary && (

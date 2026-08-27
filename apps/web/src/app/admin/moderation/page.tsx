@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Flag {
   id: string; reason: string; created_at: string
@@ -12,27 +13,35 @@ export default function AdminModerationPage() {
   const [rows, setRows] = useState<Flag[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    const res = await fetch('/api/admin/moderation', { credentials: 'include' })
-    const json = await res.json()
-    setRows(json.data ?? []); setLoading(false)
+    const res = await adminFetch<Flag[]>('/api/admin/moderation')
+    if (res.ok) setRows(res.data ?? [])
+    else setError(res.error)
+    setLoading(false)
   }, [])
   useEffect(() => { load() }, [load])
 
   async function resolve(id: string, action: 'reviewed' | 'dismissed', deleteMsg = false) {
-    setBusy(id)
-    const res = await fetch(`/api/admin/moderation/${id}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ action, delete_message: deleteMsg }),
-    })
-    setBusy(null)
-    if (res.ok) setRows((r) => r.filter((x) => x.id !== id)); else alert('Erreur')
+    setBusy(id); setError(null)
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch(`/api/admin/moderation/${id}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, delete_message: deleteMsg }),
+      })
+      if (res.ok) setRows((r) => r.filter((x) => x.id !== id))
+      else setError(res.error)
+    } finally {
+      setBusy(null)
+    }
   }
 
   return (
     <div className="px-8 py-8 max-w-4xl">
       <h1 className="text-2xl font-black text-gray-900 mb-1">Modération</h1>
+      {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm my-3">{error}</div>}
       <p className="text-gray-500 text-sm mb-6">Signalements ouverts (messages de groupe signalés ou bloqués automatiquement par l&apos;IA).</p>
 
       {loading ? (

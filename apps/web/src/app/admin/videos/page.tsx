@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Video {
   id: string; title: string; level: string; provider: string; url: string
@@ -22,10 +23,11 @@ export default function AdminVideosPage() {
 
   const load = useCallback(async () => {
     const [vids, { data: subs }] = await Promise.all([
-      fetch('/api/admin/videos', { credentials: 'include' }).then((r) => r.json()),
+      adminFetch<Video[]>('/api/admin/videos'),
       supabase.from('subjects').select('id, name, level').order('name'),
     ])
-    setVideos(vids.data ?? [])
+    if (vids.ok) setVideos(vids.data ?? [])
+    else setError(vids.error)
     setSubjects((subs ?? []) as Subject[])
     setLoading(false)
   }, [supabase])
@@ -35,14 +37,18 @@ export default function AdminVideosPage() {
   async function add(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/videos', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify(form),
-    })
-    const json = await res.json()
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); setSaving(false); return }
-    setForm(EMPTY); setSaving(false)
-    await load()
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch('/api/admin/videos', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setForm(EMPTY)
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function remove(id: string) {

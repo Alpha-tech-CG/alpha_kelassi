@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Pending {
   user_id: string; bio: string | null; created_at: string
@@ -12,36 +13,48 @@ export default function AdminTutorsPage() {
   const [rows, setRows] = useState<Pending[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    const res = await fetch('/api/admin/tutors/pending', { credentials: 'include' })
-    const json = await res.json()
-    setRows(json.data ?? []); setLoading(false)
+    const res = await adminFetch<Pending[]>('/api/admin/tutors/pending')
+    if (res.ok) setRows(res.data ?? [])
+    else setError(res.error)
+    setLoading(false)
   }, [])
   useEffect(() => { load() }, [load])
 
+  // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
   async function verify(id: string) {
-    setBusy(id)
-    const res = await fetch(`/api/admin/tutors/${id}/verify`, { method: 'POST', credentials: 'include' })
-    setBusy(null)
-    if (res.ok) setRows((r) => r.filter((x) => x.user_id !== id)); else alert('Erreur')
+    setBusy(id); setError(null)
+    try {
+      const res = await adminFetch(`/api/admin/tutors/${id}/verify`, { method: 'POST' })
+      if (res.ok) setRows((r) => r.filter((x) => x.user_id !== id))
+      else setError(res.error)
+    } finally {
+      setBusy(null)
+    }
   }
   async function reject(id: string) {
     const reason = prompt('Motif du rejet ?')
     if (!reason) return
-    setBusy(id)
-    const res = await fetch(`/api/admin/tutors/${id}/reject`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ reason }),
-    })
-    setBusy(null)
-    if (res.ok) setRows((r) => r.filter((x) => x.user_id !== id)); else alert('Erreur')
+    setBusy(id); setError(null)
+    try {
+      const res = await adminFetch(`/api/admin/tutors/${id}/reject`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason }),
+      })
+      if (res.ok) setRows((r) => r.filter((x) => x.user_id !== id))
+      else setError(res.error)
+    } finally {
+      setBusy(null)
+    }
   }
 
   return (
     <div className="px-8 py-8 max-w-4xl">
       <h1 className="text-2xl font-black text-gray-900 mb-1">Validation des tuteurs</h1>
       <p className="text-gray-500 text-sm mb-6">Vérifie la pièce d&apos;identité et le diplôme BAC avant de valider (délai cible : 24h).</p>
+      {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
 
       {loading ? (
         <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>

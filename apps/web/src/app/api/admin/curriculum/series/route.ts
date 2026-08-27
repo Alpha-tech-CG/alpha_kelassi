@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 /** GET /api/admin/curriculum/series — liste toutes les séries */
 export async function GET() {
@@ -26,7 +27,9 @@ const schema = z.object({
   code:         z.string().min(1).max(8),
   label:        z.string().min(3).max(120),
   track:        z.enum(['generale', 'technique', 'professionnel']),
-  level:        z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  // Source partagée : la liste était figée sur quatre niveaux généraux, ce qui
+  // rejetait toute création de série technique (G2, G3, BG, R…).
+  level:        z.enum(STUDY_LEVELS),
   country_code: z.string().length(2).default('CG'),
 })
 

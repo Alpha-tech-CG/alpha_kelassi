@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Quiz { id: string; title: string; level: string; is_premium: boolean; subject_name: string | null; question_count: number }
 interface Doc { id: string; title: string; level: string }
@@ -19,10 +20,11 @@ export default function AdminQuizPage() {
 
   const load = useCallback(async () => {
     const [qz, { data: documents }] = await Promise.all([
-      fetch('/api/admin/quiz', { credentials: 'include' }).then((r) => r.json()),
+      adminFetch<Quiz[]>('/api/admin/quiz'),
       supabase.from('documents').select('id, title, level').eq('type', 'cours').order('created_at', { ascending: false }).limit(200),
     ])
-    setQuizzes(qz.data ?? [])
+    if (qz.ok) setQuizzes(qz.data ?? [])
+    else setMsg(qz.error)
     setDocs((documents ?? []) as Doc[])
     setLoading(false)
   }, [supabase])
@@ -33,14 +35,18 @@ export default function AdminQuizPage() {
     e.preventDefault()
     if (!documentId) return
     setGenerating(true); setMsg(null)
-    const res = await fetch('/api/admin/quiz/generate', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ document_id: documentId, count, is_premium: isPremium }),
-    })
-    const json = await res.json()
-    if (!res.ok) setMsg(json.error?.message ?? 'Erreur de génération')
-    else { setMsg(`✅ QCM créé — ${json.data?.question_count ?? 0} questions`); await load() }
-    setGenerating(false)
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch<{ question_count?: number }>('/api/admin/quiz/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document_id: documentId, count, is_premium: isPremium }),
+      })
+      if (!res.ok) { setMsg(res.error ?? 'Erreur de génération'); return }
+      setMsg(`✅ QCM créé — ${res.data?.question_count ?? 0} questions`)
+      await load()
+    } finally {
+      setGenerating(false)
+    }
   }
 
   async function remove(id: string) {

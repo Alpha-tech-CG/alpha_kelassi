@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { adminFetch } from '@/lib/admin-fetch'
 
 const API_URL = ''  // routes Next.js locales
 
@@ -35,9 +36,11 @@ export default function AdminNotificationsPage() {
 
   async function load() {
     const token = await getToken()
-    const res = await fetch(`${API_URL}/api/admin/notifications`, { headers: { Authorization: `Bearer ${token}` } })
-    const { data } = await res.json()
-    setNotifs(data ?? [])
+    const res = await adminFetch<Notif[]>(`${API_URL}/api/admin/notifications`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (res.ok) setNotifs(res.data ?? [])
+    else setError(res.error)
     setLoading(false)
   }
 
@@ -46,16 +49,20 @@ export default function AdminNotificationsPage() {
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const token = await getToken()
-    const body = { ...form, cta_label: form.cta_label || null, cta_url: form.cta_url || null, expires_at: form.expires_at || null }
-    const res = await fetch(`${API_URL}/api/admin/notifications`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(body),
-    })
-    if (!res.ok) { const j = await res.json(); setError(j.error?.message ?? 'Erreur'); setSaving(false); return }
-    setForm(EMPTY); setShowForm(false)
-    await load()
-    setSaving(false)
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const token = await getToken()
+      const body = { ...form, cta_label: form.cta_label || null, cta_url: form.cta_url || null, expires_at: form.expires_at || null }
+      const res = await adminFetch(`${API_URL}/api/admin/notifications`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setForm(EMPTY); setShowForm(false)
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function handleToggle(n: Notif) {

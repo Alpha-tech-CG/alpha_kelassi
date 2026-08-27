@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Chapter { id: string; title: string; description: string | null; order_index: number; series_id: string | null; lesson_count: number }
 interface Series { id: string; code: string; label: string }
@@ -22,13 +23,14 @@ export default function AdminChaptersPage() {
 
   const load = useCallback(async () => {
     const [c, s, subs] = await Promise.all([
-      fetch(`/api/admin/curriculum/chapters?subjectId=${subjectId}`, { credentials: 'include' }).then((r) => r.json()),
-      fetch('/api/admin/curriculum/series', { credentials: 'include' }).then((r) => r.json()),
+      adminFetch<Chapter[]>(`/api/admin/curriculum/chapters?subjectId=${subjectId}`),
+      adminFetch<Series[]>('/api/admin/curriculum/series'),
       // Sert au fil d'Ariane : permet de remonter à la classe de la matière.
-      fetch('/api/admin/subjects', { credentials: 'include' }).then((r) => r.json()).catch(() => ({ data: [] })),
+      adminFetch<SubjectInfo[]>('/api/admin/subjects'),
     ])
-    setRows(c.data ?? []); setSeries(s.data ?? [])
-    setSubject(((subs.data ?? []) as SubjectInfo[]).find((x) => x.id === subjectId) ?? null)
+    if (c.ok) setRows(c.data ?? []); else setError(c.error)
+    if (s.ok) setSeries(s.data ?? [])
+    setSubject((subs.data ?? []).find((x) => x.id === subjectId) ?? null)
     setLoading(false)
   }, [subjectId])
   useEffect(() => { load() }, [load])
@@ -36,29 +38,36 @@ export default function AdminChaptersPage() {
   async function add(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/curriculum/chapters', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ subject_id: subjectId, title, description: description || null, series_id: seriesId || null, order_index: rows.length }),
-    })
-    const json = await res.json()
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); setSaving(false); return }
-    setTitle(''); setDescription(''); setSeriesId(''); setSaving(false); await load()
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch('/api/admin/curriculum/chapters', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subject_id: subjectId, title, description: description || null, series_id: seriesId || null, order_index: rows.length }),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setTitle(''); setDescription(''); setSeriesId('')
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function remove(ch: Chapter) {
     if (!confirm(`Supprimer le chapitre « ${ch.title} » et ses leçons ?`)) return
-    const res = await fetch(`/api/admin/curriculum/chapters/${ch.id}`, { method: 'DELETE', credentials: 'include' })
+    setError(null)
+    const res = await adminFetch(`/api/admin/curriculum/chapters/${ch.id}`, { method: 'DELETE' })
     if (res.ok) setRows((l) => l.filter((x) => x.id !== ch.id))
-    else alert((await res.json()).error?.message ?? 'Erreur')
+    else setError(res.error)
   }
 
   async function move(ch: Chapter, dir: -1 | 1) {
     const next = ch.order_index + dir
-    const res = await fetch(`/api/admin/curriculum/chapters/${ch.id}`, {
-      method: 'PUT', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+    const res = await adminFetch(`/api/admin/curriculum/chapters/${ch.id}`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ order_index: Math.max(0, next) }),
     })
     if (res.ok) await load()
+    else setError(res.error)
   }
 
   return (

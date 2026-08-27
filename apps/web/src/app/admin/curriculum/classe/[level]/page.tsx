@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { LEVEL_META, isStudyLevel } from '@alpha-kelassi/types'
+import { adminFetch } from '@/lib/admin-fetch'
 
 /**
  * Curriculum — étape 2 : les matières d'une classe.
@@ -38,11 +39,11 @@ export default function AdminClassSubjectsPage() {
 
   const load = useCallback(async () => {
     const [s, c] = await Promise.all([
-      fetch('/api/admin/subjects', { credentials: 'include' }).then((r) => r.json()),
-      fetch(`/api/admin/curriculum/chapters/count?level=${level}`, { credentials: 'include' })
-        .then((r) => r.json()).catch(() => ({ data: {} })),
+      adminFetch<Subject[]>('/api/admin/subjects'),
+      adminFetch<Record<string, number>>(`/api/admin/curriculum/chapters/count?level=${level}`),
     ])
-    setRows(((s.data ?? []) as Subject[]).filter((x) => x.level === level))
+    if (s.ok) setRows((s.data ?? []).filter((x) => x.level === level))
+    else setError(s.error)
     setChapCount(c.data ?? {})
     setLoading(false)
   }, [level])
@@ -51,15 +52,19 @@ export default function AdminClassSubjectsPage() {
   async function add(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/subjects', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      // Le niveau vient de la classe ouverte, pas d'un choix de l'utilisateur.
-      body: JSON.stringify({ name, level, track_type: track, icon: icon || undefined }),
-    })
-    const json = await res.json()
-    setSaving(false)
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); return }
-    setName(''); setIcon(''); await load()
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch('/api/admin/subjects', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        // Le niveau vient de la classe ouverte, pas d'un choix de l'utilisateur.
+        body: JSON.stringify({ name, level, track_type: track, icon: icon || undefined }),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setName(''); setIcon('')
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function remove(s: Subject) {
@@ -68,11 +73,14 @@ export default function AdminClassSubjectsPage() {
       ? `Supprimer « ${s.name} » ? Ses ${chapters} chapitre(s) et toutes leurs leçons seront supprimés aussi.`
       : `Supprimer la matière « ${s.name} » ?`
     if (!confirm(warning)) return
-    setBusy(s.id)
-    const res = await fetch(`/api/admin/subjects/${s.id}`, { method: 'DELETE', credentials: 'include' })
-    setBusy(null)
-    if (res.ok) await load()
-    else alert((await res.json()).error?.message ?? 'Erreur')
+    setBusy(s.id); setError(null)
+    try {
+      const res = await adminFetch(`/api/admin/subjects/${s.id}`, { method: 'DELETE' })
+      if (res.ok) await load()
+      else setError(res.error)
+    } finally {
+      setBusy(null)
+    }
   }
 
   const byId = new Map(rows.map((r) => [r.id, r]))

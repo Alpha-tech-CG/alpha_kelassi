@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Exercise {
   id: string; title: string; statement: string; difficulty: number; is_premium: boolean; order_index: number
@@ -32,31 +33,40 @@ export default function AdminExercisesPage() {
   const [premium, setPremium] = useState(false)
 
   const load = useCallback(async () => {
-    const res = await fetch(`/api/admin/curriculum/exercises?chapterId=${chapterId}`, { credentials: 'include' })
-    const json = await res.json()
-    setRows(json.data ?? []); setLoading(false)
+    const res = await adminFetch<Exercise[]>(`/api/admin/curriculum/exercises?chapterId=${chapterId}`)
+    if (res.ok) setRows(res.data ?? [])
+    else setError(res.error)
+    setLoading(false)
   }, [chapterId])
   useEffect(() => { load() }, [load])
 
   async function add(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/curriculum/exercises', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ chapter_id: chapterId, title, statement, solution, difficulty, is_premium: premium, order_index: rows.length }),
-    })
-    const json = await res.json()
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); setSaving(false); return }
-    setTitle(''); setStatement(''); setSolution(''); setDifficulty(1); setPremium(false); setSaving(false); await load()
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch('/api/admin/curriculum/exercises', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chapter_id: chapterId, title, statement, solution, difficulty, is_premium: premium, order_index: rows.length }),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setTitle(''); setStatement(''); setSolution(''); setDifficulty(1); setPremium(false)
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function del(id: string) {
     if (!confirm('Supprimer cet exercice et son corrigé ?')) return
-    setBusy(id)
-    const res = await fetch(`/api/admin/curriculum/exercises/${id}`, { method: 'DELETE', credentials: 'include' })
-    setBusy(null)
-    if (res.ok) setRows((list) => list.filter((x) => x.id !== id))
-    else alert((await res.json()).error?.message ?? 'Erreur')
+    setBusy(id); setError(null)
+    try {
+      const res = await adminFetch(`/api/admin/curriculum/exercises/${id}`, { method: 'DELETE' })
+      if (res.ok) setRows((list) => list.filter((x) => x.id !== id))
+      else setError(res.error)
+    } finally {
+      setBusy(null)
+    }
   }
 
   return (

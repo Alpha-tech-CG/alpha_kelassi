@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
+import { adminFetch } from '@/lib/admin-fetch'
 
 type LessonType = 'cours' | 'resume' | 'fiche' | 'quiz' | 'video'
 interface Lesson {
@@ -34,49 +35,65 @@ export default function AdminLessonsPage() {
   const [drafts, setDrafts] = useState<Record<string, string>>({})
 
   const load = useCallback(async () => {
-    const res = await fetch(`/api/admin/curriculum/lessons?chapterId=${chapterId}`, { credentials: 'include' })
-    const json = await res.json()
-    setRows(json.data ?? []); setLoading(false)
+    const res = await adminFetch<Lesson[]>(`/api/admin/curriculum/lessons?chapterId=${chapterId}`)
+    if (res.ok) setRows(res.data ?? [])
+    else setError(res.error)
+    setLoading(false)
   }, [chapterId])
   useEffect(() => { load() }, [load])
 
   async function add(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const body: Record<string, unknown> = { chapter_id: chapterId, type, title, is_premium: premium, order_index: rows.length }
-    if (type === 'video') body['video_url'] = videoUrl || null
-    else body['content'] = content || null
-    const res = await fetch('/api/admin/curriculum/lessons', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(body),
-    })
-    const json = await res.json()
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); setSaving(false); return }
-    setTitle(''); setContent(''); setVideoUrl(''); setPremium(false); setSaving(false); await load()
+    // `finally` garantit la réactivation du bouton : sans lui, une réponse
+    // inattendue laissait le formulaire bloqué sur « Ajout… ».
+    try {
+      const body: Record<string, unknown> = { chapter_id: chapterId, type, title, is_premium: premium, order_index: rows.length }
+      if (type === 'video') body['video_url'] = videoUrl || null
+      else body['content'] = content || null
+      const res = await adminFetch('/api/admin/curriculum/lessons', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setTitle(''); setContent(''); setVideoUrl(''); setPremium(false)
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function saveContent(l: Lesson) {
-    setBusy(l.id)
-    const res = await fetch(`/api/admin/curriculum/lessons/${l.id}`, {
-      method: 'PUT', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ content: drafts[l.id] ?? '' }),
-    })
-    setBusy(null)
-    if (res.ok) { await load(); setDrafts((d) => { const n = { ...d }; delete n[l.id]; return n }) }
-    else alert((await res.json()).error?.message ?? 'Erreur')
+    setBusy(l.id); setError(null)
+    try {
+      const res = await adminFetch(`/api/admin/curriculum/lessons/${l.id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: drafts[l.id] ?? '' }),
+      })
+      if (!res.ok) { setError(res.error); return }
+      await load()
+      setDrafts((d) => { const n = { ...d }; delete n[l.id]; return n })
+    } finally {
+      setBusy(null)
+    }
   }
 
   async function generateResume(l: Lesson) {
-    setBusy(l.id)
-    const res = await fetch(`/api/admin/curriculum/lessons/${l.id}/generate-resume`, { method: 'POST', credentials: 'include' })
-    setBusy(null)
-    if (res.ok) await load()
-    else alert((await res.json()).error?.message ?? 'Génération impossible')
+    setBusy(l.id); setError(null)
+    try {
+      const res = await adminFetch(`/api/admin/curriculum/lessons/${l.id}/generate-resume`, { method: 'POST' })
+      if (!res.ok) { setError(res.error ?? 'Génération impossible'); return }
+      await load()
+    } finally {
+      setBusy(null)
+    }
   }
 
   async function remove(l: Lesson) {
     if (!confirm(`Supprimer la leçon « ${l.title} » ?`)) return
-    const res = await fetch(`/api/admin/curriculum/lessons/${l.id}`, { method: 'DELETE', credentials: 'include' })
+    setError(null)
+    const res = await adminFetch(`/api/admin/curriculum/lessons/${l.id}`, { method: 'DELETE' })
     if (res.ok) setRows((list) => list.filter((x) => x.id !== l.id))
+    else setError(res.error)
   }
 
   return (

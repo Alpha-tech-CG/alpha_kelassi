@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Exam { id: string; level: string; label: string; exam_date: string }
 
@@ -14,9 +15,9 @@ export default function AdminExamsPage() {
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    const res = await fetch('/api/admin/exams', { credentials: 'include' })
-    const json = await res.json()
-    setExams(json.data ?? [])
+    const res = await adminFetch<Exam[]>('/api/admin/exams')
+    if (res.ok) setExams(res.data ?? [])
+    else setError(res.error)
     setLoading(false)
   }, [])
 
@@ -25,14 +26,18 @@ export default function AdminExamsPage() {
   async function add(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/exams', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify(form),
-    })
-    const json = await res.json()
-    if (!res.ok) { setError(json.error?.message ?? json.error ?? 'Erreur'); setSaving(false); return }
-    setForm(EMPTY); setSaving(false)
-    await load()
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch('/api/admin/exams', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setForm(EMPTY)
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function remove(id: string) {

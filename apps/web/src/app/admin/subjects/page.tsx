@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface Subject {
   id: string
@@ -33,9 +34,9 @@ export default function AdminSubjectsPage() {
   const [editName, setEditName] = useState('')
 
   const load = useCallback(async () => {
-    const res = await fetch('/api/admin/subjects', { credentials: 'include' })
-    const json = await res.json()
-    setSubjects(json.data ?? [])
+    const res = await adminFetch<Subject[]>('/api/admin/subjects')
+    if (res.ok) setSubjects(res.data ?? [])
+    else setError(res.error)
     setLoading(false)
   }, [])
 
@@ -44,40 +45,40 @@ export default function AdminSubjectsPage() {
   async function add(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/subjects', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify(form),
-    })
-    const json = await res.json()
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); setSaving(false); return }
-    setForm((f) => ({ ...EMPTY, level: f.level })); setSaving(false)
-    await load()
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch('/api/admin/subjects', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setForm((f) => ({ ...EMPTY, level: f.level }))
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function saveEdit(id: string) {
-    const res = await fetch(`/api/admin/subjects/${id}`, {
-      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+    setError(null)
+    const res = await adminFetch<Subject>(`/api/admin/subjects/${id}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: editName }),
     })
-    if (res.ok) {
-      const json = await res.json()
-      setSubjects((list) => list.map((s) => (s.id === id ? { ...s, name: json.data.name } : s)))
-    } else {
-      const json = await res.json()
-      alert(json.error?.message ?? 'Erreur')
+    if (res.ok && res.data) {
+      setSubjects((list) => list.map((s) => (s.id === id ? { ...s, name: res.data!.name } : s)))
+    } else if (!res.ok) {
+      setError(res.error)
     }
     setEditing(null)
   }
 
   async function remove(s: Subject) {
     if (!confirm(`Supprimer la matière « ${s.name} » (${s.level.replace('_', ' ').toUpperCase()}) ?`)) return
-    const res = await fetch(`/api/admin/subjects/${s.id}`, { method: 'DELETE', credentials: 'include' })
-    if (res.ok) {
-      setSubjects((list) => list.filter((x) => x.id !== s.id))
-    } else {
-      const json = await res.json()
-      alert(json.error?.message ?? 'Suppression impossible')
-    }
+    setError(null)
+    const res = await adminFetch(`/api/admin/subjects/${s.id}`, { method: 'DELETE' })
+    if (res.ok) setSubjects((list) => list.filter((x) => x.id !== s.id))
+    else setError(res.error ?? 'Suppression impossible')
   }
 
   return (
