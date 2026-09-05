@@ -65,8 +65,8 @@ export default function AdminQuizPage() {
       {/* Générateur */}
       <form onSubmit={generate} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 space-y-4">
         {msg && <div className="p-3 bg-green-50 text-green-800 rounded-xl text-sm">{msg}</div>}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="sm:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Cours source</label>
             <select required value={documentId} onChange={(e) => setDocumentId(e.target.value)}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm">
