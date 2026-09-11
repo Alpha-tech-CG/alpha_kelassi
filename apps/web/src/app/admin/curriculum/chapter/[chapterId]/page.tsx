@@ -140,7 +140,7 @@ export default function AdminLessonsPage() {
         )}
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 text-sm text-gray-600">
-            <input type="checkbox" checked={premium} onChange={(e) => setPremium(e.target.checked)} /> Premium ⭐
+            <input type="checkbox" checked={premium} onChange={(e) => setPremium(e.target.checked)} /> Réservé aux abonnés (dès Starter) ⭐
           </label>
           <button type="submit" disabled={saving} className="px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
             {saving ? 'Ajout…' : 'Ajouter la leçon'}

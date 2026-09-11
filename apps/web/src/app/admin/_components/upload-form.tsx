@@ -185,7 +185,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
             onChange={(e) => setForm((f) => ({ ...f, is_premium: e.target.checked }))}
             className="w-4 h-4"
           />
-          <span className="text-sm text-gray-700">Document Premium</span>
+          <span className="text-sm text-gray-700">Réservé aux abonnés (dès Starter)</span>
         </label>
       </div>
 

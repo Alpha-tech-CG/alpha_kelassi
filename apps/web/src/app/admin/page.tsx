@@ -13,6 +13,7 @@ async function getAnalytics() {
       { data: activeSubs },
       { data: recentQuestions },
       { count: totalUsers },
+      { data: monthPayments },
     ] = await Promise.all([
       supabaseAdmin
         .from('document_views')
@@ -33,6 +34,11 @@ async function getAnalytics() {
         .limit(50),
 
       supabaseAdmin.from('users').select('id', { count: 'exact', head: true }),
+
+      // Revenus réels : paiements confirmés depuis le 1er du mois.
+      supabaseAdmin.from('payment_transactions').select('amount')
+        .eq('status', 'successful')
+        .gte('created_at', new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)).toISOString()),
     ])
 
     // Agrège les vues par document
@@ -56,7 +62,7 @@ async function getAnalytics() {
         active_subscriptions: (activeSubs ?? []).length,
         stripe_count: stripeCount,
         mobile_money_count: mobileMoneyCount,
-        monthly_revenue_fcfa: stripeCount * 2000 + mobileMoneyCount * 2000,
+        monthly_revenue_fcfa: ((monthPayments ?? []) as { amount: number }[]).reduce((s, p) => s + p.amount, 0),
       },
       recent_questions: (recentQuestions ?? []).slice(0, 20).map((q) => ({
         content: q.content.slice(0, 120),
@@ -85,7 +91,7 @@ export default async function AdminOverviewPage() {
 
   const statCards = [
     { label: 'Utilisateurs inscrits', value: totals.users.toLocaleString('fr'), icon: '👥', color: 'from-green-600 to-green-700' },
-    { label: 'Abonnés Premium', value: totals.active_subs.toLocaleString('fr'), icon: '⭐', color: 'from-amber-500 to-orange-500' },
+    { label: 'Abonnés actifs', value: totals.active_subs.toLocaleString('fr'), icon: '⭐', color: 'from-amber-500 to-orange-500' },
     { label: 'Revenus du mois', value: `${revenue.monthly_revenue_fcfa.toLocaleString('fr')} FCFA`, icon: '💰', color: 'from-emerald-500 to-teal-600' },
     { label: 'Paiements Mobile Money', value: revenue.mobile_money_count.toLocaleString('fr'), icon: '📱', color: 'from-violet-500 to-purple-600' },
   ]

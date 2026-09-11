@@ -4,6 +4,9 @@ import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { CalendarClock, Sparkles, CheckCircle2, Circle, Target } from 'lucide-react'
 import { ReminderSettings } from './reminder-settings'
+import type { LockedFeatureInfo } from '@alpha-kelassi/types'
+import { LockedFeature } from '@/components/subscription/locked-feature'
+import { planErrorOf } from '@/lib/subscription/client'
 
 interface Plan { id: string; level: string; title: string; exam_date: string; days_remaining: number }
 interface ExamEvent { id: string; level: string; label: string; exam_date: string }
@@ -28,6 +31,8 @@ export default function PlanningPage() {
   const [perDay, setPerDay] = useState(2)
   const [duration, setDuration] = useState(30)
   const [generating, setGenerating] = useState(false)
+  const [locked, setLocked] = useState<LockedFeatureInfo | null>(null)
+  const [info, setInfo] = useState<string | null>(null)
 
   const loadSessions = useCallback(async () => {
     const res = await fetch('/api/planning/sessions?scope=upcoming', { credentials: 'include' })
@@ -69,20 +74,42 @@ export default function PlanningPage() {
     if (res.ok) {
       const planRes = await fetch('/api/planning/plan', { credentials: 'include' }).then((r) => r.json())
       setPlan(planRes.data)
+    } else {
+      setLocked(planErrorOf(await res.json().catch(() => null))?.info ?? null)
     }
   }
 
   async function generate() {
     if (!plan || picked.size === 0 || generating) return
     setGenerating(true)
-    const res = await fetch('/api/planning/generate', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ plan_id: plan.id, subject_ids: [...picked], sessions_per_day: perDay, duration_min: duration }),
-    })
-    const json = await res.json()
-    if (json.error) alert(json.error.message ?? 'Erreur de génération')
-    else await loadSessions()
-    setGenerating(false)
+    setInfo(null)
+    try {
+      const res = await fetch('/api/planning/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        body: JSON.stringify({ plan_id: plan.id, subject_ids: [...picked], sessions_per_day: perDay, duration_min: duration }),
+      })
+      const json = await res.json().catch(() => null)
+      const planErr = planErrorOf(json)
+      if (planErr) setLocked(planErr.info)
+      else if (!res.ok) setInfo(json?.error?.message ?? 'Le planning n’a pas pu être généré. Réessaie.')
+      else {
+        if (json?.data?.adaptive) setInfo('Plan adaptatif : les matières où tu te trompes le plus reviennent plus souvent.')
+        await loadSessions()
+      }
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  // Pro Max : reporte les séances manquées sur les prochains jours les moins chargés.
+  async function adapt() {
+    const res = await fetch('/api/planning/adapt', { method: 'POST', credentials: 'include' })
+    const json = await res.json().catch(() => null)
+    const planErr = planErrorOf(json)
+    if (planErr) { setLocked(planErr.info); return }
+    const moved = json?.data?.moved ?? 0
+    setInfo(moved ? `${moved} séance${moved > 1 ? 's' : ''} manquée${moved > 1 ? 's' : ''} reportée${moved > 1 ? 's' : ''}.` : 'Aucune séance manquée à reporter.')
+    await loadSessions()
   }
 
   async function toggle(session: Session) {
@@ -110,6 +137,9 @@ export default function PlanningPage() {
           <p className="text-sm text-gray-500">Organise-toi jusqu&apos;au jour J.</p>
         </div>
       </header>
+
+      {locked && <LockedFeature info={locked} />}
+      {info && <p role="status" className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-2.5 text-sm text-blue-900">{info}</p>}
 
       {/* Pas de plan : choisir l'examen cible */}
       {!plan ? (
@@ -198,7 +228,16 @@ export default function PlanningPage() {
               {generating ? 'Génération…' : 'Générer mon planning'}
             </button>
             {sessions.length > 0 && (
-              <p className="text-xs text-amber-600 mt-2 text-center">Régénérer remplacera les séances non terminées.</p>
+              <>
+                <p className="text-xs text-amber-700 mt-2 text-center">Régénérer remplacera les séances non terminées.</p>
+                <button
+                  type="button"
+                  onClick={adapt}
+                  className="w-full mt-3 border-2 border-blue-600 text-blue-700 font-semibold py-2.5 rounded-xl hover:bg-blue-50"
+                >
+                  Reporter mes séances manquées (plan adaptatif Pro Max)
+                </button>
+              </>
             )}
           </section>
 

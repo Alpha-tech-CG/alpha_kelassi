@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { BookOpen, FileText, Bot, Layers, Crown, BarChart3, type LucideIcon } from 'lucide-react'
+import { formatFcfa, normalizePlan, planPrice } from '@alpha-kelassi/types'
 
 interface Shortcut {
   href: string; label: string; Icon: LucideIcon
@@ -20,7 +21,7 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   const [{ data: profile }, { data: progress }, { data: recentDocs }] = await Promise.all([
-    supabase.from('users').select('full_name, plan, onboarding_completed').eq('id', user!.id).single(),
+    supabase.from('users').select('full_name, plan, role, onboarding_completed').eq('id', user!.id).single(),
     supabase.from('user_progress').select('*, subjects(name)').eq('user_id', user!.id).limit(5),
     supabase.from('documents').select('id, title, type, level').eq('is_premium', false).order('created_at', { ascending: false }).limit(4),
   ])
@@ -43,13 +44,13 @@ export default async function DashboardPage() {
           <p className="text-blue-200 text-sm font-medium mb-1">{greeting} 👋</p>
           <h1 className="text-3xl font-black text-white mb-2">{firstName}</h1>
           <p className="text-blue-100 text-sm max-w-xs">Prêt à réviser aujourd'hui ? Continue là où tu t'es arrêté.</p>
-          {profile?.plan === 'free' && (
+          {normalizePlan(profile?.plan) === 'free' && profile?.role !== 'admin' && (
             <Link
               href="/billing"
               className="inline-flex items-center gap-2 mt-5 bg-white text-blue-700 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors"
             >
-              <Crown className="w-4 h-4" />
-              Passer Premium — 2 000 FCFA/mois
+              <Crown className="w-4 h-4" aria-hidden="true" />
+              Découvrir les formules — dès {formatFcfa(planPrice('starter', 'month'))} / mois
             </Link>
           )}
         </div>

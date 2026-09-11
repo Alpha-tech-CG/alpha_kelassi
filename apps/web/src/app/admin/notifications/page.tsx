@@ -124,7 +124,7 @@ export default function AdminNotificationsPage() {
               >
                 <option value="all">Tous les utilisateurs</option>
                 <option value="free">Utilisateurs gratuits</option>
-                <option value="premium">Abonnés Premium</option>
+                <option value="premium">Abonnés (toutes formules payantes)</option>
               </select>
             </div>
             <div>
@@ -219,7 +219,7 @@ export default function AdminNotificationsPage() {
                       <h3 className="font-bold text-gray-900">{n.title}</h3>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${cfg.color}`}>{cfg.label}</span>
                       <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                        {n.target_plan === 'all' ? 'Tous' : n.target_plan === 'free' ? 'Gratuits' : 'Premium'}
+                        {n.target_plan === 'all' ? 'Tous' : n.target_plan === 'free' ? 'Gratuits' : 'Abonnés'}
                       </span>
                       {!n.is_active && <span className="text-xs text-gray-400">· Désactivée</span>}
                       {n.expires_at && (

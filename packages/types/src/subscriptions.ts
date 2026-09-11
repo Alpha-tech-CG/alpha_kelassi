@@ -538,6 +538,24 @@ export function lockedFeatureInfo(feature: FeatureKey): LockedFeatureInfo {
   }
 }
 
+/* ── Accès anticipé (Pro Max) ─────────────────────────────────────────────── */
+
+export interface EarlyAccessPreview {
+  key: string
+  title: string
+  description: string
+  /** Date à laquelle la fonctionnalité sort de l'accès anticipé, si connue. */
+  generalAvailability: string | null
+}
+
+/**
+ * Nouveautés pédagogiques ouvertes en avant-première aux abonnés Pro Max.
+ * Ajouter une entrée ici suffit à l'afficher dans « Mon analyse » ; la route
+ * de la fonctionnalité vérifie `ent.can('early_access')` (sinon
+ * `planRequired('early_access')`) jusqu'à sa date de disponibilité générale.
+ */
+export const EARLY_ACCESS_PREVIEWS: readonly EarlyAccessPreview[] = []
+
 /* ── Contenu des offres (page de présentation) ────────────────────────────── */
 
 export const EXAM_MODES = ['entrainement', 'bac_test', 'bac_blanc', 'bac_rouge'] as const

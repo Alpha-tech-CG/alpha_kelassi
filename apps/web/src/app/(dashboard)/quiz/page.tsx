@@ -91,7 +91,7 @@ export default function QuizListPage() {
                     <h3 className="font-bold text-gray-900 truncate">{quiz.title}</h3>
                     {quiz.is_premium && (
                       <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">
-                        <Crown className="w-3 h-3" /> Premium
+                        <Crown className="w-3 h-3" aria-hidden="true" /> Abonnés
                       </span>
                     )}
                   </div>

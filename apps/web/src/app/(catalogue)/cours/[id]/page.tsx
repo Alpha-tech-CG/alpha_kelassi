@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
-import { FreeLimitGate } from '@/components/free-limit-gate'
+import { LockedFeature } from '@/components/subscription/locked-feature'
+import { getEntitlements } from '@/lib/subscription/server'
+import { supabaseAdmin } from '@/lib/admin-guard'
 import { DocumentReaderClient } from '@/components/document-reader-client'
 import Link from 'next/link'
 
@@ -21,33 +23,26 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
     .from('documents')
     .select('*, subjects(name, level)')
     .eq('id', id)
-    .single()
+    .maybeSingle()
 
-  if (!doc) notFound()
-
-  const { data: profile } = await supabase.from('users').select('plan').eq('id', user.id).single()
-  const plan = profile?.plan ?? 'free'
-
-  // Gate Premium
-  if (doc.is_premium && plan !== 'premium') {
+  if (!doc) {
+    // Invisible pour ce compte mais existant : c'est la formule qui bloque.
+    const { data: exists } = await supabaseAdmin.from('documents').select('id').eq('id', id).maybeSingle()
+    if (!exists) notFound()
     return (
       <div className="min-h-screen flex items-center justify-center px-6">
-        <div className="text-center max-w-sm">
-          <div className="w-20 h-20 bg-amber-100 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">⭐</div>
-          <h2 className="text-2xl font-black text-gray-900 mb-3">Contenu Premium</h2>
-          <p className="text-gray-500 text-sm leading-relaxed mb-8">
-            Ce document est réservé aux abonnés Premium. Passe à Premium pour accéder à tous les cours et examens.
-          </p>
-          <Link
-            href="/billing"
-            className="w-full inline-block py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl font-bold text-sm hover:opacity-90 transition-opacity shadow-md"
-          >
-            Passer à Premium — 2 000 FCFA/mois
-          </Link>
-          <Link href="/cours" className="inline-block mt-4 text-sm text-gray-400 hover:text-gray-600">
-            ← Retour aux cours
-          </Link>
-        </div>
+        <LockedFeature feature="full_courses" backHref="/cours" backLabel="← Retour aux cours" />
+      </div>
+    )
+  }
+
+  // Accès vérifié côté serveur : la base ne renvoie un document au plan
+  // Gratuit que s'il lui est ouvert. Ce contrôle couvre les documents premium.
+  const ent = await getEntitlements(user.id)
+  if (doc.is_premium && !ent.can('full_courses')) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-6">
+        <LockedFeature feature="full_courses" backHref="/cours" backLabel="← Retour aux cours" />
       </div>
     )
   }
@@ -98,7 +93,7 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
               )}
               {doc.year && <span className="text-xs text-gray-400 font-medium">{doc.year}</span>}
               {doc.is_premium && (
-                <span className="text-xs bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-bold">⭐ Premium</span>
+                <span className="text-xs bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-bold">⭐ Abonnés</span>
               )}
               {!hasText && (
                 <span className="text-xs bg-orange-50 text-orange-600 px-2.5 py-1 rounded-full font-medium">
@@ -133,7 +128,7 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
       </div>
 
       {/* Contenu formaté */}
-      <FreeLimitGate type="cours" plan={plan}>
+      <div>
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           {hasText ? (
             <DocumentReaderClient
@@ -160,7 +155,7 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
             </div>
           )}
         </div>
-      </FreeLimitGate>
+      </div>
     </div>
   )
 }

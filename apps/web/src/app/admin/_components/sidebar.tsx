@@ -45,7 +45,8 @@ const GROUPS: NavGroup[] = [
   {
     title: 'Exploitation',
     items: [
-      { href: '/admin/subscriptions', label: 'Abonnements', icon: '💳' },
+      { href: '/admin/subscriptions', label: 'Abonnements', icon: '💳', hint: 'Formules, paiements, revenus' },
+      { href: '/admin/support',       label: 'Support',     icon: '🎧', hint: 'Demandes par priorité' },
       { href: '/admin/notifications', label: 'Annonces',    icon: '🔔' },
     ],
   },

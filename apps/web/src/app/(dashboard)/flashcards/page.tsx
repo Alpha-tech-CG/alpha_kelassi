@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { FREE_TIER } from '@alpha-kelassi/types'
+import { useBillingMe } from '@/lib/subscription/client'
 
 interface Flashcard {
   id: string
@@ -31,18 +33,15 @@ export default function FlashcardsPage() {
   const [reviewing, setReviewing] = useState(false)
   const [sessionDone, setSessionDone] = useState(false)
   const [stats, setStats] = useState({ reviewed: 0, correct: 0 })
-  const [plan, setPlan] = useState<string | null>(null)
+  // Gratuit : jusqu'à 20 flashcards (limite appliquée par le serveur et la base) ;
+  // Starter et plus : sans limite.
+  const { data: me } = useBillingMe()
   const supabase = createClient()
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) { setLoading(false); return }
-      supabase.from('users').select('plan').eq('id', session.user.id).single().then(({ data }) => {
-        const p = data?.plan ?? 'free'
-        setPlan(p)
-        if (p === 'premium') loadDueCards()
-        else setLoading(false)
-      })
+      loadDueCards()
     })
   }, [])
 
@@ -92,38 +91,12 @@ export default function FlashcardsPage() {
     )
   }
 
-  if (plan !== 'premium') {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-6">
-        <div className="text-center max-w-sm w-full">
-          <div className="relative inline-block mb-6">
-            <div className="w-20 h-20 bg-violet-100 rounded-3xl flex items-center justify-center text-4xl">🃏</div>
-            <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-sm">🔒</div>
-          </div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">Flashcards Premium</h2>
-          <p className="text-gray-500 text-sm leading-relaxed mb-6">
-            Les flashcards utilisent l'algorithme SM-2 pour optimiser ta mémorisation. Disponible avec l'abonnement Premium.
-          </p>
-          <div className="bg-gradient-to-br from-violet-600 to-blue-600 rounded-2xl p-5 mb-6 text-left">
-            <p className="text-violet-100 text-xs font-bold uppercase tracking-wider mb-3">✨ Avec Premium</p>
-            <div className="space-y-2">
-              {['Répétition espacée SM-2', 'Cartes générées par IA', 'Statistiques de mémorisation', 'Sessions illimitées'].map((f) => (
-                <div key={f} className="flex items-center gap-2 text-sm text-white">
-                  <span className="text-violet-300">✓</span>{f}
-                </div>
-              ))}
-            </div>
-          </div>
-          <a
-            href="/billing"
-            className="w-full inline-block py-3.5 bg-violet-600 text-white rounded-2xl font-bold text-sm hover:bg-violet-700 transition-colors shadow-md mb-3"
-          >
-            Passer Premium — 2 000 FCFA/mois →
-          </a>
-        </div>
-      </div>
-    )
-  }
+  const freeNotice = me && !me.features.flashcards && (
+    <p className="max-w-sm mx-auto mb-4 rounded-xl bg-violet-50 border border-violet-100 px-4 py-2.5 text-xs text-violet-800 text-center">
+      Formule Gratuit : jusqu’à {FREE_TIER.maxFlashcards} flashcards.{' '}
+      <a href="/billing?plan=starter" className="font-bold underline">Starter les rend illimitées</a>.
+    </p>
+  )
 
   if (sessionDone) {
     const pct = stats.reviewed > 0 ? Math.round((stats.correct / stats.reviewed) * 100) : 0
@@ -136,6 +109,7 @@ export default function FlashcardsPage() {
           <div className={`w-24 h-24 bg-gradient-to-br ${color} rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6 shadow-lg`}>
             {emoji}
           </div>
+          {freeNotice}
           <h2 className="text-2xl font-black text-gray-900 mb-2">Session terminée !</h2>
           {stats.reviewed > 0 ? (
             <>
@@ -170,6 +144,7 @@ export default function FlashcardsPage() {
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-8">
       <div className="max-w-lg mx-auto">
+        {freeNotice}
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

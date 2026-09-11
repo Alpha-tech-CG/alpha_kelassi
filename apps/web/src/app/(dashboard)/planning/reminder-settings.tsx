@@ -2,12 +2,16 @@
 
 import { useEffect, useState } from 'react'
 import { MessageCircle } from 'lucide-react'
+import type { LockedFeatureInfo } from '@alpha-kelassi/types'
+import { LockedFeature } from '@/components/subscription/locked-feature'
+import { planErrorOf } from '@/lib/subscription/client'
 
 interface Prefs { phone: string | null; whatsapp_opt_in: boolean; reminder_hour: number }
 
 export function ReminderSettings() {
   const [prefs, setPrefs] = useState<Prefs | null>(null)
   const [saving, setSaving] = useState(false)
+  const [locked, setLocked] = useState<LockedFeatureInfo | null>(null)
 
   useEffect(() => {
     fetch('/api/reminders', { credentials: 'include' })
@@ -17,14 +21,24 @@ export function ReminderSettings() {
 
   async function save(patch: Partial<Prefs>) {
     if (!prefs) return
+    const previous = prefs
     const next = { ...prefs, ...patch }
     setPrefs(next)
     setSaving(true)
-    await fetch('/api/reminders', {
-      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ whatsapp_opt_in: next.whatsapp_opt_in, reminder_hour: next.reminder_hour }),
-    })
-    setSaving(false)
+    setLocked(null)
+    try {
+      const res = await fetch('/api/reminders', {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        body: JSON.stringify({ whatsapp_opt_in: next.whatsapp_opt_in, reminder_hour: next.reminder_hour }),
+      })
+      if (!res.ok) {
+        // Refus (formule Gratuit) : l'interrupteur revient à son état réel.
+        setPrefs(previous)
+        setLocked(planErrorOf(await res.json().catch(() => null))?.info ?? null)
+      }
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (!prefs) return null
@@ -39,12 +53,16 @@ export function ReminderSettings() {
         <button
           role="switch"
           aria-checked={prefs.whatsapp_opt_in}
+          aria-label="Activer les rappels WhatsApp"
+          disabled={saving}
           onClick={() => save({ whatsapp_opt_in: !prefs.whatsapp_opt_in })}
           className={`relative w-11 h-6 rounded-full transition ${prefs.whatsapp_opt_in ? 'bg-emerald-500' : 'bg-gray-300'}`}
         >
           <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${prefs.whatsapp_opt_in ? 'translate-x-5' : ''}`} />
         </button>
       </div>
+
+      {locked && <div className="mt-3"><LockedFeature info={locked} compact /></div>}
 
       {!prefs.phone && (
         <p className="text-xs text-amber-600 mt-2">Ajoute un numéro de téléphone à ton compte pour recevoir les rappels.</p>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { normalizePlan } from '@alpha-kelassi/types'
 
 // Client admin pour une lecture publique sans cookie
 let _admin: ReturnType<typeof createClient> | null = null
@@ -13,15 +14,15 @@ function getAdmin() {
   return _admin
 }
 
-// Valeurs autorisées pour le ciblage — whitelist stricte pour empêcher toute
-// injection dans le filtre PostgREST via le paramètre `?plan=`.
-const ALLOWED_PLANS = new Set(['free', 'premium'])
-
-/** GET /api/notifications?plan=free — notifs actives affichées dans le dashboard */
+/**
+ * GET /api/notifications?plan=free — notifs actives affichées dans le dashboard.
+ * Ciblage des annonces : `free` (non abonnés) ou `premium` (tous les abonnés,
+ * quelle que soit leur formule payante). Le paramètre est ramené à l'une de
+ * ces deux valeurs — jamais interpolé tel quel dans le filtre PostgREST.
+ */
 export async function GET(req: NextRequest) {
   const rawPlan = req.nextUrl.searchParams.get('plan') ?? 'free'
-  // Toute valeur inattendue retombe sur 'free' — jamais interpolée telle quelle.
-  const plan = ALLOWED_PLANS.has(rawPlan) ? rawPlan : 'free'
+  const plan = normalizePlan(rawPlan) === 'free' ? 'free' : 'premium'
 
   const { data } = await getAdmin()
     .from('notifications')

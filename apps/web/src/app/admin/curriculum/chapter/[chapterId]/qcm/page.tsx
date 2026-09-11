@@ -159,7 +159,7 @@ export default function AdminChapterQuizPage() {
             </label>
             <label className="flex items-center gap-2 text-sm text-gray-600">
               <input type="checkbox" checked={premium} onChange={(e) => setPremium(e.target.checked)} />
-              Réservé aux abonnés Premium
+              Réservé aux abonnés (dès Starter)
             </label>
           </div>
 

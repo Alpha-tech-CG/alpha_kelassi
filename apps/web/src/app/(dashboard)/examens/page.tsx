@@ -203,7 +203,7 @@ export default async function ExamensPage({ searchParams }: { searchParams: Prom
                             )}
                             {hasCorrige && doc.is_premium && (
                               <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full border border-amber-100 font-semibold">
-                                ⭐ Corrigé Premium
+                                ⭐ Corrigé abonnés
                               </span>
                             )}
                             {!hasCorrige && (

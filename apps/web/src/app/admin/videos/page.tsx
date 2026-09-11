@@ -98,7 +98,7 @@ export default function AdminVideosPage() {
         <div className="flex items-center justify-between pt-2">
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <input type="checkbox" checked={form.is_premium} onChange={(e) => setForm((f) => ({ ...f, is_premium: e.target.checked }))} className="w-4 h-4" />
-            <span className="text-sm text-gray-700 font-medium">Réservé aux abonnés Premium</span>
+            <span className="text-sm text-gray-700 font-medium">Réservé aux abonnés (dès Starter)</span>
           </label>
           <button type="submit" disabled={saving} className="px-6 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
             {saving ? 'Ajout…' : 'Ajouter la vidéo'}

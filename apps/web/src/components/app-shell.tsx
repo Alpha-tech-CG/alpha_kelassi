@@ -4,8 +4,9 @@ import { NotificationBanner } from '@/components/notification-banner'
 import { SignOutButton } from '@/components/sign-out-button'
 import {
   Home, BookOpen, FileText, Bot, Layers, TrendingUp,
-  Crown, Wrench, ListChecks, CalendarClock, PlayCircle, type LucideIcon,
+  Crown, Wrench, ListChecks, CalendarClock, PlayCircle, Sparkles, type LucideIcon,
 } from 'lucide-react'
+import { PLAN_META, normalizePlan } from '@alpha-kelassi/types'
 
 /**
  * Coque de l'application pour un utilisateur connecté : barre latérale,
@@ -29,7 +30,8 @@ const NAV: NavItem[] = [
   { href: '/quiz',       label: 'QCM',         Icon: ListChecks },
   { href: '/planning',   label: 'Planning',    Icon: CalendarClock },
   { href: '/progression',label: 'Progression', Icon: TrendingUp },
-  { href: '/billing',    label: 'Premium',     Icon: Crown      },
+  { href: '/analyse',    label: 'Mon analyse', Icon: Sparkles   },
+  { href: '/billing',    label: 'Formules',    Icon: Crown      },
 ]
 
 const MOBILE_NAV: NavItem[] = [
@@ -60,6 +62,10 @@ export function AppShell({
 }) {
   const initial = (profile?.full_name ?? email ?? 'U')[0]!.toUpperCase()
   const displayName = profile?.full_name ?? email
+  // `profile.plan` est la formule effective, calculée par le layout serveur.
+  const plan = normalizePlan(profile?.plan)
+  const paidPlan = plan !== 'free'
+  const planLabel = profile?.role === 'admin' ? 'Admin · accès complet' : PLAN_META[plan].label
 
   return (
     <div className="min-h-screen flex">
@@ -116,11 +122,15 @@ export function AppShell({
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold text-gray-900 truncate">{displayName}</p>
-              <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full mt-0.5 ${
-                profile?.plan === 'premium' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'
-              }`}>
-                {profile?.plan === 'premium' ? <><Crown className="w-3 h-3" /> Premium</> : 'Gratuit'}
-              </span>
+              <Link
+                href="/billing"
+                aria-label={`Formule ${planLabel} — voir les formules`}
+                className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full mt-0.5 ${
+                  paidPlan ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'
+                }`}
+              >
+                {paidPlan && <Crown className="w-3 h-3" aria-hidden="true" />} {planLabel}
+              </Link>
             </div>
           </div>
 
@@ -154,7 +164,7 @@ export function AppShell({
             <SignOutButton className="flex items-center gap-1 hover:text-white transition-colors" />
           </div>
         </div>
-        <NotificationBanner plan={profile?.plan ?? 'free'} />
+        <NotificationBanner plan={normalizePlan(profile?.plan)} />
         {children}
       </main>
 

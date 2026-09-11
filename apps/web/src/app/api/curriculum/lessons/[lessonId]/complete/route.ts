@@ -32,7 +32,7 @@ export async function POST(
     .eq('id', lessonId)
     .maybeSingle()
   if (lErr) return NextResponse.json({ error: { code: 'DB_ERROR', message: lErr.message } }, { status: 500 })
-  if (!lesson) return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Leçon introuvable ou réservée aux abonnés Premium.' } }, { status: 404 })
+  if (!lesson) return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Leçon introuvable ou réservée aux abonnés.' } }, { status: 404 })
 
   // État précédent (idempotence XP)
   const { data: prev } = await supabase

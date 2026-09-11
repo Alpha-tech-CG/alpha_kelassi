@@ -307,12 +307,14 @@ create policy "quiz_questions: select via quiz access" on public.quiz_questions
     )
   );
 
--- Documents (cours PDF et annales)
+-- Documents (cours PDF et annales). La ligne porte le texte intégral
+-- (`text_content`) : la rendre visible reviendrait à ouvrir le document. Le
+-- Gratuit ne voit donc que les documents qui lui sont ouverts.
 drop policy if exists "documents: select free content" on public.documents;
 create policy "documents: select free content" on public.documents
   for select using (
     auth.uid() is not null
-    and (is_premium = false or (select public.current_user_plan_level()) >= 1)
+    and ((select public.current_user_plan_level()) >= 1 or public.is_open_document(id))
   );
 
 drop policy if exists "chunks: select via document access" on public.document_chunks;

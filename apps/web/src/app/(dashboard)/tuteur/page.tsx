@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { MarkdownRenderer } from '@/components/markdown-renderer'
+import { LockedFeature } from '@/components/subscription/locked-feature'
+import { newRequestKey, planErrorOf, type PlanError } from '@/lib/subscription/client'
 
 interface ImageAttachment {
   data:     string   // base64 sans le préfixe data:...
@@ -65,6 +67,8 @@ export default function TuteurPage() {
   const [selectedImage,  setSelectedImage]  = useState<ImageAttachment | null>(null)
   const [loading,        setLoading]        = useState(false)
   const [quotaRemaining, setQuotaRemaining] = useState<number | null>(null)
+  const [quotaSummary,   setQuotaSummary]   = useState<string | null>(null)
+  const [quotaNotice,    setQuotaNotice]    = useState<PlanError | null>(null)
   const [sourcesCount,   setSourcesCount]   = useState(0)
   const [exerciseContext,setExerciseContext] = useState<string | null>(null)
   const [sidebarOpen,    setSidebarOpen]    = useState(false)
@@ -161,17 +165,29 @@ export default function TuteurPage() {
       if (documentId)  chatBody.document_id = documentId
       if (imageToSend) chatBody.image = { data: imageToSend.data, mimeType: imageToSend.mimeType }
 
-      const res = await fetch('/api/ai/chat', {
+      // Clé d'idempotence : si la requête doit être renvoyée (coupure réseau),
+      // la même clé évite que la question soit décomptée deux fois.
+      const requestKey = newRequestKey()
+      const send = () => fetch('/api/ai/chat', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Idempotency-Key': requestKey },
         body:    JSON.stringify(chatBody),
       })
+      let res: Response
+      try { res = await send() } catch { res = await send() }
 
       if (!res.ok) {
-        const err = await res.json()
+        const err = await res.json().catch(() => null)
+        const planErr = planErrorOf(err)
+        if (planErr?.code === 'QUOTA_EXCEEDED') setQuotaRemaining(0)
+        if (planErr) {
+          setQuotaNotice(planErr)
+          if (imageToSend) setSelectedImage(imageToSend)   // l'image n'est pas perdue
+          if (hasText) setInput(input.trim())               // ni la question
+        }
         setMessages((prev) => prev.map((m) =>
           m.id === assistantMsg.id
-            ? { ...m, content: `❌ ${err.error?.message ?? 'Erreur'}`, streaming: false }
+            ? { ...m, content: `❌ ${err?.error?.message ?? 'Erreur'}`, streaming: false }
             : m
         ))
         setLoading(false)
@@ -216,6 +232,10 @@ export default function TuteurPage() {
                 ))
               }
               if (payload.sources_count !== undefined) setSourcesCount(payload.sources_count)
+              if (payload.quota?.summary) {
+                setQuotaSummary(`${payload.quota.summary} ${payload.quota.detail ?? ''}`.trim())
+                setQuotaNotice(null)
+              }
             } catch { /* ligne non-JSON */ }
           }
         }
@@ -361,10 +381,13 @@ export default function TuteurPage() {
               </span>
             )}
             {quotaRemaining !== null && (
-              <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                quotaRemaining <= 2 ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-500'
-              }`}>
-                {quotaRemaining} restante{quotaRemaining !== 1 ? 's' : ''}
+              <span
+                title={quotaSummary ?? undefined}
+                className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                  quotaRemaining <= 2 ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-600'
+                }`}
+              >
+                {quotaRemaining} question{quotaRemaining !== 1 ? 's' : ''} restante{quotaRemaining !== 1 ? 's' : ''} aujourd’hui
               </span>
             )}
           </div>
@@ -477,12 +500,19 @@ export default function TuteurPage() {
             </div>
           )}
 
+          {/* Fonctionnalité réservée (ex. analyse de photo) */}
+          {quotaNotice?.code === 'PLAN_REQUIRED' && (
+            <div className="max-w-3xl mx-auto mb-3"><LockedFeature info={quotaNotice.info} compact /></div>
+          )}
+
           {/* Quota atteint */}
           {quotaRemaining === 0 ? (
-            <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
-              <p className="text-sm text-amber-700 font-medium">Limite journalière atteinte.</p>
-              <Link href="/billing" className="text-sm bg-amber-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-amber-600">
-                Passer Premium ⭐
+            <div role="status" className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
+              <p className="text-sm text-amber-800 font-medium">
+                {quotaNotice?.code === 'QUOTA_EXCEEDED' ? quotaNotice.message : 'Ton quota quotidien Cognix IA est atteint. Il sera renouvelé demain.'}
+              </p>
+              <Link href="/billing" className="text-sm bg-gray-900 text-white px-4 py-2 rounded-xl font-semibold hover:bg-gray-700 text-center whitespace-nowrap">
+                Voir les formules
               </Link>
             </div>
           ) : (
