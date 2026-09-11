@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 const supabaseAdmin = createAdminClient(
   process.env['NEXT_PUBLIC_SUPABASE_URL']!,
@@ -57,7 +58,7 @@ const schema = z.object({
   subject_id:   z.string().uuid(),
   title:        z.string().min(3).max(200),
   description:  z.string().max(1000).optional(),
-  level:        z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  level:        z.enum(STUDY_LEVELS),
   url:          z.string().url(),
   duration_sec: z.number().int().positive().optional(),
   is_premium:   z.boolean().default(false),

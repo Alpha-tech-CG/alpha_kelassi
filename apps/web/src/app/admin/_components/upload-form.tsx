@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { STUDY_LEVELS, LEVEL_META, type StudyLevel } from '@alpha-kelassi/types'
 
-type Level = 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+type Level = StudyLevel
 type DocType = 'cours' | 'examen'
 
 interface Subject { id: string; name: string; level: Level }
@@ -102,8 +103,8 @@ export function UploadForm({ subjects, onSuccess }: Props) {
             onChange={(e) => setForm((f) => ({ ...f, level: e.target.value as Level, subject_id: '' }))}
             className="w-full border rounded-lg px-3 py-2 text-sm"
           >
-            {(['bepc', 'bac_a', 'bac_c', 'bac_d'] as Level[]).map((l) => (
-              <option key={l} value={l}>{l.toUpperCase().replace('_', ' ')}</option>
+            {STUDY_LEVELS.map((l) => (
+              <option key={l} value={l}>{LEVEL_META[l].label}</option>
             ))}
           </select>
         </div>

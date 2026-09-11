@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 /** GET /api/planning/plan — plan actif de l'élève + compte à rebours */
 export async function GET(req: Request) {
@@ -23,7 +24,7 @@ export async function GET(req: Request) {
 }
 
 const schema = z.object({
-  level:     z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  level:     z.enum(STUDY_LEVELS),
   title:     z.string().min(3).max(120),
   exam_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 })

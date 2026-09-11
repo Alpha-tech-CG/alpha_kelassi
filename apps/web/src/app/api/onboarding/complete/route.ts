@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 const schema = z.object({
   track_type:  z.enum(['generale', 'technique', 'professionnel']).default('generale'),
-  level:       z.enum(['cepe', 'bepc', 'bac_a', 'bac_c', 'bac_d']),
+  // Toutes les classes de l'enum `study_level`, séries techniques comprises :
+  // une liste figée ici rejetait en silence tout élève de G2, G3, BG, R…
+  level:       z.enum(STUDY_LEVELS),
   // Un parcours peut n'avoir pas encore de matières (créées au fur et à mesure)
   subject_ids: z.array(z.string().uuid()).max(12).default([]),
 })
@@ -19,17 +22,22 @@ export async function POST(req: NextRequest) {
   catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
 
   const { track_type, level, subject_ids } = body
-  // Cast : les types Supabase générés sont encore obsolètes (ne connaissent pas
-  // 'cepe', ajouté par la migr. 028). Runtime OK. À retirer après régénération.
+  // Cast : les types Supabase générés sont obsolètes (ils ignorent les classes
+  // ajoutées par les migrations 028, 054 et 055). Runtime OK.
   const lvl = level as 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
 
   // Marque l'onboarding terminé + sauvegarde les préférences (filière + parcours)
-  await supabase.from('users').update({
+  const { error: updateError } = await supabase.from('users').update({
     onboarding_completed: true,
     track_type,
     study_level_pref:    lvl,
     subject_ids_pref:    subject_ids,
   }).eq('id', user.id)
+  // Sans ce contrôle, un échec d'écriture passait pour un succès : l'élève
+  // repartait sur l'accueil avec son ancien parcours.
+  if (updateError) {
+    return NextResponse.json({ error: { code: 'UPDATE_FAILED', message: 'Impossible d’enregistrer ton parcours.' } }, { status: 500 })
+  }
 
   // Crée les entrées user_progress pour les matières choisies (si l'élève en a choisi)
   if (subject_ids.length > 0) {

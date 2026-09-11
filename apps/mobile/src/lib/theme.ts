@@ -49,6 +49,14 @@ export const LEVEL_LABEL: Record<string, string> = {
   bac_a: 'BAC A',
   bac_c: 'BAC C',
   bac_d: 'BAC D',
+  // Séries techniques (migrations 054 et 055)
+  bac_e: 'BAC E',
+  bac_f3: 'BAC F3',
+  bac_g2: 'BAC G2',
+  bac_g3: 'BAC G3',
+  bac_h: 'BAC H',
+  bac_bg: 'BAC BG',
+  bac_r: 'BAC R',
 }
 
 /** Couleur du badge de niveau : BEPC en jaune, tous les BAC en rouge (comme les maquettes). */

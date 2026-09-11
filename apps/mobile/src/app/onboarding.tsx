@@ -14,7 +14,10 @@ const TRACKS: { value: Track; emoji: string; title: string; desc: string }[] = [
   { value: 'generale',  emoji: '🎓', title: 'Enseignement général',   desc: 'CEPE, BEPC, BAC A / C / D' },
   { value: 'technique', emoji: '🔧', title: 'Enseignement technique', desc: 'Séries G1, G2, F3…' },
 ]
-const LEVEL_ORDER: Record<string, number> = { cepe: 0, bepc: 1, bac_a: 2, bac_c: 3, bac_d: 4 }
+const LEVEL_ORDER: Record<string, number> = {
+  cepe: 0, bepc: 1, bac_a: 2, bac_c: 3, bac_d: 4,
+  bac_e: 5, bac_f3: 6, bac_g2: 7, bac_g3: 8, bac_h: 9, bac_bg: 10, bac_r: 11,
+}
 
 const KELASSI_TIPS = [
   { icon: '🎯', title: 'Sois précis', desc: 'Indique la matière et le sujet. Ex : "Explique la dérivée en Maths BAC C"' },
@@ -71,8 +74,11 @@ export default function OnboardingScreen() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
         body: JSON.stringify({ track_type: track, level, subject_ids: selectedSubjects }),
       })
-      const json = await res.json()
-      if (json.data?.suggested_document) {
+      // Un refus du serveur doit se voir : avant, l'élève repartait sur l'accueil
+      // comme si son parcours était enregistré.
+      const json = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(json?.error?.message ?? json?.error ?? `HTTP ${res.status}`)
+      if (json?.data?.suggested_document) {
         await fetch(`${API_URL}/api/flashcards/generate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },

@@ -17,15 +17,24 @@ interface Subject {
   domains: number
 }
 
+const BROWSABLE_LEVELS = Object.keys(LEVEL_LABEL)
+
 export default function MatieresScreen() {
   const router = useRouter()
-  const { level, track, ready } = useLevel()
+  const { level: profileLevel, track: profileTrack, isAdmin, ready } = useLevel()
+  // Un admin peut consulter n'importe quelle classe ; null = celle de son profil.
+  const [browseLevel, setBrowseLevel] = useState<string | null>(null)
+  const level = browseLevel ?? profileLevel
+  // La filière du profil ne vaut que pour la classe du profil.
+  const track = browseLevel ? null : profileTrack
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
 
   useEffect(() => {
     if (!ready) return
+    // Changer vite de classe ne doit pas laisser une réponse périmée écraser la bonne.
+    let active = true
     async function load() {
       // Matières du parcours ET de la filière de l'élève uniquement
       let sq = supabase.from('subjects').select('id, name, level, icon, parent_subject_id').order('name')
@@ -74,6 +83,7 @@ export default function MatieresScreen() {
         if (doneSet.has(l.id)) doneC.set(sid, (doneC.get(sid) ?? 0) + 1)
       }
 
+      if (!active) return
       setSubjects(topLevel.map((s) => {
         const children = childrenByParent.get(s.id) ?? []
         const ids = children.length ? [s.id, ...children.map((c) => c.id)] : [s.id]
@@ -91,6 +101,7 @@ export default function MatieresScreen() {
       setLoading(false)
     }
     load()
+    return () => { active = false }
   }, [ready, level, track])
 
   const filtered = useMemo(() => {
@@ -104,7 +115,23 @@ export default function MatieresScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Mes Matières</Text>
-        {level && <Text style={styles.subtitle}>Programme {LEVEL_LABEL[level]}</Text>}
+        {level && <Text style={styles.subtitle}>Programme {LEVEL_LABEL[level] ?? level}{browseLevel ? ' · consultation admin' : ''}</Text>}
+        {isAdmin && (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.levelChips}>
+            {BROWSABLE_LEVELS.map((l) => {
+              const on = l === level
+              return (
+                <TouchableOpacity
+                  key={l}
+                  style={[styles.levelChip, on && styles.levelChipOn]}
+                  onPress={() => setBrowseLevel(l === profileLevel ? null : l)}
+                >
+                  <Text style={[styles.levelChipText, on && styles.levelChipTextOn]}>{LEVEL_LABEL[l]}</Text>
+                </TouchableOpacity>
+              )
+            })}
+          </ScrollView>
+        )}
         <TextInput
           style={styles.search}
           placeholder="Rechercher une matière…"
@@ -131,7 +158,7 @@ export default function MatieresScreen() {
                 key={s.id}
                 activeOpacity={0.85}
                 style={styles.card}
-                onPress={() => router.push(((s.level === 'cepe' || s.level === 'bepc') ? `/progression?subject=${s.id}` : `/parcours/${s.id}`) as any)}
+                onPress={() => router.push(((s.level === 'cepe' || s.level === 'bepc') ? `/progression?subject=${s.id}&level=${s.level}` : `/parcours/${s.id}`) as any)}
               >
                 <View style={[styles.accent, { backgroundColor: accent }]} />
                 <View style={styles.cardBody}>
@@ -171,6 +198,14 @@ const styles = StyleSheet.create({
   header: { paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12 },
   title: { fontSize: 26, fontWeight: '800', color: colors.text },
   subtitle: { fontSize: 13, color: colors.textMuted, marginTop: 2, marginBottom: 12 },
+  levelChips: { gap: 8, paddingBottom: 10 },
+  levelChip: {
+    paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.full,
+    borderWidth: 1, borderColor: colors.cardBorder, backgroundColor: colors.card,
+  },
+  levelChipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
+  levelChipText: { fontSize: 12, fontWeight: '700', color: colors.textMuted },
+  levelChipTextOn: { color: '#fff' },
   search: {
     backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder, borderRadius: radius.md,
     paddingHorizontal: 14, paddingVertical: 11, fontSize: 15, color: colors.text, marginTop: 4,

@@ -25,8 +25,10 @@ async function token() {
 
 export default function ProgressionScreen() {
   const router = useRouter()
-  const { subject: initialSubject } = useLocalSearchParams<{ subject?: string }>()
-  const { level, ready: levelReady } = useLevel()
+  const { subject: initialSubject, level: levelParam } = useLocalSearchParams<{ subject?: string; level?: string }>()
+  const { level: profileLevel, ready: levelReady } = useLevel()
+  // Un admin qui consulte une autre classe la transmet en paramètre.
+  const level = levelParam ?? profileLevel
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [active, setActive] = useState<string | null>(initialSubject ?? null)
   const [chapters, setChapters] = useState<ProgChapter[]>([])

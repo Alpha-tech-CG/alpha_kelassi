@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 /** GET /api/admin/courses — liste les cours (avec matière + nb d'O.G) */
 export async function GET(_req: NextRequest) {
@@ -38,7 +39,7 @@ export async function GET(_req: NextRequest) {
 
 const schema = z.object({
   subject_id: z.string().uuid(),
-  level: z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  level: z.enum(STUDY_LEVELS),
   title: z.string().min(3).max(200),
   subtitle: z.string().max(300).optional(),
   is_premium: z.boolean().default(false),

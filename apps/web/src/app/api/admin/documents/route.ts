@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 export const maxDuration = 60 // secondes — extraction PDF peut être lente
 
@@ -18,7 +19,7 @@ const saveSchema = z.object({
     subject_id: z.string().uuid(),
     type: z.enum(['cours', 'examen']),
     title: z.string().min(3),
-    level: z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+    level: z.enum(STUDY_LEVELS),
     year: z.coerce.number().int().min(1990).max(2030).optional(),
     session: z.enum(['normale', 'rattrapage']).optional(),
     country_code: z.string().length(2).default('CG'),

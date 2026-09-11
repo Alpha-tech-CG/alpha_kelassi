@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 /** GET /api/admin/exams — toutes les dates d'examen */
 export async function GET() {
@@ -18,7 +19,7 @@ export async function GET() {
 }
 
 const schema = z.object({
-  level:     z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  level:     z.enum(STUDY_LEVELS),
   label:     z.string().min(3).max(120),
   exam_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 })
