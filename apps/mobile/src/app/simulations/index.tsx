@@ -4,22 +4,26 @@ import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
+import { useBilling } from '../../hooks/useBilling'
 
 interface ExamQuiz {
   id: string; title: string; year: number | null; time_limit_sec: number; is_premium: boolean
   subjects: { name: string } | null
 }
 
-const MODES: { key: string; label: string; desc: string; emoji: string }[] = [
-  { key: 'entrainement', label: 'Entraînement libre', desc: 'Sans chrono, sans pression',    emoji: '🎯' },
-  { key: 'bac_test',     label: 'Bac test',           desc: 'Chronométré, comme le vrai',    emoji: '⏱️' },
-  { key: 'bac_blanc',    label: 'Bac blanc',          desc: 'Chronométré + note',            emoji: '📝' },
-  { key: 'bac_rouge',    label: 'Bac rouge',          desc: 'Difficile : −1 par erreur',     emoji: '🔴' },
+// Formule minimale de chaque mode (règle appliquée par le serveur ; ici, affichage).
+const MODES: { key: string; label: string; desc: string; emoji: string; plan: 'starter' | 'pro'; planLabel: string }[] = [
+  { key: 'entrainement', label: 'Entraînement libre', desc: 'Sans chrono, sans pression', emoji: '🎯', plan: 'starter', planLabel: 'Starter' },
+  { key: 'bac_test',     label: 'Bac test',           desc: 'Chronométré, comme le vrai', emoji: '⏱️', plan: 'starter', planLabel: 'Starter' },
+  { key: 'bac_blanc',    label: 'Bac blanc',          desc: 'Chronométré + note',         emoji: '📝', plan: 'pro',     planLabel: 'Pro' },
+  { key: 'bac_rouge',    label: 'Bac rouge',          desc: 'Difficile : −1 par erreur',  emoji: '🔴', plan: 'pro',     planLabel: 'Pro' },
 ]
 
 export default function SimulationsScreen() {
   const router = useRouter()
   const { level, ready } = useLevel()
+  const { me } = useBilling()
+  const allowed = new Set(me?.exam_modes ?? [])
   const [quizzes, setQuizzes] = useState<ExamQuiz[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -48,8 +52,19 @@ export default function SimulationsScreen() {
   }, [quizzes])
 
   function chooseMode(qz: ExamQuiz) {
+    const open = MODES.filter((m) => allowed.has(m.key))
+    if (open.length === 0) {
+      Alert.alert(
+        'Simulations disponibles dès Starter',
+        'Les modes Entraînement libre et Bac test sont inclus dans Starter (4 000 FCFA / mois) ; Bac blanc et Bac rouge dans Pro (6 000 FCFA / mois).',
+        [{ text: 'Voir les formules', onPress: () => router.push('/abonnement?plan=starter' as any) }, { text: 'Plus tard', style: 'cancel' }],
+      )
+      return
+    }
     Alert.alert(qz.title, 'Choisis ton mode de simulation', [
-      ...MODES.map((m) => ({ text: `${m.emoji}  ${m.label}`, onPress: () => router.push(`/quiz/${qz.id}?mode=${m.key}`) })),
+      ...MODES.map((m) => allowed.has(m.key)
+        ? { text: `${m.emoji}  ${m.label}`, onPress: () => router.push(`/quiz/${qz.id}?mode=${m.key}`) }
+        : { text: `🔒  ${m.label} — formule ${m.planLabel}`, onPress: () => router.push(`/abonnement?plan=${m.plan}` as any) }),
       { text: 'Annuler', style: 'cancel' as const },
     ])
   }
@@ -66,9 +81,9 @@ export default function SimulationsScreen() {
       {/* Légende des modes */}
       <View style={styles.legend}>
         {MODES.map((m) => (
-          <View key={m.key} style={styles.legendItem}>
-            <Text style={styles.legendEmoji}>{m.emoji}</Text>
-            <Text style={styles.legendLabel}>{m.label}</Text>
+          <View key={m.key} style={styles.legendItem} accessible accessibilityLabel={`${m.label} : ${allowed.has(m.key) ? 'inclus dans ta formule' : `formule ${m.planLabel} requise`}`}>
+            <Text style={styles.legendEmoji}>{allowed.has(m.key) ? m.emoji : '🔒'}</Text>
+            <Text style={styles.legendLabel}>{m.label}{allowed.has(m.key) ? '' : ` · ${m.planLabel}`}</Text>
           </View>
         ))}
       </View>

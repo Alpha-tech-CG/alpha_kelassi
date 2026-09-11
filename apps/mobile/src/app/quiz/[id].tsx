@@ -4,6 +4,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { LessonContent } from '../../components/LessonContent'
+import { LockedFeature } from '../../components/LockedFeature'
+import { planErrorOf, type LockedInfo } from '../../lib/billing'
 
 /**
  * Un énoncé de QCM est du texte simple dans l'immense majorité des cas, et le
@@ -18,7 +20,11 @@ const isRichMarkdown = (s: string) =>
 interface Question { id: string; position: number; prompt: string; options: string[] }
 interface Quiz { id: string; title: string; time_limit_sec: number; questions: Question[] }
 interface Correction { question_id: string; correct_index: number; explanation: string | null }
-interface Result { attempt_id: string; score: number; penalized_score?: number; wrong?: number; total: number; mode?: string; corrections: Correction[] }
+interface Result {
+  attempt_id: string; score: number; penalized_score?: number; wrong?: number; total: number; mode?: string; corrections: Correction[]
+  /** Résultats détaillés (formule Pro). */
+  details?: { correct: number; wrong: number; blank: number; penalty: number; seconds_per_question: number | null; best_rate: number; delta_vs_last: number | null; advice: string } | null
+}
 
 type Mode = 'entrainement' | 'bac_test' | 'bac_blanc' | 'bac_rouge'
 const MODE_META: Record<Mode, { label: string; emoji: string; timed: boolean }> = {
@@ -46,6 +52,8 @@ export default function QuizTakeScreen() {
   const [remaining, setRemaining] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState<Result | null>(null)
+  const [locked, setLocked] = useState<LockedInfo | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const startRef = useRef(Date.now())
 
   async function getToken() {
@@ -57,7 +65,8 @@ export default function QuizTakeScreen() {
     async function load() {
       const token = await getToken()
       const res = await fetch(`${API_URL}/api/quiz/${id}`, { headers: { Authorization: `Bearer ${token}` } })
-      const json = await res.json()
+      const json = await res.json().catch(() => ({}))
+      if (json.data?.locked) setLocked(json.data.locked)
       if (json.data) {
         setQuiz(json.data)
         setRemaining(json.data.time_limit_sec)
@@ -82,14 +91,17 @@ export default function QuizTakeScreen() {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body:    JSON.stringify({ answers: payload, duration_sec, mode }),
     })
-    const json = await res.json()
-    if (json.data) setResult(json.data)
+    const json = await res.json().catch(() => ({}))
+    const planErr = planErrorOf(json)
+    if (planErr?.info) setLocked(planErr.info)
+    else if (json.data) setResult(json.data)
+    else setSubmitError(json.error?.message ?? 'Envoi impossible. Tes réponses sont conservées : réessaie.')
     setSubmitting(false)
   }, [quiz, submitting, result, answers, id, mode])
 
   // Chrono — désactivé en mode entraînement libre (sans pression)
   useEffect(() => {
-    if (loading || result || !quiz || !meta.timed) return
+    if (loading || result || !quiz || !meta.timed || locked || quiz.questions.length === 0) return
     if (remaining <= 0) { submit(); return }
     const t = setTimeout(() => setRemaining((r) => r - 1), 1000)
     return () => clearTimeout(t)
@@ -97,6 +109,17 @@ export default function QuizTakeScreen() {
 
   if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#1E74E8" />
   if (!quiz) return <View style={styles.center}><Text>QCM introuvable.</Text></View>
+
+  // Formule insuffisante : explication et accès aux offres, jamais un QCM vide.
+  if (locked) {
+    return (
+      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+        <TouchableOpacity onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Retour"><Text style={{ fontSize: 24, marginBottom: 12 }}>←</Text></TouchableOpacity>
+        <Text style={{ fontSize: 16, fontWeight: '800', textAlign: 'center', marginBottom: 8 }}>{quiz.title}</Text>
+        <LockedFeature info={locked} />
+      </ScrollView>
+    )
+  }
 
   // ---------- Résultat ----------
   if (result) {
@@ -114,6 +137,21 @@ export default function QuizTakeScreen() {
           )}
           {result.score > 0 && <Text style={styles.xp}>+{result.score * 5} XP</Text>}
         </View>
+
+        {result.details ? (
+          <View style={styles.resultCard}>
+            <Text style={{ fontSize: 15, fontWeight: '900', marginBottom: 6 }}>Résultats détaillés</Text>
+            <Text>✅ {result.details.correct} bonne(s) · ❌ {result.details.wrong} erreur(s) · ○ {result.details.blank} sans réponse</Text>
+            {result.details.seconds_per_question !== null && <Text>⏱️ {result.details.seconds_per_question} s par question</Text>}
+            <Text>🏅 Meilleur résultat sur ce sujet : {result.details.best_rate} %</Text>
+            {result.details.delta_vs_last !== null && <Text>📈 Par rapport à la dernière fois : {result.details.delta_vs_last >= 0 ? '+' : ''}{result.details.delta_vs_last} points</Text>}
+            <Text style={{ fontWeight: '800', marginTop: 6, textAlign: 'center' }}>{result.details.advice}</Text>
+          </View>
+        ) : (
+          <TouchableOpacity onPress={() => router.push('/abonnement?plan=pro' as any)} accessibilityRole="button">
+            <Text style={{ textAlign: 'center', color: '#3E4A3E', marginBottom: 12 }}>Résultats détaillés (rythme, évolution, conseils) avec la formule Pro →</Text>
+          </TouchableOpacity>
+        )}
 
         {quiz.questions.map((q) => {
           const corr = byId.get(q.id)
@@ -215,11 +253,12 @@ export default function QuizTakeScreen() {
             <Text style={styles.navNextText}>Suivant →</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.finishBtn} onPress={submit} disabled={submitting}>
+          <TouchableOpacity style={styles.finishBtn} onPress={() => { setSubmitError(null); submit() }} disabled={submitting}>
             <Text style={styles.finishText}>{submitting ? 'Correction…' : 'Terminer'}</Text>
           </TouchableOpacity>
         )}
       </View>
+      {!!submitError && <Text style={{ color: '#C62828', textAlign: 'center', paddingHorizontal: 16, paddingBottom: 12 }} accessibilityLiveRegion="polite">{submitError}</Text>}
     </View>
   )
 }

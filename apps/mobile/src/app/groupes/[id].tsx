@@ -7,8 +7,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, fonts } from '../../lib/theme'
+import { newRequestKey, planErrorOf } from '../../lib/billing'
+import { useBilling } from '../../hooks/useBilling'
 
-interface Msg { id: string; sender_id: string; content: string; created_at: string }
+interface Msg { id: string; sender_id: string; content: string; created_at: string; is_priority?: boolean }
 
 async function getToken() {
   const { data: { session } } = await supabase.auth.getSession()
@@ -25,6 +27,9 @@ export default function GroupChatScreen() {
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [priority, setPriority] = useState(false)
+  const { me, can } = useBilling()
+  const canWrite = !me || can('study_groups')
   const listRef = useRef<FlatList>(null)
 
   useEffect(() => {
@@ -35,7 +40,7 @@ export default function GroupChatScreen() {
       setGroupName((g as { name?: string } | null)?.name ?? 'Groupe')
 
       const { data: msgs } = await supabase.from('group_messages')
-        .select('id, sender_id, content, created_at').eq('group_id', id)
+        .select('*').eq('group_id', id)
         .order('created_at', { ascending: true }).limit(100)
       setMessages((msgs ?? []) as Msg[])
 
@@ -76,13 +81,27 @@ export default function GroupChatScreen() {
     const token = await getToken()
     const res = await fetch(`${API_URL}/api/groups/${id}/messages`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ content }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, 'Idempotency-Key': newRequestKey() },
+      body: JSON.stringify({ content, priority }),
     })
     const json = await res.json().catch(() => ({}))
     setSending(false)
+    const planErr = planErrorOf(json)
+    if (planErr) {
+      // Le message saisi est conservé.
+      Alert.alert(
+        planErr.code === 'QUOTA_EXCEEDED' ? 'Quota atteint' : 'Formule requise',
+        planErr.info ? `${planErr.info.title} ${planErr.info.body}` : planErr.message,
+        planErr.info
+          ? [{ text: 'Voir les formules', onPress: () => router.push(`/abonnement?plan=${planErr.info!.requiredPlan}` as any) }, { text: 'Plus tard', style: 'cancel' }]
+          : [{ text: 'OK' }],
+      )
+      if (planErr.code === 'QUOTA_EXCEEDED') setPriority(false)
+      return
+    }
     if (res.ok) {
       setInput('')
+      setPriority(false)
       // Repli si le temps réel n'a pas encore livré le message.
       if (json.data) setMessages((prev) => prev.some((x) => x.id === json.data.id) ? prev : [...prev, json.data])
     } else if (json.error?.code === 'BLOCKED') {
@@ -90,7 +109,7 @@ export default function GroupChatScreen() {
     } else {
       Alert.alert('Erreur', json.error?.message ?? 'Envoi impossible.')
     }
-  }, [input, sending, id])
+  }, [input, sending, id, priority, router])
 
   async function flag(m: Msg) {
     if (m.sender_id === meId) return
@@ -126,7 +145,8 @@ export default function GroupChatScreen() {
           const mine = item.sender_id === meId
           return (
             <TouchableOpacity activeOpacity={0.8} onLongPress={() => flag(item)} style={[styles.row, mine && styles.rowMine]}>
-              <View style={[styles.bubble, mine ? styles.bubbleMine : styles.bubbleOther]}>
+              <View style={[styles.bubble, mine ? styles.bubbleMine : styles.bubbleOther, item.is_priority && styles.bubblePriority]}>
+                {item.is_priority && <Text style={[styles.priorityTag, mine && { color: '#fff' }]}>⚡ Question prioritaire</Text>}
                 {!mine && <Text style={styles.sender}>{names[item.sender_id] ?? 'Membre'}</Text>}
                 <Text style={[styles.msgText, mine && { color: '#fff' }]}>{item.content}</Text>
               </View>
@@ -135,10 +155,33 @@ export default function GroupChatScreen() {
         }}
       />
 
+      {!canWrite && (
+        <TouchableOpacity style={styles.readOnly} onPress={() => router.push('/abonnement?plan=starter' as any)} accessibilityRole="button">
+          <Text style={styles.readOnlyText}>Lecture seule avec la formule Gratuit. Participe aux discussions dès Starter (4 000 FCFA / mois) →</Text>
+        </TouchableOpacity>
+      )}
+      {canWrite && (
+        <TouchableOpacity
+          style={styles.priorityRow}
+          onPress={() => {
+            if (me && !can('priority_study_groups')) {
+              Alert.alert('Questions prioritaires', 'Mettre une question en avant pour les enseignants et tuteurs du groupe est inclus dans Pro (3 par jour) et illimité en Pro Max.', [
+                { text: 'Voir les formules', onPress: () => router.push('/abonnement?plan=pro' as any) }, { text: 'Plus tard', style: 'cancel' },
+              ])
+              return
+            }
+            setPriority((p) => !p)
+          }}
+          accessibilityRole="switch"
+          accessibilityState={{ checked: priority }}
+        >
+          <Text style={styles.priorityText}>{priority ? '⚡ Question prioritaire activée' : '⚡ Marquer comme question prioritaire'}{me && !can('priority_study_groups') ? ' · Pro' : ''}</Text>
+        </TouchableOpacity>
+      )}
       <View style={styles.inputBar}>
-        <TextInput style={styles.input} placeholder="Écris un message…" placeholderTextColor={colors.textMuted}
-          value={input} onChangeText={setInput} multiline maxLength={2000} />
-        <TouchableOpacity style={[styles.sendBtn, (!input.trim() || sending) && { opacity: 0.4 }]} onPress={send} disabled={!input.trim() || sending}>
+        <TextInput style={styles.input} placeholder={canWrite ? 'Écris un message…' : 'Lecture seule'} placeholderTextColor={colors.textMuted}
+          value={input} onChangeText={setInput} multiline maxLength={2000} editable={canWrite} accessibilityLabel="Message" />
+        <TouchableOpacity style={[styles.sendBtn, (!input.trim() || sending || !canWrite) && { opacity: 0.4 }]} onPress={send} disabled={!input.trim() || sending || !canWrite} accessibilityRole="button" accessibilityLabel="Envoyer">
           {sending ? <ActivityIndicator size="small" color="#fff" /> : <Text style={styles.sendText}>↑</Text>}
         </TouchableOpacity>
       </View>
@@ -161,6 +204,12 @@ const styles = StyleSheet.create({
   bubbleOther: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder, borderBottomLeftRadius: 4 },
   sender: { fontSize: 11, fontWeight: '800', color: colors.primary, marginBottom: 2 },
   msgText: { fontSize: 14, color: colors.text, lineHeight: 19 },
+  bubblePriority: { borderWidth: 2, borderColor: '#F2B705' },
+  priorityTag: { fontSize: 10, fontWeight: '900', color: '#8A5A00', marginBottom: 2 },
+  readOnly: { backgroundColor: '#FFF8E6', paddingHorizontal: 14, paddingVertical: 10, borderTopWidth: 1, borderTopColor: '#F2D48A' },
+  readOnlyText: { fontSize: 12, color: '#5C4300', fontWeight: '700' },
+  priorityRow: { backgroundColor: colors.card, paddingHorizontal: 14, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.cardBorder },
+  priorityText: { fontSize: 12, fontWeight: '800', color: colors.textMuted },
   inputBar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, backgroundColor: colors.card, borderTopWidth: 1, borderTopColor: colors.cardBorder, paddingHorizontal: 12, paddingTop: 10 },
   input: { flex: 1, backgroundColor: colors.background, borderWidth: 1, borderColor: colors.cardBorder, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 9, fontSize: 14, color: colors.text, maxHeight: 110 },
   sendBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },

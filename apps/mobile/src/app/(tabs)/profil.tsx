@@ -5,12 +5,14 @@ import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL } from '../../lib/theme'
 import { syncAllForOffline, type SyncProgress } from '../../lib/offlineSync'
+import { useBilling } from '../../hooks/useBilling'
 
 export default function ProfilScreen() {
   const router = useRouter()
   const { level, track } = useLevel()
+  // Formule effective et droits : décidés par le serveur, rafraîchis à chaque retour sur l'écran.
+  const { me, can } = useBilling()
   const [name, setName] = useState('Élève')
-  const [plan, setPlan] = useState('free')
   const [xp, setXp] = useState(0)
   const [streak, setStreak] = useState(0)
   const [badges, setBadges] = useState(0)
@@ -24,12 +26,11 @@ export default function ProfilScreen() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setLoading(false); return }
       const [{ data: me }, { data: prog }, { count: badgeCount }] = await Promise.all([
-        supabase.from('users').select('full_name, plan, xp, whatsapp_opt_in').eq('id', user.id).single(),
+        supabase.from('users').select('full_name, xp, whatsapp_opt_in').eq('id', user.id).single(),
         supabase.from('user_progress').select('streak_days').eq('user_id', user.id),
         supabase.from('user_badges').select('badge_code', { count: 'exact', head: true }).eq('user_id', user.id),
       ])
       setName((me as { full_name?: string })?.full_name?.split(' ')[0] ?? 'Élève')
-      setPlan((me as { plan?: string })?.plan ?? 'free')
       setXp((me as { xp?: number })?.xp ?? 0)
       setNotif(!!(me as { whatsapp_opt_in?: boolean })?.whatsapp_opt_in)
       setStreak(Math.max(0, ...((prog ?? []) as { streak_days: number }[]).map((p) => p.streak_days)))
@@ -39,13 +40,37 @@ export default function ProfilScreen() {
     load()
   }, [])
 
+  function showOffers(title: string, message: string, plan: string) {
+    Alert.alert(title, message, [
+      { text: 'Voir les formules', onPress: () => router.push(`/abonnement?plan=${plan}` as any) },
+      { text: 'Plus tard', style: 'cancel' },
+    ])
+  }
+
   async function toggleNotif(value: boolean) {
+    if (value && me && !can('whatsapp_reminders')) {
+      showOffers('Rappels WhatsApp', 'Les rappels WhatsApp sont inclus dès la formule Starter (4 000 FCFA / mois).', 'starter')
+      return
+    }
     setNotif(value)
     const { data: { user } } = await supabase.auth.getUser()
-    if (user) await supabase.from('users').update({ whatsapp_opt_in: value }).eq('id', user.id)
+    if (!user) return
+    const { error } = await supabase.from('users').update({ whatsapp_opt_in: value }).eq('id', user.id)
+    if (error) {
+      setNotif(!value)   // l'interrupteur reflète l'état réel
+      if (error.message.includes('PLAN_REQUIRED')) {
+        showOffers('Rappels WhatsApp', 'Les rappels WhatsApp sont inclus dès la formule Starter (4 000 FCFA / mois).', 'starter')
+      } else {
+        Alert.alert('Erreur', 'Le réglage n’a pas pu être enregistré. Réessaie.')
+      }
+    }
   }
   async function downloadForOffline() {
     if (syncing) return
+    if (me && !can('offline_downloads')) {
+      showOffers('Téléchargement hors connexion', 'Le téléchargement de tout ton programme est inclus dès la formule Starter (4 000 FCFA / mois).', 'starter')
+      return
+    }
     if (!level) { Alert.alert('Niveau manquant', 'Définis d\'abord ton niveau d\'examen (ci-dessus) avant de télécharger tes cours.'); return }
     setSyncing(true)
     setSyncProgress({ done: 0, total: 0, label: '' })
@@ -84,10 +109,11 @@ export default function ProfilScreen() {
       <View style={styles.header}>
         <View style={styles.avatarWrap}>
           <View style={styles.avatar}><Text style={styles.avatarText}>{name[0]?.toUpperCase()}</Text></View>
-          <View style={styles.crown}><Text style={{ fontSize: 16 }}>👑</Text></View>
+          {!!me && me.plan !== 'free' && <View style={styles.crown}><Text style={{ fontSize: 16 }}>👑</Text></View>}
         </View>
         <Text style={styles.name}>{name}</Text>
         <View style={styles.pill}><Text style={styles.pillText}>🎖️ Élève {level ? `· ${LEVEL_LABEL[level]}` : ''} · Niveau {niveau}</Text></View>
+        {!!me && <View style={styles.pill}><Text style={styles.pillText}>Formule {me.is_admin ? 'admin · accès complet' : me.plan_label}</Text></View>}
       </View>
 
       <View style={styles.body}>
@@ -112,7 +138,7 @@ export default function ProfilScreen() {
             <View style={[styles.settingIcon, { backgroundColor: colors.primaryTint }]}><Text style={{ fontSize: 18 }}>🔔</Text></View>
             <View style={{ flex: 1 }}>
               <Text style={styles.settingTitle}>Notifications</Text>
-              <Text style={styles.settingSub}>Rappels de révision</Text>
+              <Text style={styles.settingSub}>Rappels de révision WhatsApp{me && !can('whatsapp_reminders') ? ' · dès Starter' : ''}</Text>
             </View>
             <Switch value={notif} onValueChange={toggleNotif} trackColor={{ true: colors.primary, false: '#CBD5C7' }} thumbColor="#fff" />
           </View>
@@ -137,24 +163,33 @@ export default function ProfilScreen() {
                   ? syncProgress && syncProgress.total > 0
                     ? `Téléchargement… ${syncProgress.done}/${syncProgress.total}`
                     : 'Préparation…'
-                  : 'Tout ton programme, cours et images'}
+                  : me && !can('offline_downloads') ? 'Inclus dès la formule Starter' : 'Tout ton programme, cours et images'}
               </Text>
             </View>
             {syncing ? <ActivityIndicator color={colors.primary} /> : <Text style={styles.chevron}>›</Text>}
           </TouchableOpacity>
-          {plan === 'free' && (
-            <>
-              <View style={styles.divider} />
-              <TouchableOpacity style={styles.settingRow} onPress={() => router.push('/planning' as any)}>
-                <View style={[styles.settingIcon, { backgroundColor: '#FDE2E1' }]}><Text style={{ fontSize: 18 }}>⭐</Text></View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.settingTitle}>Passer à Premium</Text>
-                  <Text style={styles.settingSub}>2 000 FCFA/mois</Text>
-                </View>
-                <Text style={styles.chevron}>›</Text>
-              </TouchableOpacity>
-            </>
-          )}
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow} onPress={() => router.push('/analyse' as any)} accessibilityRole="button">
+            <View style={[styles.settingIcon, { backgroundColor: '#EDE7FB' }]}><Text style={{ fontSize: 18 }}>📊</Text></View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.settingTitle}>Mon analyse</Text>
+              <Text style={styles.settingSub}>Erreurs, progression et recommandations{me && !can('ai_error_analysis') ? ' · dès Pro' : ''}</Text>
+            </View>
+            <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow} onPress={() => router.push('/abonnement' as any)} accessibilityRole="button">
+            <View style={[styles.settingIcon, { backgroundColor: '#FDE2E1' }]}><Text style={{ fontSize: 18 }}>⭐</Text></View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.settingTitle}>{me && me.plan !== 'free' ? `Ma formule : ${me.plan_label}` : 'Découvrir les formules'}</Text>
+              <Text style={styles.settingSub}>
+                {me?.current_subscription?.expires_at
+                  ? `Jusqu’au ${new Date(me.current_subscription.expires_at).toLocaleDateString('fr-FR')}${me.expiring_soon ? ' · à renouveler' : ''}`
+                  : 'Starter, Pro, Pro Max — dès 4 000 FCFA / mois'}
+              </Text>
+            </View>
+            <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.shareBtn} onPress={share}><Text style={styles.shareText}>🔗  Partager avec des amis</Text></TouchableOpacity>

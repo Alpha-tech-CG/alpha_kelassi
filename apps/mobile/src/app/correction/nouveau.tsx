@@ -2,22 +2,20 @@ import { useEffect, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
-import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
 import { pickAndUpload } from '../../lib/uploads'
+import { api, planErrorOf, type LockedInfo, type UsageView } from '../../lib/billing'
+import { LockedFeature } from '../../components/LockedFeature'
+import { QuotaBar } from '../../components/QuotaBar'
 
 interface Subject { id: string; name: string }
 type Slot = { path: string; uri: string } | null
 
-async function token() {
-  const { data: { session } } = await supabase.auth.getSession()
-  return session?.access_token
-}
-
 export default function NouvelleCorrection() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [isPremium, setIsPremium] = useState(true)
+  const [locked, setLocked] = useState<LockedInfo | null>(null)
+  const [quota, setQuota] = useState<UsageView | null>(null)
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [subjectId, setSubjectId] = useState<string | null>(null)
   const [exercise, setExercise] = useState<Slot>(null)   // énoncé
@@ -29,9 +27,19 @@ export default function NouvelleCorrection() {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setLoading(false); return }
-      const { data: profile } = await supabase.from('users').select('plan, study_level_pref, track_type').eq('id', user.id).single()
-      const p = profile as { plan?: string; study_level_pref?: string; track_type?: string } | null
-      setIsPremium(p?.plan === 'premium')
+      const { data: profile } = await supabase.from('users').select('study_level_pref, track_type').eq('id', user.id).single()
+      const p = profile as { study_level_pref?: string; track_type?: string } | null
+      // Droits et quota mensuel décidés par le serveur.
+      const [me, missions] = await Promise.all([api('/api/billing/me'), api('/api/corrections')])
+      if (me.ok && me.json.data && !me.json.data.features?.tutor_correction) {
+        setLocked({
+          feature: 'tutor_correction', requiredPlan: 'pro',
+          title: 'La correction par un tuteur est disponible avec la formule Pro.',
+          body: 'Passe à Pro pour 2 corrections par mois, ou à Pro Max pour 6 corrections traitées en priorité.',
+          price: '6 000 FCFA / mois',
+        })
+      }
+      if (missions.ok && missions.json.quota) setQuota(missions.json.quota as UsageView)
       let q = supabase.from('subjects').select('id, name').order('name')
       if (p?.study_level_pref) q = q.eq('level', p.study_level_pref)
       if (p?.track_type) q = q.eq('track_type', p.track_type)
@@ -65,23 +73,20 @@ export default function NouvelleCorrection() {
   async function submit() {
     if (!subjectId || !exercise || !work || submitting) return
     setSubmitting(true)
-    const t = await token()
-    const res = await fetch(`${API_URL}/api/corrections`, {
+    // Les mêmes photos renvoyées (double appui, nouvelle tentative) ne créent
+    // pas une seconde demande : le serveur reconnaît les fichiers.
+    const res = await api('/api/corrections', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
       body: JSON.stringify({ subject_id: subjectId, exercise_url: exercise.path, work_url: work.path }),
     })
-    const json = await res.json().catch(() => ({}))
     setSubmitting(false)
     if (!res.ok) {
-      if (json.error?.code === 'PREMIUM_REQUIRED') {
-        Alert.alert('Réservé au Premium', 'La correction par un tuteur humain fait partie de l’offre Premium.')
-      } else {
-        Alert.alert('Erreur', json.error?.message ?? 'Envoi impossible.')
-      }
+      const planErr = planErrorOf(res.json)
+      if (planErr?.code === 'PLAN_REQUIRED') setLocked(planErr.info)
+      else Alert.alert(planErr?.code === 'QUOTA_EXCEEDED' ? 'Quota atteint' : 'Envoi impossible', res.json.error?.message ?? 'Envoi impossible. Réessaie.')
       return
     }
-    router.replace(`/correction/${json.data.id}`)
+    router.replace(`/correction/${res.json.data.id}`)
   }
 
   if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
@@ -96,11 +101,7 @@ export default function NouvelleCorrection() {
         <View style={{ width: 20 }} />
       </View>
 
-      {!isPremium && (
-        <TouchableOpacity style={styles.premiumBanner} onPress={() => router.push('/abonnement' as any)} activeOpacity={0.85}>
-          <Text style={styles.premiumText}>⭐ La correction par un tuteur est une fonctionnalité Premium. Appuie pour t’abonner →</Text>
-        </TouchableOpacity>
-      )}
+      {locked ? <LockedFeature info={locked} /> : <QuotaBar label="Corrections incluses ce mois-ci" usage={quota} />}
 
       <Text style={styles.label}>1 · Matière</Text>
       <View style={styles.chips}>
@@ -121,7 +122,7 @@ export default function NouvelleCorrection() {
       <Text style={styles.label}>3 · Photo de ton travail</Text>
       <PhotoSlot slot={work} busy={busy === 'work'} onPress={() => pick('work')} placeholder="Ajouter ton travail manuscrit" />
 
-      <TouchableOpacity style={[styles.submit, (!ready || submitting) && { opacity: 0.5 }]} onPress={submit} disabled={!ready || submitting}>
+      <TouchableOpacity style={[styles.submit, (!ready || submitting || !!locked || quota?.message.reached) && { opacity: 0.5 }]} onPress={submit} disabled={!ready || submitting || !!locked || !!quota?.message.reached} accessibilityRole="button">
         <Text style={styles.submitText}>{submitting ? 'Envoi…' : 'Envoyer à un tuteur'}</Text>
       </TouchableOpacity>
       <Text style={styles.footHint}>Un tuteur qualifié corrige ton exercice à la main, vérifié par l’IA. Délai moyen : 1h30.</Text>
@@ -155,8 +156,6 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 },
   back: { fontSize: 24, color: colors.text },
   title: { fontSize: 20, fontFamily: fonts.headingBlack, color: colors.text },
-  premiumBanner: { backgroundColor: '#FFF3E0', borderRadius: radius.md, padding: 12, marginBottom: 16 },
-  premiumText: { color: '#C77700', fontSize: 12, fontWeight: '700' },
   label: { fontSize: 14, fontWeight: '800', color: colors.text, marginTop: 18, marginBottom: 10 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: { paddingHorizontal: 14, paddingVertical: 9, borderRadius: radius.full, borderWidth: 1, borderColor: colors.cardBorder, backgroundColor: colors.card },

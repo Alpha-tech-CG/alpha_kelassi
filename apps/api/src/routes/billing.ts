@@ -77,6 +77,12 @@ router.post(
     })
   ),
   async (c) => {
+    // Remplacé par apps/web (/api/billing/feexpay) : formules Starter, Pro et
+    // Pro Max, transactions en base, webhook idempotent. Cette route, restée à
+    // l'ancienne offre Premium unique, ne doit plus jamais encaisser.
+    if (process.env['LEGACY_HONO_BILLING'] !== 'enabled') {
+      return c.json({ error: { code: 'MOVED', message: 'Paiement déplacé vers /api/billing/feexpay (apps/web).' } }, 410)
+    }
     const userId = c.get('userId') as string
     const { plan, phone, network } = c.req.valid('json')
 

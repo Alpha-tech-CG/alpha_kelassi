@@ -9,6 +9,8 @@ import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
 import { LessonContent } from '../../components/LessonContent'
 import { MathLessonView } from '../../components/MathLessonView'
 import { ChapterSkeleton } from '../../components/Skeleton'
+import { LockedFeature } from '../../components/LockedFeature'
+import { useBilling } from '../../hooks/useBilling'
 
 // Contenu avec formules LaTeX ($...$) → rendu math natif ; sinon rendu léger (encarts BEPC).
 const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$/.test(s)
@@ -39,6 +41,7 @@ export default function ChapitreScreen() {
   const [scores, setScores] = useState<Record<string, string>>({})
   const [openSub, setOpenSub] = useState<string | null>(null) // sous-chapitre ouvert (mode drill-down)
   const [exCount, setExCount] = useState(0)
+  const { me, can } = useBilling()
 
   useEffect(() => {
     let cancelled = false
@@ -176,7 +179,18 @@ export default function ChapitreScreen() {
         </TouchableOpacity>
       )}
 
-      {lessons.length === 0 ? (
+      {lessons.length === 0 && me && !can('full_courses') && !fromCache ? (
+        // Gratuit : seul le premier chapitre de chaque matière est ouvert ; la base
+        // ne renvoie pas les leçons des suivants.
+        <ScrollView contentContainerStyle={styles.content}>
+          <LockedFeature info={{
+            feature: 'full_courses', requiredPlan: 'starter',
+            title: 'Ce chapitre est disponible avec la formule Starter.',
+            body: 'En Gratuit, le premier chapitre de chaque matière est ouvert. Starter débloque tout le programme de ta classe, les annales et 30 questions Cognix IA par jour.',
+            price: '4 000 FCFA / mois',
+          }} />
+        </ScrollView>
+      ) : lessons.length === 0 ? (
         <View style={styles.empty}><Text style={styles.emptyText}>Contenu bientôt disponible.</Text></View>
       ) : subMode ? (
         openLesson ? (

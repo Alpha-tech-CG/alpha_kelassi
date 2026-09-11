@@ -17,6 +17,16 @@ interface Mission {
   created_at: string
   subjects?: { name: string } | null
   solution_url: string | null
+  priority?: number
+  /** Analyse approfondie de la copie (formule Pro Max). */
+  deep_analysis?: {
+    overall: string
+    strengths: string[]
+    errors: { step: string; issue: string; correction: string; kind: string }[]
+    recurring_risks: string[]
+    next_steps: string[]
+    estimated_mastery: number | null
+  } | null
 }
 
 async function token() {
@@ -133,6 +143,51 @@ export default function CorrectionDetail() {
         </View>
       )}
 
+      {m.status === 'pending' && (m.priority ?? 0) > 0 && (
+        <Text style={styles.eta}>⚡ Demande traitée en priorité (Pro Max)</Text>
+      )}
+
+      {/* Analyse approfondie (Pro Max) */}
+      {m.deep_analysis && (
+        <View style={styles.card}>
+          <Text style={styles.cardTitle} accessibilityRole="header">Analyse approfondie de ta copie</Text>
+          <Text style={styles.aiText}>{m.deep_analysis.overall}</Text>
+          {m.deep_analysis.estimated_mastery !== null && (
+            <Text style={[styles.muted, { marginTop: 6 }]}>Maîtrise estimée : {m.deep_analysis.estimated_mastery} %</Text>
+          )}
+          {m.deep_analysis.strengths.length > 0 && (
+            <>
+              <Text style={styles.analysisHeading}>Ce qui est réussi</Text>
+              {m.deep_analysis.strengths.map((s, i) => <Text key={i} style={styles.aiText}>✓ {s}</Text>)}
+            </>
+          )}
+          {m.deep_analysis.errors.length > 0 && (
+            <>
+              <Text style={styles.analysisHeading}>Erreurs relevées</Text>
+              {m.deep_analysis.errors.map((e, i) => (
+                <View key={i} style={styles.errorItem}>
+                  <Text style={styles.errorStep}>{e.step} · {e.kind}</Text>
+                  <Text style={styles.aiText}>{e.issue}</Text>
+                  <Text style={[styles.aiText, { color: colors.primary }]}>→ {e.correction}</Text>
+                </View>
+              ))}
+            </>
+          )}
+          {m.deep_analysis.recurring_risks.length > 0 && (
+            <>
+              <Text style={styles.analysisHeading}>Erreurs à surveiller</Text>
+              {m.deep_analysis.recurring_risks.map((r, i) => <Text key={i} style={styles.aiText}>• {r}</Text>)}
+            </>
+          )}
+          {m.deep_analysis.next_steps.length > 0 && (
+            <>
+              <Text style={styles.analysisHeading}>Pour progresser</Text>
+              {m.deep_analysis.next_steps.map((s, i) => <Text key={i} style={styles.aiText}>{i + 1}. {s}</Text>)}
+            </>
+          )}
+        </View>
+      )}
+
       {/* Actions après livraison (uniquement si tuteur humain) */}
       {m.status === 'delivered' && m.solution_url && (
         <View style={styles.actions}>
@@ -212,6 +267,9 @@ const styles = StyleSheet.create({
   aiTag: { alignSelf: 'flex-start', backgroundColor: '#E6F7EE', paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.full, marginBottom: 10 },
   aiTagText: { color: '#0B8A46', fontSize: 11, fontWeight: '800' },
   aiText: { fontSize: 14, color: colors.text, lineHeight: 21 },
+  analysisHeading: { fontSize: 13, fontWeight: '900', color: colors.text, marginTop: 14, marginBottom: 4 },
+  errorItem: { borderLeftWidth: 3, borderLeftColor: colors.red, paddingLeft: 10, marginVertical: 6 },
+  errorStep: { fontSize: 12, fontWeight: '800', color: colors.textMuted },
   actions: { marginTop: 18, gap: 12 },
   actionOutline: { borderWidth: 1.5, borderColor: colors.primary, borderRadius: radius.lg, paddingVertical: 14, alignItems: 'center' },
   actionOutlineText: { color: colors.primary, fontSize: 14, fontWeight: '800' },

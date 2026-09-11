@@ -16,21 +16,11 @@ export default function ExamenDetailScreen() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase.from('documents').select('*, subjects(name)').eq('id', id).eq('type', 'examen').single()
-      if (!data) { setLoading(false); return }
+      // En Gratuit, une annale par matière est ouverte : la base masque les
+      // autres. Une annale invisible est donc une annale verrouillée.
+      const { data } = await supabase.from('documents').select('*, subjects(name)').eq('id', id).eq('type', 'examen').maybeSingle()
+      if (!data) { setIsPremiumBlocked(true); setLoading(false); return }
       setDoc(data as Doc)
-
-      if (data.is_premium) {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-          const { data: profile } = await supabase.from('users').select('plan').eq('id', user.id).single()
-          if (profile?.plan !== 'premium') {
-            setIsPremiumBlocked(true)
-            setLoading(false)
-            return
-          }
-        }
-      }
 
       const bucket = data.is_premium ? 'pdfs-premium' : 'pdfs-public'
       const fileName = data.pdf_url.split('/').pop() ?? ''
@@ -46,11 +36,11 @@ export default function ExamenDetailScreen() {
   if (isPremiumBlocked) {
     return (
       <View style={styles.blocked}>
-        <Text style={styles.blockedIcon}>⭐</Text>
-        <Text style={styles.blockedTitle}>Contenu Premium</Text>
-        <Text style={styles.blockedSub}>Cet examen est réservé aux abonnés Premium.</Text>
-        <TouchableOpacity style={styles.upgradeBtn} onPress={() => router.push('/abonnement' as any)}>
-          <Text style={styles.upgradeBtnText}>Passer à Premium</Text>
+        <Text style={styles.blockedIcon}>🔒</Text>
+        <Text style={styles.blockedTitle}>L’accès complet aux annales est disponible avec la formule Starter.</Text>
+        <Text style={styles.blockedSub}>En Gratuit, une annale par matière est ouverte. Passe à Starter (4 000 FCFA / mois) pour toutes les annales disponibles.</Text>
+        <TouchableOpacity style={styles.upgradeBtn} onPress={() => router.push('/abonnement?plan=starter' as any)} accessibilityRole="button">
+          <Text style={styles.upgradeBtnText}>Voir la formule Starter</Text>
         </TouchableOpacity>
       </View>
     )

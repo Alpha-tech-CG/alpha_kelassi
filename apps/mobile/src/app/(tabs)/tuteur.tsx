@@ -4,17 +4,22 @@ import {
   StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
 } from 'react-native'
 import { fetch as expoFetch } from 'expo/fetch'
+import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
+import { newRequestKey, planErrorOf } from '../../lib/billing'
 
 interface Message { id: string; role: 'user' | 'assistant'; content: string; streaming?: boolean }
 
 export default function TuteurScreen() {
+  const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [quotaRemaining, setQuotaRemaining] = useState<number | null>(null)
+  const [quotaText, setQuotaText] = useState<string | null>(null)
+  const [quotaReached, setQuotaReached] = useState(false)
   const listRef = useRef<FlatList>(null)
 
   useEffect(() => {
@@ -56,12 +61,18 @@ export default function TuteurScreen() {
     }
 
     let received = 0 // nb de caractères reçus (pour préserver le texte partiel)
+    // Même clé pour la tentative et la nouvelle tentative : jamais décomptée deux fois.
+    const requestKey = newRequestKey()
 
     // Applique une ligne SSE « data: {...} » au message en cours
     const applyLine = (line: string) => {
       if (!line.startsWith('data: ') || line.includes('"{}"}')) return
       try {
         const payload = JSON.parse(line.slice(6))
+        if (payload.quota?.summary) {
+          setQuotaText(`${payload.quota.summary} ${payload.quota.detail ?? ''}`.trim())
+          setQuotaReached(false)
+        }
         if (payload.text) {
           received += payload.text.length
           setMessages((prev) => prev.map((m) =>
@@ -78,13 +89,20 @@ export default function TuteurScreen() {
       try {
         const res = await expoFetch(`${API_URL}/api/ai/chat`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, 'Idempotency-Key': requestKey },
           body: JSON.stringify({ question, session_id: sessionId }),
           signal: controller.signal,
         })
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({}))
+          const planErr = planErrorOf(err)
+          if (planErr?.code === 'QUOTA_EXCEEDED') {
+            setQuotaRemaining(0)
+            setQuotaReached(true)
+            setQuotaText(planErr.message)
+            setInput(question) // la question n'est pas perdue
+          }
           setMessages((prev) => prev.map((m) =>
             m.id === asstMsgId ? { ...m, content: `❌ ${err.error?.message ?? 'Erreur'}`, streaming: false } : m
           ))
@@ -170,13 +188,22 @@ export default function TuteurScreen() {
           <Text style={styles.headerSub}>Tuteur · Méthode Feynman</Text>
         </View>
         {quotaRemaining !== null && (
-          <View style={[styles.quotaBadge, quotaRemaining <= 2 && styles.quotaBadgeLow]}>
+          <View style={[styles.quotaBadge, quotaRemaining <= 2 && styles.quotaBadgeLow]} accessible accessibilityLabel={quotaText ?? `${quotaRemaining} questions restantes aujourd’hui`}>
             <Text style={[styles.quotaText, quotaRemaining <= 2 && styles.quotaTextLow]}>
-              {quotaRemaining} restante{quotaRemaining > 1 ? 's' : ''}
+              {quotaRemaining} question{quotaRemaining > 1 ? 's' : ''} restante{quotaRemaining > 1 ? 's' : ''}
             </Text>
           </View>
         )}
       </View>
+
+      {quotaReached && (
+        <View style={styles.quotaNotice} accessibilityLiveRegion="polite">
+          <Text style={styles.quotaNoticeText}>{quotaText ?? 'Ton quota quotidien Cognix IA est atteint. Il sera renouvelé demain.'}</Text>
+          <TouchableOpacity onPress={() => router.push('/abonnement' as any)} accessibilityRole="button">
+            <Text style={styles.quotaNoticeLink}>Voir les formules →</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Messages */}
       <FlatList
@@ -252,7 +279,10 @@ const styles = StyleSheet.create({
   quotaBadge: { marginLeft: 'auto', backgroundColor: '#EFF6EB', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
   quotaBadgeLow: { backgroundColor: '#FCE9E8' },
   quotaText: { fontSize: 11, color: '#3E4A3E', fontWeight: '600' },
-  quotaTextLow: { color: '#E53935' },
+  quotaTextLow: { color: '#C62828' },
+  quotaNotice: { backgroundColor: '#FFF8E6', borderBottomWidth: 1, borderBottomColor: '#F2D48A', paddingHorizontal: 16, paddingVertical: 10 },
+  quotaNoticeText: { fontSize: 13, color: '#5C4300' },
+  quotaNoticeLink: { fontSize: 13, color: '#171D17', fontWeight: '800', marginTop: 4 },
   messageList: { flex: 1 },
   messageContent: { padding: 16, gap: 12, flexGrow: 1 },
   emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 40 },

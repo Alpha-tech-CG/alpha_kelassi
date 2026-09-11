@@ -81,6 +81,12 @@ router.post('/stripe', async (c) => {
 // l'intention d'achat mémorisée à l'init (Redis, liée au vrai user), puis on
 // RE-VÉRIFIE le statut et le montant directement auprès de l'API FeexPay.
 router.post('/feexpay', async (c) => {
+  // Remplacé par apps/web (/api/billing/feexpay/webhook). Cette version active
+  // l'ancienne offre Premium : désactivée pour éviter un second chemin
+  // d'activation aux anciens tarifs.
+  if (process.env['LEGACY_HONO_BILLING'] !== 'enabled') {
+    return c.json({ error: 'Moved to /api/billing/feexpay/webhook (apps/web)' }, 410)
+  }
   const body = await c.req.json<Record<string, unknown>>().catch(() => ({} as Record<string, unknown>))
 
   // La référence est renvoyée dans `reference` ou dans `callback_info`.
