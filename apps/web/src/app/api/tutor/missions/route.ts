@@ -19,6 +19,8 @@ export async function GET(req: Request) {
   const { data, error } = await admin().from('correction_missions')
     .select('id, subject_id, created_at, subjects(name)')
     .eq('status', 'pending').in('subject_id', subjectIds)
+    // Les demandes Pro Max passent en tête, puis ordre d'arrivée.
+    .order('priority', { ascending: false })
     .order('created_at', { ascending: true }).limit(30)
   if (error) {
     console.error('[/api/tutor/missions]', error)

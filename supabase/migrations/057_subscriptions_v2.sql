@@ -610,6 +610,7 @@ create table if not exists public.payment_transactions (
   change_kind      text check (change_kind in ('new', 'upgrade', 'renewal', 'downgrade')),
   network          text,
   phone_last4      text,
+  provider_reference text,                 -- référence renvoyée par FeexPay, si différente de la nôtre
   provider_status  text,
   failure_reason   text,
   subscription_id  uuid references public.subscriptions(id) on delete set null,

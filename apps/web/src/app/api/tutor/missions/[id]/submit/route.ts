@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, after } from 'next/server'
+import { runDeepCopyAnalysis } from '@/lib/learning/deep-copy'
 import { z } from 'zod'
 import { authenticate } from '@/lib/supabase/api'
 import { admin, aiVerifySolution, aiGenerateSolution, creditTutor, recomputeTutorScore, rewardForAttempt, MAX_ATTEMPTS } from '@/lib/tutor'
@@ -54,6 +55,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     }).eq('id', id)
     await creditTutor(user.id, id, reward)
     await recomputeTutorScore(user.id)
+    // Pro Max : analyse approfondie de la copie, après la réponse au tuteur.
+    after(() => runDeepCopyAnalysis(id).catch((e) => console.error('[deep-copy]', e)))
     return NextResponse.json({ data: { status: 'delivered', reward_fcfa: reward } }, { status: 201 })
   }
 
@@ -69,5 +72,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   await admin().from('correction_missions').update({
     status: 'delivered', delivered_at: new Date().toISOString(), attempts: attempt, reward_fcfa: 0, ai_verdict: solutionText,
   }).eq('id', id)
+  after(() => runDeepCopyAnalysis(id).catch((e) => console.error('[deep-copy]', e)))
   return NextResponse.json({ data: { status: 'delivered_ai', ai_feedback: verdict.feedback } }, { status: 201 })
 }

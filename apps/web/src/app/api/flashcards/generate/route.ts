@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { GoogleGenAI } from '@google/genai'
 import { z } from 'zod'
+import { FREE_TIER } from '@alpha-kelassi/types'
+import { getEntitlements, planRequired, planRequiredFromDbError } from '@/lib/subscription/server'
 
 export const maxDuration = 60
 
@@ -25,7 +27,19 @@ export async function POST(req: NextRequest) {
   try { body = schema.parse(await req.json()) }
   catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
 
-  const { document_id, count } = body
+  const { document_id } = body
+  let { count } = body
+
+  // Gratuit : quelques flashcards seulement (sans limite dès Starter). Vérifié
+  // AVANT l'appel Gemini ; la base refuse aussi toute carte au-delà.
+  const ent = await getEntitlements(user.id)
+  if (!ent.can('flashcards')) {
+    const { count: owned } = await supabase.from('flashcards')
+      .select('id', { count: 'exact', head: true }).eq('user_id', user.id)
+    const room = FREE_TIER.maxFlashcards - (owned ?? 0)
+    if (room <= 0) return planRequired('flashcards')
+    count = Math.min(count, room)
+  }
 
   // Récupère les chunks du document
   const { data: chunks } = await supabase
@@ -89,6 +103,11 @@ ${context}`
     .insert(rows)
     .select()
 
-  if (dbError) return NextResponse.json({ error: { code: 'DB_ERROR', message: dbError.message } }, { status: 500 })
+  if (dbError) {
+    const locked = planRequiredFromDbError(dbError.message)
+    if (locked) return locked
+    console.error('[/api/flashcards/generate]', dbError)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: inserted, count: inserted?.length ?? 0 }, { status: 201 })
 }

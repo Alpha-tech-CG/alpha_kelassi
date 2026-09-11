@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
+import { getEntitlements, planRequired, planRequiredFromDbError } from '@/lib/subscription/server'
 
 /** GET /api/reminders — préférences de rappel de l'élève */
 export async function GET() {
@@ -39,6 +40,12 @@ export async function PATCH(req: NextRequest) {
   try { body = schema.parse(await req.json()) }
   catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
 
+  // Activer les rappels WhatsApp est une fonction Starter (désactiver reste libre).
+  if (body.whatsapp_opt_in === true) {
+    const ent = await getEntitlements(user.id)
+    if (!ent.can('whatsapp_reminders')) return planRequired('whatsapp_reminders')
+  }
+
   const { data, error } = await supabase
     .from('users')
     .update(body)
@@ -47,6 +54,8 @@ export async function PATCH(req: NextRequest) {
     .single()
 
   if (error) {
+    const locked = planRequiredFromDbError(error.message)
+    if (locked) return locked
 
     console.error('[/api/reminders]', error)
 

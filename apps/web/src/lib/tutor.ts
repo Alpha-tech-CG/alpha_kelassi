@@ -81,6 +81,15 @@ async function imagePart(bucket: string, path: string) {
   return { inlineData: { mimeType, data: buf.toString('base64') } }
 }
 
+/** Images d'une mission pour l'IA : énoncé, copie de l'élève, correction du tuteur (si fournie). */
+export async function missionImageParts(m: { exercise_url: string; work_url: string; solution_url?: string | null }): Promise<object[]> {
+  const parts = await Promise.all([
+    imagePart(BUCKET.exercise, m.exercise_url), imagePart(BUCKET.work, m.work_url),
+    m.solution_url ? imagePart(BUCKET.solution, m.solution_url) : null,
+  ])
+  return parts.filter(Boolean) as object[]
+}
+
 /** Vérifie une correction tuteur (énoncé + travail + solution). */
 export async function aiVerifySolution(m: { exercise_url: string; work_url: string; photo_url: string }): Promise<{ ok: boolean; feedback: string }> {
   const genai = getGenai()

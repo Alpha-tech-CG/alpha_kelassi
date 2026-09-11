@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { z } from 'zod'
 import { STUDY_LEVELS } from '@alpha-kelassi/types'
+import { getEntitlements, planRequired } from '@/lib/subscription/server'
 
 /** GET /api/planning/plan — plan actif de l'élève + compte à rebours */
 export async function GET(req: Request) {
@@ -33,6 +34,10 @@ const schema = z.object({
 export async function POST(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+
+  // Le compte à rebours (GET) reste libre ; créer un plan personnalisé est Starter.
+  const ent = await getEntitlements(user.id)
+  if (!ent.can('personalized_study_plan')) return planRequired('personalized_study_plan')
 
   let body: z.infer<typeof schema>
   try { body = schema.parse(await req.json()) }

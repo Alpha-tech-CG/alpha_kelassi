@@ -9,7 +9,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   if (!user) return NextResponse.json({ error: { code: 'UNAUTHORIZED' } }, { status: 401 })
 
   const { data: mission, error } = await supabase.from('correction_missions')
-    .select('id, subject_id, status, accepted_at, due_at, delivered_at, attempts, reward_fcfa, ai_verdict, created_at, subjects(name)')
+    .select('id, subject_id, status, accepted_at, due_at, delivered_at, attempts, reward_fcfa, ai_verdict, deep_analysis, priority, created_at, subjects(name)')
     .eq('id', id).eq('student_id', user.id).maybeSingle()
   if (error) {
     console.error('[/api/corrections/[id]]', error)
