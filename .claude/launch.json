@@ -8,6 +8,12 @@
       "port": 3000
     },
     {
+      "name": "kelassi-web-turbo",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@alpha-kelassi/web", "exec", "next", "dev", "--turbopack", "--port", "3000"],
+      "port": 3000
+    },
+    {
       "name": "kelassi-api",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter", "@alpha-kelassi/api", "dev"],
