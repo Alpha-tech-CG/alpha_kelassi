@@ -158,8 +158,14 @@ describe('Produits et prix', () => {
     const info = lockedFeatureInfo('bac_rouge_mode')
     assert.equal(info.requiredPlan, 'pro')
     assert.equal(info.title, 'Le mode Bac rouge est disponible avec la formule Pro.')
-    assert.match(info.body, /100 questions Cognix IA par jour/)
+    assert.equal(info.body, 'Passe à Pro pour accéder aux simulations avancées, obtenir 2 corrections par tuteur par mois et 100 questions Cognix IA par jour.')
     assert.equal(info.price, `6${NBSP}000${NBSP}FCFA / mois`)
+  })
+
+  it('accorde le verbe avec les fonctionnalités au pluriel', () => {
+    assert.equal(lockedFeatureInfo('corrected_exercises').title, 'Les exercices corrigés sont disponibles avec la formule Starter.')
+    assert.equal(lockedFeatureInfo('tutor_correction').title, 'La correction par un tuteur est disponible avec la formule Pro.')
+    for (const f of FEATURE_KEYS) assert.doesNotMatch(lockedFeatureInfo(f).body, /\bde les\b|\bde le\b/, f)
   })
 })
 

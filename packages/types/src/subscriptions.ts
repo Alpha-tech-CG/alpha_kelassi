@@ -511,9 +511,9 @@ export function quotaMessage(type: UsageType, plan: string | null | undefined, u
 
 /** Ce que la formule requise apporte en plus, pour convaincre sans jargon. */
 const PLAN_PITCH: Record<PaidPlan, string> = {
-  starter: 'tout le programme de ta classe, les annales et 30 questions Cognix IA par jour',
-  pro: 'les simulations avancées, 2 corrections par tuteur par mois et 100 questions Cognix IA par jour',
-  pro_max: 'le suivi personnalisé complet, 6 corrections par mois et 250 questions Cognix IA par jour',
+  starter: 'accéder à tout le programme de ta classe et aux annales, et obtenir 30 questions Cognix IA par jour',
+  pro: 'accéder aux simulations avancées, obtenir 2 corrections par tuteur par mois et 100 questions Cognix IA par jour',
+  pro_max: 'bénéficier du suivi personnalisé complet, de 6 corrections par mois et de 250 questions Cognix IA par jour',
 }
 
 export interface LockedFeatureInfo {
@@ -529,11 +529,13 @@ export interface LockedFeatureInfo {
 export function lockedFeatureInfo(feature: FeatureKey): LockedFeatureInfo {
   const required = requiredPlanFor(feature) as PaidPlan
   const label = PLAN_META[required].label
+  const subject = FEATURE_LABELS[feature]
+  const verb = subject.startsWith('Les ') ? 'sont disponibles' : 'est disponible'
   return {
     feature,
     requiredPlan: required,
-    title: `${FEATURE_LABELS[feature]} est disponible avec la formule ${label}.`,
-    body: `Passe à ${label} pour profiter de ${PLAN_PITCH[required]}.`,
+    title: `${subject} ${verb} avec la formule ${label}.`,
+    body: `Passe à ${label} pour ${PLAN_PITCH[required]}.`,
     price: `${formatFcfa(planPrice(required, 'month'))} / mois`,
   }
 }

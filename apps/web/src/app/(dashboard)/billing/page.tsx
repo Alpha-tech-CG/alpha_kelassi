@@ -72,7 +72,10 @@ function BillingContent() {
       })
       const json = await res.json().catch(() => null)
       if (!res.ok || !json?.data?.reference) {
-        setStatus({ tone: 'error', text: json?.error?.message ?? 'Le paiement n’a pas pu être lancé. Réessaie.' })
+        setStatus({
+          tone: 'error',
+          text: json?.error?.message ?? (res.status === 401 ? 'Ta session a expiré. Reconnecte-toi pour souscrire.' : 'Le paiement n’a pas pu être lancé. Réessaie.'),
+        })
         return
       }
 
@@ -204,10 +207,10 @@ function BillingContent() {
                   </p>
                 )}
 
-                <dl className="grid grid-cols-1 gap-1 text-sm mt-4 p-3 rounded-xl bg-gray-50">
-                  <div className="flex justify-between gap-2"><dt className="text-gray-600">Cognix IA</dt><dd className="font-bold text-gray-900">{AI_DAILY_LIMITS[plan]} questions / jour</dd></div>
-                  <div className="flex justify-between gap-2"><dt className="text-gray-600">Corrections tuteur</dt><dd className="font-bold text-gray-900">{TUTOR_CORRECTION_MONTHLY_LIMITS[plan] ? `${TUTOR_CORRECTION_MONTHLY_LIMITS[plan]} / mois` : 'Non incluses'}</dd></div>
-                  <div className="flex justify-between gap-2"><dt className="text-gray-600">Simulations</dt><dd className="font-bold text-gray-900 text-right">{modes.length ? modes.join(', ') : 'Aucune'}</dd></div>
+                <dl className="grid grid-cols-1 gap-2 text-sm mt-4 p-3 rounded-xl bg-gray-50">
+                  <div><dt className="text-xs text-gray-600">Cognix IA</dt><dd className="font-bold text-gray-900">{AI_DAILY_LIMITS[plan]} questions par jour</dd></div>
+                  <div><dt className="text-xs text-gray-600">Corrections par tuteur</dt><dd className="font-bold text-gray-900">{TUTOR_CORRECTION_MONTHLY_LIMITS[plan] ? `${TUTOR_CORRECTION_MONTHLY_LIMITS[plan]} par mois` : 'Non incluses'}</dd></div>
+                  <div><dt className="text-xs text-gray-600">Simulations</dt><dd className="font-bold text-gray-900">{modes.length ? modes.join(', ') : 'Aucune'}</dd></div>
                 </dl>
 
                 <ul className="mt-4 space-y-1.5 text-sm flex-1">
