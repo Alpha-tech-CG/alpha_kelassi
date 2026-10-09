@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation'
 import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
 import { MarkdownRenderer } from '@/components/markdown-renderer'
 import { adminFetch } from '@/lib/admin-fetch'
+import { SeriesCopiesPanel } from '@/app/admin/_components/series-copies'
 import { useUndoToast, restoreFromTrash } from '@/app/admin/_components/undo-toast'
 
 /**
@@ -145,6 +146,8 @@ export default function AdminChapterQuizPage() {
         Corrigé et noté automatiquement, avec chrono — contrairement au bloc « quiz » d'une leçon, qui n'est qu'un texte.
         L'énoncé et le corrigé acceptent le Markdown : formules $…$, tableaux et schémas. Les options de réponse restent du texte simple.
       </p>
+
+      <SeriesCopiesPanel chapterId={chapterId} />
 
       {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
 

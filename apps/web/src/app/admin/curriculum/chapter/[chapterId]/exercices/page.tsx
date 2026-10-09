@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
 import { adminFetch } from '@/lib/admin-fetch'
+import { SeriesCopiesPanel } from '@/app/admin/_components/series-copies'
 import { useUndoToast, restoreFromTrash } from '@/app/admin/_components/undo-toast'
 
 interface Exercise {
@@ -84,6 +85,8 @@ export default function AdminExercisesPage() {
       <Link href={`/admin/curriculum/chapter/${chapterId}`} className="text-sm text-gray-400 hover:text-gray-700">← Leçons du chapitre</Link>
       <h1 className="text-2xl font-black text-gray-900 mt-2 mb-1">Exercices & corrigés</h1>
       <p className="text-gray-500 text-sm mb-6">Énoncé et corrigé en Markdown (formules $…$, tableaux, schémas). Le corrigé se débloque côté élève après une tentative.</p>
+
+      <SeriesCopiesPanel chapterId={chapterId} />
 
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}

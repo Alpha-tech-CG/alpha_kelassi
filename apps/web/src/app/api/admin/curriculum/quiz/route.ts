@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
 import { isUuid } from '@/lib/query-validation'
+import { syncAfterChange } from '@/lib/chapter-copies'
 
 /**
  * QCM de fin de chapitre (console admin).
@@ -96,6 +97,7 @@ export async function POST(req: NextRequest) {
     console.error('[/api/admin/curriculum/quiz POST]', error)
     return NextResponse.json({ error: DB_ERROR }, { status: 500 })
   }
+  await syncAfterChange({ chapterId: b.chapter_id })
   return NextResponse.json({ data: { id: data.id } }, { status: 201 })
 }
 
@@ -127,6 +129,7 @@ export async function PATCH(req: NextRequest) {
     console.error('[/api/admin/curriculum/quiz PATCH]', error)
     return NextResponse.json({ error: DB_ERROR }, { status: 500 })
   }
+  await syncAfterChange({ quizId: id })
   return NextResponse.json({ data: { id } })
 }
 
@@ -146,5 +149,6 @@ export async function DELETE(req: NextRequest) {
     console.error('[/api/admin/curriculum/quiz DELETE]', error)
     return NextResponse.json({ error: DB_ERROR }, { status: 500 })
   }
+  await syncAfterChange({ quizId: id })
   return NextResponse.json({ data: { id } })
 }

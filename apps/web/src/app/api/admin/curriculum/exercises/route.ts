@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
 import { isUuid } from '@/lib/query-validation'
+import { syncAfterChange } from '@/lib/chapter-copies'
 
 /** GET /api/admin/curriculum/exercises?chapterId= — exercices d'un chapitre (+ corrigé). */
 export async function GET(req: NextRequest) {
@@ -58,5 +59,6 @@ export async function POST(req: NextRequest) {
     await supabaseAdmin.from('exercises').delete().eq('id', ex.id)   // rollback
     return NextResponse.json({ error: { code: 'DB_ERROR', message: sErr.message } }, { status: 500 })
   }
+  await syncAfterChange({ chapterId: b.chapter_id })
   return NextResponse.json({ data: { id: ex.id } }, { status: 201 })
 }

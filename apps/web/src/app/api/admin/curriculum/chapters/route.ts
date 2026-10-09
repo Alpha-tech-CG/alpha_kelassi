@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from('chapters')
-    .select('id, subject_id, series_id, title, description, order_index, lessons(count)')
+    .select('id, subject_id, series_id, title, description, order_index, source_chapter_id, lessons(count), copies:chapters!source_chapter_id(count)')
     .eq('subject_id', subjectId)
     .order('order_index')
 
@@ -31,6 +31,8 @@ export async function GET(req: NextRequest) {
     id: c['id'], subject_id: c['subject_id'], series_id: c['series_id'],
     title: c['title'], description: c['description'], order_index: c['order_index'],
     lesson_count: (c['lessons'] as { count: number }[] | null)?.[0]?.count ?? 0,
+    source_chapter_id: c['source_chapter_id'] ?? null,
+    copy_count: (c['copies'] as { count: number }[] | null)?.[0]?.count ?? 0,
   }))
   return NextResponse.json({ data: rows })
 }
@@ -64,5 +66,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
 
   }
-  return NextResponse.json({ data: { ...data, lesson_count: 0 } }, { status: 201 })
+  return NextResponse.json({ data: { ...data, lesson_count: 0, copy_count: 0 } }, { status: 201 })
 }

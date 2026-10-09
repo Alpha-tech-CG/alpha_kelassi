@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
 import { isUuid } from '@/lib/query-validation'
+import { syncAfterChange } from '@/lib/chapter-copies'
 
 /** GET /api/admin/curriculum/lessons?chapterId= — leçons d'un chapitre */
 export async function GET(req: NextRequest) {
@@ -62,5 +63,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
 
   }
+  await syncAfterChange({ chapterId: b.chapter_id })
   return NextResponse.json({ data }, { status: 201 })
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { syncAfterChange } from '@/lib/chapter-copies'
 
 const schema = z.object({
   title:       z.string().min(2).max(200),
@@ -37,6 +38,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
     }
   }
+  await syncAfterChange({ exerciseId: id })
   return NextResponse.json({ data: { ok: true } })
 }
 
@@ -52,5 +54,6 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     console.error('[/api/admin/curriculum/exercises/[id]]', error)
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
+  await syncAfterChange({ exerciseId: id })
   return NextResponse.json({ data: { ok: true } })
 }

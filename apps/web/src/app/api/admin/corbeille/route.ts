@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { syncAfterChange } from '@/lib/chapter-copies'
 
 /**
  * Corbeille de la console (migration 058).
@@ -69,6 +70,8 @@ export async function POST(req: NextRequest) {
   catch { return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Corps invalide' } }, { status: 400 }) }
 
   const table = b.kind === 'quiz' ? 'quizzes' : 'exercises'
+  // Chapitre concerné, lu avant une éventuelle suppression définitive.
+  const { data: owner } = await supabaseAdmin.from(table).select('chapter_id').eq('id', b.id).maybeSingle()
 
   if (b.action === 'restore') {
     const { error } = await supabaseAdmin.from(table).update({ deleted_at: null }).eq('id', b.id)
@@ -80,6 +83,7 @@ export async function POST(req: NextRequest) {
       console.error('[/api/admin/corbeille restore]', error)
       return NextResponse.json({ error: DB_ERROR }, { status: 500 })
     }
+    await syncAfterChange({ chapterId: owner?.chapter_id })
     return NextResponse.json({ data: { id: b.id, restored: true } })
   }
 
@@ -89,5 +93,6 @@ export async function POST(req: NextRequest) {
     console.error('[/api/admin/corbeille purge]', error)
     return NextResponse.json({ error: DB_ERROR }, { status: 500 })
   }
+  await syncAfterChange({ chapterId: owner?.chapter_id })
   return NextResponse.json({ data: { id: b.id, purged: true } })
 }

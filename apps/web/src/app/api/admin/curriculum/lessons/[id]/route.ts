@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { syncAfterChange } from '@/lib/chapter-copies'
 
 const schema = z.object({
   type:         z.enum(['cours', 'resume', 'fiche', 'quiz', 'video']),
@@ -27,6 +28,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     console.error('[/api/admin/curriculum/lessons/[id]]', error)
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
+  await syncAfterChange({ chapterId: data?.chapter_id })
   return NextResponse.json({ data })
 }
 
@@ -36,10 +38,12 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if ('error' in guard) return guard.error
   const { id } = await params
 
+  const { data: before } = await supabaseAdmin.from('lessons').select('chapter_id').eq('id', id).maybeSingle()
   const { error } = await supabaseAdmin.from('lessons').delete().eq('id', id)
   if (error) {
     console.error('[/api/admin/curriculum/lessons/[id]]', error)
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
+  await syncAfterChange({ chapterId: before?.chapter_id })
   return NextResponse.json({ data: { deleted: true } })
 }

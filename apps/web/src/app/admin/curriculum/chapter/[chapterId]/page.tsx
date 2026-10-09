@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
 import { adminFetch } from '@/lib/admin-fetch'
+import { SeriesCopiesPanel } from '@/app/admin/_components/series-copies'
 
 type LessonType = 'cours' | 'resume' | 'fiche' | 'quiz' | 'video'
 interface Lesson {
@@ -116,6 +117,8 @@ export default function AdminLessonsPage() {
         Blocs : cours, résumé, fiche de révision (Markdown, formules $…$, tableaux, schémas), quiz, vidéo.
         Le bloc « quiz » est un simple texte — pour un QCM corrigé et noté automatiquement, utilise « QCM de fin de chapitre ».
       </p>
+
+      <SeriesCopiesPanel chapterId={chapterId} />
 
       {/* Ajout */}
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">

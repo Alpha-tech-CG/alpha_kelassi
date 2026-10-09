@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { syncAfterChange } from '@/lib/chapter-copies'
 
 const schema = z.object({
   series_id:   z.string().uuid().nullish(),
@@ -24,6 +25,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     console.error('[/api/admin/curriculum/chapters/[id]]', error)
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
+  if (updates.title !== undefined || updates.description !== undefined) await syncAfterChange({ chapterId: id })
   return NextResponse.json({ data })
 }
 

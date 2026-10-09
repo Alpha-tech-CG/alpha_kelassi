@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { GoogleGenAI } from '@google/genai'
+import { syncAfterChange } from '@/lib/chapter-copies'
 
 let _genai: GoogleGenAI | null = null
 function getGenai(): GoogleGenAI {
@@ -69,5 +70,6 @@ ${source}`
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
 
+  await syncAfterChange({ chapterId: data?.chapter_id })
   return NextResponse.json({ data })
 }
