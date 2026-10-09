@@ -14,12 +14,18 @@ import { isUuid } from '@/lib/query-validation'
 
 const DB_ERROR = { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' }
 
-const schema = z.object({
-  quiz_id:       z.string().uuid(),
-  prompt:        z.string().min(3).max(1000),
+const fields = {
+  prompt:        z.string().min(3).max(4000),
   options:       z.array(z.string().min(1).max(300)).min(2).max(6),
   correct_index: z.number().int().min(0),
-  explanation:   z.string().max(600).nullish(),
+  explanation:   z.string().max(2000).nullish(),
+}
+
+const schema = z.object({
+  quiz_id:  z.string().uuid(),
+  ...fields,
+  /** Remise en place d'une question supprimée (« Annuler ») : sa position d'origine. */
+  position: z.number().int().min(1).optional(),
 }).refine((v) => v.correct_index < v.options.length, {
   message: 'correct_index doit désigner une option existante',
   path: ['correct_index'],
@@ -43,7 +49,13 @@ export async function POST(req: NextRequest) {
     .limit(1)
     .maybeSingle()
 
-  const position = (last?.position ?? 0) + 1
+  let position = (last?.position ?? 0) + 1
+  if (b.position) {
+    // Position d'origine encore libre ? On la reprend, sinon la question va à la fin.
+    const { data: taken } = await supabaseAdmin.from('quiz_questions').select('id')
+      .eq('quiz_id', b.quiz_id).eq('position', b.position).maybeSingle()
+    if (!taken) position = b.position
+  }
 
   const { data, error } = await supabaseAdmin
     .from('quiz_questions')
@@ -75,10 +87,39 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'id requis (UUID valide)' } }, { status: 400 })
   }
 
-  const { error } = await supabaseAdmin.from('quiz_questions').delete().eq('id', id)
+  // La question supprimée est renvoyée : la console s'en sert pour « Annuler ».
+  const { data: deleted, error } = await supabaseAdmin.from('quiz_questions').delete().eq('id', id)
+    .select('quiz_id, position, prompt, options, correct_index, explanation').maybeSingle()
   if (error) {
     console.error('[/api/admin/curriculum/quiz/questions DELETE]', error)
     return NextResponse.json({ error: DB_ERROR }, { status: 500 })
   }
-  return NextResponse.json({ data: { id } })
+  return NextResponse.json({ data: { id, deleted } })
+}
+
+const patchSchema = z.object({ id: z.string().uuid(), ...fields }).refine(
+  (v) => v.correct_index < v.options.length,
+  { message: 'correct_index doit désigner une option existante', path: ['correct_index'] },
+)
+
+/**
+ * PATCH /api/admin/curriculum/quiz/questions — modifie une question en place
+ * (même id : les réponses déjà données par les élèves restent rattachées).
+ */
+export async function PATCH(req: NextRequest) {
+  const guard = await requireAdmin()
+  if ('error' in guard) return guard.error
+
+  let b: z.infer<typeof patchSchema>
+  try { b = patchSchema.parse(await req.json()) }
+  catch { return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Corps invalide' } }, { status: 400 }) }
+
+  const { error } = await supabaseAdmin.from('quiz_questions').update({
+    prompt: b.prompt, options: b.options, correct_index: b.correct_index, explanation: b.explanation ?? null,
+  }).eq('id', b.id)
+  if (error) {
+    console.error('[/api/admin/curriculum/quiz/questions PATCH]', error)
+    return NextResponse.json({ error: DB_ERROR }, { status: 500 })
+  }
+  return NextResponse.json({ data: { id: b.id } })
 }

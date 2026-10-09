@@ -40,13 +40,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   return NextResponse.json({ data: { ok: true } })
 }
 
-/** DELETE /api/admin/curriculum/exercises/:id — supprime l'exercice (corrigé en cascade). */
+/** DELETE /api/admin/curriculum/exercises/:id — place l'exercice dans la corbeille (corrigé conservé, restaurable). */
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireAdmin()
   if ('error' in guard) return guard.error
   const { id } = await params
 
-  const { error } = await supabaseAdmin.from('exercises').delete().eq('id', id)
+  const { error } = await supabaseAdmin.from('exercises')
+    .update({ deleted_at: new Date().toISOString() }).eq('id', id).is('deleted_at', null)
   if (error) {
     console.error('[/api/admin/curriculum/exercises/[id]]', error)
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })

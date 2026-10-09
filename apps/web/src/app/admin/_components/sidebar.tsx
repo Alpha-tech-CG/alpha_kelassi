@@ -27,9 +27,11 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: '/admin/subjects',   label: 'Matières',        icon: '📘' },
       { href: '/admin/curriculum', label: 'Cours & chapitres', icon: '🎓', hint: 'Leçons, exercices, QCM' },
-      { href: '/admin/quiz',       label: 'QCM & annales',   icon: '✅' },
+      { href: '/admin/prepa',      label: 'Prépa — examens & TD', icon: '🏆', hint: 'Bac test, blanc, rouge, anciens bacs' },
+      { href: '/admin/quiz',       label: 'QCM (génération IA)', icon: '✅' },
       { href: '/admin/documents',  label: 'Documents (PDF)', icon: '📚' },
       { href: '/admin/videos',     label: 'Vidéos',          icon: '🎬' },
+      { href: '/admin/corbeille',  label: 'Corbeille',       icon: '🗑️', hint: 'Restaurer un élément supprimé' },
       { href: '/admin/exams',      label: 'Dates d\'examen', icon: '📅' },
     ],
   },

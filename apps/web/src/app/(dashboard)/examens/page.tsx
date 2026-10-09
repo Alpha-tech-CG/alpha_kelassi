@@ -1,226 +1,204 @@
-import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import { getEntitlements } from '@/lib/subscription/server'
+import { allowedExamModes, EXAM_MODE_LABELS, STUDY_LEVELS, LEVEL_META, isStudyLevel, type ExamMode } from '@alpha-kelassi/types'
+import { RAYONS, isRayon, rayonMeta, examName, type PrepaRayon } from '@/lib/prepa'
 import { ExamensHistorique } from './examens-historique'
-import {
-  Calculator, FlaskConical, Leaf, BookOpen, Globe, Brain,
-  Languages, TrendingUp, Monitor, Activity, BookMarked,
-  type LucideIcon,
-} from 'lucide-react'
 
-interface SearchParams { level?: string; subject?: string; year?: string; session?: string }
+/**
+ * Espace « Prépa » (remplace l'ancienne page « Examens d'État »).
+ *
+ * Trois étapes, portées par l'URL :
+ *   /examens                         → choix du rayon (Bac test, blanc, rouge, anciens sujets, TD)
+ *   /examens?rayon=bac_blanc         → choix de la matière
+ *   /examens?rayon=bac_blanc&subject → épreuves (ou chapitres de TD) de la matière
+ *
+ * Même organisation que l'application mobile (`apps/mobile/src/app/prepa`).
+ * Les épreuves sans question sont masquées (`question_total`, migration 059).
+ */
 
-const LEVEL_CONFIG: Record<string, {
-  label: string; color: string; bg: string; border: string
-  headerBg: string; dot: string; accent: string
-}> = {
-  bepc:  { label: 'BEPC',  color: 'text-blue-700',   bg: 'bg-blue-50',    border: 'border-blue-300',   headerBg: 'bg-blue-500',    dot: 'bg-blue-500',    accent: 'text-blue-600'   },
-  bac_a: { label: 'BAC A', color: 'text-amber-700',  bg: 'bg-amber-50',   border: 'border-amber-300',  headerBg: 'bg-amber-500',   dot: 'bg-amber-500',   accent: 'text-amber-600'  },
-  bac_c: { label: 'BAC C', color: 'text-violet-700', bg: 'bg-violet-50',  border: 'border-violet-300', headerBg: 'bg-violet-500',  dot: 'bg-violet-500',  accent: 'text-violet-600' },
-  bac_d: { label: 'BAC D', color: 'text-emerald-700',bg: 'bg-emerald-50', border: 'border-emerald-300',headerBg: 'bg-emerald-500', dot: 'bg-emerald-500', accent: 'text-emerald-600'},
-}
+interface SearchParams { rayon?: string; subject?: string; level?: string }
+interface Subject { id: string; name: string; level: string }
+interface Epreuve { id: string; title: string; year: number | null; time_limit_sec: number; is_premium: boolean; subject_id: string; question_total: number }
+interface Sujet { id: string; title: string; year: number | null; session: string | null; is_premium: boolean; corrige_url: string | null; subject_id: string }
+interface TdChapter { id: string; title: string; order_index: number; subject_id: string; count: number }
 
-function SubjectIcon({ name, className }: { name: string; className?: string }) {
-  const n = name.toLowerCase()
-  let Icon: LucideIcon = BookMarked
-  if (n.includes('math'))                                              Icon = Calculator
-  else if (n.includes('physique') || n.includes('chimie'))            Icon = FlaskConical
-  else if (n.includes('svt') || n.includes('biolog') || n.includes('vie')) Icon = Leaf
-  else if (n.includes('français') || n.includes('litt'))              Icon = BookOpen
-  else if (n.includes('histoire') || n.includes('géo'))               Icon = Globe
-  else if (n.includes('philo'))                                        Icon = Brain
-  else if (n.includes('anglais') || n.includes('langue'))             Icon = Languages
-  else if (n.includes('économ') || n.includes('gestion'))             Icon = TrendingUp
-  else if (n.includes('info'))                                         Icon = Monitor
-  else if (n.includes('sport') || n.includes('eps'))                  Icon = Activity
-  return <Icon className={className ?? 'w-8 h-8'} strokeWidth={1.5} />
-}
+const ALL_MODES: ExamMode[] = ['entrainement', 'bac_test', 'bac_blanc', 'bac_rouge']
+const card = 'flex items-center gap-4 bg-white rounded-2xl border border-gray-100 p-4 hover:border-emerald-300 hover:shadow-md transition-all'
 
-export default async function ExamensPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const { level, subject: subjectId, year, session } = await searchParams
+export default async function PrepaPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const sp = await searchParams
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login?next=/examens')
 
-  const [{ data: documents }, { data: subjects }] = await Promise.all([
-    supabase
-      .from('documents')
-      .select('id, title, level, year, session, is_premium, corrige_url, subject_id, subjects(id, name, level)')
-      .eq('type', 'examen')
-      .order('year', { ascending: false })
-      .order('created_at', { ascending: false })
-      .limit(200),
-    supabase.from('subjects').select('id, name, level').order('level').order('name'),
+  const [{ data: profile }, ent] = await Promise.all([
+    supabase.from('users').select('study_level_pref, track_type').eq('id', user.id).maybeSingle(),
+    getEntitlements(user.id),
   ])
+  const prof = profile as { study_level_pref?: string | null; track_type?: string | null } | null
+  // `?level=` permet de consulter une autre classe (admins, élèves sans profil).
+  const level = isStudyLevel(sp.level) ? sp.level : (prof?.study_level_pref ?? null)
+  const track = isStudyLevel(sp.level) ? null : (prof?.track_type ?? null)
+  const allowed = new Set<string>(allowedExamModes(ent.plan))
+  const rayon: PrepaRayon | null = isRayon(sp.rayon) ? sp.rayon : null
+  const lvlQuery = isStudyLevel(sp.level) ? `&level=${sp.level}` : ''
 
-  const allDocs     = documents ?? []
-  const allSubjects = subjects  ?? []
-
-  /* ── Vue 2 : liste des sujets d'une matière ──────────────────────────── */
-  if (subjectId) {
-    const currentSubject = allSubjects.find((s) => s.id === subjectId)
-    const lvl = currentSubject ? (LEVEL_CONFIG[currentSubject.level] ?? LEVEL_CONFIG['bepc']) : LEVEL_CONFIG['bepc']
-
-    let docs = allDocs.filter((d) => (d.subjects as { id: string } | null)?.id === subjectId)
-    if (year)    docs = docs.filter((d) => d.year?.toString() === year)
-    if (session) docs = docs.filter((d) => d.session === session)
-
-    const availableYears = [...new Set(
-      allDocs.filter((d) => (d.subjects as { id: string } | null)?.id === subjectId)
-             .map((d) => d.year?.toString()).filter(Boolean) as string[]
-    )].sort((a, b) => b.localeCompare(a))
-
-    // Regrouper par année
-    const byYear = docs.reduce<Record<string, typeof docs>>((acc, doc) => {
-      const y = doc.year?.toString() ?? 'N/A'
-      if (!acc[y]) acc[y] = []
-      acc[y].push(doc)
-      return acc
-    }, {})
-    const sortedYears = Object.keys(byYear).sort((a, b) => b.localeCompare(a))
-
+  /* ── Étape 1 : le rayon ────────────────────────────────────────────────── */
+  if (!rayon) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-
-        {/* Fil d'Ariane */}
-        <nav className="flex items-center gap-1.5 text-sm mb-6 flex-wrap">
-          <Link href="/examens" className="text-violet-600 hover:underline font-medium">Examens</Link>
-          {currentSubject && (
-            <>
-              <span className="text-gray-300">›</span>
-              <Link
-                href={`/examens?level=${currentSubject.level}`}
-                className={`font-semibold ${lvl.color} hover:underline`}
-              >
-                {lvl.label}
-              </Link>
-              <span className="text-gray-300">›</span>
-              <span className="text-gray-700 font-semibold text-xs uppercase tracking-wide">
-                {currentSubject.name}
-              </span>
-            </>
-          )}
-        </nav>
-
-        {/* En-tête matière */}
-        {currentSubject && (
-          <div className="flex items-center gap-4 mb-6">
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${lvl.bg} border-2 ${lvl.border} ${lvl.color}`}>
-              <SubjectIcon name={currentSubject.name} className="w-7 h-7" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-black text-gray-900">{currentSubject.name}</h1>
-              <p className="text-sm text-gray-400">{docs.length} sujet{docs.length !== 1 ? 's' : ''} · {lvl.label}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Filtres année + session */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {availableYears.slice(0, 8).map((y) => (
-            <Link
-              key={y}
-              href={`/examens?subject=${subjectId}${year === y ? '' : `&year=${y}`}${session ? `&session=${session}` : ''}`}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                year === y
-                  ? `${lvl.headerBg} text-white border-transparent`
-                  : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              {y}
-            </Link>
-          ))}
-          {[{ v: 'normale', l: '✅ Normale' }, { v: 'rattrapage', l: '🔄 Rattrapage' }].map(({ v, l }) => (
-            <Link
-              key={v}
-              href={`/examens?subject=${subjectId}${year ? `&year=${year}` : ''}${session === v ? '' : `&session=${v}`}`}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                session === v
-                  ? 'bg-gray-700 text-white border-transparent'
-                  : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              {l}
-            </Link>
-          ))}
-          {(year || session) && (
-            <Link
-              href={`/examens?subject=${subjectId}`}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium border border-red-200 text-red-500 bg-white hover:bg-red-50 transition-all"
-            >
-              ✕ Réinitialiser
-            </Link>
-          )}
+        <div className="mb-6">
+          {level && <span className="inline-block text-xs font-black text-white bg-red-600 rounded-full px-3 py-1 mb-2">{LEVEL_META[level as keyof typeof LEVEL_META]?.label ?? level}</span>}
+          <h1 className="text-3xl font-black text-gray-900">Prépa</h1>
+          <p className="text-gray-500 mt-1 text-sm">Choisis comment tu veux t&apos;entraîner pour le {examName(level)}, puis ta matière.</p>
         </div>
 
-        {/* Liste des sujets par année */}
-        {sortedYears.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-4xl mb-3">📭</p>
-            <p className="text-gray-500">Aucun sujet trouvé.</p>
-            <Link href="/examens" className="inline-block mt-4 text-sm font-semibold text-violet-600 hover:underline">
-              ← Retour aux matières
-            </Link>
-          </div>
+        {!level && <LevelPicker current={null} />}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          {RAYONS.map((r) => {
+            const m = rayonMeta(r, level)
+            const locked = !!m.mode && !allowed.has(m.mode)
+            const featured = r === 'bac_blanc'
+            return (
+              <Link key={r} href={`/examens?rayon=${r}${lvlQuery}`}
+                className={`group flex items-center gap-4 rounded-2xl border p-5 transition-all hover:shadow-lg hover:-translate-y-0.5 ${featured ? 'bg-emerald-700 border-emerald-700 text-white' : 'bg-white border-gray-100'}`}>
+                <span className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 ${featured ? 'bg-white/20' : 'bg-emerald-50'}`}>{m.emoji}</span>
+                <span className="flex-1 min-w-0">
+                  <span className={`block text-lg font-black ${featured ? 'text-white' : 'text-gray-900'}`}>{m.label}</span>
+                  <span className={`block text-sm ${featured ? 'text-emerald-50' : 'text-gray-500'}`}>{m.desc}</span>
+                </span>
+                {locked
+                  ? <span className={`text-xs font-bold rounded-full px-2.5 py-1 ${featured ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'}`}>🔒 {m.plan === 'pro' ? 'Pro' : 'Starter'}</span>
+                  : <span className={`text-2xl ${featured ? 'text-white' : 'text-emerald-600'}`}>›</span>}
+              </Link>
+            )
+          })}
+        </div>
+
+        <ExamensHistorique />
+      </div>
+    )
+  }
+
+  const meta = rayonMeta(rayon, level)
+
+  // Matières de la classe (et de la filière de l'élève).
+  let sq = supabase.from('subjects').select('id, name, level').order('name')
+  if (level) sq = sq.eq('level', level)
+  if (track) sq = sq.eq('track_type', track)
+  const { data: subs } = await sq
+  const subjects = (subs ?? []) as Subject[]
+  const ids = subjects.map((s) => s.id)
+
+  let epreuves: Epreuve[] = []
+  let sujets: Sujet[] = []
+  let chapters: TdChapter[] = []
+  if (ids.length > 0) {
+    if (rayon === 'td') {
+      const { data } = await supabase.from('exercises')
+        .select('id, chapters!inner(id, title, order_index, subject_id)')
+        .in('chapters.subject_id', ids).is('deleted_at', null)
+      const map = new Map<string, TdChapter>()
+      for (const row of (data ?? []) as unknown as { chapters: { id: string; title: string; order_index: number | null; subject_id: string } | null }[]) {
+        const c = row.chapters
+        if (!c) continue
+        const cur = map.get(c.id) ?? { id: c.id, title: c.title, order_index: c.order_index ?? 0, subject_id: c.subject_id, count: 0 }
+        cur.count += 1
+        map.set(c.id, cur)
+      }
+      chapters = [...map.values()].sort((a, b) => a.order_index - b.order_index)
+    } else {
+      const [{ data: qz }, docs] = await Promise.all([
+        supabase.from('quizzes')
+          .select('id, title, year, time_limit_sec, is_premium, subject_id, question_total')
+          .eq('is_exam', true).eq('exam_kind', rayon).is('deleted_at', null).in('subject_id', ids)
+          .order('year', { ascending: false, nullsFirst: false }),
+        rayon === 'ancien_bac'
+          ? supabase.from('documents').select('id, title, year, session, is_premium, corrige_url, subject_id')
+              .eq('type', 'examen').in('subject_id', ids).order('year', { ascending: false, nullsFirst: false })
+          : Promise.resolve({ data: [] }),
+      ])
+      epreuves = ((qz ?? []) as unknown as Epreuve[]).filter((e) => (e.question_total ?? 0) > 0)
+      sujets = (docs.data ?? []) as unknown as Sujet[]
+    }
+  }
+
+  const counts = new Map<string, number>()
+  const add = (sid: string, n = 1) => counts.set(sid, (counts.get(sid) ?? 0) + n)
+  if (rayon === 'td') chapters.forEach((c) => add(c.subject_id, c.count))
+  else { epreuves.forEach((e) => add(e.subject_id)); sujets.forEach((d) => add(d.subject_id)) }
+
+  const subject = subjects.find((s) => s.id === sp.subject) ?? null
+  const locked = !!meta.mode && !allowed.has(meta.mode)
+
+  const breadcrumb = (
+    <nav className="flex items-center gap-1.5 text-sm mb-6 flex-wrap">
+      <Link href={`/examens${lvlQuery ? `?${lvlQuery.slice(1)}` : ''}`} className="text-emerald-700 hover:underline font-medium">Prépa</Link>
+      <span className="text-gray-300">›</span>
+      {subject
+        ? <Link href={`/examens?rayon=${rayon}${lvlQuery}`} className="text-emerald-700 hover:underline font-medium">{meta.label}</Link>
+        : <span className="text-gray-700 font-semibold">{meta.label}</span>}
+      {subject && <><span className="text-gray-300">›</span><span className="text-gray-700 font-semibold">{subject.name}</span></>}
+    </nav>
+  )
+
+  /* ── Étape 2 : la matière ──────────────────────────────────────────────── */
+  if (!subject) {
+    const has = (id: string) => ((counts.get(id) ?? 0) > 0 ? 1 : 0)
+    const ordered = [...subjects].sort((a, b) => has(b.id) - has(a.id) || a.name.localeCompare(b.name, 'fr'))
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {breadcrumb}
+        <h1 className="text-2xl font-black text-gray-900">{meta.emoji} {meta.label} — choisis ta matière</h1>
+        <p className="text-gray-500 text-sm mt-1 mb-6">{meta.desc}</p>
+        {ordered.length === 0 ? (
+          <p className="text-center text-gray-400 py-16">Aucune matière pour ta classe pour l&apos;instant.</p>
         ) : (
-          <div className="space-y-8">
-            {sortedYears.map((yr) => (
-              <div key={yr}>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-sm font-black text-gray-600 bg-gray-100 px-3 py-1 rounded-lg">📅 {yr}</span>
-                  <span className="text-xs text-gray-400">{byYear[yr].length} sujet{byYear[yr].length !== 1 ? 's' : ''}</span>
-                </div>
-                <div className="space-y-2">
-                  {byYear[yr].map((doc, idx) => {
-                    const hasCorrige   = !!doc.corrige_url
-                    return (
-                      <Link
-                        key={doc.id}
-                        href={`/examens/${doc.id}`}
-                        className={`group flex items-center gap-4 bg-white rounded-2xl border border-gray-100 p-4 hover:border-violet-200 hover:shadow-md transition-all`}
-                      >
-                        {/* Numéro */}
-                        <div className={`flex-shrink-0 w-10 h-10 rounded-full border-2 ${lvl.border} bg-white flex items-center justify-center`}>
-                          <span className={`text-xs font-bold ${lvl.color}`}>{String(idx + 1).padStart(2, '0')}</span>
-                        </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {ordered.map((s) => {
+              const n = counts.get(s.id) ?? 0
+              return (
+                <Link key={s.id} href={`/examens?rayon=${rayon}&subject=${s.id}${lvlQuery}`} className={`${card} ${n === 0 ? 'opacity-60' : ''}`}>
+                  <span className="flex-1 min-w-0">
+                    <span className="block font-bold text-gray-900 truncate">{s.name}</span>
+                    <span className="block text-xs text-gray-400 mt-0.5">
+                      {n === 0 ? 'Bientôt disponible' : rayon === 'td' ? `${n} exercice${n > 1 ? 's' : ''}` : `${n} sujet${n > 1 ? 's' : ''}`}
+                    </span>
+                  </span>
+                  <span className="text-emerald-600 text-xl">›</span>
+                </Link>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    )
+  }
 
-                        {/* Contenu */}
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-gray-800 group-hover:text-violet-700 transition-colors text-sm leading-snug">
-                            {doc.title}
-                          </h3>
-                          <div className="flex flex-wrap items-center gap-2 mt-1">
-                            {doc.session && (
-                              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                                doc.session === 'rattrapage'
-                                  ? 'bg-orange-100 text-orange-700'
-                                  : 'bg-green-100 text-green-700'
-                              }`}>
-                                {doc.session === 'rattrapage' ? '🔄' : '✅'} {doc.session}
-                              </span>
-                            )}
-                            {hasCorrige && !doc.is_premium && (
-                              <span className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full border border-green-100 font-medium">
-                                ✅ Corrigé
-                              </span>
-                            )}
-                            {hasCorrige && doc.is_premium && (
-                              <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full border border-amber-100 font-semibold">
-                                ⭐ Corrigé abonnés
-                              </span>
-                            )}
-                            {!hasCorrige && (
-                              <span className="text-xs text-gray-300 border border-gray-100 px-2 py-0.5 rounded-full">
-                                Sans corrigé
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Flèche */}
-                        <span className="flex-shrink-0 text-sm font-bold text-violet-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                      </Link>
-                    )
-                  })}
-                </div>
-              </div>
+  /* ── Étape 3 : TD de la matière ────────────────────────────────────────── */
+  if (rayon === 'td') {
+    const list = chapters.filter((c) => c.subject_id === subject.id)
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        {breadcrumb}
+        <h1 className="text-2xl font-black text-gray-900 mb-1">TD — {subject.name}</h1>
+        <p className="text-gray-500 text-sm mb-6">Réponds d&apos;abord, puis ouvre le corrigé.</p>
+        {list.length === 0 ? (
+          <p className="text-center text-gray-400 py-16">Pas encore d&apos;exercices dans cette matière. Reviens bientôt !</p>
+        ) : (
+          <div className="space-y-2">
+            {list.map((c, i) => (
+              <Link key={c.id} href={`/examens/td/${c.id}`} className={card}>
+                <span className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-700 font-black flex items-center justify-center flex-shrink-0">{i + 1}</span>
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold text-gray-900">{c.title}</span>
+                  <span className="block text-xs text-gray-400 mt-0.5">{c.count} exercice{c.count > 1 ? 's' : ''} corrigé{c.count > 1 ? 's' : ''}</span>
+                </span>
+                <span className="text-emerald-600 text-xl">›</span>
+              </Link>
             ))}
           </div>
         )}
@@ -228,170 +206,95 @@ export default async function ExamensPage({ searchParams }: { searchParams: Prom
     )
   }
 
-  /* ── Vue 1 : grille des matières par niveau ───────────────────────────── */
-  const activeLevel = level ?? ''
-  const docsPerSubject = allDocs.reduce<Record<string, number>>((acc, d) => {
-    const sid = (d.subjects as { id: string } | null)?.id
-    if (sid) acc[sid] = (acc[sid] ?? 0) + 1
-    return acc
-  }, {})
-
-  const filteredSubjects = activeLevel
-    ? allSubjects.filter((s) => s.level === activeLevel)
-    : allSubjects
-
-  const levelTabs = [
-    { value: '',      label: 'Tous' },
-    { value: 'bepc',  label: 'BEPC' },
-    { value: 'bac_a', label: 'BAC A' },
-    { value: 'bac_c', label: 'BAC C' },
-    { value: 'bac_d', label: 'BAC D' },
-  ]
-
-  const sessionTabs = [
-    { value: '',           label: 'Toutes sessions' },
-    { value: 'normale',    label: '✅ Session normale' },
-    { value: 'rattrapage', label: '🔄 Rattrapage' },
-  ]
+  /* ── Étape 3 : épreuves de la matière ──────────────────────────────────── */
+  const list = epreuves.filter((e) => e.subject_id === subject.id)
+  const pdfs = sujets.filter((d) => d.subject_id === subject.id)
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      {breadcrumb}
+      <h1 className="text-2xl font-black text-gray-900 mb-1">{meta.emoji} {meta.label} — {subject.name}</h1>
+      <p className="text-gray-500 text-sm mb-6">{meta.desc}</p>
 
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-black text-gray-900">Examens d'État</h1>
-        <p className="text-gray-400 mt-1 text-sm">Congo Brazzaville · BEPC & BAC</p>
-      </div>
+      {locked && (
+        <Link href="/billing" className="block bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl px-4 py-3 text-sm font-semibold mb-4">
+          🔒 Le {meta.label} est inclus dans la formule {meta.plan === 'pro' ? 'Pro' : 'Starter'}. Voir les formules ›
+        </Link>
+      )}
 
-      {/* Historique récent */}
-      <ExamensHistorique />
+      {list.length === 0 && pdfs.length === 0 && (
+        <p className="text-center text-gray-400 py-16">Aucun sujet « {meta.label} » dans cette matière pour l&apos;instant. Reviens bientôt !</p>
+      )}
 
-      {/* Filtres */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-8 space-y-3">
-        {/* Niveau */}
-        <div className="flex flex-wrap gap-2">
-          {levelTabs.map((tab) => {
-            const cfg = LEVEL_CONFIG[tab.value]
+      <div className="space-y-2">
+        {list.map((ep) => {
+          const info = `${ep.year ? `Session ${ep.year} · ` : ''}${Math.round(ep.time_limit_sec / 60)} min · ${ep.question_total} question${ep.question_total > 1 ? 's' : ''}`
+          // Rayon à mode fixe : un seul bouton. Ancien sujet : un bouton par mode.
+          if (meta.mode) {
             return (
-              <Link
-                key={tab.value}
-                href={tab.value ? `/examens?level=${tab.value}` : '/examens'}
-                className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
-                  activeLevel === tab.value
-                    ? cfg
-                      ? `${cfg.headerBg} text-white border-transparent shadow-sm`
-                      : 'bg-gray-900 text-white border-transparent shadow-sm'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                {tab.label}
+              <Link key={ep.id} href={locked ? '/billing' : `/quiz/${ep.id}?mode=${meta.mode}`} className={card}>
+                <span className="text-2xl">{meta.emoji}</span>
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold text-gray-900">{ep.title} {ep.is_premium ? '⭐' : ''}</span>
+                  <span className="block text-xs text-gray-400 mt-0.5">{info}</span>
+                </span>
+                <span className="text-emerald-600 text-xl">{locked ? '🔒' : '›'}</span>
               </Link>
             )
-          })}
-        </div>
-
-        {/* Session */}
-        <div className="flex flex-wrap gap-2">
-          {sessionTabs.map((s) => (
-            <Link
-              key={s.value}
-              href={`/examens${s.value ? `?session=${s.value}${activeLevel ? `&level=${activeLevel}` : ''}` : activeLevel ? `?level=${activeLevel}` : ''}`}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                (session ?? '') === s.value
-                  ? 'bg-gray-700 text-white border-transparent shadow-sm'
-                  : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              {s.label}
-            </Link>
-          ))}
-        </div>
+          }
+          return (
+            <div key={ep.id} className="bg-white rounded-2xl border border-gray-100 p-4">
+              <p className="font-bold text-gray-900">{ep.title} {ep.is_premium ? '⭐' : ''}</p>
+              <p className="text-xs text-gray-400 mt-0.5 mb-3">{info}</p>
+              <div className="flex flex-wrap gap-2">
+                {ALL_MODES.map((m) => allowed.has(m) ? (
+                  <Link key={m} href={`/quiz/${ep.id}?mode=${m}`}
+                    className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 hover:bg-emerald-100">{EXAM_MODE_LABELS[m]}</Link>
+                ) : (
+                  <Link key={m} href="/billing" className="px-3 py-1.5 rounded-xl text-xs font-bold bg-gray-50 text-gray-400">🔒 {EXAM_MODE_LABELS[m]}</Link>
+                ))}
+              </div>
+            </div>
+          )
+        })}
       </div>
 
-      {/* Grille des matières */}
-      {filteredSubjects.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-4xl mb-3">📭</p>
-          <p className="text-gray-500">Aucune matière disponible.</p>
-        </div>
-      ) : activeLevel ? (
-        <ExamenSubjectGrid subjects={filteredSubjects} docsPerSubject={docsPerSubject} />
-      ) : (
-        <div className="space-y-10">
-          {(['bepc', 'bac_a', 'bac_c', 'bac_d'] as const).map((lvlKey) => {
-            const lvlSubjects = filteredSubjects.filter((s) => s.level === lvlKey)
-            if (lvlSubjects.length === 0) return null
-            const cfg = LEVEL_CONFIG[lvlKey]
-            return (
-              <div key={lvlKey}>
-                <div className="flex items-center gap-3 mb-4">
-                  <Link
-                    href={`/examens?level=${lvlKey}`}
-                    className={`px-3 py-1 rounded-lg text-sm font-black ${cfg.headerBg} text-white hover:opacity-90 transition-opacity`}
-                  >
-                    {cfg.label}
-                  </Link>
-                  <span className="text-xs text-gray-400">
-                    {lvlSubjects.reduce((s, sub) => s + (docsPerSubject[sub.id] ?? 0), 0)} sujets
+      {pdfs.length > 0 && (
+        <>
+          <h2 className="font-black text-gray-900 mt-8 mb-3">Sujets officiels (PDF)</h2>
+          <div className="space-y-2">
+            {pdfs.map((d) => (
+              <Link key={d.id} href={`/examens/${d.id}`} className={card}>
+                <span className="text-2xl">📄</span>
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold text-gray-900">{d.title} {d.is_premium ? '⭐' : ''}</span>
+                  <span className="block text-xs text-gray-400 mt-0.5">
+                    {[d.year, d.session].filter(Boolean).join(' · ') || 'Sujet'}{d.corrige_url ? ' · corrigé disponible' : ''}
                   </span>
-                </div>
-                <ExamenSubjectGrid subjects={lvlSubjects} docsPerSubject={docsPerSubject} />
-              </div>
-            )
-          })}
-        </div>
+                </span>
+                <span className="text-emerald-600 text-xl">›</span>
+              </Link>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
 }
 
-/* ── Grille de cartes matières (examens) ──────────────────────────────── */
-function ExamenSubjectGrid({
-  subjects,
-  docsPerSubject,
-}: {
-  subjects: { id: string; name: string; level: string }[]
-  docsPerSubject: Record<string, number>
-}) {
+/** Choix de la classe quand le profil n'en indique pas. */
+function LevelPicker({ current }: { current: string | null }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {subjects.map((s) => {
-        const cfg   = LEVEL_CONFIG[s.level] ?? LEVEL_CONFIG['bepc']
-        const count = docsPerSubject[s.id] ?? 0
-
-        return (
-          <Link
-            key={s.id}
-            href={`/examens?subject=${s.id}`}
-            className={`group relative flex flex-col rounded-2xl border-2 ${cfg.border} bg-white overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200`}
-          >
-            {/* Barre colorée */}
-            <div className={`${cfg.headerBg} px-3 py-2 flex items-center justify-between`}>
-              <span className="text-white font-black text-xs tracking-wider uppercase truncate">{cfg.label}</span>
-              <svg width="20" height="20" viewBox="0 0 20 20" className="flex-shrink-0">
-                <circle cx="10" cy="10" r="8" fill="white" fillOpacity="0.25" stroke="white" strokeWidth="2" />
-              </svg>
-            </div>
-
-            {/* Icône */}
-            <div className={`flex-1 flex items-center justify-center py-6 ${cfg.bg} ${cfg.color}`}>
-              <SubjectIcon name={s.name} className="w-10 h-10" />
-            </div>
-
-            {/* Nom */}
-            <div className="px-3 py-2.5 bg-white border-t border-gray-100 text-center">
-              <p className={`text-xs font-bold ${cfg.color} leading-tight line-clamp-2`}>
-                {s.name}
-              </p>
-              {count > 0 ? (
-                <p className="text-xs text-gray-400 mt-0.5">{count} sujet{count !== 1 ? 's' : ''}</p>
-              ) : (
-                <p className="text-xs text-gray-300 mt-0.5">Bientôt</p>
-              )}
-            </div>
+    <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-6">
+      <p className="text-sm font-semibold text-gray-700 mb-2">Choisis ta classe</p>
+      <div className="flex flex-wrap gap-2">
+        {STUDY_LEVELS.map((l) => (
+          <Link key={l} href={`/examens?level=${l}`}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${current === l ? 'bg-gray-900 text-white border-transparent' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}>
+            {LEVEL_META[l].label}
           </Link>
-        )
-      })}
+        ))}
+      </div>
     </div>
   )
 }

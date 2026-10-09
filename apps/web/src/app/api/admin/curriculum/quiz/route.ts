@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
     .from('quizzes')
     .select('id, title, description, time_limit_sec, is_premium, level, quiz_questions(id, position, prompt, options, correct_index, explanation)')
     .eq('chapter_id', chapterId)
+    .is('deleted_at', null)
     .maybeSingle()
 
   if (error) {
@@ -129,7 +130,7 @@ export async function PATCH(req: NextRequest) {
   return NextResponse.json({ data: { id } })
 }
 
-/** DELETE /api/admin/curriculum/quiz?id= — supprime le QCM et ses questions. */
+/** DELETE /api/admin/curriculum/quiz?id= — place le QCM dans la corbeille (restaurable). */
 export async function DELETE(req: NextRequest) {
   const guard = await requireAdmin()
   if ('error' in guard) return guard.error
@@ -139,7 +140,8 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'id requis (UUID valide)' } }, { status: 400 })
   }
 
-  const { error } = await supabaseAdmin.from('quizzes').delete().eq('id', id)
+  const { error } = await supabaseAdmin.from('quizzes')
+    .update({ deleted_at: new Date().toISOString() }).eq('id', id).is('deleted_at', null)
   if (error) {
     console.error('[/api/admin/curriculum/quiz DELETE]', error)
     return NextResponse.json({ error: DB_ERROR }, { status: 500 })

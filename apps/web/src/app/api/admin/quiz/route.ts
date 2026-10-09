@@ -9,6 +9,7 @@ export async function GET() {
   const { data, error } = await supabaseAdmin
     .from('quizzes')
     .select('id, title, level, is_premium, created_at, subjects(name), quiz_questions(count)')
+    .is('deleted_at', null)
     .order('created_at', { ascending: false })
     .limit(300)
 

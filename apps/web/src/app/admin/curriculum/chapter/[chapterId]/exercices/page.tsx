@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
 import { adminFetch } from '@/lib/admin-fetch'
+import { useUndoToast, restoreFromTrash } from '@/app/admin/_components/undo-toast'
 
 interface Exercise {
   id: string; title: string; statement: string; difficulty: number; is_premium: boolean; order_index: number
@@ -25,6 +26,7 @@ export default function AdminExercisesPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
+  const undo = useUndoToast()
 
   const [title, setTitle] = useState('')
   const [statement, setStatement] = useState('')
@@ -57,12 +59,20 @@ export default function AdminExercisesPage() {
     }
   }
 
+  // Suppression → corbeille (restaurable) ; « Annuler » reste proposé 10 s.
   async function del(id: string) {
-    if (!confirm('Supprimer cet exercice et son corrigé ?')) return
+    const ex = rows.find((x) => x.id === id)
     setBusy(id); setError(null)
     try {
       const res = await adminFetch(`/api/admin/curriculum/exercises/${id}`, { method: 'DELETE' })
-      if (res.ok) setRows((list) => list.filter((x) => x.id !== id))
+      if (res.ok) {
+        setRows((list) => list.filter((x) => x.id !== id))
+        undo.show(`« ${ex?.title ?? 'Exercice'} » placé dans la corbeille.`, async () => {
+          const err = await restoreFromTrash('exercise', id)
+          if (!err) await load()
+          return err
+        })
+      }
       else setError(res.error)
     } finally {
       setBusy(null)
@@ -122,6 +132,7 @@ export default function AdminExercisesPage() {
           ))}
         </div>
       )}
+      {undo.node}
     </div>
   )
 }

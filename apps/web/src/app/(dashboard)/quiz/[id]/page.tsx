@@ -50,8 +50,10 @@ function fmt(sec: number) {
   return `${m}:${s.toString().padStart(2, '0')}`
 }
 
-export default function QuizTakePage({ params }: { params: Promise<{ id: string }> }) {
+export default function QuizTakePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ mode?: string }> }) {
   const { id } = use(params)
+  // Mode demandé depuis l'espace Prépa (?mode=bac_blanc…), retenu seulement si la formule l'ouvre.
+  const requestedMode = use(searchParams).mode ?? null
   const [quiz, setQuiz] = useState<Quiz | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -63,6 +65,10 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
   const [result, setResult] = useState<Result | null>(null)
 
   const startRef = useRef<number>(Date.now())
+
+  const mode = quiz?.allowed_modes?.includes(requestedMode ?? '') ? requestedMode! : (quiz?.allowed_modes?.[0] ?? 'entrainement')
+  const timed = !(quiz?.is_exam && mode === 'entrainement')
+  const backHref = quiz?.is_exam ? '/examens' : '/quiz'
 
   useEffect(() => {
     fetch(`/api/quiz/${id}`, { credentials: 'include' })
@@ -88,8 +94,7 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
       method:      'POST',
       headers:     { 'Content-Type': 'application/json' },
       credentials: 'include',
-      // Annale : premier mode ouvert par la formule (Entraînement libre sur le web).
-      body:        JSON.stringify({ answers: payload, duration_sec, mode: quiz.allowed_modes?.[0] ?? 'entrainement' }),
+      body:        JSON.stringify({ answers: payload, duration_sec, mode }),
     })
     const json = await res.json().catch(() => null)
     const planErr = planErrorOf(json)
@@ -98,15 +103,15 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
     setResult(json.data)
     setSubmitting(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [quiz, submitting, result, answers, id])
+  }, [quiz, submitting, result, answers, id, mode])
 
   // Chrono
   useEffect(() => {
-    if (loading || result || !quiz || quiz.locked || quiz.questions.length === 0) return
+    if (loading || result || !quiz || quiz.locked || quiz.questions.length === 0 || !timed) return
     if (remaining <= 0) { submit(); return }
     const t = setTimeout(() => setRemaining((r) => r - 1), 1000)
     return () => clearTimeout(t)
-  }, [remaining, loading, result, quiz, submit])
+  }, [remaining, loading, result, quiz, submit, timed])
 
   if (loading) return <div className="p-6 text-gray-500">Chargement du QCM…</div>
   if (error && !quiz) return <div className="p-6 text-red-600">{error}</div>
@@ -117,7 +122,7 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
     return (
       <div className="max-w-2xl mx-auto p-4 sm:p-10">
         <p className="text-sm text-gray-500 mb-4 text-center">{quiz.title}</p>
-        <LockedFeature info={quiz.locked} backHref="/quiz" backLabel="← Retour aux QCM" />
+        <LockedFeature info={quiz.locked} backHref={backHref} backLabel={quiz.is_exam ? '← Retour à la Prépa' : '← Retour aux QCM'} />
       </div>
     )
   }
@@ -133,6 +138,9 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
           <Trophy className={`w-12 h-12 mx-auto mb-3 ${pct >= 50 ? 'text-amber-500' : 'text-gray-300'}`} />
           <h1 className="text-3xl font-black text-gray-900">{result.score}/{result.total}</h1>
           <p className="text-gray-500 mt-1">{pct}% de bonnes réponses</p>
+          {mode === 'bac_rouge' && result.penalized_score != null && (
+            <p className="text-sm text-red-600 mt-2 font-semibold">Note Bac rouge (−1 par erreur) : {result.penalized_score}/{result.total}</p>
+          )}
           {result.score > 0 && <p className="text-sm text-emerald-600 mt-2 font-semibold">+{result.score * 5} XP gagnés</p>}
         </div>
 
@@ -203,8 +211,8 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
           })}
         </div>
 
-        <Link href="/quiz" className="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl">
-          Retour aux QCM
+        <Link href={backHref} className="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl">
+          {quiz.is_exam ? 'Retour à la Prépa' : 'Retour aux QCM'}
         </Link>
       </div>
     )
@@ -220,9 +228,13 @@ export default function QuizTakePage({ params }: { params: Promise<{ id: string 
       {/* Barre chrono + progression */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm text-gray-500">Question {current + 1}/{quiz.questions.length}</span>
-        <span className={`flex items-center gap-1.5 font-mono font-bold ${lowTime ? 'text-red-600 animate-pulse' : 'text-gray-900'}`}>
-          <Clock className="w-4 h-4" /> {fmt(remaining)}
-        </span>
+        {timed ? (
+          <span className={`flex items-center gap-1.5 font-mono font-bold ${lowTime ? 'text-red-600 animate-pulse' : 'text-gray-900'}`}>
+            <Clock className="w-4 h-4" /> {fmt(remaining)}
+          </span>
+        ) : (
+          <span className="text-sm font-semibold text-emerald-700">🎯 Sans chrono</span>
+        )}
       </div>
       <div className="h-1.5 bg-gray-200 rounded-full mb-6 overflow-hidden">
         <div className="h-full bg-blue-600 transition-all" style={{ width: `${(answeredCount / quiz.questions.length) * 100}%` }} />

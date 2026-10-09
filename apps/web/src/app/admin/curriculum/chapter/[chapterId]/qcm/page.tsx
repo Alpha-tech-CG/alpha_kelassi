@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation'
 import { MarkdownEditor } from '@/app/admin/_components/markdown-editor'
 import { MarkdownRenderer } from '@/components/markdown-renderer'
 import { adminFetch } from '@/lib/admin-fetch'
+import { useUndoToast, restoreFromTrash } from '@/app/admin/_components/undo-toast'
 
 /**
  * QCM de fin de chapitre — console admin.
@@ -34,6 +35,7 @@ export default function AdminChapterQuizPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
+  const undo = useUndoToast()
 
   // Création du QCM
   const [title, setTitle] = useState('')
@@ -115,11 +117,18 @@ export default function AdminChapterQuizPage() {
 
   async function delQuiz() {
     if (!quiz) return
-    if (!confirm(`Supprimer le QCM « ${quiz.title} » et ses ${quiz.quiz_questions.length} question(s) ?`)) return
-    setBusy(quiz.id); setError(null)
+    const { id: quizId, title: quizTitle } = quiz
+    setBusy(quizId); setError(null)
     try {
-      const res = await adminFetch(`/api/admin/curriculum/quiz?id=${quiz.id}`, { method: 'DELETE' })
-      if (res.ok) { setQuiz(null); await load() }
+      const res = await adminFetch(`/api/admin/curriculum/quiz?id=${quizId}`, { method: 'DELETE' })
+      if (res.ok) {
+        setQuiz(null); await load()
+        undo.show(`QCM « ${quizTitle} » placé dans la corbeille.`, async () => {
+          const err = await restoreFromTrash('quiz', quizId)
+          if (!err) await load()
+          return err
+        })
+      }
       else setError(res.error)
     } finally {
       setBusy(null)
@@ -255,6 +264,7 @@ export default function AdminChapterQuizPage() {
           </div>
         </>
       )}
+      {undo.node}
     </div>
   )
 }

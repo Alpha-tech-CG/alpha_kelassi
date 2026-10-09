@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { adminFetch } from '@/lib/admin-fetch'
+import { useUndoToast, restoreFromTrash } from '@/app/admin/_components/undo-toast'
 
 interface Quiz { id: string; title: string; level: string; is_premium: boolean; subject_name: string | null; question_count: number }
 interface Doc { id: string; title: string; level: string }
@@ -17,6 +18,7 @@ export default function AdminQuizPage() {
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
+  const undo = useUndoToast()
 
   const load = useCallback(async () => {
     const [qz, { data: documents }] = await Promise.all([
@@ -50,9 +52,15 @@ export default function AdminQuizPage() {
   }
 
   async function remove(id: string) {
-    if (!confirm('Supprimer ce QCM ?')) return
-    await fetch(`/api/admin/quiz/${id}`, { method: 'DELETE', credentials: 'include' })
+    const qz = quizzes.find((x) => x.id === id)
+    const res = await adminFetch(`/api/admin/quiz/${id}`, { method: 'DELETE' })
+    if (!res.ok) { setMsg(res.error); return }
     setQuizzes((q) => q.filter((x) => x.id !== id))
+    undo.show(`« ${qz?.title ?? 'QCM'} » placé dans la corbeille.`, async () => {
+      const err = await restoreFromTrash('quiz', id)
+      if (!err) await load()
+      return err
+    })
   }
 
   return (
@@ -111,6 +119,7 @@ export default function AdminQuizPage() {
           ))}
         </div>
       )}
+      {undo.node}
     </div>
   )
 }

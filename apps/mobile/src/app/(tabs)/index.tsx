@@ -13,7 +13,7 @@ const ACTIONS = [
   { label: 'Correction', icon: 'notebook', route: '/correction' },
   { label: 'Groupe',     icon: 'group',    route: '/groupes' },
   { label: 'Classement', icon: 'crown',    route: '/classements' },
-  { label: 'Examens',    icon: 'document', route: '/(tabs)/examens' },
+  { label: 'Prépa',      icon: 'document', route: '/(tabs)/examens' },
   { label: 'Cards',      icon: 'card',     route: '/flashcards' },
 ]
 

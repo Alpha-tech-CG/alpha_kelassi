@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabaseAdmin
     .from('exercises')
     .select('id, chapter_id, title, statement, difficulty, is_premium, order_index, exercise_solutions(solution)')
-    .eq('chapter_id', chapterId).order('order_index')
+    .eq('chapter_id', chapterId).is('deleted_at', null).order('order_index')
   if (error) {
     console.error('[/api/admin/curriculum/exercises]', error)
     return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })

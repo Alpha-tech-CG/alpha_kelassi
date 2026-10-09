@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { GoogleGenAI } from '@google/genai'
 import { z } from 'zod'
+import { EXAM_KINDS } from '@/lib/prepa'
 
 export const maxDuration = 60
 
@@ -25,6 +26,8 @@ const schema = z.object({
   time_limit_sec: z.number().int().min(60).max(3600).default(600),
   is_exam:     z.boolean().default(false),          // annale (mode simulation)
   year:        z.number().int().min(1990).max(2100).nullish(),
+  exam_kind:   z.enum(EXAM_KINDS).nullish(),            // rayon Prépa (défaut : ancien bac si daté)
+  quiz_id:     z.string().uuid().nullish(),             // ajoute les questions à une épreuve existante
 })
 
 /** POST /api/admin/quiz/generate — génère un QCM IA depuis un document (admin) */
@@ -104,6 +107,20 @@ ${context}`
     return NextResponse.json({ error: { code: 'GENERATION_ERROR', message: 'Aucune question valide générée.' } }, { status: 500 })
   }
 
+  // Épreuve existante : on complète ses questions au lieu de créer un QCM.
+  if (body.quiz_id) {
+    const { data: last } = await supabaseAdmin.from('quiz_questions').select('position')
+      .eq('quiz_id', body.quiz_id).order('position', { ascending: false }).limit(1).maybeSingle()
+    const start = last?.position ?? 0
+    const { error: addErr } = await supabaseAdmin.from('quiz_questions').insert(valid.map((q, i) => ({
+      quiz_id: body.quiz_id!, position: start + i + 1, prompt: q.prompt, options: q.options,
+      correct_index: q.correct_index, explanation: q.explanation ?? null,
+    })))
+    if (addErr) return NextResponse.json({ error: { code: 'DB_ERROR', message: addErr.message } }, { status: 500 })
+    return NextResponse.json({ data: { quiz: { id: body.quiz_id }, question_count: valid.length } }, { status: 201 })
+  }
+
+  const year = body.year ?? (doc as { year?: number | null }).year ?? null
   const { data: quiz, error: quizErr } = await supabaseAdmin
     .from('quizzes')
     .insert({
@@ -114,7 +131,8 @@ ${context}`
       is_premium:     body.is_premium,
       time_limit_sec: body.time_limit_sec,
       is_exam:        body.is_exam,
-      year:           body.year ?? (doc as { year?: number | null }).year ?? null,
+      year,
+      exam_kind:      body.is_exam ? (body.exam_kind ?? (year ? 'ancien_bac' : 'bac_test')) : null,
     })
     .select()
     .single()

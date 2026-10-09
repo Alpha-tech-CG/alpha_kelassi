@@ -23,7 +23,7 @@ interface NavItem { href: string; label: string; Icon: LucideIcon }
 const NAV: NavItem[] = [
   { href: '/dashboard',  label: 'Accueil',     Icon: Home       },
   { href: '/cours',      label: 'Cours',       Icon: BookOpen   },
-  { href: '/examens',    label: 'Examens',     Icon: FileText   },
+  { href: '/examens',    label: 'Prépa',       Icon: FileText   },
   { href: '/videos',     label: 'Vidéos',      Icon: PlayCircle },
   { href: '/tuteur',     label: 'Kelassi IA',  Icon: Bot        },
   { href: '/flashcards', label: 'Flashcards',  Icon: Layers     },
