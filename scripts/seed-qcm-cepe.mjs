@@ -109,7 +109,8 @@ for (const fichier of fichiers) {
     const [quiz] = await sb('/quizzes', {
       method: 'POST',
       body: JSON.stringify({
-        subject_id: data.subject_id,
+        // Une fiche peut regrouper plusieurs matières : chaque chapitre porte alors son `subject_id`.
+        subject_id: chapitre.subject_id ?? data.subject_id,
         chapter_id: chapitre.chapter_id,
         title: titre,
         description: chapitre.description ?? null,

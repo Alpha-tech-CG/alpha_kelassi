@@ -82,6 +82,8 @@ const reponses = new Map() // `semaine` -> texte du bloc de corrigés
   for (const ligne of source.split('\n')) {
     const mSemaine = ligne.match(/^## Semaine (\d+)/)
     const mTitre = ligne.match(/^### (.+)$/)
+    // Un titre de mois ou d'annexe ferme la section en cours.
+    if (/^# [^#]/.test(ligne)) { pousser(); courante = null; continue }
     if (mSemaine) { pousser(); courante = null; semaine = Number(mSemaine[1]); continue }
     if (mTitre) { pousser(); courante = { semaine, titre: mTitre[1].trim(), lignes: [] }; continue }
     if (courante) courante.lignes.push(ligne)
