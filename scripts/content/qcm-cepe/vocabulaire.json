@@ -1,0 +1,118 @@
+{
+ "matiere": "Vocabulaire",
+ "subject_id": "d81a1b47-8075-43bf-9e9e-4fca02feb4a6",
+ "chapitres": [
+  {
+   "chapter_id": "5678935c-aed5-41a6-b81d-2dff7c91979a",
+   "titre": "La famille de mots — Le radical",
+   "questions": [
+    { "prompt": "Qu'est-ce que le radical d'un mot ?", "options": ["La partie centrale invariable qui porte le sens principal", "La dernière lettre du mot", "Un mot de sens contraire", "Un mot de même prononciation"], "correct_index": 0, "explanation": "Le radical reste invariable et porte le sens principal : il sert de base à toute la famille." },
+    { "prompt": "Qu'est-ce qu'une famille de mots ?", "options": ["Des mots formés à partir du même radical", "Des mots de même longueur", "Des mots qui riment ensemble", "Des mots de sens contraire"], "correct_index": 0, "explanation": "Les mots d'une même famille partagent le même radical." },
+    { "prompt": "Quel mot appartient à la famille de « terre » ?", "options": ["terrain", "timide", "tendre", "tirer"], "correct_index": 0, "explanation": "Famille du radical terr- : terre, terrain, terrestre, déterrer." },
+    { "prompt": "Quel mot appartient à la famille du radical « port- » ?", "options": ["transport", "portrait", "porte-monnaie du voisin", "poésie"], "correct_index": 0, "explanation": "Porter, porteur, transport, exportation, importation partagent le radical port-." },
+    { "prompt": "Quel mot appartient à la famille de « fleur » ?", "options": ["fleuriste", "fleuve", "flèche", "flamme"], "correct_index": 0, "explanation": "Fleur, fleurir, fleuriste, fleuri, défleuri sont de la même famille." },
+    { "prompt": "Quel mot appartient à la famille du radical « mer- » ?", "options": ["maritime", "merci", "mercredi", "mériter"], "correct_index": 0, "explanation": "Mer, marin, maritime, sous-marin, débarquer appartiennent à cette famille." },
+    { "prompt": "Quel mot n'appartient PAS à la famille de « terre » ?", "options": ["terrestre", "déterrer", "terrarium", "timide"], "correct_index": 3, "explanation": "« Timide » n'a pas le radical terr- : il n'est pas de cette famille." },
+    { "prompt": "Quel est le radical du mot « porteur » ?", "options": ["port-", "eur", "por", "teur"], "correct_index": 0, "explanation": "Le radical est port-, auquel s'ajoute le suffixe -eur." },
+    { "prompt": "Le mot « sous-marin » appartient à la famille de :", "options": ["mer", "sous-sol", "marcher", "marché"], "correct_index": 0, "explanation": "Sous-marin vient du radical mer- (marin, maritime)." },
+    { "prompt": "Que devient le radical quand on forme les mots d'une même famille ?", "options": ["Il reste invariable", "Il change à chaque fois", "Il disparaît", "Il se place à la fin"], "correct_index": 0, "explanation": "Le radical reste invariable : ce sont les préfixes et suffixes qui changent." }
+   ]
+  },
+  {
+   "chapter_id": "f6b23cf3-d2e8-4ca7-8439-f57b98a50601",
+   "titre": "Le préfixe",
+   "questions": [
+    { "prompt": "Où se place un préfixe ?", "options": ["Avant le radical", "Après le radical", "Au milieu du mot", "À la fin de la phrase"], "correct_index": 0, "explanation": "Le préfixe est placé avant le radical et modifie le sens du mot." },
+    { "prompt": "Que marquent les préfixes « in- » et « im- » ?", "options": ["La négation, le contraire", "La répétition", "L'avant", "Le dessous"], "correct_index": 0, "explanation": "Incertain, impossible, imprévu : in-/im- marquent le contraire." },
+    { "prompt": "Que marque le préfixe « dé- » ?", "options": ["Le contraire ou la séparation", "La répétition", "L'au-delà", "Le diminutif"], "correct_index": 0, "explanation": "Défaire, désaccord, débrancher : dé-/des- marquent le contraire ou la séparation." },
+    { "prompt": "Que marque le préfixe « re- » ?", "options": ["La répétition", "La négation", "L'avant", "Le dessus"], "correct_index": 0, "explanation": "Refaire, relire, recommencer : re-/ré- marquent la répétition." },
+    { "prompt": "Que marque le préfixe « pré- » ?", "options": ["Avant", "Après", "Contre", "Sous"], "correct_index": 0, "explanation": "Prévoir, préparer, préfixe : pré- veut dire avant." },
+    { "prompt": "Que marque le préfixe « trans- » ?", "options": ["À travers, au-delà", "En dessous", "En plus", "Le contraire"], "correct_index": 0, "explanation": "Transporter, transmettre : trans- signifie à travers, au-delà." },
+    { "prompt": "Que marque le préfixe « sous- » ?", "options": ["En dessous", "Au-dessus", "Avant", "La répétition"], "correct_index": 0, "explanation": "Sous-marin, sous-sol : sous- signifie en dessous." },
+    { "prompt": "Que marque le préfixe « sur- » ?", "options": ["Au-dessus, en plus", "En dessous", "Le contraire", "L'avant"], "correct_index": 0, "explanation": "Surpopulation, surcharger : sur- signifie au-dessus, en plus." },
+    { "prompt": "Quel est le contraire de « possible », formé avec un préfixe ?", "options": ["impossible", "repossible", "surpossible", "prépossible"], "correct_index": 0, "explanation": "Le préfixe im- forme le contraire : impossible." },
+    { "prompt": "Que veut dire « refaire » ?", "options": ["Faire à nouveau", "Ne pas faire", "Faire avant", "Faire en dessous"], "correct_index": 0, "explanation": "Le préfixe re- marque la répétition : refaire, c'est faire à nouveau." }
+   ]
+  },
+  {
+   "chapter_id": "c668126d-5a9d-4d2b-859b-d6e6b294505b",
+   "titre": "Le suffixe",
+   "questions": [
+    { "prompt": "Où se place un suffixe ?", "options": ["Après le radical", "Avant le radical", "Au début du mot", "Entre deux mots"], "correct_index": 0, "explanation": "Le suffixe se place après le radical et crée un nouveau mot." },
+    { "prompt": "Que marquent les suffixes « -tion » et « -sion » ?", "options": ["Une action ou un résultat", "Un petit objet", "Une possibilité", "Une personne"], "correct_index": 0, "explanation": "Définition, révision, production : -tion/-sion marquent l'action ou le résultat." },
+    { "prompt": "Que marque le suffixe « -eur » dans « chanteur » ?", "options": ["La personne qui fait l'action", "Un petit objet", "Une possibilité", "Un contraire"], "correct_index": 0, "explanation": "Chanteur, danseur, coiffeur : -eur/-euse désigne la personne qui fait l'action." },
+    { "prompt": "Que marque le suffixe « -iste » ?", "options": ["Un spécialiste", "Une action", "Un diminutif", "Une négation"], "correct_index": 0, "explanation": "Dentiste, fleuriste, pianiste : -iste désigne un spécialiste." },
+    { "prompt": "Que marque le suffixe « -ette » ?", "options": ["Un diminutif, quelque chose de petit", "Une grande taille", "Une action", "Une personne"], "correct_index": 0, "explanation": "Maisonnette, fourchette : -ette est un diminutif." },
+    { "prompt": "Que marquent les suffixes « -able » et « -ible » ?", "options": ["La possibilité", "La répétition", "La négation", "Le métier"], "correct_index": 0, "explanation": "Mangeable, lisible : ces suffixes expriment une possibilité." },
+    { "prompt": "Quel mot est formé avec le suffixe « -age » ?", "options": ["jardinage", "jardinier", "jardinette", "jardiniste"], "correct_index": 0, "explanation": "Voyage, jardinage, passage : -age marque l'action ou le résultat." },
+    { "prompt": "Quel mot obtient-on avec « chanter » et le suffixe « -eur » ?", "options": ["chanteur", "chantage", "chantiste", "chantable"], "correct_index": 0, "explanation": "Le radical chant- et le suffixe -eur donnent chanteur." },
+    { "prompt": "Avec quel suffixe le mot « dentiste » est-il formé ?", "options": ["-iste", "-age", "-ette", "-tion"], "correct_index": 0, "explanation": "Dentiste est formé avec le suffixe -iste, qui désigne un spécialiste." },
+    { "prompt": "Que veut dire « maisonnette » ?", "options": ["Une petite maison", "Une très grande maison", "Celui qui construit des maisons", "Un quartier"], "correct_index": 0, "explanation": "Le suffixe -ette est un diminutif : une maisonnette est une petite maison." }
+   ]
+  },
+  {
+   "chapter_id": "60b2d793-dc86-4ffe-9515-5820409a9542",
+   "titre": "Les synonymes",
+   "questions": [
+    { "prompt": "Que sont des synonymes ?", "options": ["Des mots de même sens ou de sens très proche", "Des mots de sens contraire", "Des mots qui se prononcent pareil", "Des mots de la même famille"], "correct_index": 0, "explanation": "Les synonymes ont le même sens ou un sens très proche, mais s'écrivent différemment." },
+    { "prompt": "Quel mot est synonyme de « content » ?", "options": ["joyeux", "triste", "fatigué", "lourd"], "correct_index": 0, "explanation": "Content : joyeux, heureux, satisfait." },
+    { "prompt": "Quel mot est synonyme de « courageux » ?", "options": ["brave", "peureux", "paresseux", "faible"], "correct_index": 0, "explanation": "Courageux : brave, vaillant, intrépide." },
+    { "prompt": "Quel mot est synonyme de « maison » ?", "options": ["demeure", "jardin", "village", "rue"], "correct_index": 0, "explanation": "Maison : demeure, habitation, logement." },
+    { "prompt": "Quel mot est synonyme de « rapide » ?", "options": ["prompt", "lent", "lourd", "calme"], "correct_index": 0, "explanation": "Rapide : vite, prompt, leste." },
+    { "prompt": "Quel mot est synonyme de « triste » ?", "options": ["malheureux", "joyeux", "content", "satisfait"], "correct_index": 0, "explanation": "Triste : malheureux, mélancolique." },
+    { "prompt": "Quel mot est synonyme de « beau » ?", "options": ["magnifique", "laid", "sale", "vieux"], "correct_index": 0, "explanation": "Beau : joli, magnifique, splendide." },
+    { "prompt": "Quel mot est synonyme de « parler » ?", "options": ["raconter", "écouter", "écrire", "lire"], "correct_index": 0, "explanation": "Parler : dire, raconter, s'exprimer." },
+    { "prompt": "À quoi servent les synonymes dans une rédaction ?", "options": ["À éviter les répétitions et enrichir le vocabulaire", "À allonger le texte inutilement", "À compliquer les phrases", "À remplacer la ponctuation"], "correct_index": 0, "explanation": "Les synonymes évitent les répétitions et enrichissent le vocabulaire." },
+    { "prompt": "Quel mot n'est PAS un synonyme de « beau » ?", "options": ["laid", "joli", "magnifique", "splendide"], "correct_index": 0, "explanation": "« Laid » est le contraire de beau : c'est un antonyme, pas un synonyme." }
+   ]
+  },
+  {
+   "chapter_id": "6ccdc000-e915-41fa-ae78-4d7513221231",
+   "titre": "Les antonymes (contraires)",
+   "questions": [
+    { "prompt": "Que sont des antonymes ?", "options": ["Des mots de sens opposé", "Des mots de même sens", "Des mots de la même famille", "Des mots qui se prononcent pareil"], "correct_index": 0, "explanation": "Les antonymes, ou contraires, ont un sens opposé." },
+    { "prompt": "Quel est le contraire de « grand » ?", "options": ["petit", "large", "haut", "long"], "correct_index": 0, "explanation": "Grand a pour contraire petit." },
+    { "prompt": "Quel est le contraire de « chaud » ?", "options": ["froid", "tiède", "brûlant", "humide"], "correct_index": 0, "explanation": "Chaud a pour contraire froid." },
+    { "prompt": "Quel est le contraire de « entrer » ?", "options": ["sortir", "rester", "marcher", "courir"], "correct_index": 0, "explanation": "Entrer a pour contraire sortir." },
+    { "prompt": "Quel est le contraire de « monter » ?", "options": ["descendre", "sauter", "tomber", "glisser"], "correct_index": 0, "explanation": "Monter a pour contraire descendre." },
+    { "prompt": "Quel est le contraire de « difficile » ?", "options": ["facile", "pénible", "compliqué", "dur"], "correct_index": 0, "explanation": "Difficile a pour contraire facile." },
+    { "prompt": "Quel est le contraire de « courageux » ?", "options": ["lâche", "brave", "vaillant", "fort"], "correct_index": 0, "explanation": "Courageux a pour contraires lâche et peureux." },
+    { "prompt": "Quel est le contraire de « riche » ?", "options": ["pauvre", "généreux", "avare", "économe"], "correct_index": 0, "explanation": "Riche a pour contraire pauvre." },
+    { "prompt": "Quel est le contraire de « travail » ?", "options": ["repos", "effort", "métier", "devoir"], "correct_index": 0, "explanation": "Travail a pour contraire repos." },
+    { "prompt": "Quel est le contraire de « jour » ?", "options": ["nuit", "matin", "soir", "midi"], "correct_index": 0, "explanation": "Jour a pour contraire nuit." }
+   ]
+  },
+  {
+   "chapter_id": "a5ce0aa6-80b4-414d-8814-f9536e66f2ac",
+   "titre": "Les homonymes",
+   "questions": [
+    { "prompt": "Que sont des homonymes ?", "options": ["Des mots qui se prononcent pareil mais s'écrivent ou signifient autrement", "Des mots de sens contraire", "Des mots de même sens", "Des mots de la même famille"], "correct_index": 0, "explanation": "Les homonymes ont le même son, mais une orthographe et/ou un sens différents." },
+    { "prompt": "Quel mot désigne la maman ?", "options": ["mère", "maire", "mer", "mer-"], "correct_index": 0, "explanation": "La mère est la maman ; le maire dirige la ville ; la mer est l'étendue d'eau." },
+    { "prompt": "Complète : « Je bois un … d'eau. »", "options": ["verre", "vert", "vers", "ver"], "correct_index": 0, "explanation": "Le verre est le récipient ; vert est la couleur ; le ver est l'animal ; vers indique la direction." },
+    { "prompt": "Complète : « La … est calme aujourd'hui. » (l'étendue d'eau)", "options": ["mer", "mère", "maire", "mairie"], "correct_index": 0, "explanation": "La mer désigne l'étendue d'eau salée." },
+    { "prompt": "Quel homonyme désigne un animal qui rampe dans la terre ?", "options": ["ver", "verre", "vert", "vers"], "correct_index": 0, "explanation": "Le ver est l'animal ; le verre est le récipient." },
+    { "prompt": "Quel homonyme désigne une couleur ?", "options": ["vert", "verre", "ver", "vers"], "correct_index": 0, "explanation": "Vert est la couleur." },
+    { "prompt": "Quel mot désigne une leçon donnée par le maître ?", "options": ["cours", "cour", "court", "courre"], "correct_index": 0, "explanation": "Le cours est la leçon ; la cour est l'espace de l'école ; court est un adjectif." },
+    { "prompt": "Quel homonyme désigne le nombre 100 ?", "options": ["cent", "sang", "sans", "sens"], "correct_index": 0, "explanation": "Cent est le nombre ; le sang est le liquide vital ; sans marque le manque ; le sens est la signification." },
+    { "prompt": "Quel homonyme désigne une hauteur ?", "options": ["haut", "eau", "os", "ô"], "correct_index": 0, "explanation": "Haut désigne la hauteur ; l'eau est le liquide ; l'os appartient au squelette." },
+    { "prompt": "Quel mot désigne le son qui sort de la bouche ?", "options": ["voix", "voir", "vois", "voie"], "correct_index": 0, "explanation": "La voix est le son de la bouche ; voir, c'est regarder." }
+   ]
+  },
+  {
+   "chapter_id": "9344fb79-2d0c-46c8-a8d5-4475a1e30469",
+   "titre": "Le sens propre et le sens figuré",
+   "questions": [
+    { "prompt": "Qu'est-ce que le sens propre d'un mot ?", "options": ["Son sens premier, concret, que l'on peut voir ou toucher", "Son sens imagé", "Son contraire", "Son synonyme"], "correct_index": 0, "explanation": "Le sens propre est le sens premier et concret du mot." },
+    { "prompt": "Qu'est-ce que le sens figuré ?", "options": ["Un sens imagé, plus abstrait", "Le sens du dictionnaire uniquement", "Le sens contraire", "Le sens d'un homonyme"], "correct_index": 0, "explanation": "Le sens figuré est imagé, obtenu par extension ou métaphore." },
+    { "prompt": "« Le pied de la montagne » est employé :", "options": ["Au sens figuré", "Au sens propre", "Comme un synonyme", "Comme un antonyme"], "correct_index": 0, "explanation": "Le pied de la montagne désigne sa base : c'est un sens figuré." },
+    { "prompt": "« La tête du classement » est employée :", "options": ["Au sens figuré", "Au sens propre", "Comme un homonyme", "Comme un préfixe"], "correct_index": 0, "explanation": "La tête du classement, c'est la première place : sens figuré." },
+    { "prompt": "« Le bras de cet homme » est employé :", "options": ["Au sens propre", "Au sens figuré", "Comme un antonyme", "Comme un suffixe"], "correct_index": 0, "explanation": "Il s'agit de la partie du corps : c'est le sens propre." },
+    { "prompt": "« Les dents d'un peigne » sont employées :", "options": ["Au sens figuré", "Au sens propre", "Comme un synonyme", "Comme un radical"], "correct_index": 0, "explanation": "Les dents du peigne sont ses pointes : sens figuré." },
+    { "prompt": "Que veut dire « avoir du cœur » ?", "options": ["Être généreux", "Avoir mal à la poitrine", "Courir vite", "Être en colère"], "correct_index": 0, "explanation": "Au sens figuré, avoir du cœur signifie être généreux." },
+    { "prompt": "« La bouche d'un tunnel » désigne :", "options": ["L'entrée du tunnel", "La bouche d'une personne", "Le milieu du tunnel", "La sortie de secours"], "correct_index": 0, "explanation": "Au sens figuré, la bouche du tunnel est son entrée." },
+    { "prompt": "« La patte du chien » est employée :", "options": ["Au sens propre", "Au sens figuré", "Comme un homonyme", "Comme un antonyme"], "correct_index": 0, "explanation": "C'est la partie du corps de l'animal : sens propre." },
+    { "prompt": "« La patte d'une chaise » est employée :", "options": ["Au sens figuré", "Au sens propre", "Comme un synonyme", "Comme un préfixe"], "correct_index": 0, "explanation": "La chaise n'a pas de patte au sens concret : l'expression est imagée." }
+   ]
+  }
+ ]
+}

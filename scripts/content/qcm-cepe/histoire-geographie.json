@@ -1,0 +1,70 @@
+{
+ "matiere": "Histoire-Géographie",
+ "subject_id": "39c4caac-6a89-455d-ac4d-65ee0bb42f83",
+ "chapitres": [
+  {
+   "chapter_id": "196a55ee-ffea-40cd-a019-b003272f0e9a",
+   "titre": "La colonisation et les grands explorateurs",
+   "questions": [
+    { "prompt": "Qui a fondé Brazzaville ?", "options": ["Pierre Savorgnan de Brazza", "Stanley", "Le roi Makoko", "Victor Schœlcher"], "correct_index": 0, "explanation": "Brazzaville a été fondée par l'explorateur Pierre Savorgnan de Brazza." },
+    { "prompt": "À quelle date Brazza a-t-il signé le traité avec le roi Makoko ?", "options": ["Le 10 septembre 1880", "Le 3 octobre 1880", "Le 28 novembre 1958", "Le 1er juin 1934"], "correct_index": 0, "explanation": "Le traité avec le roi Makoko a été signé le 10 septembre 1880." },
+    { "prompt": "De quel peuple le roi Makoko était-il le chef ?", "options": ["Les Bateke", "Les Bakongo", "Les Pygmées", "Les Vili"], "correct_index": 0, "explanation": "Le roi Makoko était le chef des Bateke." },
+    { "prompt": "Quand Brazzaville a-t-elle été fondée ?", "options": ["Le 10 septembre 1880", "Le 3 octobre 1880", "Le 15 août 1960", "Le 27 avril 1848"], "correct_index": 1, "explanation": "Brazzaville a été fondée le 3 octobre 1880, quelques semaines après le traité." },
+    { "prompt": "Quel était le but de la conférence de Berlin de 1884-1885 ?", "options": ["Partager l'Afrique en colonies", "Libérer les colonies", "Construire le chemin de fer", "Créer l'ONU"], "correct_index": 0, "explanation": "Les puissances européennes s'y réunirent pour se partager l'Afrique en colonies." },
+    { "prompt": "Quelles villes le chemin de fer Congo-Océan relie-t-il ?", "options": ["Brazzaville et Pointe-Noire", "Brazzaville et Dolisie", "Pointe-Noire et Ouesso", "Djambala et Ewo"], "correct_index": 0, "explanation": "Le CFCO relie Brazzaville à Pointe-Noire." },
+    { "prompt": "En quelle année les travaux du CFCO ont-ils commencé ?", "options": ["En 1921", "En 1934", "En 1880", "En 1958"], "correct_index": 0, "explanation": "Les travaux ont débuté en 1921 et se sont achevés en 1934." },
+    { "prompt": "Quelle est la longueur du chemin de fer Congo-Océan ?", "options": ["515 km", "342 km", "4 640 km", "1 000 km"], "correct_index": 0, "explanation": "Le CFCO mesure 515 km ; il a été inauguré le 1er juin 1934." },
+    { "prompt": "Quels chefs congolais ont résisté à la pénétration coloniale ?", "options": ["Bouéta Mbongo et Mabiala Ma Nganga", "Brazza et Stanley", "Makoko et Schœlcher", "Les députés de l'AEF"], "correct_index": 0, "explanation": "Bouéta Mbongo et Mabiala Ma Nganga sont des figures de la résistance." },
+    { "prompt": "Quel explorateur a parcouru l'Afrique centrale du côté du fleuve Congo, comme Brazza ?", "options": ["Stanley", "Schœlcher", "Makoko", "Mabiala Ma Nganga"], "correct_index": 0, "explanation": "Stanley a lui aussi exploré l'Afrique centrale, le long du fleuve Congo." }
+   ]
+  },
+  {
+   "chapter_id": "b7a9aa8d-56c5-470f-9a50-d1471ad00878",
+   "titre": "L'indépendance et les institutions internationales",
+   "questions": [
+    { "prompt": "Que veut dire AEF ?", "options": ["Afrique Équatoriale Française", "Afrique de l'Est Française", "Association des États Francophones", "Afrique Entière Fédérée"], "correct_index": 0, "explanation": "L'AEF est l'Afrique Équatoriale Française." },
+    { "prompt": "Quels territoires l'AEF regroupait-elle ?", "options": ["Le Congo, le Gabon, le Tchad et la RCA", "Le Congo, le Cameroun, le Mali et le Niger", "Le Congo et la RDC seulement", "Le Congo, l'Angola et la Zambie"], "correct_index": 0, "explanation": "L'AEF regroupait quatre territoires : Congo, Gabon, Tchad et RCA (Oubangui-Chari)." },
+    { "prompt": "Quand la République du Congo a-t-elle été proclamée ?", "options": ["Le 28 novembre 1958", "Le 15 août 1960", "Le 10 juin 1991", "Le 3 octobre 1880"], "correct_index": 0, "explanation": "La République du Congo a été proclamée le 28 novembre 1958." },
+    { "prompt": "Quand la Conférence nationale souveraine s'est-elle achevée ?", "options": ["Le 10 juin 1991", "Le 28 novembre 1958", "Le 1er juin 1934", "Le 27 avril 1848"], "correct_index": 0, "explanation": "La Conférence nationale souveraine s'est achevée le 10 juin 1991." },
+    { "prompt": "Que signifie ONU ?", "options": ["Organisation des Nations Unies", "Organisation Nationale Unique", "Office des Nations Unifiées", "Organisation du Nord Uni"], "correct_index": 0, "explanation": "ONU : Organisation des Nations Unies." },
+    { "prompt": "Que signifie CEMAC ?", "options": ["Communauté Économique et Monétaire de l'Afrique Centrale", "Comité des États Membres d'Afrique Centrale", "Conseil Économique Mondial d'Afrique Centrale", "Commission des Échanges Maritimes d'Afrique Centrale"], "correct_index": 0, "explanation": "CEMAC : Communauté Économique et Monétaire de l'Afrique Centrale." },
+    { "prompt": "Le Congo est-il membre de la CEMAC ?", "options": ["Oui", "Non", "Seulement depuis 2020", "Il en a été exclu"], "correct_index": 0, "explanation": "Le Congo est membre de la CEMAC." },
+    { "prompt": "Quel nom portait la RCA à l'époque de l'AEF ?", "options": ["L'Oubangui-Chari", "Le Moyen-Congo", "Le Tanganyika", "Le Dahomey"], "correct_index": 0, "explanation": "La RCA s'appelait alors Oubangui-Chari." },
+    { "prompt": "Quel homme est associé à l'abolition de l'esclavage en 1848 ?", "options": ["Victor Schœlcher", "Pierre Savorgnan de Brazza", "Stanley", "Le roi Makoko"], "correct_index": 0, "explanation": "Victor Schœlcher est associé à l'abolition de l'esclavage, le 27 avril 1848." },
+    { "prompt": "En quelle année l'esclavage a-t-il été aboli selon le programme ?", "options": ["En 1848", "En 1880", "En 1934", "En 1958"], "correct_index": 0, "explanation": "L'abolition date de 1848, le 27 avril." }
+   ]
+  },
+  {
+   "chapter_id": "06e26887-5d6b-4eb6-b9dc-b2927c22ee3b",
+   "titre": "Le Congo : fleuve, relief et départements",
+   "questions": [
+    { "prompt": "Quelle est la longueur du fleuve Congo ?", "options": ["4 640 km", "515 km", "342 km", "1 000 km"], "correct_index": 0, "explanation": "Le fleuve Congo mesure 4 640 km." },
+    { "prompt": "Où le fleuve Congo prend-il sa source ?", "options": ["En RDC, dans la région des Grands Lacs", "Au Gabon", "Au Tchad", "En Angola"], "correct_index": 0, "explanation": "Il prend sa source en RDC, dans la région des Grands Lacs." },
+    { "prompt": "Quel est le débit moyen du fleuve Congo ?", "options": ["Environ 41 000 m³/s", "Environ 4 100 m³/s", "Environ 410 m³/s", "Environ 410 000 m³/s"], "correct_index": 0, "explanation": "Son débit moyen est d'environ 41 000 m³ par seconde." },
+    { "prompt": "Quels sont deux affluents importants du fleuve Congo ?", "options": ["La Sangha et l'Oubangui", "Le Niari et le Kouilou", "La Léfini et la Nkéni", "Le Niger et le Nil"], "correct_index": 0, "explanation": "La Sangha et l'Oubangui sont deux affluents importants." },
+    { "prompt": "Quelle est la superficie du Congo ?", "options": ["342 000 km²", "242 000 km²", "542 000 km²", "42 000 km²"], "correct_index": 0, "explanation": "La superficie du Congo est de 342 000 km²." },
+    { "prompt": "Quel est le chef-lieu du département des Plateaux ?", "options": ["Djambala", "Dolisie", "Ewo", "Owando"], "correct_index": 0, "explanation": "Djambala est le chef-lieu des Plateaux." },
+    { "prompt": "De quel département Dolisie est-elle le chef-lieu ?", "options": ["Le Niari", "La Cuvette-Ouest", "Les Plateaux", "Le Kouilou"], "correct_index": 0, "explanation": "Dolisie est le chef-lieu du Niari." },
+    { "prompt": "De quel département Ewo est-elle le chef-lieu ?", "options": ["La Cuvette-Ouest", "Le Niari", "Les Plateaux", "La Likouala"], "correct_index": 0, "explanation": "Ewo est le chef-lieu de la Cuvette-Ouest." },
+    { "prompt": "Par quelle ville passe l'équateur au Congo ?", "options": ["Makoua", "Djambala", "Dolisie", "Pointe-Noire"], "correct_index": 0, "explanation": "L'équateur passe par Makoua." },
+    { "prompt": "Quel est le rôle principal de Pointe-Noire ?", "options": ["C'est un port d'importation et d'exportation", "C'est la capitale politique", "C'est le siège du Sénat", "C'est la source du fleuve"], "correct_index": 0, "explanation": "Pointe-Noire est un port maritime important pour l'importation et l'exportation." }
+   ]
+  },
+  {
+   "chapter_id": "1e070c3e-29d7-4cd6-bbc8-068bc82d4e7a",
+   "titre": "Les premiers habitants et royaumes traditionnels",
+   "questions": [
+    { "prompt": "Qui compte parmi les premiers habitants des forêts du Congo ?", "options": ["Les Pygmées", "Les Européens", "Les Bantous seulement", "Les Arabes"], "correct_index": 0, "explanation": "Les Pygmées sont parmi les premiers habitants des forêts." },
+    { "prompt": "Qui est arrivé plus tard et a développé l'agriculture et le commerce ?", "options": ["Les Bantous", "Les Pygmées", "Les Portugais", "Les Téké uniquement"], "correct_index": 0, "explanation": "Les Bantous sont arrivés après les Pygmées et ont développé l'agriculture et le commerce." },
+    { "prompt": "Où se situait le royaume Kongo ?", "options": ["À l'ouest", "À l'est", "Au nord", "Au centre du Tchad"], "correct_index": 0, "explanation": "Le royaume Kongo se situait à l'ouest." },
+    { "prompt": "Quel royaume traditionnel occupait la région de Brazzaville ?", "options": ["Le royaume Téké", "Le royaume Kongo", "Le royaume du Mali", "Le royaume Ashanti"], "correct_index": 0, "explanation": "Le royaume Téké occupait la région de Brazzaville." },
+    { "prompt": "Autour de qui les royaumes traditionnels étaient-ils organisés ?", "options": ["Autour d'un chef", "Autour d'un président élu", "Autour d'une assemblée de députés", "Sans aucune organisation"], "correct_index": 0, "explanation": "Les royaumes s'organisaient autour d'un chef, avec le commerce et l'agriculture." },
+    { "prompt": "Où se situe le Congo ?", "options": ["En Afrique centrale, sur l'équateur", "En Afrique de l'Ouest", "En Afrique du Nord", "En Afrique australe"], "correct_index": 0, "explanation": "Le Congo est en Afrique centrale et l'équateur le traverse." },
+    { "prompt": "Quels pays sont voisins du Congo ?", "options": ["Le Gabon, le Cameroun, la RCA, la RDC et l'Angola", "Le Mali, le Niger et le Tchad", "Le Kenya et la Tanzanie", "Le Nigeria et le Ghana"], "correct_index": 0, "explanation": "Les voisins sont le Gabon, le Cameroun, la RCA, la RDC et l'Angola." },
+    { "prompt": "Quelle grande région naturelle correspond à la forêt ?", "options": ["Le bassin congolais", "Les plateaux", "La côte", "Les savanes"], "correct_index": 0, "explanation": "Le bassin congolais est la grande région forestière du pays." },
+    { "prompt": "Quelle ville se trouve sur la côte ?", "options": ["Pointe-Noire", "Brazzaville", "Djambala", "Makoua"], "correct_index": 0, "explanation": "Pointe-Noire est la ville de la côte ; Brazzaville est sur les plateaux." },
+    { "prompt": "Quelles activités les Bantous ont-ils développées ?", "options": ["L'agriculture et le commerce", "La navigation maritime lointaine", "L'industrie du pétrole", "L'élevage de rennes"], "correct_index": 0, "explanation": "Les Bantous ont développé l'agriculture et le commerce." }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "matiere": "Éducation civique & santé",
+ "subject_id": "ebf2b1d5-19b1-4169-b837-63990b5c9423",
+ "chapitres": [
+  {
+   "chapter_id": "0159140b-7c24-419d-8ea8-cbf9ab180a50",
+   "titre": "Les institutions et symboles de la République",
+   "questions": [
+    { "prompt": "De qui le Sénat est-il composé ?", "options": ["De sénateurs", "De députés", "De ministres", "De maires"], "correct_index": 0, "explanation": "Le Sénat est composé de sénateurs." },
+    { "prompt": "De qui l'Assemblée nationale est-elle composée ?", "options": ["De sénateurs", "De députés", "De ministres", "De préfets"], "correct_index": 1, "explanation": "L'Assemblée nationale est composée de députés." },
+    { "prompt": "De qui le Gouvernement est-il composé ?", "options": ["De ministres", "De députés", "De sénateurs", "De juges"], "correct_index": 0, "explanation": "Le Gouvernement est composé de ministres." },
+    { "prompt": "Comment s'appelle l'hymne national du Congo ?", "options": ["La Congolaise", "La Marseillaise", "L'Indépendance", "Le Chant du fleuve"], "correct_index": 0, "explanation": "L'hymne national de la République du Congo est « La Congolaise »." },
+    { "prompt": "Quelles sont les couleurs du drapeau congolais ?", "options": ["Vert, jaune, rouge", "Bleu, blanc, rouge", "Vert, blanc, rouge", "Jaune, noir, rouge"], "correct_index": 0, "explanation": "Le drapeau de la République du Congo est tricolore : vert, jaune et rouge." },
+    { "prompt": "Quelle est la forme du drapeau congolais ?", "options": ["Rectangulaire", "Carrée", "Triangulaire", "Ronde"], "correct_index": 0, "explanation": "Le drapeau est rectangulaire et tricolore." },
+    { "prompt": "Combien la République du Congo a-t-elle de symboles principaux ?", "options": ["Deux", "Trois", "Quatre", "Cinq"], "correct_index": 1, "explanation": "La République du Congo a trois symboles principaux, dont le drapeau et l'hymne national." },
+    { "prompt": "Dans quelle institution siègent les sénateurs ?", "options": ["Au Sénat", "À l'Assemblée nationale", "Au Gouvernement", "À la mairie"], "correct_index": 0, "explanation": "Les sénateurs siègent au Sénat." },
+    { "prompt": "Lequel de ces éléments n'est pas une institution, mais un symbole ?", "options": ["Le Sénat", "L'Assemblée nationale", "Le Gouvernement", "Le drapeau"], "correct_index": 3, "explanation": "Le drapeau est un symbole de la République ; le Sénat, l'Assemblée nationale et le Gouvernement sont des institutions." },
+    { "prompt": "Le drapeau et l'hymne national sont :", "options": ["Des symboles de la République", "Des institutions de la République", "Des lois de la République", "Des départements du pays"], "correct_index": 0, "explanation": "Ce sont les symboles de la République." }
+   ]
+  },
+  {
+   "chapter_id": "1ff033c1-6547-432b-b4b6-20cb639059a4",
+   "titre": "L'hygiène et la prévention des maladies",
+   "questions": [
+    { "prompt": "Quel est l'élément fondamental de l'hygiène ?", "options": ["La propreté", "La vitesse", "Le silence", "La richesse"], "correct_index": 0, "explanation": "La propreté est la base de l'hygiène." },
+    { "prompt": "Comment rendre potable une eau sale ?", "options": ["En la filtrant ou en la faisant bouillir", "En la laissant au soleil une heure", "En y ajoutant du sucre", "En la remuant longtemps"], "correct_index": 0, "explanation": "On filtre l'eau ou on la fait bouillir pour la rendre propre à boire." },
+    { "prompt": "Quel insecte transmet le paludisme ?", "options": ["La mouche", "L'anophèle", "Le cafard", "La fourmi"], "correct_index": 1, "explanation": "Le paludisme est transmis par l'anophèle, un moustique." },
+    { "prompt": "Quel est le meilleur moyen de se protéger du paludisme la nuit ?", "options": ["Dormir sous une moustiquaire imprégnée", "Laisser la fenêtre ouverte", "Dormir près d'un feu", "Boire beaucoup d'eau"], "correct_index": 0, "explanation": "La moustiquaire imprégnée protège des piqûres pendant le sommeil." },
+    { "prompt": "Pourquoi faut-il enterrer les boîtes vides qui traînent dans la cour ?", "options": ["Parce qu'elles retiennent l'eau où pondent les moustiques", "Parce qu'elles attirent les oiseaux", "Parce qu'elles rouillent trop vite", "Parce qu'elles sont trop bruyantes"], "correct_index": 0, "explanation": "L'eau stagnante des boîtes vides sert de lieu de ponte aux moustiques." },
+    { "prompt": "Quels sont deux parasites de la peau à connaître ?", "options": ["Les poux et les chiques", "Les moustiques et les mouches", "Les vers de terre et les escargots", "Les puces d'eau et les abeilles"], "correct_index": 0, "explanation": "Les poux et les chiques sont des parasites de la peau." },
+    { "prompt": "Quelles sont les deux voies principales de transmission du sida ?", "options": ["La voie sexuelle et la transfusion sanguine", "L'air et l'eau", "La poignée de main et le partage du repas", "La piqûre de moustique et la toux"], "correct_index": 0, "explanation": "Le sida se transmet par voie sexuelle et par transfusion sanguine." },
+    { "prompt": "Quand faut-il absolument se laver les mains ?", "options": ["Avant de manger et après les toilettes", "Seulement le matin", "Une fois par semaine", "Seulement quand elles sont noires"], "correct_index": 0, "explanation": "On se lave les mains avant de manger et après être allé aux toilettes." },
+    { "prompt": "Quelles maladies une bonne hygiène permet-elle d'éviter ?", "options": ["Les diarrhées, les infections de la peau et les caries", "Les fractures", "La myopie", "Les maux de dos"], "correct_index": 0, "explanation": "Une bonne hygiène protège des diarrhées, des infections de la peau et des caries." },
+    { "prompt": "Comment prend-on soin de ses dents ?", "options": ["En les brossant régulièrement", "En mangeant beaucoup de sucre", "En les rinçant une fois par mois", "En évitant de les montrer"], "correct_index": 0, "explanation": "Le brossage régulier des dents fait partie de l'hygiène du corps." }
+   ]
+  },
+  {
+   "chapter_id": "b2c19746-9fcd-4e27-bfeb-39faef77ce91",
+   "titre": "Les dangers de l'alcool, du tabac et de l'automédication",
+   "questions": [
+    { "prompt": "Quel est l'un des méfaits de l'alcool sur le comportement ?", "options": ["La perte de contrôle de soi", "Une meilleure mémoire", "Une plus grande politesse", "Une vue plus nette"], "correct_index": 0, "explanation": "L'alcool fait perdre le contrôle de soi." },
+    { "prompt": "Quelle conséquence l'alcool a-t-il sur l'argent de la famille ?", "options": ["Il entraîne un déséquilibre financier", "Il fait économiser de l'argent", "Il n'a aucune conséquence", "Il augmente les revenus"], "correct_index": 0, "explanation": "La consommation d'alcool entraîne un déséquilibre financier." },
+    { "prompt": "Que provoque l'alcool sur le corps ?", "options": ["L'affaiblissement de l'organisme", "Le renforcement des muscles", "Une croissance plus rapide", "Une meilleure digestion"], "correct_index": 0, "explanation": "L'alcool affaiblit l'organisme." },
+    { "prompt": "Le tabac est classé parmi :", "options": ["Les excitants", "Les aliments", "Les médicaments", "Les boissons"], "correct_index": 0, "explanation": "Le tabac est un excitant." },
+    { "prompt": "Quel est l'effet du tabac sur la santé ?", "options": ["Il ruine la santé", "Il protège les poumons", "Il soigne la toux", "Il n'a aucun effet"], "correct_index": 0, "explanation": "La consommation de tabac ruine la santé." },
+    { "prompt": "Qu'est-ce que l'automédication ?", "options": ["Prendre des médicaments sans consulter un médecin", "Se soigner à l'hôpital", "Suivre l'ordonnance d'un médecin", "Prendre soin de son hygiène"], "correct_index": 0, "explanation": "L'automédication, c'est prendre des médicaments sans avis médical." },
+    { "prompt": "Quels sont les deux dangers principaux de l'automédication ?", "options": ["Le sous-dosage et le surdosage", "La fatigue et la faim", "Le froid et la chaleur", "Le bruit et la poussière"], "correct_index": 0, "explanation": "Les deux dangers sont le sous-dosage et le surdosage." },
+    { "prompt": "Que faut-il faire avant de prendre un médicament ?", "options": ["Consulter un médecin", "Demander à un ami", "Doubler la dose pour guérir vite", "Le prendre à jeun sans avis"], "correct_index": 0, "explanation": "Il faut toujours consulter un médecin : c'est lui qui prescrit la bonne dose." },
+    { "prompt": "Prendre une dose de médicament trop forte s'appelle :", "options": ["Un surdosage", "Un sous-dosage", "Une prescription", "Une vaccination"], "correct_index": 0, "explanation": "Une dose trop forte est un surdosage ; une dose trop faible est un sous-dosage." },
+    { "prompt": "Parmi les méfaits de l'alcool, lequel concerne le comportement en société ?", "options": ["L'impolitesse", "La bonne humeur", "La générosité", "La patience"], "correct_index": 0, "explanation": "L'impolitesse fait partie des méfaits de l'alcool cités dans le cours." }
+   ]
+  },
+  {
+   "chapter_id": "6889688b-d892-4ecb-b7b2-5d7ee3820f97",
+   "titre": "La famille et l'école",
+   "questions": [
+    { "prompt": "Quels sont les rôles de la famille ?", "options": ["Éduquer, protéger et aider", "Punir uniquement", "Faire travailler les enfants seulement", "Organiser des fêtes"], "correct_index": 0, "explanation": "La famille éduque, protège, aide et travaille ensemble." },
+    { "prompt": "Qui fait partie de la famille ?", "options": ["Les parents, les enfants, les grands-parents, les oncles et les cousins", "Seulement le père et la mère", "Seulement les enfants", "Les voisins du quartier"], "correct_index": 0, "explanation": "La famille réunit parents, enfants, grands-parents, oncles, tantes et cousins." },
+    { "prompt": "Qu'est-ce que la ponctualité à l'école ?", "options": ["Arriver à l'heure", "Arriver quand on veut", "Partir avant la fin des cours", "Rester silencieux"], "correct_index": 0, "explanation": "Être ponctuel, c'est arriver à l'heure : c'est une règle de vie à l'école." },
+    { "prompt": "Comment doit-on se comporter avec les maîtres et les camarades ?", "options": ["Avec respect", "Avec moquerie", "En les ignorant", "En criant"], "correct_index": 0, "explanation": "Le respect des maîtres et des camarades est une règle de vie à l'école." },
+    { "prompt": "Quelle règle concerne l'état de la classe et des affaires ?", "options": ["La propreté", "La rapidité", "Le silence absolu", "La compétition"], "correct_index": 0, "explanation": "La propreté fait partie des règles de vie à l'école." },
+    { "prompt": "Quelle est la principale activité de l'élève à l'école ?", "options": ["Le travail", "Le jeu toute la journée", "Le sommeil", "Le bavardage"], "correct_index": 0, "explanation": "Le travail est au cœur des règles de l'école." },
+    { "prompt": "Complète : « La famille éduque, protège et … »", "options": ["aide", "punit", "oublie", "vend"], "correct_index": 0, "explanation": "La famille éduque, protège et aide ses membres." },
+    { "prompt": "Un élève qui arrive tous les jours en retard ne respecte pas :", "options": ["La ponctualité", "La propreté", "Le travail", "Le respect des biens"], "correct_index": 0, "explanation": "Arriver en retard, c'est manquer à la règle de ponctualité." },
+    { "prompt": "Lequel de ces comportements n'est pas une règle de l'école ?", "options": ["Se moquer de ses camarades", "Être ponctuel", "Respecter le maître", "Garder la classe propre"], "correct_index": 0, "explanation": "Se moquer des autres est contraire au respect des camarades." },
+    { "prompt": "Quelles activités la famille partage-t-elle ?", "options": ["L'entraide et le travail", "La tricherie", "L'absence de règles", "L'isolement de chacun"], "correct_index": 0, "explanation": "L'entraide et le travail font partie des rôles de la famille." }
+   ]
+  }
+ ]
+}

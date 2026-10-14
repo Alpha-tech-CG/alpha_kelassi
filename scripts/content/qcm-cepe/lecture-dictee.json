@@ -1,0 +1,38 @@
+{
+ "matiere": "Lecture & Dictée",
+ "subject_id": "dcc96d92-8a61-4423-982c-0c79ddfbbf42",
+ "chapitres": [
+  {
+   "chapter_id": "2172d2ab-2b38-4c18-bcbe-651094dbd71e",
+   "titre": "La méthode de la dictée",
+   "questions": [
+    { "prompt": "Que fait généralement le maître avant de commencer la dictée ?", "options": ["Il lit le texte une première fois en entier", "Il donne directement le titre", "Il écrit le texte au tableau", "Il distribue le corrigé"], "correct_index": 0, "explanation": "La première lecture complète permet de comprendre le sens général du texte et d'en deviner le titre." },
+    { "prompt": "Pourquoi faut-il bien écouter la ponctuation annoncée ?", "options": ["Pour l'écrire dans la dictée", "Pour écrire plus vite", "Pour deviner la note", "Pour choisir son stylo"], "correct_index": 0, "explanation": "Le point, la virgule ou le point d'interrogation annoncés doivent être écrits." },
+    { "prompt": "Dans « les enfants », que faut-il retenir à propos du « s » ?", "options": ["Il faut l'écrire même s'il ne se prononce pas seul", "Il ne faut pas l'écrire puisqu'on ne l'entend pas", "Il se place avant le mot", "Il remplace la virgule"], "correct_index": 0, "explanation": "C'est le piège des liaisons : le « s » du pluriel s'écrit même s'il ne s'entend pas isolément." },
+    { "prompt": "Combien de fois faut-il au minimum se relire après la dictée ?", "options": ["Une fois", "Deux fois", "Cinq fois", "Jamais, c'est inutile"], "correct_index": 1, "explanation": "On se relit au moins deux fois, avec un objectif différent à chaque relecture." },
+    { "prompt": "Quel est l'objectif de la première relecture ?", "options": ["Vérifier le sens de chaque phrase", "Vérifier les accords", "Compter les mots", "Recopier au propre"], "correct_index": 0, "explanation": "La première relecture vérifie que chaque phrase veut dire quelque chose." },
+    { "prompt": "Quel est l'objectif de la deuxième relecture ?", "options": ["Vérifier les accords et les homophones", "Vérifier le titre", "Vérifier la longueur du texte", "Effacer les ratures"], "correct_index": 0, "explanation": "La deuxième relecture porte sur les accords sujet/verbe, le groupe nominal et les homophones." },
+    { "prompt": "Lequel de ces couples est un homophone grammatical fréquent ?", "options": ["son / sont", "table / chaise", "grand / petit", "lire / écrire"], "correct_index": 0, "explanation": "son/sont, a/à, on/ont, et/est, ce/se sont les homophones à surveiller." },
+    { "prompt": "Quelle erreur revient souvent dans les dictées du CEPE ?", "options": ["L'accord du participe passé", "L'écriture des chiffres", "Le choix du stylo", "La taille des lettres"], "correct_index": 0, "explanation": "D'après les annales, l'accord du participe passé est une erreur très fréquente." },
+    { "prompt": "Quel est le pluriel de « un cheval » ?", "options": ["des chevals", "des chevaux", "des chevales", "des cheveaux"], "correct_index": 1, "explanation": "Certains noms changent au pluriel : un cheval donne des chevaux." },
+    { "prompt": "À quoi sert de repérer les verbes conjugués pendant la dictée ?", "options": ["À choisir la bonne terminaison", "À compter les phrases", "À trouver le titre", "À deviner la ponctuation"], "correct_index": 0, "explanation": "Le temps employé, souvent le présent ou l'imparfait, guide le choix de la terminaison." }
+   ]
+  },
+  {
+   "chapter_id": "de593657-175e-4061-b179-dcb0f1f3f070",
+   "titre": "Comprendre un texte : stratégies de compréhension",
+   "questions": [
+    { "prompt": "Comment choisir le bon titre parmi plusieurs propositions ?", "options": ["Choisir celui qui résume l'idée principale", "Choisir le plus court", "Choisir celui qui parle d'un détail", "Choisir le premier de la liste"], "correct_index": 0, "explanation": "Le titre doit résumer l'idée principale, pas un détail secondaire." },
+    { "prompt": "On te demande de relever une expression du texte : que fais-tu ?", "options": ["Tu recopies la phrase exacte sans la reformuler", "Tu écris la phrase avec tes propres mots", "Tu inventes une phrase proche", "Tu recopies tout le paragraphe"], "correct_index": 0, "explanation": "On recopie l'expression telle quelle, sans la transformer." },
+    { "prompt": "Comment répondre à une question « vrai ou faux » ?", "options": ["En vérifiant phrase par phrase dans le texte", "En répondant au hasard", "En répondant toujours vrai", "En se fiant à son impression"], "correct_index": 0, "explanation": "On retourne dans le texte et on vérifie phrase par phrase." },
+    { "prompt": "Si le texte ne dit rien du tout sur un point affirmé, que répond-on ?", "options": ["La réponse peut être « faux »", "On répond toujours « vrai »", "On laisse la case vide", "On recopie la question"], "correct_index": 0, "explanation": "Une affirmation que le texte contredit ou dont il ne parle pas peut être fausse." },
+    { "prompt": "Comment trouver le sens d'un mot inconnu ?", "options": ["En utilisant le contexte, les mots autour", "En le sautant", "En demandant au voisin", "En choisissant un mot au hasard"], "correct_index": 0, "explanation": "On devine d'abord grâce au contexte, avant de penser à un synonyme appris par cœur." },
+    { "prompt": "Qu'est-ce qu'un texte narratif ?", "options": ["Un texte qui raconte une histoire", "Un texte qui donne une recette", "Un texte qui décrit une carte", "Une liste de mots"], "correct_index": 0, "explanation": "Le texte narratif raconte une histoire avec des personnages, un lieu, un moment et des actions." },
+    { "prompt": "Quels éléments faut-il repérer dans un texte narratif ?", "options": ["Les personnages, le lieu, le moment et les actions", "Les rimes et les strophes", "Les nombres et les unités", "Les titres et les sous-titres uniquement"], "correct_index": 0, "explanation": "Ce sont les quatre repères du texte narratif." },
+    { "prompt": "Quelles questions se pose-t-on pour comprendre un texte ?", "options": ["Qui ? fait quoi ? où ? quand ? pourquoi ?", "Combien coûte-t-il ?", "Qui a écrit le plus vite ?", "Quelle est la couleur du papier ?"], "correct_index": 0, "explanation": "Se poser ces questions aide à retrouver les informations importantes." },
+    { "prompt": "Que faire si une phrase du texte n'est pas comprise ?", "options": ["La relire attentivement", "Passer à la question suivante sans lire", "Inventer une réponse", "Recopier la phrase dans la réponse"], "correct_index": 0, "explanation": "On lit attentivement et on relit si besoin avant de répondre." },
+    { "prompt": "Sur quoi faut-il s'appuyer pour répondre aux questions de compréhension ?", "options": ["Sur le texte lui-même", "Sur son imagination", "Sur le titre seulement", "Sur les réponses des camarades"], "correct_index": 0, "explanation": "Les réponses se justifient toujours par le texte." }
+   ]
+  }
+ ]
+}
