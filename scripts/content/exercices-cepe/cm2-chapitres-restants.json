@@ -1,0 +1,146 @@
+[
+ {
+  "chapitre": "Le complément d'objet — COD et COI",
+  "chapter_id": "5ff2bc0e-0b0e-40cf-9856-0a32c81b9122",
+  "exercices": [
+   { "titre": "Trouver le COD", "enonce": "Relève le complément d'objet direct de chaque phrase et écris la question qui t'a permis de le trouver.\n1. Les élèves lisent un conte.\n2. Maman prépare le foufou.\n3. Nous regardons le match.", "corrige": "1. « Les élèves lisent quoi ? » → un conte.\n2. « Maman prépare quoi ? » → le foufou.\n3. « Nous regardons quoi ? » → le match.\nLe COD suit le verbe sans petit mot (à, de)." },
+   { "titre": "Trouver le COI", "enonce": "Relève le complément d'objet indirect de chaque phrase.\n1. Je parle à mon voisin.\n2. Elle téléphone à sa tante.\n3. Il a besoin de repos.", "corrige": "1. « Je parle à qui ? » → à mon voisin.\n2. « Elle téléphone à qui ? » → à sa tante.\n3. « Il a besoin de quoi ? » → de repos.\nLe COI est introduit par à ou de." },
+   { "titre": "COD et COI dans la même phrase", "enonce": "Dans la phrase « Le maître explique la leçon aux élèves », trouve le COD puis le COI, en indiquant chaque fois la question posée.", "corrige": "COD : « explique quoi ? » → la leçon.\nCOI : « explique à qui ? » → aux élèves." }
+  ]
+ },
+ {
+  "chapitre": "La négation",
+  "chapter_id": "72371084-720b-4e25-938e-f7c48a7e5985",
+  "exercices": [
+   { "titre": "Mettre à la forme négative", "enonce": "Écris ces phrases à la forme négative.\n1. Il mange du riz.\n2. J'aime le piment.\n3. Nous avons de l'eau.", "corrige": "1. Il ne mange pas de riz.\n2. Je n'aime pas le piment. (ne devient n' devant une voyelle)\n3. Nous n'avons pas d'eau. (du et de l' deviennent de à la forme négative)" },
+   { "titre": "Choisir la bonne négation", "enonce": "Complète avec ne … plus, ne … jamais ou ne … rien.\n1. Il pleut encore ? Non, il … pleut … .\n2. Elle … est … allée à Pointe-Noire.\n3. Je … comprends … à cet exercice.", "corrige": "1. il ne pleut plus (l'action a cessé).\n2. elle n'est jamais allée.\n3. je ne comprends rien." },
+   { "titre": "Corriger une phrase incomplète", "enonce": "Cette phrase est fautive à l'écrit : « Je veux pas sortir. » Corrige-la et explique l'erreur.", "corrige": "On écrit : « Je ne veux pas sortir. » À l'oral, on supprime souvent le « ne », mais à l'écrit la négation doit encadrer le verbe : ne … pas." }
+  ]
+ },
+ {
+  "chapitre": "Décrire un lieu et un objet",
+  "chapter_id": "a0801443-0297-4e98-87a2-cc1b225edc68",
+  "exercices": [
+   { "titre": "Décrire la cour de ton école", "enonce": "Décris la cour de ton école en six à huit lignes. Va du général au détail et emploie au moins trois mots de lieu (devant, à gauche, au fond…) et quatre adjectifs.", "corrige": "Exemple attendu : « Notre cour est vaste et sablonneuse. Devant les salles, un long manguier donne de l'ombre. À gauche se dresse le mât du drapeau. Au fond, un vieux mur gris sépare la cour du terrain de football. Le matin, elle est calme ; à la récréation, elle devient bruyante. » Vérifie : un ordre clair, des mots de lieu, des adjectifs, et au moins un détail entendu ou senti." },
+   { "titre": "Décrire un objet de la classe", "enonce": "Choisis un objet de ta classe et décris-le en donnant son nom, sa forme, sa taille, sa couleur, sa matière et son utilité.", "corrige": "Exemple : « L'ardoise est un rectangle d'environ trente centimètres de long. Elle est noire, en bois recouvert d'une plaque lisse. Elle sert à écrire à la craie, puis à effacer pour recommencer. » Les six informations doivent apparaître." },
+   { "titre": "Repérer ce qui manque", "enonce": "Lis cette description : « C'est une bouteille en plastique, transparente, d'un litre. » Quelle information manque-t-il ? Réécris la phrase complète.", "corrige": "Il manque l'utilité. Par exemple : « C'est une bouteille en plastique transparente d'un litre, qui sert à transporter l'eau du puits. »" }
+  ]
+ },
+ {
+  "chapitre": "Raconter au passé et écrire un dialogue",
+  "chapter_id": "ddcc4473-9527-48e6-9410-58ba227ba589",
+  "exercices": [
+   { "titre": "Imparfait ou passé composé ?", "enonce": "Complète avec l'imparfait ou le passé composé et justifie ton choix.\n1. Il (faire) beau ce matin-là.\n2. Soudain, la pluie (tomber).\n3. Les enfants (jouer) dans la cour quand la cloche (sonner).", "corrige": "1. Il faisait beau (imparfait : c'est le décor).\n2. la pluie est tombée (passé composé : action soudaine).\n3. Les enfants jouaient (décor) quand la cloche a sonné (action)." },
+   { "titre": "Continuer un récit", "enonce": "Continue ce début en six à huit lignes, au passé, en gardant le même personnage : « Ce matin-là, Mireille partit au marché avec sa grand-mère. »", "corrige": "On attend : les mêmes personnages, un récit au passé (imparfait pour le décor, passé composé ou passé simple pour les actions), des connecteurs (d'abord, ensuite, enfin) et une fin, une chute : par exemple la rencontre d'une voisine, un objet oublié, un retour sous la pluie." },
+   { "titre": "Écrire un dialogue", "enonce": "Écris un dialogue de quatre répliques entre un élève et un marchand de beignets. Respecte la présentation : deux points, guillemets, tirets et verbes de parole.", "corrige": "Exemple :\nL'élève demanda : « Combien coûte un beignet ? »\n— Vingt-cinq francs, répondit le marchand.\n— Donnez-m'en quatre, s'il vous plaît.\n— Les voici, dit-il en souriant.\nVérifie : un tiret et un retour à la ligne par réplique, et des verbes de parole variés." }
+  ]
+ },
+ {
+  "chapitre": "S'entraîner dans les conditions du CEPE",
+  "chapter_id": "d1738601-0426-4526-baa9-593689d2c037",
+  "exercices": [
+   { "titre": "Organiser sa révision", "enonce": "Écris les quatre étapes de la méthode de révision, dans l'ordre, et explique à quoi sert chacune.", "corrige": "1. Relire la leçon : remettre les idées en place.\n2. Cacher la leçon et la dire à voix haute : vérifier ce qui est vraiment su.\n3. Refaire les exercices résolus sans regarder : contrôler la méthode.\n4. Noter ses erreurs et les corriger : c'est l'étape qui fait progresser." },
+   { "titre": "Se relire après la dictée", "enonce": "Tu viens de terminer ta dictée. Indique les trois relectures à faire et ce que tu vérifies à chaque fois.", "corrige": "1re relecture : les majuscules et la ponctuation.\n2e relecture : les accords sujet/verbe et nom/adjectif.\n3e relecture : les mots difficiles et les homophones (a/à, et/est, on/ont, son/sont)." },
+   { "titre": "Résoudre un problème jusqu'au bout", "enonce": "Un commerçant achète 12 cartons de savon à 4 500 F le carton. Il revend le tout 60 000 F. Gagne-t-il de l'argent ? Rédige toute la démarche, de la lecture à la phrase réponse.", "corrige": "Données : 12 cartons à 4 500 F ; vente totale 60 000 F.\nOn cherche : s'il gagne de l'argent.\nAchat : 12 × 4 500 = 54 000 F.\nComparaison : 60 000 − 54 000 = 6 000 F.\nRéponse : oui, le commerçant gagne 6 000 F.\nVérification : 54 000 + 6 000 = 60 000 ✔" }
+  ]
+ },
+ {
+  "chapitre": "Les villes du Congo",
+  "chapter_id": "a87dd329-567a-4275-893d-0e7607b486a4",
+  "exercices": [
+   { "titre": "Associer ville et repère", "enonce": "Associe chaque ville à ce qui la caractérise : Brazzaville, Pointe-Noire, Nkayi, Ouesso.", "corrige": "Brazzaville : capitale politique, au bord du fleuve Congo.\nPointe-Noire : capitale économique, grand port sur l'océan Atlantique.\nNkayi : le sucre, dans la Bouenza.\nOuesso : ville du nord, sur la Sangha." },
+   { "titre": "Deux capitales, deux rôles", "enonce": "Pourquoi dit-on que Brazzaville est la capitale politique et Pointe-Noire la capitale économique ? Réponds en deux phrases.", "corrige": "Brazzaville abrite les institutions : la présidence, le gouvernement, l'Assemblée nationale et le Sénat. Pointe-Noire concentre l'activité économique : le port, le pétrole et les échanges commerciaux avec l'étranger." },
+   { "titre": "Placer sur la carte", "enonce": "Cite les éléments que tu dois savoir placer sur une carte du Congo le jour de l'examen.", "corrige": "Brazzaville, Pointe-Noire, le fleuve Congo, l'Oubangui, le massif du Mayombe, l'océan Atlantique et les pays voisins : Gabon, Cameroun, RCA, RDC et Angola." }
+  ]
+ },
+ {
+  "chapitre": "Le climat, les saisons et la végétation",
+  "chapter_id": "0e5eb9e0-842c-4886-a1db-c8237b38e4df",
+  "exercices": [
+   { "titre": "Les deux saisons", "enonce": "Indique les mois de la saison des pluies et ceux de la saison sèche, puis explique pourquoi le Congo est chaud et humide.", "corrige": "Saison des pluies : d'octobre à mai, avec une courte pause en janvier-février. Saison sèche : de juin à septembre. Le pays est chaud et humide parce qu'il est traversé par l'équateur." },
+   { "titre": "Chaque végétation à sa place", "enonce": "Associe chaque végétation à sa région : forêt dense, savane, mangrove.", "corrige": "Forêt dense : le nord du pays et le massif du Mayombe.\nSavane : les plateaux Batéké.\nMangrove : la côte, au bord de l'océan." },
+   { "titre": "Le climat et les travaux des champs", "enonce": "Explique en trois lignes pourquoi le cultivateur doit connaître les saisons avant de semer.", "corrige": "On sème en début de saison des pluies pour que la graine trouve l'eau nécessaire à sa germination. Semer en pleine saison sèche expose la récolte au manque d'eau ; semer trop tard expose les jeunes plants aux fortes pluies." }
+  ]
+ },
+ {
+  "chapitre": "Le Congo indépendant et ses grandes dates",
+  "chapter_id": "67639700-45cb-4a46-9c1a-eff5408a8047",
+  "exercices": [
+   { "titre": "Remettre les dates dans l'ordre", "enonce": "Remets ces dates dans l'ordre et indique l'événement correspondant : 1991, 1880, 1960, 1944.", "corrige": "1880 : traité entre Brazza et le roi Makoko.\n1944 : Conférence de Brazzaville.\n1960 : indépendance du Congo, le 15 août.\n1991 : Conférence nationale souveraine, ouverture démocratique." },
+   { "titre": "Les présidents", "enonce": "Cite dans l'ordre les dirigeants du Congo à partir de 1960, avec l'année où chacun arrive au pouvoir.", "corrige": "1960 : Fulbert Youlou. 1963 : Alphonse Massamba-Débat. 1968 : Marien Ngouabi. 1979 : Denis Sassou Nguesso." },
+   { "titre": "Expliquer une date", "enonce": "Que s'est-il passé en 1991 au Congo, et pourquoi cette date est-elle importante ?", "corrige": "La Conférence nationale souveraine s'est tenue et s'est achevée le 10 juin 1991. Elle marque une période de transition vers le multipartisme et la démocratie." }
+  ]
+ },
+ {
+  "chapitre": "Les ressources naturelles et l'économie",
+  "chapter_id": "9790c3bb-1df1-4cd5-9f23-aa5edf7c2bec",
+  "exercices": [
+   { "titre": "Classer les ressources", "enonce": "Classe ces ressources selon leur origine : pétrole, bois, poisson, potasse, manioc.", "corrige": "Sous-sol : pétrole, potasse. Forêt : bois. Eaux : poisson. Terres agricoles : manioc." },
+   { "titre": "La première richesse", "enonce": "Quelle est la première richesse du Congo, où est-elle extraite, et quelle ville en vit principalement ?", "corrige": "Le pétrole. Il est extrait en mer, au large de Pointe-Noire, ville qui concentre cette activité." },
+   { "titre": "Cultures vivrières et cultures de rente", "enonce": "Range ces cultures en deux colonnes : manioc, cacao, banane plantain, café, arachide, canne à sucre. Explique la différence.", "corrige": "Vivrières (nourrissent la famille) : manioc, banane plantain, arachide.\nDe rente (vendues, souvent exportées) : cacao, café, canne à sucre.\nLes premières servent d'abord à l'alimentation, les secondes rapportent de l'argent." }
+  ]
+ },
+ {
+  "chapitre": "Le pluriel des noms et des adjectifs",
+  "chapter_id": "49a2fa0f-fd13-43b1-9ad2-798cca8c815b",
+  "exercices": [
+   { "titre": "Mettre au pluriel", "enonce": "Écris au pluriel : un bateau, un cheval, un pays, un trou, un genou.", "corrige": "des bateaux (noms en -eau : x), des chevaux (noms en -al : -aux), des pays (ne change pas), des trous (règle générale : s), des genoux (exception en -ou)." },
+   { "titre": "Les sept exceptions en -ou", "enonce": "Cite les sept noms en -ou qui prennent un x au pluriel.", "corrige": "bijou, caillou, chou, genou, hibou, joujou, pou. Tous les autres noms en -ou prennent un s : des clous, des trous, des fous." },
+   { "titre": "Accorder le groupe nominal", "enonce": "Mets tout le groupe au pluriel : « un journal local », « une belle histoire », « un animal sauvage ».", "corrige": "des journaux locaux, de belles histoires, des animaux sauvages. L'adjectif s'accorde avec le nom, et les mots en -al deviennent -aux." }
+  ]
+ },
+ {
+  "chapitre": "Tableaux de conjugaison à connaître",
+  "chapter_id": "ab47d046-7815-4e9a-ab7f-b1c06097d910",
+  "exercices": [
+   { "titre": "Être et avoir aux quatre temps", "enonce": "Conjugue « être » puis « avoir » à la 3e personne du pluriel, au présent, à l'imparfait, au futur et au passé composé.", "corrige": "Être : ils sont, ils étaient, ils seront, ils ont été.\nAvoir : ils ont, ils avaient, ils auront, ils ont eu." },
+   { "titre": "Les verbes irréguliers les plus utilisés", "enonce": "Donne le participe passé de : aller, faire, dire, prendre, venir, pouvoir, voir.", "corrige": "allé, fait, dit, pris, venu, pu, vu." },
+   { "titre": "Appliquer la méthode en quatre étapes", "enonce": "Conjugue correctement : « Hier, les enfants (aller) au marché. » Écris les quatre étapes de ton raisonnement.", "corrige": "1. Infinitif : aller, 3e groupe.\n2. « Hier » → passé composé.\n3. Sujet : les enfants = ils.\n4. Aller se conjugue avec être, le participe s'accorde : « Hier, les enfants sont allés au marché. »" }
+  ]
+ },
+ {
+  "chapitre": "Les figures planes",
+  "chapter_id": "bc2c13c5-a142-4c68-893e-e80c3e01b7a4",
+  "exercices": [
+   { "titre": "Reconnaître les figures", "enonce": "Pour chaque figure, donne le nombre de côtés et dis si elle possède des angles droits : carré, rectangle, triangle équilatéral, cercle.", "corrige": "Carré : 4 côtés égaux, 4 angles droits.\nRectangle : 4 côtés, côtés opposés égaux, 4 angles droits.\nTriangle équilatéral : 3 côtés égaux, aucun angle droit.\nCercle : pas de côté, pas d'angle ; tous ses points sont à la même distance du centre." },
+   { "titre": "Rayon et diamètre", "enonce": "Un cercle a un rayon de 7 cm. Quel est son diamètre ? Et si le diamètre mesure 18 cm, combien mesure le rayon ?", "corrige": "Diamètre = 2 × rayon = 2 × 7 = 14 cm.\nRayon = diamètre ÷ 2 = 18 ÷ 2 = 9 cm." },
+   { "titre": "Choisir le bon instrument", "enonce": "Quel instrument utilises-tu pour tracer un segment, pour vérifier un angle droit, pour tracer un cercle ? Explique en une phrase chaque usage.", "corrige": "La règle graduée trace et mesure les segments. L'équerre vérifie et trace les angles droits. Le compas trace les cercles à partir du centre et du rayon." }
+  ]
+ },
+ {
+  "chapitre": "Les solides et les volumes",
+  "chapter_id": "f98440f2-f80f-42de-960f-b5b32a489d59",
+  "exercices": [
+   { "titre": "Volume d'un cube", "enonce": "Calcule le volume d'un cube dont l'arête mesure 6 cm.", "corrige": "Volume = c × c × c = 6 × 6 × 6 = 216 cm³." },
+   { "titre": "Volume d'un pavé droit", "enonce": "Une caisse mesure 5 dm de long, 4 dm de large et 3 dm de haut. Calcule son volume, puis donne sa contenance en litres.", "corrige": "Volume = L × l × h = 5 × 4 × 3 = 60 dm³. Comme 1 dm³ = 1 litre, la caisse contient 60 litres." },
+   { "titre": "Reconnaître les solides", "enonce": "Associe chaque objet à son solide : un dé, une boîte de conserve, un ballon, une brique.", "corrige": "Le dé : un cube. La boîte de conserve : un cylindre. Le ballon : une sphère. La brique : un pavé droit." }
+  ]
+ },
+ {
+  "chapitre": "La famille et l'école",
+  "chapter_id": "6889688b-d892-4ecb-b7b2-5d7ee3820f97",
+  "exercices": [
+   { "titre": "Les rôles de la famille", "enonce": "Cite trois rôles de la famille et donne un exemple concret pour chacun.", "corrige": "Éduquer : les parents apprennent à dire bonjour et à respecter les aînés.\nProtéger : la famille soigne l'enfant malade et veille sur lui.\nAider : les grands frères expliquent les devoirs, chacun participe aux travaux." },
+   { "titre": "Les règles de l'école", "enonce": "Écris quatre règles de vie à respecter à l'école et explique à quoi sert chacune.", "corrige": "La ponctualité : ne pas manquer le début du cours. Le respect des maîtres et des camarades : vivre ensemble sans violence. Le travail : apprendre et réussir. La propreté : garder un cadre sain pour tous." },
+   { "titre": "Analyser un comportement", "enonce": "Un élève arrive en retard chaque matin et se moque de ceux qui répondent mal. Quelles règles ne respecte-t-il pas ? Que lui conseilles-tu ?", "corrige": "Il ne respecte pas la ponctualité ni le respect des camarades. Conseil : partir plus tôt de la maison, et encourager ses camarades au lieu de se moquer, car chacun a le droit de se tromper en apprenant." }
+  ]
+ },
+ {
+  "chapitre": "Les droits et les devoirs de l'enfant",
+  "chapter_id": "305657dd-e30e-4006-bc73-90045f913e22",
+  "exercices": [
+   { "titre": "Mes droits", "enonce": "Cite quatre droits de l'enfant et explique pourquoi chacun est important.", "corrige": "Avoir un nom : être reconnu et exister officiellement. Aller à l'école : apprendre et préparer son avenir. Être soigné : rester en bonne santé. Être protégé : vivre à l'abri de la violence et des mauvais traitements. On peut ajouter : jouer et donner son avis." },
+   { "titre": "Mes devoirs", "enonce": "Cite quatre devoirs de l'enfant, à la maison et à l'école.", "corrige": "Aller à l'école et travailler. Respecter les maîtres, les parents et les camarades. Aider aux tâches de la maison. Respecter les règles et le bien d'autrui." },
+   { "titre": "Droits et devoirs vont ensemble", "enonce": "Un camarade dit : « J'ai le droit de jouer, donc je ne fais pas mes devoirs. » Que lui réponds-tu ?", "corrige": "Le droit de jouer existe, mais il ne supprime pas les devoirs : aller à l'école et travailler en font partie. Droits et devoirs vont ensemble ; on joue après avoir fait son travail." }
+  ]
+ },
+ {
+  "chapitre": "Ces / Ses",
+  "chapter_id": "f01152cd-393c-4c8e-89cb-5ea8272b44e0",
+  "exercices": [
+   { "titre": "Ces ou ses ?", "enonce": "Complète avec « ces » ou « ses » et justifie par le test appris.\n1. Paul range … cahiers.\n2. … mangues sont mûres.\n3. Awa aime … parents.", "corrige": "1. ses cahiers (ce sont les siens : « mes cahiers » fonctionne).\n2. Ces mangues (on les montre : « cette mangue » au singulier).\n3. ses parents (les siens)." },
+   { "titre": "Son, sont, ce, se", "enonce": "Complète : « Il range … sac. Les enfants … sages. … matin, il … lève tôt. »", "corrige": "« Il range son sac (mon sac). Les enfants sont sages (étaient sages). Ce matin (cette matinée), il se lève tôt (il me lève)." },
+   { "titre": "Corriger une phrase", "enonce": "Corrige cette phrase et explique chaque erreur : « Ses fleurs son belles et il lave ces mains. »", "corrige": "« Ces fleurs sont belles et il lave ses mains. »\n— ces : on montre les fleurs ;\n— sont : verbe être, remplaçable par étaient ;\n— ses mains : ce sont les siennes." }
+  ]
+ }
+]
