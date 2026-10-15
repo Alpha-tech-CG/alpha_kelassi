@@ -12,7 +12,7 @@ import { useRouter } from 'expo-router'
 import { colors, radius, cardShadow, fonts } from '../lib/theme'
 import { useLevel } from '../hooks/useLevel'
 import { listCachedEntries, cacheSize, clearCache, readCachedLesson, type CachedEntry } from '../lib/lessonCache'
-import { syncAllForOffline, derniereSynchro, type SyncProgress } from '../lib/offlineSync'
+import { syncAllForOffline, derniereSynchro, indexHorsLigne, type SyncProgress } from '../lib/offlineSync'
 import { enAttente, viderLaFile } from '../lib/outbox'
 
 interface ChapitreLocal { key: string; titre: string; taille: number; lecons: number }
@@ -43,6 +43,24 @@ export default function HorsLigneScreen() {
   const relire = useCallback(async () => {
     const entrees: CachedEntry[] = await listCachedEntries()
     const chapitresEnCache = entrees.filter((e) => e.key.startsWith('chapter:'))
+    const tailleParId = new Map(chapitresEnCache.map((e) => [e.key.slice('chapter:'.length), e.size]))
+
+    // L'index écrit par la synchronisation évite de rouvrir chaque fichier.
+    const index = await indexHorsLigne()
+    const depuisIndex = index.filter((f) => tailleParId.has(f.id))
+    if (depuisIndex.length > 0) {
+      const liste = depuisIndex
+        .map((f) => ({ key: `chapter:${f.id}`, titre: f.titre, taille: tailleParId.get(f.id) ?? 0, lecons: f.lecons }))
+        .sort((a, b) => a.titre.localeCompare(b.titre, 'fr'))
+      setChapitres(liste)
+      setTaille(await cacheSize())
+      setDerniere(await derniereSynchro())
+      setEnFile(await enAttente())
+      setChargement(false)
+      return
+    }
+
+    // Repli : cache constitué au fil des visites, sans index.
     const liste = await Promise.all(chapitresEnCache.map(async (e) => {
       let titre = 'Chapitre'
       let lecons = 0

@@ -23,6 +23,17 @@ export type SyncProgress = { done: number; total: number; label: string }
 export interface SyncResult { synced: number; failed: number; total: number; aJour: number; retires: number }
 
 const ETAT_KEY = 'offline-sync:etat'
+const INDEX_KEY = 'offline-index'
+
+/** Fiche d'un chapitre téléchargé : de quoi lister et chercher sans rouvrir chaque fichier. */
+export interface FicheChapitre {
+  id: string
+  titre: string
+  matiere: string
+  lecons: number
+  exercices: number
+  majLe: string
+}
 
 interface EtatSync {
   lastSyncAt: string | null
@@ -30,6 +41,8 @@ interface EtatSync {
   incrementalIndisponible?: boolean
   /** Chapitres du programme lors de la dernière synchronisation (pour le ménage). */
   chapitres?: string[]
+  /** Dernier index connu, pour ne pas perdre les compteurs des chapitres non rafraîchis. */
+  index?: FicheChapitre[]
 }
 
 interface ChapterRow { id: string; title: string; subject_id: string }
@@ -231,8 +244,35 @@ export async function syncAllForOffline(
     }
   }
 
-  await ecrireEtat({ lastSyncAt: debut, incrementalIndisponible, chapitres: chapterIds })
+  // Index local : la liste de ce qui est sur l'appareil, lisible d'un seul
+  // fichier (l'écran « Mes cours hors-ligne » n'a plus à tous les rouvrir).
+  const nomMatiere = new Map((subjects ?? []).map((s) => [s.id as string, (s as { name?: string }).name ?? '']))
+  const index: FicheChapitre[] = []
+  for (const ch of chapterRows) {
+    const nbLecons = lessonsByChapter.get(ch.id)?.length
+    const ancienneFiche = (etat.index ?? []).find((f) => f.id === ch.id)
+    index.push({
+      id: ch.id,
+      titre: ch.title,
+      matiere: nomMatiere.get(ch.subject_id) ?? '',
+      lecons: nbLecons ?? ancienneFiche?.lecons ?? 0,
+      exercices: exercisesByChapter.get(ch.id)?.length ?? 0,
+      majLe: nbLecons !== undefined ? debut : (ancienneFiche?.majLe ?? debut),
+    })
+  }
+  await writeCachedLesson(INDEX_KEY, 'index', JSON.stringify(index))
+
+  await ecrireEtat({ lastSyncAt: debut, incrementalIndisponible, chapitres: chapterIds, index })
   return { synced, failed, total, aJour, retires }
+}
+
+/** Contenu téléchargé sur l'appareil, d'après l'index local (vide si jamais synchronisé). */
+export async function indexHorsLigne(): Promise<FicheChapitre[]> {
+  try {
+    const brut = await readCachedLesson(INDEX_KEY)
+    if (brut) return JSON.parse(brut) as FicheChapitre[]
+  } catch { /* index absent : l'écran retombe sur la lecture des fichiers */ }
+  return []
 }
 
 /** Date de la dernière synchronisation réussie, pour l'écran « Mes cours hors-ligne ». */
