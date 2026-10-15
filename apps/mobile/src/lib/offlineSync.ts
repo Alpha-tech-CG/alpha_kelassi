@@ -54,6 +54,54 @@ export async function syncAllForOffline(
     lessonsByChapter.set(l.chapter_id, arr)
   }
 
+  // Exercices : énoncés de tous les chapitres, tentatives de l'élève et
+  // corrigés qu'il a déjà débloqués (la base n'en renvoie pas d'autres).
+  const exercisesByChapter = new Map<string, unknown[]>()
+  const solutionsByChapter = new Map<string, Record<string, string>>()
+  const attemptsByChapter = new Map<string, Record<string, boolean>>()
+  try {
+    const { data: exercises } = await supabase
+      .from('exercises')
+      .select('id, title, statement, difficulty, order_index, chapter_id')
+      .in('chapter_id', chapterIds)
+      .order('order_index')
+    const exerciseRows = (exercises ?? []) as ({ id: string; chapter_id: string } & Record<string, unknown>)[]
+    const chapitreDeLExercice = new Map(exerciseRows.map((e) => [e.id, e.chapter_id]))
+    for (const e of exerciseRows) {
+      const arr = exercisesByChapter.get(e.chapter_id) ?? []
+      const { chapter_id: _ignore, ...sansChapitre } = e
+      arr.push(sansChapitre)
+      exercisesByChapter.set(e.chapter_id, arr)
+    }
+
+    if (exerciseRows.length > 0) {
+      const exerciseIds = exerciseRows.map((e) => e.id)
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: attempts } = await supabase
+          .from('exercise_attempts').select('exercise_id').eq('user_id', user.id).in('exercise_id', exerciseIds)
+        for (const a of (attempts ?? []) as { exercise_id: string }[]) {
+          const ch = chapitreDeLExercice.get(a.exercise_id)
+          if (!ch) continue
+          const map = attemptsByChapter.get(ch) ?? {}
+          map[a.exercise_id] = true
+          attemptsByChapter.set(ch, map)
+        }
+      }
+      const { data: solutions } = await supabase
+        .from('exercise_solutions').select('exercise_id, solution').in('exercise_id', exerciseIds)
+      for (const s of (solutions ?? []) as { exercise_id: string; solution: string }[]) {
+        const ch = chapitreDeLExercice.get(s.exercise_id)
+        if (!ch) continue
+        const map = solutionsByChapter.get(ch) ?? {}
+        map[s.exercise_id] = s.solution
+        solutionsByChapter.set(ch, map)
+      }
+    }
+  } catch {
+    /* les exercices ne bloquent pas la synchronisation des cours */
+  }
+
   const total = chapterRows.length
   let done = 0, synced = 0, failed = 0
 
@@ -65,6 +113,16 @@ export async function syncAllForOffline(
     await Promise.all(batch.map(async (ch) => {
       const ls = (lessonsByChapter.get(ch.id) ?? []).sort((a, b) => a.order_index - b.order_index)
       const ok = await writeCachedLesson(`chapter:${ch.id}`, 'chapter', JSON.stringify({ title: ch.title, lessons: ls }))
+
+      const exs = exercisesByChapter.get(ch.id)
+      if (exs?.length) {
+        await writeCachedLesson(`exercises:${ch.id}`, 'chapter', JSON.stringify({ title: ch.title, exercises: exs }))
+      }
+      const attempts = attemptsByChapter.get(ch.id)
+      if (attempts) await writeCachedLesson(`exercise-attempts:${ch.id}`, 'chapter', JSON.stringify(attempts))
+      const solutions = solutionsByChapter.get(ch.id)
+      if (solutions) await writeCachedLesson(`exercise-solutions:${ch.id}`, 'chapter', JSON.stringify(solutions))
+
       if (ok) synced++; else failed++
       done++
       onProgress?.({ done, total, label: ch.title })

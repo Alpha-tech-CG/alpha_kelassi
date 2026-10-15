@@ -80,7 +80,7 @@ export default function ProfilScreen() {
         'Téléchargement terminé',
         failed > 0
           ? `${synced}/${total} chapitres téléchargés pour hors-ligne. ${failed} chapitre(s) n'ont pas pu être téléchargés (vérifie ta connexion et réessaie).`
-          : `Les ${synced} chapitres de ton programme sont maintenant disponibles hors-ligne, images comprises.`
+          : `Les ${synced} chapitres de ton programme sont maintenant disponibles hors-ligne : cours, images et exercices.`
       )
     } catch {
       Alert.alert('Erreur', 'Le téléchargement a été interrompu. Vérifie ta connexion et réessaie.')
