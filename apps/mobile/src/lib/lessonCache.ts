@@ -93,13 +93,78 @@ export async function readCachedLesson(lessonId: string): Promise<string | null>
  * les appelants en tâche de fond peuvent ignorer la valeur de retour sans
  * risque (aucune exception n'est jamais levée).
  */
+/** Supprime une entrée du cache (contenu retiré du programme, ou ménage demandé par l'élève). */
+export async function removeCachedLesson(lessonId: string): Promise<void> {
+  try {
+    await FileSystem.deleteAsync(`${CACHE_DIR}${safeKey(lessonId)}.json`, { idempotent: true })
+  } catch { /* rien à supprimer */ }
+}
+
+export interface CachedEntry { key: string; fileName: string; size: number; cachedAt: number }
+
+/**
+ * Entrées présentes sur l'appareil, avec leur taille. La clé d'origine est
+ * relue dans le fichier : `safeKey` remplace les caractères interdits, donc le
+ * nom de fichier seul ne permet pas de la reconstituer.
+ */
+export async function listCachedEntries(): Promise<CachedEntry[]> {
+  try {
+    const info = await FileSystem.getInfoAsync(CACHE_DIR)
+    if (!info.exists) return []
+    const fichiers = (await FileSystem.readDirectoryAsync(CACHE_DIR)).filter((f) => f.endsWith('.json'))
+    const entries = await Promise.all(fichiers.map(async (fileName) => {
+      const chemin = `${CACHE_DIR}${fileName}`
+      const stat = await FileSystem.getInfoAsync(chemin, { size: true })
+      let key = fileName.replace(/\.json$/, '')
+      let cachedAt = 0
+      try {
+        const brut = await FileSystem.readAsStringAsync(chemin)
+        const parsed = JSON.parse(brut) as { key?: string; cachedAt?: number }
+        key = parsed.key ?? key
+        cachedAt = parsed.cachedAt ?? 0
+      } catch { /* fichier illisible : on garde ce que le nom indique */ }
+      return { key, fileName, size: stat.exists && 'size' in stat ? (stat.size ?? 0) : 0, cachedAt }
+    }))
+    return entries
+  } catch {
+    return []
+  }
+}
+
+/** Place occupée par le cache, images comprises (octets). */
+export async function cacheSize(): Promise<number> {
+  const somme = async (dir: string): Promise<number> => {
+    try {
+      const info = await FileSystem.getInfoAsync(dir)
+      if (!info.exists) return 0
+      const noms = await FileSystem.readDirectoryAsync(dir)
+      const tailles = await Promise.all(noms.map(async (n) => {
+        const stat = await FileSystem.getInfoAsync(`${dir}${n}`, { size: true })
+        if (stat.exists && stat.isDirectory) return somme(`${dir}${n}/`)
+        return stat.exists && 'size' in stat ? (stat.size ?? 0) : 0
+      }))
+      return tailles.reduce((a, b) => a + b, 0)
+    } catch {
+      return 0
+    }
+  }
+  return somme(CACHE_DIR)
+}
+
+/** Vide tout le cache hors-ligne, images comprises. */
+export async function clearCache(): Promise<void> {
+  try {
+    await FileSystem.deleteAsync(CACHE_DIR, { idempotent: true })
+  } catch { /* rien à supprimer */ }
+}
+
 export async function writeCachedLesson(lessonId: string, type: string, content: string): Promise<boolean> {
   if (!content) return false
   try {
     await ensureDir(CACHE_DIR)
     const withLocalImages = await cacheImagesInText(content)
     const path = `${CACHE_DIR}${safeKey(lessonId)}.json`
-    await FileSystem.writeAsStringAsync(path, JSON.stringify({ type, content: withLocalImages, cachedAt: Date.now() }))
+    await FileSystem.writeAsStringAsync(path, JSON.stringify({ key: lessonId, type, content: withLocalImages, cachedAt: Date.now() }))
     return true
   } catch {
     return false

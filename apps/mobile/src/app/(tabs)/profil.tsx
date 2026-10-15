@@ -152,6 +152,17 @@ export default function ProfilScreen() {
             <Text style={styles.chevron}>›</Text>
           </TouchableOpacity>
           <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow} onPress={() => router.push('/hors-ligne' as never)}   /* route neuve : types expo-router régénérés au build */>
+            <View style={[styles.settingIcon, { backgroundColor: '#E8F5E9' }]}>
+              <Text style={{ fontSize: 18 }}>📴</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.settingTitle}>Mes cours hors-ligne</Text>
+              <Text style={styles.settingSub}>Ce que contient ton téléphone, place occupée, mise à jour</Text>
+            </View>
+            <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
+          <View style={styles.divider} />
           <TouchableOpacity style={styles.settingRow} onPress={downloadForOffline} disabled={syncing}>
             <View style={[styles.settingIcon, { backgroundColor: '#E0F2FE' }]}>
               <Text style={{ fontSize: 18 }}>⤓</Text>
