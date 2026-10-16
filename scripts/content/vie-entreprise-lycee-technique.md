@@ -395,33 +395,77 @@ Un projet comporte plusieurs tâches. Pour chacune, on donne sa durée (en jours
 
 **Démarche :** établir le tableau des antériorités → construire le graphe, avec les tâches fictives nécessaires → calculer les dates au plus tôt (DTO) → calculer les dates au plus tard (DTA) → calculer les marges (MT et ML) → identifier le chemin critique (les tâches à marge nulle) et la durée totale du projet.
 
+### 7. La représentation des étapes et l'intervalle de flottement
+
+La détermination du chemin critique, de l'intervalle de flottement et des marges totale et libre devient aisée lorsqu'on connaît, à chaque étape, la date au plus tôt et la date au plus tard. Pour cela, les étapes sont représentées d'une certaine manière.
+
+**Exemple :** tâche B, durée 4 semaines.
+
+- **1re représentation — étapes avec numéro seulement :** étape 1 —B(4)→ étape 2.
+- **2e représentation — étapes avec numéro, date au plus tôt et date au plus tard :** le cercle de chaque étape porte le numéro en haut, la date au plus tôt à gauche et la date au plus tard à droite.
+- **3e représentation — étapes avec numéro, dates et intervalle de flottement :** on ajoute, en bas du cercle, l'intervalle de flottement de l'étape.
+
+| Notation | Signification |
+|---|---|
+| DTOD B | Date au plus tôt du début de la tâche B |
+| DTAD B | Date au plus tard du début de la tâche B |
+| DTOF B | Date au plus tôt de la fin de la tâche B |
+| DTAF B | Date au plus tard de la fin de la tâche B |
+| IFD B | Intervalle de flottement relatif à l'étape de début de la tâche B |
+| IFF B | Intervalle de flottement relatif à l'étape de fin de la tâche B |
+
+**L'intervalle de flottement** d'une étape est le retard qui peut être accepté dans le démarrage des tâches qui succèdent à cette étape, sans modifier la durée totale du projet :
+
+$$\text{IF} = \text{DTA} - \text{DTO}$$
+
+**La marge libre** d'une tâche $x$, de durée $n_x$, s'écrit avec ces notations :
+
+$$\text{ML}_x = \text{DTOF}_x - (n_x + \text{DTOD}_x)$$
+
+> **Remarques :**
+> - La date au plus tard est toujours supérieure ou égale à la date au plus tôt.
+> - L'intervalle de flottement et les marges totale et libre ne sont jamais négatifs.
+> - Sur le chemin critique, la date au plus tôt est égale à la date au plus tard : l'intervalle de flottement, la marge totale et la marge libre sont nuls.
+
+### 8. Questions de cours corrigées (bac blanc de Brazzaville)
+
+**1. À quoi sert le pilotage de la politique d'information ?** Il permet à l'entreprise de se doter d'une banque de données fiables, donnant lieu à la prise de décisions fiables pour garantir le pilotage de l'entreprise.
+
+**2. Pourquoi une étape du chemin critique a-t-elle toujours une marge totale et une marge libre nulles ?** Parce qu'à cette étape la date au plus tôt est égale à la date au plus tard : l'intervalle de flottement y est nul.
+
+**3. Définir les notions suivantes.**
+
+- **Seuil de fermeture :** le plus bas prix que l'entreprise accepte à court terme ; il se fixe au minimum du coût variable moyen.
+- **Seuil de rentabilité :** le niveau de production pour lequel le résultat de l'entreprise est nul.
+- **Intervalle de flottement :** le retard qui peut être accepté dans le démarrage des tâches qui succèdent à une étape, sans modifier la durée totale du projet.
+- **Marge libre d'une tâche :** le retard qui peut être accepté dans le démarrage d'une tâche sans conséquence sur le démarrage des tâches qui lui succèdent immédiatement.
+
 ## Chapitre 6 — Les coûts de production
 
 ### Introduction
 
-Le **coût** est une fonction croissante de la quantité produite : lorsqu'on augmente la production, l'entreprise doit en général consacrer davantage de travail, de capital et de matières.
+L'entreprise engage un certain nombre de dépenses pour réaliser son volume de production : l'achat des matières premières, les produits semi-finis, la rémunération des facteurs, etc. L'ensemble de ces dépenses constitue les **coûts de production** de l'entreprise.
 
-Selon leur nature, on distingue le **coût fixe**, le **coût variable** et le **coût total**.
+La relation entre les quantités de facteurs utilisées et les quantités produites détermine la **fonction de production** de l'entreprise ; de même, la relation entre les quantités produites et les coûts correspondants détermine sa **fonction de coûts**. Le coût est une fonction croissante de la quantité produite.
+
+On distingue deux types de coûts de production :
+
+- les coûts de production de **courte période** : la courte période est la période au cours de laquelle la nature et le volume des équipements ne changent pas ; seule la production peut augmenter, pour une quantité donnée du facteur variable ;
+- les coûts de production de **longue période** : la longue période est la période au cours de laquelle la nature et le volume des équipements varient, y compris la taille de l'entreprise.
+
+### A. Les coûts de production de courte période
 
 ### I. Les coûts totaux (ou globaux)
 
-#### 1. Les coûts variables (CV)
+Ils comprennent les coûts fixes et les coûts variables.
 
-**a. Les coûts variables proportionnels (CVp)** : ils varient proportionnellement aux quantités produites. Si la quantité double, le coût double ; si elle triple, le coût triple. Ils s'écrivent sous la forme $y = ax$, d'où :
+#### 1. Les coûts fixes (CFT ou CF)
 
-$$\text{CVp} = ax$$
-
-avec $a$ le coefficient de proportionnalité (le coût unitaire) et $x$ la quantité. Graphiquement, c'est une **droite qui passe par l'origine**.
-
-**b. Les coûts variables non proportionnels (CVnp)** : ils varient plus vite ou moins vite que les quantités produites.
-
-#### 2. Les coûts fixes (CF)
-
-Ce sont des coûts constants, qui ne dépendent pas de la quantité produite — du moins jusqu'à un certain seuil de production. Leur montant reste le même quelle que soit la quantité.
+Les coûts fixes, ou charges fixes, ou charges de structure, sont des charges qui ne changent pas quel que soit le niveau de production : l'entreprise les supporte même lorsque la production est nulle.
 
 *Exemples :* loyer, assurance, impôt foncier, salaires fixes, amortissements.
 
-Graphiquement, le coût fixe est une **droite parallèle à l'axe des abscisses** : $\text{CF} = a$ (constante).
+Graphiquement, le coût fixe est une **droite parallèle à l'axe des abscisses** : $\text{CFT} = k$ (constante).
 
 > **N.B.** Pour ramener des frais à l'année, on les multiplie selon leur périodicité :
 
@@ -429,66 +473,508 @@ Graphiquement, le coût fixe est une **droite parallèle à l'axe des abscisses*
 |---|---|---|---|---|---|
 | Coefficient | × 12 | × 4 | × 2 | × 52 | × 1 |
 
+#### 2. Les coûts variables (CVT)
+
+**a. Les coûts variables proportionnels (CVP)** : ils varient proportionnellement aux quantités produites. Si la quantité double, le coût double. Ils s'écrivent sous la forme $y = aq$, appelée **équation de la contrainte de production** :
+
+$$\text{CVP} = a \times q \qquad \text{avec} \qquad a = \frac{\text{CVP}}{q}$$
+
+Graphiquement, c'est une **droite qui passe par l'origine**.
+
+**b. Les coûts variables non proportionnels (CVNP)** : ils varient plus vite ou moins vite que les quantités produites.
+
+**c. Le coût variable total (CVT)** est l'ensemble des coûts variables précédents :
+
+$$\text{CVT} = \text{CVP} + \text{CVNP}$$
+
+d'où $\text{CVP} = \text{CVT} - \text{CVNP}$ et $\text{CVNP} = \text{CVT} - \text{CVP}$.
+
 #### 3. Le coût total (CT)
 
-C'est la somme du coût fixe total et du coût variable total, c'est-à-dire l'ensemble des dépenses que l'entreprise supporte pour réaliser une production donnée.
+Le coût total, ou prix de revient total, ou global, représente la somme des coûts fixes et variables que l'entreprise doit supporter pour réaliser son volume de production :
 
-$$\text{CT} = \text{CF} + \text{CV} = \text{CF} + \text{CVp} + \text{CVnp}$$
+$$\text{CT} = \text{CVT} + \text{CFT} = \text{CVP} + \text{CVNP} + \text{CFT}$$
+
+d'où $\text{CVT} = \text{CT} - \text{CFT}$ et $\text{CFT} = \text{CT} - \text{CVT}$.
+
+> **Remarques :**
+> - Si $q = 0$, alors $\text{CVT} = 0$, $\text{CVP} = 0$ et $\text{CVNP} = 0$ : le coût total se réduit au coût fixe, $\text{CFT} = \text{CT}_0$.
+> - Le salaire désigne tantôt un coût fixe, tantôt un coût variable : c'est un **CFT** dans le cas du salaire des employés ; un **CVP** lorsqu'il s'agit du salaire à la tâche, à la pièce, à l'article ou à l'unité ; un **CVNP** dans le cas du salaire des ouvriers (main-d'œuvre).
+> - Lorsque le coût total est donné sous la forme d'une fonction, le CVT correspond à la partie variable du CT et le CFT à sa partie non variable. Ainsi, si $\text{CT} = aq^4 + bq^3 + cq^2 + dq + k$, alors $\text{CVT} = aq^4 + bq^3 + cq^2 + dq$ et $\text{CFT} = k$.
+
+#### Application 1
+
+Le coût total d'une entreprise évolue comme suit en fonction des quantités produites. On précise que l'entreprise a supporté 270 F de coûts variables proportionnels pour 90 unités.
+
+| Q | 0 | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 |
+|---|---|---|---|---|---|---|---|---|---|
+| CT | 300 | 460 | 520 | 640 | 760 | 880 | 920 | 1 200 | 1 600 |
+
+**Travail à faire :** dresser l'équation de la contrainte, puis calculer dans un tableau les différents coûts supportés par cette entreprise.
+
+**Solution**
+
+*Équation de la contrainte.* Elle est de la forme $y = aq$, avec $a = \dfrac{y}{q} = \dfrac{270}{90} = 3$. D'où $y = 3q$, c'est-à-dire $\text{CVP} = 3q$.
+
+*Coût fixe.* Pour $q = 0$, $\text{CFT} = \text{CT}_0 = 300$.
+
+*Coûts variables.* $\text{CVT} = \text{CT} - \text{CFT}$ ; $\text{CVP} = 3q$ ; $\text{CVNP} = \text{CVT} - \text{CVP}$.
+
+| Q | CT | CFT | CVT | CVP | CVNP |
+|---|---|---|---|---|---|
+| 0 | 300 | 300 | 0 | 0 | 0 |
+| 2 | 460 | 300 | 160 | 6 | 154 |
+| 4 | 520 | 300 | 220 | 12 | 208 |
+| 6 | 640 | 300 | 340 | 18 | 322 |
+| 8 | 760 | 300 | 460 | 24 | 436 |
+| 10 | 880 | 300 | 580 | 30 | 550 |
+| 12 | 920 | 300 | 620 | 36 | 584 |
+| 14 | 1 200 | 300 | 900 | 42 | 858 |
+| 16 | 1 600 | 300 | 1 300 | 48 | 1 252 |
+
+#### Application 2
+
+Le coût de revient global d'une entreprise est $C(q) = 2q^3 - 6q^2 + 28q + 150$. Donner l'expression du CT, du CVT et du CFT.
+
+**Solution**
+
+- Le coût de revient global est le coût total : $\text{CT} = 2q^3 - 6q^2 + 28q + 150$.
+- Le CFT correspond à la partie non variable du CT : $\text{CFT} = 150$.
+- Le CVT correspond à la partie variable du CT : $\text{CVT} = 2q^3 - 6q^2 + 28q$.
 
 ### II. Les coûts moyens (ou unitaires)
 
-Les coûts moyens s'obtiennent en divisant les coûts totaux par la quantité produite $q$.
+Ce sont les dépenses que l'entreprise supporte par unité produite. Ils s'obtiennent en divisant les coûts totaux précédents par la quantité $q$.
 
-#### 1. Le coût fixe moyen (CFmo)
+#### 1. Le coût fixe moyen (CFM ou CFU)
 
-C'est la part des charges de structure supportée par chaque unité produite :
+C'est le rapport du coût fixe total à la quantité :
 
-$$\text{CFmo} = \frac{\text{CF}}{q}$$
+$$\text{CFM} = \frac{\text{CFT}}{q}$$
 
-Il diminue à mesure que la production augmente : les charges fixes sont réparties sur un plus grand nombre d'unités.
+d'où $\text{CFT} = \text{CFM} \times q$ et $q = \dfrac{\text{CFT}}{\text{CFM}}$.
 
-#### 2. Le coût variable moyen (CVmo)
+> **N.B.** Le coût fixe moyen est représenté par une courbe qui décroît au fur et à mesure que la production augmente : c'est un même coût fixe qui se répartit sur un nombre d'unités de plus en plus grand.
 
-C'est la part des charges variables supportée par chaque unité produite :
+#### 2. Le coût variable moyen (CVMo ou CVU)
 
-$$\text{CVmo} = \frac{\text{CV}}{q}$$
+C'est le rapport du coût variable total à la quantité :
 
-#### 3. Le coût moyen (CMo), ou coût total moyen
+$$\text{CVMo} = \frac{\text{CVT}}{q}$$
 
-C'est ce que coûte en moyenne une unité produite ; on l'appelle aussi **coût de revient unitaire** :
+d'où $\text{CVT} = \text{CVMo} \times q$ et $q = \dfrac{\text{CVT}}{\text{CVMo}}$.
 
-$$\text{CMo} = \frac{\text{CT}}{q} = \text{CFmo} + \text{CVmo}$$
+#### 3. Le coût moyen (Cmo), ou coût total moyen
+
+C'est ce que coûte en moyenne une unité produite ; on l'appelle aussi **coût de revient unitaire** (CRU) ou prix de revient unitaire (PRU) :
+
+$$\text{Cmo} = \frac{\text{CT}}{q} = \text{CFM} + \text{CVMo}$$
+
+d'où $\text{CT} = \text{Cmo} \times q$.
 
 > **Remarques :**
-> - Le minimum du CVmo est le **seuil de fermeture**. C'est le prix de vente le plus bas que l'entreprise peut accepter à court terme pour continuer à produire : à ce prix, elle couvre tout juste ses charges variables. En dessous, elle a intérêt à fermer.
-> - Le minimum du CMo est le **seuil de rentabilité**. À ce prix, l'entreprise couvre la totalité de ses charges, fixes et variables. La quantité correspondante est l'**optimum technique** : la quantité produite au coût moyen le plus bas.
+> - Le minimum du CVMo est le **seuil de fermeture**, appelé aussi **prix plancher** ou *shut down point* (SDP). C'est le prix de vente le plus bas que l'entreprise peut accepter à court terme pour continuer à produire : à ce prix, elle couvre tout juste ses charges variables et sa perte est égale à ses coûts fixes, $B = -\text{CFT}$. En dessous, elle a intérêt à fermer.
+> - La quantité qui correspond au minimum du coût moyen est l'**optimum technique** (OT) : c'est la quantité produite au coût moyen le plus bas.
+> - Tant que le coût moyen décroît, l'entreprise est en zone de **rendements croissants** (économies d'échelle internes) ; lorsqu'il est constant, en zone de rendements constants ; lorsqu'il croît, en zone de **rendements décroissants**.
 
 ### III. Le coût marginal (Cma)
 
-Le coût marginal est le **coût supplémentaire** entraîné par la production d'une unité de plus : c'est le coût de la dernière unité produite.
+Le coût marginal, ou prix de revient additionnel ou supplémentaire, est la **dépense supplémentaire** que l'entreprise supporte en produisant une unité supplémentaire, dite unité additionnelle. Il exprime le rapport de la variation du coût total à celle de la quantité :
 
-$$\text{Cma} = \frac{\Delta \text{CT}}{\Delta q} = \frac{\text{CT}_n - \text{CT}_{n-1}}{q_n - q_{n-1}}$$
+$$\text{Cma} = \frac{\Delta \text{CT}}{\Delta q}$$
 
-> **À retenir :**
-> - Tant que le coût marginal diminue, les rendements sont **croissants** ; lorsqu'il augmente, ils deviennent **décroissants**.
-> - La courbe du coût marginal coupe celles du CVmo et du CMo **en leur minimum**. À l'optimum technique, on a donc $\text{Cma} = \text{CMo}$.
-> - L'**optimum économique** est la quantité qui procure le profit maximal : il est atteint lorsque le coût marginal est égal au prix de vente, $\text{Cma} = p$ (voir le chapitre 7).
+**1. Calcul du Cma connaissant CT et q**
 
-### Exercice d'application
+$$\text{Cma}_n = \frac{\text{CT}_n - \text{CT}_{n-1}}{q_n - q_{n-1}}$$
 
-À partir d'un tableau donnant, pour chaque niveau de production, le coût fixe total, le coût variable total et le coût total, on demande de :
+**2. Calcul du CT connaissant Cma et q**
 
-1. compléter le tableau (CFmo, CVmo, CMo, Cma) ;
-2. déterminer les zones de rendements croissants et décroissants, le seuil de fermeture, le seuil de rentabilité et l'optimum technique ;
-3. représenter graphiquement les courbes des coûts moyens et du coût marginal.
+$$\text{CT}_n = \text{CT}_{n-1} + \text{Cma}_n \times (q_n - q_{n-1})$$
+
+$$\text{CT}_{n-1} = \text{CT}_n - \text{Cma}_n \times (q_n - q_{n-1})$$
+
+**3. Calcul des quantités connaissant les CT et le Cma**
+
+$$q_n = q_{n-1} + \frac{\text{CT}_n - \text{CT}_{n-1}}{\text{Cma}_n}$$
+
+$$q_{n-1} = q_n - \frac{\text{CT}_n - \text{CT}_{n-1}}{\text{Cma}_n}$$
+
+> **Remarques :**
+> - Si le coût total est donné sous forme de fonction, le coût marginal est la **dérivée première** du coût total : $\text{Cma} = \dfrac{d\,\text{CT}}{dq} = \text{CT}'$.
+> - Inversement, si le coût marginal est donné sous forme de fonction, on retrouve le coût total par **intégration** : $\text{CT} = \displaystyle\int \text{Cma}\,dq + k$, avec $k = \text{CFT}$. On rappelle qu'une primitive de $q^n$ est $\dfrac{q^{n+1}}{n+1}$.
+
+#### Application
+
+On donne $\text{CT} = 2q^4 + 3q^3 - 8q^2 + 12q + 300$.
+
+1. Donner la fonction du coût marginal.
+2. À partir du coût marginal trouvé, retrouver la fonction du coût total.
+
+**Solution**
+
+*1) Fonction du coût marginal.*
+
+$$\text{Cma} = \text{CT}' = 8q^3 + 9q^2 - 16q + 12$$
+
+*2) Fonction du coût total.*
+
+$$\text{CT} = \int (8q^3 + 9q^2 - 16q + 12)\,dq + k = \frac{8q^4}{4} + \frac{9q^3}{3} - \frac{16q^2}{2} + 12q + k$$
+
+$$\text{CT} = 2q^4 + 3q^3 - 8q^2 + 12q + k$$
+
+Or $k = \text{CFT} = 300$, donc $\text{CT} = 2q^4 + 3q^3 - 8q^2 + 12q + 300$.
+
+### IV. Relation entre le coût moyen et le coût marginal
+
+Lorsque le coût moyen est à son point le plus bas, la courbe du coût marginal traverse celle du coût moyen. À ce niveau, le coût marginal est égal au coût moyen :
+
+$$\text{Cmo minimum} \iff \text{Cma} = \text{Cmo}$$
+
+> **Remarques :**
+> - Le niveau de production qui égalise le coût moyen et le coût marginal est l'**optimum technique** de production : $\text{OT} = q$ tel que $\text{Cma} = \text{Cmo}$.
+> - La partie ascendante de la courbe du coût marginal, située au-dessus du minimum de la courbe du coût moyen, constitue la **courbe d'offre** de l'entreprise qui veut maximiser son profit à court terme.
+> - La courbe du coût marginal coupe aussi celle du coût variable moyen en son minimum.
+
+**Démonstration.** Le coût moyen est minimum lorsque sa dérivée est nulle : $\text{Cmo}' = 0$. Or $\text{Cmo} = \dfrac{\text{CT}}{q}$ est de la forme $\dfrac{U}{V}$, dont la dérivée est $\dfrac{U'V - V'U}{V^2}$. On pose $U = \text{CT}$, donc $U' = \text{CT}'$, et $V = q$, donc $V' = 1$ :
+
+$$\text{Cmo}' = \frac{\text{CT}' \times q - \text{CT}}{q^2}$$
+
+$$\text{Cmo}' = 0 \implies \text{CT}' \times q - \text{CT} = 0 \implies \text{CT}' = \frac{\text{CT}}{q}$$
+
+Or $\text{CT}' = \text{Cma}$ et $\dfrac{\text{CT}}{q} = \text{Cmo}$, donc $\text{Cma} = \text{Cmo}$.
+
+### Exercices corrigés sur les coûts de courte période
+
+#### Exercice 1
+
+Le prix de revient unitaire d'une entreprise, en fonction du volume de production, est donné dans le tableau ci-dessous :
+
+| Q | 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| PRU | — | 64 | 60 | 58 | 52 | 63 | 72 | 84 | 110 | 160 |
+
+On précise en outre que cette entreprise a supporté 180 F de coûts variables proportionnels pour 90 unités, et qu'elle a dépensé 5 F par mois pour le loyer, 2 F par semaine pour le carburant et 36 F pour les frais d'assurance.
+
+**Travail à faire :**
+
+1. Calculer, dans un tableau, les différents coûts engagés par cette entreprise.
+2. Dégager l'équation de la contrainte de production.
+3. Trouver le *shut down point*, la quantité écoulée et le résultat obtenu.
+4. Déterminer l'optimum technique et le coût y relatif, puis dégager les zones de rendements.
+
+**Solution**
+
+*1) Les différents coûts.*
+
+- Coût total : $\text{CT} = \text{Cmo} \times q$ ; par exemple $64 \times 10 = 640$. Pour $q = 0$, $\text{CT} = \text{CFT}$.
+- Coût fixe total : $\text{CFT} = (5 \times 12) + (2 \times 52) + 36 = 60 + 104 + 36 = 200$.
+- Coût variable total : $\text{CVT} = \text{CT} - \text{CFT}$.
+- Coût variable proportionnel : $\text{CVP} = aq$ avec $a = \dfrac{180}{90} = 2$, soit $\text{CVP} = 2q$.
+- Coût variable non proportionnel : $\text{CVNP} = \text{CVT} - \text{CVP}$.
+- Coûts moyens : $\text{CVMo} = \dfrac{\text{CVT}}{q}$ et $\text{CFM} = \dfrac{\text{CFT}}{q}$ (non définis pour $q = 0$).
+
+| Q | Cmo | CT | CFT | CVT | CVP | CVNP | CVMo | CFM |
+|---|---|---|---|---|---|---|---|---|
+| 0 | — | 200 | 200 | 0 | 0 | 0 | — | — |
+| 10 | 64 | 640 | 200 | 440 | 20 | 420 | 44 | 20 |
+| 20 | 60 | 1 200 | 200 | 1 000 | 40 | 960 | 50 | 10 |
+| 30 | 58 | 1 740 | 200 | 1 540 | 60 | 1 480 | 51,33 | 6,67 |
+| 40 | 52 | 2 080 | 200 | 1 880 | 80 | 1 800 | 47 | 5 |
+| 50 | 63 | 3 150 | 200 | 2 950 | 100 | 2 850 | 59 | 4 |
+| 60 | 72 | 4 320 | 200 | 4 120 | 120 | 4 000 | 68,67 | 3,33 |
+| 70 | 84 | 5 880 | 200 | 5 680 | 140 | 5 540 | 81,14 | 2,86 |
+| 80 | 110 | 8 800 | 200 | 8 600 | 160 | 8 440 | 107,5 | 2,5 |
+| 90 | 160 | 14 400 | 200 | 14 200 | 180 | 14 020 | 157,78 | 2,22 |
+
+*2) Équation de la contrainte :* $\text{CVP} = 2q$.
+
+*3) Shut down point.* $\text{SDP} = \text{CVMo minimum} = 44$, pour une quantité $q = 10$. À ce prix, le résultat est $B = -\text{CFT} = -200$.
+
+*4) Optimum technique.* $\text{Cmo minimum} = 52$, pour $q = 40$ : $\text{OT} = 40$ et le coût moyen correspondant est 52.
+
+Zones de rendements : pour $q \in \,]0\,;\,40[$, le coût moyen décroît, c'est la zone de rendements croissants (économies d'échelle internes) ; pour $q \in [40\,;\,90]$, le coût moyen croît, c'est la zone de rendements décroissants.
+
+#### Exercice 2
+
+Les charges opérationnelles totales d'une entité sont données par l'expression $C(q) = 2q^3 - 8q^2 + 72q$, les frais de structure étant de 150 F.
+
+**Travail à faire :**
+
+1. Donner l'expression du CVT, du CT, du CFT, du CVMo et du CFM.
+2. Trouver le prix plancher de cette entreprise, la quantité et le bénéfice correspondants.
+3. Si cette entreprise fait abstraction de ses frais de structure, trouver l'optimum technique de production et le coût correspondant.
+
+**Solution**
+
+*1) Expressions.*
+
+- Les charges opérationnelles totales sont le coût variable total : $\text{CVT} = 2q^3 - 8q^2 + 72q$.
+- $\text{CFT} = 150$.
+- $\text{CT} = \text{CVT} + \text{CFT} = 2q^3 - 8q^2 + 72q + 150$.
+- $\text{CVMo} = \dfrac{\text{CVT}}{q} = 2q^2 - 8q + 72$.
+- $\text{CFM} = \dfrac{\text{CFT}}{q} = \dfrac{150}{q}$.
+
+*2) Prix plancher.* Le prix plancher est le minimum du CVMo. $\text{CVMo}' = 4q - 8$ ; $\text{CVMo}' = 0$ donne $q = 2$.
+
+$$\text{CVMo}(2) = 2(2)^2 - 8(2) + 72 = 8 - 16 + 72 = 64$$
+
+Le prix plancher est 64, pour une quantité $q = 2$ ; le bénéfice correspondant est $B = -\text{CFT} = -150$.
+
+*3) Optimum technique sans frais de structure.* Si $\text{CFT} = 0$, alors $\text{CT} = 2q^3 - 8q^2 + 72q$ et $\text{Cmo} = \dfrac{\text{CT}}{q} = 2q^2 - 8q + 72$.
+
+$\text{Cmo}' = 4q - 8 = 0$ donne $q = 2$, d'où $\text{OT} = 2$. Le coût correspondant est $\text{Cmo}(2) = 64$.
+
+### B. Les coûts de production de longue période
+
+En longue période, la nature et le volume des équipements varient, y compris la taille de l'entreprise. Toute modification de la taille de l'entreprise entraîne des changements dans la structure de ses coûts : on parle alors de coûts de production de longue période.
+
+#### 1. Le coût fixe de longue période
+
+Les changements intervenus dans la structure des coûts de l'entreprise provoquent un accroissement des frais de structure, qui se fixent à un niveau supérieur. En longue période, le coût fixe varie donc **par paliers**, ou en escalier : il reste constant sur un intervalle de production ($\text{CFT}_1$ jusqu'à $Q_1$), puis passe à un niveau supérieur ($\text{CFT}_2$ jusqu'à $Q_2$), et ainsi de suite.
+
+#### 2. Le coût moyen de longue période : la courbe enveloppe
+
+En courte période, à chaque taille d'équipement correspond une courbe du coût moyen de courte période. Pour une production donnée, l'entreprise choisit en longue période le niveau d'équipement qui lui donne le coût moyen minimum.
+
+La courbe qui joint les courbes du coût moyen de courte période en leurs minimums constitue la courbe du coût moyen de longue période.
+
+> **N.B.** On appelle **courbe enveloppe**, ou enveloppante, la courbe du coût moyen de longue période, tangente à toutes les courbes du coût moyen de courte période en leurs minimums.
+
+### C. Le volume optimal et les seuils de rentabilité
+
+#### 1. Le volume optimal (Vo)
+
+On appelle volume optimal le niveau de production qui assure à l'entreprise le maximum de profit : $V_o = q$ tel que $B$ est maximum.
+
+Pour fixer ce niveau de production, l'entreprise compare ses recettes à ses dépenses.
+
+#### 2. Les recettes de l'entreprise
+
+**La recette totale (RT)**, ou chiffre d'affaires (CA), ou prix de vente total, est la recette que l'entreprise encaisse en vendant toute sa production. Elle s'obtient en multipliant le prix de vente unitaire par la quantité :
+
+$$\text{RT} = \text{PVU} \times q$$
+
+d'où $\text{PVU} = \dfrac{\text{RT}}{q}$ et $q = \dfrac{\text{RT}}{\text{PVU}}$.
+
+**La recette moyenne (Rmo)** est la recette par unité vendue : $\text{Rmo} = \dfrac{\text{RT}}{q} = \text{PVU}$.
+
+**La recette marginale (Rma)**, ou supplémentaire, ou additionnelle, est le supplément de recette que l'entreprise encaisse à la suite de la vente d'une unité supplémentaire. Elle exprime le rapport de la variation de la recette totale à celle de la quantité :
+
+$$\text{Rma}_n = \frac{\text{RT}_n - \text{RT}_{n-1}}{q_n - q_{n-1}}$$
+
+> **Remarques importantes :**
+> - Si la recette totale est donnée sous forme de fonction, alors $\text{Rma} = \text{RT}'$.
+> - Si la recette marginale est donnée sous forme de fonction, alors $\text{RT} = \displaystyle\int \text{Rma}\,dq + c$, avec $c$ une constante d'intégration.
+> - Si le prix de vente unitaire pratiqué sur le marché est constant, il est égal à la recette marginale : $\text{Rma} = \text{PVU}$.
+
+#### 3. Le résultat de l'entreprise
+
+On appelle résultat de l'entreprise la différence entre les recettes encaissées et les dépenses engagées.
+
+**Le résultat total** (ou bénéfice total, global, ou profit), noté $R$, $B$, $BT$, $BG$ ou $\pi$, est la différence entre la recette totale et le coût total :
+
+$$B = \text{RT} - \text{CT}$$
+
+- Si $\text{RT} > \text{CT}$, le résultat est positif : l'entreprise réalise un **profit**.
+- Si $\text{RT} < \text{CT}$, le résultat est négatif : l'entreprise réalise une **perte**.
+- Si $\text{RT} = \text{CT}$, le résultat est nul : l'entreprise ne réalise ni perte ni profit ; on parle de **seuil de rentabilité**.
+
+**Le résultat moyen** (ou unitaire), noté $b$, BMo ou BU, est le bénéfice que l'entreprise fait par unité vendue :
+
+$$b = \frac{B}{q}$$
+
+d'où $B = b \times q$. Comme $B = \text{PVU} \times q - \text{Cmo} \times q$, on a aussi :
+
+$$b = \text{PVU} - \text{Cmo} = \text{Rmo} - \text{Cmo} \qquad \text{et} \qquad B = (\text{PVU} - \text{Cmo}) \times q$$
+
+**Le résultat marginal (Bma)** est le bénéfice supplémentaire que l'entreprise réalise à la suite de la vente d'une unité additionnelle :
+
+$$\text{Bma}_n = \frac{B_n - B_{n-1}}{q_n - q_{n-1}}$$
+
+Si $B$ est une fonction, $\text{Bma} = B'$ ; inversement, $B = \displaystyle\int \text{Bma}\,dq + c$.
+
+**Le résultat maximum** est le plus grand bénéfice que l'entreprise réalise. Selon le raisonnement marginaliste, il est atteint lorsque la recette marginale est égale au coût marginal :
+
+$$B \text{ maximum} \iff \text{Rma} = \text{Cma}$$
+
+Le niveau de production qui égalise la recette marginale et le coût marginal est appelé **optimum économique**, optimum de position, volume optimal, production optimale ou dimension optimale.
+
+**Démonstration.** $B$ est maximum lorsque $B' = 0$. Or $B = \text{RT} - \text{CT}$, donc $B' = \text{RT}' - \text{CT}'$. $B' = 0$ donne $\text{RT}' = \text{CT}'$ ; comme $\text{RT}' = \text{Rma}$ et $\text{CT}' = \text{Cma}$, on obtient $\text{Rma} = \text{Cma}$.
+
+#### 4. Les seuils de rentabilité, ou points morts (SR)
+
+**Définition.** On appelle seuils de rentabilité les niveaux de production pour lesquels le résultat de l'entreprise est nul : $\text{SR} = q$ tel que $B = 0$ ou $b = 0$.
+
+**Les deux seuils de rentabilité**
+
+- **Le 1er seuil de rentabilité**, ou taille minimale, ou masse critique : c'est le niveau de production pour lequel le résultat est nul et où l'entreprise quitte la zone de perte pour basculer dans la zone de profit.
+- **Le 2e seuil de rentabilité**, ou taille maximale, ou seuil critique : c'est le niveau de production pour lequel le résultat est nul et où l'entreprise quitte la zone de profit pour basculer dans une nouvelle zone de perte.
+
+À chacun des deux seuils : $B = 0$, donc $\text{RT} = \text{CT}$ ; ou $b = 0$, donc $\text{PVU} = \text{Cmo}$.
+
+**Remarque.** Le seuil de rentabilité exprime parfois un **chiffre d'affaires critique**. Dans ce cas, il se calcule par la formule :
+
+$$\text{SR} = \frac{\text{CA} \times \text{CF}}{\text{M/CV}} \qquad \text{avec} \qquad \text{M/CV} = \text{CA} - \text{CV}$$
+
+où M/CV est la marge sur coût variable, CA le chiffre d'affaires, CF les coûts fixes et CV les coûts variables.
+
+**Détermination graphique.** Les seuils de rentabilité se lisent à l'intersection des courbes de RT et de CT, ou bien à l'intersection des courbes de PVU (Rmo) et de Cmo :
+
+- la droite de la recette totale coupe la courbe du coût total en deux points : avant le premier, le coût total est au-dessus de la recette (zone de perte) ; entre les deux, la recette est au-dessus (zone de profit) ; après le second, c'est de nouveau une zone de perte ;
+- de même, la droite horizontale du prix de vente unitaire coupe la courbe en U du coût moyen en deux points, qui délimitent la zone de profit.
+
+**Détermination algébrique**
+
+- *Données dans un tableau :* on repère dans le tableau les bénéfices nuls ; la quantité qui correspond au premier bénéfice nul est le 1er SR, celle qui correspond au second est le 2e SR. Si les zéros du bénéfice n'apparaissent pas dans le tableau, les seuils de rentabilité sont donnés sous forme d'intervalles.
+- *Données sous forme de fonction :* on pose $B = 0$ ou $b = 0$, on calcule le discriminant et les racines ; la petite racine est le 1er SR et la grande racine le 2e SR.
+
+**Les zones de perte et de profit.** La zone de perte est l'intervalle de production pour lequel le résultat de l'entreprise est négatif ; la zone de profit est l'intervalle de production pour lequel il est positif.
+
+### Exercices corrigés sur le volume optimal et les seuils de rentabilité
+
+#### Exercice 1
+
+Le coût de revient unitaire d'une entreprise, en fonction du volume de production, est donné dans le tableau ci-après, le prix de vente d'une unité étant de 62 F.
+
+| Volume de production | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| CRU | 86 | 80 | 62 | 54 | 50 | 50 | 58 | 62 | 84 | 110 |
+
+On précise en outre que cette entreprise est soumise à la contrainte $y = \dfrac{Q}{0{,}5}$, et qu'elle a dépensé 5 F par mois pour le loyer, 2 F par semaine pour le carburant et 36 F pour l'assurance.
+
+**Travail à faire :**
+
+1. Calculer, dans un tableau, les différents coûts engagés par cette entité, de même que ses recettes et ses résultats.
+2. Déterminer le seuil de fermeture, la quantité et le résultat correspondants.
+3. Trouver l'optimum technique et dégager les zones de rendements.
+4. Déterminer la production optimale et le résultat correspondant.
+5. Trouver les seuils de rentabilité et donner les zones de perte et de profit.
+6. Préciser la courbe d'offre et les points morts.
+
+**Solution**
+
+*1) Tableau des coûts, recettes et résultats.*
+
+- $\text{CT} = \text{Cmo} \times q$ ; par exemple $86 \times 10 = 860$.
+- $\text{CFT} = (5 \times 12) + (2 \times 52) + 36 = 200$.
+- $\text{CVT} = \text{CT} - \text{CFT}$ ; par exemple $860 - 200 = 660$.
+- $\text{CVP} = \dfrac{Q}{0{,}5} = 2Q$ ; par exemple $\dfrac{10}{0{,}5} = 20$.
+- $\text{CVNP} = \text{CVT} - \text{CVP}$ ; par exemple $660 - 20 = 640$.
+- $\text{CVMo} = \dfrac{\text{CVT}}{q}$ et $\text{CFM} = \dfrac{\text{CFT}}{q}$ ; par exemple $\dfrac{660}{10} = 66$ et $\dfrac{200}{10} = 20$.
+- $\text{Cma}_n = \dfrac{\text{CT}_n - \text{CT}_{n-1}}{q_n - q_{n-1}}$ ; par exemple $\dfrac{1\,600 - 860}{20 - 10} = 74$.
+- $\text{Rmo} = \text{PVU} = 62$ ; le prix étant constant, $\text{Rma} = \text{PVU} = 62$.
+- $\text{RT} = \text{Rmo} \times q$ ; par exemple $62 \times 10 = 620$.
+- $B = \text{RT} - \text{CT}$ ; par exemple $620 - 860 = -240$.
+- $b = \dfrac{B}{q}$ ; par exemple $\dfrac{-240}{10} = -24$.
+
+| Q | Cmo | CT | CFT | CVT | CVP | CVNP | CVMo | CFM | Cma | RT | B | b |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 10 | 86 | 860 | 200 | 660 | 20 | 640 | 66 | 20 | — | 620 | −240 | −24 |
+| 20 | 80 | 1 600 | 200 | 1 400 | 40 | 1 360 | 70 | 10 | 74 | 1 240 | −360 | −18 |
+| 30 | 62 | 1 860 | 200 | 1 660 | 60 | 1 600 | 55,33 | 6,67 | 26 | 1 860 | 0 | 0 |
+| 40 | 54 | 2 160 | 200 | 1 960 | 80 | 1 880 | 49 | 5 | 30 | 2 480 | 320 | 8 |
+| 50 | 50 | 2 500 | 200 | 2 300 | 100 | 2 200 | 46 | 4 | 34 | 3 100 | 600 | 12 |
+| 60 | 50 | 3 000 | 200 | 2 800 | 120 | 2 680 | 46,67 | 3,33 | 50 | 3 720 | 720 | 12 |
+| 70 | 58 | 4 060 | 200 | 3 860 | 140 | 3 720 | 55,14 | 2,86 | 106 | 4 340 | 280 | 4 |
+| 80 | 62 | 4 960 | 200 | 4 760 | 160 | 4 600 | 59,5 | 2,5 | 90 | 4 960 | 0 | 0 |
+| 90 | 84 | 7 560 | 200 | 7 360 | 180 | 7 180 | 81,78 | 2,22 | 260 | 5 580 | −1 980 | −22 |
+| 100 | 110 | 11 000 | 200 | 10 800 | 200 | 10 600 | 108 | 2 | 344 | 6 200 | −4 800 | −48 |
+
+Sur toute la colonne, $\text{Rmo} = \text{Rma} = 62$.
+
+*2) Seuil de fermeture.* $\text{SF} = \text{CVMo minimum} = 46$, pour $q = 50$. Si le prix tombait à ce niveau, le résultat serait $B = -\text{CFT} = -200$.
+
+*3) Optimum technique.* L'optimum technique est la quantité pour laquelle $\text{Cma} = \text{Cmo}$ : $\text{Cma} = \text{Cmo} = 50$ pour $q = 60$, d'où $\text{OT} = 60$.
+
+Zones de rendements : pour $q \in [10\,;\,50[$, le coût moyen décroît, zone de rendements croissants ; pour $q \in [50\,;\,60]$, le coût moyen est constant, zone de rendements constants ; pour $q \in \,]60\,;\,100]$, le coût moyen croît, zone de rendements décroissants.
+
+*4) Production optimale.* Le bénéfice est maximum pour $q = 60$ : $P_o = 60$ et $B_{\max} = 720$.
+
+*5) Seuils de rentabilité.* $B = 0$ pour $q = 30$ et pour $q = 80$ : le 1er SR est 30, le 2e SR est 80.
+
+- Zone de perte : $q \in [10\,;\,30[ \;\cup\; ]80\,;\,100]$.
+- Zone de profit : $q \in \,]30\,;\,80[$.
+
+*6) Courbe d'offre et points morts.* La courbe d'offre de l'entreprise est la partie ascendante de la courbe du coût marginal située au-dessus du minimum du coût moyen, c'est-à-dire à partir de $q = 60$. Les points morts sont les points où la droite du prix ($\text{PVU} = 62$) coupe la courbe du coût moyen : $q = 30$ et $q = 80$.
+
+#### Exercice 2
+
+Le résultat unitaire d'une entreprise a pour expression $b(q) = 2q^2 - 10q + 12$.
+
+1. Donner les points morts de cette entreprise.
+2. Donner les fonctions du bénéfice total et du bénéfice marginal.
+
+**Solution**
+
+*1) Points morts.* On pose $b = 0$ : $2q^2 - 10q + 12 = 0$.
+
+$$\Delta = b^2 - 4ac = (-10)^2 - 4 \times 2 \times 12 = 100 - 96 = 4$$
+
+$$q' = \frac{10 - 2}{4} = 2 \qquad \text{et} \qquad q'' = \frac{10 + 2}{4} = 3$$
+
+Le 1er SR est 2 et le 2e SR est 3.
+
+*2) Fonctions du bénéfice.*
+
+$$B = b \times q = 2q^3 - 10q^2 + 12q$$
+
+$$\text{Bma} = B' = 6q^2 - 20q + 12$$
+
+#### Exercice 3
+
+Quel est le seuil de rentabilité d'une entreprise dont le chiffre d'affaires est de 380 F lorsque les charges fixes et variables sont respectivement de 70 F et 180 F ?
+
+**Solution**
+
+$$\text{M/CV} = \text{CA} - \text{CV} = 380 - 180 = 200$$
+
+$$\text{SR} = \frac{\text{CA} \times \text{CF}}{\text{M/CV}} = \frac{380 \times 70}{200} = 133 \text{ F}$$
 
 ## Chapitre 7 — Le marché
 
-### Section I — Les études de marché
+### Section I — La connaissance du marché de l'entreprise
 
-**Introduction.** Pour l'entreprise, l'écoulement de sa production est déterminant. Elle cherche donc à connaître son marché : les besoins, les comportements et les motivations des consommateurs. Elle recourt pour cela aux **études de marché**, c'est-à-dire à l'étude méthodique de la demande, des prix, de la distribution et de la concurrence.
+Connaître le marché de l'entreprise et son environnement est important, dans la mesure où cela permet à l'entreprise d'établir une politique commerciale rigoureuse et efficace.
 
-L'étude de marché permet de mieux connaître la clientèle et la concurrence, donc de mieux décider : elle **réduit le risque commercial**.
+L'entreprise vit d'échanges avec le milieu économique extérieur, lequel constitue son environnement. Ces échanges s'effectuent à l'intérieur des marchés, dans lesquels l'entreprise est soit en position d'offreur, soit en position de demandeur.
+
+#### 1. Définition
+
+On appelle **marché de l'entreprise** le milieu territorial et institutionnel dans lequel se forme la demande des biens que l'entreprise produit.
+
+L'entreprise produit et vend généralement un bien ou un service ; lorsqu'elle a une production diversifiée, elle a autant de marchés que de produits à vendre.
+
+#### 2. Les différents niveaux d'approche du marché du produit
+
+- **Le marché actuel** : c'est l'ensemble des clients qui achètent, régulièrement ou irrégulièrement, auprès de l'entreprise. Il se mesure par le chiffre d'affaires ou par les quantités vendues, et représente la part de l'entreprise dans le marché total du produit.
+- **Le marché théorique** : il est composé des clients actuels et des non-consommateurs relatifs (NCR), c'est-à-dire ceux qui n'achètent pas actuellement le produit de l'entreprise pour des raisons données, mais qui sont susceptibles de l'acheter plus tard.
+- **Le marché potentiel** : il regroupe les clients enlevés à la concurrence, la part conquise des NCR et les clients nouveaux liés à l'innovation.
+- **Le marché réel** : c'est le marché potentiel de l'entreprise qui pratique une stratégie d'expansion.
+
+#### 3. La segmentation du marché de l'entreprise
+
+**Définition.** La segmentation du marché de l'entreprise est l'action de diviser ce marché en plusieurs segments, de façon à placer à l'intérieur de chaque segment les consommateurs qui expriment le même comportement d'achat.
+
+**Les critères.** La segmentation se fait selon plusieurs critères : l'âge, le sexe, les catégories socio-professionnelles, la région, le degré d'urbanisation des villes, le motif d'utilisation du produit, etc.
+
+**Les difficultés.**
+
+- La difficulté de trouver un segment suffisamment représentatif, dans lequel l'action de l'entreprise reste rentable.
+- La difficulté de trouver un critère significatif de segmentation.
+
+**Les conséquences.**
+
+- La diversification des produits selon la marque, l'emballage, la présentation, la qualité, la quantité, le prix, le degré de sophistication, etc.
+- La différenciation des prix, en liaison avec la diversification des produits.
+- Le choix d'axes publicitaires différents selon le segment auquel on s'intéresse.
+
+**L'avantage.** La segmentation permet à l'entreprise de définir ses cibles de clientèle et d'adapter son action à la demande des consommateurs. Elle constitue le point de départ d'une stratégie de marketing dans l'entreprise.
+
+### Section II — Les études de marché
+
+Pour agir, l'entreprise a besoin d'information. Elle cherche à connaître son marché : les besoins, les comportements et les motivations des consommateurs. Elle procède pour cela aux **études de marché**, c'est-à-dire à l'étude méthodique de la demande d'un produit, de l'offre qui lui répond, des prix, de la distribution et de la concurrence.
+
+L'étude de marché permet de mieux connaître la clientèle et la concurrence, donc de mieux décider : elle **réduit le risque commercial**. Elle se fait grâce à des méthodes dites techniques d'investigation du marché.
 
 #### 1. Les techniques d'investigation
 
@@ -508,59 +994,152 @@ C'est l'ensemble des questions posées. Il comporte :
 
 C'est la fraction de la population que l'on interroge. L'échantillon doit être **représentatif** : il doit avoir la même structure que la population mère, afin que les résultats puissent être étendus (extrapolés) à l'ensemble de la population.
 
-### Section II — Le marché
+### Section III — L'entreprise et le marché
 
 #### 1. Définition
 
-Le **marché** est le lieu de rencontre entre l'**offre** et la **demande** d'un bien ou d'un service, en vue de fixer un prix.
+Le **marché** peut se définir comme la masse des offres et des demandes d'un produit sur la base d'un prix. C'est le lieu de rencontre entre l'**offre** et la **demande** d'un bien ou d'un service, en vue de fixer un prix.
 
 Sur le marché des biens et services, l'offre est constituée par les producteurs (les vendeurs), la demande par les consommateurs (les acheteurs).
 
-#### 2. Les caractéristiques du marché
+#### 2. La classification des marchés
 
-Sur un marché s'échangent des biens et des services contre un prix, entre une offre et une demande.
+Les marchés se distinguent selon plusieurs critères.
 
-#### 3. Les différentes structures de marché
+**a. Le critère de la taille, de l'étendue ou de la dimension du marché.** Il distingue le marché local, le marché régional, le marché national et le marché international.
 
-Selon le nombre d'offreurs (vendeurs) et de demandeurs (acheteurs), on distingue plusieurs structures de marché :
+**b. Le critère de la destination des biens et services.** Il distingue le marché des biens de consommation finale et le marché des biens de production, lui-même composé du marché des biens de consommation intermédiaire et du marché des biens d'équipement.
+
+**c. Le critère de la structure de la relation entre l'offre et la demande.** Il distingue neuf types de marché à partir de la confrontation entre le nombre d'offreurs et le nombre de demandeurs, comme le présente le tableau de Stackelberg :
 
 | Offreurs ↓ \ Demandeurs → | Un seul | Quelques-uns | Nombreux |
 |---|---|---|---|
 | **Un seul** | Monopole bilatéral | Monopole contrarié | Monopole |
 | **Quelques-uns** | Monopsone contrarié | Oligopole bilatéral | Oligopole |
-| **Nombreux** | Monopsone | Oligopsone | Concurrence parfaite |
+| **Nombreux** | Monopsone | Oligopsone | Concurrence pure et parfaite |
 
-### Section III — La concurrence pure et parfaite et l'équilibre du marché
+> **Remarque.** De ces neuf marchés, deux sont étudiés en priorité : la concurrence pure et parfaite et le monopole, auxquels s'ajoute un troisième type de marché tiré de ces deux derniers, le marché de concurrence monopolistique.
 
-#### 1. Le marché de concurrence pure et parfaite
+### Section IV — Le marché de concurrence pure et parfaite (CPP)
 
-C'est le marché théorique de référence. Il suppose la réunion de cinq conditions :
+#### 1. Définition et caractéristiques
 
-- **a. L'atomicité** : offreurs et demandeurs sont nombreux et de petite taille ; aucun ne peut, à lui seul, influencer le prix.
-- **b. L'homogénéité du produit** : les produits offerts sont identiques.
-- **c. La libre entrée et la libre sortie** : les producteurs peuvent entrer sur le marché et le quitter librement.
-- **d. La transparence du marché** : l'information circule parfaitement ; chacun connaît les prix et les quantités.
-- **e. La mobilité des facteurs de production** : le travail et le capital circulent librement d'une activité à une autre.
+C'est le marché théorique de référence. Le régime de concurrence pure et parfaite est un marché qui présente les cinq caractéristiques suivantes :
 
-#### 2. L'équilibre du marché
+- **a. L'atomicité des offres et des demandes** : les participants à ce marché sont en grand nombre ; ils agissent de manière indépendante et aucun d'eux n'a la possibilité d'influencer les conditions du marché.
+- **b. L'homogénéité (ou l'identité) des produits** : les produits vendus sur ce marché sont identiques ou substituables.
+- **c. La transparence du marché** : les participants ont une parfaite connaissance des conditions du marché (prix et quantités).
+- **d. La fluidité du marché** : les participants sont libres d'entrer sur le marché et d'en sortir.
+- **e. La parfaite mobilité des facteurs** : les facteurs de production (travail, capital) circulent librement d'une activité à une autre.
 
-L'équilibre est réalisé lorsque **l'offre est égale à la demande**. On distingue :
+Dans ce qui suit, on note OG l'offre globale, DG la demande globale, OI l'offre individuelle (celle d'une entreprise) et NE le nombre d'entreprises sur le marché.
 
-- l'équilibre de courte période ;
-- l'équilibre de longue période.
+#### 2. L'équilibre de courte période
 
-#### 3. Détermination du prix d'équilibre
+**a. Équilibre au niveau du marché**
 
-Le **prix d'équilibre** est le prix pour lequel la quantité offerte est égale à la quantité demandée. Sur le graphique, c'est le **point d'intersection** de la courbe d'offre (croissante) et de la courbe de demande (décroissante).
+Le marché est en équilibre lorsque l'offre globale est égale à la demande globale :
+
+$$\text{OG} = \text{DG}$$
+
+*Le prix d'équilibre du marché ($P_e$).* En courte période, sur le marché de CPP, le prix est une donnée qui s'impose à tous : il est unique et constant ; c'est à la fois le prix du marché et celui de l'entreprise. Il se détermine :
+
+- **graphiquement**, à l'intersection de la courbe d'offre globale (croissante) et de la courbe de demande globale (décroissante) ;
+- **algébriquement**, par l'égalité entre les équations d'offre et de demande globales.
+
+*La quantité d'équilibre du marché ($q_e$).* Elle se détermine de la même façon : $q_e = \text{OG} = \text{DG}$. Comme l'offre globale est la somme des offres individuelles :
+
+$$\text{OG} = \text{OI} \times \text{NE} \qquad \text{d'où} \qquad \text{OI} = \frac{\text{OG}}{\text{NE}} \quad \text{et} \quad \text{NE} = \frac{\text{OG}}{\text{OI}}$$
 
 À l'équilibre, le marché est apuré : il n'y a ni pénurie, ni surproduction.
 
-#### 4. Détermination du profit
+*Le profit réalisé par le marché ($BG$).*
 
-À partir du prix d'équilibre et des coûts (coût moyen, coût marginal), on détermine le profit de l'entreprise. En concurrence pure et parfaite, le prix s'impose à l'entreprise, qui est égal à sa recette marginale. Le profit est **maximal** pour la quantité qui égalise le coût marginal et le prix :
+$$BG = B \text{ par entreprise} \times \text{NE}$$
 
-$$\text{Cma} = \text{Rma} = p$$
+**b. Équilibre au niveau de l'entreprise**
 
-Le profit se calcule alors ainsi :
+L'entreprise est en équilibre de courte période lorsque son profit est maximum, c'est-à-dire lorsque $\text{Rma} = \text{Cma}$.
 
-$$\text{Profit} = (p - \text{CMo}) \times q$$
+*Le prix d'équilibre de l'entreprise.* C'est celui du marché ; comme il est unique et constant :
+
+$$P_e = \text{PVU} = \text{Rmo} = \text{Rma} = \text{Cma}$$
+
+*La quantité d'équilibre de l'entreprise.* C'est l'offre individuelle : la quantité pour laquelle $\text{Rma} = \text{Cma}$ (profit maximum), ou encore $\text{OI} = \dfrac{\text{OG}}{\text{NE}}$.
+
+*Le profit de l'entreprise en courte période.* Sur ce marché, l'entreprise réalise en courte période un **superprofit** (ou surprofit) :
+
+$$B_{\max} = P_e \times q_e - \text{CT} = (P_e - \text{Cmo}) \times q_e$$
+
+Graphiquement, le superprofit est la surface du rectangle compris entre la droite du prix et le coût moyen, pour la quantité d'équilibre.
+
+#### 3. L'équilibre de longue période
+
+Le superprofit réalisé en courte période attire de nouveaux producteurs sur le marché. Cela provoque une augmentation de l'offre globale et une baisse du prix de vente unitaire, jusqu'au minimum du coût moyen. À ce niveau, le bénéfice devient nul : aucun autre producteur n'a intérêt à venir sur le marché. On dit que le marché est **stabilisé**.
+
+**a. Équilibre au niveau du marché**
+
+La condition reste $\text{OG}_{LP} = \text{DG}_{LP}$, ce qui donne le prix et la quantité d'équilibre de longue période. Avec $\text{OG}_{LP} = \text{OI}_{LP} \times \text{NE}_{LP}$ :
+
+$$\text{NE}_{LP} = \frac{\text{OG}_{LP}}{\text{OI}_{LP}}$$
+
+Le pourcentage de variation du nombre d'entreprises sur le marché est :
+
+$$\%\Delta \text{NE} = \frac{\text{NE}_{LP} - \text{NE}_{CP}}{\text{NE}_{CP}} \times 100$$
+
+Le profit réalisé par le marché en longue période est nul : $BG_{LP} = 0$.
+
+**b. Équilibre au niveau de l'entreprise**
+
+La condition d'équilibre de l'entreprise en longue période est le minimum du coût moyen, c'est-à-dire $\text{Cmo} = \text{Cma}$.
+
+- Le prix d'équilibre : $P_e = \text{Cmo minimum}$.
+- La quantité d'équilibre : la quantité pour laquelle le coût moyen est minimum ($\text{Cmo} = \text{Cma}$).
+- Le profit : $B_{LP} = 0$. En effet, $B = P_e \times q_e - \text{Cmo} \times q_e$ ; or $\text{Cmo} = P_e$, donc $B = 0$.
+
+#### Application
+
+Sur un marché où interviennent plusieurs firmes n'ayant aucune influence sur le prix, l'offre et la demande globales d'un bien, en fonction du prix, sont données dans le tableau ci-après.
+
+| Prix | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 |
+|---|---|---|---|---|---|---|---|---|
+| OG | 1 000 | 3 000 | 5 000 | 7 000 | 9 000 | 11 000 | 13 000 | 15 000 |
+| DG | 10 000 | 9 000 | 8 000 | 7 000 | 6 000 | 5 000 | 4 000 | 3 000 |
+
+L'entreprise DELM, l'une des 1 000 firmes identiques intervenant sur ce marché, supporte un coût total évoluant comme suit en fonction des quantités produites :
+
+| Quantités | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| CT | 70 | 120 | 135 | 160 | 200 | 246 | 294 | 360 | 450 | 550 |
+
+**Travail à faire :**
+
+1. Donner, en justifiant la réponse, la nature de ce marché, puis le caractériser.
+2. Déterminer, à l'équilibre de courte période, les éléments d'équilibre du marché.
+3. a) Trouver, à l'équilibre de courte période, la quantité offerte par DELM, le prix appliqué et le profit réalisé. b) Nommer le profit de l'entreprise en courte période, puis calculer le profit réalisé par le marché. c) Trouver, à l'équilibre de longue période, le prix et la quantité d'équilibre, ainsi que le profit réalisé par DELM.
+
+**Solution**
+
+*1) Nature du marché.* Plusieurs firmes interviennent sur ce marché et aucune n'a d'influence sur le prix : c'est un marché de concurrence pure et parfaite. Il se caractérise par l'atomicité des offres et des demandes, l'homogénéité des produits, la transparence, la fluidité du marché et la parfaite mobilité des facteurs.
+
+*2) Équilibre du marché en courte période.* $\text{OG} = \text{DG} = 7\,000$ pour un prix de 50 : $P_e = 50$ et $q_e = 7\,000$.
+
+*3) a) Équilibre de DELM en courte période.* Le prix appliqué est celui du marché : 50. On calcule le coût moyen, le coût marginal et le bénéfice $B = 50q - \text{CT}$ :
+
+| q | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| CT | 70 | 120 | 135 | 160 | 200 | 246 | 294 | 360 | 450 | 550 |
+| Cmo | 70 | 60 | 45 | 40 | 40 | 41 | 42 | 45 | 50 | 55 |
+| Cma | — | 50 | 15 | 25 | 40 | 46 | 48 | 66 | 90 | 100 |
+| RT | 50 | 100 | 150 | 200 | 250 | 300 | 350 | 400 | 450 | 500 |
+| B | −20 | −20 | 15 | 40 | 50 | 54 | 56 | 40 | 0 | −50 |
+
+Le profit est maximum pour $q = 7$ : c'est la dernière unité dont le coût marginal (48) reste inférieur au prix (50) ; la huitième coûterait 66. On vérifie que $\text{OI} = \dfrac{\text{OG}}{\text{NE}} = \dfrac{7\,000}{1\,000} = 7$.
+
+La quantité offerte par DELM est 7, au prix de 50, pour un profit $B_{\max} = 50 \times 7 - 294 = 56$.
+
+*b) Nom et profit du marché.* Ce profit de courte période est un **superprofit** (ou surprofit). Le profit réalisé par le marché est $BG = 56 \times 1\,000 = 56\,000$.
+
+*c) Équilibre de longue période.* Le prix se fixe au minimum du coût moyen : $\text{Cmo minimum} = 40$, et $\text{Cmo} = \text{Cma} = 40$ pour $q = 5$. Donc $P_e = 40$ et DELM produit 5 unités ; son profit est $B = 40 \times 5 - 200 = 0$.
+
+Au prix de 40, la demande globale est de 8 000 : la quantité d'équilibre du marché est 8 000 et le nombre d'entreprises devient $\text{NE}_{LP} = \dfrac{8\,000}{5} = 1\,600$, soit une variation de $\dfrac{1\,600 - 1\,000}{1\,000} \times 100 = 60\ \%$.

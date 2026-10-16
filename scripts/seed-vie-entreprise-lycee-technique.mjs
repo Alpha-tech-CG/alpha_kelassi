@@ -13,16 +13,24 @@
  * Idempotent : ne crée que ce qui manque, ne supprime rien, et sauvegarde
  * dans `scripts/.backup-vie-entreprise-*.json` ce qu'il remplace.
  *
+ * Les chapitres 5 à 7 ont été enrichis à partir d'un cahier de cours de BG
+ * (étapes PERT et intervalle de flottement ; coûts de longue période, volume
+ * optimal et seuils de rentabilité ; connaissance du marché, équilibres de
+ * courte et de longue période, exercices corrigés).
+ *
  * Usage :
  *   node scripts/seed-vie-entreprise-lycee-technique.mjs --dry-run
  *   node scripts/seed-vie-entreprise-lycee-technique.mjs
+ *   node scripts/seed-vie-entreprise-lycee-technique.mjs --level=bac_bg   (une seule série)
  */
 import { readFileSync, writeFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { splitExercises, syncExercises } from './lib/exercises.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DRY_RUN = process.argv.includes('--dry-run')
+const ONLY_LEVEL = process.argv.find((a) => a.startsWith('--level='))?.slice('--level='.length)
 
 const env = Object.fromEntries(
   readFileSync(join(__dirname, '..', 'apps', 'web', '.env.local'), 'utf-8')
@@ -51,20 +59,22 @@ async function sb(path, init) {
 }
 
 const SUBJECT = "VIE D'ENTREPRISE"
-const TARGETS = [
+const ALL_TARGETS = [
   { level: 'bac_g2', series: 'ef1a3bef-4d82-4f8a-a483-57c57a02248a' },
   { level: 'bac_g3', series: '73c62a1b-1df0-4080-a297-8cedb2f71a5a' },
   { level: 'bac_bg', series: 'b2a0a771-e218-48e8-a6f3-d79f468e9f3d' },
 ]
+const TARGETS = ONLY_LEVEL ? ALL_TARGETS.filter((t) => t.level === ONLY_LEVEL) : ALL_TARGETS
+if (!TARGETS.length) throw new Error(`Série inconnue : ${ONLY_LEVEL} (attendu : ${ALL_TARGETS.map((t) => t.level).join(', ')}).`)
 
 const TITLES = [
   { title: 'Chapitre I — Le pilotage de l’entreprise', description: 'Tableau de bord, modules pilote, opérationnel et de contrôle, pilotage social.' },
   { title: 'Chapitre II — Le processus de décision', description: 'Étapes de la décision et classification selon le temps, le niveau et le risque.' },
   { title: 'Chapitre III — Les pouvoirs et les niveaux de décision', description: 'Niveaux de décision, délégation de pouvoirs et décentralisation.' },
   { title: 'Chapitre IV — La programmation linéaire', description: 'Formalisation, résolution graphique et algébrique, plein emploi ; exemple résolu.' },
-  { title: 'Chapitre V — Les graphes et l’ordonnancement des tâches', description: 'Chemin critique, tâches fictives, méthode PERT, dates et marges.' },
-  { title: 'Chapitre VI — Les coûts de production', description: 'Coûts fixes, variables, totaux, moyens et marginal ; seuils et optimum.' },
-  { title: 'Chapitre VII — Le marché', description: 'Études de marché, structures de marché, concurrence pure et parfaite, équilibre.' },
+  { title: 'Chapitre V — Les graphes et l’ordonnancement des tâches', description: 'Chemin critique, tâches fictives, méthode PERT, dates, marges et intervalle de flottement.' },
+  { title: 'Chapitre VI — Les coûts de production', description: 'Coûts de courte et de longue période, coût marginal, volume optimal, seuils de rentabilité ; exercices corrigés.' },
+  { title: 'Chapitre VII — Le marché', description: 'Connaissance et segmentation du marché, études de marché, structures, concurrence pure et parfaite, équilibres.' },
 ]
 
 /* ── Découpage ──────────────────────────────────────────────────────────── */
@@ -78,11 +88,13 @@ if (chapters.length !== TITLES.length) throw new Error(`${chapters.length} chapi
 
 const prepared = chapters.map((c, i) => {
   if (c.body.length < 1000) throw new Error(`Chapitre « ${c.heading} » suspicieusement court (${c.body.length} car.).`)
-  return { ...TITLES[i], order: i, content: `## ${c.heading}\n\n${c.body}\n` }
+  // Le cours garde définitions, formules et méthodes ; les exercices vont dans l'espace Exercices.
+  const { course, exercises } = splitExercises(c.body)
+  return { ...TITLES[i], order: i, content: `## ${c.heading}\n\n${course.trim()}\n`, exercises }
 })
 
 console.log('Chapitres préparés :')
-for (const c of prepared) console.log(`  ${c.order}. ${c.title} — ${c.content.length} car.`)
+for (const c of prepared) console.log(`  ${c.order}. ${c.title} — ${c.content.length} car., ${c.exercises.length} exercice(s)`)
 console.log()
 
 /* ── Installation ───────────────────────────────────────────────────────── */
@@ -113,12 +125,16 @@ for (const target of TARGETS) {
   }
 
   for (const ch of prepared) {
-    if (!subjectId) { console.log(`${tag}  ${ch.title} : création`); continue }
+    if (!subjectId) {
+      console.log(`${tag}  ${ch.title} : création`)
+      await syncExercises(sb, null, ch.exercises, { dryRun: DRY_RUN, backup })
+      continue
+    }
     const existing = await sb(`/chapters?select=id&subject_id=eq.${subjectId}&title=eq.${encodeURIComponent(ch.title)}`)
     let chapterId = existing[0]?.id
     if (!chapterId) {
       console.log(`${tag}  ${ch.title} : chapitre créé`)
-      if (DRY_RUN) continue
+      if (DRY_RUN) { await syncExercises(sb, null, ch.exercises, { dryRun: DRY_RUN, backup }); continue }
       const [created] = await sb('/chapters', {
         method: 'POST',
         body: JSON.stringify({
@@ -128,6 +144,7 @@ for (const target of TARGETS) {
       })
       chapterId = created.id
     }
+    await syncExercises(sb, chapterId, ch.exercises, { dryRun: DRY_RUN, backup })
 
     const lessons = await sb(`/lessons?select=id,type,title,content&chapter_id=eq.${chapterId}&type=eq.cours`)
     if (lessons.length) {
