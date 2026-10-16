@@ -45,6 +45,14 @@ returns boolean language sql security definer stable set search_path = public as
   select coalesce((select public.level_is_visible(s.level) from public.subjects s where s.id = sid), true)
 $$;
 
+-- Ces fonctions sont appelées par les policies ci-dessous, y compris pour le
+-- rôle `anon` (catalogue public, migration 052). `current_user_role()` (migr.
+-- 002) n'a pas d'EXECUTE pour `anon` : sans ces grants, la lecture anonyme de
+-- `subjects` échoue. Grants idempotents (voir aussi la migration 065).
+grant execute on function public.current_user_role() to anon;
+grant execute on function public.level_is_visible(study_level) to anon, authenticated;
+grant execute on function public.subject_is_visible(uuid) to anon, authenticated;
+
 -- ── Matières ───────────────────────────────────────────────────────────────
 drop policy if exists "subjects: select all authenticated" on public.subjects;
 create policy "subjects: select all authenticated" on public.subjects
