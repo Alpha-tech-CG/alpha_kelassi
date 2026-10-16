@@ -3,7 +3,8 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
-import { colors, radius, cardShadow, LEVEL_LABEL, subjectIcon, fonts } from '../../lib/theme'
+import { colors, radius, cardShadow, LEVEL_LABEL, fonts } from '../../lib/theme'
+import { subjectArtwork } from '../../lib/subjectArtwork'
 import { SolarIcon } from '../../icons/solar'
 
 interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
@@ -132,7 +133,7 @@ export default function HomeScreen() {
           <View style={styles.grid}>
             {subjects.slice(0, 6).map((s) => (
               <TouchableOpacity key={s.id} style={styles.subjectCard} onPress={() => router.push(`/parcours/${s.id}` as any)}>
-                <View style={styles.subjectIcon}><Text style={{ fontSize: 24 }}>{s.icon ?? subjectIcon(s.name)}</Text></View>
+                <Image source={subjectArtwork(s.name)} style={styles.subjectImg} resizeMode="cover" />
                 <Text style={styles.subjectName} numberOfLines={1}>{s.name}</Text>
                 <View style={styles.subjectProgRow}>
                   <View style={styles.subjectTrack}><View style={[styles.subjectFill, { width: `${s.progress}%` }]} /></View>
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
   empty: { color: colors.textMuted, fontSize: 14, paddingVertical: 20, textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
   subjectCard: { width: '46%', flexGrow: 1, backgroundColor: '#fff', borderRadius: 26, padding: 18, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
-  subjectIcon: { width: 52, height: 52, borderRadius: 16, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center', marginBottom: 14 },
+  subjectImg: { width: '100%', height: 84, borderRadius: 16, marginBottom: 14, backgroundColor: colors.primaryTint },
   subjectName: { fontSize: 15, fontWeight: '900', color: colors.text, marginBottom: 8 },
   subjectProgRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   subjectTrack: { flex: 1, height: 5, backgroundColor: colors.primaryTint, borderRadius: radius.full, overflow: 'hidden' },

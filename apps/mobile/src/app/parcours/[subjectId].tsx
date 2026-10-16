@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ImageBackground } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
-import { colors, radius, cardShadow, subjectIcon } from '../../lib/theme'
+import { colors, radius, cardShadow } from '../../lib/theme'
+import { subjectArtwork } from '../../lib/subjectArtwork'
 
 interface ChapterVM { id: string; title: string; description: string | null; pct: number; total: number; done: number }
 
@@ -14,15 +15,13 @@ export default function ParcoursSubjectScreen() {
   const { subjectId } = useLocalSearchParams<{ subjectId: string }>()
   const router = useRouter()
   const [name, setName] = useState('Matière')
-  const [icon, setIcon] = useState<string | null>(null)
   const [chapters, setChapters] = useState<ChapterVM[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function load() {
-      const { data: subj } = await supabase.from('subjects').select('name, icon').eq('id', subjectId).maybeSingle()
+      const { data: subj } = await supabase.from('subjects').select('name').eq('id', subjectId).maybeSingle()
       setName((subj as { name?: string } | null)?.name ?? 'Matière')
-      setIcon((subj as { icon?: string | null } | null)?.icon ?? null)
 
       const chs = await safe<{ id: string; title: string; description: string | null; order_index: number }>(
         supabase.from('chapters').select('id, title, description, order_index').eq('subject_id', subjectId).order('order_index')
@@ -58,14 +57,14 @@ export default function ParcoursSubjectScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.hbtn} onPress={() => router.back()}><Text style={styles.hbtnText}>←</Text></TouchableOpacity>
-        <Text style={styles.htitle} numberOfLines={1}>{icon ?? subjectIcon(name)} {name}</Text>
+        <Text style={styles.htitle} numberOfLines={1}>{name}</Text>
         <View style={styles.hbtn} />
       </View>
 
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
         {/* Hero progression */}
-        <View style={styles.hero}>
-          <View style={styles.heroIcon}><Text style={{ fontSize: 34 }}>{icon ?? subjectIcon(name)}</Text></View>
+        <ImageBackground source={subjectArtwork(name)} style={styles.hero} imageStyle={styles.heroImg}>
+          <View style={styles.heroOverlay} />
           <View style={{ flex: 1 }}>
             <View style={styles.heroTop}>
               <Text style={styles.heroLabel}>PROGRESSION</Text>
@@ -74,7 +73,7 @@ export default function ParcoursSubjectScreen() {
             <View style={styles.heroTrack}><View style={[styles.heroFill, { width: `${overall}%` }]} /></View>
             <Text style={styles.heroSub}>🏆 {doneLessons} leçons complétées sur {totalLessons}</Text>
           </View>
-        </View>
+        </ImageBackground>
 
         <View style={styles.sectionHead}>
           <Text style={styles.sectionTitle}>Chapitres</Text>
@@ -111,8 +110,9 @@ const styles = StyleSheet.create({
   hbtn: { width: 40, height: 40, borderRadius: 12, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
   hbtnText: { fontSize: 20, color: colors.text, fontWeight: '800' },
   htitle: { flex: 1, textAlign: 'center', fontSize: 18, fontWeight: '900', color: colors.text },
-  hero: { flexDirection: 'row', alignItems: 'center', gap: 16, backgroundColor: colors.primary, borderRadius: 28, padding: 18, ...cardShadow },
-  heroIcon: { width: 66, height: 66, borderRadius: 20, backgroundColor: '#ffffffee', alignItems: 'center', justifyContent: 'center' },
+  hero: { borderRadius: 28, padding: 20, overflow: 'hidden', ...cardShadow },
+  heroImg: { borderRadius: 28 },
+  heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(15,143,79,0.82)' },
   heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   heroLabel: { color: '#ffffffcc', fontSize: 10, fontWeight: '900', letterSpacing: 1 },
   heroPct: { color: colors.yellow, fontSize: 15, fontWeight: '900' },

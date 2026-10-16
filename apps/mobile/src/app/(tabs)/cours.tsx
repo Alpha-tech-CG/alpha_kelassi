@@ -1,9 +1,10 @@
 import { useEffect, useState, useMemo } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, ImageBackground } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
-import { colors, radius, cardShadow, LEVEL_LABEL, levelBadgeStyle, subjectAccent, subjectIcon } from '../../lib/theme'
+import { colors, radius, cardShadow, LEVEL_LABEL, levelBadgeStyle } from '../../lib/theme'
+import { subjectArtwork } from '../../lib/subjectArtwork'
 
 interface Subject {
   id: string
@@ -151,7 +152,6 @@ export default function MatieresScreen() {
           </View>
         ) : (
           filtered.map((s) => {
-            const accent = subjectAccent(s.name)
             const badge = levelBadgeStyle(s.level)
             return (
               <TouchableOpacity
@@ -160,18 +160,15 @@ export default function MatieresScreen() {
                 style={styles.card}
                 onPress={() => router.push(((s.level === 'cepe' || s.level === 'bepc') ? `/progression?subject=${s.id}&level=${s.level}` : `/parcours/${s.id}`) as any)}
               >
-                <View style={[styles.accent, { backgroundColor: accent }]} />
-                <View style={styles.cardBody}>
-                  <View style={styles.cardTop}>
-                    <View style={[styles.iconBox, { backgroundColor: accent + '1A' }]}>
-                      <Text style={styles.iconText}>{s.icon || subjectIcon(s.name)}</Text>
-                    </View>
-                    <View style={[styles.badge, { backgroundColor: badge.bg }]}>
-                      <Text style={[styles.badgeText, { color: badge.fg }]}>{LEVEL_LABEL[s.level]}</Text>
-                    </View>
+                <ImageBackground source={subjectArtwork(s.name)} style={styles.cardImage} imageStyle={styles.cardImageInner}>
+                  <View style={styles.cardImageOverlay} />
+                  <View style={[styles.badge, styles.badgeOnImage, { backgroundColor: badge.bg }]}>
+                    <Text style={[styles.badgeText, { color: badge.fg }]}>{LEVEL_LABEL[s.level]}</Text>
                   </View>
+                  <Text style={styles.subjectNameOnImage} numberOfLines={2}>{s.name}</Text>
+                </ImageBackground>
 
-                  <Text style={styles.subjectName}>{s.name}</Text>
+                <View style={styles.cardBody}>
                   <Text style={styles.counts}>
                     {s.hasChildren ? `📁 ${s.domains} domaines   📘 ${s.lessons} chapitres` : `📘 ${s.lessons} Cours   ✅ ${s.quizzes} Quiz`}
                   </Text>
@@ -212,18 +209,21 @@ const styles = StyleSheet.create({
   },
   list: { padding: 16, paddingTop: 4, gap: 14 },
   card: {
-    flexDirection: 'row', backgroundColor: colors.card, borderRadius: radius.lg, overflow: 'hidden',
+    backgroundColor: colors.card, borderRadius: radius.lg, overflow: 'hidden',
     borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow,
   },
-  accent: { width: 5 },
-  cardBody: { flex: 1, padding: 16 },
-  cardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  iconBox: { width: 48, height: 48, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center' },
-  iconText: { fontSize: 24 },
+  cardImage: { height: 112, justifyContent: 'flex-end', padding: 12 },
+  cardImageInner: { resizeMode: 'cover' },
+  cardImageOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(2,6,23,0.42)' },
+  cardBody: { padding: 16 },
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.full },
+  badgeOnImage: { position: 'absolute', top: 10, right: 10 },
   badgeText: { fontSize: 11, fontWeight: '800' },
-  subjectName: { fontSize: 19, fontWeight: '800', color: colors.text, marginTop: 12 },
-  counts: { fontSize: 13, color: colors.textMuted, marginTop: 4 },
+  subjectNameOnImage: {
+    fontSize: 19, fontWeight: '800', color: '#fff',
+    textShadowColor: 'rgba(0,0,0,0.6)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 4,
+  },
+  counts: { fontSize: 13, color: colors.textMuted },
   progressRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 14 },
   progressLabel: { fontSize: 13, color: colors.textMuted },
   progressPct: { fontSize: 15, fontWeight: '800' },
