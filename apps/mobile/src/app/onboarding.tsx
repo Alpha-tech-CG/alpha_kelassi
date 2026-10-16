@@ -6,6 +6,7 @@ import {
 import { useRouter } from 'expo-router'
 import { supabase } from '../lib/supabase'
 import { API_URL } from '../lib/config'
+import { LEVEL_LABEL } from '../lib/theme'
 
 type Track = 'generale' | 'technique'
 interface Series { id: string; code: string; label: string; level: string }
@@ -14,10 +15,11 @@ const TRACKS: { value: Track; emoji: string; title: string; desc: string }[] = [
   { value: 'generale',  emoji: '🎓', title: 'Enseignement général',   desc: 'CEPE, BEPC, BAC A / C / D' },
   { value: 'technique', emoji: '🔧', title: 'Enseignement technique', desc: 'Séries G1, G2, F3…' },
 ]
-const LEVEL_ORDER: Record<string, number> = {
-  cepe: 0, bepc: 1, bac_a: 2, bac_c: 3, bac_d: 4,
-  bac_e: 5, bac_f3: 6, bac_g2: 7, bac_g3: 8, bac_h: 9, bac_bg: 10, bac_r: 11,
-}
+// Ordre scolaire, par cycle. Seules les classes ouvertes aux élèves reviennent
+// de la base (RLS sur `series`, migration 064).
+const LEVEL_ORDER: Record<string, number> = Object.fromEntries(
+  Object.keys(LEVEL_LABEL).map((level, i) => [level, i]),
+)
 
 const KELASSI_TIPS = [
   { icon: '🎯', title: 'Sois précis', desc: 'Indique la matière et le sujet. Ex : "Explique la dérivée en Maths BAC C"' },

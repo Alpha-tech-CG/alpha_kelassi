@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { adminFetch } from '@/lib/admin-fetch'
-import { STUDY_LEVELS, LEVEL_META } from '@alpha-kelassi/types'
+import { LevelOptions } from '@/app/admin/_components/level-options'
 
 interface Video {
   id: string; title: string; level: string; provider: string; url: string
@@ -81,7 +81,7 @@ export default function AdminVideosPage() {
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Niveau</label>
             <select value={form.level} onChange={(e) => setForm((f) => ({ ...f, level: e.target.value }))}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm">
-              {STUDY_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_META[l].label}</option>)}
+              <LevelOptions />
             </select>
           </div>
         </div>

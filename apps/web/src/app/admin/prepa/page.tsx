@@ -3,7 +3,8 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { STUDY_LEVELS, LEVEL_META, type StudyLevel } from '@alpha-kelassi/types'
+import { LEVEL_META, type StudyLevel } from '@alpha-kelassi/types'
+import { LevelOptions } from '@/app/admin/_components/level-options'
 import { adminFetch } from '@/lib/admin-fetch'
 import { EXAM_KINDS, EXAM_KIND_META, type ExamKind } from '@/lib/prepa'
 import { useUndoToast, restoreFromTrash } from '@/app/admin/_components/undo-toast'
@@ -133,7 +134,7 @@ function PrepaAdmin() {
           <select value={level} onChange={(e) => setParam({ level: e.target.value, subject: '' })}
             className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm">
             <option value="">Choisir une classe…</option>
-            {STUDY_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_META[l].label}</option>)}
+            <LevelOptions />
           </select>
         </div>
         <div>

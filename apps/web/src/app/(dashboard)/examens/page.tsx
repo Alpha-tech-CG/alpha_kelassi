@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getEntitlements } from '@/lib/subscription/server'
-import { allowedExamModes, EXAM_MODE_LABELS, STUDY_LEVELS, LEVEL_META, isStudyLevel, type ExamMode } from '@alpha-kelassi/types'
+import { allowedExamModes, EXAM_MODE_LABELS, EXAM_LEVELS, LEVEL_META, isStudyLevel, type ExamMode } from '@alpha-kelassi/types'
 import { RAYONS, isRayon, rayonMeta, examName, type PrepaRayon } from '@/lib/prepa'
 import { ExamensHistorique } from './examens-historique'
 
@@ -288,7 +288,7 @@ function LevelPicker({ current }: { current: string | null }) {
     <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-6">
       <p className="text-sm font-semibold text-gray-700 mb-2">Choisis ta classe</p>
       <div className="flex flex-wrap gap-2">
-        {STUDY_LEVELS.map((l) => (
+        {EXAM_LEVELS.map((l) => (
           <Link key={l} href={`/examens?level=${l}`}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${current === l ? 'bg-gray-900 text-white border-transparent' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}>
             {LEVEL_META[l].label}

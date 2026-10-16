@@ -44,7 +44,9 @@ const LEVEL_CONFIG: Record<string, {
 }
 
 // Ordre d'affichage aligné sur la source partagée (packages/types/src/levels.ts).
-const LEVEL_ORDER = STUDY_LEVELS
+// Les classes sans habillage ici (classes intermédiaires, fermées aux élèves par
+// la base tant que l'administration ne les ouvre pas) ne sont pas listées.
+const LEVEL_ORDER = STUDY_LEVELS.filter((l) => l in LEVEL_CONFIG)
 
 /* ── Icônes par matière ──────────────────────────────────────────────────── */
 function SubjectIcon({ name, className }: { name: string; className?: string }) {

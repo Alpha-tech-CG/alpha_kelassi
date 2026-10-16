@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 const API_URL = ''  // routes Next.js locales
 
@@ -15,7 +16,9 @@ const TRACKS: { value: Track; emoji: string; title: string; desc: string; color:
 ]
 
 // Ordre d'affichage des parcours généraux (du plus jeune au plus avancé)
-const LEVEL_ORDER: Record<string, number> = { cepe: 0, bepc: 1, bac_a: 2, bac_c: 3, bac_d: 4 }
+// Ordre scolaire, par cycle. Seules les classes ouvertes aux élèves reviennent
+// de la base (RLS sur `series`, migration 064).
+const LEVEL_ORDER: Record<string, number> = Object.fromEntries(STUDY_LEVELS.map((l, i) => [l, i]))
 
 const TIPS = [
   { icon: '🎯', title: 'Sois précis', desc: 'Indique la matière et le sujet. Ex : "Explique la dérivée en Maths BAC C"' },

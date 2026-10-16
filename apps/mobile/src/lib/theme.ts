@@ -43,9 +43,33 @@ export const cardShadow = {
   elevation: 2,
 } as const
 
+// Ordre scolaire, par cycle (sert aussi à l'ordre des classes proposées). Les
+// classes intermédiaires (migration 063) restent fermées aux élèves par la base
+// tant que l'administration ne les ouvre pas.
 export const LEVEL_LABEL: Record<string, string> = {
+  cp1: 'CP1',
+  cp2: 'CP2',
+  ce1: 'CE1',
+  ce2: 'CE2',
+  cm1: 'CM1',
   cepe: 'CEPE',
+  sixieme: '6e',
+  cinquieme: '5e',
+  quatrieme: '4e',
   bepc: 'BEPC',
+  seconde_a: '2nde A',
+  seconde_c: '2nde C',
+  seconde_t: '2nde T',
+  premiere_a: '1ère A',
+  premiere_c: '1ère C',
+  premiere_d: '1ère D',
+  premiere_e: '1ère E',
+  premiere_f3: '1ère F3',
+  premiere_g2: '1ère G2',
+  premiere_g3: '1ère G3',
+  premiere_h: '1ère H',
+  premiere_bg: '1ère BG',
+  premiere_r: '1ère R',
   bac_a: 'BAC A',
   bac_c: 'BAC C',
   bac_d: 'BAC D',

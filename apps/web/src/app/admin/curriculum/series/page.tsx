@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
-import { STUDY_LEVELS, LEVEL_META } from '@alpha-kelassi/types'
+import { LevelOptions } from '@/app/admin/_components/level-options'
 import { adminFetch } from '@/lib/admin-fetch'
 
 interface Series { id: string; code: string; label: string; track: string; level: string; country_code: string }
@@ -12,10 +12,6 @@ const TRACKS = [
   { value: 'technique', label: 'Technique' },
   { value: 'professionnel', label: 'Professionnel' },
 ] as const
-// Toutes les classes d'examen, depuis la source partagée : la liste était
-// figée sur quatre niveaux généraux, ce qui rendait impossible la création
-// d'une série technique (G2, G3, BG, R…) depuis la console.
-const LEVELS = STUDY_LEVELS
 
 type Form = { code: string; label: string; track: string; level: string }
 const EMPTY: Form = { code: '', label: '', track: 'generale', level: 'bac_c' }
@@ -77,7 +73,7 @@ export default function AdminSeriesPage() {
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Niveau</label>
             <select value={form.level} onChange={(e) => setForm((f) => ({ ...f, level: e.target.value }))}
               className="w-full border border-gray-200 rounded-xl px-2 py-2.5 text-sm">
-              {LEVELS.map((l) => <option key={l} value={l}>{LEVEL_META[l].label}</option>)}
+              <LevelOptions />
             </select>
           </div>
           <div className="col-span-12 sm:col-span-6 md:col-span-4">
