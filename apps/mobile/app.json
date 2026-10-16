@@ -10,9 +10,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/cognix-logo.png",
+      "image": "./assets/splash-blank.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0A0F1C"
+      "backgroundColor": "#00030C"
     },
     "ios": {
       "supportsTablet": false,

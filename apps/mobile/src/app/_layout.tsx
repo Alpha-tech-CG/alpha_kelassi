@@ -8,7 +8,7 @@ import {
 } from '@expo-google-fonts/nunito'
 import { Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins'
 import { supabase } from '../lib/supabase'
-import { Splash } from '../components/Splash'
+import { Splash, SPLASH_BG } from '../components/Splash'
 import { LockScreen } from '../components/LockScreen'
 import { startAppLockTracking, shouldRequireUnlock, clearAppLock } from '../lib/appLock'
 import type { Session } from '@supabase/supabase-js'
@@ -33,7 +33,7 @@ export default function RootLayout() {
   })
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
-  const [minSplash, setMinSplash] = useState(false)  // logo Cognix visible ≥ 3s
+  const [splashDone, setSplashDone] = useState(false) // animation du logo terminée et effacée
   const [locked, setLocked] = useState(false)
   const segments = useSegments()
   const router = useRouter()
@@ -47,8 +47,7 @@ export default function RootLayout() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s)
     })
-    const t = setTimeout(() => setMinSplash(true), 3000)
-    return () => { subscription.unsubscribe(); clearTimeout(t) }
+    return () => { subscription.unsubscribe() }
   }, [])
 
   // Verrouillage biométrique/PIN après inactivité (> 5 min en arrière-plan).
@@ -121,25 +120,36 @@ export default function RootLayout() {
     }
   }, [ready, navState?.key, session, segments, router])
 
-  if (!fontsLoaded || !ready || !minSplash) return <Splash />
+  const appReady = fontsLoaded && ready
 
+  // Le splash animé reste monté par-dessus l'appli pendant que celle-ci démarre
+  // (polices, session, redirection) : il ne s'efface qu'une fois les deux prêts.
   return (
     <>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="cours/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="examens/[id]" options={{ headerShown: true, title: '' }} />
-        <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
-        <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
-      </Stack>
-      <StatusBar style="dark" backgroundColor="#F4F8FE" />
-      {/* Verrouillage biométrique/PIN : overlay plein écran par-dessus la
-          navigation existante, affiché seulement quand un déverrouillage est
-          requis (retour au premier plan après > 5 min en arrière-plan). */}
-      {locked && session ? (
+      {appReady ? (
+        <>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="cours/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="examens/[id]" options={{ headerShown: true, title: '' }} />
+          <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
+          <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
+        </Stack>
+        <StatusBar style={splashDone ? 'dark' : 'light'} backgroundColor={splashDone ? '#F4F8FE' : SPLASH_BG} />
+        {/* Verrouillage biométrique/PIN : overlay plein écran par-dessus la
+            navigation existante, affiché seulement quand un déverrouillage est
+            requis (retour au premier plan après > 5 min en arrière-plan). */}
+        {locked && session ? (
+          <View style={StyleSheet.absoluteFill}>
+            <LockScreen onUnlock={handleUnlock} />
+          </View>
+        ) : null}
+        </>
+      ) : null}
+      {!splashDone ? (
         <View style={StyleSheet.absoluteFill}>
-          <LockScreen onUnlock={handleUnlock} />
+          <Splash ready={appReady} onDone={() => setSplashDone(true)} />
         </View>
       ) : null}
     </>
