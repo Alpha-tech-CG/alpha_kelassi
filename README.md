@@ -26,17 +26,16 @@ Cours structurés, annales officielles corrigées, tuteur IA hors-ligne, groupes
 |--------|-------------|
 | **Web / API produit** | Next.js 15 (App Router) — sert le site élève **et** l'API REST consommée par le web et le mobile |
 | **Mobile** | Expo 52 (React Native) + Expo Router ; KaTeX/marked embarqués pour le rendu hors-ligne |
-| **Service de fond** | Hono (`apps/api`) — webhooks paiement/WhatsApp + worker de rappels (BullMQ) |
 | **Base de données** | Supabase (PostgreSQL + pgvector + Auth + Storage), RLS sur toutes les tables |
 | **Cache / quotas / queue** | Upstash Redis |
 | **IA** | Google Gemini (`@google/genai`) + embeddings `text-embedding-004` (vecteurs 768d, index HNSW) |
 | **Paiements** | Stripe (carte) + FeexPay (Mobile Money, paiement push) |
 | **Messagerie** | WhatsApp Cloud API + SMS OTP (Africa's Talking) |
-| **Monitoring** | Sentry (web + api) |
+| **Monitoring** | Sentry (web) |
 | **Monorepo** | pnpm workspaces + Turborepo |
-| **Déploiement** | Vercel (web) · hébergement Node (api) · EAS Build (mobile) |
+| **Déploiement** | Vercel (web) · EAS Build (mobile) |
 
-> ℹ️ **À noter** : l'API de production est **Next.js** (`apps/web/src/app/api`), pas le service Hono. `apps/api` héberge uniquement les webhooks et les jobs de fond. Le stockage offline WatermelonDB du mobile est désactivé au profit d'un cache léger (`lessonCache`).
+> ℹ️ **À noter** : toute l'API de production est **Next.js** (`apps/web/src/app/api`), webhooks (FeexPay) et tâches planifiées (`/api/cron`) compris. L'ancien service Hono `apps/api` a été supprimé (récupérable via l'historique git). Le stockage offline WatermelonDB du mobile est désactivé au profit d'un cache léger (`lessonCache`).
 
 ---
 
@@ -168,8 +167,7 @@ Seuils : p95 < 2 s, taux d'erreur < 1 %.
 
 | Cible | Méthode |
 |-------|---------|
-| **Web + API produit** | Vercel (`apps/web`) — build `pnpm build` |
-| **Service de fond** (`apps/api`) | Hôte Node (`pnpm --filter api build && pnpm --filter api start`) — nécessaire pour les webhooks et le worker de rappels |
+| **Web + API produit** | Vercel (`apps/web`) — build `pnpm build` ; inclut webhooks et `/api/cron` |
 | **Mobile** | EAS Build (`pnpm --filter mobile build:android` / `build:ios`) |
 | **Base de données** | `supabase db push` vers le projet distant |
 

@@ -14,10 +14,10 @@
       "port": 3000
     },
     {
-      "name": "kelassi-api",
+      "name": "kelassi-mobile-web",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "@alpha-kelassi/api", "dev"],
-      "port": 3001
+      "runtimeArgs": ["--filter", "@alpha-kelassi/mobile", "exec", "expo", "start", "--web", "--port", "8081"],
+      "port": 8081
     }
   ]
 }

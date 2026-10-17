@@ -30,7 +30,7 @@ de type "preuve de concept" limités et non destructifs sont les bienvenus.
 
 - **Web** : `apps/web` (Next.js, déployé sur Vercel — app élèves/tuteurs/enseignants + back-office admin).
 - **Mobile** : `apps/mobile` (Expo/React Native, Android/iOS).
-- **API** : routes `apps/web/src/app/api/**` (API de production) ; `apps/api` (Hono, non utilisé en prod actuellement).
+- **API** : routes `apps/web/src/app/api/**` (toute l'API de production, webhooks et cron compris).
 - **Base de données** : Supabase (Postgres + RLS), migrations dans `supabase/migrations/**`.
 
 Hors périmètre : infrastructure tierce (Vercel, Supabase, Upstash, FeexPay eux-mêmes), attaques
