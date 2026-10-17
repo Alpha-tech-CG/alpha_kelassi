@@ -19,12 +19,11 @@ const RNTextAny = RNText as unknown as { defaultProps?: { style?: unknown } }
 RNTextAny.defaultProps = RNTextAny.defaultProps || {}
 RNTextAny.defaultProps.style = { fontFamily: 'Nunito_700Bold' }
 
-// NOTE : WatermelonDB (cache offline) est temporairement retiré du chemin de
-// démarrage. Il s'initialisait ici (`jsi: true` + décorateurs sans babel config
-// legacy) et faisait planter l'app entière au lancement, alors qu'aucun écran ne
-// l'utilise encore. Les fichiers src/db/ restent en place ; à re-brancher
-// proprement (setup natif JSI + babel legacy decorators) quand la vraie feature
-// offline-first sera implémentée.
+// NOTE : WatermelonDB a été entièrement retiré (dépendances + src/db/ supprimés) :
+// son init JSI au démarrage faisait planter l'app, pour aucun écran consommateur.
+// L'offline des leçons est assuré par src/lib/lessonCache.ts (expo-file-system :
+// texte + images mis en cache en tâche de fond). Un vrai offline-first structuré
+// (file de mutations synchronisée) reste à spécifier si besoin.
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
