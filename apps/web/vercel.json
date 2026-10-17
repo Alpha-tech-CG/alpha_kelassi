@@ -3,6 +3,7 @@
   "buildCommand": "pnpm build",
   "outputDirectory": ".next",
   "crons": [
-    { "path": "/api/cron/subscriptions", "schedule": "0 3 * * *" }
+    { "path": "/api/cron/subscriptions", "schedule": "0 3 * * *" },
+    { "path": "/api/cron/reminders", "schedule": "0 * * * *" }
   ]
 }
