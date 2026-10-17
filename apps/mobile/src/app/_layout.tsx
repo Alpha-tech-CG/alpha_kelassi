@@ -7,7 +7,9 @@ import {
   Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold, Nunito_900Black,
 } from '@expo-google-fonts/nunito'
 import { Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins'
+import NetInfo from '@react-native-community/netinfo'
 import { supabase } from '../lib/supabase'
+import { viderLaFile } from '../lib/outbox'
 import { Splash, SPLASH_BG } from '../components/Splash'
 import { LockScreen } from '../components/LockScreen'
 import { startAppLockTracking, shouldRequireUnlock, clearAppLock } from '../lib/appLock'
@@ -90,6 +92,38 @@ export default function RootLayout() {
     }
     return () => {
       try { sub?.remove() } catch { /* no-op */ }
+    }
+  }, [])
+
+  // Drainage automatique de la file d'écriture hors-ligne (outbox) : au démarrage
+  // si l'appareil est en ligne, puis à chaque retour de connexion (hors-ligne ->
+  // en ligne). Entièrement défensif : viderLaFile() est un no-op sans session ni
+  // réseau, donc on ne bloque ni ne fait planter quoi que ce soit.
+  useEffect(() => {
+    let precedent: boolean | null = null
+    const drain = () => {
+      viderLaFile().catch(() => {
+        // no-op — les actions restent en file pour la prochaine occasion.
+      })
+    }
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      const online = state.isConnected ?? false
+      if (online && precedent === false) drain() // transition hors-ligne -> en ligne
+      precedent = online
+    })
+    NetInfo.fetch()
+      .then((state) => {
+        if (state.isConnected) drain()
+      })
+      .catch(() => {
+        // no-op
+      })
+    return () => {
+      try {
+        unsubscribe()
+      } catch {
+        // no-op
+      }
     }
   }, [])
 

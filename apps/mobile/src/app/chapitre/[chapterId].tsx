@@ -13,6 +13,7 @@ import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow } from '../../lib/theme'
 import { useNetworkStatus } from '../../hooks/useNetworkStatus'
+import { enfiler } from '../../lib/outbox'
 import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
 import { LessonContent } from '../../components/LessonContent'
 import { MathLessonView } from '../../components/MathLessonView'
@@ -174,7 +175,23 @@ export default function ChapitreScreen() {
       }
     }
     if (!isOnline) {
-      setFlash('Reconnecte-toi pour valider ta progression.')
+      // Le QCM est noté côté serveur : il ne peut pas être validé hors-ligne.
+      if (l.type === 'quiz') {
+        setFlash('Reconnecte-toi pour valider le quiz.')
+        setTimeout(() => setFlash(null), 3000)
+        return
+      }
+      // Cours / résumé / vidéo : marquage idempotent mis en file et rejoué au
+      // retour du réseau. L'interface considère la leçon comme faite tout de suite.
+      await enfiler({
+        type: 'lesson_progress',
+        lessonId: l.id,
+        completed: true,
+        score: null,
+        at: Date.now(),
+      })
+      setDone((prev) => ({ ...prev, [l.id]: { completed: true, score: null } }))
+      setFlash('Enregistré hors-ligne — synchronisé au retour du réseau.')
       setTimeout(() => setFlash(null), 3000)
       return
     }
