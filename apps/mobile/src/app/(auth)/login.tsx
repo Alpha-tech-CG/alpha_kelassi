@@ -118,8 +118,8 @@ export default function LoginScreen() {
           </>
         )}
 
-        <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
-          <Text style={styles.link}>Pas de compte ? S'inscrire</Text>
+        <TouchableOpacity onPress={() => setTab('phone')}>
+          <Text style={styles.link}>Pas de compte ? Inscris-toi par SMS</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
