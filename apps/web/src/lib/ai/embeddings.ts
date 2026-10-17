@@ -21,3 +21,24 @@ export async function embedQuery(text: string): Promise<number[]> {
   })
   return result.embeddings?.[0]?.values ?? []
 }
+
+const EMBED_BATCH = 100
+
+/** Génère les embeddings de plusieurs documents (indexation RAG), par lots. */
+export async function embedTexts(texts: string[]): Promise<number[][]> {
+  const out: number[][] = []
+  for (let i = 0; i < texts.length; i += EMBED_BATCH) {
+    const batch = texts.slice(i, i + EMBED_BATCH)
+    const results = await Promise.all(
+      batch.map((text) =>
+        getGenai().models.embedContent({
+          model: EMBED_MODEL,
+          contents: text,
+          config: { taskType: 'RETRIEVAL_DOCUMENT' },
+        })
+      )
+    )
+    for (const result of results) out.push(result.embeddings?.[0]?.values ?? [])
+  }
+  return out
+}

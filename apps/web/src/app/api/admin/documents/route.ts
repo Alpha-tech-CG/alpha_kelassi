@@ -3,8 +3,10 @@ import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { z } from 'zod'
 import { STUDY_LEVELS } from '@alpha-kelassi/types'
+import { chunkText } from '@/lib/ai/chunker'
+import { embedTexts } from '@/lib/ai/embeddings'
 
-export const maxDuration = 60 // secondes — extraction PDF peut être lente
+export const maxDuration = 300 // secondes — extraction PDF + indexation RAG (chunks + embeddings)
 
 // Client admin (bypass RLS)
 const supabaseAdmin = createAdminClient(
@@ -163,7 +165,38 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: dbError.message }, { status: 500 })
   }
 
+  // Indexation RAG : chunking sémantique + embeddings Gemini -> document_chunks.
+  // Remplace l'ancien worker BullMQ (supprimé avec apps/api). Résilient : si
+  // l'embedding échoue, le document reste enregistré et pourra être réindexé.
+  let indexedChunks = 0
+  try {
+    const chunks = chunkText(textContent)
+    if (chunks.length > 0) {
+      const vectors = await embedTexts(chunks.map((c) => c.content))
+      await supabaseAdmin.from('document_chunks').delete().eq('document_id', doc.id)
+      const rows = chunks.map((chunk, i) => ({
+        document_id: doc.id,
+        content: chunk.content,
+        embedding: JSON.stringify(vectors[i] ?? []), // pgvector attend un tableau JSON
+        chunk_index: chunk.chunkIndex,
+        page_number: chunk.pageNumber,
+        metadata: { is_exercise: chunk.isExercise, char_count: chunk.content.length },
+      }))
+      for (let i = 0; i < rows.length; i += 50) {
+        const { error } = await supabaseAdmin.from('document_chunks').insert(rows.slice(i, i + 50))
+        if (error) throw new Error(error.message)
+      }
+      await supabaseAdmin
+        .from('documents')
+        .update({ indexed_at: new Date().toISOString() })
+        .eq('id', doc.id)
+      indexedChunks = chunks.length
+    }
+  } catch (err) {
+    console.error('[admin/documents] indexation RAG échouée:', (err as Error).message)
+  }
+
   // On ne renvoie pas text_content (peut contenir des séquences Unicode invalides)
   const { text_content: _, ...docSafe } = doc as Record<string, unknown>
-  return NextResponse.json({ data: docSafe }, { status: 201 })
+  return NextResponse.json({ data: docSafe, indexed_chunks: indexedChunks }, { status: 201 })
 }
