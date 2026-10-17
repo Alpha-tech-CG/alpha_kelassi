@@ -2,8 +2,8 @@
   "expo": {
     "name": "Cognix",
     "slug": "kelassi",
-    "version": "1.0.1",
-    "runtimeVersion": "1.0.1",
+    "version": "1.0.2",
+    "runtimeVersion": "1.0.2",
     "scheme": "kelassi",
     "orientation": "portrait",
     "jsEngine": "hermes",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.kelassi.app",
-      "buildNumber": "2",
+      "buildNumber": "3",
       "infoPlist": {
         "NSCameraUsageDescription": "Utilisé pour scanner des documents de cours",
         "NSFaceIDUsageDescription": "Utilisé pour déverrouiller l'application après une période d'inactivité",
@@ -27,10 +27,10 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1E74E8"
+        "backgroundColor": "#00030C"
       },
       "package": "com.kelassi.app",
-      "versionCode": 2,
+      "versionCode": 3,
       "compileSdkVersion": 35,
       "targetSdkVersion": 35,
       "minSdkVersion": 24,
