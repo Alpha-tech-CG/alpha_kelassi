@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import remarkGfm from 'remark-gfm'
@@ -13,6 +14,37 @@ interface Props {
   className?: string
   /** true = prose complète (documents), false = prose compacte (chat) */
   prose?: boolean
+}
+
+function textContent(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (Array.isArray(node)) return node.map(textContent).join('')
+  if (node && typeof node === 'object' && 'props' in node) {
+    return textContent((node.props as { children?: ReactNode }).children as ReactNode)
+  }
+  return ''
+}
+
+function sectionKind(children: ReactNode) {
+  const title = textContent(children).trim().toLocaleLowerCase('fr')
+  if (/^introduction\b/.test(title)) return 'introduction'
+  if (/notions?\s+cl[eé]s|d[eé]finitions?\s+des?\s+notions/.test(title)) return 'keywords'
+  if (/^d[eé]veloppement\b/.test(title)) return 'development'
+  if (/^conclusion\b/.test(title)) return 'conclusion'
+  return undefined
+}
+
+function paragraphKind(children: ReactNode) {
+  const text = textContent(children).trim()
+  if (/^probl[eé]matique\s*:/i.test(text)) return 'question'
+  if (
+    /^(?:objectif(?:s)? p[eé]dagogiques?|[àa] retenir|exemple(?: concret)?|d[eé]finition(?:s)?)\s*:/i.test(
+      text
+    )
+  ) {
+    return 'note'
+  }
+  return undefined
 }
 
 /**
@@ -55,9 +87,29 @@ export function MarkdownRenderer({ content, className = '', prose = false }: Pro
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
         components={{
+          h2: ({ node, children, ...props }) => (
+            <h2 {...props} data-section-kind={sectionKind(children)}>
+              {children}
+            </h2>
+          ),
+          h3: ({ node, children, ...props }) => (
+            <h3 {...props} data-section-kind={sectionKind(children)}>
+              {children}
+            </h3>
+          ),
+          p: ({ node, children, ...props }) => (
+            <p {...props} data-paragraph-kind={paragraphKind(children)}>
+              {children}
+            </p>
+          ),
+          strong: ({ node, children, ...props }) => (
+            <strong {...props} className="course-keyword">
+              {children}
+            </strong>
+          ),
           // Un tableau large défile dans son propre cadre plutôt que d'élargir la page.
           table: ({ node, ...props }) => (
-            <div className="overflow-x-auto my-4">
+            <div className="my-4 overflow-x-auto">
               <table {...props} />
             </div>
           ),

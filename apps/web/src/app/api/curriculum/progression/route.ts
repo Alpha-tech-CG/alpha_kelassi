@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
       if (am !== bm) return am - bm
       return (a.order_index ?? 0) - (b.order_index ?? 0)
     })
-  const chapterIds = rows.map((r) => r.chapter_id)
+  const chapterIds = rows.map((r) => r.chapter_id).filter((id): id is string => id !== null)
   if (chapterIds.length === 0) return NextResponse.json({ data: { subject, chapters: [] } })
 
   const { data: lessons } = await supabase.from('lessons').select('id, chapter_id').in('chapter_id', chapterIds)
@@ -67,8 +67,8 @@ export async function GET(req: NextRequest) {
 
   let previousCompleted = true // le premier chapitre est toujours débloqué
   const chapters = rows.map((r) => {
-    const total = totalByChapter.get(r.chapter_id) ?? 0
-    const done = doneByChapter.get(r.chapter_id) ?? 0
+    const total = totalByChapter.get(r.chapter_id ?? '') ?? 0
+    const done = doneByChapter.get(r.chapter_id ?? '') ?? 0
     const isCompleted = total > 0 && done >= total
     const isUnlocked = UNLOCK_ALL_FOR_INSPECTION || previousCompleted
     previousCompleted = isCompleted

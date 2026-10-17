@@ -44,7 +44,7 @@ async function getAnalytics() {
     // Agrège les vues par document
     const viewsByDoc = new Map<string, { count: number; title: string; type: string; level: string }>()
     for (const row of topDocs ?? []) {
-      const doc = row.documents as { title: string; type: string; level: string } | null
+      const doc = row.documents as unknown as { title: string; type: string; level: string } | null
       const cur = viewsByDoc.get(row.document_id) ?? { count: 0, title: doc?.title ?? '', type: doc?.type ?? '', level: doc?.level ?? '' }
       viewsByDoc.set(row.document_id, { ...cur, count: cur.count + 1 })
     }

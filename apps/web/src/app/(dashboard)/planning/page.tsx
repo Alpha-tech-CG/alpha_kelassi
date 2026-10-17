@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { CalendarClock, Sparkles, CheckCircle2, Circle, Target } from 'lucide-react'
 import { ReminderSettings } from './reminder-settings'
-import type { LockedFeatureInfo } from '@alpha-kelassi/types'
+import type { LockedFeatureInfo, StudyLevel } from '@alpha-kelassi/types'
 import { LockedFeature } from '@/components/subscription/locked-feature'
 import { planErrorOf } from '@/lib/subscription/client'
 
@@ -56,7 +56,7 @@ export default function PlanningPage() {
       setExams(examRes.data ?? [])
 
       let sq = supabase.from('subjects').select('id, name').order('name')
-      if (lvl) sq = sq.eq('level', lvl)
+      if (lvl) sq = sq.eq('level', lvl as StudyLevel)
       const { data: subs } = await sq
       setSubjects((subs ?? []) as Subject[])
 

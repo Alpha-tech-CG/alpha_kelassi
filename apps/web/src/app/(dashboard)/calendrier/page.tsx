@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation'
 
 interface ChapterRow {
   id: string
-  chapter_id: string
+  chapter_id: string | null
   subject_id: string
   chapters: { id: string; title: string } | null
   subjects: { id: string; name: string } | null

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import type { Database } from '@alpha-kelassi/types'
 import { GoogleGenAI } from '@google/genai'
 import { z } from 'zod'
 import { createHash } from 'crypto'
@@ -23,10 +24,10 @@ function getGenai(): GoogleGenAI {
   return _genai
 }
 
-let _admin: ReturnType<typeof createAdminClient> | null = null
+let _admin: ReturnType<typeof createAdminClient<Database>> | null = null
 function getAdmin() {
   if (!_admin) {
-    _admin = createAdminClient(
+    _admin = createAdminClient<Database>(
       process.env['NEXT_PUBLIC_SUPABASE_URL']!,
       process.env['SUPABASE_SERVICE_ROLE_KEY']!
     )

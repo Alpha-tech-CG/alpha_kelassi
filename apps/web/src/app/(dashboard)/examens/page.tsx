@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getEntitlements } from '@/lib/subscription/server'
-import { allowedExamModes, EXAM_MODE_LABELS, EXAM_LEVELS, LEVEL_META, isStudyLevel, type ExamMode } from '@alpha-kelassi/types'
+import { allowedExamModes, EXAM_MODE_LABELS, EXAM_LEVELS, LEVEL_META, isStudyLevel, type ExamMode, type StudyLevel } from '@alpha-kelassi/types'
 import { RAYONS, isRayon, rayonMeta, examName, type PrepaRayon } from '@/lib/prepa'
 import { ExamensHistorique } from './examens-historique'
 
@@ -87,8 +87,8 @@ export default async function PrepaPage({ searchParams }: { searchParams: Promis
 
   // Matières de la classe (et de la filière de l'élève).
   let sq = supabase.from('subjects').select('id, name, level').order('name')
-  if (level) sq = sq.eq('level', level)
-  if (track) sq = sq.eq('track_type', track)
+  if (level) sq = sq.eq('level', level as StudyLevel)
+  if (track) sq = sq.eq('track_type', track as 'generale' | 'technique' | 'professionnel')
   const { data: subs } = await sq
   const subjects = (subs ?? []) as Subject[]
   const ids = subjects.map((s) => s.id)

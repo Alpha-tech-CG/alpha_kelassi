@@ -173,6 +173,7 @@ export type Database = {
           id: string
           name: string
           level: StudyLevel
+          track_type: 'generale' | 'technique' | 'professionnel'
           country_code: string
           icon: string | null
           parent_subject_id: string | null
@@ -182,6 +183,7 @@ export type Database = {
           id?: string
           name: string
           level: StudyLevel
+          track_type?: 'generale' | 'technique' | 'professionnel'
           country_code?: string
           icon?: string | null
           parent_subject_id?: string | null
@@ -191,6 +193,7 @@ export type Database = {
           id?: string
           name?: string
           level?: StudyLevel
+          track_type?: 'generale' | 'technique' | 'professionnel'
           country_code?: string
           icon?: string | null
           parent_subject_id?: string | null
@@ -240,7 +243,7 @@ export type Database = {
         Row: {
           id: string
           chapter_id: string
-          type: string
+          type: 'cours' | 'resume' | 'quiz' | 'video'
           title: string
           content: string | null
           video_url: string | null
@@ -252,7 +255,7 @@ export type Database = {
         Insert: {
           id?: string
           chapter_id: string
-          type: string
+          type: 'cours' | 'resume' | 'quiz' | 'video'
           title: string
           content?: string | null
           video_url?: string | null
@@ -264,7 +267,7 @@ export type Database = {
         Update: {
           id?: string
           chapter_id?: string
-          type?: string
+          type?: 'cours' | 'resume' | 'quiz' | 'video'
           title?: string
           content?: string | null
           video_url?: string | null
@@ -289,7 +292,7 @@ export type Database = {
           subject_id: string | null
           type: 'cours' | 'examen'
           title: string
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           year: number | null
           session: 'normale' | 'rattrapage' | null
           country_code: string
@@ -307,7 +310,7 @@ export type Database = {
           subject_id?: string | null
           type: 'cours' | 'examen'
           title: string
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           year?: number | null
           session?: 'normale' | 'rattrapage' | null
           country_code?: string
@@ -325,7 +328,7 @@ export type Database = {
           subject_id?: string | null
           type?: 'cours' | 'examen'
           title?: string
-          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level?: StudyLevel
           year?: number | null
           session?: 'normale' | 'rattrapage' | null
           country_code?: string
@@ -792,9 +795,18 @@ export type Database = {
           document_id: string | null
           title: string
           description: string | null
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           time_limit_sec: number
           is_premium: boolean
+          is_exam: boolean
+          is_monthly_test: boolean
+          is_term_exam: boolean
+          default_month_id: string | null
+          default_term_id: string | null
+          chapter_id: string | null
+          year: number | null
+          exam_kind: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac' | null
+          deleted_at: string | null
           created_at: string
         }
         Insert: {
@@ -803,9 +815,18 @@ export type Database = {
           document_id?: string | null
           title: string
           description?: string | null
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           time_limit_sec?: number
           is_premium?: boolean
+          is_exam?: boolean
+          is_monthly_test?: boolean
+          is_term_exam?: boolean
+          default_month_id?: string | null
+          default_term_id?: string | null
+          chapter_id?: string | null
+          year?: number | null
+          exam_kind?: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac' | null
+          deleted_at?: string | null
           created_at?: string
         }
         Update: {
@@ -814,9 +835,18 @@ export type Database = {
           document_id?: string | null
           title?: string
           description?: string | null
-          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level?: StudyLevel
           time_limit_sec?: number
           is_premium?: boolean
+          is_exam?: boolean
+          is_monthly_test?: boolean
+          is_term_exam?: boolean
+          default_month_id?: string | null
+          default_term_id?: string | null
+          chapter_id?: string | null
+          year?: number | null
+          exam_kind?: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac' | null
+          deleted_at?: string | null
           created_at?: string
         }
         Relationships: [
@@ -964,7 +994,7 @@ export type Database = {
       exam_events: {
         Row: {
           id: string
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           label: string
           exam_date: string
           country_code: string
@@ -972,7 +1002,7 @@ export type Database = {
         }
         Insert: {
           id?: string
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           label: string
           exam_date: string
           country_code?: string
@@ -980,7 +1010,7 @@ export type Database = {
         }
         Update: {
           id?: string
-          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level?: StudyLevel
           label?: string
           exam_date?: string
           country_code?: string
@@ -992,7 +1022,7 @@ export type Database = {
         Row: {
           id: string
           user_id: string
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           title: string
           exam_date: string
           is_active: boolean
@@ -1001,7 +1031,7 @@ export type Database = {
         Insert: {
           id?: string
           user_id: string
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           title: string
           exam_date: string
           is_active?: boolean
@@ -1010,7 +1040,7 @@ export type Database = {
         Update: {
           id?: string
           user_id?: string
-          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level?: StudyLevel
           title?: string
           exam_date?: string
           is_active?: boolean
@@ -1150,6 +1180,9 @@ export type Database = {
           attempts: number
           reward_fcfa: number
           ai_verdict: string | null
+          deep_analysis: Json | null
+          priority: number
+          request_key: string | null
           created_at: string
         }
         Insert: {
@@ -1166,6 +1199,9 @@ export type Database = {
           attempts?: number
           reward_fcfa?: number
           ai_verdict?: string | null
+          deep_analysis?: Json | null
+          priority?: number
+          request_key?: string | null
           created_at?: string
         }
         Update: {
@@ -1182,6 +1218,9 @@ export type Database = {
           attempts?: number
           reward_fcfa?: number
           ai_verdict?: string | null
+          deep_analysis?: Json | null
+          priority?: number
+          request_key?: string | null
           created_at?: string
         }
         Relationships: []
@@ -1312,6 +1351,433 @@ export type Database = {
         }
         Relationships: []
       }
+      lesson_progress: {
+        Row: {
+          id: string
+          user_id: string
+          lesson_id: string
+          completed: boolean
+          score: number | null
+          completed_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          lesson_id: string
+          completed?: boolean
+          score?: number | null
+          completed_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          lesson_id?: string
+          completed?: boolean
+          score?: number | null
+          completed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'lesson_progress_lesson_id_fkey'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'lesson_progress_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      exercises: {
+        Row: {
+          id: string
+          chapter_id: string
+          title: string
+          statement: string
+          difficulty: number
+          is_premium: boolean
+          order_index: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          chapter_id: string
+          title: string
+          statement: string
+          difficulty?: number
+          is_premium?: boolean
+          order_index?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          chapter_id?: string
+          title?: string
+          statement?: string
+          difficulty?: number
+          is_premium?: boolean
+          order_index?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'exercises_chapter_id_fkey'
+            columns: ['chapter_id']
+            isOneToOne: false
+            referencedRelation: 'chapters'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      exercise_solutions: {
+        Row: {
+          exercise_id: string
+          solution: string
+          created_at: string
+        }
+        Insert: {
+          exercise_id: string
+          solution: string
+          created_at?: string
+        }
+        Update: {
+          exercise_id?: string
+          solution?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'exercise_solutions_exercise_id_fkey'
+            columns: ['exercise_id']
+            isOneToOne: true
+            referencedRelation: 'exercises'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      exercise_attempts: {
+        Row: {
+          user_id: string
+          exercise_id: string
+          created_at: string
+        }
+        Insert: {
+          user_id: string
+          exercise_id: string
+          created_at?: string
+        }
+        Update: {
+          user_id?: string
+          exercise_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'exercise_attempts_exercise_id_fkey'
+            columns: ['exercise_id']
+            isOneToOne: false
+            referencedRelation: 'exercises'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'exercise_attempts_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      academic_years: {
+        Row: {
+          id: string
+          level: StudyLevel
+          country_code: string
+          label: string
+          start_date: string
+          end_date: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          level: StudyLevel
+          country_code?: string
+          label: string
+          start_date: string
+          end_date: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          level?: StudyLevel
+          country_code?: string
+          label?: string
+          start_date?: string
+          end_date?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      terms: {
+        Row: {
+          id: string
+          academic_year_id: string
+          term_number: number
+          label: string
+          start_date: string
+          end_date: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          academic_year_id: string
+          term_number: number
+          label: string
+          start_date: string
+          end_date: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          academic_year_id?: string
+          term_number?: number
+          label?: string
+          start_date?: string
+          end_date?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'terms_academic_year_id_fkey'
+            columns: ['academic_year_id']
+            isOneToOne: false
+            referencedRelation: 'academic_years'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      school_months: {
+        Row: {
+          id: string
+          term_id: string
+          label: string
+          start_date: string
+          end_date: string
+          order_index: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          term_id: string
+          label: string
+          start_date: string
+          end_date: string
+          order_index: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          term_id?: string
+          label?: string
+          start_date?: string
+          end_date?: string
+          order_index?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'school_months_term_id_fkey'
+            columns: ['term_id']
+            isOneToOne: false
+            referencedRelation: 'terms'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      curriculum_items: {
+        Row: {
+          id: string
+          subject_id: string
+          chapter_id: string | null
+          lesson_id: string | null
+          exercise_id: string | null
+          quiz_id: string | null
+          item_type: 'chapter' | 'lesson' | 'exercise' | 'quiz'
+          school_month_id: string
+          term_id: string
+          is_core: boolean
+          is_revision: boolean
+          order_index: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          subject_id: string
+          chapter_id?: string | null
+          lesson_id?: string | null
+          exercise_id?: string | null
+          quiz_id?: string | null
+          item_type: 'chapter' | 'lesson' | 'exercise' | 'quiz'
+          school_month_id: string
+          term_id: string
+          is_core?: boolean
+          is_revision?: boolean
+          order_index?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          subject_id?: string
+          chapter_id?: string | null
+          lesson_id?: string | null
+          exercise_id?: string | null
+          quiz_id?: string | null
+          item_type?: 'chapter' | 'lesson' | 'exercise' | 'quiz'
+          school_month_id?: string
+          term_id?: string
+          is_core?: boolean
+          is_revision?: boolean
+          order_index?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'curriculum_items_school_month_id_fkey'
+            columns: ['school_month_id']
+            isOneToOne: false
+            referencedRelation: 'school_months'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'curriculum_items_term_id_fkey'
+            columns: ['term_id']
+            isOneToOne: false
+            referencedRelation: 'terms'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'curriculum_items_subject_id_fkey'
+            columns: ['subject_id']
+            isOneToOne: false
+            referencedRelation: 'subjects'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'curriculum_items_chapter_id_fkey'
+            columns: ['chapter_id']
+            isOneToOne: false
+            referencedRelation: 'chapters'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'curriculum_items_lesson_id_fkey'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'curriculum_items_exercise_id_fkey'
+            columns: ['exercise_id']
+            isOneToOne: false
+            referencedRelation: 'exercises'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'curriculum_items_quiz_id_fkey'
+            columns: ['quiz_id']
+            isOneToOne: false
+            referencedRelation: 'quizzes'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      curriculum_item_review: {
+        Row: {
+          id: string
+          user_id: string
+          curriculum_item_id: string
+          score_best: number | null
+          attempts_count: number
+          last_reviewed_at: string | null
+          next_review_at: string | null
+          ease_factor: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          curriculum_item_id: string
+          score_best?: number | null
+          attempts_count?: number
+          last_reviewed_at?: string | null
+          next_review_at?: string | null
+          ease_factor?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          curriculum_item_id?: string
+          score_best?: number | null
+          attempts_count?: number
+          last_reviewed_at?: string | null
+          next_review_at?: string | null
+          ease_factor?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'curriculum_item_review_curriculum_item_id_fkey'
+            columns: ['curriculum_item_id']
+            isOneToOne: false
+            referencedRelation: 'curriculum_items'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'curriculum_item_review_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      series: {
+        Row: {
+          id: string
+          code: string
+          label: string
+          track: 'generale' | 'technique' | 'professionnel'
+          level: StudyLevel
+          country_code: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          code: string
+          label: string
+          track: 'generale' | 'technique' | 'professionnel'
+          level: StudyLevel
+          country_code?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          code?: string
+          label?: string
+          track?: 'generale' | 'technique' | 'professionnel'
+          level?: StudyLevel
+          country_code?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       quiz_weak_areas: {
@@ -1340,7 +1806,7 @@ export type Database = {
           query_embedding: string
           match_count?: number
           min_similarity?: number
-          filter_document?: string | undefined
+          filter_document?: string | null
           p_include_premium?: boolean
         }
         Returns: {

@@ -170,7 +170,7 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
             enonceUrl={enonceUrl}
             corrigeUrl={corrigeUrl}
             corrigeIsPremium={!!doc.is_premium}
-            exercises={exercises ?? []}
+            exercises={(exercises ?? []).map((e) => ({ ...e, metadata: e.metadata as Record<string, unknown> }))}
             contextChunks={contextChunks ?? []}
           />
         ) : textContent ? (
