@@ -1,13 +1,9 @@
 // Auto-generated Supabase types stub
 // Run `pnpm db:generate-types` to regenerate from Supabase schema
 
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+import type { StudyLevel } from './levels'
+
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
 export type Database = {
   public: {
@@ -24,7 +20,8 @@ export type Database = {
           xp: number
           streak: number
           onboarding_completed: boolean
-          study_level_pref: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d' | null
+          track_type: 'generale' | 'technique' | 'professionnel' | null
+          study_level_pref: StudyLevel | null
           subject_ids_pref: string[] | null
           whatsapp_opt_in: boolean
           reminder_hour: number
@@ -42,7 +39,8 @@ export type Database = {
           xp?: number
           streak?: number
           onboarding_completed?: boolean
-          study_level_pref?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d' | null
+          track_type?: 'generale' | 'technique' | 'professionnel' | null
+          study_level_pref?: StudyLevel | null
           subject_ids_pref?: string[] | null
           whatsapp_opt_in?: boolean
           reminder_hour?: number
@@ -60,7 +58,8 @@ export type Database = {
           xp?: number
           streak?: number
           onboarding_completed?: boolean
-          study_level_pref?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d' | null
+          track_type?: 'generale' | 'technique' | 'professionnel' | null
+          study_level_pref?: StudyLevel | null
           subject_ids_pref?: string[] | null
           whatsapp_opt_in?: boolean | undefined
           reminder_hour?: number | undefined
@@ -113,7 +112,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       videos: {
@@ -122,7 +121,7 @@ export type Database = {
           subject_id: string
           title: string
           description: string | null
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           provider: 'youtube' | 'vimeo'
           external_id: string
           url: string
@@ -136,7 +135,7 @@ export type Database = {
           subject_id: string
           title: string
           description?: string | null
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           provider?: 'youtube' | 'vimeo'
           external_id: string
           url: string
@@ -150,7 +149,7 @@ export type Database = {
           subject_id?: string
           title?: string
           description?: string | null
-          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level?: StudyLevel
           provider?: 'youtube' | 'vimeo'
           external_id?: string
           url?: string
@@ -166,35 +165,123 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'subjects'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       subjects: {
         Row: {
           id: string
           name: string
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           country_code: string
           icon: string | null
+          parent_subject_id: string | null
           created_at: string
         }
         Insert: {
           id?: string
           name: string
-          level: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level: StudyLevel
           country_code?: string
           icon?: string | null
+          parent_subject_id?: string | null
           created_at?: string
         }
         Update: {
           id?: string
           name?: string
-          level?: 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+          level?: StudyLevel
           country_code?: string
           icon?: string | null
+          parent_subject_id?: string | null
           created_at?: string
         }
         Relationships: []
+      }
+      chapters: {
+        Row: {
+          id: string
+          subject_id: string
+          series_id: string | null
+          title: string
+          order_index: number
+          description: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          subject_id: string
+          series_id?: string | null
+          title: string
+          order_index?: number
+          description?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          subject_id?: string
+          series_id?: string | null
+          title?: string
+          order_index?: number
+          description?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'chapters_subject_id_fkey'
+            columns: ['subject_id']
+            isOneToOne: false
+            referencedRelation: 'subjects'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          id: string
+          chapter_id: string
+          type: string
+          title: string
+          content: string | null
+          video_url: string | null
+          duration_min: number | null
+          is_premium: boolean
+          order_index: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          chapter_id: string
+          type: string
+          title: string
+          content?: string | null
+          video_url?: string | null
+          duration_min?: number | null
+          is_premium?: boolean
+          order_index?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          chapter_id?: string
+          type?: string
+          title?: string
+          content?: string | null
+          video_url?: string | null
+          duration_min?: number | null
+          is_premium?: boolean
+          order_index?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'lessons_chapter_id_fkey'
+            columns: ['chapter_id']
+            isOneToOne: false
+            referencedRelation: 'chapters'
+            referencedColumns: ['id']
+          },
+        ]
       }
       documents: {
         Row: {
@@ -258,7 +345,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'subjects'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       document_chunks: {
@@ -299,7 +386,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'documents'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       chat_sessions: {
@@ -338,7 +425,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'documents'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       chat_messages: {
@@ -370,7 +457,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'chat_sessions'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       flashcards: {
@@ -378,6 +465,7 @@ export type Database = {
           id: string
           user_id: string
           document_id: string | null
+          lesson_id: string | null
           front: string
           back: string
           next_review: string
@@ -390,6 +478,7 @@ export type Database = {
           id?: string
           user_id: string
           document_id?: string | null
+          lesson_id?: string | null
           front: string
           back: string
           next_review?: string
@@ -402,6 +491,7 @@ export type Database = {
           id?: string
           user_id?: string
           document_id?: string | null
+          lesson_id?: string | null
           front?: string
           back?: string
           next_review?: string
@@ -419,12 +509,19 @@ export type Database = {
             referencedColumns: ['id']
           },
           {
+            foreignKeyName: 'flashcards_lesson_id_fkey'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
+            referencedColumns: ['id']
+          },
+          {
             foreignKeyName: 'flashcards_user_id_fkey'
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       user_badges: {
@@ -453,7 +550,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       document_views: {
@@ -489,7 +586,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       subscriptions: {
@@ -533,7 +630,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       push_tokens: {
@@ -608,7 +705,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       beta_feedback: {
@@ -646,7 +743,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       notifications: {
@@ -736,7 +833,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'subjects'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       quiz_questions: {
@@ -777,7 +874,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'quizzes'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       quiz_attempts: {
@@ -822,7 +919,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       quiz_attempt_answers: {
@@ -861,7 +958,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'quiz_questions'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       exam_events: {
@@ -926,7 +1023,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       revision_sessions: {
@@ -987,7 +1084,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
-          }
+          },
         ]
       }
       tutor_profiles: {
@@ -1230,6 +1327,10 @@ export type Database = {
       }
     }
     Functions: {
+      current_user_plan_level: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       submit_quiz_attempt: {
         Args: { p_quiz_id: string; p_answers: Json; p_duration_sec: number; p_mode?: string }
         Returns: Json
@@ -1278,14 +1379,13 @@ type DefaultSchema = Database[Extract<keyof Database, 'public'>]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    | { schema: keyof Database },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+    keyof (DefaultSchema['Tables'] & DefaultSchema['Views']) | { schema: keyof Database },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof Database
   }
     ? keyof (Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
         Database[DefaultSchemaTableNameOrOptions['schema']]['Views'])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
   ? (Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
       Database[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
@@ -1293,10 +1393,8 @@ export type Tables<
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1305,13 +1403,12 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
-    | { schema: keyof Database },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+    keyof DefaultSchema['Tables'] | { schema: keyof Database },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof Database
   }
     ? keyof Database[DefaultSchemaTableNameOrOptions['schema']]['Tables']
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
   ? Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Insert: infer I
@@ -1328,13 +1425,12 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
-    | { schema: keyof Database },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+    keyof DefaultSchema['Tables'] | { schema: keyof Database },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof Database
   }
     ? keyof Database[DefaultSchemaTableNameOrOptions['schema']]['Tables']
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
   ? Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Update: infer U
@@ -1350,14 +1446,12 @@ export type TablesUpdate<
     : never
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
-    | { schema: keyof Database },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums'] | { schema: keyof Database },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof Database
   }
     ? keyof Database[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
   ? Database[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
@@ -1366,13 +1460,12 @@ export type Enums<
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
-    | { schema: keyof Database },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    keyof DefaultSchema['CompositeTypes'] | { schema: keyof Database },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof Database
   }
     ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
   ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
