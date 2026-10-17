@@ -17,7 +17,7 @@ export function BetaFeedbackButton() {
     if (rating === 0) return
     setLoading(true)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
+      await supabase.auth.getSession()
       await fetch(`${API_URL}/api/feedback`, {
         method:      'POST',
         headers:     { 'Content-Type': 'application/json' },

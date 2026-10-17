@@ -87,28 +87,28 @@ export function MarkdownRenderer({ content, className = '', prose = false }: Pro
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
         components={{
-          h2: ({ node, children, ...props }) => (
+          h2: ({ children, ...props }) => (
             <h2 {...props} data-section-kind={sectionKind(children)}>
               {children}
             </h2>
           ),
-          h3: ({ node, children, ...props }) => (
+          h3: ({ children, ...props }) => (
             <h3 {...props} data-section-kind={sectionKind(children)}>
               {children}
             </h3>
           ),
-          p: ({ node, children, ...props }) => (
+          p: ({ children, ...props }) => (
             <p {...props} data-paragraph-kind={paragraphKind(children)}>
               {children}
             </p>
           ),
-          strong: ({ node, children, ...props }) => (
+          strong: ({ children, ...props }) => (
             <strong {...props} className="course-keyword">
               {children}
             </strong>
           ),
           // Un tableau large défile dans son propre cadre plutôt que d'élargir la page.
-          table: ({ node, ...props }) => (
+          table: ({ ...props }) => (
             <div className="my-4 overflow-x-auto">
               <table {...props} />
             </div>

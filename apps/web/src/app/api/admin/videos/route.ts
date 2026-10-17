@@ -31,7 +31,7 @@ function parseVideoUrl(url: string): { provider: 'youtube' | 'vimeo'; external_i
 }
 
 /** GET /api/admin/videos — liste toutes les vidéos (admin) */
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })

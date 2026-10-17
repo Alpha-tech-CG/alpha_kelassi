@@ -111,7 +111,7 @@ export default function OnboardingPage() {
         credentials: 'include',
         body: JSON.stringify({ track_type: track, level, subject_ids: selectedSubjects }),
       })
-      const json = await res.json()
+      await res.json()
       router.replace('/dashboard')
     } finally {
       setLoading(false)

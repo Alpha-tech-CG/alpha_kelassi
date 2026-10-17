@@ -20,7 +20,7 @@ interface Session {
 export default function PlanningPage() {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
-  const [level, setLevel] = useState<string | null>(null)
+  const [, setLevel] = useState<string | null>(null)
   const [plan, setPlan] = useState<Plan | null>(null)
   const [exams, setExams] = useState<ExamEvent[]>([])
   const [subjects, setSubjects] = useState<Subject[]>([])

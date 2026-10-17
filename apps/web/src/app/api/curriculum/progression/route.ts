@@ -43,8 +43,8 @@ export async function GET(req: NextRequest) {
   const rows = (items ?? [])
     .filter((it) => it.chapters)
     .sort((a, b) => {
-      const am = (a.school_months as any)?.order_index ?? 999
-      const bm = (b.school_months as any)?.order_index ?? 999
+      const am = (a.school_months as { order_index?: number } | null)?.order_index ?? 999
+      const bm = (b.school_months as { order_index?: number } | null)?.order_index ?? 999
       if (am !== bm) return am - bm
       return (a.order_index ?? 0) - (b.order_index ?? 0)
     })
@@ -74,10 +74,10 @@ export async function GET(req: NextRequest) {
     previousCompleted = isCompleted
     return {
       id: r.chapter_id,
-      title: (r.chapters as any)?.title ?? '—',
+      title: (r.chapters as { title?: string } | null)?.title ?? '—',
       domain_id: r.subject_id,
       domain_name: domainNameById.get(r.subject_id) ?? '',
-      month_label: (r.school_months as any)?.label ?? null,
+      month_label: (r.school_months as { label?: string } | null)?.label ?? null,
       total_lessons: total,
       completed_lessons: done,
       is_completed: isCompleted,

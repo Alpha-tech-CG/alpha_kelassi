@@ -19,7 +19,7 @@ interface Notif {
   is_active: boolean; target_plan: string; expires_at: string | null; created_at: string
 }
 
-const EMPTY = { type: 'annonce' as const, title: '', message: '', cta_label: '', cta_url: '', is_active: true, target_plan: 'all', expires_at: '' }
+const EMPTY = { type: 'annonce' as keyof typeof TYPE_CONFIG, title: '', message: '', cta_label: '', cta_url: '', is_active: true, target_plan: 'all', expires_at: '' }
 
 async function getToken() {
   const { data: { session } } = await createClient().auth.getSession()
@@ -107,7 +107,7 @@ export default function AdminNotificationsPage() {
               <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Type</label>
               <select
                 value={form.type}
-                onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as any }))}
+                onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as keyof typeof TYPE_CONFIG }))}
                 className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
               >
                 {Object.entries(TYPE_CONFIG).map(([k, v]) => (

@@ -24,6 +24,13 @@ const reactHooksStub = {
 
 export default [
   {
+    // Les directives `eslint-disable @next/next/*` et `react-hooks/*` du code
+    // ciblent des plugins non installés (déclarés en no-op plus bas) : on ne
+    // signale pas ces directives comme « inutilisées » (elles redeviendront
+    // actives si les vrais plugins sont ajoutés).
+    linterOptions: { reportUnusedDisableDirectives: 'off' },
+  },
+  {
     ignores: [
       '**/node_modules/**',
       '**/dist/**',
