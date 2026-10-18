@@ -1,62 +1,31 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { View } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { colors } from '../lib/theme'
 import { KATEX_CSS, KATEX_JS_B64, MARKED_JS_B64 } from '../lib/katexBundle'
+import { CognixLoader } from './CognixLoader'
 
 /**
  * Rendu des leçons avec mathématiques natives (Markdown + LaTeX).
  *
  * Le composant léger `LessonContent` ne sait pas afficher le LaTeX. Ici on
- * réutilise le patron WebView + KaTeX (déjà utilisé dans `lecon/[id]`) pour un
- * rendu typographié : fractions, intégrales, limites, vecteurs…
+ * réutilise le patron WebView + KaTeX pour un rendu typographié : fractions,
+ * intégrales, limites, vecteurs…
  *
  * Les formules $...$ / $$...$$ sont protégées AVANT le parsing Markdown puis
  * rendues par KaTeX (évite que Markdown ne casse les `_` et `*` des formules).
- * La hauteur s'ajuste automatiquement via postMessage.
+ *
+ * Deux modes :
+ * - `MathLessonReader` (à privilégier) : une seule WebView qui occupe l'écran et
+ *   défile elle-même. Défilement natif, fluide, quelle que soit la longueur.
+ * - `MathLessonView` : WebView « en ligne » dans un ScrollView, hauteur ajustée
+ *   par postMessage. Réservé aux contenus courts (énoncés, cartes) : sur un long
+ *   cours, chaque changement de hauteur fait sauter le défilement.
  */
 export function MathLessonView({ content }: { content: string }) {
-  // Une seule WebView très haute (cours de maths de 30 000+ caractères) s'affiche
-  // mal sur Android : zones blanches, rendu tronqué au défilement. On découpe le
-  // cours aux titres « # » / « ## » en morceaux de taille raisonnable, une WebView chacun.
-  const chunks = useMemo(() => splitContent(content ?? ''), [content])
-  return (
-    <View>
-      {chunks.map((chunk, i) => (
-        <MathChunk key={i} content={chunk} />
-      ))}
-    </View>
-  )
-}
-
-const CHUNK_TARGET = 5000
-/** Coupe aux titres de section (hors blocs $$…$$), en regroupant les petites sections. */
-export function splitContent(md: string): string[] {
-  const sections: string[] = []
-  let cur: string[] = []
-  let inDisplayMath = false
-  for (const line of md.split('\n')) {
-    if (!inDisplayMath && /^#{1,2} /.test(line) && cur.join('\n').trim()) {
-      sections.push(cur.join('\n'))
-      cur = []
-    }
-    cur.push(line)
-    if ((line.match(/\$\$/g) ?? []).length % 2 === 1) inDisplayMath = !inDisplayMath
-  }
-  if (cur.join('\n').trim()) sections.push(cur.join('\n'))
-  const chunks: string[] = []
-  for (const sec of sections) {
-    const last = chunks.length - 1
-    if (last >= 0 && (chunks[last] ?? '').length + sec.length < CHUNK_TARGET) chunks[last] += '\n' + sec
-    else chunks.push(sec)
-  }
-  return chunks.length ? chunks : ['']
-}
-
-function MathChunk({ content }: { content: string }) {
   const [height, setHeight] = useState(60)
-
-  const html = useMemo(() => buildHtml(content), [content])
+  const last = useRef(0)
+  const html = useMemo(() => buildHtml(content ?? ''), [content])
 
   return (
     <WebView
@@ -64,19 +33,46 @@ function MathChunk({ content }: { content: string }) {
       source={{ html, baseUrl: 'https://kelassi.app/' }}
       style={{ height, backgroundColor: 'transparent' }}
       scrollEnabled={false}
-      nestedScrollEnabled
       showsVerticalScrollIndicator={false}
       setSupportMultipleWindows={false}
       onMessage={(e) => {
-        const h = Number(e.nativeEvent.data)
-        if (!Number.isNaN(h) && h > 0) setHeight(Math.ceil(h))
+        const h = Math.ceil(Number(e.nativeEvent.data))
+        // Ignore les micro-variations : chaque setHeight relance la mise en page du parent.
+        if (!Number.isNaN(h) && h > 0 && Math.abs(h - last.current) > 4) {
+          last.current = h
+          setHeight(h)
+        }
       }}
     />
   )
 }
 
-function buildHtml(md: string): string {
+/** Lecteur plein écran : la WebView défile elle-même (à placer dans un parent `flex: 1`). */
+export function MathLessonReader({ content, title }: { content: string; title?: string }) {
+  const html = useMemo(() => buildHtml(content ?? '', { reader: true, title: title ?? '' }), [content, title])
+  return (
+    <WebView
+      originWhitelist={['*']}
+      source={{ html, baseUrl: 'https://kelassi.app/' }}
+      style={{ flex: 1, backgroundColor: '#fff' }}
+      scrollEnabled
+      showsVerticalScrollIndicator
+      setSupportMultipleWindows={false}
+      overScrollMode="never"
+      decelerationRate="normal"
+      startInLoadingState
+      renderLoading={() => (
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#fff', justifyContent: 'center' }}>
+          <CognixLoader compact label="Ouverture du cours…" />
+        </View>
+      )}
+    />
+  )
+}
+
+function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}): string {
   const payload = JSON.stringify(md)
+  const titlePayload = JSON.stringify(opts.title ?? '')
   return `<!DOCTYPE html><html><head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -93,6 +89,9 @@ function buildHtml(md: string): string {
   html,body { width:100%; max-width:100%; overflow-x:hidden; }
   body { color:${colors.text}; font-family:-apple-system,'Segoe UI',Roboto,sans-serif; font-size:15px; line-height:1.55; word-wrap:break-word; overflow-wrap:break-word; }
   #c { padding-bottom:4px; }
+  body.reader { background:#fff; padding:18px 18px 40px; }
+  #rt { font-size:21px; font-weight:800; color:${colors.text}; margin:0 0 14px; line-height:1.25; }
+  #rt:empty { display:none; }
   h1,h2,h3,h4 { font-weight:800; margin:18px 0 8px; line-height:1.25; color:${colors.primary}; }
   h1 { font-size:20px; } h2 { font-size:18px; padding-bottom:6px; border-bottom:2px solid ${colors.primaryTint}; }
   h3 { font-size:16px; } h4 { font-size:15px; color:${colors.text}; }
@@ -116,11 +115,13 @@ function buildHtml(md: string): string {
   tbody tr:nth-child(even) td { background:#F7FAFF; }
   img { max-width:100%; height:auto; border-radius:12px; display:block; margin:10px auto; }
 </style></head>
-<body>
+<body class="${opts.reader ? 'reader' : ''}">
+<div id="rt"></div>
 <div id="c"></div>
 <script>
 (function(){
   var md = ${payload};
+  document.getElementById('rt').textContent = ${titlePayload};
   var lastH = 0;
   function post(){
     var c = document.getElementById('c');

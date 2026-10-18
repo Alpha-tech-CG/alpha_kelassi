@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Share } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Share } from 'react-native'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
+import { LoaderDots } from '../../components/CognixLoader'
 
 export default function InviterParent() {
   const [code, setCode] = useState<string | null>(null)
@@ -36,7 +37,7 @@ export default function InviterParent() {
           </>
         ) : (
           <TouchableOpacity style={styles.genBtn} onPress={generate} disabled={loading}>
-            {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.genText}>Générer un code</Text>}
+            {loading ? <LoaderDots color={"#fff"} size={6} /> : <Text style={styles.genText}>Générer un code</Text>}
           </TouchableOpacity>
         )}
       </View>

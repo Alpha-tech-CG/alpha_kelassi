@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useRouter, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Group { id: string; name: string; type: string }
 const TYPE_LABEL: Record<string, string> = { classe: 'Classe', matiere: 'Matière', officiel: 'Officiel', prive: 'Privé' }
@@ -53,7 +54,7 @@ export default function GroupesScreen() {
     router.push(`/groupes/${g.id}`)
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>

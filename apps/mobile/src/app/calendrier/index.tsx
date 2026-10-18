@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, RefreshControl } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native'
 import { useRouter, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface CalItem {
   id: string
@@ -74,7 +75,7 @@ export default function CalendrierScreen() {
 
   const onRefresh = () => { setRefreshing(true); load() }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView

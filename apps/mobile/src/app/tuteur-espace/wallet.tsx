@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native'
 import { useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Txn { id: string; amount_fcfa: number; type: 'credit' | 'withdrawal'; status: string; created_at: string }
 
@@ -56,7 +57,7 @@ export default function WalletScreen() {
     ])
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>

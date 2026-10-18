@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
   Animated,
   ScrollView,
 } from 'react-native'
@@ -13,6 +12,7 @@ import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader, LoaderDots } from '../../components/CognixLoader'
 
 interface Flashcard {
   id: string
@@ -243,7 +243,7 @@ export default function FlashcardsScreen() {
             </Text>
           )}
           {sourcesLoading ? (
-            <ActivityIndicator color={colors.primary} />
+            <LoaderDots color={colors.primary} size={6} />
           ) : sources.length === 0 ? (
             <Text style={styles.generatorSub}>
               Aucun cours avec contenu n’est disponible pour ton parcours.
@@ -290,7 +290,7 @@ export default function FlashcardsScreen() {
                 }
               >
                 {generating ? (
-                  <ActivityIndicator color="#fff" />
+                  <LoaderDots color={"#fff"} size={6} />
                 ) : (
                   <Text style={styles.generateText}>Générer mes cartes</Text>
                 )}
@@ -332,7 +332,7 @@ export default function FlashcardsScreen() {
     </View>
   )
 
-  if (loading) return shell(<ActivityIndicator style={{ flex: 1 }} color={colors.primary} />)
+  if (loading) return shell(<CognixLoader />)
 
   if (loadError) {
     return shell(

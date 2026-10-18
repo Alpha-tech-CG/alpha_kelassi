@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ImageBackground } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native'
 import { useRouter, useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
@@ -8,6 +8,7 @@ import { subjectArtwork } from '../../lib/subjectArtwork'
 import { BackButton } from '../../components/BackButton'
 import { ImageTile } from '../../components/ImageTile'
 import { FadeIn } from '../../components/FadeIn'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface ProgChapter {
   id: string
@@ -52,7 +53,7 @@ export default function ProgressionScreen() {
 
   useEffect(() => { load() }, [load])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   const nextIndex = chapters.findIndex((c) => c.is_unlocked && !c.is_completed)
   const total = chapters.reduce((a, c) => a + c.total_lessons, 0)

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
@@ -7,6 +7,7 @@ import { colors, radius, cardShadow, LEVEL_LABEL, fonts } from '../../lib/theme'
 import { subjectArtwork } from '../../lib/subjectArtwork'
 import { SolarIcon } from '../../icons/solar'
 import { FadeIn } from '../../components/FadeIn'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
 
@@ -73,7 +74,7 @@ export default function HomeScreen() {
     load()
   }, [ready, level, track])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   const total = subjects.length
   const started = subjects.filter((s) => s.progress > 0).length

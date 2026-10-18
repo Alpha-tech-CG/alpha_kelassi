@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useRouter, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Child { id: string; name: string }
 
@@ -42,7 +43,7 @@ export default function ParentScreen() {
     Alert.alert('Compte lié ✅', `Tu suis maintenant ${(data as { child_name?: string })?.child_name ?? 'cet élève'}.`)
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>

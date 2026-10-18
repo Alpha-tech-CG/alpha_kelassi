@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, StyleSheet } from 'react-native'
 import { useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Rating { clarity: number; quality: number; comment: string | null; created_at: string }
 
@@ -32,7 +33,7 @@ export default function ScoreScreen() {
   }, [])
   useFocusEffect(useCallback(() => { load() }, [load]))
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>

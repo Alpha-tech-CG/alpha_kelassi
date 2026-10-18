@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native'
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
@@ -8,6 +8,7 @@ import { enfiler, viderLaFile } from '../../lib/outbox'
 import { LessonContent } from '../../components/LessonContent'
 import { MathLessonView } from '../../components/MathLessonView'
 import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 // Formules LaTeX ou tableaux → rendu riche ; le rendu léger ne gère ni l'un ni l'autre.
 const needsRich = (s?: string | null) => !!s && (/\$[^$\n]+\$|\$\$|^[ \t]*\$[ \t]*$/m.test(s) || /^\|.+\|\s*$/m.test(s))
@@ -189,7 +190,7 @@ export default function ExercicesScreen() {
     writeCachedLesson(answersKey, 'chapter', JSON.stringify(next))
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>

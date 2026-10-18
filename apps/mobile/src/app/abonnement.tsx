@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { colors, radius, cardShadow, fonts } from '../lib/theme'
 import { api, dateFr, formatFcfa, planLabel, type PlanId, type PlanOffer } from '../lib/billing'
 import { useBilling } from '../hooks/useBilling'
 import { QuotaBar } from '../components/QuotaBar'
 import { BackButton, BACK_BUTTON_WIDTH } from '../components/BackButton'
+import { CognixLoader, LoaderDots } from '../components/CognixLoader'
 
 type Interval = 'month' | 'year'
 type Tone = 'info' | 'ok' | 'error'
@@ -139,7 +140,7 @@ export default function AbonnementScreen() {
       </View>
 
       {loadError && <Text style={styles.errorText}>{loadError}</Text>}
-      {!plans && !loadError && <ActivityIndicator color={colors.primary} style={{ marginVertical: 30 }} />}
+      {!plans && !loadError && <CognixLoader compact />}
 
       {plans?.map((p) => {
         const isCurrent = p.id === currentPlan
@@ -219,7 +220,7 @@ export default function AbonnementScreen() {
 
           {status && (
             <View style={[styles.statusBox, status.tone === 'ok' ? styles.statusOk : status.tone === 'error' ? styles.statusError : styles.statusInfo]} accessibilityLiveRegion="polite">
-              {paying && status.tone === 'info' && <ActivityIndicator size="small" color={colors.primary} />}
+              {paying && status.tone === 'info' && <LoaderDots color={colors.primary} size={6} />}
               <Text style={styles.statusText}>{status.text}</Text>
             </View>
           )}

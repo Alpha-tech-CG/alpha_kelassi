@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, BackHandler } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, BackHandler } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
@@ -7,6 +7,7 @@ import { useBilling } from '../../hooks/useBilling'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
 import { isRayon, rayonMeta, MODE_LABEL, type ExamMode } from '../../lib/prepa'
 import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 /**
  * Un rayon de l'espace Prépa : l'élève choisit sa matière, puis une épreuve
@@ -159,7 +160,7 @@ export default function PrepaRayonScreen() {
     </View>
   )
 
-  if (loading) return <View style={styles.container}>{header}<ActivityIndicator style={{ marginTop: 40 }} color={colors.primary} /></View>
+  if (loading) return <View style={styles.container}>{header}<CognixLoader compact /></View>
 
   // ── Étape 1 : la matière ───────────────────────────────────────────────────
   if (!subject) {

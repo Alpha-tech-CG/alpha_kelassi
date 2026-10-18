@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
 import { pickAndUpload } from '../../lib/uploads'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader, LoaderDots } from '../../components/CognixLoader'
 
 interface Subject { id: string; name: string }
 type Doc = { path: string; uri: string } | null
@@ -67,7 +68,7 @@ export default function InscriptionTuteur() {
     Alert.alert('Dossier envoyé ✅', 'Ton compte tuteur sera validé sous 24h.', [{ text: 'OK', onPress: () => router.replace('/tuteur-espace') }])
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
   const ready = picked.size > 0 && idDoc && bacDoc
 
   return (
@@ -110,7 +111,7 @@ export default function InscriptionTuteur() {
 function DocSlot({ doc, busy, onPress, label }: { doc: Doc; busy: boolean; onPress: () => void; label: string }) {
   return (
     <TouchableOpacity style={[styles.doc, doc && styles.docOk]} onPress={onPress} disabled={busy} activeOpacity={0.85}>
-      {busy ? <ActivityIndicator color={colors.primary} /> : (
+      {busy ? <LoaderDots color={colors.primary} size={6} /> : (
         <Text style={[styles.docText, doc && { color: '#0B8A46' }]}>{doc ? '✓ Document ajouté — modifier' : `＋ ${label}`}</Text>
       )}
     </TouchableOpacity>

@@ -1,11 +1,12 @@
 import { useEffect, useState, useMemo } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, ImageBackground } from 'react-native'
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL, levelBadgeStyle } from '../../lib/theme'
 import { subjectArtwork } from '../../lib/subjectArtwork'
 import { FadeIn } from '../../components/FadeIn'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Subject {
   id: string
@@ -104,7 +105,7 @@ export default function MatieresScreen() {
     return q ? subjects.filter((s) => s.name.toLowerCase().includes(q)) : subjects
   }, [subjects, search])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <View style={styles.container}>

@@ -6,7 +6,6 @@ import {
   ScrollView,
   StyleSheet,
   Animated,
-  ActivityIndicator,
   Alert,
   ImageBackground,
   Image,
@@ -17,6 +16,7 @@ import { supabase } from '../lib/supabase'
 import { API_URL } from '../lib/config'
 import { LEVEL_LABEL, colors, fonts, radius, cardShadow } from '../lib/theme'
 import { BackButton } from '../components/BackButton'
+import { CognixLoader, LoaderDots } from '../components/CognixLoader'
 
 type Track = 'generale' | 'technique'
 type Cycle = 'primaire' | 'college' | 'lycee'
@@ -249,7 +249,7 @@ export default function OnboardingScreen() {
                 </TouchableOpacity>
               ))}
             </View>
-            {!allSeries && <ActivityIndicator color={colors.primary} style={{ marginTop: 18 }} />}
+            {!allSeries && <CognixLoader compact />}
           </ScrollView>
         )}
 
@@ -288,7 +288,7 @@ export default function OnboardingScreen() {
             <Text style={styles.title}>Ta classe</Text>
             <Text style={styles.subtitle}>Sélectionne la classe que tu fréquentes cette année.</Text>
             {stepLoading ? (
-              <ActivityIndicator color={colors.primary} style={{ marginTop: 24 }} />
+              <CognixLoader compact />
             ) : classes.length === 0 ? (
               <View style={styles.soon}>
                 <Text style={styles.soonTitle}>Bientôt disponible</Text>
@@ -401,7 +401,7 @@ export default function OnboardingScreen() {
               onPress={handleComplete}
               disabled={loading}
             >
-              {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>C'est parti !</Text>}
+              {loading ? <LoaderDots color={"#fff"} size={6} /> : <Text style={styles.btnText}>C'est parti !</Text>}
             </TouchableOpacity>
           </View>
         )}

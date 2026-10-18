@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Alert, Image, Linking } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, Alert, Image, Linking } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { STATUS } from './index'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Mission {
   id: string
@@ -86,7 +87,7 @@ export default function CorrectionDetail() {
     Alert.alert('Contestation envoyée', 'L’IA analyse ta correction et te répondra sous peu.')
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
   if (!m) return (
     <View style={styles.center}><Text style={styles.muted}>Correction introuvable.</Text></View>
   )

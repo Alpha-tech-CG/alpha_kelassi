@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { pickAndUpload } from '../../lib/uploads'
 import { BackButton } from '../../components/BackButton'
+import { CognixLoader, LoaderDots } from '../../components/CognixLoader'
 
 type Doc = { path: string; uri: string } | null
 interface Profile { user_id: string; is_verified: boolean; school: string | null }
@@ -56,7 +57,7 @@ export default function EnseignantScreen() {
     Alert.alert('Dossier envoyé ✅', 'Ton compte enseignant sera validé sous 48h.', [{ text: 'OK', onPress: load }])
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -101,7 +102,7 @@ export default function EnseignantScreen() {
 function DocSlot({ doc, busy, onPress, label }: { doc: Doc; busy: boolean; onPress: () => void; label: string }) {
   return (
     <TouchableOpacity style={[styles.doc, doc && styles.docOk]} onPress={onPress} disabled={busy} activeOpacity={0.85}>
-      {busy ? <ActivityIndicator color={colors.primary} /> : (
+      {busy ? <LoaderDots color={colors.primary} size={6} /> : (
         <Text style={[styles.docText, doc && { color: '#0B8A46' }]}>{doc ? '✓ Document ajouté — modifier' : `＋ ${label}`}</Text>
       )}
     </TouchableOpacity>

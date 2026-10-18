@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import {
   ScrollView,
   View,
@@ -17,7 +17,7 @@ import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 import { enfiler } from '../../lib/outbox'
 import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
 import { LessonContent } from '../../components/LessonContent'
-import { MathLessonView } from '../../components/MathLessonView'
+import { MathLessonView, MathLessonReader } from '../../components/MathLessonView'
 import { ChapterSkeleton } from '../../components/Skeleton'
 import { LockedFeature } from '../../components/LockedFeature'
 import { useBilling } from '../../hooks/useBilling'
@@ -268,6 +268,50 @@ export default function ChapitreScreen() {
       </TouchableOpacity>
     ) : null
 
+  // Lecteur plein écran pour les cours avec formules : la WebView défile
+  // elle-même (fluide), au lieu d'être une page très haute dans un ScrollView.
+  const reader = (l: LessonVM, top?: ReactNode) => {
+    const isDone = done[l.id]?.completed
+    const gatedNow = l.type === 'cours' && !quizzesValidated
+    return (
+      <View style={styles.readerWrap}>
+        {top}
+        <View style={styles.readerCard}>
+          <MathLessonReader content={l.content ?? ''} title={l.title} />
+        </View>
+        <View style={styles.readerBar}>
+          {isDone ? (
+            <View style={[styles.readerBtn, styles.readerDone]}>
+              <Text style={styles.donePillText}>✓ Terminé</Text>
+            </View>
+          ) : gatedNow ? (
+            <View style={[styles.readerBtn, styles.gated, { marginTop: 0 }]}>
+              <Text style={styles.gatedText} numberOfLines={2}>Valide d'abord le quiz du chapitre.</Text>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={[styles.readerBtn, styles.readerCta, (busy === l.id || fromCache) && styles.ctaDisabled]}
+              disabled={busy === l.id || fromCache}
+              onPress={() => complete(l)}
+            >
+              <Text style={styles.ctaText}>{busy === l.id ? '…' : 'Marquer comme lu'}</Text>
+            </TouchableOpacity>
+          )}
+          {exCount > 0 ? (
+            <TouchableOpacity
+              style={[styles.readerBtn, styles.readerEx]}
+              onPress={() => router.push(`/exercices/${chapterId}`)}
+            >
+              <Text style={styles.exBtnText} numberOfLines={1}>S'entraîner ({exCount}) →</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
+    )
+  }
+  const isReadable = (l: LessonVM) =>
+    (l.type === 'cours' || l.type === 'resume' || l.type === 'fiche') && hasMath(l.content)
+
   return (
     <View style={styles.container}>
       <ImageBackground source={subjectArtwork(subjectName || title)} style={styles.header} imageStyle={styles.headerImg}>
@@ -307,7 +351,14 @@ export default function ChapitreScreen() {
           {exFooter ? <View style={styles.emptyFooter}>{exFooter}</View> : null}
         </View>
       ) : subMode ? (
-        openLesson ? (
+        openLesson && isReadable(openLesson) ? (
+          reader(
+            openLesson,
+            <TouchableOpacity onPress={() => setOpenSub(null)} style={styles.readerBack} hitSlop={10}>
+              <Text style={styles.subBackText}>‹ Tous les sous-chapitres</Text>
+            </TouchableOpacity>
+          )
+        ) : openLesson ? (
           /* Détail d'un sous-chapitre */
           <ScrollView contentContainerStyle={styles.content}>
             <TouchableOpacity onPress={() => setOpenSub(null)} style={styles.subBack} hitSlop={10}>
@@ -372,6 +423,9 @@ export default function ChapitreScreen() {
             ))}
           </View>
 
+          {items.length === 1 && items[0] && isReadable(items[0]) ? (
+            reader(items[0])
+          ) : (
           <ScrollView contentContainerStyle={styles.content}>
             {items.map((l) => {
               const isDone = done[l.id]?.completed
@@ -469,6 +523,7 @@ export default function ChapitreScreen() {
             })}
             {exFooter}
           </ScrollView>
+          )}
         </>
       )}
 
@@ -600,6 +655,21 @@ const styles = StyleSheet.create({
   subRowText: { flex: 1, fontSize: 15, fontWeight: '700', color: colors.text },
   subRowChevron: { fontSize: 20, color: colors.primary, marginLeft: 8 },
   subBack: { paddingVertical: 6, marginBottom: 4 },
+  readerWrap: { flex: 1, paddingHorizontal: 12, paddingTop: 4 },
+  readerBack: { paddingVertical: 8, paddingHorizontal: 4 },
+  readerCard: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    overflow: 'hidden',
+  },
+  readerBar: { flexDirection: 'row', gap: 10, paddingVertical: 10, paddingBottom: 18 },
+  readerBtn: { flex: 1, minHeight: 46, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 10 },
+  readerCta: { backgroundColor: colors.primary },
+  readerDone: { backgroundColor: colors.primaryTint },
+  readerEx: { backgroundColor: colors.primaryTint },
   subBackText: { fontSize: 14, fontWeight: '700', color: colors.primary },
   empty: { alignItems: 'center', paddingTop: 60 },
   emptyText: { fontSize: 14, color: colors.textMuted },

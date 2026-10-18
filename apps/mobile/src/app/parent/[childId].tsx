@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TextInput, StyleSheet, ActivityIndicator, Switch, Alert } from 'react-native'
+import { ScrollView, View, Text, TextInput, StyleSheet, Switch, Alert } from 'react-native'
 import { useLocalSearchParams, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { planLabel } from '../../lib/billing'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 /**
  * Niveau de suivi (selon la formule de l'ENFANT, calculé par la base) :
@@ -76,7 +77,7 @@ export default function ChildDashboard() {
     Alert.alert('Enregistré', n ? `Limite fixée à ${n} min/jour.` : 'Limite retirée.')
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
   if (!d) return <View style={styles.center}><Text style={styles.muted}>Impossible de charger ce profil.</Text></View>
 
   // Base antérieure à la migration 057 : pas de niveau renvoyé → suivi standard.

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Switch, Share } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, Switch, Share } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL } from '../../lib/theme'
 import { syncAllForOffline, type SyncProgress } from '../../lib/offlineSync'
 import { useBilling } from '../../hooks/useBilling'
+import { CognixLoader, LoaderDots } from '../../components/CognixLoader'
 
 export default function ProfilScreen() {
   const router = useRouter()
@@ -100,7 +101,7 @@ export default function ProfilScreen() {
     ])
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
   const niveau = Math.max(1, Math.floor(xp / 100) + 1)
 
   return (
@@ -177,7 +178,7 @@ export default function ProfilScreen() {
                   : me && !can('offline_downloads') ? 'Inclus dès la formule Starter' : 'Tout ton programme, cours et images'}
               </Text>
             </View>
-            {syncing ? <ActivityIndicator color={colors.primary} /> : <Text style={styles.chevron}>›</Text>}
+            {syncing ? <LoaderDots color={colors.primary} size={6} /> : <Text style={styles.chevron}>›</Text>}
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.settingRow} onPress={() => router.push('/analyse' as any)} accessibilityRole="button">

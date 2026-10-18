@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow } from '../../lib/theme'
 import { planErrorOf } from '../../lib/billing'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Plan { id: string; level: string; title: string; exam_date: string; days_remaining: number }
 interface ExamEvent { id: string; level: string; label: string; exam_date: string }
@@ -113,7 +114,7 @@ export default function PlanningScreen() {
     await api(`/sessions/${s.id}`, { method: 'PATCH', body: JSON.stringify({ is_done: !s.is_done }) })
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   const today = new Date().toISOString().slice(0, 10)
   const todaySessions = sessions.filter((s) => s.scheduled_date === today)

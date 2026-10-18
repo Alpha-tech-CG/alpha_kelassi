@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useFocusEffect } from 'expo-router'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { api, planErrorOf, type LockedInfo } from '../../lib/billing'
 import { useBilling } from '../../hooks/useBilling'
 import { LockedFeature } from '../../components/LockedFeature'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Reco { subject_id: string; subject_name: string; priority: 'haute' | 'moyenne' | 'basse'; reason: string; action: string }
 interface SubjectError { subject_id: string; subject_name: string; answered: number; wrong: number; error_rate: number }
@@ -66,7 +67,7 @@ export default function AnalyseScreen() {
         <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
-      {loading && <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />}
+      {loading && <CognixLoader compact />}
       {!!error && <Text style={styles.error}>{error}</Text>}
       {locked && <LockedFeature info={locked} />}
 

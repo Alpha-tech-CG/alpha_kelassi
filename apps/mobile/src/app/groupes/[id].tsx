@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import {
   View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet,
-  KeyboardAvoidingView, Platform, ActivityIndicator, Alert,
+  KeyboardAvoidingView, Platform, Alert,
 } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
@@ -10,6 +10,7 @@ import { colors, radius, fonts } from '../../lib/theme'
 import { newRequestKey, planErrorOf } from '../../lib/billing'
 import { useBilling } from '../../hooks/useBilling'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader, LoaderDots } from '../../components/CognixLoader'
 
 interface Msg { id: string; sender_id: string; content: string; created_at: string; is_priority?: boolean }
 
@@ -126,7 +127,7 @@ export default function GroupChatScreen() {
     ])
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={90}>
@@ -183,7 +184,7 @@ export default function GroupChatScreen() {
         <TextInput style={styles.input} placeholder={canWrite ? 'Écris un message…' : 'Lecture seule'} placeholderTextColor={colors.textMuted}
           value={input} onChangeText={setInput} multiline maxLength={2000} editable={canWrite} accessibilityLabel="Message" />
         <TouchableOpacity style={[styles.sendBtn, (!input.trim() || sending || !canWrite) && { opacity: 0.4 }]} onPress={send} disabled={!input.trim() || sending || !canWrite} accessibilityRole="button" accessibilityLabel="Envoyer">
-          {sending ? <ActivityIndicator size="small" color="#fff" /> : <Text style={styles.sendText}>↑</Text>}
+          {sending ? <LoaderDots color={"#fff"} size={6} /> : <Text style={styles.sendText}>↑</Text>}
         </TouchableOpacity>
       </View>
       <Text style={styles.modHint}>🛡️ Messages modérés par IA · appui long pour signaler</Text>

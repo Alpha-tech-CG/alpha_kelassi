@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image, Linking } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Image, Linking } from 'react-native'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow } from '../../lib/theme'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Video {
   id: string
@@ -40,7 +41,7 @@ export default function VideosScreen() {
     Linking.openURL(v.url).catch(() => null)
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>

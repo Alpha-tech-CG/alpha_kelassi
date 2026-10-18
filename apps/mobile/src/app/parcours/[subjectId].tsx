@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ImageBackground } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow } from '../../lib/theme'
@@ -7,6 +7,7 @@ import { subjectArtwork } from '../../lib/subjectArtwork'
 import { ImageTile } from '../../components/ImageTile'
 import { FadeIn } from '../../components/FadeIn'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface ChapterVM { id: string; title: string; description: string | null; pct: number; total: number; done: number }
 
@@ -49,7 +50,7 @@ export default function ParcoursSubjectScreen() {
     load()
   }, [subjectId])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   const totalLessons = chapters.reduce((a, c) => a + c.total, 0)
   const doneLessons = chapters.reduce((a, c) => a + c.done, 0)

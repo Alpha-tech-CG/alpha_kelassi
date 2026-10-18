@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
@@ -7,6 +7,7 @@ import { LessonContent } from '../../components/LessonContent'
 import { LockedFeature } from '../../components/LockedFeature'
 import { planErrorOf, type LockedInfo } from '../../lib/billing'
 import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 /**
  * Un énoncé de QCM est du texte simple dans l'immense majorité des cas, et le
@@ -108,7 +109,7 @@ export default function QuizTakeScreen() {
     return () => clearTimeout(t)
   }, [remaining, loading, result, quiz, submit, meta.timed])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#1E74E8" />
+  if (loading) return <CognixLoader />
   if (!quiz) return <View style={styles.center}><Text>QCM introuvable.</Text></View>
 
   // Formule insuffisante : explication et accès aux offres, jamais un QCM vide.

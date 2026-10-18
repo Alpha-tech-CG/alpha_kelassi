@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import {
   View, Text, TextInput, TouchableOpacity, FlatList, Image, Animated,
-  StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator,
-} from 'react-native'
+  StyleSheet, KeyboardAvoidingView, Platform, } from 'react-native'
 import { fetch as expoFetch } from 'expo/fetch'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
@@ -10,6 +9,7 @@ import { API_URL } from '../../lib/config'
 import { newRequestKey, planErrorOf } from '../../lib/billing'
 import { colors, fonts, radius, cardShadow } from '../../lib/theme'
 import { SolarIcon } from '../../icons/solar'
+import { LoaderDots } from '../../components/CognixLoader'
 
 interface Message { id: string; role: 'user' | 'assistant'; content: string; streaming?: boolean }
 
@@ -284,7 +284,7 @@ export default function TuteurScreen() {
             accessibilityRole="button"
             accessibilityLabel="Envoyer"
           >
-            {loading ? <ActivityIndicator size="small" color="#fff" /> : <SolarIcon name="send" size={20} color="#fff" />}
+            {loading ? <LoaderDots color={"#fff"} size={6} /> : <SolarIcon name="send" size={20} color="#fff" />}
           </TouchableOpacity>
         </View>
       </View>

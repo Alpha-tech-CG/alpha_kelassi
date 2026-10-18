@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image, Linking } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, Image, Linking } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../../lib/supabase'
 import { API_URL } from '../../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../../lib/theme'
 import { pickAndUpload } from '../../../lib/uploads'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../../components/BackButton'
+import { CognixLoader, LoaderDots } from '../../../components/CognixLoader'
 
 interface Detail {
   id: string
@@ -80,7 +81,7 @@ export default function MissionScreen() {
     }
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -128,7 +129,7 @@ export default function MissionScreen() {
 
           {detail.status === 'submitted' && (
             <View style={styles.waiting}>
-              <ActivityIndicator color={colors.primary} />
+              <LoaderDots color={colors.primary} size={6} />
               <Text style={styles.waitingText}>Vérification IA en cours…</Text>
             </View>
           )}

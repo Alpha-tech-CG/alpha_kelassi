@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from 'react'
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, ScrollView } from 'react-native'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Row { rank: number; user_id: string; name: string; xp: number; is_me: boolean }
 interface Group { id: string; name: string }
@@ -83,7 +84,7 @@ export default function ClassementsScreen() {
       )}
 
       {loading ? (
-        <ActivityIndicator style={{ marginTop: 40 }} color={colors.primary} />
+        <CognixLoader compact />
       ) : (
         <FlatList
           data={rows}

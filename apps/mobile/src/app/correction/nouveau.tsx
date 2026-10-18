@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
@@ -8,6 +8,7 @@ import { api, planErrorOf, type LockedInfo, type UsageView } from '../../lib/bil
 import { LockedFeature } from '../../components/LockedFeature'
 import { QuotaBar } from '../../components/QuotaBar'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader, LoaderDots } from '../../components/CognixLoader'
 
 interface Subject { id: string; name: string }
 type Slot = { path: string; uri: string } | null
@@ -90,7 +91,7 @@ export default function NouvelleCorrection() {
     router.replace(`/correction/${res.json.data.id}`)
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   const ready = subjectId && exercise && work
 
@@ -135,7 +136,7 @@ function PhotoSlot({ slot, busy, onPress, placeholder }: { slot: Slot; busy: boo
   return (
     <TouchableOpacity style={styles.slot} onPress={onPress} disabled={busy} activeOpacity={0.85}>
       {busy ? (
-        <ActivityIndicator color={colors.primary} />
+        <LoaderDots color={colors.primary} size={6} />
       ) : slot ? (
         <>
           <Image source={{ uri: slot.uri }} style={styles.preview} resizeMode="cover" />

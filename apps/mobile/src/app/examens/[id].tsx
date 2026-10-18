@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Pdf from 'react-native-pdf'
 import { supabase } from '../../lib/supabase'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Doc { id: string; title: string; level: string; year: number | null; session: string | null; is_premium: boolean; pdf_url: string; subjects: { name: string } | null }
 
@@ -31,7 +32,7 @@ export default function ExamenDetailScreen() {
     load()
   }, [id])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#1E74E8" />
+  if (loading) return <CognixLoader />
 
   if (isPremiumBlocked) {
     return (

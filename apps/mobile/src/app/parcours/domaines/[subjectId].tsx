@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../../lib/supabase'
 import { colors, radius, cardShadow, subjectAccent } from '../../../lib/theme'
 import { subjectArtwork } from '../../../lib/subjectArtwork'
 import { ImageTile } from '../../../components/ImageTile'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../../components/BackButton'
+import { CognixLoader } from '../../../components/CognixLoader'
 
 interface Domain {
   id: string
@@ -75,7 +76,7 @@ export default function ParcoursDomainesScreen() {
     load()
   }, [subjectId])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <View style={styles.container}>

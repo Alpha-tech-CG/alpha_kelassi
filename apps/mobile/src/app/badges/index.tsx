@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, StyleSheet } from 'react-native'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 // Catalogue miroir de apps/web|api/src/lib/xp.ts (BADGES).
 const CATALOG: { code: string; label: string; icon: string; description: string }[] = [
@@ -29,7 +30,7 @@ export default function BadgesScreen() {
     })()
   }, [])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   const earnedCount = CATALOG.filter((b) => earned.has(b.code)).length
 

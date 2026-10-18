@@ -7,7 +7,7 @@
  * téléphone d'entrée de gamme.
  */
 import { useCallback, useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, RefreshControl } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, RefreshControl } from 'react-native'
 import { colors, radius, cardShadow, fonts } from '../lib/theme'
 import { useLevel } from '../hooks/useLevel'
 import { listCachedEntries, cacheSize, clearCache, readCachedLesson, type CachedEntry } from '../lib/lessonCache'
@@ -15,6 +15,7 @@ import { syncAllForOffline, derniereSynchro, indexHorsLigne, type SyncProgress }
 import { enAttente, viderLaFile } from '../lib/outbox'
 import { BackButton } from '../components/BackButton'
 import { SolarIcon } from '../icons/solar'
+import { CognixLoader, LoaderDots } from '../components/CognixLoader'
 
 interface ChapitreLocal { key: string; titre: string; taille: number; lecons: number }
 
@@ -132,7 +133,7 @@ export default function HorsLigneScreen() {
     )
   }
 
-  if (chargement) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (chargement) return <CognixLoader />
 
   return (
     <View style={styles.container}>
@@ -174,7 +175,7 @@ export default function HorsLigneScreen() {
         )}
 
         <TouchableOpacity style={[styles.bouton, synchro && styles.boutonOff]} onPress={mettreAJour} disabled={synchro} activeOpacity={0.85}>
-          {synchro && <ActivityIndicator color="#fff" style={{ marginRight: 8 }} />}
+          {synchro && <View style={{ marginRight: 8 }}><LoaderDots color={"#fff"} size={6} /></View>}
           <Text style={styles.boutonTexte}>
             {synchro
               ? avancement && avancement.total > 0 ? `Mise à jour… ${avancement.done}/${avancement.total}` : 'Préparation…'
