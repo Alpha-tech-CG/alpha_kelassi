@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
+import { View } from 'react-native'
 import { WebView } from 'react-native-webview'
-import { colors, fonts } from '../lib/theme'
+import { colors } from '../lib/theme'
 import { KATEX_CSS, KATEX_JS_B64, MARKED_JS_B64 } from '../lib/katexBundle'
 
 /**
@@ -15,9 +16,47 @@ import { KATEX_CSS, KATEX_JS_B64, MARKED_JS_B64 } from '../lib/katexBundle'
  * La hauteur s'ajuste automatiquement via postMessage.
  */
 export function MathLessonView({ content }: { content: string }) {
-  const [height, setHeight] = useState(120)
+  // Une seule WebView très haute (cours de maths de 30 000+ caractères) s'affiche
+  // mal sur Android : zones blanches, rendu tronqué au défilement. On découpe le
+  // cours aux titres « # » / « ## » en morceaux de taille raisonnable, une WebView chacun.
+  const chunks = useMemo(() => splitContent(content ?? ''), [content])
+  return (
+    <View>
+      {chunks.map((chunk, i) => (
+        <MathChunk key={i} content={chunk} />
+      ))}
+    </View>
+  )
+}
 
-  const html = useMemo(() => buildHtml(content ?? ''), [content])
+const CHUNK_TARGET = 5000
+/** Coupe aux titres de section (hors blocs $$…$$), en regroupant les petites sections. */
+export function splitContent(md: string): string[] {
+  const sections: string[] = []
+  let cur: string[] = []
+  let inDisplayMath = false
+  for (const line of md.split('\n')) {
+    if (!inDisplayMath && /^#{1,2} /.test(line) && cur.join('\n').trim()) {
+      sections.push(cur.join('\n'))
+      cur = []
+    }
+    cur.push(line)
+    if ((line.match(/\$\$/g) ?? []).length % 2 === 1) inDisplayMath = !inDisplayMath
+  }
+  if (cur.join('\n').trim()) sections.push(cur.join('\n'))
+  const chunks: string[] = []
+  for (const sec of sections) {
+    const last = chunks.length - 1
+    if (last >= 0 && (chunks[last] ?? '').length + sec.length < CHUNK_TARGET) chunks[last] += '\n' + sec
+    else chunks.push(sec)
+  }
+  return chunks.length ? chunks : ['']
+}
+
+function MathChunk({ content }: { content: string }) {
+  const [height, setHeight] = useState(60)
+
+  const html = useMemo(() => buildHtml(content), [content])
 
   return (
     <WebView
@@ -25,6 +64,7 @@ export function MathLessonView({ content }: { content: string }) {
       source={{ html, baseUrl: 'https://kelassi.app/' }}
       style={{ height, backgroundColor: 'transparent' }}
       scrollEnabled={false}
+      nestedScrollEnabled
       showsVerticalScrollIndicator={false}
       setSupportMultipleWindows={false}
       onMessage={(e) => {
@@ -53,17 +93,27 @@ function buildHtml(md: string): string {
   html,body { width:100%; max-width:100%; overflow-x:hidden; }
   body { color:${colors.text}; font-family:-apple-system,'Segoe UI',Roboto,sans-serif; font-size:15px; line-height:1.55; word-wrap:break-word; overflow-wrap:break-word; }
   #c { padding-bottom:4px; }
-  h1,h2,h3 { font-weight:800; margin:14px 0 6px; line-height:1.25; }
-  h1 { font-size:20px; } h2 { font-size:18px; } h3 { font-size:15.5px; color:${colors.primary}; }
+  h1,h2,h3,h4 { font-weight:800; margin:18px 0 8px; line-height:1.25; color:${colors.primary}; }
+  h1 { font-size:20px; } h2 { font-size:18px; padding-bottom:6px; border-bottom:2px solid ${colors.primaryTint}; }
+  h3 { font-size:16px; } h4 { font-size:15px; color:${colors.text}; }
+  #c > :first-child { margin-top:0; }
   p { margin:0 0 10px; } strong { font-weight:800; }
-  ul,ol { margin:6px 0 10px; padding-left:22px; } li { margin:3px 0; }
-  .katex { font-size:1.02em; }
-  .katex-display { margin:12px 0; max-width:100%; overflow-x:auto; overflow-y:hidden; padding:2px 0; }
-  /* Tables larges : conteneur défilable horizontalement (jamais coupé) */
-  .tw { width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; margin:10px 0; }
-  table { border-collapse:collapse; margin:0; font-size:13px; }
-  th,td { border:1px solid ${colors.cardBorder}; padding:6px 8px; text-align:center; }
-  th { background:${colors.primaryTint}; font-weight:800; }
+  ul,ol { margin:6px 0 10px; padding-left:22px; } li { margin:4px 0; }
+  blockquote { margin:10px 0; padding:10px 12px; background:${colors.primaryTint}; border-left:4px solid ${colors.primary}; border-radius:10px; }
+  blockquote p:last-child { margin-bottom:0; }
+  code { background:#F1F4F9; padding:1px 5px; border-radius:5px; font-size:13.5px; }
+  hr { border:0; border-top:1px solid ${colors.cardBorder}; margin:16px 0; }
+  .katex { font-size:1.04em; }
+  .katex-display { margin:12px 0; max-width:100%; overflow-x:auto; overflow-y:hidden; padding:4px 0; }
+  /* Tableaux : défilement horizontal si trop larges, texte jamais écrasé. */
+  .tw { width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; margin:12px 0; border:1px solid ${colors.cardBorder}; border-radius:12px; }
+  .hint { font-size:11px; color:${colors.textMuted}; text-align:center; margin:-6px 0 12px; }
+  table { border-collapse:collapse; margin:0; font-size:13.5px; min-width:100%; }
+  th,td { border-bottom:1px solid ${colors.cardBorder}; border-right:1px solid ${colors.cardBorder}; padding:8px 10px; text-align:left; vertical-align:top; min-width:84px; max-width:240px; line-height:1.4; }
+  th:last-child,td:last-child { border-right:0; }
+  tr:last-child td { border-bottom:0; }
+  th { background:${colors.primary}; color:#fff; font-weight:800; }
+  tbody tr:nth-child(even) td { background:#F7FAFF; }
   img { max-width:100%; height:auto; border-radius:12px; display:block; margin:10px auto; }
 </style></head>
 <body>
@@ -111,7 +161,8 @@ function buildHtml(md: string): string {
     c.innerHTML = sanitize(html);
     // Enveloppe les tableaux larges dans un conteneur défilable (jamais coupé).
     var tables = c.querySelectorAll('table');
-    for(var i=0;i<tables.length;i++){ var w=document.createElement('div'); w.className='tw'; var t=tables[i]; t.parentNode.insertBefore(w,t); w.appendChild(t); }
+    for(var i=0;i<tables.length;i++){ var w=document.createElement('div'); w.className='tw'; var t=tables[i]; t.parentNode.insertBefore(w,t); w.appendChild(t); 
+      if(t.scrollWidth > w.clientWidth + 4){ var hn=document.createElement('div'); hn.className='hint'; hn.textContent='‹ Fais glisser le tableau pour tout voir ›'; w.parentNode.insertBefore(hn, w.nextSibling); } }
     // Re-mesure quand chaque image (figure) charge.
     var imgs = c.querySelectorAll('img');
     // { once:true } : le listener se retire tout seul après la première mesure.

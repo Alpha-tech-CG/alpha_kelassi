@@ -10,48 +10,10 @@
 
 export const unit = {
   chapterTitle: 'THEME 7 — DEMOGRAPHIC, ECOLOGICAL AND SOCIAL PROBLEMS / PROBLÈMES DÉMOGRAPHIQUES, ÉCOLOGIQUES ET SOCIAUX',
-  description: 'ANGLAIS · UNITÉ 7 — Demographic, ecological and social problems · thème 7 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 7 — Demographic, ecological and social problems · thème 7',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 7 — Introduction : Demographic, ecological and social problems',
-    content: `## Demographic, ecological and social problems — Problèmes démographiques, écologiques et sociaux
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 7
-
-### Pourquoi ce thème ?
-
-Les villes congolaises grandissent très vite. Des quartiers entiers sont construits sans routes ni égouts, les déchets plastiques bouchent les caniveaux, des ravins d'érosion menacent des maisons, et beaucoup de jeunes diplômés cherchent du travail. Dans le même temps, la forêt du Bassin du Congo, l'une des plus grandes du monde, est menacée. Ces problèmes sont **liés** : la croissance rapide de la population, la dégradation de l'environnement et la pauvreté s'entretiennent. Dans cette unité, tu vas apprendre à **décrire ces problèmes**, à **expliquer leurs causes et leurs conséquences** et à **proposer des solutions**.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire de la population, de l'environnement et des problèmes sociaux (≈ 40 mots) et les **connecteurs de cause et de conséquence** ;
-- **décrire des faits et des processus** avec la **voix passive** (forests are cut down, the beach was cleaned) ;
-- **comprendre** un reportage radio et un article sur la forêt du Bassin du Congo ;
-- **expliquer** un problème et **débattre** à l'oral ;
-- **écrire** un essai cause-conséquence-solutions de 150 à 180 mots.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Population, environnement, société ; connecteurs | Lexique |
-| 2. Grammar | La voix passive | Langue |
-| 3. Listening | Reportage : « Cleaning the Côte Sauvage » | Comprendre à l'oral |
-| 4. Reading | « The Congo Basin, the green lungs of Africa » | Comprendre à l'écrit |
-| 5. Speaking | Expliquer un problème, débat croissance / environnement | S'exprimer à l'oral |
-| 6. Writing | Essai : causes, conséquences, solutions | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-- What are the three biggest problems in your neighbourhood?
-- What happens to the rubbish in your street?
-- Why do so many young people move from the villages to the cities?`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Population, environment and society',

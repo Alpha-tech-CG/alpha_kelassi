@@ -16,44 +16,6 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'Unidad 2 — Introducción : El instituto y los estudios',
-    content: `## El instituto y los estudios — L'école et les études
-
-**Niveau :** Terminale A (espagnol, deuxième langue) · **Durée conseillée :** 4 séances de 45 à 90 minutes
-
-### Pourquoi ce thème ?
-
-L'année de Terminale est décisive : il faut réviser, passer le bac et choisir ses études. Comment se passe une journée au lycée à Brazzaville ? Et à Madrid ou à Malabo ? Quelles règles faut-il respecter, que faut-il faire pour réussir ? Dans cette unité, tu vas apprendre à **décrire ta vie au lycée**, à **comparer les systèmes scolaires**, à **parler de tes projets d'études** et surtout à **exprimer l'obligation** : ce qu'il faut faire, ce qu'on doit faire, ce qui est interdit.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire de l'école, des matières, des examens et des études (≈ 45 mots) ;
-- **exprimer l'obligation** avec **tener que**, **hay que** et **deber**, et l'absence d'obligation ou l'interdiction (**no tener que**, **no hace falta**, **está prohibido**) ;
-- **comprendre** une conversation entre deux lycéens et un texte comparant deux lycées ;
-- **décrire** ta journée de cours et **donner des conseils** pour réussir le bac ;
-- **écrire** un message de 120 à 150 mots sur ton lycée et tes projets.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulario | Le lycée, les matières, les examens, les études | Lexique |
-| 2. Gramática | L'obligation : tener que, hay que, deber | Langue |
-| 3. Escuchar | « ¿Cómo es tu instituto? » | Comprendre à l'oral |
-| 4. Leer | « Dos institutos, dos realidades » | Comprendre à l'écrit |
-| 5. Hablar | Ma journée, le règlement, conseils pour le bac | S'exprimer à l'oral |
-| 6. Escribir | Message à un correspondant : mon lycée et mes projets | S'exprimer à l'écrit |
-| 7. Ejercicios | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Calentamiento
-
-- ¿Cuál es tu asignatura favorita? ¿Por qué?
-- ¿A qué hora empiezan las clases en tu instituto?
-- ¿Qué quieres estudiar después del bachillerato?`,
-  },
-  {
-    type: 'cours',
     title: 'Vocabulario — El instituto, las asignaturas y los exámenes',
     content: `## Vocabulario — Le vocabulaire de l'unité
 

@@ -17,44 +17,6 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'Unidad 4 — Introducción : La salud',
-    content: `## La salud — La santé
-
-**Niveau :** Terminale A (espagnol, deuxième langue) · **Durée conseillée :** 4 séances de 45 à 90 minutes
-
-### Pourquoi ce thème ?
-
-Une fièvre, un mal de tête, une chute pendant un match : un jour ou l'autre, il faut expliquer ce qui ne va pas à un médecin ou à un pharmacien. Au Congo comme dans toute l'Afrique centrale, le **paludisme** reste la première préoccupation de santé, mais il se prévient et se soigne. Dans cette unité, tu vas apprendre à **dire où tu as mal**, à **décrire des symptômes**, à **comprendre les conseils d'un médecin** et à **parler de tes habitudes de santé**. Et pour raconter ce qui vient de t'arriver (« je me suis blessé », « j'ai pris mes médicaments »), tu vas apprendre le **pretérito perfecto**.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire du corps, des maladies, des soins et de la vie saine (≈ 45 mots), et le verbe **doler** (me duele la cabeza) ;
-- **raconter un passé récent ou une expérience** avec le **pretérito perfecto** (he tenido fiebre, ¿has ido al médico?, nunca he estado enfermo) ;
-- **comprendre** une consultation dans un centre de santé et un texte sur le paludisme ;
-- **expliquer** tes symptômes et **donner des conseils** à l'oral ;
-- **écrire** un message de 120 à 150 mots sur ta santé et tes habitudes.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulario | Le corps, les maladies, chez le médecin, la vie saine | Lexique |
-| 2. Gramática | Le pretérito perfecto | Langue |
-| 3. Escuchar | « En el centro de salud » | Comprendre à l'oral |
-| 4. Leer | « El paludismo: una enfermedad que se puede vencer » | Comprendre à l'écrit |
-| 5. Hablar | Chez le médecin, habitudes de santé, débat | S'exprimer à l'oral |
-| 6. Escribir | Message : ma santé et mes bonnes résolutions | S'exprimer à l'écrit |
-| 7. Ejercicios | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Calentamiento
-
-- ¿Cómo estás hoy? ¿Te duele algo?
-- ¿Qué haces para estar en forma?
-- ¿Has tenido paludismo alguna vez?`,
-  },
-  {
-    type: 'cours',
     title: 'Vocabulario — El cuerpo, las enfermedades y la vida sana',
     content: `## Vocabulario — Le vocabulaire de l'unité
 

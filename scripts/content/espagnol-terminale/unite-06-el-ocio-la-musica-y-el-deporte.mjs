@@ -17,44 +17,6 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'Unidad 6 — Introducción : El ocio, la música y el deporte',
-    content: `## El ocio, la música y el deporte — Les loisirs, la musique et le sport
-
-**Niveau :** Terminale A (espagnol, deuxième langue) · **Durée conseillée :** 4 séances de 45 à 90 minutes
-
-### Pourquoi ce thème ?
-
-Le week-end, on joue au football sur un terrain de quartier, on danse sur de la rumba, on va à un concert, on regarde un match. La musique et le sport sont des loisirs, mais aussi une **culture** : la rumba congolaise et le flamenco espagnol sont tous deux inscrits au patrimoine culturel immatériel de l'humanité. Dans cette unité, tu vas apprendre à **parler de tes loisirs**, à **dire ce que tu aimes** et surtout à **raconter** un match, un concert ou un week-end passé avec le **pretérito indefinido**, le temps du récit en espagnol.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire des loisirs, de la musique et du sport (≈ 45 mots) et exprimer tes goûts (me gusta, me encanta, prefiero) ;
-- **raconter des faits passés et terminés** avec le **pretérito indefinido** (jugué, fuimos, tuvo) et le distinguer du pretérito perfecto ;
-- **comprendre** un récit de week-end et un texte sur la rumba et le flamenco ;
-- **raconter** un souvenir de match ou de concert à l'oral ;
-- **écrire** un récit de 120 à 150 mots : « Un fin de semana inolvidable ».
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulario | Loisirs, musique, sport, goûts | Lexique |
-| 2. Gramática | Le pretérito indefinido | Langue |
-| 3. Escuchar | « ¿Qué hiciste el fin de semana? » | Comprendre à l'oral |
-| 4. Leer | « La rumba y el flamenco, patrimonio de la humanidad » | Comprendre à l'écrit |
-| 5. Hablar | Raconter un souvenir, débat sur le sport | S'exprimer à l'oral |
-| 6. Escribir | « Un fin de semana inolvidable » | S'exprimer à l'écrit |
-| 7. Ejercicios | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Calentamiento
-
-- ¿Qué haces en tu tiempo libre?
-- ¿Qué música te gusta? ¿Quién es tu cantante favorito?
-- ¿Practicas algún deporte?`,
-  },
-  {
-    type: 'cours',
     title: 'Vocabulario — El ocio, la música y el deporte',
     content: `## Vocabulario — Le vocabulaire de l'unité
 

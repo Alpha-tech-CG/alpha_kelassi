@@ -9,50 +9,10 @@
 
 export const unit = {
   chapterTitle: 'THEME 2 — DEVELOPMENT / LE DÉVELOPPEMENT',
-  description: 'ANGLAIS · UNITÉ 2 — Development · thème 2 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 2 — Development · thème 2',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 2 — Introduction : Development',
-    content: `## Development — Le développement
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 2
-
-### Pourquoi ce thème ?
-
-Qu'est-ce qu'un pays « développé » ? Un pays riche, ou un pays où les gens vivent longtemps, vont à l'école et ont de l'eau potable ? Depuis l'indépendance, le Congo a construit des routes, des écoles et des barrages, mais la pauvreté n'a pas disparu. Dans cette unité, tu vas apprendre à **parler du développement**, à **comprendre des textes et des témoignages sur le progrès** et à **faire le bilan de ce qui a changé**.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire du développement : croissance, pauvreté, infrastructures, éducation, aide, dette, développement durable (≈ 40 mots) ;
-- **dresser un bilan** avec le **present perfect** : The government has built new roads. Life has improved since 2010 ;
-- **comprendre** un reportage radio sur un projet de village et un article sur les indicateurs de développement ;
-- **présenter oralement** un facteur de développement et débattre ;
-- **écrire** un essai argumenté de 150 à 180 mots.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Le vocabulaire du développement | Lexique |
-| 2. Grammar | Faire un bilan : le present perfect (since, for, already, yet) | Langue |
-| 3. Listening | Un reportage radio : « A well, a school and a solar panel » | Comprendre à l'oral |
-| 4. Reading | « What does development really mean? » | Comprendre à l'écrit |
-| 5. Speaking | Exposé et débat sur les priorités du développement | S'exprimer à l'oral |
-| 6. Writing | Essai : « Education is the key to development » | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-Réponds mentalement en anglais :
-
-- What has changed in your town or village in the last ten years?
-- In your opinion, what does a country need most to develop: money, schools, roads or hospitals?
-- Name one thing that has improved in your life since primary school.`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Development, growth and poverty',

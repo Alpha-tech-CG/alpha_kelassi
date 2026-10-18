@@ -11,48 +11,10 @@
 
 export const unit = {
   chapterTitle: 'THEME 9 — POLITICS / LA POLITIQUE',
-  description: 'ANGLAIS · UNITÉ 9 — Politics · thème 9 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 9 — Politics · thème 9',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 9 — Introduction : Politics',
-    content: `## Politics — La politique
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 9
-
-### Pourquoi ce thème ?
-
-À 18 ans, tu deviens électeur. Mais la vie citoyenne commence bien avant : quand tu élis le délégué de ta classe, quand tu respectes le règlement du lycée, quand tu participes à une association de quartier. La politique, au sens premier, c'est **l'organisation de la vie commune** : qui décide, comment, avec quels droits et quels devoirs. Dans cette unité, tu vas apprendre à **parler des institutions et de la citoyenneté**, à **exprimer des obligations et des interdictions**, et à **donner ton opinion** de façon argumentée et respectueuse.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire des institutions, de la démocratie et de la citoyenneté (≈ 40 mots) ;
-- **exprimer l'obligation, l'interdiction et l'absence d'obligation** avec **must, have to, mustn't, don't have to** ;
-- **comprendre** des discours de candidats à l'élection des délégués et un article sur la participation des jeunes ;
-- **donner ton opinion** et **débattre** dans le respect des autres ;
-- **écrire** un essai argumenté de 150 à 180 mots.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Institutions, démocratie, citoyenneté | Lexique |
-| 2. Grammar | Obligation et interdiction : must, have to… | Langue |
-| 3. Listening | « Vote for me! » : l'élection des délégués | Comprendre à l'oral |
-| 4. Reading | « Citizens, not spectators » | Comprendre à l'écrit |
-| 5. Speaking | Opinion, règles, débat sur l'engagement des jeunes | S'exprimer à l'oral |
-| 6. Writing | Essai : qu'est-ce qu'un bon dirigeant ? | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-- At what age can you vote in Congo?
-- How is your class delegate chosen? What does he or she have to do?
-- Name three rights and three duties of a citizen.`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Institutions, democracy and citizenship',

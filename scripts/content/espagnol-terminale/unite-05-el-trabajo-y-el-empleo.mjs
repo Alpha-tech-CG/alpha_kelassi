@@ -16,44 +16,6 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'Unidad 5 — Introducción : El trabajo y el empleo',
-    content: `## El trabajo y el empleo — Le travail et l'emploi
-
-**Niveau :** Terminale A (espagnol, deuxième langue) · **Durée conseillée :** 4 séances de 45 à 90 minutes
-
-### Pourquoi ce thème ?
-
-« Que feras-tu après le bac ? » C'est la question que tout le monde te pose cette année. Les emplois de bureau ne suffisent pas pour tous les jeunes diplômés, au Congo comme en Espagne ; beaucoup créent leur propre activité, d'autres apprennent un métier manuel, d'autres encore se tournent vers le numérique ou l'agriculture moderne. Dans cette unité, tu vas apprendre à **parler des métiers**, à **décrire un travail**, à **réussir un entretien simple** et à **parler de ton avenir** avec le **futur**.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire des métiers, du monde du travail et de la recherche d'emploi (≈ 45 mots) ;
-- **parler de tes projets et faire des prédictions** avec le **futur simple** (trabajaré, seré, tendré, podré) et le distinguer du futur proche (voy a trabajar) ;
-- **comprendre** un entretien d'orientation et un texte sur les métiers de demain ;
-- **présenter** ton projet professionnel et **passer un entretien** simple ;
-- **écrire** un texte de 120 à 150 mots : « Mi vida dentro de diez años ».
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulario | Métiers, travail, recherche d'emploi | Lexique |
-| 2. Gramática | Le futur simple (et ir a + infinitif) | Langue |
-| 3. Escuchar | « ¿Qué harás después del bachillerato? » | Comprendre à l'oral |
-| 4. Leer | « Los trabajos del futuro » | Comprendre à l'écrit |
-| 5. Hablar | Mon projet, entretien d'embauche, débat | S'exprimer à l'oral |
-| 6. Escribir | « Mi vida dentro de diez años » | S'exprimer à l'écrit |
-| 7. Ejercicios | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Calentamiento
-
-- ¿En qué trabajan tus padres?
-- ¿Qué profesión te gustaría tener? ¿Por qué?
-- ¿Es fácil encontrar trabajo en tu ciudad?`,
-  },
-  {
-    type: 'cours',
     title: 'Vocabulario — Las profesiones y el mundo del trabajo',
     content: `## Vocabulario — Le vocabulaire de l'unité
 

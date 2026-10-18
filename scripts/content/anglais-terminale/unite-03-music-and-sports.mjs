@@ -8,48 +8,10 @@
 
 export const unit = {
   chapterTitle: 'THEME 3 — MUSIC AND SPORTS / MUSIQUE ET SPORT',
-  description: 'ANGLAIS · UNITÉ 3 — Music and sports · thème 3 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 3 — Music and sports · thème 3',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 3 — Introduction : Music and sports',
-    content: `## Music and sports — Musique et sport
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 3
-
-### Pourquoi ce thème ?
-
-La rumba congolaise est inscrite au patrimoine culturel immatériel de l'humanité, et le football fait vibrer tout le pays quand jouent les Diables Rouges. La musique et le sport sont des loisirs, mais aussi une culture, une école de discipline et parfois un métier. Dans cette unité, tu vas apprendre à **parler de tes loisirs et de tes passions**, à **raconter un parcours** (la carrière d'un artiste ou d'un sportif) et à **comparer le passé et le présent**.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire de la musique et du sport (≈ 40 mots) ;
-- **raconter le passé** avec le **prétérit** (I won, we didn't play) et parler d'**habitudes passées** avec **used to** (I used to sing in a choir) ;
-- **comprendre** l'interview d'une jeune athlète et un article sur la rumba congolaise ;
-- **raconter oralement** un souvenir et défendre un point de vue ;
-- **écrire** une courte biographie ou un récit de 150 mots.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Le vocabulaire de la musique et du sport | Lexique |
-| 2. Grammar | Raconter le passé : prétérit et used to | Langue |
-| 3. Listening | Interview d'une sprinteuse de Pointe-Noire | Comprendre à l'oral |
-| 4. Reading | « Congolese rumba, a heritage of humanity » | Comprendre à l'écrit |
-| 5. Speaking | Raconter un souvenir, débat sur le sport-métier | S'exprimer à l'oral |
-| 6. Writing | La biographie d'un artiste ou d'un sportif | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-- What kind of music do you like? Who is your favourite singer or band?
-- Do you practise a sport? How often?
-- What did you use to play when you were a child?`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Music, sports and leisure',

@@ -17,44 +17,6 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'Unidad 8 — Introducción : La tecnología',
-    content: `## La tecnología — La technologie
-
-**Niveau :** Terminale A (espagnol, deuxième langue) · **Durée conseillée :** 4 séances de 45 à 90 minutes
-
-### Pourquoi ce thème ?
-
-Il y a trente ans, au Congo, on écrivait des lettres, on écoutait les nouvelles à la radio et on faisait la queue à la cabine téléphonique. Aujourd'hui, presque chaque famille a un téléphone portable : on envoie de l'argent par Mobile Money, on étudie en ligne, on parle avec la famille à l'étranger en vidéo. L'Afrique est même devenue un exemple mondial du paiement par téléphone. Dans cette unité, tu vas apprendre à **parler des nouvelles technologies**, de leurs **avantages et dangers**, et à **comparer la vie d'avant et celle d'aujourd'hui** avec le **pretérito imperfecto**, le temps de la description et des habitudes passées.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire du téléphone, d'internet et des réseaux sociaux (≈ 45 mots) ;
-- **décrire le passé et parler d'habitudes passées** avec le **pretérito imperfecto** (antes escribíamos cartas, no había internet) ;
-- **comparer** « antes » et « ahora » ;
-- **comprendre** une interview d'un grand-père et un texte sur le téléphone portable en Afrique ;
-- **écrire** un texte de 120 à 150 mots : « La vida antes y ahora ».
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulario | Téléphone, internet, réseaux sociaux | Lexique |
-| 2. Gramática | Le pretérito imperfecto | Langue |
-| 3. Escuchar | « Abuelo, ¿cómo era la vida sin móvil? » | Comprendre à l'oral |
-| 4. Leer | « África, el continente del móvil » | Comprendre à l'écrit |
-| 5. Hablar | Antes et ahora, avantages et dangers, débat | S'exprimer à l'oral |
-| 6. Escribir | « La vida antes y ahora » | S'exprimer à l'écrit |
-| 7. Ejercicios | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Calentamiento
-
-- ¿Tienes un teléfono móvil? ¿Para qué lo usas?
-- ¿Cuántas horas al día pasas en internet?
-- ¿Cómo se comunicaban tus abuelos cuando eran jóvenes?`,
-  },
-  {
-    type: 'cours',
     title: 'Vocabulario — El móvil, internet y las redes sociales',
     content: `## Vocabulario — Le vocabulaire de l'unité
 

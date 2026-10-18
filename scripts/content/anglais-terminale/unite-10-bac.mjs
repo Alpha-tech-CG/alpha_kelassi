@@ -22,14 +22,8 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'BAC — Introduction : l\'épreuve d\'anglais',
-    content: `## Section BAC — Réussir l'épreuve d'anglais
-
-**Niveau :** Terminale A, C et D · **À utiliser :** toute l'année, et intensivement pendant les révisions
-
-### À quoi sert cette section ?
-
-Les neuf unités t'ont donné le vocabulaire, la grammaire et les compétences de chaque thème du programme. Cette section t'apprend à **les mobiliser le jour de l'examen** : connaître l'épreuve, appliquer une méthode pour chaque partie, réviser la grammaire et le lexique d'un coup d'œil, et t'entraîner sur des **sujets type BAC corrigés**.
+    title: 'BAC — L\'épreuve d\'anglais',
+    content: `## L'épreuve d'anglais au BAC
 
 ### La structure de l'épreuve
 
@@ -53,19 +47,6 @@ Quelle que soit la durée indiquée sur ta convocation, répartis ton temps en p
 | Relecture finale | toujours 5 minutes au moins |
 
 Conseil : commence par la partie où tu es le plus à l'aise, mais **ne laisse jamais une question sans réponse**.
-
-### Le parcours de la section
-
-| Étape | Contenu | Où ? |
-|---|---|---|
-| 1. Méthode Reading | Lire, repérer, répondre | Leçon |
-| 2. Méthode Language | Identifier ce que teste chaque item | Leçon |
-| 3. Méthode Writing | Les six formats et leur présentation | Leçon |
-| 4. Grammaire de référence | Toute la grammaire du BAC | Leçon |
-| 5. Lexique thématique | ≈ 300 mots classés par thème | Leçon |
-| 6. Entraînement | 10 sujets type BAC + textes courts + exercices ciblés, tous corrigés | Bouton « Exercices » |
-| 7. BAC blanc Language | QCM de 20 questions | Test |
-| 8. Fiche « jour J » | Les règles d'or | Fiche |
 
 ### Le lien avec les unités
 

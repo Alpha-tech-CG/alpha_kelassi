@@ -10,48 +10,10 @@
 
 export const unit = {
   chapterTitle: "THEME 8 — EMPLOYMENT / L'EMPLOI ET LE MONDE DU TRAVAIL",
-  description: 'ANGLAIS · UNITÉ 8 — Employment · thème 8 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 8 — Employment · thème 8',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 8 — Introduction : Employment',
-    content: `## Employment — L'emploi et le monde du travail
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 8
-
-### Pourquoi ce thème ?
-
-Après le bac, que vas-tu faire ? Poursuivre des études, apprendre un métier, créer ta propre activité ? Chaque année, des milliers de jeunes diplômés arrivent sur le marché du travail, et les emplois de bureau ne suffisent pas pour tout le monde. Beaucoup de jeunes Congolais créent leur activité : réparation de téléphones, couture, transformation de produits agricoles, services numériques. Dans cette unité, tu vas apprendre à **parler des métiers et du travail**, à **te présenter à un employeur**, à **réussir un entretien** et à **écrire une lettre de motivation** en anglais.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire des métiers, de la recherche d'emploi et du monde du travail (≈ 40 mots) ;
-- **employer correctement** le **gérondif (-ing)** et l'**infinitif (to + verbe)** après un verbe ou une préposition (I enjoy working, I would like to apply, I look forward to hearing from you) ;
-- **comprendre** un entretien d'embauche et un article sur les jeunes entrepreneurs africains ;
-- **passer un entretien** et parler de tes projets professionnels ;
-- **écrire** une lettre de motivation formelle.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Métiers, recherche d'emploi, monde du travail | Lexique |
-| 2. Grammar | Gérondif ou infinitif ? | Langue |
-| 3. Listening | Un entretien d'embauche à Pointe-Noire | Comprendre à l'oral |
-| 4. Reading | « Young, African and self-employed » | Comprendre à l'écrit |
-| 5. Speaking | Entretien, projets, débat diplôme / compétences | S'exprimer à l'oral |
-| 6. Writing | La lettre de motivation | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-- What job would you like to do in ten years? Why?
-- Is it better to work for the government, for a company or for yourself?
-- What skills does an employer look for today?`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Jobs, job-seeking and the workplace',

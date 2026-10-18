@@ -9,48 +9,10 @@
 
 export const unit = {
   chapterTitle: 'THEME 6 — TRANSPORT / LE TRANSPORT',
-  description: 'ANGLAIS · UNITÉ 6 — Transport · thème 6 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 6 — Transport · thème 6',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 6 — Introduction : Transport',
-    content: `## Transport — Le transport
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 6
-
-### Pourquoi ce thème ?
-
-Le matin, à Brazzaville ou à Pointe-Noire, il faut parfois une heure pour traverser la ville en bus ou en taxi. Entre les deux grandes villes, on peut prendre le train du Chemin de fer Congo-Océan, la route nationale ou l'avion, et sur le fleuve circulent pirogues et bateaux. Le transport fait vivre l'économie, mais il pose aussi des problèmes : embouteillages, accidents, pollution, coût. Dans cette unité, tu vas apprendre à **parler de tes déplacements**, à **comparer les moyens de transport** et surtout à **parler de l'avenir** : tes projets de voyage et les villes de demain.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire des transports, du voyage et de la circulation (≈ 40 mots) ;
-- **parler du futur** avec **will** (prédiction, décision immédiate) et **be going to** (projet, évidence) ;
-- **comprendre** une conversation pour organiser un voyage et un article sur les transports urbains en Afrique ;
-- **organiser** un voyage et **débattre** à l'oral ;
-- **écrire** un rapport de 150 mots avec des propositions.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Moyens de transport, voyage, circulation | Lexique |
-| 2. Grammar | Le futur : will et be going to | Langue |
-| 3. Listening | « Train or bus to Pointe-Noire? » | Comprendre à l'oral |
-| 4. Reading | « African cities on the move » | Comprendre à l'écrit |
-| 5. Speaking | Projets, prédictions, débat voiture / transports en commun | S'exprimer à l'oral |
-| 6. Writing | Un rapport : améliorer les transports de ta ville | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-- How do you go to school? How long does it take?
-- What is the best way to travel from Brazzaville to Pointe-Noire? Why?
-- How will people travel in 2050, in your opinion?`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Means of transport, travel and traffic',

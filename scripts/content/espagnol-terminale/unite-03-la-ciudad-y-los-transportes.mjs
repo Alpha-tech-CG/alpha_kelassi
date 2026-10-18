@@ -17,44 +17,6 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'Unidad 3 — Introducción : La ciudad y los transportes',
-    content: `## La ciudad y los transportes — La ville et les transports
-
-**Niveau :** Terminale A (espagnol, deuxième langue) · **Durée conseillée :** 4 séances de 45 à 90 minutes
-
-### Pourquoi ce thème ?
-
-Brazzaville, Pointe-Noire, Malabo, Madrid : chaque ville a ses quartiers, ses marchés, ses embouteillages et ses moyens de transport. Savoir **décrire sa ville**, **demander son chemin**, **indiquer une direction** et **parler des transports** est indispensable pour voyager ou accueillir un visiteur hispanophone. Dans cette unité, tu vas aussi apprendre l'**impératif**, le mode des instructions : « tourne à gauche », « prenez le bus », « traverse la rue ».
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire de la ville, des directions et des transports (≈ 45 mots) ;
-- **donner des instructions et indiquer un chemin** avec l'**impératif affirmatif** (sigue, gira, cruza, tome, vaya…) ;
-- **comprendre** un appel téléphonique pour guider un visiteur perdu et un texte sur les transports dans trois villes ;
-- **demander et indiquer un chemin** à l'oral, en tutoyant ou en vouvoyant ;
-- **écrire** un message de 120 à 150 mots pour expliquer à un ami comment venir chez toi.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulario | La ville, les directions, les transports | Lexique |
-| 2. Gramática | L'impératif affirmatif | Langue |
-| 3. Escuchar | « ¡Me he perdido! » : guider un ami par téléphone | Comprendre à l'oral |
-| 4. Leer | « Moverse en la ciudad: un desafío diario » | Comprendre à l'écrit |
-| 5. Hablar | Demander et indiquer un chemin, présenter sa ville | S'exprimer à l'oral |
-| 6. Escribir | Message : comment venir chez moi | S'exprimer à l'écrit |
-| 7. Ejercicios | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Calentamiento
-
-- ¿En qué ciudad vives? ¿En qué barrio?
-- ¿Cómo vas al instituto: a pie, en autobús, en taxi?
-- ¿Qué lugar de tu ciudad recomiendas a un turista?`,
-  },
-  {
-    type: 'cours',
     title: 'Vocabulario — La ciudad, las direcciones y los transportes',
     content: `## Vocabulario — Le vocabulaire de l'unité
 

@@ -12,52 +12,10 @@
 export const unit = {
   // Chapitre existant (programme INRAP importé le 09/10/2026), enrichi en unité complète.
   chapterTitle: 'THEME 1 — FOOD AND HEALTH / ALIMENTATION ET SANTÉ',
-  description: 'ANGLAIS · UNITÉ 1 — Food and health · thème 1 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 1 — Food and health · thème 1',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 1 — Introduction : Food and health',
-    content: `## Food and health — Alimentation et santé
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 1
-
-### Pourquoi ce thème ?
-
-Ce que nous mangeons chaque jour décide en grande partie de notre santé. Au Congo comme ailleurs, les habitudes changent : boissons sucrées, fritures, repas pris dans la rue… Dans cette unité, tu vas apprendre à **parler de ton alimentation**, à **comprendre des textes et des conversations sur la santé** et à **donner des conseils** en anglais.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **nommer** les aliments, les nutriments, les maladies et les bonnes habitudes de santé (40 mots et expressions) ;
-- **donner un conseil ou une recommandation** avec should, ought to, had better et must ;
-- **comprendre** une conversation chez le médecin et un article sur l'alimentation en Afrique ;
-- **parler** de tes habitudes alimentaires et jouer une consultation médicale ;
-- **écrire** un court essai argumenté (150 mots) sur l'importance d'une vie saine.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Apprendre les mots du thème | Lexique |
-| 2. Grammar | Donner un conseil : should, ought to, had better, must | Langue |
-| 3. Listening | Une consultation chez le médecin | Comprendre à l'oral |
-| 4. Reading | « Eating well in a changing Africa » | Comprendre à l'écrit |
-| 5. Speaking | Parler de ses habitudes, jeu de rôle | S'exprimer à l'oral |
-| 6. Writing | Un essai de 150 mots | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-Réponds mentalement en anglais, avant de commencer :
-
-- What did you eat yesterday?
-- Do you think you eat well? Why or why not?
-- What do people in your family do to stay healthy?
-
-Ne t'inquiète pas des fautes : l'objectif est de commencer à penser en anglais.`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Food, diet and health',

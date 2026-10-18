@@ -9,48 +9,10 @@
 
 export const unit = {
   chapterTitle: 'THEME 4 — THE NORTH/SOUTH DIVIDE / LA FRACTURE NORD-SUD',
-  description: 'ANGLAIS · UNITÉ 4 — The North/South divide · thème 4 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 4 — The North/South divide · thème 4',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 4 — Introduction : The North/South divide',
-    content: `## The North/South divide — La fracture Nord-Sud
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 4
-
-### Pourquoi ce thème ?
-
-Le Congo exporte du pétrole, du bois et des minerais, mais importe de l'essence raffinée, des meubles et des téléphones. Pourquoi un pays riche en ressources reste-t-il pauvre ? C'est la question de la **fracture Nord-Sud** : l'écart entre les pays industrialisés (le « Nord ») et les pays en développement (le « Sud »). Dans cette unité, tu vas apprendre à **décrire les inégalités**, à **comparer** des pays et des situations, et à **proposer des solutions** : commerce équitable, coopération, transformation locale.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire de l'économie mondiale et des inégalités (≈ 40 mots) ;
-- **comparer** avec les **comparatifs et superlatifs** (richer than, more developed than, the poorest, as… as) ;
-- **comprendre** un débat radiophonique et un article sur le chemin d'une fève de cacao ;
-- **défendre un point de vue** à l'oral dans un débat ;
-- **écrire** un essai argumenté de 150 à 180 mots.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Le vocabulaire du commerce et des inégalités | Lexique |
-| 2. Grammar | Comparatifs et superlatifs | Langue |
-| 3. Listening | Débat radio : « Is aid the answer? » | Comprendre à l'oral |
-| 4. Reading | « The long journey of a cocoa bean » | Comprendre à l'écrit |
-| 5. Speaking | Comparer, débattre, proposer | S'exprimer à l'oral |
-| 6. Writing | Essai : réduire l'écart Nord-Sud | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-- Name three things your family buys that were made abroad.
-- Name three products that Congo sells to other countries.
-- Which is more expensive: a kilo of cocoa beans or a kilo of chocolate? Why?`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Inequality, trade and development',

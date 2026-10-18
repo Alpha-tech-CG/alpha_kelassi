@@ -17,44 +17,6 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'Unidad 7 — Introducción : El medio ambiente',
-    content: `## El medio ambiente — L'environnement
-
-**Niveau :** Terminale A (espagnol, deuxième langue) · **Durée conseillée :** 4 séances de 45 à 90 minutes
-
-### Pourquoi ce thème ?
-
-Les sachets plastiques qui bouchent les caniveaux et provoquent des inondations, les fumées des ordures brûlées, les arbres coupés pour le charbon de bois… Les problèmes d'environnement se voient dans chaque quartier. Mais l'Afrique centrale possède aussi un trésor : la forêt du Bassin du Congo, la deuxième forêt tropicale du monde, partagée entre six pays dont le Congo et la Guinée équatoriale. Dans cette unité, tu vas apprendre à **décrire les problèmes écologiques**, à **proposer des solutions** et à **exprimer la nécessité, la volonté et le souhait** (il faut que…, je veux que…, pourvu que…) avec le **présent du subjonctif**.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire de la nature, de la pollution et de l'écologie (≈ 45 mots) ;
-- **former le présent du subjonctif** et l'employer après **es necesario que, es importante que, quiero que, ojalá, para que** ;
-- **interdire ou déconseiller** avec l'**impératif négatif** (no tires basura, no quemes el plástico) ;
-- **comprendre** une réunion d'un club écologique et un texte sur la lutte contre le plastique ;
-- **écrire** un appel de 120 à 150 mots pour protéger l'environnement de ton quartier.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulario | La nature, la pollution, les solutions | Lexique |
-| 2. Gramática | Le présent du subjonctif et l'impératif négatif | Langue |
-| 3. Escuchar | « El club ecológico del instituto » | Comprendre à l'oral |
-| 4. Leer | « Un mundo sin plástico: ¿es posible? » | Comprendre à l'écrit |
-| 5. Hablar | Problèmes, solutions, débat | S'exprimer à l'oral |
-| 6. Escribir | Un appel pour protéger son quartier | S'exprimer à l'écrit |
-| 7. Ejercicios | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Calentamiento
-
-- ¿Qué problemas de medio ambiente hay en tu barrio?
-- ¿Qué haces con las botellas y las bolsas de plástico?
-- ¿Por qué es importante proteger los bosques?`,
-  },
-  {
-    type: 'cours',
     title: 'Vocabulario — La naturaleza, la contaminación y las soluciones',
     content: `## Vocabulario — Le vocabulaire de l'unité
 

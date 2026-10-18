@@ -9,48 +9,10 @@
 
 export const unit = {
   chapterTitle: 'THEME 5 — FAMOUS LIVES / VIES DE PERSONNALITÉS CÉLÈBRES',
-  description: 'ANGLAIS · UNITÉ 5 — Famous lives · thème 5 du programme INRAP',
+  description: 'ANGLAIS · UNITÉ 5 — Famous lives · thème 5',
 }
 
 export const lessons = [
-  {
-    type: 'cours',
-    title: 'Unit 5 — Introduction : Famous lives',
-    content: `## Famous lives — Vies de personnalités célèbres
-
-**Niveau :** Terminale A, C et D · **Durée conseillée :** 4 séances de 45 à 90 minutes · **Programme INRAP :** thème 5
-
-### Pourquoi ce thème ?
-
-Nelson Mandela, Wangari Maathai, les grands écrivains congolais, mais aussi la sage-femme du village ou l'enseignant qui a changé ta vie : certaines existences inspirent. Qu'est-ce qui rend une vie « célèbre » ou exemplaire ? L'argent, le talent, le courage, le service des autres ? Dans cette unité, tu vas apprendre à **présenter une personnalité**, à **raconter ses réalisations** et à **expliquer pourquoi elle t'inspire**, en reliant tes idées avec des **propositions relatives**.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire de la biographie, des qualités et des réalisations (≈ 40 mots) ;
-- **définir et décrire** avec les **propositions relatives** (a woman who…, a book which…, a man whose…, the town where…) ;
-- **comprendre** une émission de radio scolaire et un portrait de Wangari Maathai ;
-- **présenter** oralement une personnalité que tu admires ;
-- **écrire** un portrait de 150 à 180 mots.
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulary | Biographie, qualités, réalisations | Lexique |
-| 2. Grammar | Les propositions relatives | Langue |
-| 3. Listening | Radio scolaire : « Heroes next door » | Comprendre à l'oral |
-| 4. Reading | « Wangari Maathai, the woman who planted millions of trees » | Comprendre à l'écrit |
-| 5. Speaking | Devinettes, présentation, débat sur la célébrité | S'exprimer à l'oral |
-| 6. Writing | Le portrait d'une personne que tu admires | S'exprimer à l'écrit |
-| 7. Exercises | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Warm-up
-
-- Name a famous African person. Why is he or she famous?
-- Is there a person in your family or neighbourhood whom you really admire?
-- Would you like to be famous? Why or why not?`,
-  },
   {
     type: 'cours',
     title: 'Vocabulary — Lives, qualities and achievements',

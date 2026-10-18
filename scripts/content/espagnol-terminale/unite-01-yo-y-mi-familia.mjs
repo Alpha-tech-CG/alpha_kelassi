@@ -22,41 +22,10 @@ export const unit = {
 export const lessons = [
   {
     type: 'cours',
-    title: 'Unidad 1 — Introducción : Yo y mi familia',
-    content: `## Yo y mi familia — Moi et ma famille
+    title: 'Vocabulario — La familia, el físico y el carácter',
+    content: `## Vocabulario — Le vocabulaire de l'unité
 
-**Niveau :** Terminale A (espagnol, deuxième langue) · **Durée conseillée :** 4 séances de 45 à 90 minutes
-
-### Pourquoi ce thème ?
-
-Se présenter et parler de sa famille, c'est la première chose qu'on fait quand on rencontre quelqu'un, et un sujet fréquent à l'oral comme à l'écrit. Au Congo, la famille est souvent **élargie** : grands-parents, oncles, tantes, cousins vivent ensemble ou tout près. En Espagne, les familles sont plus petites, mais les liens restent forts. Tout près de nous, en **Guinée équatoriale**, on parle espagnol : c'est le seul pays d'Afrique où l'espagnol est langue officielle. Dans cette unité, tu vas apprendre à **te présenter**, à **décrire ta famille** (physique, caractère, état) et à **comparer les familles** d'ici et d'ailleurs.
-
-### Objectifs — À la fin de l'unité, tu pourras :
-
-- **utiliser** le vocabulaire de la famille, de la description physique et du caractère (≈ 40 mots) ;
-- **choisir entre ser et estar**, les deux verbes « être » de l'espagnol ;
-- **comprendre** un appel vidéo entre deux correspondants et un texte sur la famille en Afrique et en Espagne ;
-- **te présenter** et **présenter un membre de ta famille** à l'oral ;
-- **écrire** une lettre de présentation à un correspondant (120 à 150 mots).
-
-### Le parcours de l'unité
-
-| Étape | Ce que tu fais | Compétence |
-|---|---|---|
-| 1. Vocabulario | La famille, le physique, le caractère | Lexique |
-| 2. Gramática | Ser ou estar ? | Langue |
-| 3. Escuchar | Un appel vidéo Brazzaville – Malabo | Comprendre à l'oral |
-| 4. Leer | « La familia, ¿una institución que cambia? » | Comprendre à l'écrit |
-| 5. Hablar | Se présenter, présenter sa famille, débattre | S'exprimer à l'oral |
-| 6. Escribir | Lettre à un correspondant | S'exprimer à l'écrit |
-| 7. Ejercicios | Exercices corrigés (bouton en bas de page) | Entraînement |
-| 8. Test | QCM de fin d'unité, 20 questions | Évaluation |
-
-### Pour te lancer — Calentamiento
-
-- ¿Cómo te llamas? ¿Cuántos años tienes?
-- ¿Cuántas personas hay en tu familia?
-- ¿Con quién vives?
+Apprends ces mots par groupes de 10 et lis les exemples à voix haute.
 
 ### Rappel de prononciation
 
@@ -70,14 +39,7 @@ Se présenter et parler de sa famille, c'est la première chose qu'on fait quand
 | **e** | toujours **é** | padre, madre |
 | **r** entre voyelles / **rr** | **r** roulé (un coup / plusieurs coups) | pero / perro |
 
-L'**accent tonique** tombe sur l'avant-dernière syllabe des mots terminés par une voyelle, -n ou -s (her**ma**no, **jo**ven) ; sinon sur la dernière (pa**pel**, ma**yor**). Un accent écrit signale une exception : ma**má**, pa**pá**, sim**pá**tico.`,
-  },
-  {
-    type: 'cours',
-    title: 'Vocabulario — La familia, el físico y el carácter',
-    content: `## Vocabulario — Le vocabulaire de l'unité
-
-Apprends ces mots par groupes de 10 et lis les exemples à voix haute.
+L'**accent tonique** tombe sur l'avant-dernière syllabe des mots terminés par une voyelle, -n ou -s (her**ma**no, **jo**ven) ; sinon sur la dernière (pa**pel**, ma**yor**). Un accent écrit signale une exception : ma**má**, pa**pá**, sim**pá**tico.
 
 ### 1. La familia — La famille
 
