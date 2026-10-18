@@ -136,11 +136,14 @@ function buildHtml(md: string): string {
   // chaîne d'import — on retire scripts, gestionnaires d'événements inline
   // et URLs javascript:/data: avant d'injecter le HTML rendu par marked/katex.
   function sanitize(html){
+    // NB : on est dans un template literal TS — chaque antislash doit être
+    // doublé, et la balise fermante de script doit rester échappée (antislash
+    // avant la barre), sinon elle fermerait ce bloc et tout le rendu KaTeX tomberait.
     return html
-      .replace(/<script[\s\S]*?<\/script>/gi, '')
-      .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
-      .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]*)/gi, '')
-      .replace(/(href|src)\s*=\s*("javascript:[^"]*"|'javascript:[^']*'|"data:text\/html[^"]*"|'data:text\/html[^']*')/gi, '$1="#"');
+      .replace(/<script[\\s\\S]*?<\\/script>/gi, '')
+      .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')
+      .replace(/\\son\\w+\\s*=\\s*("[^"]*"|'[^']*'|[^\\s>]*)/gi, '')
+      .replace(/(href|src)\\s*=\\s*("javascript:[^"]*"|'javascript:[^']*'|"data:text\\/html[^"]*"|'data:text\\/html[^']*')/gi, '$1="#"');
   }
   var built = false;
   var ro = null;
@@ -149,12 +152,20 @@ function buildHtml(md: string): string {
     if(!window.marked || !window.katex){ return setTimeout(build, 80); }
     built = true;
     var maths=[];
+    // \\diagbox (case d'en-tête barrée des tableaux statistiques) n'existe pas dans KaTeX.
+    md = md.replace(/\\\\diagbox\\{([^}]*)\\}\\{([^}]*)\\}/g,function(_,a,b){return b ? a+' \\\\backslash '+b : ' \\\\backslash '+a;});
     md = md.replace(/\\$\\$([\\s\\S]+?)\\$\\$/g,function(_,x){maths.push({d:true,t:x});return '@@M'+(maths.length-1)+'@@';});
+    // « $ » seul en fin de ligne … « $ » seul en début de ligne : bloc (tableaux \\begin{array}).
+    // Les deux « $ » sont seuls sur leur ligne, sans ligne vide ni autre « $ » entre eux.
+    md = md.replace(/(^|\\n)[ \\t]*\\$[ \\t]*\\n([^$]+?)\\n[ \\t]*\\$[ \\t]*(?=\\n|$)/g,function(all,pre,x){
+      if(/\\n[ \\t]*\\n/.test(x)) return all;
+      maths.push({d:true,t:x});return pre+'@@M'+(maths.length-1)+'@@';});
     md = md.replace(/\\$([^\\n$]+?)\\$/g,function(_,x){maths.push({d:false,t:x});return '@@M'+(maths.length-1)+'@@';});
     var html = window.marked.parse(md, {breaks:true});
     html = html.replace(/@@M(\\d+)@@/g,function(_,i){
       var o=maths[+i];
-      try { return window.katex.renderToString(o.t,{displayMode:o.d,throwOnError:false}); }
+      // « A\\' » (prime saisi avec un antislash dans certains cours) → « A' ».
+      try { return window.katex.renderToString(o.t.replace(/\\\\'/g,"'"),{displayMode:o.d,throwOnError:false}); }
       catch(e){ return o.t; }
     });
     var c = document.getElementById('c');

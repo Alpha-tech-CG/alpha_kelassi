@@ -10,7 +10,7 @@ import { MathLessonView } from '../../components/MathLessonView'
 import { BackButton } from '../../components/BackButton'
 
 // Formules LaTeX ou tableaux → rendu riche ; le rendu léger ne gère ni l'un ni l'autre.
-const needsRich = (s?: string | null) => !!s && (/\$[^$\n]+\$|\$\$/.test(s) || /^\|.+\|\s*$/m.test(s))
+const needsRich = (s?: string | null) => !!s && (/\$[^$\n]+\$|\$\$|^[ \t]*\$[ \t]*$/m.test(s) || /^\|.+\|\s*$/m.test(s))
 
 interface Exercise { id: string; title: string; statement: string; difficulty: number; order_index: number }
 const DIFF: Record<number, { label: string; bg: string; fg: string }> = {

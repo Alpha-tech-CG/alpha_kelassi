@@ -26,7 +26,7 @@ import { ImageTile } from '../../components/ImageTile'
 import { BackButton } from '../../components/BackButton'
 
 // Contenu avec formules LaTeX ($...$) → rendu math natif ; sinon rendu léger (encarts BEPC).
-const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$/.test(s)
+const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$|^[ \t]*\$[ \t]*$/m.test(s)
 
 type LessonType = 'cours' | 'resume' | 'fiche' | 'quiz' | 'video'
 interface LessonVM {
