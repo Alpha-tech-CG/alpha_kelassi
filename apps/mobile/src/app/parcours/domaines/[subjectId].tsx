@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../../lib/supabase'
-import { colors, radius, cardShadow, subjectAccent, subjectIcon } from '../../../lib/theme'
+import { colors, radius, cardShadow, subjectAccent } from '../../../lib/theme'
+import { subjectArtwork } from '../../../lib/subjectArtwork'
+import { ImageTile } from '../../../components/ImageTile'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../../components/BackButton'
 
 interface Domain {
   id: string
@@ -17,7 +20,6 @@ export default function ParcoursDomainesScreen() {
   const { subjectId } = useLocalSearchParams<{ subjectId: string }>()
   const router = useRouter()
   const [name, setName] = useState('Matière')
-  const [icon, setIcon] = useState<string | null>(null)
   const [domains, setDomains] = useState<Domain[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -25,7 +27,6 @@ export default function ParcoursDomainesScreen() {
     async function load() {
       const { data: subj } = await supabase.from('subjects').select('name, icon').eq('id', subjectId).maybeSingle()
       setName((subj as { name?: string } | null)?.name ?? 'Matière')
-      setIcon((subj as { icon?: string | null } | null)?.icon ?? null)
 
       const { data: children } = await supabase
         .from('subjects').select('id, name, icon')
@@ -79,9 +80,9 @@ export default function ParcoursDomainesScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.hbtn} onPress={() => router.back()}><Text style={styles.hbtnText}>←</Text></TouchableOpacity>
-        <Text style={styles.htitle} numberOfLines={1}>{icon ?? subjectIcon(name)} {name}</Text>
-        <View style={styles.hbtn} />
+        <BackButton />
+        <Text style={styles.htitle} numberOfLines={1}>{name}</Text>
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.list}>
@@ -100,12 +101,10 @@ export default function ParcoursDomainesScreen() {
               >
                 <View style={[styles.accent, { backgroundColor: accent }]} />
                 <View style={styles.cardBody}>
-                  <View style={[styles.iconBox, { backgroundColor: accent + '1A' }]}>
-                    <Text style={styles.iconText}>{d.icon || subjectIcon(d.name)}</Text>
-                  </View>
+                  <ImageTile source={subjectArtwork(d.name)} label={d.name.charAt(0).toUpperCase()} pct={d.progress} done={d.progress === 100} />
                   <View style={{ flex: 1 }}>
                     <Text style={styles.domainName}>{d.name}</Text>
-                    <Text style={styles.counts}>📘 {d.chapters} chapitres   ✅ {d.quizzes} quiz</Text>
+                    <Text style={styles.counts}>{d.chapters} chapitres · {d.quizzes} quiz</Text>
                     <View style={styles.progressTrack}>
                       <View style={[styles.progressFill, { width: `${d.progress}%`, backgroundColor: colors.primary }]} />
                     </View>
@@ -136,8 +135,6 @@ const styles = StyleSheet.create({
   },
   accent: { width: 5 },
   cardBody: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 14, padding: 14 },
-  iconBox: { width: 48, height: 48, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center' },
-  iconText: { fontSize: 24 },
   domainName: { fontSize: 16, fontWeight: '800', color: colors.text },
   counts: { fontSize: 12, color: colors.textMuted, marginTop: 3 },
   progressTrack: { height: 6, backgroundColor: colors.primaryTint, borderRadius: radius.full, marginTop: 8, overflow: 'hidden' },

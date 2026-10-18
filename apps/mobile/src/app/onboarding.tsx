@@ -1,93 +1,210 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
-  View, Text, TouchableOpacity, ScrollView, StyleSheet,
-  Animated, ActivityIndicator, Alert,
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Animated,
+  ActivityIndicator,
+  Alert,
+  ImageBackground,
+  Image,
+  type ImageSourcePropType,
 } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../lib/supabase'
 import { API_URL } from '../lib/config'
-import { LEVEL_LABEL } from '../lib/theme'
+import { LEVEL_LABEL, colors, fonts, radius, cardShadow } from '../lib/theme'
+import { BackButton } from '../components/BackButton'
 
 type Track = 'generale' | 'technique'
-interface Series { id: string; code: string; label: string; level: string }
+type Cycle = 'primaire' | 'college' | 'lycee'
+interface Series {
+  id: string
+  code: string
+  label: string
+  level: string
+  track: Track
+}
 
-const TRACKS: { value: Track; emoji: string; title: string; desc: string }[] = [
-  { value: 'generale',  emoji: '🎓', title: 'Enseignement général',   desc: 'CEPE, BEPC, BAC A / C / D' },
-  { value: 'technique', emoji: '🔧', title: 'Enseignement technique', desc: 'Séries G1, G2, F3…' },
+/**
+ * Choix du parcours, par cycle :
+ * - Primaire → CP1, CP2, CE1, CE2, CM1, CEPE (CM2)
+ * - Collège  → 6e, 5e, 4e, BEPC (3e)
+ * - Lycée    → Enseignement général ou technique → Seconde, Première, Terminale
+ * Seules les classes ouvertes aux élèves reviennent de la base (RLS sur
+ * `series`, migration 064) : une classe fermée n'apparaît simplement pas.
+ */
+const CYCLE_LEVELS: Record<Exclude<Cycle, 'lycee'>, string[]> = {
+  primaire: ['cp1', 'cp2', 'ce1', 'ce2', 'cm1', 'cepe'],
+  college: ['sixieme', 'cinquieme', 'quatrieme', 'bepc'],
+}
+const CYCLES: { value: Cycle; title: string; range: string; desc: string; art: ImageSourcePropType }[] = [
+  {
+    value: 'primaire',
+    title: 'Primaire',
+    range: 'CP1 → CEPE',
+    desc: "De la première année d'école au certificat d'études",
+    art: require('../../assets/subjects/literature.jpg'),
+  },
+  {
+    value: 'college',
+    title: 'Collège',
+    range: '6e → 3e · BEPC',
+    desc: 'Les quatre années du collège jusqu’au BEPC',
+    art: require('../../assets/subjects/mathematics.jpg'),
+  },
+  {
+    value: 'lycee',
+    title: 'Lycée',
+    range: 'Seconde → Terminale',
+    desc: 'Enseignement général ou technique, jusqu’au BAC',
+    art: require('../../assets/subjects/sciences.jpg'),
+  },
 ]
-// Ordre scolaire, par cycle. Seules les classes ouvertes aux élèves reviennent
-// de la base (RLS sur `series`, migration 064).
+const TRACKS: { value: Track; title: string; desc: string; art: ImageSourcePropType }[] = [
+  {
+    value: 'generale',
+    title: 'Enseignement général',
+    desc: 'Séries A, C, D',
+    art: require('../../assets/subjects/humanities.jpg'),
+  },
+  {
+    value: 'technique',
+    title: 'Enseignement technique',
+    desc: 'Séries E, F3, G1, G2, G3, H, BG, R…',
+    art: require('../../assets/subjects/technology.jpg'),
+  },
+]
+
+/** Rang d'une classe de lycée : Seconde, Première, Terminale. */
+function lyceeYear(level: string): 'Seconde' | 'Première' | 'Terminale' | null {
+  if (level.startsWith('seconde')) return 'Seconde'
+  if (level.startsWith('premiere')) return 'Première'
+  if (level.startsWith('bac_')) return 'Terminale'
+  return null
+}
 const LEVEL_ORDER: Record<string, number> = Object.fromEntries(
-  Object.keys(LEVEL_LABEL).map((level, i) => [level, i]),
+  Object.keys(LEVEL_LABEL).map((level, i) => [level, i])
 )
+const byLevelThenCode = (a: Series, b: Series) =>
+  (LEVEL_ORDER[a.level] ?? 99) - (LEVEL_ORDER[b.level] ?? 99) || a.code.localeCompare(b.code)
 
-const KELASSI_TIPS = [
-  { icon: '🎯', title: 'Sois précis', desc: 'Indique la matière et le sujet. Ex : "Explique la dérivée en Maths BAC C"' },
-  { icon: '🔍', title: 'Demande des exemples', desc: '"Donne-moi un exemple avec des chiffres" → Cognix s\'adapte à ton niveau.' },
-  { icon: '🔄', title: 'Reformule si besoin', desc: '"Je n\'ai pas compris, explique autrement" → Cognix essaie une autre approche.' },
+const TIPS = [
+  {
+    n: '1',
+    title: 'Sois précis',
+    desc: 'Indique la matière et le sujet. Ex : « Explique la dérivée en Maths BAC C ».',
+  },
+  {
+    n: '2',
+    title: 'Demande des exemples',
+    desc: '« Donne-moi un exemple avec des chiffres » : Cognix s’adapte à ton niveau.',
+  },
+  {
+    n: '3',
+    title: 'Reformule si besoin',
+    desc: '« Je n’ai pas compris, explique autrement » : Cognix essaie une autre approche.',
+  },
 ]
+
+// Étapes : 0 cycle · 1 filière (lycée) · 2 classe · 3 matières · 4 conseils · 5 lancement
+const STEPS = 6
 
 export default function OnboardingScreen() {
   const router = useRouter()
   const [step, setStep] = useState(0)
+  const [cycle, setCycle] = useState<Cycle | null>(null)
   const [track, setTrack] = useState<Track | null>(null)
-  const [seriesList, setSeriesList] = useState<Series[]>([])
+  const [allSeries, setAllSeries] = useState<Series[] | null>(null)
   const [level, setLevel] = useState<string | null>(null)
   const [subjects, setSubjects] = useState<{ id: string; name: string }[]>([])
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [stepLoading, setStepLoading] = useState(false)
-  const slideAnim = useRef(new Animated.Value(0)).current
+  const anim = useRef(new Animated.Value(1)).current
 
+  // Toutes les classes ouvertes, chargées une fois (une trentaine de lignes).
+  useEffect(() => {
+    supabase
+      .from('series')
+      .select('id, code, label, level, track')
+      .then(({ data }) => setAllSeries(((data ?? []) as Series[]).slice().sort(byLevelThenCode)))
+  }, [])
+
+  // Apparition de chaque étape : fondu + légère montée.
   function goStep(n: number) {
-    Animated.timing(slideAnim, { toValue: 1, duration: 200, useNativeDriver: true }).start(() => {
-      slideAnim.setValue(0)
+    Animated.timing(anim, { toValue: 0, duration: 140, useNativeDriver: true }).start(() => {
       setStep(n)
+      Animated.spring(anim, { toValue: 1, useNativeDriver: true, friction: 8, tension: 70 }).start()
     })
   }
 
-  async function handleTrackSelect(t: Track) {
-    setTrack(t); setStepLoading(true)
-    const { data } = await supabase.from('series').select('id, code, label, level').eq('track', t)
-    const rows = (data ?? []) as Series[]
-    rows.sort((a, b) => (LEVEL_ORDER[a.level] ?? 99) - (LEVEL_ORDER[b.level] ?? 99) || a.code.localeCompare(b.code))
-    setSeriesList(rows); setStepLoading(false); goStep(1)
+  function pickCycle(c: Cycle) {
+    setCycle(c)
+    if (c === 'lycee') goStep(1)
+    else {
+      setTrack('generale')
+      goStep(2)
+    }
   }
 
-  async function handleParcoursSelect(s: Series) {
-    setLevel(s.level); setStepLoading(true)
-    const { data } = await supabase.from('subjects').select('id, name')
-      .eq('level', s.level).eq('track_type', track!).order('name')
-    setSubjects(data ?? []); setSelectedSubjects([]); setStepLoading(false); goStep(2)
+  function pickTrack(t: Track) {
+    setTrack(t)
+    goStep(2)
+  }
+
+  const classes: Series[] = (allSeries ?? []).filter((s) => {
+    if (!cycle) return false
+    if (cycle === 'lycee') return s.track === track && lyceeYear(s.level) !== null
+    return CYCLE_LEVELS[cycle].includes(s.level)
+  })
+
+  async function pickClass(s: Series) {
+    setLevel(s.level)
+    setTrack(s.track)
+    setStepLoading(true)
+    const { data } = await supabase
+      .from('subjects')
+      .select('id, name')
+      .eq('level', s.level)
+      .eq('track_type', s.track)
+      .is('parent_subject_id', null)
+      .order('name')
+    setSubjects(data ?? [])
+    setSelectedSubjects([])
+    setStepLoading(false)
+    goStep(3)
   }
 
   function toggleSubject(id: string) {
-    setSelectedSubjects((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id])
+    setSelectedSubjects((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    )
   }
 
   async function handleComplete() {
     if (!track || !level) return
     setLoading(true)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
       if (!session) throw new Error('Non connecté')
       const res = await fetch(`${API_URL}/api/onboarding/complete`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify({ track_type: track, level, subject_ids: selectedSubjects }),
       })
       // Un refus du serveur doit se voir : avant, l'élève repartait sur l'accueil
       // comme si son parcours était enregistré.
       const json = await res.json().catch(() => null)
       if (!res.ok) throw new Error(json?.error?.message ?? json?.error ?? `HTTP ${res.status}`)
-      if (json?.data?.suggested_document) {
-        await fetch(`${API_URL}/api/flashcards/generate`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-          body: JSON.stringify({ document_id: json.data.suggested_document.id, count: 3 }),
-        })
-      }
-      router.replace('/(tabs)/')
+      router.replace('/(tabs)')
     } catch {
       Alert.alert('Erreur', 'Impossible de sauvegarder. Réessaie.')
     } finally {
@@ -95,76 +212,135 @@ export default function OnboardingScreen() {
     }
   }
 
-  const translateX = slideAnim.interpolate({ inputRange: [0, 1], outputRange: [0, -20] })
+  const stepStyle = {
+    opacity: anim,
+    transform: [{ translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [18, 0] }) }],
+  }
+  // Le lycée a une étape de plus (filière) : on ne montre pas de point « vide ».
+  const visibleSteps = cycle && cycle !== 'lycee' ? STEPS - 1 : STEPS
+  const dotIndex = cycle && cycle !== 'lycee' && step >= 2 ? step - 1 : step
+
+  const cycleTitle = CYCLES.find((c) => c.value === cycle)?.title
 
   return (
     <View style={styles.container}>
       <View style={styles.dots}>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <View key={i} style={[styles.dot, step === i && styles.dotActive]} />
+        {Array.from({ length: visibleSteps }, (_, i) => (
+          <View key={i} style={[styles.dot, i <= dotIndex && styles.dotDone, i === dotIndex && styles.dotActive]} />
         ))}
       </View>
 
-      <Animated.View style={[styles.content, { opacity: slideAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 0] }), transform: [{ translateX }] }]}>
-
-        {/* Étape 0 — Filière */}
+      <Animated.View style={[styles.content, stepStyle]}>
+        {/* Étape 0 — Cycle */}
         {step === 0 && (
-          <View style={styles.step}>
-            <Text style={styles.emoji}>👋</Text>
-            <Text style={styles.title}>Bienvenue sur Cognix !</Text>
-            <Text style={styles.subtitle}>Quel type d'enseignement suis-tu ?</Text>
-            <View style={{ gap: 12 }}>
-              {TRACKS.map((t) => (
-                <TouchableOpacity key={t.value} style={styles.trackCard} onPress={() => handleTrackSelect(t.value)} disabled={stepLoading}>
-                  <Text style={styles.trackEmoji}>{t.emoji}</Text>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.trackTitle}>{t.title}</Text>
-                    <Text style={styles.trackDesc}>{t.desc}</Text>
-                  </View>
+          <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+            <Text style={styles.kicker}>BIENVENUE SUR COGNIX</Text>
+            <Text style={styles.title}>Où en es-tu dans ta scolarité ?</Text>
+            <Text style={styles.subtitle}>Choisis ton cycle, puis ta classe.</Text>
+            <View style={{ gap: 14 }}>
+              {CYCLES.map((c) => (
+                <TouchableOpacity key={c.value} activeOpacity={0.9} onPress={() => pickCycle(c.value)} disabled={!allSeries}>
+                  <ImageBackground source={c.art} style={styles.bigCard} imageStyle={styles.bigCardImg}>
+                    <View style={styles.bigCardShade} />
+                    <Text style={styles.bigCardRange}>{c.range}</Text>
+                    <Text style={styles.bigCardTitle}>{c.title}</Text>
+                    <Text style={styles.bigCardDesc}>{c.desc}</Text>
+                  </ImageBackground>
                 </TouchableOpacity>
               ))}
             </View>
-          </View>
+            {!allSeries && <ActivityIndicator color={colors.primary} style={{ marginTop: 18 }} />}
+          </ScrollView>
         )}
 
-        {/* Étape 1 — Parcours */}
+        {/* Étape 1 — Filière (lycée) */}
         {step === 1 && (
-          <View style={styles.step}>
-            <TouchableOpacity onPress={() => goStep(0)}><Text style={styles.backLink}>← Changer de filière</Text></TouchableOpacity>
-            <Text style={styles.emoji}>🧭</Text>
-            <Text style={styles.title}>Ton parcours</Text>
-            <Text style={styles.subtitle}>Sélectionne ton examen / ta série.</Text>
-            {stepLoading ? <ActivityIndicator color="#1E74E8" style={{ marginTop: 24 }} /> : seriesList.length === 0 ? (
-              <Text style={styles.emptyText}>Aucun parcours pour cette filière pour l'instant.</Text>
+          <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+            <BackButton label="Cycles" onPress={() => goStep(0)} />
+            <Text style={[styles.kicker, styles.kickerAfterBack]}>LYCÉE</Text>
+            <Text style={styles.title}>Quel enseignement suis-tu ?</Text>
+            <Text style={styles.subtitle}>Chacun a ses classes, de la Seconde à la Terminale.</Text>
+            <View style={{ gap: 14 }}>
+              {TRACKS.map((t) => (
+                <TouchableOpacity key={t.value} activeOpacity={0.9} onPress={() => pickTrack(t.value)}>
+                  <ImageBackground source={t.art} style={styles.bigCard} imageStyle={styles.bigCardImg}>
+                    <View style={styles.bigCardShade} />
+                    <Text style={styles.bigCardTitle}>{t.title}</Text>
+                    <Text style={styles.bigCardDesc}>{t.desc}</Text>
+                  </ImageBackground>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        )}
+
+        {/* Étape 2 — Classe */}
+        {step === 2 && (
+          <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+            <BackButton
+              label={cycle === 'lycee' ? 'Enseignement' : 'Cycles'}
+              onPress={() => goStep(cycle === 'lycee' ? 1 : 0)}
+            />
+            <Text style={[styles.kicker, styles.kickerAfterBack]}>
+              {(cycleTitle ?? '').toUpperCase()}
+              {cycle === 'lycee' ? ` · ${track === 'technique' ? 'TECHNIQUE' : 'GÉNÉRAL'}` : ''}
+            </Text>
+            <Text style={styles.title}>Ta classe</Text>
+            <Text style={styles.subtitle}>Sélectionne la classe que tu fréquentes cette année.</Text>
+            {stepLoading ? (
+              <ActivityIndicator color={colors.primary} style={{ marginTop: 24 }} />
+            ) : classes.length === 0 ? (
+              <View style={styles.soon}>
+                <Text style={styles.soonTitle}>Bientôt disponible</Text>
+                <Text style={styles.soonText}>
+                  Les classes de ce cycle ne sont pas encore ouvertes. Reviens très vite !
+                </Text>
+              </View>
+            ) : cycle === 'lycee' ? (
+              (['Seconde', 'Première', 'Terminale'] as const).map((year) => {
+                const rows = classes.filter((s) => lyceeYear(s.level) === year)
+                if (!rows.length) return null
+                return (
+                  <View key={year} style={{ marginBottom: 18 }}>
+                    <Text style={styles.groupTitle}>{year}</Text>
+                    <View style={styles.classGrid}>
+                      {rows.map((s) => (
+                        <ClassCard key={s.id} s={s} onPress={() => pickClass(s)} />
+                      ))}
+                    </View>
+                  </View>
+                )
+              })
             ) : (
-              <View style={styles.parcoursGrid}>
-                {seriesList.map((s) => (
-                  <TouchableOpacity key={s.id} style={styles.parcoursCard} onPress={() => handleParcoursSelect(s)}>
-                    <Text style={styles.parcoursCode}>{s.code}</Text>
-                    <Text style={styles.parcoursLabel} numberOfLines={2}>{s.label}</Text>
-                  </TouchableOpacity>
+              <View style={styles.classGrid}>
+                {classes.map((s) => (
+                  <ClassCard key={s.id} s={s} onPress={() => pickClass(s)} />
                 ))}
               </View>
             )}
-          </View>
+          </ScrollView>
         )}
 
-        {/* Étape 2 — Matières */}
-        {step === 2 && (
-          <View style={styles.step}>
-            <TouchableOpacity onPress={() => goStep(1)}><Text style={styles.backLink}>← Changer de parcours</Text></TouchableOpacity>
-            <Text style={styles.emoji}>📚</Text>
+        {/* Étape 3 — Matières */}
+        {step === 3 && (
+          <View style={styles.flexStep}>
+            <BackButton label="Classes" onPress={() => goStep(2)} />
+            <Text style={[styles.kicker, styles.kickerAfterBack]}>{level ? LEVEL_LABEL[level] ?? level : ''}</Text>
             <Text style={styles.title}>Tes matières principales</Text>
-            <Text style={styles.subtitle}>Sélectionne celles à réviser (optionnel).</Text>
+            <Text style={styles.subtitle}>Sélectionne celles à réviser en priorité (optionnel).</Text>
             {subjects.length === 0 ? (
-              <Text style={styles.emptyText}>Les matières de ce parcours arrivent bientôt. Tu peux continuer.</Text>
+              <Text style={styles.soonText}>Les matières de cette classe arrivent bientôt. Tu peux continuer.</Text>
             ) : (
               <ScrollView style={styles.subjectList} showsVerticalScrollIndicator={false}>
                 <View style={styles.subjectChips}>
                   {subjects.map((s) => {
                     const sel = selectedSubjects.includes(s.id)
                     return (
-                      <TouchableOpacity key={s.id} style={[styles.chip, sel && styles.chipActive]} onPress={() => toggleSubject(s.id)}>
+                      <TouchableOpacity
+                        key={s.id}
+                        style={[styles.chip, sel && styles.chipActive]}
+                        onPress={() => toggleSubject(s.id)}
+                      >
                         <Text style={[styles.chipText, sel && styles.chipTextActive]}>{s.name}</Text>
                       </TouchableOpacity>
                     )
@@ -172,21 +348,23 @@ export default function OnboardingScreen() {
                 </View>
               </ScrollView>
             )}
-            <TouchableOpacity style={styles.btn} onPress={() => goStep(3)}>
-              <Text style={styles.btnText}>Continuer{selectedSubjects.length > 0 ? ` (${selectedSubjects.length})` : ''}</Text>
+            <TouchableOpacity style={styles.btn} onPress={() => goStep(4)}>
+              <Text style={styles.btnText}>
+                Continuer{selectedSubjects.length > 0 ? ` (${selectedSubjects.length})` : ''}
+              </Text>
             </TouchableOpacity>
           </View>
         )}
 
-        {/* Étape 3 — Tutoriel */}
-        {step === 3 && (
-          <View style={styles.step}>
-            <Text style={styles.emoji}>🤖</Text>
-            <Text style={styles.title}>Comment utiliser Cognix ?</Text>
+        {/* Étape 4 — Conseils */}
+        {step === 4 && (
+          <View style={styles.flexStep}>
+            <Image source={require('../../assets/cognix-tutor.png')} style={styles.mascot} resizeMode="contain" />
+            <Text style={styles.title}>Comment parler à Cognix ?</Text>
             <View style={styles.tips}>
-              {KELASSI_TIPS.map((t) => (
+              {TIPS.map((t) => (
                 <View key={t.title} style={styles.tip}>
-                  <Text style={styles.tipIcon}>{t.icon}</Text>
+                  <View style={styles.tipNum}><Text style={styles.tipNumText}>{t.n}</Text></View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.tipTitle}>{t.title}</Text>
                     <Text style={styles.tipDesc}>{t.desc}</Text>
@@ -194,28 +372,36 @@ export default function OnboardingScreen() {
                 </View>
               ))}
             </View>
-            <TouchableOpacity style={styles.btn} onPress={() => goStep(4)}>
-              <Text style={styles.btnText}>J'ai compris !</Text>
+            <TouchableOpacity style={styles.btn} onPress={() => goStep(5)}>
+              <Text style={styles.btnText}>J'ai compris</Text>
             </TouchableOpacity>
           </View>
         )}
 
-        {/* Étape 4 — Lancement */}
-        {step === 4 && (
-          <View style={styles.step}>
-            <Text style={styles.emoji}>🚀</Text>
-            <Text style={styles.title}>Tout est prêt !</Text>
-            <Text style={styles.subtitle}>Ton espace est configuré pour ton parcours. Bonne révision avec Cognix !</Text>
+        {/* Étape 5 — Lancement */}
+        {step === 5 && (
+          <View style={styles.flexStep}>
+            <Text style={[styles.kicker, { marginTop: 30 }]}>C'EST PRÊT</Text>
+            <Text style={styles.title}>Ton espace {level ? LEVEL_LABEL[level] ?? '' : ''} est configuré</Text>
+            <Text style={styles.subtitle}>Bonne révision avec Cognix !</Text>
             <View style={styles.featureList}>
-              {['Contenu adapté à ta filière et ton parcours', 'Répétition espacée SM-2', '+ 2 XP par flashcard réussie'].map((f) => (
+              {[
+                'Cours et exercices de ta classe',
+                'Répétition espacée pour mémoriser',
+                'Cognix IA et des tuteurs pour t’aider',
+              ].map((f) => (
                 <View key={f} style={styles.featureRow}>
-                  <Text style={styles.featureCheck}>✅</Text>
+                  <View style={styles.check}><Text style={styles.checkText}>✓</Text></View>
                   <Text style={styles.featureText}>{f}</Text>
                 </View>
               ))}
             </View>
-            <TouchableOpacity style={[styles.btn, loading && styles.btnDisabled]} onPress={handleComplete} disabled={loading}>
-              {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>C'est parti ! 🚀</Text>}
+            <TouchableOpacity
+              style={[styles.btn, loading && styles.btnDisabled]}
+              onPress={handleComplete}
+              disabled={loading}
+            >
+              {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>C'est parti !</Text>}
             </TouchableOpacity>
           </View>
         )}
@@ -224,42 +410,69 @@ export default function OnboardingScreen() {
   )
 }
 
+function ClassCard({ s, onPress }: { s: Series; onPress: () => void }) {
+  // « Série A — Lettres… » → « Lettres et Sciences Humaines »
+  const detail = s.label.includes('—') ? s.label.split('—').slice(1).join('—').trim() : s.label
+  return (
+    <TouchableOpacity style={styles.classCard} activeOpacity={0.85} onPress={onPress}>
+      <Text style={styles.classLevel}>{LEVEL_LABEL[s.level] ?? s.code}</Text>
+      <Text style={styles.classDetail} numberOfLines={2}>{detail}</Text>
+    </TouchableOpacity>
+  )
+}
+
 const styles = StyleSheet.create({
-  container:    { flex: 1, backgroundColor: '#F4F8FE', paddingTop: 60 },
-  dots:         { flexDirection: 'row', justifyContent: 'center', gap: 8, marginBottom: 32 },
-  dot:          { width: 8, height: 8, borderRadius: 4, backgroundColor: '#E3EADF' },
-  dotActive:    { backgroundColor: '#1E74E8', width: 24 },
-  content:      { flex: 1, paddingHorizontal: 24 },
-  step:         { flex: 1 },
-  backLink:     { color: '#3E4A3E', fontSize: 13, marginBottom: 8 },
-  emoji:        { fontSize: 48, textAlign: 'center', marginBottom: 16 },
-  title:        { fontSize: 24, fontWeight: '700', color: '#171D17', textAlign: 'center', marginBottom: 8 },
-  subtitle:     { fontSize: 15, color: '#3E4A3E', textAlign: 'center', marginBottom: 24, lineHeight: 22 },
-  emptyText:    { fontSize: 14, color: '#3E4A3E', textAlign: 'center', paddingVertical: 24 },
-  trackCard:    { flexDirection: 'row', alignItems: 'center', gap: 14, borderWidth: 2, borderColor: '#1E74E8', borderRadius: 16, padding: 18, backgroundColor: '#fff' },
-  trackEmoji:   { fontSize: 32 },
-  trackTitle:   { fontSize: 17, fontWeight: '700', color: '#171D17' },
-  trackDesc:    { fontSize: 12, color: '#3E4A3E', marginTop: 2 },
-  parcoursGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'center' },
-  parcoursCard: { width: '44%', borderWidth: 2, borderColor: '#E3EADF', borderRadius: 14, padding: 14, alignItems: 'center', backgroundColor: '#fff' },
-  parcoursCode: { fontSize: 20, fontWeight: '800', color: '#1E74E8' },
-  parcoursLabel:{ fontSize: 11, color: '#3E4A3E', textAlign: 'center', marginTop: 4 },
-  subjectList:  { flex: 1, marginBottom: 16 },
+  container: { flex: 1, backgroundColor: colors.background, paddingTop: 56 },
+  dots: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginBottom: 20 },
+  dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.cardBorder },
+  dotDone: { backgroundColor: colors.primary + '66' },
+  dotActive: { backgroundColor: colors.primary, width: 26 },
+  content: { flex: 1, paddingHorizontal: 20 },
+  scroll: { paddingBottom: 40 },
+  flexStep: { flex: 1 },
+  kicker: { fontSize: 11, fontFamily: fonts.body, color: colors.primary, letterSpacing: 1.4, marginBottom: 6 },
+  kickerAfterBack: { marginTop: 18 },
+  title: { fontSize: 26, lineHeight: 32, fontFamily: fonts.headingBlack, color: colors.text, marginBottom: 6 },
+  subtitle: { fontSize: 14, color: colors.textMuted, marginBottom: 22, lineHeight: 20 },
+  bigCard: { height: 132, borderRadius: radius.xl, overflow: 'hidden', justifyContent: 'flex-end', padding: 18, ...cardShadow },
+  bigCardImg: { borderRadius: radius.xl },
+  bigCardShade: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(10,30,70,0.58)' },
+  bigCardRange: {
+    position: 'absolute', top: 14, right: 14, color: colors.onYellow, backgroundColor: colors.yellow,
+    paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, overflow: 'hidden', fontSize: 11, fontFamily: fonts.body,
+  },
+  bigCardTitle: { color: '#fff', fontSize: 24, fontFamily: fonts.headingBlack },
+  bigCardDesc: { color: '#ffffffd9', fontSize: 12, marginTop: 2 },
+  groupTitle: { fontSize: 13, fontFamily: fonts.body, color: colors.textMuted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 10 },
+  classGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+  classCard: {
+    width: '47%', flexGrow: 1, backgroundColor: colors.card, borderRadius: radius.lg, paddingVertical: 16, paddingHorizontal: 14,
+    borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow,
+  },
+  classLevel: { fontSize: 20, fontFamily: fonts.headingBlack, color: colors.primary },
+  classDetail: { fontSize: 11, color: colors.textMuted, marginTop: 3, lineHeight: 15 },
+  soon: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 20, borderWidth: 1, borderColor: colors.cardBorder },
+  soonTitle: { fontSize: 16, fontFamily: fonts.heading, color: colors.text, marginBottom: 4 },
+  soonText: { fontSize: 13, color: colors.textMuted, lineHeight: 19 },
+  subjectList: { flex: 1, marginBottom: 12 },
   subjectChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chip:         { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, borderWidth: 1.5, borderColor: '#E3EADF', backgroundColor: '#fff' },
-  chipActive:   { backgroundColor: '#1E74E8', borderColor: '#1E74E8' },
-  chipText:     { fontSize: 13, fontWeight: '500', color: '#171D17' },
+  chip: { paddingHorizontal: 14, paddingVertical: 9, borderRadius: 999, borderWidth: 1.5, borderColor: colors.cardBorder, backgroundColor: colors.card },
+  chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  chipText: { fontSize: 13, color: colors.text },
   chipTextActive: { color: '#fff' },
-  tips:         { gap: 16, marginBottom: 32 },
-  tip:          { flexDirection: 'row', gap: 12, backgroundColor: '#fff', borderRadius: 14, padding: 14, borderWidth: 1, borderColor: '#EFF6EB' },
-  tipIcon:      { fontSize: 24 },
-  tipTitle:     { fontSize: 14, fontWeight: '600', color: '#171D17', marginBottom: 2 },
-  tipDesc:      { fontSize: 12, color: '#3E4A3E', lineHeight: 18 },
-  featureList:  { gap: 12, marginBottom: 40 },
-  featureRow:   { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  featureCheck: { fontSize: 16 },
-  featureText:  { fontSize: 14, color: '#171D17' },
-  btn:          { backgroundColor: '#1E74E8', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 'auto' as any, marginBottom: 32 },
-  btnDisabled:  { opacity: 0.5 },
-  btnText:      { color: '#fff', fontSize: 16, fontWeight: '700' },
+  mascot: { width: 120, height: 120, alignSelf: 'center', marginBottom: 8 },
+  tips: { gap: 12, marginTop: 10, marginBottom: 24 },
+  tip: { flexDirection: 'row', gap: 12, backgroundColor: colors.card, borderRadius: radius.lg, padding: 14, borderWidth: 1, borderColor: colors.cardBorder },
+  tipNum: { width: 30, height: 30, borderRadius: 15, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
+  tipNumText: { color: colors.primary, fontFamily: fonts.heading, fontSize: 14 },
+  tipTitle: { fontSize: 14, fontFamily: fonts.body, color: colors.text, marginBottom: 2 },
+  tipDesc: { fontSize: 12, color: colors.textMuted, lineHeight: 18 },
+  featureList: { gap: 12, marginBottom: 40 },
+  featureRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  check: { width: 24, height: 24, borderRadius: 12, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
+  checkText: { color: '#fff', fontSize: 13, fontFamily: fonts.body },
+  featureText: { fontSize: 14, color: colors.text },
+  btn: { backgroundColor: colors.primary, borderRadius: radius.lg, paddingVertical: 16, alignItems: 'center', marginTop: 'auto', marginBottom: 32, ...cardShadow },
+  btnDisabled: { opacity: 0.5 },
+  btnText: { color: '#fff', fontSize: 16, fontFamily: fonts.body },
 })

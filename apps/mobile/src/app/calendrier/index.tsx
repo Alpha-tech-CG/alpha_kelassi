@@ -4,6 +4,7 @@ import { useRouter, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface CalItem {
   id: string
@@ -82,9 +83,9 @@ export default function CalendrierScreen() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
     >
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Calendrier scolaire</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <View style={styles.banner}>

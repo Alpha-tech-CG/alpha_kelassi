@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
-import { useFocusEffect, useRouter } from 'expo-router'
+import { useFocusEffect } from 'expo-router'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { api, planErrorOf, type LockedInfo } from '../../lib/billing'
 import { useBilling } from '../../hooks/useBilling'
 import { LockedFeature } from '../../components/LockedFeature'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Reco { subject_id: string; subject_name: string; priority: 'haute' | 'moyenne' | 'basse'; reason: string; action: string }
 interface SubjectError { subject_id: string; subject_name: string; answered: number; wrong: number; error_rate: number }
@@ -29,7 +30,6 @@ const PRIORITY: Record<Reco['priority'], { bg: string; fg: string }> = {
 const clip = (s: string, n = 160) => { const t = s.replace(/\$+/g, '').replace(/\s+/g, ' '); return t.length > n ? `${t.slice(0, n)}…` : t }
 
 export default function AnalyseScreen() {
-  const router = useRouter()
   const { me, can } = useBilling()
   const [data, setData] = useState<Insights | null>(null)
   const [locked, setLocked] = useState<LockedInfo | null>(null)
@@ -61,9 +61,9 @@ export default function AnalyseScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12} accessibilityRole="button" accessibilityLabel="Retour"><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title} accessibilityRole="header">Mon analyse</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {loading && <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />}

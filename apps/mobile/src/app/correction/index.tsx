@@ -4,6 +4,7 @@ import { useRouter, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Mission {
   id: string
@@ -47,9 +48,9 @@ export default function CorrectionsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Mes corrections</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {loading ? (

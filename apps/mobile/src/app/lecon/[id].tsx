@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
 
 type Block =
   | { type: 'subtitle'; text: string }
@@ -106,7 +107,7 @@ export default function LeconScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.headerTitle} numberOfLines={1}>Leçon</Text>
       </View>
       <WebView

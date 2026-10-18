@@ -3,6 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
 
 interface Lesson { id: string; title: string; position: number }
 interface Objective { id: string; title: string; position: number; course_lessons: Lesson[] }
@@ -54,7 +55,7 @@ export default function CoursDetailScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.headerTitle} numberOfLines={1}>{course.subjects?.name ?? 'Cours'}</Text>
       </View>
 

@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Switch, Alert } from 'react-native'
-import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router'
+import { ScrollView, View, Text, TextInput, StyleSheet, ActivityIndicator, Switch, Alert } from 'react-native'
+import { useLocalSearchParams, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { planLabel } from '../../lib/billing'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 /**
  * Niveau de suivi (selon la formule de l'ENFANT, calculé par la base) :
@@ -41,7 +42,6 @@ const NEXT: Record<Exclude<TrackingLevel, 'reports'>, { plan: string; text: stri
 
 export default function ChildDashboard() {
   const { childId } = useLocalSearchParams<{ childId: string }>()
-  const router = useRouter()
   const [d, setD] = useState<Dashboard | null>(null)
   const [loading, setLoading] = useState(true)
   const [limit, setLimit] = useState('')
@@ -86,9 +86,9 @@ export default function ChildDashboard() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12} accessibilityRole="button" accessibilityLabel="Retour"><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title} numberOfLines={1} accessibilityRole="header">{d.child_name}</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
       {!!d.child_plan && <Text style={styles.planLine}>Formule de ton enfant : {planLabel(d.child_plan)}</Text>}
 

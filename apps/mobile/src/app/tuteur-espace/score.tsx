@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
-import { useRouter, useFocusEffect } from 'expo-router'
+import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Rating { clarity: number; quality: number; comment: string | null; created_at: string }
 
@@ -17,7 +18,6 @@ function Stars({ n }: { n: number }) {
 }
 
 export default function ScoreScreen() {
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [score, setScore] = useState(0)
   const [ratings, setRatings] = useState<Rating[]>([])
@@ -37,9 +37,9 @@ export default function ScoreScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Score & avis</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <View style={styles.scoreCard}>

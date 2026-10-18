@@ -3,6 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, subjectAccent, subjectIcon } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
 
 interface Course { id: string; title: string; subtitle: string | null; is_premium: boolean }
 
@@ -38,7 +39,7 @@ export default function MatiereDetailScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <View style={[styles.iconBox, { backgroundColor: accent + '1A' }]}>
           <Text style={styles.iconText}>{icon || subjectIcon(name)}</Text>
         </View>

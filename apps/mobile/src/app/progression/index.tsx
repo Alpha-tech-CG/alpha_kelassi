@@ -1,12 +1,14 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
-import { useRouter, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ImageBackground } from 'react-native'
+import { useRouter, useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
-import { useLevel } from '../../hooks/useLevel'
-import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
+import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { subjectArtwork } from '../../lib/subjectArtwork'
+import { BackButton } from '../../components/BackButton'
+import { ImageTile } from '../../components/ImageTile'
+import { FadeIn } from '../../components/FadeIn'
 
-interface Subject { id: string; name: string }
 interface ProgChapter {
   id: string
   title: string
@@ -23,123 +25,114 @@ async function token() {
   return session?.access_token
 }
 
+/**
+ * Parcours d'une matière du primaire / collège : chapitres dans l'ordre, débloqués
+ * au fil de l'année. On arrive ici depuis « Mes matières » ; la matière est fixée
+ * (plus de barre de matières en haut : on revient en arrière pour en changer).
+ */
 export default function ProgressionScreen() {
   const router = useRouter()
-  const { subject: initialSubject, level: levelParam } = useLocalSearchParams<{ subject?: string; level?: string }>()
-  const { level: profileLevel, ready: levelReady } = useLevel()
-  // Un admin qui consulte une autre classe la transmet en paramètre.
-  const level = levelParam ?? profileLevel
-  const [subjects, setSubjects] = useState<Subject[]>([])
-  const [active, setActive] = useState<string | null>(initialSubject ?? null)
+  const { subject: subjectId } = useLocalSearchParams<{ subject?: string; level?: string }>()
+  const [name, setName] = useState('Matière')
   const [chapters, setChapters] = useState<ProgChapter[]>([])
   const [loading, setLoading] = useState(true)
-  const [loadingList, setLoadingList] = useState(false)
 
-  const loadSubjects = useCallback(async () => {
-    if (!level) { setLoading(false); return }
-    const { data } = await supabase.from('subjects').select('id, name').eq('level', level).is('parent_subject_id', null).order('display_order').order('name')
-    const rows = (data ?? []) as Subject[]
-    setSubjects(rows)
-    setActive((cur) => cur ?? initialSubject ?? rows[0]?.id ?? null)
-    setLoading(false)
-  }, [initialSubject, level])
-
-  const loadChapters = useCallback(async (subjectId: string) => {
-    setLoadingList(true)
-    const t = await token()
+  const load = useCallback(async () => {
+    if (!subjectId) { setLoading(false); return }
+    const [{ data: subj }, t] = await Promise.all([
+      supabase.from('subjects').select('name').eq('id', subjectId).maybeSingle(),
+      token(),
+    ])
+    setName((subj as { name?: string } | null)?.name ?? 'Matière')
     const res = await fetch(`${API_URL}/api/curriculum/progression?subject=${subjectId}`, { headers: { Authorization: `Bearer ${t}` } })
     const json = await res.json().catch(() => ({}))
     setChapters(json?.data?.chapters ?? [])
-    setLoadingList(false)
-  }, [])
+    setLoading(false)
+  }, [subjectId])
 
-  useFocusEffect(useCallback(() => { if (levelReady) loadSubjects() }, [loadSubjects, levelReady]))
-  useEffect(() => { if (active) loadChapters(active) }, [active, loadChapters])
+  useEffect(() => { load() }, [load])
 
   if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
 
   const nextIndex = chapters.findIndex((c) => c.is_unlocked && !c.is_completed)
+  const total = chapters.reduce((a, c) => a + c.total_lessons, 0)
+  const done = chapters.reduce((a, c) => a + c.completed_lessons, 0)
+  const overall = total ? Math.round((done / total) * 100) : 0
+  const art = subjectArtwork(name)
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
-        <Text style={styles.title}>Progression</Text>
-        <View style={{ width: 20 }} />
+        <BackButton label="Matières" />
       </View>
 
-      <View style={styles.tabs}>
-        {subjects.map((s) => (
-          <TouchableOpacity key={s.id} style={[styles.tab, active === s.id && styles.tabActive]} onPress={() => setActive(s.id)}>
-            <Text style={[styles.tabText, active === s.id && styles.tabTextActive]}>{s.name}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
+        <ImageBackground source={art} style={styles.hero} imageStyle={styles.heroImg}>
+          <View style={styles.heroShade} />
+          <Text style={styles.heroKicker}>PROGRESSION</Text>
+          <Text style={styles.heroTitle} numberOfLines={2}>{name}</Text>
+          <View style={styles.heroRow}>
+            <View style={styles.heroTrack}><View style={[styles.heroFill, { width: `${overall}%` }]} /></View>
+            <Text style={styles.heroPct}>{overall}%</Text>
+          </View>
+          <Text style={styles.heroSub}>{done} leçon{done > 1 ? 's' : ''} terminée{done > 1 ? 's' : ''} sur {total}</Text>
+        </ImageBackground>
 
-      {loadingList ? (
-        <ActivityIndicator style={{ flex: 1 }} color={colors.primary} />
-      ) : (
-        <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
-          {chapters.map((c, i) => {
-            const isNext = i === nextIndex
-            return (
-              <View key={c.id} style={styles.row}>
-                <View style={styles.rail}>
-                  <View style={[styles.dot, c.is_completed && styles.dotDone, isNext && styles.dotNext]}>
-                    <Text style={styles.dotText}>{c.is_completed ? '✓' : !c.is_unlocked ? '🔒' : i + 1}</Text>
-                  </View>
-                  {i < chapters.length - 1 && <View style={[styles.line, c.is_completed && styles.lineDone]} />}
-                </View>
-                <TouchableOpacity
-                  style={[styles.card, !c.is_unlocked && styles.cardLocked, isNext && styles.cardNext]}
-                  activeOpacity={c.is_unlocked ? 0.85 : 1}
-                  disabled={!c.is_unlocked}
-                  onPress={() => router.push(`/chapitre/${c.id}` as any)}
-                >
-                  <Text style={{ fontSize: 20 }}>{subjectIcon(c.domain_name)}</Text>
-                  <View style={{ flex: 1 }}>
-                    <Text style={[styles.cardTitle, !c.is_unlocked && styles.textLocked]} numberOfLines={1}>{c.title}</Text>
-                    <Text style={styles.cardSub} numberOfLines={1}>{c.domain_name}{c.month_label ? ` · ${c.month_label}` : ''}</Text>
-                  </View>
-                  {c.is_unlocked && c.total_lessons > 0 && (
-                    <Text style={styles.cardPct}>{Math.round((c.completed_lessons / c.total_lessons) * 100)}%</Text>
-                  )}
-                </TouchableOpacity>
+        <Text style={styles.sectionTitle}>Chapitres</Text>
+        {chapters.map((c, i) => {
+          const isNext = i === nextIndex
+          const pct = c.total_lessons ? Math.round((c.completed_lessons / c.total_lessons) * 100) : 0
+          return (
+            <FadeIn key={c.id} delay={120 + Math.min(i, 10) * 55}>
+            <TouchableOpacity
+              style={[styles.card, !c.is_unlocked && styles.cardLocked, isNext && styles.cardNext]}
+              activeOpacity={c.is_unlocked ? 0.85 : 1}
+              disabled={!c.is_unlocked}
+              onPress={() => router.push(`/chapitre/${c.id}` as any)}
+            >
+              <ImageTile source={art} label={String(i + 1)} pct={pct} done={c.is_completed} locked={!c.is_unlocked} size={52} />
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.cardTitle, !c.is_unlocked && styles.textLocked]} numberOfLines={2}>{c.title}</Text>
+                <Text style={styles.cardSub} numberOfLines={1}>
+                  {!c.is_unlocked ? 'Bientôt débloqué' : c.domain_name}{c.month_label ? ` · ${c.month_label}` : ''}
+                </Text>
               </View>
-            )
-          })}
-          {chapters.length === 0 && <Text style={styles.empty}>Aucun chapitre pour cette matière.</Text>}
-        </ScrollView>
-      )}
+              {isNext ? <View style={styles.nextPill}><Text style={styles.nextText}>À suivre</Text></View> : null}
+            </TouchableOpacity>
+            </FadeIn>
+          )
+        })}
+        {chapters.length === 0 && <Text style={styles.empty}>Aucun chapitre pour cette matière.</Text>}
+      </ScrollView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 56, paddingBottom: 12 },
-  back: { fontSize: 24, color: colors.text },
-  title: { fontSize: 20, fontFamily: fonts.headingBlack, color: colors.text },
-  tabs: { flexDirection: 'row', gap: 8, paddingHorizontal: 16, paddingBottom: 14 },
-  tab: { flex: 1, paddingVertical: 9, borderRadius: radius.full, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder, alignItems: 'center' },
-  tabActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  tabText: { fontSize: 12, fontWeight: '800', color: colors.textMuted },
-  tabTextActive: { color: '#fff' },
+  header: { paddingHorizontal: 16, paddingTop: 52, paddingBottom: 10 },
   list: { paddingHorizontal: 16, paddingBottom: 40 },
-  row: { flexDirection: 'row', gap: 12 },
-  rail: { alignItems: 'center', width: 32 },
-  dot: { width: 28, height: 28, borderRadius: 14, backgroundColor: colors.card, borderWidth: 2, borderColor: colors.cardBorder, alignItems: 'center', justifyContent: 'center' },
-  dotDone: { backgroundColor: colors.primary, borderColor: colors.primary },
-  dotNext: { borderColor: colors.primary },
-  dotText: { fontSize: 11, fontWeight: '900', color: colors.textMuted },
-  line: { width: 2, flex: 1, minHeight: 24, backgroundColor: colors.cardBorder, marginVertical: 2 },
-  lineDone: { backgroundColor: colors.primary },
-  card: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: colors.card, borderRadius: radius.md, padding: 12, marginBottom: 12, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
-  cardLocked: { backgroundColor: '#F1F4F9', borderColor: '#E3E9F2' },
-  cardNext: { borderColor: colors.primary, borderWidth: 1.5 },
-  cardTitle: { fontSize: 13, fontWeight: '800', color: colors.text },
-  cardSub: { fontSize: 11, color: colors.textMuted, marginTop: 2 },
-  cardPct: { fontSize: 11, fontWeight: '900', color: colors.primary },
+  hero: { borderRadius: 26, padding: 20, overflow: 'hidden', marginBottom: 22, ...cardShadow },
+  heroImg: { borderRadius: 26 },
+  heroShade: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(20,92,192,0.82)' },
+  heroKicker: { color: '#ffffffcc', fontSize: 10, fontFamily: fonts.body, letterSpacing: 1.2 },
+  heroTitle: { color: '#fff', fontSize: 24, fontFamily: fonts.headingBlack, marginTop: 4, marginBottom: 14 },
+  heroRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  heroTrack: { flex: 1, height: 10, backgroundColor: '#ffffff33', borderRadius: radius.full, padding: 2, overflow: 'hidden' },
+  heroFill: { height: '100%', backgroundColor: colors.yellow, borderRadius: radius.full },
+  heroPct: { color: colors.yellow, fontSize: 15, fontFamily: fonts.headingBlack },
+  heroSub: { color: '#ffffffe6', fontSize: 12, marginTop: 8 },
+  sectionTitle: { fontSize: 18, fontFamily: fonts.headingBlack, color: colors.text, marginBottom: 12 },
+  card: {
+    flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.card, borderRadius: 20,
+    padding: 12, marginBottom: 12, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow,
+  },
+  cardLocked: { backgroundColor: '#F1F4F9', borderColor: '#E3E9F2', shadowOpacity: 0, elevation: 0 },
+  cardNext: { borderColor: colors.primary, borderWidth: 2 },
+  cardTitle: { fontSize: 14, fontFamily: fonts.body, color: colors.text },
+  cardSub: { fontSize: 11, color: colors.textMuted, marginTop: 3 },
   textLocked: { color: colors.textMuted },
+  nextPill: { backgroundColor: colors.primary, paddingHorizontal: 9, paddingVertical: 4, borderRadius: 999 },
+  nextText: { color: '#fff', fontSize: 10, fontFamily: fonts.body },
   empty: { textAlign: 'center', color: colors.textMuted, paddingTop: 40 },
 })

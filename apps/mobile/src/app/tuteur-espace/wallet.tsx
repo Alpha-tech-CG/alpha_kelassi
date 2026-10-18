@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Alert } from 'react-native'
-import { useRouter, useFocusEffect } from 'expo-router'
+import { useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Txn { id: string; amount_fcfa: number; type: 'credit' | 'withdrawal'; status: string; created_at: string }
 
@@ -23,7 +24,6 @@ async function api(path: string, init?: RequestInit) {
 const AMOUNTS = [1000, 2000, 5000]
 
 export default function WalletScreen() {
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [balance, setBalance] = useState(0)
   const [txns, setTxns] = useState<Txn[]>([])
@@ -61,9 +61,9 @@ export default function WalletScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Portefeuille</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <View style={styles.balanceCard}>

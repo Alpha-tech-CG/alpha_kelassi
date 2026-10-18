@@ -7,6 +7,7 @@ import { pickAndUpload } from '../../lib/uploads'
 import { api, planErrorOf, type LockedInfo, type UsageView } from '../../lib/billing'
 import { LockedFeature } from '../../components/LockedFeature'
 import { QuotaBar } from '../../components/QuotaBar'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Subject { id: string; name: string }
 type Slot = { path: string; uri: string } | null
@@ -96,9 +97,9 @@ export default function NouvelleCorrection() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Faire corriger</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {locked ? <LockedFeature info={locked} /> : <QuotaBar label="Corrections incluses ce mois-ci" usage={quota} />}

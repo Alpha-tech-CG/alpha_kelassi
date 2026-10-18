@@ -4,6 +4,7 @@ import { useRouter, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Profile {
   user_id: string
@@ -63,9 +64,9 @@ export default function TuteurEspace() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load() }} tintColor={colors.primary} />}
     >
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Espace tuteur</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {/* Non inscrit */}

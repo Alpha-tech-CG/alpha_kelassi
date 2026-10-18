@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
 import { pickAndUpload } from '../../lib/uploads'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Subject { id: string; name: string }
 type Doc = { path: string; uri: string } | null
@@ -72,9 +73,9 @@ export default function InscriptionTuteur() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Devenir tuteur</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <Text style={styles.label}>Matières que tu peux corriger</Text>

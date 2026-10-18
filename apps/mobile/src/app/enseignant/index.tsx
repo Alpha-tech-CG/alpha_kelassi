@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react'
 import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
-import { useRouter, useFocusEffect } from 'expo-router'
+import { useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { pickAndUpload } from '../../lib/uploads'
+import { BackButton } from '../../components/BackButton'
 
 type Doc = { path: string; uri: string } | null
 interface Profile { user_id: string; is_verified: boolean; school: string | null }
@@ -15,7 +16,6 @@ async function token() {
 }
 
 export default function EnseignantScreen() {
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [school, setSchool] = useState('')
@@ -61,7 +61,7 @@ export default function EnseignantScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Espace enseignant</Text>
       </View>
 

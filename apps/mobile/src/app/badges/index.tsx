@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
-import { useRouter } from 'expo-router'
+import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 // Catalogue miroir de apps/web|api/src/lib/xp.ts (BADGES).
 const CATALOG: { code: string; label: string; icon: string; description: string }[] = [
@@ -15,7 +15,6 @@ const CATALOG: { code: string; label: string; icon: string; description: string 
 ]
 
 export default function BadgesScreen() {
-  const router = useRouter()
   const [earned, setEarned] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
 
@@ -37,9 +36,9 @@ export default function BadgesScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Mes badges</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <View style={styles.counter}>

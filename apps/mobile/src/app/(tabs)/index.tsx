@@ -6,11 +6,12 @@ import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL, fonts } from '../../lib/theme'
 import { subjectArtwork } from '../../lib/subjectArtwork'
 import { SolarIcon } from '../../icons/solar'
+import { FadeIn } from '../../components/FadeIn'
 
 interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
 
 const ACTIONS = [
-  { label: 'Tuteur',     icon: 'chat',     route: '/(tabs)/tuteur' },
+  { label: 'Tuteur',     icon: 'chat',     route: '/tuteurs' },
   { label: 'Correction', icon: 'notebook', route: '/correction' },
   { label: 'Groupe',     icon: 'group',    route: '/groupes' },
   { label: 'Classement', icon: 'crown',    route: '/classements' },
@@ -101,24 +102,28 @@ export default function HomeScreen() {
         </View>
 
         {/* Carte progression (chevauche le header) */}
+        <FadeIn delay={60}>
         <View style={styles.progCard}>
           <View style={styles.progTop}>
             <Text style={styles.progTitle}>PROGRESSION {lvl}</Text>
             <Text style={styles.progCount}>{started} / {total} matières</Text>
           </View>
           <View style={styles.progTrack}><View style={[styles.progFill, { width: `${overall}%` }]} /></View>
-          <Text style={styles.progHint}>🎖️ Continue — {overall}% de ton parcours complété !</Text>
+          <Text style={styles.progHint}>Continue : {overall}% de ton parcours complété !</Text>
         </View>
+        </FadeIn>
       </View>
 
       <View style={styles.body}>
         {/* Raccourcis */}
         <View style={styles.actions}>
-          {ACTIONS.map((a) => (
-            <TouchableOpacity key={a.label} style={styles.action} onPress={() => router.push(a.route as any)}>
-              <View style={styles.actionBox}><SolarIcon name={a.icon} size={26} color={colors.primary} /></View>
-              <Text style={styles.actionLabel}>{a.label}</Text>
-            </TouchableOpacity>
+          {ACTIONS.map((a, i) => (
+            <FadeIn key={a.label} delay={140 + i * 50} style={styles.action}>
+              <TouchableOpacity style={styles.actionInner} onPress={() => router.push(a.route as any)}>
+                <View style={styles.actionBox}><SolarIcon name={a.icon} size={26} color={colors.primary} /></View>
+                <Text style={styles.actionLabel}>{a.label}</Text>
+              </TouchableOpacity>
+            </FadeIn>
           ))}
         </View>
 
@@ -131,8 +136,9 @@ export default function HomeScreen() {
           <Text style={styles.empty}>Choisis ton parcours pour voir tes matières.</Text>
         ) : (
           <View style={styles.grid}>
-            {subjects.slice(0, 6).map((s) => (
-              <TouchableOpacity key={s.id} style={styles.subjectCard} onPress={() => router.push(`/parcours/${s.id}` as any)}>
+            {subjects.slice(0, 6).map((s, i) => (
+              <FadeIn key={s.id} delay={420 + i * 70} style={styles.subjectCell}>
+              <TouchableOpacity style={styles.subjectCard} onPress={() => router.push(`/parcours/${s.id}` as any)}>
                 <Image source={subjectArtwork(s.name)} style={styles.subjectImg} resizeMode="cover" />
                 <Text style={styles.subjectName} numberOfLines={1}>{s.name}</Text>
                 <View style={styles.subjectProgRow}>
@@ -140,19 +146,22 @@ export default function HomeScreen() {
                   <Text style={styles.subjectPct}>{s.progress}%</Text>
                 </View>
               </TouchableOpacity>
+              </FadeIn>
             ))}
           </View>
         )}
 
         {/* CTA Cognix */}
+        <FadeIn delay={700}>
         <TouchableOpacity style={styles.cta} onPress={() => router.push('/(tabs)/tuteur')}>
           <View style={{ flex: 1 }}>
             <Text style={styles.ctaTitle}>Besoin d'aide ?</Text>
             <Text style={styles.ctaSub}>Demande à Cognix, ton tuteur IA !</Text>
-            <View style={styles.ctaBtn}><Text style={styles.ctaBtnText}>PARLER À KELASSI →</Text></View>
+            <View style={styles.ctaBtn}><Text style={styles.ctaBtnText}>PARLER À COGNIX →</Text></View>
           </View>
-          <Image source={require('../../../assets/kelassi-mascot.png')} style={{ width: 92, height: 92 }} resizeMode="contain" />
+          <Image source={require('../../../assets/cognix-tutor.png')} style={{ width: 104, height: 104, marginVertical: -12 }} resizeMode="contain" />
         </TouchableOpacity>
+        </FadeIn>
       </View>
     </ScrollView>
   )
@@ -186,7 +195,8 @@ const styles = StyleSheet.create({
   calHint: { fontSize: 12, color: colors.textMuted, marginTop: 2, fontWeight: '600' },
   calArrow: { fontSize: 16, color: colors.primary, fontWeight: '900' },
   actions: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 18, marginBottom: 28 },
-  action: { alignItems: 'center', gap: 6, width: '30%' },
+  action: { width: '30%' },
+  actionInner: { alignItems: 'center', gap: 6 },
   actionBox: { width: 56, height: 56, borderRadius: 18, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
   actionLabel: { fontSize: 10, fontWeight: '900', color: colors.textMuted, textTransform: 'uppercase', textAlign: 'center' },
   sectionHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
@@ -194,7 +204,8 @@ const styles = StyleSheet.create({
   seeAll: { color: colors.primary, fontSize: 11, fontWeight: '900', letterSpacing: 1 },
   empty: { color: colors.textMuted, fontSize: 14, paddingVertical: 20, textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
-  subjectCard: { width: '46%', flexGrow: 1, backgroundColor: '#fff', borderRadius: 26, padding: 18, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
+  subjectCell: { width: '46%', flexGrow: 1 },
+  subjectCard: { backgroundColor: '#fff', borderRadius: 26, padding: 18, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
   subjectImg: { width: '100%', height: 84, borderRadius: 16, marginBottom: 14, backgroundColor: colors.primaryTint },
   subjectName: { fontSize: 15, fontWeight: '900', color: colors.text, marginBottom: 8 },
   subjectProgRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },

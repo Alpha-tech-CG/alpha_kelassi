@@ -8,12 +8,13 @@
  */
 import { useCallback, useEffect, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, RefreshControl } from 'react-native'
-import { useRouter } from 'expo-router'
 import { colors, radius, cardShadow, fonts } from '../lib/theme'
 import { useLevel } from '../hooks/useLevel'
 import { listCachedEntries, cacheSize, clearCache, readCachedLesson, type CachedEntry } from '../lib/lessonCache'
 import { syncAllForOffline, derniereSynchro, indexHorsLigne, type SyncProgress } from '../lib/offlineSync'
 import { enAttente, viderLaFile } from '../lib/outbox'
+import { BackButton } from '../components/BackButton'
+import { SolarIcon } from '../icons/solar'
 
 interface ChapitreLocal { key: string; titre: string; taille: number; lecons: number }
 
@@ -29,7 +30,6 @@ function dateCourte(d: Date): string {
 }
 
 export default function HorsLigneScreen() {
-  const router = useRouter()
   const { level, track } = useLevel()
 
   const [chargement, setChargement] = useState(true)
@@ -135,81 +135,114 @@ export default function HorsLigneScreen() {
   if (chargement) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ padding: 16, paddingBottom: 48 }}
-      refreshControl={<RefreshControl refreshing={false} onRefresh={relire} />}
-    >
+    <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
-        <Text style={styles.titre}>Mes cours hors-ligne</Text>
+        <BackButton />
       </View>
-
-      <View style={styles.carte}>
-        <Text style={styles.gros}>{chapitres.length}</Text>
-        <Text style={styles.sous}>chapitre{chapitres.length > 1 ? 's' : ''} disponible{chapitres.length > 1 ? 's' : ''} sans réseau</Text>
-        <Text style={styles.ligne}>Place occupée : <Text style={styles.fort}>{poids(taille)}</Text></Text>
-        <Text style={styles.ligne}>
-          Dernière mise à jour : <Text style={styles.fort}>{derniere ? dateCourte(derniere) : 'jamais'}</Text>
-        </Text>
-      </View>
-
-      {enFile > 0 && (
-        <TouchableOpacity style={[styles.carte, styles.attente]} onPress={envoyerEnAttente}>
-          <Text style={styles.attenteTitre}>⏳ {enFile} action(s) en attente d'envoi</Text>
-          <Text style={styles.sous}>Tes réponses validées sans réseau partiront dès que tu seras connecté. Touche ici pour essayer maintenant.</Text>
-        </TouchableOpacity>
-      )}
-
-      <TouchableOpacity style={[styles.bouton, synchro && styles.boutonOff]} onPress={mettreAJour} disabled={synchro}>
-        {synchro
-          ? <Text style={styles.boutonTexte}>
-              {avancement && avancement.total > 0 ? `Mise à jour… ${avancement.done}/${avancement.total}` : 'Préparation…'}
-            </Text>
-          : <Text style={styles.boutonTexte}>Mettre à jour mes cours</Text>}
-      </TouchableOpacity>
-      <Text style={styles.aide}>Seuls les chapitres modifiés depuis la dernière fois sont retéléchargés.</Text>
-
-      {chapitres.length > 0 && (
-        <>
-          <Text style={styles.sectionTitre}>Sur cet appareil</Text>
-          {chapitres.map((c) => (
-            <View key={c.key} style={styles.item}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.itemTitre} numberOfLines={2}>{c.titre}</Text>
-                <Text style={styles.sous}>{c.lecons} leçon{c.lecons > 1 ? 's' : ''} · {poids(c.taille)}</Text>
-              </View>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        refreshControl={<RefreshControl refreshing={false} onRefresh={relire} tintColor={colors.primary} />}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.hero}>
+          <View style={styles.heroIcon}><SolarIcon name="cloud" size={30} color="#fff" /></View>
+          <Text style={styles.heroKicker}>HORS-LIGNE</Text>
+          <Text style={styles.heroTitle}>Mes cours sans réseau</Text>
+          <View style={styles.stats}>
+            <View style={styles.stat}>
+              <Text style={styles.statValue}>{chapitres.length}</Text>
+              <Text style={styles.statLabel}>chapitre{chapitres.length > 1 ? 's' : ''}</Text>
             </View>
-          ))}
+            <View style={styles.statSep} />
+            <View style={styles.stat}>
+              <Text style={styles.statValue}>{poids(taille)}</Text>
+              <Text style={styles.statLabel}>sur le téléphone</Text>
+            </View>
+          </View>
+          <Text style={styles.heroSub}>
+            Dernière mise à jour : {derniere ? dateCourte(derniere) : 'jamais'}
+          </Text>
+        </View>
 
-          <TouchableOpacity style={styles.supprimer} onPress={toutSupprimer}>
-            <Text style={styles.supprimerTexte}>Tout supprimer de cet appareil</Text>
+        {enFile > 0 && (
+          <TouchableOpacity style={styles.attente} onPress={envoyerEnAttente} activeOpacity={0.85}>
+            <Text style={styles.attenteTitre}>{enFile} action{enFile > 1 ? 's' : ''} en attente d'envoi</Text>
+            <Text style={styles.attenteTexte}>
+              Tes réponses validées sans réseau partiront dès que tu seras connecté. Touche ici pour essayer maintenant.
+            </Text>
           </TouchableOpacity>
-        </>
-      )}
-    </ScrollView>
+        )}
+
+        <TouchableOpacity style={[styles.bouton, synchro && styles.boutonOff]} onPress={mettreAJour} disabled={synchro} activeOpacity={0.85}>
+          {synchro && <ActivityIndicator color="#fff" style={{ marginRight: 8 }} />}
+          <Text style={styles.boutonTexte}>
+            {synchro
+              ? avancement && avancement.total > 0 ? `Mise à jour… ${avancement.done}/${avancement.total}` : 'Préparation…'
+              : 'Mettre à jour mes cours'}
+          </Text>
+        </TouchableOpacity>
+        <Text style={styles.aide}>Seuls les chapitres modifiés depuis la dernière fois sont retéléchargés.</Text>
+
+        {chapitres.length === 0 ? (
+          <View style={styles.vide}>
+            <Text style={styles.videTitre}>Aucun cours enregistré</Text>
+            <Text style={styles.videTexte}>
+              Touche « Mettre à jour mes cours » avec du réseau : tous les chapitres de ta classe seront gardés sur ce téléphone.
+            </Text>
+          </View>
+        ) : (
+          <>
+            <Text style={styles.sectionTitre}>Sur ce téléphone</Text>
+            {chapitres.map((c, i) => (
+              <View key={c.key} style={styles.item}>
+                <View style={styles.itemNum}><Text style={styles.itemNumText}>{i + 1}</Text></View>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={styles.itemTitre} numberOfLines={2}>{c.titre}</Text>
+                  <Text style={styles.itemSous}>{c.lecons} leçon{c.lecons > 1 ? 's' : ''} · {poids(c.taille)}</Text>
+                </View>
+              </View>
+            ))}
+
+            <TouchableOpacity style={styles.supprimer} onPress={toutSupprimer}>
+              <Text style={styles.supprimerTexte}>Tout supprimer de ce téléphone</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </ScrollView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  header: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 16 },
-  back: { fontSize: 24, color: colors.text },
-  titre: { fontFamily: fonts.heading, fontSize: 20, color: colors.text, flex: 1 },
-  carte: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 16, marginBottom: 12, ...cardShadow },
-  gros: { fontFamily: fonts.heading, fontSize: 32, color: colors.primary },
-  sous: { fontSize: 13, color: colors.textMuted, marginTop: 2 },
-  ligne: { fontSize: 14, color: colors.text, marginTop: 8 },
-  fort: { fontFamily: fonts.body },
-  attente: { borderWidth: 1, borderColor: colors.cardBorder },
-  attenteTitre: { fontFamily: fonts.body, fontSize: 15, color: colors.text },
-  bouton: { backgroundColor: colors.primary, borderRadius: radius.lg, paddingVertical: 14, alignItems: 'center', marginTop: 4 },
-  boutonOff: { opacity: 0.7 },
+  header: { paddingHorizontal: 16, paddingTop: 52, paddingBottom: 10 },
+  scroll: { paddingHorizontal: 16, paddingBottom: 48 },
+  hero: { backgroundColor: colors.primary, borderRadius: 26, padding: 20, marginBottom: 16, ...cardShadow },
+  heroIcon: { width: 52, height: 52, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
+  heroKicker: { color: '#ffffffcc', fontSize: 10, fontFamily: fonts.body, letterSpacing: 1.2 },
+  heroTitle: { color: '#fff', fontSize: 22, fontFamily: fonts.headingBlack, marginTop: 2 },
+  stats: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.14)', borderRadius: 18, paddingVertical: 12, marginTop: 16 },
+  stat: { flex: 1, alignItems: 'center' },
+  statSep: { width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.25)' },
+  statValue: { color: '#fff', fontSize: 20, fontFamily: fonts.headingBlack },
+  statLabel: { color: '#ffffffcc', fontSize: 11, marginTop: 2 },
+  heroSub: { color: '#ffffffd9', fontSize: 12, marginTop: 12 },
+  attente: { backgroundColor: '#FFF8E6', borderRadius: radius.lg, padding: 14, marginBottom: 14, borderWidth: 1, borderColor: '#F2D48A' },
+  attenteTitre: { fontFamily: fonts.body, fontSize: 14, color: '#5C4300' },
+  attenteTexte: { fontSize: 12, color: '#5C4300', marginTop: 4, lineHeight: 17 },
+  bouton: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.primary, borderRadius: radius.lg, paddingVertical: 15, ...cardShadow },
+  boutonOff: { opacity: 0.75 },
   boutonTexte: { color: colors.onPrimary, fontFamily: fonts.body, fontSize: 15 },
-  aide: { fontSize: 12, color: colors.textMuted, textAlign: 'center', marginTop: 8, marginBottom: 20 },
-  sectionTitre: { fontFamily: fonts.heading, fontSize: 16, color: colors.text, marginBottom: 8 },
-  item: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: radius.md, padding: 12, marginBottom: 8 },
+  aide: { fontSize: 12, color: colors.textMuted, textAlign: 'center', marginTop: 8, marginBottom: 22, paddingHorizontal: 10 },
+  vide: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 18, borderWidth: 1, borderColor: colors.cardBorder },
+  videTitre: { fontSize: 15, fontFamily: fonts.heading, color: colors.text },
+  videTexte: { fontSize: 13, color: colors.textMuted, marginTop: 6, lineHeight: 19 },
+  sectionTitre: { fontFamily: fonts.headingBlack, fontSize: 17, color: colors.text, marginBottom: 10 },
+  item: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.card, borderRadius: radius.lg, padding: 12, marginBottom: 10, borderWidth: 1, borderColor: colors.cardBorder },
+  itemNum: { width: 36, height: 36, borderRadius: 12, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
+  itemNumText: { color: colors.primary, fontFamily: fonts.heading, fontSize: 14 },
   itemTitre: { fontSize: 14, color: colors.text, fontFamily: fonts.body },
-  supprimer: { marginTop: 16, paddingVertical: 12, alignItems: 'center' },
+  itemSous: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
+  supprimer: { marginTop: 14, paddingVertical: 14, alignItems: 'center', borderRadius: radius.lg, borderWidth: 1, borderColor: '#F3C4C3', backgroundColor: '#FDF1F1' },
   supprimerTexte: { color: colors.red, fontSize: 14, fontFamily: fonts.body },
 })

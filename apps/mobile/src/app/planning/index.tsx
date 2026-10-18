@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow } from '../../lib/theme'
 import { planErrorOf } from '../../lib/billing'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Plan { id: string; level: string; title: string; exam_date: string; days_remaining: number }
 interface ExamEvent { id: string; level: string; label: string; exam_date: string }
@@ -120,9 +121,9 @@ export default function PlanningScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Mon planning</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {!plan ? (

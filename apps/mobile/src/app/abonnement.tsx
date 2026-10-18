@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator } from 'react-native'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { colors, radius, cardShadow, fonts } from '../lib/theme'
 import { api, dateFr, formatFcfa, planLabel, type PlanId, type PlanOffer } from '../lib/billing'
 import { useBilling } from '../hooks/useBilling'
 import { QuotaBar } from '../components/QuotaBar'
+import { BackButton, BACK_BUTTON_WIDTH } from '../components/BackButton'
 
 type Interval = 'month' | 'year'
 type Tone = 'info' | 'ok' | 'error'
@@ -12,7 +13,6 @@ type Tone = 'info' | 'ok' | 'error'
 const LEVEL: Record<PlanId, number> = { free: 0, starter: 1, pro: 2, pro_max: 3 }
 
 export default function AbonnementScreen() {
-  const router = useRouter()
   const params = useLocalSearchParams<{ plan?: string }>()
   const { me, reload } = useBilling()
   const [plans, setPlans] = useState<PlanOffer[] | null>(null)
@@ -96,11 +96,9 @@ export default function AbonnementScreen() {
   return (
     <ScrollView ref={scrollRef} style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12} accessibilityRole="button" accessibilityLabel="Retour">
-          <Text style={styles.back}>←</Text>
-        </TouchableOpacity>
+        <BackButton />
         <Text style={styles.title} accessibilityRole="header">Formules Cognix</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {/* Ma formule */}

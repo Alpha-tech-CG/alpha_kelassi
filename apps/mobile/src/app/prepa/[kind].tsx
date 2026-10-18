@@ -6,6 +6,7 @@ import { useLevel } from '../../hooks/useLevel'
 import { useBilling } from '../../hooks/useBilling'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
 import { isRayon, rayonMeta, MODE_LABEL, type ExamMode } from '../../lib/prepa'
+import { BackButton } from '../../components/BackButton'
 
 /**
  * Un rayon de l'espace Prépa : l'élève choisit sa matière, puis une épreuve
@@ -148,10 +149,10 @@ export default function PrepaRayonScreen() {
 
   const header = (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => (subject ? setSubjectId(null) : router.back())} hitSlop={12}
-        accessibilityRole="button" accessibilityLabel="Retour">
-        <Text style={styles.back}>←</Text>
-      </TouchableOpacity>
+      <BackButton
+        label={subject ? 'Matières' : 'Retour'}
+        onPress={subject ? () => setSubjectId(null) : undefined}
+      />
       <Text style={styles.kicker}>{meta.emoji}  {meta.label.toUpperCase()}</Text>
       <Text style={styles.title}>{subject ? subject.name : 'Choisis ta matière'}</Text>
       {!subject && <Text style={styles.subtitle}>{meta.desc}</Text>}

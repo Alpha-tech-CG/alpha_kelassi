@@ -4,6 +4,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow } from '../../lib/theme'
 import { subjectArtwork } from '../../lib/subjectArtwork'
+import { ImageTile } from '../../components/ImageTile'
+import { FadeIn } from '../../components/FadeIn'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface ChapterVM { id: string; title: string; description: string | null; pct: number; total: number; done: number }
 
@@ -56,9 +59,9 @@ export default function ParcoursSubjectScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.hbtn} onPress={() => router.back()}><Text style={styles.hbtnText}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.htitle} numberOfLines={1}>{name}</Text>
-        <View style={styles.hbtn} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
@@ -71,7 +74,7 @@ export default function ParcoursSubjectScreen() {
               <Text style={styles.heroPct}>{overall}%</Text>
             </View>
             <View style={styles.heroTrack}><View style={[styles.heroFill, { width: `${overall}%` }]} /></View>
-            <Text style={styles.heroSub}>🏆 {doneLessons} leçons complétées sur {totalLessons}</Text>
+            <Text style={styles.heroSub}>{doneLessons} leçon{doneLessons > 1 ? 's' : ''} terminée{doneLessons > 1 ? 's' : ''} sur {totalLessons}</Text>
           </View>
         </ImageBackground>
 
@@ -82,21 +85,24 @@ export default function ParcoursSubjectScreen() {
 
         {chapters.length === 0 ? (
           <Text style={styles.empty}>Chapitres bientôt disponibles.</Text>
-        ) : chapters.map((ch) => {
+        ) : chapters.map((ch, i) => {
           const status = ch.pct === 100 ? 'done' : ch.pct > 0 ? 'progress' : 'todo'
-          const box = status === 'done' ? styles.boxDone : status === 'progress' ? styles.boxProgress : styles.boxTodo
-          const emoji = status === 'done' ? '✅' : status === 'progress' ? '▶️' : '📖'
-          const label = status === 'done' ? 'Terminé' : status === 'progress' ? `En cours · ${ch.pct}%` : 'À commencer'
+          const label =
+            status === 'done' ? 'Terminé'
+              : status === 'progress' ? `En cours · ${ch.pct}%`
+                : `${ch.total} leçon${ch.total > 1 ? 's' : ''} · À commencer`
           return (
-            <TouchableOpacity key={ch.id} style={[styles.row, status === 'progress' && styles.rowActive]} activeOpacity={0.85}
+            <FadeIn key={ch.id} delay={120 + Math.min(i, 10) * 55}>
+            <TouchableOpacity style={[styles.row, status === 'progress' && styles.rowActive]} activeOpacity={0.85}
               onPress={() => router.push(`/chapitre/${ch.id}` as any)}>
-              <View style={[styles.rowIcon, box]}><Text style={{ fontSize: 22 }}>{emoji}</Text></View>
+              <ImageTile source={subjectArtwork(name)} label={String(i + 1)} pct={ch.pct} done={status === 'done'} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.rowTitle} numberOfLines={2}>{ch.title}</Text>
-                <Text style={[styles.rowStatus, status === 'done' && { color: colors.primary }, status === 'progress' && { color: colors.primary }]}>{label}</Text>
+                <Text style={[styles.rowStatus, status !== 'todo' && { color: colors.primary }]}>{label}</Text>
               </View>
               <Text style={styles.chevron}>›</Text>
             </TouchableOpacity>
+            </FadeIn>
           )
         })}
       </ScrollView>
@@ -112,7 +118,7 @@ const styles = StyleSheet.create({
   htitle: { flex: 1, textAlign: 'center', fontSize: 18, fontWeight: '900', color: colors.text },
   hero: { borderRadius: 28, padding: 20, overflow: 'hidden', ...cardShadow },
   heroImg: { borderRadius: 28 },
-  heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(15,143,79,0.82)' },
+  heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(20,92,192,0.82)' },
   heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   heroLabel: { color: '#ffffffcc', fontSize: 10, fontWeight: '900', letterSpacing: 1 },
   heroPct: { color: colors.yellow, fontSize: 15, fontWeight: '900' },
@@ -126,10 +132,6 @@ const styles = StyleSheet.create({
   empty: { color: colors.textMuted, textAlign: 'center', paddingVertical: 24 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: '#fff', borderRadius: 24, padding: 16, borderWidth: 1, borderColor: colors.cardBorder, marginBottom: 12, ...cardShadow },
   rowActive: { borderWidth: 2, borderColor: colors.primary },
-  rowIcon: { width: 54, height: 54, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
-  boxDone: { backgroundColor: colors.primaryTint },
-  boxProgress: { backgroundColor: colors.primary },
-  boxTodo: { backgroundColor: colors.primaryTint },
   rowTitle: { fontSize: 15, fontWeight: '900', color: colors.text },
   rowStatus: { fontSize: 11, fontWeight: '800', color: colors.textMuted, marginTop: 3, textTransform: 'uppercase', letterSpacing: 0.3 },
   chevron: { fontSize: 26, color: colors.outlineVariant },

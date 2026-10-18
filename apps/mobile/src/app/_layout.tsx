@@ -161,13 +161,16 @@ export default function RootLayout() {
     <>
       {appReady ? (
         <>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
+        {/* Transitions animées entre les écrans : glissement latéral, fondu pour les
+            écrans de passage (connexion, choix du parcours). */}
+        <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right', animationDuration: 280 }}>
+          <Stack.Screen name="(auth)" options={{ animation: 'fade' }} />
+          <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
           <Stack.Screen name="cours/[id]" options={{ headerShown: false }} />
           <Stack.Screen name="examens/[id]" options={{ headerShown: true, title: '' }} />
-          <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
-          <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
+          {/* L'écran a son propre en-tête (bouton retour + compteur) */}
+          <Stack.Screen name="flashcards/index" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }} />
         </Stack>
         <StatusBar style={splashDone ? 'dark' : 'light'} backgroundColor={splashDone ? '#F4F8FE' : SPLASH_BG} />
         {/* Verrouillage biométrique/PIN : overlay plein écran par-dessus la

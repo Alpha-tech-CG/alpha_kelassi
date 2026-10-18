@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Share } from 'react-native'
-import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
 
 export default function InviterParent() {
-  const router = useRouter()
   const [code, setCode] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -19,7 +18,7 @@ export default function InviterParent() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Inviter un parent</Text>
       </View>
 

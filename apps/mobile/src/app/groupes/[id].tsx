@@ -9,6 +9,7 @@ import { API_URL } from '../../lib/config'
 import { colors, radius, fonts } from '../../lib/theme'
 import { newRequestKey, planErrorOf } from '../../lib/billing'
 import { useBilling } from '../../hooks/useBilling'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Msg { id: string; sender_id: string; content: string; created_at: string; is_priority?: boolean }
 
@@ -130,9 +131,9 @@ export default function GroupChatScreen() {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={90}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title} numberOfLines={1}>{groupName}</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <FlatList

@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow, LEVEL_LABEL, levelBadgeStyle } from '../../lib/theme'
 import { subjectArtwork } from '../../lib/subjectArtwork'
+import { FadeIn } from '../../components/FadeIn'
 
 interface Subject {
   id: string
@@ -18,16 +19,9 @@ interface Subject {
   domains: number
 }
 
-const BROWSABLE_LEVELS = Object.keys(LEVEL_LABEL)
-
 export default function MatieresScreen() {
   const router = useRouter()
-  const { level: profileLevel, track: profileTrack, isAdmin, ready } = useLevel()
-  // Un admin peut consulter n'importe quelle classe ; null = celle de son profil.
-  const [browseLevel, setBrowseLevel] = useState<string | null>(null)
-  const level = browseLevel ?? profileLevel
-  // La filière du profil ne vaut que pour la classe du profil.
-  const track = browseLevel ? null : profileTrack
+  const { level, track, ready } = useLevel()
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -116,23 +110,7 @@ export default function MatieresScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Mes Matières</Text>
-        {level && <Text style={styles.subtitle}>Programme {LEVEL_LABEL[level] ?? level}{browseLevel ? ' · consultation admin' : ''}</Text>}
-        {isAdmin && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.levelChips}>
-            {BROWSABLE_LEVELS.map((l) => {
-              const on = l === level
-              return (
-                <TouchableOpacity
-                  key={l}
-                  style={[styles.levelChip, on && styles.levelChipOn]}
-                  onPress={() => setBrowseLevel(l === profileLevel ? null : l)}
-                >
-                  <Text style={[styles.levelChipText, on && styles.levelChipTextOn]}>{LEVEL_LABEL[l]}</Text>
-                </TouchableOpacity>
-              )
-            })}
-          </ScrollView>
-        )}
+        {level && <Text style={styles.subtitle}>Programme {LEVEL_LABEL[level] ?? level}</Text>}
         <TextInput
           style={styles.search}
           placeholder="Rechercher une matière…"
@@ -145,17 +123,17 @@ export default function MatieresScreen() {
       <ScrollView contentContainerStyle={styles.list}>
         {filtered.length === 0 ? (
           <View style={styles.empty}>
-            <Text style={styles.emptyIcon}>📚</Text>
+            
             <Text style={styles.emptyText}>
               {level ? 'Aucune matière pour ton niveau pour le moment.' : 'Termine ton inscription pour voir tes matières.'}
             </Text>
           </View>
         ) : (
-          filtered.map((s) => {
+          filtered.map((s, i) => {
             const badge = levelBadgeStyle(s.level)
             return (
+              <FadeIn key={s.id} delay={Math.min(i, 8) * 60}>
               <TouchableOpacity
-                key={s.id}
                 activeOpacity={0.85}
                 style={styles.card}
                 onPress={() => router.push(((s.level === 'cepe' || s.level === 'bepc') ? `/progression?subject=${s.id}&level=${s.level}` : `/parcours/${s.id}`) as any)}
@@ -170,7 +148,7 @@ export default function MatieresScreen() {
 
                 <View style={styles.cardBody}>
                   <Text style={styles.counts}>
-                    {s.hasChildren ? `📁 ${s.domains} domaines   📘 ${s.lessons} chapitres` : `📘 ${s.lessons} Cours   ✅ ${s.quizzes} Quiz`}
+                    {s.hasChildren ? `${s.domains} domaines · ${s.lessons} chapitres` : `${s.lessons} chapitres · ${s.quizzes} quiz`}
                   </Text>
 
                   <View style={styles.progressRow}>
@@ -182,6 +160,7 @@ export default function MatieresScreen() {
                   </View>
                 </View>
               </TouchableOpacity>
+              </FadeIn>
             )
           })
         )}
@@ -195,14 +174,6 @@ const styles = StyleSheet.create({
   header: { paddingTop: 60, paddingHorizontal: 16, paddingBottom: 12 },
   title: { fontSize: 26, fontWeight: '800', color: colors.text },
   subtitle: { fontSize: 13, color: colors.textMuted, marginTop: 2, marginBottom: 12 },
-  levelChips: { gap: 8, paddingBottom: 10 },
-  levelChip: {
-    paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.full,
-    borderWidth: 1, borderColor: colors.cardBorder, backgroundColor: colors.card,
-  },
-  levelChipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  levelChipText: { fontSize: 12, fontWeight: '700', color: colors.textMuted },
-  levelChipTextOn: { color: '#fff' },
   search: {
     backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder, borderRadius: radius.md,
     paddingHorizontal: 14, paddingVertical: 11, fontSize: 15, color: colors.text, marginTop: 4,

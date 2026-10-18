@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import {
   View,
   Text,
@@ -8,10 +8,11 @@ import {
   Animated,
   ScrollView,
 } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
-import { colors, radius, cardShadow } from '../../lib/theme'
+import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Flashcard {
   id: string
@@ -43,7 +44,6 @@ const QUALITIES = [
 ]
 
 export default function FlashcardsScreen() {
-  const router = useRouter()
   const [cards, setCards] = useState<Flashcard[]>([])
   const [index, setIndex] = useState(0)
   const [flipped, setFlipped] = useState(false)
@@ -62,7 +62,9 @@ export default function FlashcardsScreen() {
   const [generationMessage, setGenerationMessage] = useState('')
   const [remaining, setRemaining] = useState<number | null>(null)
   const [limit, setLimit] = useState<number | null>(null)
-  const flipAnim = new Animated.Value(0)
+  // Une seule valeur pour toute la vie de l'écran : recréée à chaque rendu, la
+  // carte revenait à la question dès qu'on la retournait (réponse jamais visible).
+  const flipAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
     void loadCards()
@@ -94,6 +96,7 @@ export default function FlashcardsScreen() {
       setIndex(0)
       setFlipped(false)
       setDone((json.data ?? []).length === 0)
+      if ((json.data ?? []).length === 0) setShowGenerator(true)
       setStats({ reviewed: 0, correct: 0 })
     } catch (error) {
       setLoadError(
@@ -317,16 +320,22 @@ export default function FlashcardsScreen() {
     </View>
   )
 
-  if (loading)
-    return (
-      <ActivityIndicator
-        style={{ flex: 1, backgroundColor: colors.background }}
-        color={colors.primary}
-      />
-    )
+  // Même en-tête pour tous les états de l'écran (chargement, erreur, révision, fin).
+  const shell = (body: React.ReactNode, counter?: string) => (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <BackButton />
+        <Text style={styles.headerTitle}>{counter ?? 'Flashcards'}</Text>
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
+      </View>
+      {body}
+    </View>
+  )
+
+  if (loading) return shell(<ActivityIndicator style={{ flex: 1 }} color={colors.primary} />)
 
   if (loadError) {
-    return (
+    return shell(
       <View style={styles.center}>
         <Text accessibilityRole="alert" style={styles.errorText}>
           {loadError}
@@ -340,61 +349,49 @@ export default function FlashcardsScreen() {
 
   if (done) {
     const pct = stats.reviewed > 0 ? Math.round((stats.correct / stats.reviewed) * 100) : 0
-    return (
-      <ScrollView
-        contentContainerStyle={styles.doneContainer}
-        style={{ flex: 1, backgroundColor: colors.background }}
-      >
-        <Text style={styles.doneEmoji}>{pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '💪'}</Text>
-        <Text style={styles.doneTitle}>Session terminée !</Text>
-        {stats.reviewed > 0 ? (
-          <Text style={styles.doneScore}>{pct}% de réussite</Text>
-        ) : (
-          <Text style={styles.doneSub}>Aucune carte à réviser aujourd'hui.</Text>
-        )}
+    return shell(
+      <ScrollView contentContainerStyle={styles.doneContainer} showsVerticalScrollIndicator={false}>
+        <View style={styles.doneHero}>
+          <Text style={styles.doneKicker}>{stats.reviewed > 0 ? 'SESSION TERMINÉE' : 'RÉVISION DU JOUR'}</Text>
+          {stats.reviewed > 0 ? (
+            <>
+              <Text style={styles.doneScore}>{pct}%</Text>
+              <Text style={styles.doneSubLight}>
+                de réussite sur {stats.reviewed} carte{stats.reviewed > 1 ? 's' : ''}
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.doneTitle}>Aucune carte à réviser</Text>
+              <Text style={styles.doneSubLight}>
+                Crée tes cartes à partir d'une leçon : Cognix en prépare 5 pour toi, puis te les
+                repropose au bon moment pour bien mémoriser.
+              </Text>
+            </>
+          )}
+        </View>
         {generatorPanel}
-        <TouchableOpacity
-          style={styles.restartBtn}
-          onPress={() => {
-            setStats({ reviewed: 0, correct: 0 })
-            loadCards()
-          }}
-        >
-          <Text style={styles.restartText}>Recommencer</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Text style={styles.backText}>Retour</Text>
-        </TouchableOpacity>
+        {stats.reviewed > 0 && (
+          <TouchableOpacity
+            style={styles.restartBtn}
+            onPress={() => {
+              setStats({ reviewed: 0, correct: 0 })
+              loadCards()
+            }}
+          >
+            <Text style={styles.restartText}>Réviser à nouveau</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     )
   }
 
   const card = cards[index]
-  if (!card) {
-    return (
-      <View style={styles.center}>
-        <Text style={styles.doneSub}>Aucune carte à afficher.</Text>
-      </View>
-    )
-  }
+  if (!card) return shell(<View style={styles.center}><Text style={styles.doneSub}>Aucune carte à afficher.</Text></View>)
   const progress = index / cards.length
 
-  return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.activeContainer}
-      keyboardShouldPersistTaps="handled"
-    >
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <Text style={styles.back}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.counter}>
-          {index + 1} / {cards.length}
-        </Text>
-        <View style={{ width: 24 }} />
-      </View>
-
+  return shell(
+    <ScrollView contentContainerStyle={styles.activeContainer} keyboardShouldPersistTaps="handled">
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
       </View>
@@ -409,7 +406,6 @@ export default function FlashcardsScreen() {
           {card.documents.subjects?.name} · {card.documents.title}
         </Text>
       ) : null}
-      {generatorPanel}
       {reviewError ? (
         <Text accessibilityRole="alert" style={styles.errorText}>
           {reviewError}
@@ -417,23 +413,27 @@ export default function FlashcardsScreen() {
       ) : null}
 
       {/* Carte animée */}
-      <TouchableOpacity activeOpacity={0.9} onPress={flip} style={styles.cardContainer}>
+      <TouchableOpacity activeOpacity={0.95} onPress={flip} style={styles.cardContainer}>
         <Animated.View
           style={[
             styles.cardFace,
             styles.cardFront,
-            { transform: [{ rotateY: frontInterpolate }] },
+            { transform: [{ perspective: 1000 }, { rotateY: frontInterpolate }] },
           ]}
         >
           <Text style={styles.cardLabel}>Question</Text>
           <Text style={styles.cardText}>{card.front}</Text>
-          <Text style={styles.tapHint}>Appuie pour voir la réponse</Text>
+          <Text style={styles.tapHint}>Touche la carte pour voir la réponse</Text>
         </Animated.View>
         <Animated.View
-          style={[styles.cardFace, styles.cardBack, { transform: [{ rotateY: backInterpolate }] }]}
+          style={[
+            styles.cardFace,
+            styles.cardBack,
+            { transform: [{ perspective: 1000 }, { rotateY: backInterpolate }] },
+          ]}
         >
-          <Text style={[styles.cardLabel, { color: colors.primary }]}>Réponse</Text>
-          <Text style={styles.cardText}>{card.back}</Text>
+          <Text style={[styles.cardLabel, { color: '#ffffffcc' }]}>Réponse</Text>
+          <Text style={[styles.cardText, { color: '#fff' }]}>{card.back}</Text>
         </Animated.View>
       </TouchableOpacity>
 
@@ -446,11 +446,7 @@ export default function FlashcardsScreen() {
               <TouchableOpacity
                 key={q}
                 disabled={reviewing}
-                style={[
-                  styles.qualityBtn,
-                  { backgroundColor: bg },
-                  reviewing && styles.disabledBtn,
-                ]}
+                style={[styles.qualityBtn, { backgroundColor: bg }, reviewing && styles.disabledBtn]}
                 onPress={() => void review(q)}
               >
                 <Text style={styles.qualityText}>{label}</Text>
@@ -463,12 +459,16 @@ export default function FlashcardsScreen() {
           <Text style={styles.flipBtnText}>Voir la réponse</Text>
         </TouchableOpacity>
       )}
-    </ScrollView>
+
+      <View style={{ paddingHorizontal: 20, marginTop: 28 }}>{generatorPanel}</View>
+    </ScrollView>,
+    `${index + 1} / ${cards.length}`
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background, paddingTop: 56 },
+  container: { flex: 1, backgroundColor: colors.background, paddingTop: 52 },
+  headerTitle: { fontSize: 16, fontFamily: fonts.headingBlack, color: colors.text },
   activeContainer: { paddingBottom: 40 },
   center: {
     flex: 1,
@@ -484,7 +484,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 12,
   },
-  back: { fontSize: 24, color: colors.text },
   counter: { fontSize: 14, color: colors.textMuted, fontWeight: '700' },
   progressBar: {
     height: 6,
@@ -514,7 +513,7 @@ const styles = StyleSheet.create({
     borderColor: colors.cardBorder,
     ...cardShadow,
   },
-  cardBack: { backgroundColor: '#EAF6EE', borderWidth: 1, borderColor: colors.primary },
+  cardBack: { backgroundColor: colors.primary, ...cardShadow },
   cardLabel: {
     fontSize: 11,
     fontWeight: '800',
@@ -545,9 +544,11 @@ const styles = StyleSheet.create({
     ...cardShadow,
   },
   flipBtnText: { color: '#fff', fontWeight: '800', fontSize: 15 },
-  doneEmoji: { fontSize: 56, marginBottom: 16 },
-  doneTitle: { fontSize: 22, fontWeight: '800', color: colors.text, marginBottom: 8 },
-  doneScore: { fontSize: 30, fontWeight: '800', color: colors.primary, marginBottom: 24 },
+  doneHero: { width: '100%', backgroundColor: colors.primary, borderRadius: 26, padding: 22, marginBottom: 16, ...cardShadow },
+  doneKicker: { color: '#ffffffcc', fontSize: 10, fontFamily: fonts.body, letterSpacing: 1.2, marginBottom: 6 },
+  doneSubLight: { color: '#ffffffe0', fontSize: 13, lineHeight: 19 },
+  doneTitle: { fontSize: 22, fontFamily: fonts.headingBlack, color: '#fff', marginBottom: 6 },
+  doneScore: { fontSize: 44, fontFamily: fonts.headingBlack, color: colors.yellow },
   doneSub: { fontSize: 14, color: colors.textMuted, marginBottom: 24 },
   doneContainer: {
     alignItems: 'center',
@@ -562,7 +563,7 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: '#E4D9F8',
+    borderColor: colors.cardBorder,
     backgroundColor: colors.card,
   },
   generatorHeader: { flexDirection: 'row', alignItems: 'center', gap: 12 },

@@ -3,6 +3,7 @@ import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Activi
 import { useRouter, useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
 
 interface Child { id: string; name: string }
 
@@ -46,7 +47,7 @@ export default function ParentScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Espace parent</Text>
       </View>
 

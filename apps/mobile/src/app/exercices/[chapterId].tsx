@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
 import { enfiler, viderLaFile } from '../../lib/outbox'
 import { LessonContent } from '../../components/LessonContent'
 import { MathLessonView } from '../../components/MathLessonView'
+import { BackButton } from '../../components/BackButton'
 
 // Formules LaTeX ou tableaux → rendu riche ; le rendu léger ne gère ni l'un ni l'autre.
 const needsRich = (s?: string | null) => !!s && (/\$[^$\n]+\$|\$\$/.test(s) || /^\|.+\|\s*$/m.test(s))
@@ -25,7 +26,6 @@ function Markdown({ content }: { content: string }) {
 
 export default function ExercicesScreen() {
   const { chapterId } = useLocalSearchParams<{ chapterId: string }>()
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [title, setTitle] = useState('Exercices')
   const [exercises, setExercises] = useState<Exercise[]>([])
@@ -194,7 +194,7 @@ export default function ExercicesScreen() {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <View style={{ flex: 1 }}>
           <Text style={styles.title} numberOfLines={2}>Exercices — {title}</Text>
           {fromCache && <Text style={styles.offline}>⤓ Version hors-ligne</Text>}

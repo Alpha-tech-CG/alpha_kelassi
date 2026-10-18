@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from 'react'
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
-import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Row { rank: number; user_id: string; name: string; xp: number; is_me: boolean }
 interface Group { id: string; name: string }
@@ -11,7 +11,6 @@ type Tab = 'national' | 'groupe'
 const medal = (r: number) => (r === 1 ? '🥇' : r === 2 ? '🥈' : r === 3 ? '🥉' : `${r}`)
 
 export default function ClassementsScreen() {
-  const router = useRouter()
   const [tab, setTab] = useState<Tab>('national')
   const [loading, setLoading] = useState(true)
   const [rows, setRows] = useState<Row[]>([])
@@ -54,9 +53,9 @@ export default function ClassementsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Classements</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       <View style={styles.tabs}>

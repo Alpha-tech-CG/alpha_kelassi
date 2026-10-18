@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Quiz {
   id: string
@@ -45,9 +46,9 @@ export default function QuizListScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>QCM chronométrés</Text>
-        <View style={{ width: 24 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {weak.length > 0 && (

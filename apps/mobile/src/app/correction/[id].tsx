@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, Alert, Image, Linking } from 'react-native'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { STATUS } from './index'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
 
 interface Mission {
   id: string
@@ -51,7 +52,6 @@ const ORDER: Record<Mission['status'], number> = { pending: 0, assigned: 1, subm
 
 export default function CorrectionDetail() {
   const { id } = useLocalSearchParams<{ id: string }>()
-  const router = useRouter()
   const [m, setM] = useState<Mission | null>(null)
   const [loading, setLoading] = useState(true)
   const [rate, setRate] = useState({ open: false, clarity: 0, quality: 0, comment: '' })
@@ -97,9 +97,9 @@ export default function CorrectionDetail() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title} numberOfLines={1}>{m.subjects?.name ?? 'Correction'}</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {/* Statut */}

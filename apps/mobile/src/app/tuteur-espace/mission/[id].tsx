@@ -5,6 +5,7 @@ import { supabase } from '../../../lib/supabase'
 import { API_URL } from '../../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../../lib/theme'
 import { pickAndUpload } from '../../../lib/uploads'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../../components/BackButton'
 
 interface Detail {
   id: string
@@ -84,9 +85,9 @@ export default function MissionScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>{subject ?? 'Mission'}</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {/* Offre : pas encore acceptée */}

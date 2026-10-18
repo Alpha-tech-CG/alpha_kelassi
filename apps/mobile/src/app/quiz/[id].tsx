@@ -6,6 +6,7 @@ import { API_URL } from '../../lib/config'
 import { LessonContent } from '../../components/LessonContent'
 import { LockedFeature } from '../../components/LockedFeature'
 import { planErrorOf, type LockedInfo } from '../../lib/billing'
+import { BackButton } from '../../components/BackButton'
 
 /**
  * Un énoncé de QCM est du texte simple dans l'immense majorité des cas, et le
@@ -114,7 +115,7 @@ export default function QuizTakeScreen() {
   if (locked) {
     return (
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <TouchableOpacity onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Retour"><Text style={{ fontSize: 24, marginBottom: 12 }}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={{ fontSize: 16, fontWeight: '800', textAlign: 'center', marginBottom: 8 }}>{quiz.title}</Text>
         <LockedFeature info={locked} />
       </ScrollView>

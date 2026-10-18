@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react'
 import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
-import { useRouter, useFocusEffect } from 'expo-router'
+import { useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
 
 interface Challenge {
   id: string; title: string; description: string | null; type: string
@@ -16,7 +17,6 @@ const METRICS = [
 ] as const
 
 export default function DefisScreen() {
-  const router = useRouter()
   const [items, setItems] = useState<Challenge[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<string | null>(null)
@@ -54,7 +54,7 @@ export default function DefisScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Défis</Text>
         <TouchableOpacity onPress={() => setShowForm((s) => !s)}><Text style={styles.plus}>{showForm ? '×' : '＋'}</Text></TouchableOpacity>
       </View>

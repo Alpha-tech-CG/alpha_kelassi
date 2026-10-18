@@ -78,6 +78,7 @@ export function Splash({ ready = true, onDone }: { ready?: boolean; onDone?: () 
     lines: new Animated.Value(0),
     tagline: new Animated.Value(0),
     exit: new Animated.Value(0),
+    soft: new Animated.Value(1),   // fondu d'apparition du mode « animations réduites »
   }).current
   const [introDone, setIntroDone] = useState(false)
   const exiting = useRef(false)
@@ -100,14 +101,21 @@ export function Splash({ ready = true, onDone }: { ready?: boolean; onDone?: () 
       t(v.tagline, 550, 1900, out(2)),
     ])
 
-    // Accessibilité : si l'élève a réduit les animations, on affiche le logo tel quel.
+    // Accessibilité : si le téléphone réduit les animations (réglage d'accessibilité,
+    // mais aussi beaucoup de modes « économie de batterie » Android, qui coupent
+    // les animations système), on ne fait pas bouger les calques : le logo complet
+    // apparaît en fondu avec un léger zoom, mouvement doux toléré dans ce mode.
+    // Avant, il s'affichait figé et l'élève ne voyait aucune animation d'ouverture.
     AccessibilityInfo.isReduceMotionEnabled()
       .catch(() => false)
       .then((reduce) => {
         if (cancelled) return
         if (reduce) {
           ;[v.glow, v.ring, v.draw, v.brain, v.book, ...v.letters, v.x, v.lines, v.tagline].forEach((a) => a.setValue(1))
-          setTimeout(() => !cancelled && setIntroDone(true), 700)
+          v.soft.setValue(0)
+          Animated.timing(v.soft, { toValue: 1, duration: 900, easing: out(3), useNativeDriver: NATIVE }).start(() => {
+            if (!cancelled) setTimeout(() => !cancelled && setIntroDone(true), 500)
+          })
           return
         }
         intro.start(({ finished }) => { if (finished && !cancelled) setIntroDone(true) })
@@ -150,9 +158,9 @@ export function Splash({ ready = true, onDone }: { ready?: boolean; onDone?: () 
           width: side, height: side,
           transform: [
             { translateY: (LOGO / 2 - CONTENT_MID_Y) * k },
-            { scale: lerp(v.exit, 1, 1.08) },
+            { scale: Animated.multiply(lerp(v.exit, 1, 1.08), lerp(v.soft, 0.92, 1)) },
           ],
-          opacity: lerp(v.exit, 1, 0),
+          opacity: Animated.multiply(lerp(v.exit, 1, 0), v.soft),
         }}
       >
         {/* Halo bleu derrière le C */}

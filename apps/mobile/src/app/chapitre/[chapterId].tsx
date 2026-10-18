@@ -7,11 +7,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Linking,
+  ImageBackground,
 } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
-import { colors, radius, cardShadow } from '../../lib/theme'
+import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 import { enfiler } from '../../lib/outbox'
 import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
@@ -20,6 +21,9 @@ import { MathLessonView } from '../../components/MathLessonView'
 import { ChapterSkeleton } from '../../components/Skeleton'
 import { LockedFeature } from '../../components/LockedFeature'
 import { useBilling } from '../../hooks/useBilling'
+import { subjectArtwork } from '../../lib/subjectArtwork'
+import { ImageTile } from '../../components/ImageTile'
+import { BackButton } from '../../components/BackButton'
 
 // Contenu avec formules LaTeX ($...$) → rendu math natif ; sinon rendu léger (encarts BEPC).
 const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$/.test(s)
@@ -34,12 +38,12 @@ interface LessonVM {
   duration_min: number | null
   order_index: number
 }
-const TABS: { type: LessonType; icon: string; label: string }[] = [
-  { type: 'cours', icon: '📖', label: 'Cours' },
-  { type: 'resume', icon: '📝', label: 'Résumé' },
-  { type: 'fiche', icon: '🗂️', label: 'Fiche' },
-  { type: 'quiz', icon: '✅', label: 'Quiz' },
-  { type: 'video', icon: '🎥', label: 'Vidéo' },
+const TABS: { type: LessonType; label: string }[] = [
+  { type: 'cours', label: 'Cours' },
+  { type: 'resume', label: 'Résumé' },
+  { type: 'fiche', label: 'Fiche' },
+  { type: 'quiz', label: 'Quiz' },
+  { type: 'video', label: 'Vidéo' },
 ]
 
 export default function ChapitreScreen() {
@@ -47,6 +51,7 @@ export default function ChapitreScreen() {
   const router = useRouter()
   const { isOnline } = useNetworkStatus()
   const [title, setTitle] = useState('')
+  const [subjectName, setSubjectName] = useState('')
   const [lessons, setLessons] = useState<LessonVM[]>([])
   const [done, setDone] = useState<Record<string, { completed: boolean; score: number | null }>>({})
   const [tab, setTab] = useState<LessonType>('cours')
@@ -62,9 +67,10 @@ export default function ChapitreScreen() {
   useEffect(() => {
     let cancelled = false
 
-    function applyCached(parsed: { title: string; lessons: LessonVM[] }, isFromCache: boolean) {
+    function applyCached(parsed: { title: string; subject?: string; lessons: LessonVM[] }, isFromCache: boolean) {
       if (cancelled) return
       setTitle(parsed.title)
+      setSubjectName(parsed.subject ?? '')
       setLessons(parsed.lessons)
       setFromCache(isFromCache)
       setTab(TABS.find((x) => parsed.lessons.some((l) => l.type === x.type))?.type ?? 'cours')
@@ -79,7 +85,7 @@ export default function ChapitreScreen() {
       try {
         const cached = await readCachedLesson(`chapter:${chapterId}`)
         if (cached) {
-          const parsed = JSON.parse(cached) as { title: string; lessons: LessonVM[] }
+          const parsed = JSON.parse(cached) as { title: string; subject?: string; lessons: LessonVM[] }
           applyCached(parsed, true)
           hasCache = true
           setLoading(false)
@@ -105,7 +111,7 @@ export default function ChapitreScreen() {
 
         const fetchAll = (async () => {
           const [{ data: chapter }, { data: rows, error }, { count: exc }] = await Promise.all([
-            supabase.from('chapters').select('title').eq('id', chapterId).maybeSingle(),
+            supabase.from('chapters').select('title, subjects(name)').eq('id', chapterId).maybeSingle(),
             supabase
               .from('lessons')
               .select('id, type, title, content, video_url, duration_min, order_index')
@@ -134,6 +140,7 @@ export default function ChapitreScreen() {
 
         const ls = (rows ?? []) as LessonVM[]
         const t = (chapter as { title?: string } | null)?.title ?? 'Chapitre'
+        const subj = (chapter as { subjects?: { name?: string } | null } | null)?.subjects?.name ?? ''
         const dmap: Record<string, { completed: boolean; score: number | null }> = {}
         for (const p of (prog ?? []) as {
           lesson_id: string
@@ -144,12 +151,12 @@ export default function ChapitreScreen() {
 
         setExCount(exc ?? 0)
         setDone(dmap)
-        applyCached({ title: t, lessons: ls }, false)
+        applyCached({ title: t, subject: subj, lessons: ls }, false)
         // Cache offline (texte + images, lisibles plus tard sans réseau)
         writeCachedLesson(
           `chapter:${chapterId}`,
           'chapter',
-          JSON.stringify({ title: t, lessons: ls })
+          JSON.stringify({ title: t, subject: subj, lessons: ls })
         )
       } catch {
         // Réseau indisponible ou trop lent : on garde le cache déjà affiché
@@ -219,7 +226,7 @@ export default function ChapitreScreen() {
       const xp = json?.data?.xp_awarded ?? 0
       setFlash(
         json?.data?.chapter_completed
-          ? `🎓 Chapitre complété ! +${xp} XP`
+          ? `Chapitre terminé ! +${xp} XP`
           : xp > 0
             ? `+${xp} XP`
             : 'Enregistré ✓'
@@ -254,7 +261,6 @@ export default function ChapitreScreen() {
         onPress={() => router.push(`/exercices/${chapterId}`)}
         activeOpacity={0.9}
       >
-        <Text style={styles.exBtnIcon}>✏️</Text>
         <Text style={styles.exBtnText}>
           S'entraîner — {exCount} exercice{exCount > 1 ? 's' : ''}
         </Text>
@@ -264,21 +270,22 @@ export default function ChapitreScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-          <Text style={styles.back}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.eyebrow}>COURS · APPRENDS À TON RYTHME</Text>
-        <Text style={styles.title} numberOfLines={2}>
+      <ImageBackground source={subjectArtwork(subjectName || title)} style={styles.header} imageStyle={styles.headerImg}>
+        <View style={styles.headerShade} />
+        <BackButton tone="light" />
+        <Text style={styles.eyebrow}>{subjectName ? subjectName.toUpperCase() : 'COURS'}</Text>
+        <Text style={styles.title} numberOfLines={3}>
           {title}
         </Text>
-        {lessons.length > 0 && (
-          <Text style={styles.lessonCount}>
-            {lessons.length} étape{lessons.length > 1 ? 's' : ''} pour apprendre
-          </Text>
-        )}
-        {fromCache && <Text style={styles.offline}>⤓ Version hors-ligne</Text>}
-      </View>
+        <View style={styles.headerChips}>
+          {lessons.length > 0 && (
+            <Text style={styles.lessonCount}>
+              {lessons.length} étape{lessons.length > 1 ? 's' : ''} pour apprendre
+            </Text>
+          )}
+          {fromCache && <Text style={styles.lessonCount}>Version hors-ligne</Text>}
+        </View>
+      </ImageBackground>
 
       {lessons.length === 0 && me && !can('full_courses') && !fromCache ? (
         // Gratuit : seul le premier chapitre de chaque matière est ouvert ; la base
@@ -304,7 +311,7 @@ export default function ChapitreScreen() {
           /* Détail d'un sous-chapitre */
           <ScrollView contentContainerStyle={styles.content}>
             <TouchableOpacity onPress={() => setOpenSub(null)} style={styles.subBack} hitSlop={10}>
-              <Text style={styles.subBackText}>← Sous-chapitres</Text>
+              <Text style={styles.subBackText}>‹ Tous les sous-chapitres</Text>
             </TouchableOpacity>
             <View style={styles.card}>
               <Text style={styles.cardTitle}>{openLesson.title}</Text>
@@ -318,7 +325,7 @@ export default function ChapitreScreen() {
                 </View>
               ) : null}
               {done[openLesson.id]?.completed ? (
-                <Text style={styles.doneText}>✅ Complété</Text>
+                <View style={styles.donePill}><Text style={styles.donePillText}>✓ Terminé</Text></View>
               ) : (
                 <TouchableOpacity
                   style={[styles.cta, (busy === openLesson.id || fromCache) && styles.ctaDisabled]}
@@ -336,12 +343,13 @@ export default function ChapitreScreen() {
         ) : (
           /* Liste des sous-chapitres */
           <ScrollView contentContainerStyle={styles.content}>
-            {coursList.map((l) => (
+            {coursList.map((l, i) => (
               <TouchableOpacity key={l.id} style={styles.subRow} onPress={() => setOpenSub(l.id)}>
+                <ImageTile source={subjectArtwork(subjectName || title)} label={String(i + 1)} done={!!done[l.id]?.completed} size={48} />
                 <Text style={styles.subRowText} numberOfLines={2}>
                   {l.title}
                 </Text>
-                <Text style={styles.subRowChevron}>{done[l.id]?.completed ? '✅' : '›'}</Text>
+                <Text style={styles.subRowChevron}>›</Text>
               </TouchableOpacity>
             ))}
             {exFooter}
@@ -358,7 +366,7 @@ export default function ChapitreScreen() {
                 onPress={() => setTab(x.type)}
               >
                 <Text style={[styles.tabText, tab === x.type && styles.tabTextActive]}>
-                  {x.icon} {x.label}
+                  {x.label}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -423,16 +431,18 @@ export default function ChapitreScreen() {
                   ) : null}
 
                   {isDone ? (
-                    <Text style={styles.doneText}>
-                      ✅ Complété
-                      {l.type === 'quiz' && done[l.id]?.score != null
-                        ? ` — ${done[l.id]?.score}%`
-                        : ''}
-                    </Text>
+                    <View style={styles.donePill}>
+                      <Text style={styles.donePillText}>
+                        ✓ Terminé
+                        {l.type === 'quiz' && done[l.id]?.score != null
+                          ? ` · ${done[l.id]?.score}%`
+                          : ''}
+                      </Text>
+                    </View>
                   ) : l.type === 'cours' && !quizzesValidated ? (
                     <View style={styles.gated}>
                       <Text style={styles.gatedText}>
-                        🔒 Valide d'abord le quiz du chapitre pour marquer le cours comme lu.
+                        Valide d'abord le quiz du chapitre pour marquer le cours comme lu.
                       </Text>
                     </View>
                   ) : (
@@ -472,39 +482,38 @@ export default function ChapitreScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFFCF5' },
+  container: { flex: 1, backgroundColor: colors.background },
   header: {
-    marginTop: 48,
-    marginHorizontal: 16,
+    paddingTop: 52,
+    paddingHorizontal: 18,
+    paddingBottom: 20,
     marginBottom: 12,
-    padding: 18,
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: '#F0E3C8',
-    backgroundColor: '#FFF9EC',
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
+    overflow: 'hidden',
   },
-  back: { alignSelf: 'flex-start', fontSize: 24, color: '#55705E', marginBottom: 8 },
+  headerImg: { borderBottomLeftRadius: 28, borderBottomRightRadius: 28 },
+  headerShade: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(20,92,192,0.84)' },
   eyebrow: {
+    marginTop: 16,
     marginBottom: 6,
-    color: '#A56E24',
+    color: '#ffffffcc',
     fontSize: 10,
-    fontWeight: '900',
+    fontFamily: fonts.body,
     letterSpacing: 1.3,
   },
-  title: { fontSize: 23, lineHeight: 29, fontWeight: '900', color: '#214B3D' },
+  title: { fontSize: 23, lineHeight: 29, fontFamily: fonts.headingBlack, color: '#fff' },
+  headerChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
   lessonCount: {
-    alignSelf: 'flex-start',
-    marginTop: 12,
     overflow: 'hidden',
     borderRadius: radius.full,
     paddingHorizontal: 11,
     paddingVertical: 6,
-    backgroundColor: '#EAF2E5',
-    color: '#386448',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    color: '#fff',
     fontSize: 12,
-    fontWeight: '800',
+    fontFamily: fonts.body,
   },
-  offline: { fontSize: 12, color: colors.textMuted, marginTop: 4 },
   exBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -516,7 +525,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 14,
   },
-  exBtnIcon: { fontSize: 18 },
   exBtnText: { flex: 1, fontSize: 14, fontWeight: '800', color: colors.primary },
   exBtnChevron: { fontSize: 18, color: colors.primary, fontWeight: '800' },
   tabs: { flexDirection: 'row', paddingHorizontal: 16, gap: 8, marginBottom: 8, flexWrap: 'wrap' },
@@ -533,11 +541,11 @@ const styles = StyleSheet.create({
   tabTextActive: { color: '#fff' },
   content: { padding: 16, gap: 14 },
   card: {
-    backgroundColor: '#FFFEFB',
+    backgroundColor: colors.card,
     borderRadius: radius.xl,
     padding: 18,
     borderWidth: 1,
-    borderColor: '#F0E7D5',
+    borderColor: colors.cardBorder,
     ...cardShadow,
   },
   cardHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
@@ -573,18 +581,20 @@ const styles = StyleSheet.create({
   },
   ctaDisabled: { opacity: 0.5 },
   ctaText: { color: '#fff', fontWeight: '800', fontSize: 15 },
-  doneText: { marginTop: 14, color: '#16a34a', fontWeight: '800', fontSize: 14 },
+  donePill: { alignSelf: 'flex-start', marginTop: 14, backgroundColor: colors.primaryTint, borderRadius: radius.full, paddingHorizontal: 12, paddingVertical: 6 },
+  donePillText: { color: colors.primary, fontFamily: fonts.body, fontSize: 13 },
   gated: { marginTop: 14, backgroundColor: '#FEF3C7', borderRadius: radius.md, padding: 12 },
   gatedText: { color: '#92400E', fontWeight: '600', fontSize: 13, lineHeight: 18 },
   subRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 12,
     backgroundColor: colors.card,
     borderRadius: radius.md,
     borderWidth: 1,
     borderColor: colors.cardBorder,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
     ...cardShadow,
   },
   subRowText: { flex: 1, fontSize: 15, fontWeight: '700', color: colors.text },
