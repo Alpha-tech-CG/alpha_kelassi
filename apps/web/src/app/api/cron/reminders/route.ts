@@ -5,9 +5,6 @@ import { notifyUser } from '@/lib/messaging'
 
 export const maxDuration = 60
 
-// Congo-Brazzaville : fuseau unique WAT (UTC+1).
-const CONGO_UTC_OFFSET = 1
-
 function authorized(req: Request): boolean {
   const secret = process.env['CRON_SECRET']
   const header = req.headers.get('authorization') ?? ''
@@ -18,32 +15,29 @@ function authorized(req: Request): boolean {
 }
 
 /**
- * GET /api/cron/reminders — passe horaire (Vercel Cron, voir vercel.json).
+ * GET /api/cron/reminders — passe quotidienne du matin (Vercel Cron, voir vercel.json :
+ * le plan Hobby n'autorise qu'une exécution par jour).
  *
- * Envoie un rappel WhatsApp (repli SMS) aux élèves qui ont activé les rappels
- * et dont l'heure choisie correspond à l'heure locale courante, s'il leur reste
- * des séances de révision non terminées aujourd'hui. Idempotent par jour et par
- * élève (dedup_key), donc rejouer la passe ne crée pas de doublon.
+ * Envoie un rappel WhatsApp (repli SMS) aux élèves qui ont activé les rappels,
+ * s'il leur reste des séances de révision non terminées aujourd'hui. Idempotent
+ * par jour et par élève (dedup_key), donc rejouer la passe ne crée pas de doublon.
  */
 export async function GET(req: Request) {
   if (!authorized(req)) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
-  const now = new Date()
-  const localHour = (now.getUTCHours() + CONGO_UTC_OFFSET) % 24
-  const today = now.toISOString().slice(0, 10)
+  const today = new Date().toISOString().slice(0, 10)
 
-  // 1. Élèves opt-in dont l'heure de rappel correspond à l'heure locale actuelle
+  // 1. Élèves qui ont activé les rappels
   const { data: users, error: usersErr } = await supabaseAdmin
     .from('users')
     .select('id')
     .eq('whatsapp_opt_in', true)
-    .eq('reminder_hour', localHour)
   if (usersErr) {
     console.error('[cron/reminders] users', usersErr.message)
     return NextResponse.json({ error: { code: 'DB_ERROR' } }, { status: 500 })
   }
   if (!users || users.length === 0) {
-    return NextResponse.json({ data: { hour: localHour, notified: 0 } })
+    return NextResponse.json({ data: { notified: 0 } })
   }
 
   // 2. Séances du jour non terminées, pour ces élèves
@@ -76,5 +70,5 @@ export async function GET(req: Request) {
     if (res.status === 'sent') notified++
   }
 
-  return NextResponse.json({ data: { hour: localHour, notified } })
+  return NextResponse.json({ data: { notified } })
 }
