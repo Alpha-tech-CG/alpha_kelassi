@@ -114,6 +114,19 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
   th { background:${colors.primary}; color:#fff; font-weight:800; }
   tbody tr:nth-child(even) td { background:#F7FAFF; }
   img { max-width:100%; height:auto; border-radius:12px; display:block; margin:10px auto; }
+  /* Encadrés de cours (même palette que le site : apps/web/src/app/callouts.css). */
+  blockquote.co { --bg:#F6F8FB; --bd:#D7DEE8; --ac:#4B5563; --ti:#1F2937; background:var(--bg); border:1px solid var(--bd); border-left:5px solid var(--ac); border-radius:14px; padding:11px 13px; margin:14px 0; color:${colors.text}; }
+  blockquote.co > p:first-child { color:var(--ti); font-weight:800; margin-top:0; }
+  blockquote.co .katex-display { margin:8px 0; }
+  blockquote.co-definition { --bg:#F3F1FF; --bd:#DCD6FB; --ac:#6D5BD0; --ti:#4C3BB0; }
+  blockquote.co-theoreme { --bg:#EEF5FF; --bd:#CFE0FB; --ac:#2563EB; --ti:#1D4ED8; }
+  blockquote.co-formule { --bg:#ECF8F1; --bd:#C6EAD5; --ac:#0F8F4F; --ti:#0B6E3C; }
+  blockquote.co-comprendre { --bg:#FFFBEA; --bd:#F7E7A6; --ac:#E3B505; --ti:#8A6A00; }
+  blockquote.co-exemple { --bg:#F8FAFC; --bd:#E2E8F0; --ac:#94A3B8; --ti:#334155; }
+  blockquote.co-methode { --bg:#FFF4EC; --bd:#FBD9C0; --ac:#EA7A1F; --ti:#B45309; }
+  blockquote.co-attention { --bg:#FFF1F1; --bd:#F8CFCF; --ac:#DC2626; --ti:#B91C1C; }
+  blockquote.co-retenir { --bg:#0F8F4F; --bd:#0F8F4F; --ac:#F7D64A; --ti:#F7D64A; color:#fff; }
+  blockquote.co-retenir .katex { color:#fff; }
 </style></head>
 <body class="${opts.reader ? 'reader' : ''}">
 <div id="rt"></div>
@@ -155,7 +168,8 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
     var maths=[];
     // \\diagbox (case d'en-tête barrée des tableaux statistiques) n'existe pas dans KaTeX.
     md = md.replace(/\\\\diagbox\\{([^}]*)\\}\\{([^}]*)\\}/g,function(_,a,b){return b ? a+' \\\\backslash '+b : ' \\\\backslash '+a;});
-    md = md.replace(/\\$\\$([\\s\\S]+?)\\$\\$/g,function(_,x){maths.push({d:true,t:x});return '@@M'+(maths.length-1)+'@@';});
+    // Bloc « $$ » écrit sur plusieurs lignes dans un encadré : on retire les « > » de début de ligne.
+    md = md.replace(/\\$\\$([\\s\\S]+?)\\$\\$/g,function(_,x){maths.push({d:true,t:x.replace(/(^|\\n)[ \\t]*>[ \\t]?/g,'$1')});return '@@M'+(maths.length-1)+'@@';});
     // « $ » seul en fin de ligne … « $ » seul en début de ligne : bloc (tableaux \\begin{array}).
     // Les deux « $ » sont seuls sur leur ligne, sans ligne vide ni autre « $ » entre eux.
     md = md.replace(/(^|\\n)[ \\t]*\\$[ \\t]*\\n([^$]+?)\\n[ \\t]*\\$[ \\t]*(?=\\n|$)/g,function(all,pre,x){
@@ -171,6 +185,13 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
     });
     var c = document.getElementById('c');
     c.innerHTML = sanitize(html);
+    // Encadrés : blockquote dont le texte commence par un emoji de type (cf. apps/web/src/components/callouts.ts).
+    var kinds = [['📘','definition'],['🏛','theoreme'],['📐','formule'],['💡','comprendre'],['✏','exemple'],['🧭','methode'],['⚠','attention'],['🎯','retenir']];
+    var quotes = c.querySelectorAll('blockquote');
+    for(var q=0;q<quotes.length;q++){
+      var start = (quotes[q].textContent || '').trim();
+      for(var k=0;k<kinds.length;k++){ if(start.indexOf(kinds[k][0]) === 0){ quotes[q].className = 'co co-' + kinds[k][1]; break; } }
+    }
     // Enveloppe les tableaux larges dans un conteneur défilable (jamais coupé).
     var tables = c.querySelectorAll('table');
     for(var i=0;i<tables.length;i++){ var w=document.createElement('div'); w.className='tw'; var t=tables[i]; t.parentNode.insertBefore(w,t); w.appendChild(t); 

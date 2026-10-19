@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import remarkGfm from 'remark-gfm'
 import rehypeKatex from 'rehype-katex'
+import { calloutKind } from './callouts'
 // katex.min.css est chargé globalement via globals.css
 
 interface Props {
@@ -59,6 +60,15 @@ function paragraphKind(children: ReactNode) {
  *  - Le tuteur IA (réponses de Kelassi)
  *  - DocumentReader (cours / examens texte)
  */
+/**
+ * Une ligne qui ne contient qu'une formule « $$…$$ » (éventuellement dans un encadré « > ») est
+ * une formule à afficher en bloc, centrée. remark-math la prendrait pour une formule dans le
+ * texte : on la remet en bloc « $$ / formule / $$ ». (L'appli mobile fait déjà ce choix.)
+ */
+function displayMathLines(md: string): string {
+  return md.replace(/^((?:> ?)*)\$\$([^\n$]+)\$\$[ \t]*$/gm, (_, q: string, f: string) => `${q}$$\n${q}${f.trim()}\n${q}$$`)
+}
+
 export function MarkdownRenderer({ content, className = '', prose = false }: Props) {
   const proseClasses = prose
     ? `prose prose-gray prose-sm sm:prose-base max-w-none
@@ -107,6 +117,12 @@ export function MarkdownRenderer({ content, className = '', prose = false }: Pro
               {children}
             </strong>
           ),
+          // Encadrés de cours (📘 définition, 🏛️ théorème, 📐 formule…) : cf. callouts.ts.
+          blockquote: ({ children, ...props }) => (
+            <blockquote {...props} data-callout={calloutKind(textContent(children))}>
+              {children}
+            </blockquote>
+          ),
           // Un tableau large défile dans son propre cadre plutôt que d'élargir la page.
           table: ({ ...props }) => (
             <div className="my-4 overflow-x-auto">
@@ -115,7 +131,7 @@ export function MarkdownRenderer({ content, className = '', prose = false }: Pro
           ),
         }}
       >
-        {content}
+        {displayMathLines(content)}
       </ReactMarkdown>
     </div>
   )
