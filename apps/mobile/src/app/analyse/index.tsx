@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { latexToText } from '../../lib/latexText'
 import { useFocusEffect } from 'expo-router'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { api, planErrorOf, type LockedInfo } from '../../lib/billing'
@@ -96,8 +97,8 @@ export default function AnalyseScreen() {
           {data.error_analysis.missed_questions.slice(0, 6).map((m) => (
             <View key={m.question_id} style={styles.card}>
               <Text style={styles.meta}>{m.subject_name}{m.chapter_title ? ` — ${m.chapter_title}` : ''} · ratée {m.times_wrong} fois</Text>
-              <Text style={styles.body}>{clip(m.prompt)}</Text>
-              {!!m.explanation && <Text style={styles.explanation}>💡 {clip(m.explanation, 220)}</Text>}
+              <Text style={styles.body}>{clip(latexToText(m.prompt))}</Text>
+              {!!m.explanation && <Text style={styles.explanation}>💡 {clip(latexToText(m.explanation), 220)}</Text>}
             </View>
           ))}
 

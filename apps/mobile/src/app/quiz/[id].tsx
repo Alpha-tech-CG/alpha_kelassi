@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { LessonContent } from '../../components/LessonContent'
+import { latexToText } from '../../lib/latexText'
 import { LockedFeature } from '../../components/LockedFeature'
 import { planErrorOf, type LockedInfo } from '../../lib/billing'
 import { BackButton } from '../../components/BackButton'
@@ -164,10 +165,10 @@ export default function QuizTakeScreen() {
               {isRichMarkdown(q.prompt) ? (
                 <>
                   <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}.</Text>
-                  <LessonContent content={q.prompt} />
+                  <LessonContent content={latexToText(q.prompt)} />
                 </>
               ) : (
-                <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}. {q.prompt}</Text>
+                <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}. {latexToText(q.prompt)}</Text>
               )}
               {q.options.map((opt, i) => {
                 const isRight = corr?.correct_index === i
@@ -177,17 +178,17 @@ export default function QuizTakeScreen() {
                     key={i}
                     style={[styles.reviewOpt, isRight && styles.reviewRight, isPicked && !isRight && styles.reviewWrong]}
                   >
-                    {opt}
+                    {latexToText(opt)}
                   </Text>
                 )
               })}
               {corr?.explanation && (isRichMarkdown(corr.explanation) ? (
                 <View style={styles.explanationRich}>
                   <Text style={styles.explanation}>💡</Text>
-                  <LessonContent content={corr.explanation} />
+                  <LessonContent content={latexToText(corr.explanation)} />
                 </View>
               ) : (
-                <Text style={styles.explanation}>💡 {corr.explanation}</Text>
+                <Text style={styles.explanation}>💡 {latexToText(corr.explanation)}</Text>
               ))}
             </View>
           )
@@ -222,8 +223,8 @@ export default function QuizTakeScreen() {
 
       <ScrollView contentContainerStyle={styles.qContent}>
         {isRichMarkdown(q.prompt)
-          ? <View style={styles.promptRich}><LessonContent content={q.prompt} /></View>
-          : <Text style={styles.prompt}>{q.prompt}</Text>}
+          ? <View style={styles.promptRich}><LessonContent content={latexToText(q.prompt)} /></View>
+          : <Text style={styles.prompt}>{latexToText(q.prompt)}</Text>}
         {q.options.map((opt, i) => {
           const selected = answers[q.id] === i
           return (
@@ -235,7 +236,7 @@ export default function QuizTakeScreen() {
               <Text style={[styles.optionLetter, selected && styles.optionLetterSelected]}>
                 {String.fromCharCode(65 + i)}
               </Text>
-              <Text style={[styles.optionText, selected && styles.optionTextSelected]}>{opt}</Text>
+              <Text style={[styles.optionText, selected && styles.optionTextSelected]}>{latexToText(opt)}</Text>
             </TouchableOpacity>
           )
         })}

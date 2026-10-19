@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 
 import { supabase } from '../../lib/supabase'
+import { latexToText } from '../../lib/latexText'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
 import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
@@ -422,7 +423,7 @@ export default function FlashcardsScreen() {
           ]}
         >
           <Text style={styles.cardLabel}>Question</Text>
-          <Text style={styles.cardText}>{card.front}</Text>
+          <Text style={styles.cardText}>{latexToText(card.front)}</Text>
           <Text style={styles.tapHint}>Touche la carte pour voir la réponse</Text>
         </Animated.View>
         <Animated.View
@@ -433,7 +434,7 @@ export default function FlashcardsScreen() {
           ]}
         >
           <Text style={[styles.cardLabel, { color: '#ffffffcc' }]}>Réponse</Text>
-          <Text style={[styles.cardText, { color: '#fff' }]}>{card.back}</Text>
+          <Text style={[styles.cardText, { color: '#fff' }]}>{latexToText(card.back)}</Text>
         </Animated.View>
       </TouchableOpacity>
 
