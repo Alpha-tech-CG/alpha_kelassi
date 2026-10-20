@@ -1,0 +1,272 @@
+{
+ "div-cycle": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/div-cycle.png",
+  "author": "Pokoloko-wiki",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Sch%C3%A9ma_r%C3%A9capitulatif_des_principales_phases_du_cycle_cellulaire.jpg"
+ },
+ "div-chromosome": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/div-chromosome.png",
+  "author": "File:Chromosome-upright.png Original version: Magnus Manske, this version with upright chromosome: User:Dietzel65 Vector",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Chromosome.svg"
+ },
+ "div-caryotype": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/div-caryotype.png",
+  "author": "Courtesy: National Human Genome Research Institute",
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Human_male_karyotpe_high_resolution.jpg"
+ },
+ "div-mitose2": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/div-mitose2.png",
+  "author": "Ali Zifan",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Mitosis_Stages.svg"
+ },
+ "div-meiose": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/div-meiose.png",
+  "author": "Pascal Combemorel",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Le_d%C3%A9roulement_de_la_m%C3%A9iose.svg"
+ },
+ "div-crossing": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/div-crossing.png",
+  "author": "Abbyprovenzano",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Chromosomal_Crossover.svg"
+ },
+ "rep-spermato": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/rep-spermato.png",
+  "author": "Mariana Ruiz Villarreal",
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Complete_diagram_of_a_human_spermatozoa_en.svg"
+ },
+ "rep-ovo": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/rep-ovo.png",
+  "author": "Alexandra Garcia",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Oogenesis_Labeled.svg"
+ },
+ "rep-male": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/rep-male.png",
+  "author": "R. Dewaele (Bioscope, Unige), J. Abdulcadir (HUG), C. Brockmann (Bioscope, Unige), O. Fillod, S. Valera-Kummer (DIP), ww",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Appareil_g%C3%A9nital_m%C3%A2le_-_Vue_sagittale.svg"
+ },
+ "rep-femelle": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/rep-femelle.png",
+  "author": "R. Dewaele (Bioscope, Unige), J. Abdulcadir (HUG), C. Brockmann (Bioscope, Unige), O. Fillod, S. Valera-Kummer (DIP), ww",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Appareil_sexuel_f%C3%A9minin_-_Vue_sagittale.svg"
+ },
+ "rep-cycle2": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/rep-cycle2.png",
+  "author": "MenstrualCycle2_en.svg: Isometrik derivative work: Cineays (talk)",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Cycle_menstruel.svg"
+ },
+ "rep-fecondation": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/rep-fecondation.png",
+  "author": "Ttrue12",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Human_Fertilization.png"
+ },
+ "veg-fleur": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/veg-fleur.png",
+  "author": "Mariana Ruiz LadyofHats, translation by Berrucomons",
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Mature_flower_diagram-fr.svg"
+ },
+ "veg-double": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/veg-double.png",
+  "author": "The original uploader was Triploid at English Wikipedia.",
+  "license": "CC BY 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Double_Fertilization.jpg"
+ },
+ "veg-cycle": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/veg-cycle.png",
+  "author": "TheLAW14",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Plant_Fertilization_Cycle.svg"
+ },
+ "nerf-neurone2": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/nerf-neurone2.png",
+  "author": "No machine-readable author provided. Weft assumed (based on copyright claims).",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Neurone_fran%C3%A7ais_sch%C3%A9ma.svg"
+ },
+ "nerf-moelle": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/nerf-moelle.png",
+  "author": "LaigleAugustin",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Coupe_transversale_de_moelle_%C3%A9pini%C3%A8re.jpg"
+ },
+ "nerf-pa": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/nerf-pa.png",
+  "author": "D Cat laz",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Potentiel_d%27action.svg"
+ },
+ "nerf-synapse2": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/nerf-synapse2.png",
+  "author": "user:Looie496 created file; Illustrator: Christy Krames, MA, CMI, for US National Institutes of Health, National Institu",
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Chemical_synapse_schema_cropped.jpg"
+ },
+ "nerf-reflexe": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/nerf-reflexe.png",
+  "author": "NoeDev",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Sh%C3%A9ma_fonctionel_du_r%C3%A9flexe_ost%C3%A9otendineux_.svg"
+ },
+ "nerf-pavlov": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/nerf-pavlov.png",
+  "author": "Maxxl²",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Pavlov%27s_dog_conditioning.svg"
+ },
+ "coeur-anat": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/coeur-anat.png",
+  "author": "File:Diagram of the human heart (cropped).svg: Wapcaplet derivative work: Chandres",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Diagram_of_the_human_heart_(cropped)-fr.svg"
+ },
+ "coeur-nodal": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/coeur-nodal.png",
+  "author": "Madhero88",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Electrical_conduction_system_of_the_heart.svg"
+ },
+ "coeur-innerv": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/coeur-innerv.png",
+  "author": "Erdé51",
+  "license": "CC0",
+  "page": "https://commons.wikimedia.org/wiki/File:2032_Automatic_Innervation.fr.jpg"
+ },
+ "gen-punnett": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/gen-punnett.png",
+  "author": "Pbroks13",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Punnett_Square.svg"
+ },
+ "gen-di": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/gen-di.png",
+  "author": "Serenaweston",
+  "license": "CC BY 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Mendelian_Dihybrid_Cross.svg"
+ },
+ "gen-xlie": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/gen-xlie.png",
+  "author": "File:Autosomal recessive - en.svg: Domaina, Kashmiri and SUM1 Derivative work: SUM1",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:X-linked_recessive_(carrier_mother).svg"
+ },
+ "gen-abo": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/gen-abo.png",
+  "author": "InvictaHOG",
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:ABO_blood_group_diagram.svg"
+ },
+ "imm-phago": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/imm-phago.png",
+  "author": "BiomM&amp;L",
+  "license": "CC BY 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Sch%C3%A9ma_de_la_phagocytose_des_Am%C5%93bozoaires_(fr).png"
+ },
+ "imm-ac": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/imm-ac.png",
+  "author": "Fvasconcellos 19:03, 6 May 2007 (UTC)",
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Antibody.svg"
+ },
+ "imm-vih": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/imm-vih.png",
+  "author": "Thomas Splettstoesser (www.scistyle.com)",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:HI-virion-structure_en.svg"
+ },
+ "geo-terre": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/geo-terre.png",
+  "author": "Chris828",
+  "license": "CC0",
+  "page": "https://commons.wikimedia.org/wiki/File:Structure_interne_de_la_terre.svg"
+ },
+ "geo-pangee": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/geo-pangee.png",
+  "author": "User:Kieff",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Pangaea_continents_es.svg"
+ },
+ "geo-plaques": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/geo-plaques.png",
+  "author": "",
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Plaques_tectoniques.png"
+ },
+ "geo-subduction": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/geo-subduction.png",
+  "author": "KDS4444",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Subduction-fr2.svg"
+ },
+ "geo-dorsale": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/geo-dorsale.png",
+  "author": "37ophiuchi BrucePL",
+  "license": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Mid-ocean_ridge_cut_away_view.png"
+ },
+ "geo-failles": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/geo-failles.png",
+  "author": "Karta24",
+  "license": "Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Fault_types.svg"
+ },
+ "geo-coupe": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/geo-coupe.png",
+  "author": "JRagusa",
+  "license": "CC BY 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Coupe_g%C3%A9ologique_des_Alpes_centrales.svg"
+ },
+ "res-hydro": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/res-hydro.png",
+  "author": "Cette image a été créée par Savant-fou Elle est donc sous licence libre. Si jamais vous avez besoin d'autres clichés sur",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Mont_hydrothermal_sch%C3%A9ma-fr.svg"
+ },
+ "res-piege": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/res-piege.png",
+  "author": "MagentaGreen",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Oil_traps.svg"
+ },
+ "res-anticlinal": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/res-anticlinal.png",
+  "author": "No machine-readable author provided. Oceanh assumed (based on copyright claims).",
+  "license": "CC BY 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Structural_Trap_(Anticlinal).svg"
+ },
+ "eco-chaine": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/eco-chaine.png",
+  "author": "Original: Thompsma Vector: Pixelsquid",
+  "license": "CC0",
+  "page": "https://commons.wikimedia.org/wiki/File:FoodWeb.svg"
+ },
+ "eco-reseau": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/eco-reseau.png",
+  "author": "Marulio",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:R%C3%A9seau_trophique_en_eaux_c%C3%B4ti%C3%A8res.jpg"
+ },
+ "eco-carbone": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/eco-carbone.png",
+  "author": "bendeck",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Cycle_du_carbone2.svg"
+ },
+ "eco-azote": {
+  "url": "https://evtqdztycnttegzoleqb.supabase.co/storage/v1/object/public/course-images/svt-tle/eco-azote.png",
+  "author": "Par Nojhan",
+  "license": "CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Cycle_azote_fr.jpg"
+ }
+}
