@@ -9,6 +9,7 @@ import { LockedFeature } from '../../components/LockedFeature'
 import { planErrorOf, type LockedInfo } from '../../lib/billing'
 import { BackButton } from '../../components/BackButton'
 import { CognixLoader } from '../../components/CognixLoader'
+import { track } from '../../lib/analytics'
 
 /**
  * Un énoncé de QCM est du texte simple dans l'immense majorité des cas, et le
@@ -97,7 +98,10 @@ export default function QuizTakeScreen() {
     const json = await res.json().catch(() => ({}))
     const planErr = planErrorOf(json)
     if (planErr?.info) setLocked(planErr.info)
-    else if (json.data) setResult(json.data)
+    else if (json.data) {
+      setResult(json.data)
+      track('quiz_completed', { quiz_id: id, mode: mode ?? null, score: json.data.score ?? null, total: json.data.total ?? null })
+    }
     else setSubmitError(json.error?.message ?? 'Envoi impossible. Tes réponses sont conservées : réessaie.')
     setSubmitting(false)
   }, [quiz, submitting, result, answers, id, mode])

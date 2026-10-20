@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
+import { track } from '../../lib/analytics'
 import { colors, fonts, radius } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
 
@@ -52,7 +53,9 @@ export default function VerifyEmailScreen() {
       )
       setCode('')
       input.current?.focus()
+      return
     }
+    track('register_completed')
     // Succès : la session arrive, le layout racine prend la main.
   }
 

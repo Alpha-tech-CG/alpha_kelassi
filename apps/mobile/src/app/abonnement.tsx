@@ -7,6 +7,7 @@ import { useBilling } from '../hooks/useBilling'
 import { QuotaBar } from '../components/QuotaBar'
 import { BackButton, BACK_BUTTON_WIDTH } from '../components/BackButton'
 import { CognixLoader, LoaderDots } from '../components/CognixLoader'
+import { track } from '../lib/analytics'
 
 type Interval = 'month' | 'year'
 type Tone = 'info' | 'ok' | 'error'
@@ -32,6 +33,7 @@ export default function AbonnementScreen() {
     else setLoadError(res.json.error?.message ?? 'Les formules n’ont pas pu être chargées.')
   }, [])
   useEffect(() => { loadPlans() }, [loadPlans])
+  useEffect(() => { track('paywall_viewed', { plan: (params.plan as string | undefined) ?? null }) }, [params.plan])
 
   // Arrivée depuis un écran verrouillé : /abonnement?plan=pro
   useEffect(() => {

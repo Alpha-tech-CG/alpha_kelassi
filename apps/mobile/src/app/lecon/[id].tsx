@@ -6,6 +6,7 @@ import { supabase } from '../../lib/supabase'
 import { colors, radius } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
 import { CognixLoader } from '../../components/CognixLoader'
+import { track } from '../../lib/analytics'
 
 type Block =
   | { type: 'subtitle'; text: string }
@@ -81,6 +82,10 @@ export default function LeconScreen() {
   const router = useRouter()
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (id) track('lesson_opened', { course_lesson_id: id })
+  }, [id])
 
   useEffect(() => {
     async function load() {

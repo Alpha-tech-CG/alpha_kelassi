@@ -24,6 +24,7 @@ import { useBilling } from '../../hooks/useBilling'
 import { subjectArtwork } from '../../lib/subjectArtwork'
 import { ImageTile } from '../../components/ImageTile'
 import { BackButton } from '../../components/BackButton'
+import { track } from '../../lib/analytics'
 
 // Contenu avec formules LaTeX ($...$) → rendu math natif ; sinon rendu léger (encarts BEPC).
 const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$|^[ \t]*\$[ \t]*$/m.test(s)
@@ -63,6 +64,13 @@ export default function ChapitreScreen() {
   const [openSub, setOpenSub] = useState<string | null>(null) // sous-chapitre ouvert (mode drill-down)
   const [exCount, setExCount] = useState(0)
   const { me, can } = useBilling()
+
+  useEffect(() => {
+    if (chapterId) track('chapter_opened', { chapter_id: chapterId })
+  }, [chapterId])
+  useEffect(() => {
+    if (openSub) track('lesson_opened', { lesson_id: openSub, chapter_id: chapterId ?? null })
+  }, [openSub, chapterId])
 
   useEffect(() => {
     let cancelled = false

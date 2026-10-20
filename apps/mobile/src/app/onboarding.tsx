@@ -14,6 +14,7 @@ import {
 import { useRouter } from 'expo-router'
 import { supabase } from '../lib/supabase'
 import { API_URL } from '../lib/config'
+import { track as trackEvent } from '../lib/analytics'
 import { LEVEL_LABEL, colors, fonts, radius, cardShadow } from '../lib/theme'
 import { BackButton } from '../components/BackButton'
 import { CognixLoader, LoaderDots } from '../components/CognixLoader'
@@ -239,6 +240,7 @@ export default function OnboardingScreen() {
       // comme si son parcours était enregistré.
       const json = await res.json().catch(() => null)
       if (!res.ok) throw new Error(json?.error?.message ?? json?.error ?? `HTTP ${res.status}`)
+      trackEvent('onboarding_completed', { level: level ?? null, track: track ?? null })
       router.replace('/(tabs)')
     } catch {
       Alert.alert('Erreur', 'Impossible de sauvegarder. Réessaie.')

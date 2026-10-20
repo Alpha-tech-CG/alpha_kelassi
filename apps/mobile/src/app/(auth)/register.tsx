@@ -17,6 +17,7 @@ import { API_URL } from '../../lib/config'
 import { LEVEL_LABEL, colors, fonts, radius, cardShadow } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
 import { PASSWORD_RULES, isPasswordValid } from '../../lib/password'
+import { track } from '../../lib/analytics'
 
 /**
  * Inscription en questionnaire : une question par écran, ~45 secondes.
@@ -112,6 +113,11 @@ export default function RegisterScreen() {
   const progress = useRef(new Animated.Value(1 / STEPS.length)).current
   const fade = useRef(new Animated.Value(1)).current
 
+  // Entonnoir d'inscription : une trace par écran affiché (aucune réponse envoyée).
+  useEffect(() => {
+    track('register_step', { index: stepIndex, step })
+  }, [stepIndex, step])
+
   // Classes ouvertes aux élèves (RLS sur `series`, lisible sans compte).
   useEffect(() => {
     supabase
@@ -201,6 +207,8 @@ export default function RegisterScreen() {
       )
       return
     }
+    track('register_submitted', { level: klass?.level ?? null })
+    if (data.session) track('register_completed')
     // Session immédiate (confirmation désactivée) : le layout racine envoie à
     // l'onboarding de lui-même. Sinon : saisie du code reçu par e-mail.
     if (!data.session) {

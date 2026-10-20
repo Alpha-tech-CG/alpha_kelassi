@@ -13,6 +13,7 @@ import { viderLaFile } from '../lib/outbox'
 import { Splash, SPLASH_BG } from '../components/Splash'
 import { LockScreen } from '../components/LockScreen'
 import { startAppLockTracking, shouldRequireUnlock, clearAppLock } from '../lib/appLock'
+import { trackAppOpen } from '../lib/analytics'
 import type { Session } from '@supabase/supabase-js'
 
 // Police par défaut de toute l'app = Nunito (design final). Les titres passent
@@ -73,8 +74,11 @@ export default function RootLayout() {
         // En cas de doute, on ne verrouille pas — on ne bloque jamais l'accès.
       })
 
+    trackAppOpen()
+
     const onChange = (state: AppStateStatus) => {
       if (state !== 'active') return
+      trackAppOpen()
       shouldRequireUnlock()
         .then((needsUnlock) => {
           if (needsUnlock) setLocked(true)
