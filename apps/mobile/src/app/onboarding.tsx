@@ -123,6 +123,8 @@ export default function OnboardingScreen() {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [stepLoading, setStepLoading] = useState(false)
+  // Classe déjà donnée dans le questionnaire d'inscription : on la reprend.
+  const [prefilling, setPrefilling] = useState(true)
   const anim = useRef(new Animated.Value(1)).current
 
   // Toutes les classes ouvertes, chargées une fois (une trentaine de lignes).
@@ -132,6 +134,39 @@ export default function OnboardingScreen() {
       .select('id, code, label, level, track')
       .then(({ data }) => setAllSeries(((data ?? []) as Series[]).slice().sort(byLevelThenCode)))
   }, [])
+
+  // Classe déjà renseignée à l'inscription (migration 067) : on saute aux
+  // matières, sans redemander cycle, filière et classe.
+  useEffect(() => {
+    if (!allSeries) return
+    let cancelled = false
+    ;(async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data: profile } = user
+        ? await supabase.from('users').select('study_level_pref, track_type').eq('id', user.id).maybeSingle()
+        : { data: null }
+      const known = profile?.study_level_pref
+        ? allSeries.find(
+            (s) => s.level === profile.study_level_pref && (!profile.track_type || s.track === profile.track_type)
+          )
+        : undefined
+      if (cancelled) return
+      if (known) {
+        setCycle(
+          CYCLE_LEVELS.primaire.includes(known.level) ? 'primaire'
+            : CYCLE_LEVELS.college.includes(known.level) ? 'college'
+              : 'lycee'
+        )
+        await pickClass(known)
+      }
+      if (!cancelled) setPrefilling(false)
+    })()
+    return () => {
+      cancelled = true
+    }
+    // pickClass ne dépend que de setters stables
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allSeries])
 
   // Apparition de chaque étape : fondu + légère montée.
   function goStep(n: number) {
@@ -232,7 +267,8 @@ export default function OnboardingScreen() {
 
       <Animated.View style={[styles.content, stepStyle]}>
         {/* Étape 0 — Cycle */}
-        {step === 0 && (
+        {step === 0 && prefilling && <CognixLoader />}
+        {step === 0 && !prefilling && (
           <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
             <Text style={styles.kicker}>BIENVENUE SUR COGNIX</Text>
             <Text style={styles.title}>Où en es-tu dans ta scolarité ?</Text>
