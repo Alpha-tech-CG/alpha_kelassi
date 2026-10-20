@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { FREE_TIER } from '@alpha-kelassi/types'
 import { useBillingMe } from '@/lib/subscription/client'
+import { MarkdownRenderer } from '@/components/markdown-renderer'
 
 interface Flashcard {
   id: string
@@ -29,6 +30,11 @@ interface FlashcardSource {
 }
 
 const API_URL = '' // routes Next.js locales — pas de serveur externe
+
+/** Texte d'une carte → Markdown : chaque ligne (puces « • ») reste une ligne. */
+function cardMarkdown(text: string): string {
+  return text.replace(/\n+/g, '\n\n')
+}
 
 const QUALITY_LABELS = [
   { q: 0, label: 'Oublié', emoji: '😰', bg: 'bg-red-500 hover:bg-red-600 active:bg-red-700' },
@@ -135,8 +141,13 @@ export default function FlashcardsPage() {
       setSources(json.data)
       setRemaining(typeof json.remaining === 'number' ? json.remaining : null)
       setLimit(typeof json.limit === 'number' ? json.limit : null)
+      // Arrivée depuis un cours (« Créer des flashcards ») : /flashcards?lesson=<id>
+      const wanted = new URLSearchParams(window.location.search).get('lesson')
+      if (wanted && json.data.some((source: FlashcardSource) => source.id === wanted))
+        setShowGenerator(true)
       setSelectedSourceId(
         (current) =>
+          json.data.find((source: FlashcardSource) => source.id === wanted)?.id ||
           json.data.find((source: FlashcardSource) => source.id === current && !source.has_cards)
             ?.id ||
           json.data.find((source: FlashcardSource) => !source.has_cards)?.id ||
@@ -203,7 +214,7 @@ export default function FlashcardsPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ lesson_id: selectedSourceId, count: 5 }),
+        body: JSON.stringify({ lesson_id: selectedSourceId, count: 10 }),
       })
       const json = await res.json().catch(() => null)
       if (!res.ok || !Array.isArray(json?.data)) {
@@ -253,7 +264,9 @@ export default function FlashcardsPage() {
       >
         <span>
           <span className="block font-bold text-gray-900">Créer des cartes depuis un cours</span>
-          <span className="block text-xs text-gray-500">Choisis une leçon de ton parcours.</span>
+          <span className="block text-xs text-gray-500">
+            Choisis une leçon : les cartes sont tirées de ton cours, en un instant.
+          </span>
         </span>
         <span aria-hidden="true" className="text-xl font-bold text-violet-600">
           {showGenerator ? '−' : '+'}
@@ -282,11 +295,19 @@ export default function FlashcardsPage() {
                   onChange={(event) => setSelectedSourceId(event.target.value)}
                   className="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm text-gray-800"
                 >
-                  {sources.map((source) => (
-                    <option key={source.id} value={source.id} disabled={source.has_cards}>
-                      {source.subject_name} · {source.chapter_title} — {source.title}
-                      {source.has_cards ? ' (cartes déjà créées)' : ''}
-                    </option>
+                  {[...new Set(sources.map((source) => source.subject_name))].map((subject) => (
+                    <optgroup key={subject} label={subject}>
+                      {sources
+                        .filter((source) => source.subject_name === subject)
+                        .map((source) => (
+                          <option key={source.id} value={source.id} disabled={source.has_cards}>
+                            {source.chapter_title === source.title
+                              ? source.title
+                              : `${source.chapter_title} — ${source.title}`}
+                            {source.has_cards ? ' (cartes déjà créées)' : ''}
+                          </option>
+                        ))}
+                    </optgroup>
                   ))}
                 </select>
               </label>
@@ -486,9 +507,9 @@ export default function FlashcardsPage() {
               <span className="mb-5 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-500">
                 Question
               </span>
-              <p className="text-center text-xl font-bold leading-relaxed text-gray-900">
-                {currentCard.front}
-              </p>
+              <div className="max-h-[170px] w-full overflow-y-auto text-center text-xl font-bold leading-relaxed text-gray-900">
+                <MarkdownRenderer content={cardMarkdown(currentCard.front)} sections={false} />
+              </div>
               <p className="mt-6 text-xs text-gray-300">Appuie pour révéler la réponse</p>
             </div>
 
@@ -500,9 +521,9 @@ export default function FlashcardsPage() {
               <span className="mb-5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-200">
                 Réponse
               </span>
-              <p className="text-center text-lg font-semibold leading-relaxed text-white">
-                {currentCard.back}
-              </p>
+              <div className="max-h-[190px] w-full overflow-y-auto text-center text-base font-semibold leading-relaxed text-white">
+                <MarkdownRenderer content={cardMarkdown(currentCard.back)} sections={false} />
+              </div>
             </div>
           </div>
         </div>

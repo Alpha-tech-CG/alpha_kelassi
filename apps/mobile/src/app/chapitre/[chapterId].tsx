@@ -305,6 +305,16 @@ export default function ChapitreScreen() {
               <Text style={styles.exBtnText} numberOfLines={1}>S'entraîner ({exCount}) →</Text>
             </TouchableOpacity>
           ) : null}
+          {l.type === 'cours' || l.type === 'resume' ? (
+            // Flashcards tirées de ce cours (sans IA, instantané) : l'écran s'ouvre sur cette leçon.
+            <TouchableOpacity
+              style={[styles.readerBtn, styles.readerEx, styles.readerCards]}
+              onPress={() => router.push({ pathname: '/flashcards', params: { lesson: l.id } })}
+              accessibilityLabel="Créer mes flashcards depuis ce cours"
+            >
+              <Text style={[styles.exBtnText, { flex: 0 }]} numberOfLines={1}>🃏 Cartes</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     )
@@ -668,6 +678,7 @@ const styles = StyleSheet.create({
   readerCta: { backgroundColor: colors.primary },
   readerDone: { backgroundColor: colors.primaryTint },
   readerEx: { backgroundColor: colors.primaryTint },
+  readerCards: { flex: 0, paddingHorizontal: 14 },
   subBackText: { fontSize: 14, fontWeight: '700', color: colors.primary },
   empty: { alignItems: 'center', paddingTop: 60 },
   emptyText: { fontSize: 14, color: colors.textMuted },

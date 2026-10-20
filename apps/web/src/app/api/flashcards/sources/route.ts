@@ -3,7 +3,22 @@ import { authenticate } from '@/lib/supabase/api'
 import { FREE_TIER } from '@alpha-kelassi/types'
 import { getEntitlements } from '@/lib/subscription/server'
 
-/** GET /api/flashcards/sources — leçons accessibles pour créer des cartes */
+interface LessonRow {
+  id: string
+  title: string
+  chapters: {
+    title: string
+    order_index: number | null
+    subjects: { id: string; name: string; level: string; parent_subject_id: string | null }
+  }
+}
+
+/**
+ * GET /api/flashcards/sources — cours du parcours de l'élève, pour créer des cartes.
+ * Une seule requête filtrée par niveau (jointure), puis les cartes déjà créées.
+ * (L'ancienne version chargeait tous les cours de tous les niveaux puis passait des
+ * centaines d'identifiants dans l'URL : la requête échouait → « aucun cours ».)
+ */
 export async function GET(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
@@ -24,13 +39,17 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  const { data: lessons, error: lessonsError } = await supabase
+  let query = supabase
     .from('lessons')
-    .select('id, title, chapter_id')
-    .eq('type', 'cours')
+    .select(
+      'id, title, chapters!inner(title, order_index, subjects!inner(id, name, level, parent_subject_id))'
+    )
+    .in('type', ['cours', 'resume'])
     .not('content', 'is', null)
-    .order('title')
     .limit(1000)
+  if (profile?.study_level_pref) query = query.eq('chapters.subjects.level', profile.study_level_pref)
+
+  const { data, error: lessonsError } = await query
   if (lessonsError) {
     console.error('[/api/flashcards/sources] lessons lookup failed', lessonsError)
     return NextResponse.json(
@@ -39,73 +58,32 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  const chapterIds = [...new Set((lessons ?? []).map((lesson) => lesson.chapter_id))]
-  if (chapterIds.length === 0) {
-    return NextResponse.json({ data: [], remaining: null, limit: null })
-  }
+  const preferred = profile?.subject_ids_pref?.length ? new Set(profile.subject_ids_pref) : null
+  const lessons = ((data ?? []) as unknown as LessonRow[])
+    .filter(({ chapters: { subjects: s } }) =>
+      !preferred || preferred.has(s.id) || (s.parent_subject_id !== null && preferred.has(s.parent_subject_id))
+    )
+    .sort(
+      (a, b) =>
+        a.chapters.subjects.name.localeCompare(b.chapters.subjects.name, 'fr') ||
+        (a.chapters.order_index ?? 0) - (b.chapters.order_index ?? 0) ||
+        a.title.localeCompare(b.title, 'fr')
+    )
 
-  const { data: chapters, error: chaptersError } = await supabase
-    .from('chapters')
-    .select('id, title, subject_id')
-    .in('id', chapterIds)
-  if (chaptersError) {
-    console.error('[/api/flashcards/sources] chapters lookup failed', chaptersError)
+  // Cartes déjà créées par l'élève (sans liste d'identifiants dans l'URL).
+  const { data: owned, error: cardsError } = await supabase
+    .from('flashcards')
+    .select('lesson_id')
+    .eq('user_id', user.id)
+    .not('lesson_id', 'is', null)
+  if (cardsError) {
+    console.error('[/api/flashcards/sources] flashcard lookup failed', cardsError)
     return NextResponse.json(
-      { error: { code: 'DB_ERROR', message: 'Impossible de charger les chapitres.' } },
+      { error: { code: 'DB_ERROR', message: 'Impossible de charger tes cartes.' } },
       { status: 500 }
     )
   }
-
-  const subjectIds = [...new Set((chapters ?? []).map((chapter) => chapter.subject_id))]
-  const { data: subjects, error: subjectsError } = await supabase
-    .from('subjects')
-    .select('id, name, level, parent_subject_id')
-    .in('id', subjectIds)
-  if (subjectsError) {
-    console.error('[/api/flashcards/sources] subjects lookup failed', subjectsError)
-    return NextResponse.json(
-      { error: { code: 'DB_ERROR', message: 'Impossible de charger les matières.' } },
-      { status: 500 }
-    )
-  }
-
-  const chaptersById = new Map((chapters ?? []).map((chapter) => [chapter.id, chapter]))
-  const subjectsById = new Map((subjects ?? []).map((subject) => [subject.id, subject]))
-  const preferredSubjects = profile?.subject_ids_pref?.length
-    ? new Set(profile.subject_ids_pref)
-    : null
-  const sources = (lessons ?? [])
-    .map((lesson) => {
-      const chapter = chaptersById.get(lesson.chapter_id)
-      const subject = chapter ? subjectsById.get(chapter.subject_id) : undefined
-      return { id: lesson.id, title: lesson.title, chapter, subject }
-    })
-    .filter(
-      ({ subject }) =>
-        subject &&
-        (!profile?.study_level_pref || subject.level === profile.study_level_pref) &&
-        (!preferredSubjects ||
-          preferredSubjects.has(subject.id) ||
-          (subject.parent_subject_id !== null && preferredSubjects.has(subject.parent_subject_id)))
-    )
-
-  const sourceLessonIds = sources.map((source) => source.id)
-  let sourcesWithCards = new Set<string | null>()
-  if (sourceLessonIds.length > 0) {
-    const { data: existingCards, error: cardsError } = await supabase
-      .from('flashcards')
-      .select('lesson_id')
-      .eq('user_id', user.id)
-      .in('lesson_id', sourceLessonIds)
-    if (cardsError) {
-      console.error('[/api/flashcards/sources] flashcard lookup failed', cardsError)
-      return NextResponse.json(
-        { error: { code: 'DB_ERROR', message: 'Impossible de charger tes cartes.' } },
-        { status: 500 }
-      )
-    }
-    sourcesWithCards = new Set((existingCards ?? []).map((card) => card.lesson_id))
-  }
+  const withCards = new Set((owned ?? []).map((card) => card.lesson_id))
 
   const { count: totalOwned, error: totalError } = await supabase
     .from('flashcards')
@@ -120,19 +98,15 @@ export async function GET(req: NextRequest) {
   }
 
   const hasUnlimitedCards = ent.can('flashcards')
-  const remaining = hasUnlimitedCards
-    ? null
-    : Math.max(0, FREE_TIER.maxFlashcards - (totalOwned ?? 0))
-
   return NextResponse.json({
-    data: sources.map(({ id, title, chapter, subject }) => ({
+    data: lessons.map(({ id, title, chapters }) => ({
       id,
       title,
-      chapter_title: chapter?.title ?? '',
-      subject_name: subject?.name ?? '',
-      has_cards: sourcesWithCards.has(id),
+      chapter_title: chapters.title,
+      subject_name: chapters.subjects.name,
+      has_cards: withCards.has(id),
     })),
-    remaining,
+    remaining: hasUnlimitedCards ? null : Math.max(0, FREE_TIER.maxFlashcards - (totalOwned ?? 0)),
     limit: hasUnlimitedCards ? null : FREE_TIER.maxFlashcards,
   })
 }

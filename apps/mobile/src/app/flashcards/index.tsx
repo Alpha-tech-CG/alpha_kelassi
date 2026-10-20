@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native'
 
+import { useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { latexToText } from '../../lib/latexText'
 import { API_URL } from '../../lib/config'
@@ -45,6 +46,8 @@ const QUALITIES = [
 ]
 
 export default function FlashcardsScreen() {
+  // Arrivée depuis un cours (bouton « Cartes ») : on crée directement les cartes de ce cours.
+  const { lesson: lessonParam } = useLocalSearchParams<{ lesson?: string }>()
   const [cards, setCards] = useState<Flashcard[]>([])
   const [index, setIndex] = useState(0)
   const [flipped, setFlipped] = useState(false)
@@ -122,10 +125,16 @@ export default function FlashcardsScreen() {
           json?.error?.message ?? `Impossible de charger les cours (HTTP ${res.status}).`
         )
       setSources(json.data)
+      const wanted = json.data.find((source: FlashcardSource) => source.id === lessonParam)
+      if (wanted) {
+        setShowGenerator(true)
+        if (!wanted.has_cards && json.remaining !== 0) void generateCards(wanted.id)
+      }
       setRemaining(typeof json.remaining === 'number' ? json.remaining : null)
       setLimit(typeof json.limit === 'number' ? json.limit : null)
       setSelectedSourceId(
         (current) =>
+          wanted?.id ??
           json.data.find((source: FlashcardSource) => source.id === current && !source.has_cards)
             ?.id ??
           json.data.find((source: FlashcardSource) => !source.has_cards)?.id ??
@@ -193,8 +202,8 @@ export default function FlashcardsScreen() {
     [cards, index, reviewing]
   )
 
-  async function generateCards() {
-    if (!selectedSourceId || generating) return
+  async function generateCards(lessonId = selectedSourceId) {
+    if (!lessonId || generating) return
     setGenerating(true)
     setGenerationError('')
     setGenerationMessage('')
@@ -203,7 +212,7 @@ export default function FlashcardsScreen() {
       const res = await fetch(`${API_URL}/api/flashcards/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ lesson_id: selectedSourceId, count: 5 }),
+        body: JSON.stringify({ lesson_id: lessonId, count: 10 }),
       })
       const json = await res.json().catch(() => null)
       if (!res.ok || !Array.isArray(json?.data))
@@ -231,7 +240,7 @@ export default function FlashcardsScreen() {
       >
         <View style={{ flex: 1 }}>
           <Text style={styles.generatorTitle}>Créer des cartes depuis un cours</Text>
-          <Text style={styles.generatorSub}>Choisis une leçon de ton parcours.</Text>
+          <Text style={styles.generatorSub}>Les cartes sont tirées de ton cours, en un instant.</Text>
         </View>
         <Text style={styles.generatorToggle}>{showGenerator ? '−' : '+'}</Text>
       </TouchableOpacity>
@@ -252,25 +261,27 @@ export default function FlashcardsScreen() {
           ) : (
             <>
               <ScrollView style={styles.sourceList} nestedScrollEnabled>
-                {sources.map((source) => (
-                  <TouchableOpacity
-                    key={source.id}
-                    disabled={source.has_cards}
-                    onPress={() => setSelectedSourceId(source.id)}
-                    style={[
-                      styles.sourceOption,
-                      selectedSourceId === source.id && styles.sourceSelected,
-                      source.has_cards && styles.sourceDisabled,
-                    ]}
-                  >
-                    <Text style={styles.sourceTitle}>
-                      {source.subject_name} · {source.chapter_title}
-                    </Text>
-                    <Text style={styles.sourceSub}>
-                      {source.title}
-                      {source.has_cards ? ' · Cartes déjà créées' : ''}
-                    </Text>
-                  </TouchableOpacity>
+                {sources.map((source, i) => (
+                  <View key={source.id}>
+                    {i === 0 || sources[i - 1]!.subject_name !== source.subject_name ? (
+                      <Text style={styles.sourceGroup}>{source.subject_name}</Text>
+                    ) : null}
+                    <TouchableOpacity
+                      disabled={source.has_cards}
+                      onPress={() => setSelectedSourceId(source.id)}
+                      style={[
+                        styles.sourceOption,
+                        selectedSourceId === source.id && styles.sourceSelected,
+                        source.has_cards && styles.sourceDisabled,
+                      ]}
+                    >
+                      <Text style={styles.sourceTitle}>{source.chapter_title}</Text>
+                      <Text style={styles.sourceSub}>
+                        {source.title}
+                        {source.has_cards ? ' · Cartes déjà créées' : ''}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 ))}
               </ScrollView>
               <TouchableOpacity
@@ -584,6 +595,7 @@ const styles = StyleSheet.create({
   sourceSelected: { borderColor: colors.primary, backgroundColor: '#EEF5FF' },
   sourceDisabled: { opacity: 0.5 },
   sourceTitle: { fontSize: 12, fontWeight: '800', color: colors.text },
+  sourceGroup: { fontSize: 12, fontWeight: '800', color: colors.primary, marginTop: 10, marginBottom: 4, textTransform: 'uppercase' },
   sourceSub: { fontSize: 11, color: colors.textMuted, marginTop: 3 },
   generateBtn: {
     alignItems: 'center',

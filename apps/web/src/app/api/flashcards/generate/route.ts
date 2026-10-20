@@ -1,17 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
-import { GoogleGenAI } from '@google/genai'
 import { z } from 'zod'
 import { FREE_TIER } from '@alpha-kelassi/types'
 import { getEntitlements, planRequired, planRequiredFromDbError } from '@/lib/subscription/server'
-
-export const maxDuration = 60
-
-let _genai: GoogleGenAI | null = null
-function getGenai() {
-  if (!_genai) _genai = new GoogleGenAI({ apiKey: process.env['GEMINI_API_KEY'] ?? '' })
-  return _genai
-}
+import { extractFlashcards } from '@/lib/flashcards/extract'
 
 const schema = z
   .object({
@@ -23,7 +15,11 @@ const schema = z
     message: 'Choisis un document ou une leçon.',
   })
 
-/** POST /api/flashcards/generate — génère des flashcards IA depuis un cours */
+/**
+ * POST /api/flashcards/generate — crée des flashcards à partir d'un cours (ou d'un PDF).
+ * Les cartes sont tirées du texte du cours par lib/flashcards/extract.ts : pas d'IA,
+ * donc ni quota Gemini, ni panne, ni attente.
+ */
 export async function POST(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
@@ -38,8 +34,7 @@ export async function POST(req: NextRequest) {
   const { document_id, lesson_id } = body
   let { count } = body
 
-  // Gratuit : jusqu'à 20 cartes seulement. Vérifié avant l'appel Gemini ;
-  // la base conserve également sa limite comme protection contre la concurrence.
+  // Gratuit : jusqu'à 20 cartes ; la base garde aussi sa limite (concurrence).
   const ent = await getEntitlements(user.id)
   if (!ent.can('flashcards')) {
     const { count: owned, error: countError } = await supabase
@@ -59,93 +54,50 @@ export async function POST(req: NextRequest) {
   }
 
   let sourceTitle: string
-  let context: string
+  let text: string
 
   if (lesson_id) {
-    const { data: lesson, error: lessonError } = await supabase
-      .from('lessons')
-      .select('id, title, content, chapter_id')
-      .eq('id', lesson_id)
-      .eq('type', 'cours')
-      .maybeSingle()
-
-    if (lessonError) {
-      console.error('[/api/flashcards/generate] lesson lookup failed', lessonError)
+    const [{ data: lesson, error: lessonError }, { data: profile, error: profileError }] =
+      await Promise.all([
+        supabase
+          .from('lessons')
+          .select('id, title, content, chapters!inner(subjects!inner(id, level, parent_subject_id))')
+          .eq('id', lesson_id)
+          .in('type', ['cours', 'resume'])
+          .maybeSingle(),
+        supabase
+          .from('users')
+          .select('study_level_pref, subject_ids_pref')
+          .eq('id', user.id)
+          .maybeSingle(),
+      ])
+    if (lessonError || profileError) {
+      console.error('[/api/flashcards/generate] lookup failed', lessonError ?? profileError)
       return NextResponse.json(
         { error: { code: 'DB_ERROR', message: 'Impossible de charger le cours.' } },
         { status: 500 }
       )
     }
-    if (!lesson || !lesson.content?.trim()) {
+    const subject = (
+      lesson as unknown as {
+        chapters?: { subjects?: { id: string; level: string; parent_subject_id: string | null } }
+      } | null
+    )?.chapters?.subjects
+    if (!lesson || !lesson.content?.trim() || !subject) {
       return NextResponse.json(
-        {
-          error: { code: 'SOURCE_NOT_FOUND', message: 'Ce cours est introuvable ou inaccessible.' },
-        },
+        { error: { code: 'SOURCE_NOT_FOUND', message: 'Ce cours est introuvable ou inaccessible.' } },
         { status: 404 }
       )
     }
-
-    const { data: profile, error: profileError } = await supabase
-      .from('users')
-      .select('study_level_pref, subject_ids_pref')
-      .eq('id', user.id)
-      .maybeSingle()
-    if (profileError) {
-      console.error('[/api/flashcards/generate] profile lookup failed', profileError)
-      return NextResponse.json(
-        { error: { code: 'DB_ERROR', message: 'Impossible de vérifier ton parcours.' } },
-        { status: 500 }
-      )
-    }
-
-    const { data: chapter, error: chapterError } = await supabase
-      .from('chapters')
-      .select('subject_id')
-      .eq('id', lesson.chapter_id)
-      .maybeSingle()
-    if (chapterError) {
-      console.error('[/api/flashcards/generate] chapter lookup failed', chapterError)
-      return NextResponse.json(
-        { error: { code: 'DB_ERROR', message: 'Impossible de vérifier le chapitre.' } },
-        { status: 500 }
-      )
-    }
-    if (!chapter) {
-      return NextResponse.json(
-        {
-          error: { code: 'SOURCE_NOT_FOUND', message: 'Ce cours est introuvable ou inaccessible.' },
-        },
-        { status: 404 }
-      )
-    }
-
-    const { data: subject, error: subjectError } = await supabase
-      .from('subjects')
-      .select('id, level, parent_subject_id')
-      .eq('id', chapter.subject_id)
-      .maybeSingle()
-    if (subjectError) {
-      console.error('[/api/flashcards/generate] subject lookup failed', subjectError)
-      return NextResponse.json(
-        { error: { code: 'DB_ERROR', message: 'Impossible de vérifier la matière.' } },
-        { status: 500 }
-      )
-    }
+    const prefs = profile?.subject_ids_pref ?? []
     if (
-      !subject ||
       (profile?.study_level_pref && profile.study_level_pref !== subject.level) ||
-      (profile?.subject_ids_pref?.length &&
-        !profile.subject_ids_pref.includes(subject.id) &&
-        (!subject.parent_subject_id ||
-          !profile.subject_ids_pref.includes(subject.parent_subject_id)))
+      (prefs.length > 0 &&
+        !prefs.includes(subject.id) &&
+        !(subject.parent_subject_id && prefs.includes(subject.parent_subject_id)))
     ) {
       return NextResponse.json(
-        {
-          error: {
-            code: 'SOURCE_NOT_FOUND',
-            message: 'Ce cours ne fait pas partie de ton parcours.',
-          },
-        },
+        { error: { code: 'SOURCE_NOT_FOUND', message: 'Ce cours ne fait pas partie de ton parcours.' } },
         { status: 404 }
       )
     }
@@ -170,19 +122,14 @@ export async function POST(req: NextRequest) {
     }
 
     sourceTitle = lesson.title
-    context = lesson.content.slice(0, 8000)
+    text = lesson.content
   } else {
-    if (!document_id) {
-      return NextResponse.json({ error: 'Corps invalide' }, { status: 400 })
-    }
-    const documentId = document_id
     const { data: chunks, error: chunksError } = await supabase
       .from('document_chunks')
       .select('content')
-      .eq('document_id', documentId)
+      .eq('document_id', document_id!)
       .order('chunk_index', { ascending: true })
-      .limit(30)
-
+      .limit(60)
     if (chunksError) {
       console.error('[/api/flashcards/generate] document lookup failed', chunksError)
       return NextResponse.json(
@@ -201,104 +148,37 @@ export async function POST(req: NextRequest) {
         { status: 422 }
       )
     }
-
-    const { data: document, error: documentError } = await supabase
+    const { data: document } = await supabase
       .from('documents')
       .select('title')
-      .eq('id', documentId)
+      .eq('id', document_id!)
       .maybeSingle()
-    if (documentError) {
-      console.error('[/api/flashcards/generate] document metadata lookup failed', documentError)
-      return NextResponse.json(
-        { error: { code: 'DB_ERROR', message: 'Impossible de charger le document.' } },
-        { status: 500 }
-      )
-    }
     sourceTitle = document?.title ?? 'Document'
-    context = chunks
-      .map((chunk) => chunk.content)
-      .join('\n\n---\n\n')
-      .slice(0, 8000)
+    text = chunks.map((chunk) => chunk.content).join('\n\n')
   }
 
-  const prompt = `Tu es un expert pédagogique. À partir du cours « ${sourceTitle} » ci-dessous, génère exactement ${count} flashcards pour aider un élève congolais à réviser.
-
-Règles :
-- Recto (front) : question courte et précise (max 120 caractères)
-- Verso (back) : réponse concise (max 300 caractères), avec un exemple concret si possible
-- Couvre les concepts clés, définitions et formules importantes
-- Varie les types : définition, application, exemple, calcul
-
-Retourne UNIQUEMENT un tableau JSON valide, sans markdown, sans commentaires :
-[{"front":"...","back":"..."},...]
-
-Contenu du cours :
-${context}`
-
-  let raw: string
-  try {
-    const response = await getGenai().models.generateContent({
-      model: 'gemini-2.5-flash',
-      config: { thinkingConfig: { thinkingBudget: 0 } },
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-    })
-    raw = response.text ?? ''
-  } catch (error) {
-    console.error('[/api/flashcards/generate] Gemini request failed', error)
+  const cards = extractFlashcards(text, count, sourceTitle)
+  if (cards.length === 0) {
     return NextResponse.json(
       {
         error: {
-          code: 'GENERATION_ERROR',
-          message: 'La génération a échoué. Vérifie ta connexion puis réessaie.',
+          code: 'NO_CARDS',
+          message: 'Ce cours ne contient pas assez de définitions ou de notions à retenir pour en faire des cartes. Essaie un autre cours.',
         },
       },
-      { status: 502 }
+      { status: 422 }
     )
   }
 
-  let cards: Array<{ front: string; back: string }>
-  try {
-    const jsonStr = raw.startsWith('[')
-      ? raw
-      : raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1)
-    const parsed: unknown = JSON.parse(jsonStr)
-    if (!Array.isArray(parsed)) throw new Error('Response is not an array')
-    cards = parsed
-      .map((card: unknown) => {
-        if (
-          typeof card !== 'object' ||
-          card === null ||
-          !('front' in card) ||
-          !('back' in card) ||
-          typeof card.front !== 'string' ||
-          typeof card.back !== 'string' ||
-          !card.front.trim() ||
-          !card.back.trim()
-        )
-          throw new Error('Response contains an invalid card')
-        return { front: card.front.trim().slice(0, 500), back: card.back.trim().slice(0, 2000) }
-      })
-      .filter((card) => card.front && card.back)
-      .slice(0, count)
-    if (cards.length === 0) throw new Error('Response contains no cards')
-  } catch (error) {
-    console.error('[/api/flashcards/generate] invalid Gemini response', error)
-    return NextResponse.json(
-      { error: { code: 'GENERATION_ERROR', message: 'Erreur de génération. Réessaie.' } },
-      { status: 500 }
-    )
-  }
-
-  const rows = cards.slice(0, count).map((card) => ({
+  const rows = cards.map((card) => ({
     user_id: user.id,
     document_id: document_id ?? null,
     lesson_id: lesson_id ?? null,
-    front: card.front,
-    back: card.back,
+    front: card.front.slice(0, 500),
+    back: card.back.slice(0, 2000),
   }))
 
   const { data: inserted, error: dbError } = await supabase.from('flashcards').insert(rows).select()
-
   if (dbError) {
     const locked = planRequiredFromDbError(dbError.message)
     if (locked) return locked
