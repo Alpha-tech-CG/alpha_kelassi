@@ -47,6 +47,10 @@ export default function LoginPage(): React.JSX.Element {
         body: JSON.stringify({ email, password }),
       })
       const json = await res.json()
+      if (!res.ok && json.error?.code === 'EMAIL_NOT_CONFIRMED') {
+        router.push(`/confirmer?email=${encodeURIComponent(email.trim().toLowerCase())}`)
+        return
+      }
       if (!res.ok) setError(json.error?.message ?? 'Une erreur est survenue.')
       else {
         router.push(json.data.redirectTo)

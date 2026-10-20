@@ -106,7 +106,6 @@ export default function RegisterScreen() {
   const [series, setSeries] = useState<Series[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [sentTo, setSentTo] = useState<string | null>(null)
 
   const progress = useRef(new Animated.Value(1 / STEPS.length)).current
   const fade = useRef(new Animated.Value(1)).current
@@ -183,7 +182,7 @@ export default function RegisterScreen() {
           city: city.trim(),
           goal,
         },
-        emailRedirectTo: `${API_URL}/login?confirmed=1`,
+        emailRedirectTo: `${API_URL}/login?confirmed=1`, // repli si le modèle d'e-mail garde un lien
       },
     })
     setLoading(false)
@@ -198,27 +197,13 @@ export default function RegisterScreen() {
       return
     }
     // Session immédiate (confirmation désactivée) : le layout racine envoie à
-    // l'onboarding de lui-même.
-    if (!data.session) setSentTo(mail)
-  }
-
-  if (sentTo) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.doneWrap}>
-          <Text style={styles.doneEmoji}>📧</Text>
-          <Text style={styles.title}>Plus qu’une étape, {firstName.trim()} !</Text>
-          <Text style={styles.subtitle}>
-            Un lien de confirmation a été envoyé à{'\n'}
-            <Text style={styles.strong}>{sentTo}</Text>
-          </Text>
-          <Text style={styles.hint}>Clique dessus (regarde aussi dans les spams), puis reviens te connecter.</Text>
-          <TouchableOpacity style={styles.btn} onPress={() => router.replace('/(auth)/login')}>
-            <Text style={styles.btnText}>Aller à la connexion</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    )
+    // l'onboarding de lui-même. Sinon : saisie du code reçu par e-mail.
+    if (!data.session) {
+      router.replace({
+        pathname: '/(auth)/verify-email',
+        params: { email: mail, name: firstName.trim(), fresh: '1' },
+      } as any)
+    }
   }
 
   const classes = (series ?? []).filter((s) =>
@@ -583,6 +568,4 @@ const styles = StyleSheet.create({
   btnDisabled: { opacity: 0.6 },
   btnText: { fontFamily: fonts.body, color: colors.onPrimary, fontSize: 16 },
   skip: { fontFamily: fonts.body, textAlign: 'center', color: colors.textMuted, fontSize: 14, marginTop: 14 },
-  doneWrap: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
-  doneEmoji: { fontSize: 56, marginBottom: 16 },
 })

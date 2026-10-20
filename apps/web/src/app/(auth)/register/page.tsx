@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const LEVELS = [
   {
@@ -47,6 +48,7 @@ const LEVELS = [
 ]
 
 export default function RegisterPage() {
+  const router = useRouter()
   // Step 1 fields
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -94,7 +96,9 @@ export default function RegisterPage() {
         setError(json.error?.message ?? 'Une erreur est survenue.')
         setStep(1)
       } else {
-        setSuccess(true)
+        // Code à 6 chiffres envoyé par e-mail : on passe directement à sa saisie.
+        router.push(`/confirmer?email=${encodeURIComponent(email.trim().toLowerCase())}&fresh=1`)
+        return
       }
     } catch {
       setError('Une erreur est survenue.')

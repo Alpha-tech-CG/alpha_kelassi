@@ -30,12 +30,13 @@ export default function LoginScreen() {
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
     // Pas de navigation ici : le layout racine envoie vers l'onboarding ou les
     // onglets selon le profil (un router.replace('/(tabs)') sautait le parcours).
-    if (error) {
+    if (error && /not confirmed/i.test(error.message)) {
+      // Compte créé mais jamais confirmé : on propose la saisie du code.
+      router.push({ pathname: '/(auth)/verify-email', params: { email: email.trim().toLowerCase() } } as any)
+    } else if (error) {
       Alert.alert(
         'Connexion impossible',
-        /not confirmed/i.test(error.message)
-          ? 'Confirme d’abord ton e-mail : clique sur le lien reçu (pense aux spams).'
-          : /invalid login credentials/i.test(error.message)
+        /invalid login credentials/i.test(error.message)
             ? 'E-mail ou mot de passe incorrect.'
             : error.message
       )

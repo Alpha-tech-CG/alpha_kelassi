@@ -46,7 +46,9 @@ export async function POST(req: Request) {
   })
 
   if (error) {
-    return NextResponse.json({ error: { code: 'AUTH_ERROR', message: authErrorMessage(error) } }, { status: 400 })
+    // Compte jamais confirmé : la page de connexion bascule sur la saisie du code.
+    const code = error.code === 'email_not_confirmed' ? 'EMAIL_NOT_CONFIRMED' : 'AUTH_ERROR'
+    return NextResponse.json({ error: { code, message: authErrorMessage(error) } }, { status: 400 })
   }
 
   return NextResponse.json({ data: { redirectTo: '/dashboard' } })
