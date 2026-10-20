@@ -20,6 +20,7 @@ const GROUPS: NavGroup[] = [
     title: 'Pilotage',
     items: [
       { href: '/admin', label: 'Vue d\'ensemble', icon: '📊' },
+      { href: '/admin/suivi', label: 'Suivi de l\'app', icon: '📈', hint: 'Usage, inscriptions, paiements' },
     ],
   },
   {

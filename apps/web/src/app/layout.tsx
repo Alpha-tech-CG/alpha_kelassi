@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { WebVitals } from '@/components/web-vitals'
+import { AppTracker } from '@/components/app-tracker'
 import './globals.css'
 import './callouts.css'
 
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={inter.className}>
         <WebVitals />
+        <AppTracker />
         {children}
         <script dangerouslySetInnerHTML={{
           __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}`,
