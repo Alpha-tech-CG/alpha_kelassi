@@ -309,8 +309,10 @@ export default function ChapitreScreen() {
       </View>
     )
   }
+  // Tous les cours passent par le lecteur WebView (formules, encadrés colorés, sommaire repliable) :
+  // même présentation dans toutes les matières.
   const isReadable = (l: LessonVM) =>
-    (l.type === 'cours' || l.type === 'resume' || l.type === 'fiche') && hasMath(l.content)
+    (l.type === 'cours' || l.type === 'resume' || l.type === 'fiche') && !!l.content
 
   return (
     <View style={styles.container}>
@@ -439,11 +441,7 @@ export default function ChapitreScreen() {
                   {(l.type === 'cours' || l.type === 'resume' || l.type === 'fiche') &&
                   l.content ? (
                     <View style={{ marginTop: 6 }}>
-                      {hasMath(l.content) ? (
-                        <MathLessonView content={l.content} />
-                      ) : (
-                        <LessonContent content={l.content} />
-                      )}
+                      <MathLessonView content={l.content} />
                     </View>
                   ) : null}
 

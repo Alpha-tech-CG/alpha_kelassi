@@ -115,18 +115,31 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
   tbody tr:nth-child(even) td { background:#F7FAFF; }
   img { max-width:100%; height:auto; border-radius:12px; display:block; margin:10px auto; }
   /* Encadrés de cours (même palette que le site : apps/web/src/app/callouts.css). */
-  blockquote.co { --bg:#F6F8FB; --bd:#D7DEE8; --ac:#4B5563; --ti:#1F2937; background:var(--bg); border:1px solid var(--bd); border-left:5px solid var(--ac); border-radius:14px; padding:11px 13px; margin:14px 0; color:${colors.text}; }
+  .co { --bg:#F6F8FB; --bd:#D7DEE8; --ac:#4B5563; --ti:#1F2937; background:var(--bg); border:1px solid var(--bd); border-left:5px solid var(--ac); border-radius:14px; padding:11px 13px; margin:14px 0; color:${colors.text}; }
   blockquote.co > p:first-child { color:var(--ti); font-weight:800; margin-top:0; }
-  blockquote.co .katex-display { margin:8px 0; }
-  blockquote.co-definition { --bg:#F3F1FF; --bd:#DCD6FB; --ac:#6D5BD0; --ti:#4C3BB0; }
-  blockquote.co-theoreme { --bg:#EEF5FF; --bd:#CFE0FB; --ac:#2563EB; --ti:#1D4ED8; }
-  blockquote.co-formule { --bg:#ECF8F1; --bd:#C6EAD5; --ac:#0F8F4F; --ti:#0B6E3C; }
-  blockquote.co-comprendre { --bg:#FFFBEA; --bd:#F7E7A6; --ac:#E3B505; --ti:#8A6A00; }
-  blockquote.co-exemple { --bg:#F8FAFC; --bd:#E2E8F0; --ac:#94A3B8; --ti:#334155; }
-  blockquote.co-methode { --bg:#FFF4EC; --bd:#FBD9C0; --ac:#EA7A1F; --ti:#B45309; }
-  blockquote.co-attention { --bg:#FFF1F1; --bd:#F8CFCF; --ac:#DC2626; --ti:#B91C1C; }
-  blockquote.co-retenir { --bg:#0F8F4F; --bd:#0F8F4F; --ac:#F7D64A; --ti:#F7D64A; color:#fff; }
-  blockquote.co-retenir .katex { color:#fff; }
+  p.co > strong:first-child { color:var(--ti); }
+  .co .katex-display { margin:8px 0; }
+  .co-definition { --bg:#F3F1FF; --bd:#DCD6FB; --ac:#6D5BD0; --ti:#4C3BB0; }
+  .co-theoreme { --bg:#EEF5FF; --bd:#CFE0FB; --ac:#2563EB; --ti:#1D4ED8; }
+  .co-formule { --bg:#ECF8F1; --bd:#C6EAD5; --ac:#0F8F4F; --ti:#0B6E3C; }
+  .co-comprendre { --bg:#FFFBEA; --bd:#F7E7A6; --ac:#E3B505; --ti:#8A6A00; }
+  .co-exemple { --bg:#F8FAFC; --bd:#E2E8F0; --ac:#94A3B8; --ti:#334155; }
+  .co-methode { --bg:#FFF4EC; --bd:#FBD9C0; --ac:#EA7A1F; --ti:#B45309; }
+  .co-attention { --bg:#FFF1F1; --bd:#F8CFCF; --ac:#DC2626; --ti:#B91C1C; }
+  .co-retenir { --bg:#0F8F4F; --bd:#0F8F4F; --ac:#F7D64A; --ti:#F7D64A; color:#fff; }
+  .co-retenir .katex, .co-retenir strong { color:#fff; }
+  p.co-retenir > strong:first-child { color:#F7D64A; }
+  /* Sommaire : chaque sous-titre est une ligne qu'on touche pour lire la partie. */
+  .sec-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:6px 8px; font-size:12px; color:${colors.textMuted}; margin:14px 0 8px; }
+  .sec-head > span:last-child { display:flex; gap:6px; white-space:nowrap; }
+  .sec-head button { border:1px solid ${colors.cardBorder}; background:#fff; color:${colors.primary}; font-weight:700; border-radius:999px; padding:4px 10px; font-size:12px; }
+  details.sec { border:1px solid ${colors.cardBorder}; border-radius:14px; margin:8px 0; background:#fff; overflow:hidden; }
+  details.sec > summary { list-style:none; display:flex; align-items:center; gap:10px; padding:13px 14px; font-weight:800; font-size:15.5px; color:${colors.text}; line-height:1.3; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary::after { content:'›'; margin-left:auto; font-size:22px; line-height:1; color:${colors.primary}; transition:transform .15s; }
+  details.sec[open] > summary { background:${colors.primaryTint}; color:${colors.primary}; border-bottom:1px solid ${colors.cardBorder}; }
+  details.sec[open] > summary::after { transform:rotate(90deg); }
+  details.sec > .sec-body { padding:4px 14px 12px; }
 </style></head>
 <body class="${opts.reader ? 'reader' : ''}">
 <div id="rt"></div>
@@ -166,6 +179,11 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
     if(!window.marked || !window.katex){ return setTimeout(build, 80); }
     built = true;
     var maths=[];
+    // Grandes parties écrites en gras (« **II) APPLICATION AFFINE** ») : traitées comme des titres
+    // de même niveau que la partie « I) » (cf. splitSections dans apps/web/src/components/markdown-renderer.tsx).
+    var rh = /^(#{1,4})[ \\t]+[IVX]+[).][ \\t]/m.exec(md);
+    var rl = rh ? rh[1] : '##';
+    md = md.replace(/^\\*\\*([IVX]+[).][ \\t][^*\\n]+?)\\*\\*[ \\t]*$/gm, function(_, t){ return rl + ' ' + t; });
     // \\diagbox (case d'en-tête barrée des tableaux statistiques) n'existe pas dans KaTeX.
     md = md.replace(/\\\\diagbox\\{([^}]*)\\}\\{([^}]*)\\}/g,function(_,a,b){return b ? a+' \\\\backslash '+b : ' \\\\backslash '+a;});
     // Bloc « $$ » écrit sur plusieurs lignes dans un encadré : on retire les « > » de début de ligne.
@@ -187,10 +205,70 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
     c.innerHTML = sanitize(html);
     // Encadrés : blockquote dont le texte commence par un emoji de type (cf. apps/web/src/components/callouts.ts).
     var kinds = [['📘','definition'],['🏛','theoreme'],['📐','formule'],['💡','comprendre'],['✏','exemple'],['🧭','methode'],['⚠','attention'],['🎯','retenir']];
+    // Intitulés en gras en tête de paragraphe (« **💡 Je retiens :** », « **Remarque :** »…) : même liste
+    // que LABELS dans apps/web/src/components/callouts.ts.
+    var labels = [
+      [/^(d[ée]finitions?|vocabulaire|mots?[ -]cl[ée]s|notions?[ -]cl[ée]s)\\b/, 'definition'],
+      [/^(th[ée]or[èe]mes?|propri[ée]t[ée]s?|r[èe]gles?|lois?)\\b/, 'theoreme'],
+      [/^formules?\\b/, 'formule'],
+      [/^(remarques?|nb\\b|n\\.b|id[ée]e centrale|pour bien comprendre|explication|astuce|le savais-tu)/, 'comprendre'],
+      [/^(exemples?|exercices? r[ée]solus?|probl[èe]mes? r[ée]solus?|exercices? d'application|application)\\b/, 'exemple'],
+      [/^(m[ée]thodes?|d[ée]marche|conseils?|comment faire)\\b/, 'methode'],
+      [/^(attention|important|pi[èe]ges?|erreurs? fr[ée]quentes?)\\b/, 'attention'],
+      [/^(je retiens|[àa] retenir|l'essentiel|l’essentiel|objectifs?)\\b/, 'retenir']
+    ];
+    function emojiKind(t){ t = t.trim(); for(var k=0;k<kinds.length;k++){ if(t.indexOf(kinds[k][0]) === 0) return kinds[k][1]; } return null; }
+    function labelKind(p){
+      var n = p.firstChild;
+      while(n && n.nodeType === 3 && !n.textContent.trim()) n = n.nextSibling;
+      if(!n || n.nodeType !== 1 || n.tagName !== 'STRONG') return null;
+      var raw = (n.textContent || '').trim();
+      if(raw.length > 60) return null;
+      var t = raw.toLowerCase();
+      try { t = t.replace(/^[^\\p{L}]*(?:[a-z0-9]{1,2}[).]\\s+)?/u, ''); } catch(e){ t = t.replace(/^[^a-zà-ÿ]*/, ''); }
+      for(var k=0;k<labels.length;k++){ if(labels[k][0].test(t)) return labels[k][1]; }
+      return emojiKind(raw);
+    }
     var quotes = c.querySelectorAll('blockquote');
     for(var q=0;q<quotes.length;q++){
-      var start = (quotes[q].textContent || '').trim();
-      for(var k=0;k<kinds.length;k++){ if(start.indexOf(kinds[k][0]) === 0){ quotes[q].className = 'co co-' + kinds[k][1]; break; } }
+      var fp = quotes[q].querySelector('p');
+      var kq = emojiKind(quotes[q].textContent || '') || (fp ? labelKind(fp) : null);
+      if(kq) quotes[q].className = 'co co-' + kq;
+    }
+    var paras = c.querySelectorAll('p');
+    for(var pi=0;pi<paras.length;pi++){
+      if(paras[pi].closest('blockquote')) continue;
+      var kp = labelKind(paras[pi]);
+      if(kp) paras[pi].className = 'co co-' + kp;
+    }
+    // Sommaire : on découpe sur le plus haut niveau de titre présent au moins deux fois
+    // (un seul h1 = titre du cours) ; chaque partie se replie sous son titre.
+    var lvl = 0;
+    for(var hn=1;hn<=3;hn++){ var cnt=0; for(var ci=0;ci<c.children.length;ci++){ if(c.children[ci].tagName === 'H'+hn) cnt++; } if(cnt >= 2){ lvl = hn; break; } }
+    if(lvl){
+      var kids = Array.prototype.slice.call(c.children), cur = null, nsec = 0, list = document.createElement('div');
+      var isHead = function(el){ var m = /^H([1-3])$/.exec(el.tagName); if(!m) return false; var h = +m[1]; return h <= lvl && !(h === 1 && lvl > 1); };
+      for(var ki=0;ki<kids.length;ki++){
+        var el = kids[ki];
+        if(isHead(el)){
+          var d = document.createElement('details'); d.className = 'sec';
+          var sm = document.createElement('summary'); sm.innerHTML = el.innerHTML;
+          cur = document.createElement('div'); cur.className = 'sec-body';
+          d.appendChild(sm); d.appendChild(cur); list.appendChild(d); el.remove(); nsec++;
+        } else if(cur){ cur.appendChild(el); }
+      }
+      if(nsec >= 2){
+        var head = document.createElement('div'); head.className = 'sec-head';
+        head.innerHTML = '<span>' + nsec + ' parties · touche un titre pour le lire</span><span><button type="button" data-all="1">Tout ouvrir</button> <button type="button" data-all="0">Tout fermer</button></span>';
+        head.addEventListener('click', function(ev){
+          var b = ev.target.closest ? ev.target.closest('button') : null; if(!b) return;
+          var ds = c.querySelectorAll('details.sec'); for(var x=0;x<ds.length;x++) ds[x].open = b.getAttribute('data-all') === '1';
+        });
+        c.appendChild(head); c.appendChild(list);
+      } else {
+        // Une seule partie : on remet le contenu à plat.
+        while(list.firstChild){ var dd = list.firstChild; var h = document.createElement('h' + lvl); h.innerHTML = dd.firstChild.innerHTML; c.appendChild(h); while(dd.lastChild.firstChild) c.appendChild(dd.lastChild.firstChild); list.removeChild(dd); }
+      }
     }
     // Enveloppe les tableaux larges dans un conteneur défilable (jamais coupé).
     var tables = c.querySelectorAll('table');
