@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { rateLimit } from '@/lib/rate-limit'
+import { authErrorMessage } from '@/lib/auth-errors'
 
 const schema = z.object({
   fullName: z.string().min(1),
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
   })
 
   if (error) {
-    return NextResponse.json({ error: { code: 'AUTH_ERROR', message: error.message } }, { status: 400 })
+    return NextResponse.json({ error: { code: 'AUTH_ERROR', message: authErrorMessage(error) } }, { status: 400 })
   }
 
   return NextResponse.json({ data: { ok: true } })

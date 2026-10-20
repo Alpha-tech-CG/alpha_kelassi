@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
-import { router, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 
 export default function VerifyOTPScreen() {
@@ -18,9 +18,8 @@ export default function VerifyOTPScreen() {
 
     if (error) {
       Alert.alert('Code invalide', 'Le code est invalide ou a expiré. Réessaie.')
-    } else {
-      router.replace('/(tabs)')
     }
+    // Succès : le layout racine redirige (onboarding pour un nouveau compte).
     setLoading(false)
   }
 

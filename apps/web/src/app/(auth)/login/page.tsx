@@ -1,11 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 type Tab = 'email' | 'phone'
+
+// Fournisseurs désactivés dans Supabase Auth (pas de Twilio, pas d'OAuth Google) :
+// les afficher menait tout droit à « Unsupported phone provider ». À rallumer
+// une fois configurés dans le dashboard.
+const SMS_ENABLED = false
+const GOOGLE_ENABLED = false
 
 export default function LoginPage(): React.JSX.Element {
   const supabase = createClient()
@@ -17,6 +23,18 @@ export default function LoginPage(): React.JSX.Element {
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
+
+  // Retour du lien de confirmation d'e-mail (/auth/callback) ou d'un lien ouvert
+  // depuis l'app : on dit à l'élève où il en est au lieu d'un écran muet.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('confirmed') === '1') {
+      setNotice('Ton e-mail est confirmé ✅ Connecte-toi ici ou dans l’app Cognix.')
+    } else if (params.get('error') === 'auth_callback_error') {
+      setError('Ce lien a expiré ou a été ouvert sur un autre appareil. Si tu as déjà cliqué dessus, ton e-mail est confirmé : connecte-toi.')
+    }
+  }, [])
 
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -85,7 +103,14 @@ export default function LoginPage(): React.JSX.Element {
           <h1 className="text-2xl font-black text-gray-900 mb-1 text-center">Bon retour ! 👋</h1>
           <p className="text-sm text-gray-400 text-center mb-7">Connecte-toi pour continuer à réviser</p>
 
+          {notice && (
+            <div className="mb-5 p-3 bg-green-50 border border-green-100 text-green-700 rounded-xl text-sm">
+              {notice}
+            </div>
+          )}
+
           {/* Tabs */}
+          {SMS_ENABLED && (
           <div className="flex rounded-2xl bg-gray-100 p-1 mb-6">
             {(['email', 'phone'] as Tab[]).map((t) => (
               <button
@@ -99,6 +124,7 @@ export default function LoginPage(): React.JSX.Element {
               </button>
             ))}
           </div>
+          )}
 
           {error && (
             <div className="mb-5 p-3 bg-red-50 border border-red-100 text-red-700 rounded-xl text-sm">
@@ -180,6 +206,7 @@ export default function LoginPage(): React.JSX.Element {
             </form>
           )}
 
+          {GOOGLE_ENABLED && (<>
           {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
@@ -203,6 +230,7 @@ export default function LoginPage(): React.JSX.Element {
             </svg>
             Continuer avec Google
           </button>
+          </>)}
 
           <p className="text-center text-xs text-gray-400 mt-6">
             Pas encore de compte ?{' '}

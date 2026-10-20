@@ -14,8 +14,12 @@ import { supabase } from '../../lib/supabase'
 
 type Tab = 'email' | 'phone'
 
+// Le fournisseur SMS (Twilio) n'est pas configuré dans Supabase : l'onglet SMS
+// renvoyait « Unsupported phone provider ». À rallumer une fois configuré.
+const SMS_ENABLED = false
+
 export default function LoginScreen() {
-  const [tab, setTab] = useState<Tab>('phone')
+  const [tab, setTab] = useState<Tab>(SMS_ENABLED ? 'phone' : 'email')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
@@ -23,9 +27,19 @@ export default function LoginScreen() {
 
   async function handleEmailLogin() {
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) Alert.alert('Erreur', error.message)
-    else router.replace('/(tabs)')
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+    // Pas de navigation ici : le layout racine envoie vers l'onboarding ou les
+    // onglets selon le profil (un router.replace('/(tabs)') sautait le parcours).
+    if (error) {
+      Alert.alert(
+        'Connexion impossible',
+        /not confirmed/i.test(error.message)
+          ? 'Confirme d’abord ton e-mail : clique sur le lien reçu (pense aux spams).'
+          : /invalid login credentials/i.test(error.message)
+            ? 'E-mail ou mot de passe incorrect.'
+            : error.message
+      )
+    }
     setLoading(false)
   }
 
@@ -51,6 +65,7 @@ export default function LoginScreen() {
         <Text style={styles.subtitle}>Prépare ton examen avec l'IA</Text>
 
         {/* Tabs */}
+        {SMS_ENABLED ? (
         <View style={styles.tabs}>
           {(['phone', 'email'] as Tab[]).map((t) => (
             <TouchableOpacity
@@ -64,6 +79,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           ))}
         </View>
+        ) : null}
 
         {tab === 'phone' ? (
           <>
@@ -118,8 +134,8 @@ export default function LoginScreen() {
           </>
         )}
 
-        <TouchableOpacity onPress={() => setTab('phone')}>
-          <Text style={styles.link}>Pas de compte ? Inscris-toi par SMS</Text>
+        <TouchableOpacity onPress={() => router.push('/(auth)/register' as any)}>
+          <Text style={styles.link}>Pas de compte ? Crée-le gratuitement</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
