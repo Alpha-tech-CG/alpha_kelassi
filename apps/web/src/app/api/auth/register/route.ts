@@ -3,11 +3,13 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { rateLimit } from '@/lib/rate-limit'
 import { authErrorMessage } from '@/lib/auth-errors'
+import { isPasswordValid } from '@/lib/password'
 
 const schema = z.object({
   fullName: z.string().min(1),
   email: z.string().email(),
-  password: z.string().min(8),
+  // Doublé par le réglage « Password requirements » de Supabase Auth.
+  password: z.string().min(8).max(72).refine(isPasswordValid),
   level: z.string().min(1),
 })
 

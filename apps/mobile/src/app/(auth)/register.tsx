@@ -16,6 +16,7 @@ import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { LEVEL_LABEL, colors, fonts, radius, cardShadow } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
+import { PASSWORD_RULES, isPasswordValid } from '../../lib/password'
 
 /**
  * Inscription en questionnaire : une question par écran, ~45 secondes.
@@ -101,6 +102,7 @@ export default function RegisterScreen() {
   const [goal, setGoal] = useState<Goal | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [password2, setPassword2] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
   const [series, setSeries] = useState<Series[] | null>(null)
@@ -164,7 +166,10 @@ export default function RegisterScreen() {
   async function submit() {
     const mail = email.trim().toLowerCase()
     if (!/^\S+@\S+\.\S+$/.test(mail)) return setError('Adresse e-mail invalide.')
-    if (password.length < 8) return setError('Le mot de passe doit faire au moins 8 caractères.')
+    if (!isPasswordValid(password)) {
+      return setError('Mot de passe trop faible : 8 caractères avec une minuscule, une majuscule et un chiffre.')
+    }
+    if (password !== password2) return setError('Les deux mots de passe ne sont pas identiques.')
     setError(null)
     setLoading(true)
     const { data, error: signUpError } = await supabase.auth.signUp({
@@ -452,13 +457,34 @@ export default function RegisterScreen() {
                   autoComplete="new-password"
                   value={password}
                   onChangeText={setPassword}
-                  onSubmitEditing={onContinue}
                 />
                 <TouchableOpacity style={styles.eye} onPress={() => setShowPassword((v) => !v)}>
                   <Text style={styles.eyeText}>{showPassword ? 'Cacher' : 'Voir'}</Text>
                 </TouchableOpacity>
               </View>
-              <Text style={styles.pwHint}>8 caractères minimum</Text>
+              <View style={styles.rules}>
+                {PASSWORD_RULES.map((r) => {
+                  const ok = r.test(password)
+                  return (
+                    <Text key={r.label} style={[styles.rule, ok && styles.ruleOk]}>
+                      {ok ? '✓' : '•'} {r.label}
+                    </Text>
+                  )
+                })}
+              </View>
+              <TextInput
+                placeholderTextColor={colors.outlineVariant}
+                style={styles.input}
+                placeholder="Confirme le mot de passe"
+                secureTextEntry={!showPassword}
+                autoComplete="new-password"
+                value={password2}
+                onChangeText={setPassword2}
+                onSubmitEditing={onContinue}
+              />
+              {password2.length > 0 && password2 !== password ? (
+                <Text style={styles.rule}>Les deux mots de passe ne correspondent pas.</Text>
+              ) : null}
               <Text style={styles.legal}>
                 En créant ton compte, tu acceptes les CGU et la politique de confidentialité de Cognix.
               </Text>
@@ -552,7 +578,9 @@ const styles = StyleSheet.create({
   goalEmoji: { fontSize: 24 },
   eye: { position: 'absolute', right: 14, top: 0, bottom: 12, justifyContent: 'center' },
   eyeText: { fontFamily: fonts.body, color: colors.primary, fontSize: 14 },
-  pwHint: { fontFamily: fonts.regular, fontSize: 12, color: colors.textMuted, marginTop: -4, marginBottom: 10 },
+  rules: { flexDirection: 'row', flexWrap: 'wrap', columnGap: 14, rowGap: 4, marginTop: -4, marginBottom: 12 },
+  rule: { fontFamily: fonts.regular, fontSize: 12, color: colors.textMuted },
+  ruleOk: { color: '#0F8F4F' },
   legal: { fontFamily: fonts.regular, fontSize: 12, color: colors.textMuted, marginTop: 4, lineHeight: 17 },
   error: {
     fontFamily: fonts.body,

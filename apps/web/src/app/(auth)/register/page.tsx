@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { PASSWORD_RULES, isPasswordValid } from '@/lib/password'
 
 const LEVELS = [
   {
@@ -53,6 +54,7 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [password2, setPassword2] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
   // Step 2 field
@@ -68,7 +70,8 @@ export default function RegisterPage() {
   function validateStep1() {
     if (!fullName.trim()) return 'Entre ton nom complet.'
     if (!email.trim() || !email.includes('@')) return 'Adresse email invalide.'
-    if (password.length < 8) return 'Le mot de passe doit faire au moins 8 caractères.'
+    if (!isPasswordValid(password)) return 'Mot de passe trop faible : 8 caractères avec une minuscule, une majuscule et un chiffre.'
+    if (password !== password2) return 'Les deux mots de passe ne sont pas identiques.'
     return null
   }
 
@@ -220,7 +223,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <input
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="8 caractères minimum"
+                        placeholder="Mot de passe"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleNext()}
@@ -234,16 +237,29 @@ export default function RegisterPage() {
                         {showPassword ? '🙈' : '👁️'}
                       </button>
                     </div>
-                    {password.length > 0 && (
-                      <div className="mt-2 flex gap-1">
-                        {[...Array(4)].map((_, i) => (
-                          <div key={i} className={`h-1 flex-1 rounded-full transition-all ${
-                            password.length >= [4, 6, 8, 12][i]
-                              ? ['bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-green-500'][i]
-                              : 'bg-gray-100'
-                          }`} />
-                        ))}
-                      </div>
+                    <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                      {PASSWORD_RULES.map((r) => {
+                        const ok = r.test(password)
+                        return (
+                          <li key={r.label} className={`text-xs ${ok ? 'text-green-600' : 'text-gray-400'}`}>
+                            {ok ? '✓' : '•'} {r.label}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Confirme le mot de passe</label>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Retape ton mot de passe"
+                      value={password2}
+                      onChange={(e) => setPassword2(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleNext()}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                    {password2.length > 0 && password2 !== password && (
+                      <p className="mt-1.5 text-xs text-red-600">Les deux mots de passe ne correspondent pas.</p>
                     )}
                   </div>
                 </div>
