@@ -54,7 +54,7 @@ export function useUndoToast() {
         {error ? <span className="text-red-300">{error}</span> : pending.message}
       </span>
       <button onClick={runUndo} disabled={busy}
-        className="text-sm font-bold text-green-300 hover:text-green-200 disabled:opacity-50 flex-shrink-0">
+        className="text-sm font-bold text-blue-300 hover:text-blue-200 disabled:opacity-50 flex-shrink-0">
         {busy ? '…' : 'Annuler'}
       </button>
       <button onClick={clear} aria-label="Fermer" className="text-gray-400 hover:text-white flex-shrink-0">✕</button>

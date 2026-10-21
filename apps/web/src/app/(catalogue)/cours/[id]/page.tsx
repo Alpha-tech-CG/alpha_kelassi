@@ -9,7 +9,7 @@ import Link from 'next/link'
 const LEVEL_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   bepc:  { label: 'BEPC',  color: 'text-blue-700',   bg: 'bg-blue-100' },
   bac_a: { label: 'BAC A', color: 'text-amber-700',   bg: 'bg-amber-100' },
-  bac_c: { label: 'BAC C', color: 'text-violet-700',  bg: 'bg-violet-100' },
+  bac_c: { label: 'BAC C', color: 'text-blue-700',  bg: 'bg-blue-100' },
   bac_d: { label: 'BAC D', color: 'text-emerald-700', bg: 'bg-emerald-100' },
 }
 
@@ -76,7 +76,7 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-5">
         <div className="flex items-start gap-4">
           <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 ${
-            isExam ? 'bg-violet-100' : 'bg-blue-100'
+            isExam ? 'bg-blue-100' : 'bg-blue-100'
           }`}>
             {isExam ? '📝' : '📖'}
           </div>
@@ -121,7 +121,7 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
               href={`/tuteur?document=${doc.id}`}
               className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 transition-colors shadow-sm"
             >
-              🤖 <span className="hidden sm:inline">Demander à Kelassi</span><span className="sm:hidden">Kelassi</span>
+              🤖 <span className="hidden sm:inline">Demander à Cognix</span><span className="sm:hidden">Cognix</span>
             </Link>
           </div>
         </div>
@@ -147,7 +147,7 @@ export default async function CoursDetailPage({ params }: { params: Promise<{ id
                   href={signed.signedUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-6 px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors"
+                  className="inline-block mt-6 px-5 py-2.5 bg-blue-600 text-white rounded-full text-sm font-bold hover:bg-blue-700 transition-colors"
                 >
                   Voir le fichier original ↗
                 </a>

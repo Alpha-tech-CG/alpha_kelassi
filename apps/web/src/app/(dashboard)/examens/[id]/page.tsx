@@ -10,7 +10,7 @@ import { DocumentReaderClient } from '@/components/document-reader-client'
 const LEVEL_CONFIG: Record<string, { label: string; bg: string; color: string }> = {
   bepc:  { label: 'BEPC',  bg: 'bg-blue-100',   color: 'text-blue-700' },
   bac_a: { label: 'BAC A', bg: 'bg-amber-100',  color: 'text-amber-700' },
-  bac_c: { label: 'BAC C', bg: 'bg-violet-100', color: 'text-violet-700' },
+  bac_c: { label: 'BAC C', bg: 'bg-blue-100', color: 'text-blue-700' },
   bac_d: { label: 'BAC D', bg: 'bg-emerald-100',color: 'text-emerald-700' },
 }
 
@@ -96,7 +96,7 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
         <span>›</span>
         {doc.level && (
           <>
-            <Link href={`/examens?level=${doc.level}`} className="hover:text-violet-600 transition-colors">
+            <Link href={`/examens?level=${doc.level}`} className="hover:text-blue-600 transition-colors">
               {lvl.label}
             </Link>
             <span>›</span>
@@ -149,12 +149,12 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
           </div>
         </div>
 
-        {/* CTA Kelassi */}
+        {/* CTA Cognix */}
         <Link
           href={`/tuteur?document=${doc.id}`}
           className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-sm"
         >
-          🤖 Demander à Kelassi
+          🤖 Demander à Cognix
         </Link>
       </div>
 

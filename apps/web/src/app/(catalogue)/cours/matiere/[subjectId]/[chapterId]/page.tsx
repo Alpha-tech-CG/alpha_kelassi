@@ -64,7 +64,7 @@ export default async function ChapterPage({
   )
 
   const chapterHero = (
-    <div className="relative mb-8 overflow-hidden rounded-[2rem] border border-amber-200/70 bg-gradient-to-br from-[#fff8e8] via-white to-[#edf7ef] px-6 py-7 shadow-sm sm:px-9 sm:py-9">
+    <div className="relative mb-8 overflow-hidden rounded-[2rem] border border-amber-200/70 bg-gradient-to-br from-blue-50 via-white to-[#F4F8FE] px-6 py-7 shadow-sm sm:px-9 sm:py-9">
       <div
         className="absolute -right-10 -top-12 h-48 w-48 rounded-full bg-amber-200/25 blur-2xl"
         aria-hidden="true"
@@ -132,7 +132,7 @@ export default async function ChapterPage({
           )}
         </div>
 
-        <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 p-6 text-center">
+        <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-blue-50 p-6 text-center">
           <p className="mb-1 text-lg font-black text-gray-900">Lis ce chapitre gratuitement</p>
           <p className="mb-5 text-sm text-gray-600">
             Crée un compte gratuit pour ouvrir les leçons, suivre ta progression et t'entraîner sur
@@ -141,7 +141,7 @@ export default async function ChapterPage({
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href={`/register?next=${encodeURIComponent(`/cours/matiere/${subjectId}/${chapterId}`)}`}
-              className="rounded-xl bg-[#172554] px-5 py-2.5 font-bold text-white transition-all hover:brightness-125"
+              className="rounded-xl bg-[#0F1B2D] px-5 py-2.5 font-bold text-white transition-all hover:brightness-125"
             >
               Créer un compte gratuit
             </Link>
@@ -193,7 +193,7 @@ export default async function ChapterPage({
         {quiz && (
           <Link
             href={`/quiz/${quiz.id}`}
-            className="mt-8 flex items-center gap-4 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-5 py-4 transition-all hover:border-blue-400 hover:shadow-md"
+            className="mt-8 flex items-center gap-4 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-blue-50 px-5 py-4 transition-all hover:border-blue-400 hover:shadow-md"
           >
             <span className="text-2xl" aria-hidden="true">
               ✅

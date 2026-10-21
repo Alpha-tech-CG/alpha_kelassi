@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Montserrat } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -20,19 +19,13 @@ import {
   ProgressLine,
   StackCards,
 } from '@/components/landing/gb-motion'
+import { Logo, LogoMark } from '@/components/brand/logo'
 import { MobileMenu } from '@/components/landing/mobile-menu'
 import { PricingToggle } from '@/components/landing/pricing-toggle'
 import { Phone, type ShotName } from '@/components/landing/screenshots'
 import { SolarIcon, type SolarIconName } from '@/components/landing/solar-icon'
 import { getCatalogueStats } from '@/components/landing/stats'
-import './landing.css'
 
-const display = Montserrat({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-display',
-  display: 'swap',
-})
 
 /** Chiffres du catalogue relus toutes les heures. */
 export const revalidate = 3600
@@ -205,40 +198,6 @@ const PLAN_CTA: Record<SubscriptionPlan, { cta: string; href: string }> = {
 
 /* ── Petits composants ─────────────────────────────────────────────────────── */
 
-/** Emblème officiel Cognix (C, cerveau et livre), recomposé depuis les calques du logo. */
-function LogoMark({ className = 'size-7', dark = false }: { className?: string; dark?: boolean }) {
-  return (
-    <span className={`relative inline-block shrink-0 ${className}`}>
-      <Image
-        src={dark ? '/brand/cognix-emblem-dark.png' : '/brand/cognix-emblem.png'}
-        alt=""
-        fill
-        sizes="64px"
-        className="object-contain"
-      />
-    </span>
-  )
-}
-
-/** Logo complet : emblème + mot « COGNIX » officiel (X en bleu). */
-function Logo({ dark = false, size = 'md' }: { dark?: boolean; size?: 'md' | 'lg' }) {
-  const lg = size === 'lg'
-  return (
-    <span className="flex items-center gap-2.5" aria-label="Cognix">
-      <LogoMark className={lg ? 'h-12 w-11' : 'h-9 w-8'} dark={dark} />
-      <span className={`relative inline-block ${lg ? 'h-[26px] w-[159px]' : 'h-[18px] w-[110px]'}`}>
-        <Image
-          src={dark ? '/brand/cognix-wordmark-dark.png' : '/brand/cognix-wordmark.png'}
-          alt="Cognix"
-          fill
-          sizes="160px"
-          className="object-contain object-left"
-        />
-      </span>
-    </span>
-  )
-}
-
 function Button({
   href,
   children,
@@ -321,7 +280,7 @@ export default async function LandingPage() {
 
   return (
     <div
-      className={`${display.variable} font-display text-cx-navy selection:bg-cx-blue selection:text-white min-h-screen overflow-x-clip bg-white antialiased`}
+      className={`font-display text-cx-navy selection:bg-cx-blue selection:text-white min-h-screen overflow-x-clip bg-white antialiased`}
     >
       {/* Le contenu glisse au-dessus du pied de page, révélé en fin de défilement. */}
       <div className="relative z-10 rounded-b-[60px] bg-white sm:rounded-b-[80px]">

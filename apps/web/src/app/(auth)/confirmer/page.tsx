@@ -71,8 +71,8 @@ export default function ConfirmerPage(): React.JSX.Element {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-violet-50 px-4 py-10">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-cx-paper via-white to-[#BFD9FB] px-4 py-10">
+      <div className="w-full max-w-md bg-white rounded-[40px] shadow-[0_30px_80px_-40px_rgba(15,27,45,0.35)] p-8 text-center">
         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-5">📩</div>
         <h1 className="text-2xl font-black text-gray-900 mb-2">Confirme ton e-mail</h1>
         <p className="text-sm text-gray-500 mb-6">

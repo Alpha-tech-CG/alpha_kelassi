@@ -175,7 +175,7 @@ export default function AdminChapterQuizPage() {
             </label>
           </div>
 
-          <button disabled={saving} className="bg-green-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm disabled:opacity-50">
+          <button disabled={saving} className="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-full text-sm disabled:opacity-50">
             {saving ? 'Création…' : 'Créer le QCM'}
           </button>
         </form>
@@ -223,7 +223,7 @@ export default function AdminChapterQuizPage() {
                 <input value={opt}
                   onChange={(e) => setOptions((o) => o.map((v, j) => (j === i ? e.target.value : v)))}
                   placeholder={`Option ${String.fromCharCode(65 + i)}`}
-                  className={`flex-1 border rounded-xl px-3 py-2 text-sm ${correct === i ? 'border-green-400 bg-green-50' : 'border-gray-200'}`} />
+                  className={`flex-1 border rounded-xl px-3 py-2 text-sm ${correct === i ? 'border-blue-400 bg-blue-50' : 'border-gray-200'}`} />
               </div>
             ))}
 
@@ -231,7 +231,7 @@ export default function AdminChapterQuizPage() {
               placeholder="Corrigé affiché après la réponse (optionnel)"
               className="mt-3 mb-4" />
 
-            <button disabled={saving} className="bg-green-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm disabled:opacity-50">
+            <button disabled={saving} className="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-full text-sm disabled:opacity-50">
               {saving ? 'Ajout…' : 'Ajouter la question'}
             </button>
           </form>
@@ -248,7 +248,7 @@ export default function AdminChapterQuizPage() {
                     </div>
                     <ul className="mt-2 space-y-1">
                       {q.options.map((o, i) => (
-                        <li key={i} className={`text-xs ${i === q.correct_index ? 'text-green-700 font-semibold' : 'text-gray-500'}`}>
+                        <li key={i} className={`text-xs ${i === q.correct_index ? 'text-blue-700 font-semibold' : 'text-gray-500'}`}>
                           {i === q.correct_index ? '✓ ' : '• '}{o}
                         </li>
                       ))}

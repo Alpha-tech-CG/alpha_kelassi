@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        // Montserrat partout (variable posée par next/font dans app/layout.tsx).
+        sans: ['var(--font-display)', 'Montserrat', 'system-ui', 'sans-serif'],
         // Titres de la page d'accueil (variable posée par next/font dans app/page.tsx).
         heading: ['var(--font-heading)', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         // Mots d'accent en italique dans les titres de la page d'accueil.
@@ -17,9 +18,37 @@ const config: Config = {
         display: ['var(--font-display)', 'Montserrat', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Palette Cognix de la page d'accueil.
-        primary: '#101B4D',
-        secondary: '#1E3A8A',
+        /* Charte Cognix (bleu / blanc, logo) appliquée à tout le site : les
+           gris et les bleus de Tailwind sont recalés sur le navy et le bleu
+           Cognix, si bien que les pages existantes en héritent. */
+        gray: {
+          50: '#F6F8FC',
+          100: '#EEF2F8',
+          200: '#DFE5EF',
+          300: '#C6CFDD',
+          400: '#8C98AD',
+          500: '#66738A',
+          600: '#4B576D',
+          700: '#364156',
+          800: '#232D40',
+          900: '#0F1B2D',
+          950: '#0A111F',
+        },
+        blue: {
+          50: '#F1F6FE',
+          100: '#E3EDFC',
+          200: '#C5DBFA',
+          300: '#97BEF5',
+          400: '#5E9BEF',
+          500: '#3584EB',
+          600: '#1E74E8',
+          700: '#155DC4',
+          800: '#134C9C',
+          900: '#123F7D',
+          950: '#0D2852',
+        },
+        primary: '#0F1B2D',
+        secondary: '#1E74E8',
         accent: '#FFB703',
         // Page d'accueil : encre, papier chaud et sable.
         ink: '#0E1530',
@@ -37,16 +66,16 @@ const config: Config = {
         border: '#E2E8F0',
         muted: { DEFAULT: '#F1F5F9', foreground: '#64748B' },
         brand: {
-          50:  '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: '#F1F6FE',
+          100: '#E3EDFC',
+          200: '#C5DBFA',
+          300: '#97BEF5',
+          400: '#5E9BEF',
+          500: '#3584EB',
+          600: '#1E74E8',
+          700: '#155DC4',
+          800: '#134C9C',
+          900: '#123F7D',
         },
       },
       animation: {

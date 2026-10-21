@@ -244,7 +244,7 @@ export default function TuteurPage() {
       if (!hasContent) {
         setMessages((prev) => prev.map((m) =>
           m.id === assistantMsg.id
-            ? { ...m, content: '❌ Kelassi n\'a pas pu répondre. Réessaie dans quelques secondes.', streaming: false }
+            ? { ...m, content: '❌ Cognix n\'a pas pu répondre. Réessaie dans quelques secondes.', streaming: false }
             : m
         ))
         return
@@ -284,7 +284,7 @@ export default function TuteurPage() {
           <div className="flex items-center gap-3 mb-4">
             <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-black">K</div>
             <div>
-              <p className="font-bold text-gray-900 text-sm">Kelassi IA</p>
+              <p className="font-bold text-gray-900 text-sm">Cognix IA</p>
               <p className="text-xs text-gray-400">Tuteur pédagogique</p>
             </div>
           </div>
@@ -370,7 +370,7 @@ export default function TuteurPage() {
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-400 hover:text-gray-600 mr-1">☰</button>
             <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center text-white text-xs font-black">K</div>
             <div>
-              <p className="font-semibold text-sm text-gray-900">Kelassi IA</p>
+              <p className="font-semibold text-sm text-gray-900">Cognix IA</p>
               <p className="text-xs text-emerald-600 font-medium">● En ligne · Guide par questions</p>
             </div>
           </div>
@@ -399,7 +399,7 @@ export default function TuteurPage() {
             <div className="max-w-2xl mx-auto">
               <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white text-center mb-8">
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">🤖</div>
-                <h2 className="text-2xl font-black mb-2">Bonjour ! Je suis Kelassi</h2>
+                <h2 className="text-2xl font-black mb-2">Bonjour ! Je suis Cognix</h2>
                 <p className="text-emerald-100 text-sm leading-relaxed max-w-sm mx-auto">
                   Ton tuteur IA pour le BEPC et le BAC. Pose tes questions ou envoie une photo de ton exercice — je te guide pour trouver la réponse toi-même !
                 </p>
@@ -475,10 +475,10 @@ export default function TuteurPage() {
 
           {/* Contexte exercice */}
           {exerciseContext && (
-            <div className="flex items-center gap-2 mb-3 px-3 py-2 bg-purple-50 border border-purple-100 rounded-xl text-xs text-purple-700">
+            <div className="flex items-center gap-2 mb-3 px-3 py-2 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-700">
               <span>📋</span>
               <span className="flex-1">Contexte exercice chargé</span>
-              <button onClick={() => setExerciseContext(null)} className="text-purple-400 hover:text-purple-700 font-bold">✕</button>
+              <button onClick={() => setExerciseContext(null)} className="text-blue-400 hover:text-blue-700 font-bold">✕</button>
             </div>
           )}
 
@@ -537,7 +537,7 @@ export default function TuteurPage() {
                 <textarea
                   ref={textareaRef}
                   className="w-full resize-none border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-gray-50 max-h-36 transition-all"
-                  placeholder={selectedImage ? 'Pose une question sur cette image… (ou envoie directement)' : 'Pose ta question à Kelassi… (Entrée pour envoyer)'}
+                  placeholder={selectedImage ? 'Pose une question sur cette image… (ou envoie directement)' : 'Pose ta question à Cognix… (Entrée pour envoyer)'}
                   rows={1}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}

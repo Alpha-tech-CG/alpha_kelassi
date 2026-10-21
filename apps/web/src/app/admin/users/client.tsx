@@ -87,7 +87,7 @@ export function AdminUsersClient() {
           <input
             type="search" placeholder="Rechercher par nom, email, téléphone…"
             value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
         </label>
         <div className="flex flex-wrap bg-gray-100 rounded-xl p-1 gap-1" role="group" aria-label="Filtrer par formule">
@@ -132,7 +132,7 @@ export function AdminUsersClient() {
                 <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{u.plan === 'free' ? '—' : u.expires_at ? dateFr(u.expires_at) : 'Sans échéance'}{u.scheduled > 0 && <p className="text-xs">+{u.scheduled} programmé(s)</p>}</td>
                 <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{u.usage.ai_today} / {AI_DAILY_LIMITS[u.effective_plan] + u.usage.ai_bonus}</td>
                 <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{u.usage.corrections_month} / {TUTOR_CORRECTION_MONTHLY_LIMITS[u.effective_plan] + u.usage.corrections_bonus}</td>
-                <td className="px-4 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-bold ${u.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-green-50 text-green-700'}`}>{u.role === 'admin' ? 'Admin' : 'Élève'}</span></td>
+                <td className="px-4 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-bold ${u.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-blue-50 text-blue-700'}`}>{u.role === 'admin' ? 'Admin' : 'Élève'}</span></td>
                 <td className="px-4 py-3">
                   <button type="button" onClick={() => setSelected(u)} className="px-3 py-1.5 bg-gray-900 text-white rounded-lg text-xs font-bold hover:bg-gray-700 whitespace-nowrap">
                     Gérer

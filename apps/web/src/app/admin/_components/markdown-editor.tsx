@@ -166,7 +166,7 @@ function TableDialog({ initial, onCancel, onInsert }: TableDialogProps) {
                       onMouseEnter={() => setHover({ r, c })}
                       onFocus={() => setHover({ r, c })}
                       onClick={() => start(r + 1, c + 1)}
-                      className={`w-6 h-6 m-0.5 rounded border ${on ? 'bg-green-600 border-green-700' : 'bg-white border-gray-200'}`}
+                      className={`w-6 h-6 m-0.5 rounded border ${on ? 'bg-blue-600 border-blue-700' : 'bg-white border-gray-200'}`}
                       aria-label={`${r + 1} lignes sur ${c + 1} colonnes`}
                     />
                   )
@@ -198,7 +198,7 @@ function TableDialog({ initial, onCancel, onInsert }: TableDialogProps) {
                         <button type="button" tabIndex={-1} onClick={() => cycleAlign(c)} title="Alignement de la colonne"
                           className="w-6 h-6 rounded-md bg-gray-100 hover:bg-gray-200 text-xs">{ALIGN_ICON[a]}</button>
                         <button type="button" tabIndex={-1} onClick={() => addCol(c + 1)} title="Ajouter une colonne à droite"
-                          className="w-6 h-6 rounded-md bg-gray-100 hover:bg-green-100 text-xs">+</button>
+                          className="w-6 h-6 rounded-md bg-gray-100 hover:bg-blue-100 text-xs">+</button>
                         <button type="button" tabIndex={-1} onClick={() => delCol(c)} disabled={cols <= 1} title="Supprimer la colonne"
                           className="w-6 h-6 rounded-md bg-gray-100 hover:bg-red-100 text-xs disabled:opacity-30">✕</button>
                       </div>
@@ -212,7 +212,7 @@ function TableDialog({ initial, onCancel, onInsert }: TableDialogProps) {
                     <td className="pr-1 align-middle">
                       <div className="flex flex-col gap-0.5">
                         <button type="button" tabIndex={-1} onClick={() => addRow(r + 1)} title="Ajouter une ligne en dessous"
-                          className="w-6 h-5 rounded bg-gray-100 hover:bg-green-100 text-[10px]">+</button>
+                          className="w-6 h-5 rounded bg-gray-100 hover:bg-blue-100 text-[10px]">+</button>
                         <button type="button" tabIndex={-1} onClick={() => delRow(r)} disabled={rows <= 2 || r === 0}
                           title={r === 0 ? "L'en-tête ne peut pas être supprimé" : 'Supprimer la ligne'}
                           className="w-6 h-5 rounded bg-gray-100 hover:bg-red-100 text-[10px] disabled:opacity-30">✕</button>
@@ -225,8 +225,8 @@ function TableDialog({ initial, onCancel, onInsert }: TableDialogProps) {
                           onChange={(e) => setCell(r, c, e.target.value)}
                           placeholder={r === 0 ? `Colonne ${c + 1}` : ''}
                           style={{ textAlign: aligns[c] }}
-                          className={`w-36 border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 ${
-                            r === 0 ? 'bg-green-50 font-bold text-gray-900' : 'bg-white text-gray-700'
+                          className={`w-36 border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 ${
+                            r === 0 ? 'bg-blue-50 font-bold text-gray-900' : 'bg-white text-gray-700'
                           }`}
                         />
                       </td>
@@ -246,7 +246,7 @@ function TableDialog({ initial, onCancel, onInsert }: TableDialogProps) {
               <button type="button" onClick={onCancel}
                 className="px-4 py-2 rounded-xl text-sm font-bold text-gray-500 hover:bg-gray-100">Annuler</button>
               <button type="button" onClick={() => onInsert(gridToMarkdown(grid, aligns))}
-                className="px-5 py-2 rounded-xl bg-green-700 text-white text-sm font-bold hover:bg-green-800">
+                className="px-5 py-2 rounded-full bg-blue-700 text-white text-sm font-bold hover:bg-blue-800">
                 {initial ? 'Mettre à jour' : 'Insérer le tableau'}
               </button>
             </div>
@@ -319,7 +319,7 @@ function ImageDialog({ onCancel, onInsert }: { onCancel: () => void; onInsert: (
         onDragLeave={() => setDragging(false)}
         onDrop={(e) => { e.preventDefault(); setDragging(false); pick(e.dataTransfer.files?.[0]) }}
         className={`flex flex-col items-center justify-center gap-2 h-48 rounded-2xl border-2 border-dashed cursor-pointer transition ${
-          dragging ? 'border-green-600 bg-green-50' : 'border-gray-200 bg-gray-50 hover:border-green-500'
+          dragging ? 'border-blue-600 bg-blue-50' : 'border-gray-200 bg-gray-50 hover:border-blue-500'
         }`}
       >
         {preview ? (
@@ -347,7 +347,7 @@ function ImageDialog({ onCancel, onInsert }: { onCancel: () => void; onInsert: (
           Annuler
         </button>
         <button type="button" onClick={send} disabled={!file || busy}
-          className="px-5 py-2 rounded-xl bg-green-700 text-white text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+          className="px-5 py-2 rounded-full bg-blue-700 text-white text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
           {busy ? 'Envoi…' : 'Insérer le schéma'}
         </button>
       </div>
@@ -504,7 +504,7 @@ export function MarkdownEditor({ value, onChange, rows = 8, placeholder, require
           ▦ Tableau
         </button>
         <button type="button" onClick={() => setDialog('image')} title="Importer un schéma (image)"
-          className="px-2.5 py-1.5 rounded-lg text-xs font-bold text-violet-700 bg-violet-50 hover:bg-violet-100 transition">
+          className="px-2.5 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 transition">
           🖼️ Schéma
         </button>
         <button type="button" onClick={() => setPreview((p) => !p)} title="Aperçu du rendu élève"

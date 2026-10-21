@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Logo } from '@/components/brand/logo'
 
 export default function UpdatePasswordPage(): React.JSX.Element {
   const supabase = createClient()
@@ -54,21 +55,18 @@ export default function UpdatePasswordPage(): React.JSX.Element {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-violet-50 px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-cx-paper via-white to-[#BFD9FB] px-4 py-10">
       <div className="w-full max-w-md">
 
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-black">K</span>
-            </div>
-            <span className="text-2xl font-black text-gray-900">Kelassi</span>
+            <Logo size="lg" />
           </Link>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-xl p-8">
+        <div className="bg-white rounded-[40px] shadow-[0_30px_80px_-40px_rgba(15,27,45,0.35)] p-8">
           {checkingSession ? (
             <p className="text-sm text-gray-400 text-center py-8">Chargement…</p>
           ) : done ? (

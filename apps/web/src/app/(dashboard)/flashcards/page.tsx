@@ -245,7 +245,7 @@ export default function FlashcardsPage() {
   }
 
   const freeNotice = me && !me.features.flashcards && (
-    <p className="mx-auto mb-4 max-w-sm rounded-xl border border-violet-100 bg-violet-50 px-4 py-2.5 text-center text-xs text-violet-800">
+    <p className="mx-auto mb-4 max-w-sm rounded-xl border border-blue-100 bg-blue-50 px-4 py-2.5 text-center text-xs text-blue-800">
       Formule Gratuit : jusqu’à {FREE_TIER.maxFlashcards} flashcards.{' '}
       <a href="/billing?plan=starter" className="font-bold underline">
         Starter les rend illimitées
@@ -255,7 +255,7 @@ export default function FlashcardsPage() {
   )
 
   const generatorPanel = (
-    <section className="mb-5 rounded-2xl border border-violet-100 bg-white p-4 shadow-sm">
+    <section className="mb-5 rounded-2xl border border-blue-100 bg-white p-4 shadow-sm">
       <button
         type="button"
         onClick={() => setShowGenerator((value) => !value)}
@@ -268,7 +268,7 @@ export default function FlashcardsPage() {
             Choisis une leçon : les cartes sont tirées de ton cours, en un instant.
           </span>
         </span>
-        <span aria-hidden="true" className="text-xl font-bold text-violet-600">
+        <span aria-hidden="true" className="text-xl font-bold text-blue-600">
           {showGenerator ? '−' : '+'}
         </span>
       </button>
@@ -320,7 +320,7 @@ export default function FlashcardsPage() {
                   sources.find((source) => source.id === selectedSourceId)?.has_cards ||
                   remaining === 0
                 }
-                className="w-full rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {generating ? 'Génération…' : 'Générer mes cartes'}
               </button>
@@ -348,7 +348,7 @@ export default function FlashcardsPage() {
             </p>
           )}
           {remaining === 0 && (
-            <p className="text-sm text-violet-700">
+            <p className="text-sm text-blue-700">
               Ton quota gratuit est atteint. Passe à Starter pour créer plus de cartes.
             </p>
           )}
@@ -366,7 +366,7 @@ export default function FlashcardsPage() {
           </p>
           <button
             onClick={() => void loadDueCards()}
-            className="rounded-xl bg-blue-600 px-5 py-3 font-bold text-white"
+            className="rounded-full bg-blue-600 px-5 py-3 font-bold text-white"
           >
             Réessayer
           </button>
@@ -470,7 +470,7 @@ export default function FlashcardsPage() {
         {/* Progress bar */}
         <div className="mb-6 h-2 w-full overflow-hidden rounded-full bg-gray-200">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-blue-500 to-violet-500 transition-all duration-500"
+            className="h-full rounded-full bg-gradient-to-r from-blue-500 to-[#35C0F0] transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -515,7 +515,7 @@ export default function FlashcardsPage() {
 
             {/* Back */}
             <div
-              className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-gradient-to-br from-blue-600 to-violet-600 p-8 shadow-lg"
+              className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-gradient-to-br from-blue-600 to-[#35C0F0] p-8 shadow-lg"
               style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
             >
               <span className="mb-5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-200">
@@ -555,7 +555,7 @@ export default function FlashcardsPage() {
         ) : (
           <button
             onClick={() => setFlipped(true)}
-            className="w-full rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 py-4 font-bold text-white shadow-md transition-opacity hover:opacity-90"
+            className="w-full rounded-2xl bg-gradient-to-r from-blue-600 to-[#35C0F0] py-4 font-bold text-white shadow-md transition-opacity hover:opacity-90"
           >
             Voir la réponse →
           </button>

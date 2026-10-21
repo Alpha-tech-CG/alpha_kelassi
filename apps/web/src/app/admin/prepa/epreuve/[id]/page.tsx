@@ -53,7 +53,7 @@ function QuestionForm({ draft, onChange, onSubmit, onCancel, saving, submitLabel
             aria-label={`Bonne réponse : option ${i + 1}`} />
           <input value={opt} onChange={(e) => onChange({ ...draft, options: draft.options.map((v, j) => (j === i ? e.target.value : v)) })}
             placeholder={`Option ${String.fromCharCode(65 + i)}`}
-            className={`flex-1 border rounded-xl px-3 py-2 text-sm ${draft.correct === i ? 'border-green-400 bg-green-50' : 'border-gray-200'}`} />
+            className={`flex-1 border rounded-xl px-3 py-2 text-sm ${draft.correct === i ? 'border-blue-400 bg-blue-50' : 'border-gray-200'}`} />
         </div>
       ))}
       {draft.options.length < 6 && (
@@ -63,7 +63,7 @@ function QuestionForm({ draft, onChange, onSubmit, onCancel, saving, submitLabel
       <MarkdownEditor value={draft.explanation} onChange={(v) => onChange({ ...draft, explanation: v })} rows={3}
         placeholder="Corrigé affiché après la réponse (optionnel)" className="mt-2 mb-4" />
       <div className="flex items-center gap-3">
-        <button disabled={saving} className="bg-green-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm disabled:opacity-50">
+        <button disabled={saving} className="bg-blue-700 text-white font-bold px-5 py-2.5 rounded-full text-sm disabled:opacity-50">
           {saving ? '…' : submitLabel}
         </button>
         {onCancel && <button type="button" onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800">Annuler</button>}
@@ -265,7 +265,7 @@ export default function AdminEpreuvePage() {
         </div>
       )}
       {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-      {notice && <div className="p-3 bg-green-50 text-green-800 rounded-xl text-sm mb-4">{notice}</div>}
+      {notice && <div className="p-3 bg-blue-50 text-blue-800 rounded-xl text-sm mb-4">{notice}</div>}
 
       {/* ── Réglages ─────────────────────────────────────────────────────── */}
       <form onSubmit={saveMeta} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6 mb-6">
@@ -316,7 +316,7 @@ export default function AdminEpreuvePage() {
           <select value={count} onChange={(e) => setCount(Number(e.target.value))} className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm">
             {[5, 10, 15, 20].map((n) => <option key={n} value={n}>{n} questions</option>)}
           </select>
-          <button disabled={generating || !docId} className="bg-green-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm disabled:opacity-50">
+          <button disabled={generating || !docId} className="bg-blue-700 text-white font-bold px-4 py-2.5 rounded-full text-sm disabled:opacity-50">
             {generating ? 'Génération…' : 'Générer'}
           </button>
         </div>
@@ -347,7 +347,7 @@ export default function AdminEpreuvePage() {
                     </div>
                     <ul className="mt-2 space-y-1">
                       {q.options.map((o, i) => (
-                        <li key={i} className={`text-xs ${i === q.correct_index ? 'text-green-700 font-semibold' : 'text-gray-500'}`}>
+                        <li key={i} className={`text-xs ${i === q.correct_index ? 'text-blue-700 font-semibold' : 'text-gray-500'}`}>
                           {i === q.correct_index ? '✓ ' : '• '}{o}
                         </li>
                       ))}
@@ -358,7 +358,7 @@ export default function AdminEpreuvePage() {
                     <button onClick={() => setEditing({ id: q.id, draft: {
                       prompt: q.prompt, options: [...q.options, ...Array(Math.max(0, 4 - q.options.length)).fill('')],
                       correct: q.correct_index, explanation: q.explanation ?? '',
-                    } })} className="text-xs font-semibold text-green-700 hover:underline">Modifier</button>
+                    } })} className="text-xs font-semibold text-blue-700 hover:underline">Modifier</button>
                     <button onClick={() => delQuestion(q)} disabled={busy === q.id}
                       className="text-xs font-semibold text-red-600 hover:underline disabled:opacity-50">Supprimer</button>
                   </div>

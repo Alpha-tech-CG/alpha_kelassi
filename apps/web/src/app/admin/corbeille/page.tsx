@@ -58,10 +58,10 @@ export default function AdminTrashPage() {
       </div>
 
       {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-      {notice && <div className="p-3 bg-green-50 text-green-800 rounded-xl text-sm mb-4">{notice}</div>}
+      {notice && <div className="p-3 bg-blue-50 text-blue-800 rounded-xl text-sm mb-4">{notice}</div>}
 
       {loading ? (
-        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : items.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">La corbeille est vide.</div>
       ) : (
@@ -80,7 +80,7 @@ export default function AdminTrashPage() {
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={() => act(it, 'restore')} disabled={busy === it.id}
-                  className="px-3 py-1.5 bg-green-50 text-green-700 rounded-xl text-xs font-bold hover:bg-green-100 disabled:opacity-50">↩︎ Restaurer</button>
+                  className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold hover:bg-blue-100 disabled:opacity-50">↩︎ Restaurer</button>
                 <button onClick={() => act(it, 'purge')} disabled={busy === it.id}
                   className="px-3 py-1.5 text-red-600 rounded-xl text-xs font-bold hover:bg-red-50 disabled:opacity-50">Supprimer définitivement</button>
               </div>

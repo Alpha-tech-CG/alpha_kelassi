@@ -171,7 +171,7 @@ export default function PlanningPage() {
       ) : (
         <>
           {/* Compte à rebours */}
-          <section className="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-6 text-white text-center">
+          <section className="bg-gradient-to-br from-blue-600 to-[#35C0F0] rounded-2xl p-6 text-white text-center">
             <p className="text-sm text-blue-100">{plan.title}</p>
             <p className="text-5xl font-black my-2">{plan.days_remaining}</p>
             <p className="text-sm text-blue-100">

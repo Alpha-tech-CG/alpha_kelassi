@@ -111,7 +111,7 @@ function Columns({ series, field, color, label }: {
   )
 }
 
-function Bar({ label, value, max, right, color = 'bg-green-600' }: { label: string; value: number; max: number; right: string; color?: string }) {
+function Bar({ label, value, max, right, color = 'bg-blue-600' }: { label: string; value: number; max: number; right: string; color?: string }) {
   return (
     <div>
       <div className="flex justify-between gap-3 text-sm">
@@ -155,8 +155,8 @@ export function Dashboard({ s }: { s: Stats }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Inscriptions et activité par jour">
           <div className="space-y-6">
-            <Columns series={s.series} field="signups" color="bg-violet-500" label={`Inscriptions (${s.signups_period})`} />
-            <Columns series={s.series} field="active" color="bg-green-600" label="Élèves actifs" />
+            <Columns series={s.series} field="signups" color="bg-blue-500" label={`Inscriptions (${s.signups_period})`} />
+            <Columns series={s.series} field="active" color="bg-blue-600" label="Élèves actifs" />
           </div>
           <p className="text-[11px] text-gray-400 mt-4">
             Actif = au moins un événement d’app, une leçon validée ou un QCM terminé ce jour-là.
@@ -195,9 +195,9 @@ export function Dashboard({ s }: { s: Stats }) {
               <Bar key={`${st.index}-${st.step}`}
                 label={`${st.index + 1}. ${STEP_LABEL[st.step] ?? st.step}`}
                 value={st.devices} max={funnelMax}
-                right={`${st.devices} · ${pct(st.devices, firstStep)}`} color="bg-violet-500" />
+                right={`${st.devices} · ${pct(st.devices, firstStep)}`} color="bg-blue-500" />
             ))}
-            <Bar label="Inscription envoyée" value={f.submitted} max={funnelMax} right={`${f.submitted} · ${pct(f.submitted, firstStep)}`} color="bg-violet-700" />
+            <Bar label="Inscription envoyée" value={f.submitted} max={funnelMax} right={`${f.submitted} · ${pct(f.submitted, firstStep)}`} color="bg-blue-700" />
             <div className="border-t border-gray-100 my-3" />
             <Bar label="Comptes créés (période)" value={f.signed_up} max={funnelMax} right={`${f.signed_up}`} />
             <Bar label="Parcours choisi (onboarding terminé)" value={f.onboarded} max={funnelMax} right={`${f.onboarded} · ${pct(f.onboarded, f.signed_up)}`} />
@@ -305,7 +305,7 @@ export function Dashboard({ s }: { s: Stats }) {
             </>
           )}
           <p className="text-xs text-gray-500 mt-4">
-            Détail des transactions : <Link href="/admin/subscriptions" className="text-green-700 font-semibold hover:underline">Abonnements</Link>.
+            Détail des transactions : <Link href="/admin/subscriptions" className="text-blue-700 font-semibold hover:underline">Abonnements</Link>.
           </p>
         </Card>
       </div>

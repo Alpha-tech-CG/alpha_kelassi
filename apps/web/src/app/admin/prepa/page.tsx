@@ -159,14 +159,14 @@ function PrepaAdmin() {
           <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
             {TABS.map((t) => (
               <button key={t} onClick={() => setParam({ tab: t })}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold border ${tab === t ? 'bg-green-700 text-white border-green-700' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}>
-                {tabLabel(t)} <span className={tab === t ? 'text-green-100' : 'text-gray-400'}>{data ? countOf(t) : ''}</span>
+                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold border ${tab === t ? 'bg-blue-700 text-white border-blue-700' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}>
+                {tabLabel(t)} <span className={tab === t ? 'text-blue-100' : 'text-gray-400'}>{data ? countOf(t) : ''}</span>
               </button>
             ))}
           </div>
 
           {loading && !data ? (
-            <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+            <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
           ) : tab === 'td' ? (
             /* ── TD : exercices corrigés, chapitre par chapitre ───────────── */
             <div>
@@ -175,7 +175,7 @@ function PrepaAdmin() {
               </p>
               {(data?.chapters ?? []).length === 0 ? (
                 <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center text-gray-400 text-sm">
-                  Aucun chapitre dans cette matière. <Link className="text-green-700 font-semibold" href={`/admin/curriculum/subject/${subject.id}`}>Créer un chapitre</Link>
+                  Aucun chapitre dans cette matière. <Link className="text-blue-700 font-semibold" href={`/admin/curriculum/subject/${subject.id}`}>Créer un chapitre</Link>
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -186,7 +186,7 @@ function PrepaAdmin() {
                         <p className="text-xs text-gray-400">{c.exercise_count} exercice{c.exercise_count > 1 ? 's' : ''}</p>
                       </div>
                       <Link href={`/admin/curriculum/chapter/${c.id}/exercices`}
-                        className="flex-shrink-0 px-3 py-1.5 bg-green-50 text-green-700 rounded-xl text-xs font-bold hover:bg-green-100">
+                        className="flex-shrink-0 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold hover:bg-blue-100">
                         Gérer les exercices
                       </Link>
                     </div>
@@ -213,7 +213,7 @@ function PrepaAdmin() {
                       onChange={(e) => setForm((f) => ({ ...f, minutes: Math.max(1, Math.min(240, Number(e.target.value) || 60)) }))}
                       className="w-20 border border-gray-200 rounded-xl px-3 py-2.5 text-sm" /> min
                   </label>
-                  <button disabled={saving} className="bg-green-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm hover:bg-green-800 disabled:opacity-50">
+                  <button disabled={saving} className="bg-blue-700 text-white font-bold px-4 py-2.5 rounded-full text-sm hover:bg-blue-800 disabled:opacity-50">
                     {saving ? '…' : 'Créer'}
                   </button>
                 </div>
@@ -239,7 +239,7 @@ function PrepaAdmin() {
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Link href={`/admin/prepa/epreuve/${ep.id}`} className="px-3 py-1.5 bg-green-50 text-green-700 rounded-xl text-xs font-bold hover:bg-green-100">Modifier</Link>
+                        <Link href={`/admin/prepa/epreuve/${ep.id}`} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold hover:bg-blue-100">Modifier</Link>
                         <button onClick={() => trash(ep)} disabled={busy === ep.id}
                           className="px-3 py-1.5 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 disabled:opacity-50">
                           Supprimer
@@ -254,7 +254,7 @@ function PrepaAdmin() {
                 <div className="mt-6">
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-bold text-gray-900 text-sm">Sujets PDF d&apos;anciens examens</p>
-                    <Link href="/admin/documents" className="text-xs font-semibold text-green-700 hover:underline">Ajouter un sujet PDF →</Link>
+                    <Link href="/admin/documents" className="text-xs font-semibold text-blue-700 hover:underline">Ajouter un sujet PDF →</Link>
                   </div>
                   {(data?.sujets ?? []).length === 0 ? (
                     <p className="text-sm text-gray-400">Aucun sujet PDF (type « examen ») dans cette matière.</p>

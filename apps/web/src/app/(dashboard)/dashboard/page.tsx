@@ -29,14 +29,14 @@ const SHORTCUTS: Shortcut[] = [
     href: '/examens',
     label: 'Prépa',
     Icon: FileText,
-    gradient: 'from-violet-500 to-violet-600',
-    bg: 'bg-violet-50',
-    text: 'text-violet-700',
+    gradient: 'from-[#35C0F0] to-[#35C0F0]',
+    bg: 'bg-blue-50',
+    text: 'text-blue-700',
     iconColor: 'text-white',
   },
   {
     href: '/tuteur',
-    label: 'Kelassi IA',
+    label: 'Cognix IA',
     Icon: Bot,
     gradient: 'from-emerald-500 to-emerald-600',
     bg: 'bg-emerald-50',
@@ -85,7 +85,7 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 py-8">
       {/* ── HERO GREETING ── */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1e3a8a] via-[#172554] to-[#111827] px-8 py-10 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-blue-700 to-[#0F1B2D] px-8 py-10 shadow-xl">
         <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 -translate-y-1/2 translate-x-1/4 rounded-full bg-white/5" />
         <div className="pointer-events-none absolute bottom-0 left-1/2 h-48 w-48 translate-y-1/2 rounded-full bg-white/5" />
         <div className="relative">
@@ -240,7 +240,7 @@ export default async function DashboardPage() {
         <div>
           <p className="mb-1 font-bold text-emerald-900">Conseil du jour</p>
           <p className="text-sm leading-relaxed text-emerald-700">
-            Pose tes questions à <strong>Kelassi IA</strong> en disant "explique-moi comme si
+            Pose tes questions à <strong>Cognix IA</strong> en disant "explique-moi comme si
             j'avais 10 ans" pour des explications ultra-claires. La méthode Feynman est la plus
             efficace pour mémoriser.
           </p>

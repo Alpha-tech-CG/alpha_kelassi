@@ -57,7 +57,7 @@ export default function AdminTutorsPage() {
       {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
 
       {loading ? (
-        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : rows.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucun tuteur en attente 🎉</div>
       ) : (
@@ -70,12 +70,12 @@ export default function AdminTutorsPage() {
                   <p className="text-sm text-gray-500">{t.users?.email ?? '—'}{t.users?.phone ? ` · ${t.users.phone}` : ''}</p>
                   {t.bio && <p className="text-sm text-gray-600 mt-2 italic">“{t.bio}”</p>}
                   <div className="flex gap-3 mt-3">
-                    {t.id_doc_signed && <a href={t.id_doc_signed} target="_blank" rel="noreferrer" className="text-sm text-green-700 font-semibold underline">📄 CNI</a>}
-                    {t.bac_doc_signed && <a href={t.bac_doc_signed} target="_blank" rel="noreferrer" className="text-sm text-green-700 font-semibold underline">🎓 Diplôme BAC</a>}
+                    {t.id_doc_signed && <a href={t.id_doc_signed} target="_blank" rel="noreferrer" className="text-sm text-blue-700 font-semibold underline">📄 CNI</a>}
+                    {t.bac_doc_signed && <a href={t.bac_doc_signed} target="_blank" rel="noreferrer" className="text-sm text-blue-700 font-semibold underline">🎓 Diplôme BAC</a>}
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 shrink-0">
-                  <button onClick={() => verify(t.user_id)} disabled={busy === t.user_id} className="px-4 py-2 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">Valider</button>
+                  <button onClick={() => verify(t.user_id)} disabled={busy === t.user_id} className="px-4 py-2 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 disabled:opacity-50">Valider</button>
                   <button onClick={() => reject(t.user_id)} disabled={busy === t.user_id} className="px-4 py-2 bg-red-50 text-red-600 rounded-xl text-sm font-bold hover:bg-red-100 disabled:opacity-50">Rejeter</button>
                 </div>
               </div>

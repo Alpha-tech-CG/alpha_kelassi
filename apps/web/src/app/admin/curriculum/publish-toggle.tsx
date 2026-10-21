@@ -39,7 +39,7 @@ export function PublishToggle({ level, label, published, disabled }: {
       title={disabled ? 'Applique d’abord les migrations 063 et 064' : undefined}
       className={`text-[11px] font-bold px-2.5 py-1 rounded-full border transition-colors disabled:opacity-50 ${
         published
-          ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
+          ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
           : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
       }`}
     >

@@ -14,7 +14,7 @@ interface Exercise {
 }
 
 const DIFF: Record<number, { label: string; cls: string }> = {
-  1: { label: 'Facile',    cls: 'bg-green-50 text-green-700' },
+  1: { label: 'Facile',    cls: 'bg-blue-50 text-blue-700' },
   2: { label: 'Moyen',     cls: 'bg-amber-50 text-amber-700' },
   3: { label: 'Difficile', cls: 'bg-red-50 text-red-700' },
 }
@@ -95,7 +95,7 @@ export default function AdminExercisesPage() {
         <div className="flex gap-2 mb-3">
           {[1, 2, 3].map((d) => (
             <button key={d} type="button" onClick={() => setDifficulty(d)}
-              className={`px-3 py-2 rounded-xl text-sm font-bold border-2 ${difficulty === d ? 'border-green-600 bg-green-50 text-green-700' : 'border-gray-200 text-gray-500'}`}>
+              className={`px-3 py-2 rounded-xl text-sm font-bold border-2 ${difficulty === d ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-500'}`}>
               {DIFF[d]!.label}
             </button>
           ))}
@@ -108,14 +108,14 @@ export default function AdminExercisesPage() {
           <label className="flex items-center gap-2 text-sm text-gray-600">
             <input type="checkbox" checked={premium} onChange={(e) => setPremium(e.target.checked)} /> Réservé aux abonnés (dès Starter) ⭐
           </label>
-          <button type="submit" disabled={saving} className="px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+          <button type="submit" disabled={saving} className="px-5 py-2.5 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
             {saving ? 'Ajout…' : 'Ajouter l\'exercice'}
           </button>
         </div>
       </form>
 
       {loading ? (
-        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : rows.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucun exercice.</div>
       ) : (
@@ -130,7 +130,7 @@ export default function AdminExercisesPage() {
               </div>
               {ex.title && <p className="font-semibold text-gray-900 mb-1">{ex.title}</p>}
               <p className="text-sm text-gray-600 whitespace-pre-wrap line-clamp-3">{ex.statement}</p>
-              <p className="text-xs text-green-700 mt-2 whitespace-pre-wrap line-clamp-2">✅ {solOf(ex)}</p>
+              <p className="text-xs text-blue-700 mt-2 whitespace-pre-wrap line-clamp-2">✅ {solOf(ex)}</p>
             </div>
           ))}
         </div>

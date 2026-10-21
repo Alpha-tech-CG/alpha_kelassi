@@ -92,7 +92,7 @@ export default function AdminSubjectsPage() {
 
       {/* Formulaire d'ajout */}
       <div className="mb-3">
-        <button type="button" className="px-4 py-2 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800">
+        <button type="button" className="px-4 py-2 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800">
           Ajouter un parcours / classe
         </button>
       </div>
@@ -122,7 +122,7 @@ export default function AdminSubjectsPage() {
               placeholder="ex: Mathématiques" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm" />
           </div>
           <div className="col-span-12 md:col-span-2">
-            <button type="submit" disabled={saving} className="w-full px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+            <button type="submit" disabled={saving} className="w-full px-5 py-2.5 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
               {saving ? 'Ajout…' : 'Ajouter'}
             </button>
           </div>
@@ -131,7 +131,7 @@ export default function AdminSubjectsPage() {
 
       {/* Liste groupée par catégorie puis parcours */}
       {loading ? (
-        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : subjects.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucune matière.</div>
       ) : (
@@ -145,7 +145,7 @@ export default function AdminSubjectsPage() {
             return (
               <div key={track.value}>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-black text-green-700 bg-green-50 px-2.5 py-1 rounded-full uppercase">{track.label}</span>
+                  <span className="text-xs font-black text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full uppercase">{track.label}</span>
                   <span className="text-xs text-gray-400">{byTrack.length} matière{byTrack.length > 1 ? 's' : ''}</span>
                 </div>
 
@@ -170,7 +170,7 @@ export default function AdminSubjectsPage() {
                                     onChange={(e) => setEditName(e.target.value)}
                                     onKeyDown={(e) => { if (e.key === 'Enter') saveEdit(s.id); if (e.key === 'Escape') setEditing(null) }}
                                     onBlur={() => saveEdit(s.id)}
-                                    className="w-full border border-green-300 rounded-lg px-2 py-1 text-sm font-semibold"
+                                    className="w-full border border-blue-300 rounded-lg px-2 py-1 text-sm font-semibold"
                                   />
                                 ) : (
                                   <p className="font-semibold text-gray-900 truncate">{s.name}</p>
@@ -182,7 +182,7 @@ export default function AdminSubjectsPage() {
                               <div className="flex items-center gap-1 flex-shrink-0">
                                 <button
                                   onClick={() => { setEditing(s.id); setEditName(s.name) }}
-                                  className="p-1.5 text-gray-400 hover:text-green-700 hover:bg-green-50 rounded-lg" title="Renommer"
+                                  className="p-1.5 text-gray-400 hover:text-blue-700 hover:bg-blue-50 rounded-lg" title="Renommer"
                                 >✏️</button>
                                 <button
                                   onClick={() => remove(s)}

@@ -159,7 +159,7 @@ export function LessonBlocks({ lessons, initialDone, subjectId, chapterId }: Pro
                   <button
                     onClick={() => complete(openLesson.id)}
                     disabled={busy === openLesson.id}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                   >
                     {busy === openLesson.id ? '…' : 'Marquer comme lu'}
                   </button>
@@ -295,7 +295,7 @@ export function LessonBlocks({ lessons, initialDone, subjectId, chapterId }: Pro
                             complete(l.id, type === 'quiz' ? (quizScores[l.id] ?? 0) : undefined)
                           }
                           disabled={busy === l.id}
-                          className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                         >
                           {busy === l.id
                             ? '…'

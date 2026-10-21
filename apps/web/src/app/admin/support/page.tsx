@@ -11,7 +11,7 @@ interface Ticket {
 }
 
 const PRIORITY_LABEL = ['Standard', 'Prioritaire (Pro)', 'Prioritaire renforcé (Pro Max)']
-const PRIORITY_STYLE = ['bg-gray-100 text-gray-700', 'bg-blue-100 text-blue-800', 'bg-violet-100 text-violet-800']
+const PRIORITY_STYLE = ['bg-gray-100 text-gray-700', 'bg-blue-100 text-blue-800', 'bg-blue-100 text-blue-800']
 
 export default function AdminSupportPage() {
   const [tickets, setTickets] = useState<Ticket[]>([])

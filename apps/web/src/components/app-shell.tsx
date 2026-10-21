@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { AppNavLink } from '@/components/app-nav-link'
+import { Logo } from '@/components/brand/logo'
 import { BetaFeedbackButton } from '@/components/beta-feedback-button'
 import { NotificationBanner } from '@/components/notification-banner'
 import { SignOutButton } from '@/components/sign-out-button'
@@ -25,7 +27,7 @@ const NAV: NavItem[] = [
   { href: '/cours',      label: 'Cours',       Icon: BookOpen   },
   { href: '/examens',    label: 'Prépa',       Icon: FileText   },
   { href: '/videos',     label: 'Vidéos',      Icon: PlayCircle },
-  { href: '/tuteur',     label: 'Kelassi IA',  Icon: Bot        },
+  { href: '/tuteur',     label: 'Cognix IA',   Icon: Bot        },
   { href: '/flashcards', label: 'Flashcards',  Icon: Layers     },
   { href: '/quiz',       label: 'QCM',         Icon: ListChecks },
   { href: '/planning',   label: 'Planning',    Icon: CalendarClock },
@@ -68,100 +70,91 @@ export function AppShell({
   const planLabel = profile?.role === 'admin' ? 'Admin · accès complet' : PLAN_META[plan].label
 
   return (
-    <div className="min-h-screen flex">
+    <div className="text-cx-navy flex min-h-screen">
       {/* Skip to content — accessibilité clavier */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-blue-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
       >
         Aller au contenu principal
       </a>
 
-      {/* Sidebar */}
-      <aside className="hidden md:flex w-64 flex-col border-r border-white/10 bg-[#172554] px-4 py-6 text-white" aria-label="Navigation principale">
-        <Link href="/dashboard" className="flex items-center gap-2 mb-8 px-2" aria-label="Kelassi — Accueil">
-          <div className="w-9 h-9 bg-[#f5a623] rounded-xl flex items-center justify-center" aria-hidden="true">
-            <BookOpen className="h-5 w-5 text-[#172554]" />
-          </div>
-          <span className="text-xl font-black text-white">Alpha Kelassi</span>
+      {/* Barre latérale (charte Cognix : blanc, liens en pilule bleue) */}
+      <aside
+        className="sticky top-0 hidden h-screen w-64 flex-col border-r border-gray-100 bg-white px-4 py-6 md:flex"
+        aria-label="Navigation principale"
+      >
+        <Link href="/dashboard" className="mb-8 px-2" aria-label="Cognix, accueil">
+          <Logo />
         </Link>
 
-        <nav className="flex-1 space-y-0.5" aria-label="Menu principal">
+        <nav className="flex-1 space-y-1 overflow-y-auto" aria-label="Menu principal">
           {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-blue-100 hover:bg-white/10 hover:text-white transition-colors"
-            >
-              <item.Icon className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} aria-hidden="true" />
+            <AppNavLink key={item.href} href={item.href}>
+              <item.Icon className="h-4 w-4 flex-shrink-0" strokeWidth={1.75} aria-hidden="true" />
               {item.label}
-            </Link>
+            </AppNavLink>
           ))}
           {isAdmin && (
             <>
-              <div className="pt-4 pb-1 px-3">
-                <p className="text-[10px] font-bold text-blue-300/70 uppercase tracking-wider">Administration</p>
-              </div>
-              {/* Couleurs explicites : la barre latérale est bleu marine, un gris
-                  foncé hérité rendait ce lien pratiquement illisible. */}
+              <p className="px-4 pb-1 pt-5 text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400">
+                Administration
+              </p>
               <Link
                 href="/admin"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold bg-[#f5a623] text-[#172554] hover:brightness-105 transition-all"
+                className="bg-cx-navy flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
               >
-                <Wrench className="w-4 h-4 flex-shrink-0" strokeWidth={2} aria-hidden="true" />
+                <Wrench className="h-4 w-4 flex-shrink-0" strokeWidth={2} aria-hidden="true" />
                 Console admin
               </Link>
             </>
           )}
         </nav>
 
-        <div className="border-t border-white/10 pt-4 space-y-3">
+        <div className="space-y-3 border-t border-gray-100 pt-4">
           <div className="flex items-center gap-3 px-2">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-blue-600 font-bold text-sm">{initial}</span>
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-50">
+              <span className="text-sm font-bold text-blue-600">{initial}</span>
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-semibold text-gray-900 truncate">{displayName}</p>
+              <p className="truncate text-xs font-semibold">{displayName}</p>
               <Link
                 href="/billing"
                 aria-label={`Formule ${planLabel} — voir les formules`}
-                className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full mt-0.5 ${
-                  paidPlan ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'
+                className={`mt-0.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${
+                  paidPlan ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-500'
                 }`}
               >
-                {paidPlan && <Crown className="w-3 h-3" aria-hidden="true" />} {planLabel}
+                {paidPlan && <Crown className="h-3 w-3" aria-hidden="true" />} {planLabel}
               </Link>
             </div>
           </div>
 
-          <SignOutButton />
+          <SignOutButton className="flex w-full items-center gap-3 rounded-full px-4 py-2.5 text-left text-sm text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900" />
 
           <div className="flex flex-wrap gap-3 px-2 text-xs text-gray-400">
-            <Link href="/compte/securite" className="hover:text-gray-600 transition-colors">Sécurité</Link>
-            <Link href="/cgu" className="hover:text-gray-600 transition-colors">CGU</Link>
-            <Link href="/confidentialite" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
-            <Link href="/compte/supprimer" className="hover:text-red-500 transition-colors">Supprimer</Link>
+            <Link href="/compte/securite" className="transition-colors hover:text-gray-700">Sécurité</Link>
+            <Link href="/cgu" className="transition-colors hover:text-gray-700">CGU</Link>
+            <Link href="/confidentialite" className="transition-colors hover:text-gray-700">Confidentialité</Link>
+            <Link href="/compte/supprimer" className="transition-colors hover:text-red-500">Supprimer</Link>
           </div>
         </div>
       </aside>
 
-      {/* Main content */}
-      <main id="main-content" className="flex-1 overflow-auto bg-[#fcfbf9] pb-20 md:pb-0">
+      {/* Contenu */}
+      <main id="main-content" className="bg-cx-paper flex-1 overflow-auto pb-20 md:pb-0">
         {/* Barre compte mobile — la barre latérale est masquée en dessous de md,
             c'est donc le seul accès au compte et à la déconnexion sur mobile web. */}
-        <div className="md:hidden flex items-center justify-between gap-3 px-4 py-2.5 bg-[#172554] text-white">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-blue-600 font-bold text-[11px]">{initial}</span>
-            </div>
-            <span className="text-xs text-blue-100 truncate">{displayName}</span>
-          </div>
-          <div className="flex items-center gap-3 flex-shrink-0 text-xs text-blue-100">
+        <div className="flex items-center justify-between gap-3 border-b border-gray-100 bg-white px-4 py-2.5 md:hidden">
+          <Link href="/dashboard" aria-label="Cognix, accueil">
+            <Logo size="sm" />
+          </Link>
+          <div className="flex flex-shrink-0 items-center gap-3 text-xs font-medium text-gray-600">
             {isAdmin && (
-              <Link href="/admin" className="font-bold text-[#f5a623] hover:brightness-110 transition-all">Admin</Link>
+              <Link href="/admin" className="font-semibold text-blue-600">Admin</Link>
             )}
-            <Link href="/compte/securite" className="hover:text-white transition-colors">Compte</Link>
-            <SignOutButton className="flex items-center gap-1 hover:text-white transition-colors" />
+            <Link href="/compte/securite" className="hover:text-gray-900">Compte</Link>
+            <SignOutButton className="flex items-center gap-1 hover:text-gray-900" />
           </div>
         </div>
         <NotificationBanner plan={normalizePlan(profile?.plan)} />
@@ -170,17 +163,16 @@ export function AppShell({
 
       <BetaFeedbackButton />
 
-      {/* Bottom nav mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#172554] border-t border-white/10 px-2 py-2 flex items-center justify-around" aria-label="Navigation mobile">
+      {/* Navigation mobile */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-gray-100 bg-white/95 px-2 py-2 backdrop-blur md:hidden"
+        aria-label="Navigation mobile"
+      >
         {(isAdmin ? [...MOBILE_NAV, { href: '/admin', label: 'Console', Icon: Wrench }] : MOBILE_NAV).map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-blue-200 hover:text-[#f5a623] hover:bg-white/10 transition-all"
-          >
-            <item.Icon className="w-5 h-5" strokeWidth={1.75} aria-hidden="true" />
+          <AppNavLink key={item.href} href={item.href} variant="bottom">
+            <item.Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
             <span className="text-[10px] font-semibold">{item.label}</span>
-          </Link>
+          </AppNavLink>
         ))}
       </nav>
     </div>

@@ -1,39 +1,39 @@
 import Link from 'next/link'
-import { BookOpen } from 'lucide-react'
+import { Logo } from '@/components/brand/logo'
 
 /**
  * Coque publique du catalogue de cours — affichée aux visiteurs sans compte.
  *
- * Volontairement plus légère que la coque connectée : pas de navigation
- * applicative (qui mènerait à des pages protégées), mais un accès direct à la
- * création de compte, seule étape nécessaire pour lire les leçons.
+ * Même navigation et même pied de page que la page d'accueil (charte Cognix
+ * bleu / blanc), sans navigation applicative (qui mènerait à des pages
+ * protégées), mais avec un accès direct à la création de compte, seule étape
+ * nécessaire pour lire les leçons.
  */
 export function PublicShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcfbf9]">
+    <div className="text-cx-navy flex min-h-screen flex-col bg-white">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-blue-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
       >
         Aller au contenu principal
       </a>
 
-      <header className="bg-[#172554] text-white">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2" aria-label="Alpha Kelassi — Accueil">
-            <div className="w-8 h-8 bg-[#f5a623] rounded-lg flex items-center justify-center" aria-hidden="true">
-              <BookOpen className="h-4 w-4 text-[#172554]" />
-            </div>
-            <span className="text-lg font-black">Alpha Kelassi</span>
+      <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
+          <Link href="/" aria-label="Cognix, accueil">
+            <Logo />
           </Link>
-
-          <nav className="flex items-center gap-3 text-sm" aria-label="Compte">
-            <Link href="/login" className="text-blue-100 hover:text-white transition-colors font-medium">
+          <nav className="flex items-center gap-2 text-[15px] font-medium" aria-label="Compte">
+            <Link href="/cours" className="hidden px-3 py-2 hover:opacity-70 sm:block">
+              Cours
+            </Link>
+            <Link href="/login" className="px-3 py-2 hover:opacity-70">
               Se connecter
             </Link>
             <Link
               href="/register"
-              className="bg-[#f5a623] text-[#172554] font-bold px-3 py-1.5 rounded-lg hover:brightness-105 transition-all"
+              className="btn-lift rounded-full bg-blue-600 px-5 py-2.5 text-white"
             >
               Créer un compte
             </Link>
@@ -41,14 +41,23 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main id="main-content" className="flex-1">{children}</main>
+      <main id="main-content" className="bg-cx-paper flex-1">
+        {children}
+      </main>
 
-      <footer className="border-t border-gray-200 bg-white">
-        <div className="max-w-5xl mx-auto px-4 py-6 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-400">
-          <p>Alpha Kelassi — révisions CEPE, BEPC &amp; BAC, Congo-Brazzaville</p>
-          <div className="flex gap-4">
-            <Link href="/cgu" className="hover:text-gray-600 transition-colors">CGU</Link>
-            <Link href="/confidentialite" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
+      <footer className="bg-cx-sky">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm">
+          <div className="flex items-center gap-4">
+            <Logo size="sm" />
+            <p className="text-cx-navy/70 hidden sm:block">Révisions CEPE, BEPC et BAC au Congo</p>
+          </div>
+          <div className="flex gap-5">
+            <Link href="/cgu" className="hover:underline">
+              Conditions d’utilisation
+            </Link>
+            <Link href="/confidentialite" className="hover:underline">
+              Confidentialité
+            </Link>
           </div>
         </div>
       </footer>

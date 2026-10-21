@@ -108,7 +108,7 @@ export default function AdminLessonsPage() {
             ✅ QCM de fin de chapitre →
           </Link>
           <Link href={`/admin/curriculum/chapter/${chapterId}/exercices`}
-            className="px-4 py-2 bg-green-50 text-green-700 rounded-xl text-sm font-bold border border-green-200 hover:bg-green-100">
+            className="px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-bold border border-blue-200 hover:bg-blue-100">
             ✏️ Gérer les exercices →
           </Link>
         </div>
@@ -126,7 +126,7 @@ export default function AdminLessonsPage() {
         <div className="flex flex-wrap gap-2 mb-4">
           {TYPES.map((t) => (
             <button key={t.value} type="button" onClick={() => setType(t.value)}
-              className={`px-3 py-2 rounded-xl text-sm font-bold border-2 ${type === t.value ? 'border-green-600 bg-green-50 text-green-700' : 'border-gray-200 text-gray-500'}`}>
+              className={`px-3 py-2 rounded-xl text-sm font-bold border-2 ${type === t.value ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-500'}`}>
               {t.icon} {t.label}
             </button>
           ))}
@@ -145,7 +145,7 @@ export default function AdminLessonsPage() {
           <label className="flex items-center gap-2 text-sm text-gray-600">
             <input type="checkbox" checked={premium} onChange={(e) => setPremium(e.target.checked)} /> Réservé aux abonnés (dès Starter) ⭐
           </label>
-          <button type="submit" disabled={saving} className="px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+          <button type="submit" disabled={saving} className="px-5 py-2.5 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
             {saving ? 'Ajout…' : 'Ajouter la leçon'}
           </button>
         </div>
@@ -153,7 +153,7 @@ export default function AdminLessonsPage() {
 
       {/* Liste */}
       {loading ? (
-        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : rows.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucune leçon.</div>
       ) : (
@@ -171,7 +171,7 @@ export default function AdminLessonsPage() {
                   </div>
                   {l.type === 'resume' && (
                     <button onClick={() => generateResume(l)} disabled={busy === l.id}
-                      className="px-3 py-1.5 bg-violet-100 text-violet-700 rounded-lg text-xs font-bold hover:bg-violet-200 disabled:opacity-50">
+                      className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-bold hover:bg-blue-200 disabled:opacity-50">
                       {busy === l.id ? '…' : '✨ Générer IA'}
                     </button>
                   )}
@@ -188,7 +188,7 @@ export default function AdminLessonsPage() {
                     <MarkdownEditor value={drafts[l.id] ?? ''} onChange={(v) => setDrafts((d) => ({ ...d, [l.id]: v }))}
                       rows={12} />
                     <button onClick={() => saveContent(l)} disabled={busy === l.id}
-                      className="mt-2 px-4 py-2 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+                      className="mt-2 px-4 py-2 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
                       {busy === l.id ? 'Enregistrement…' : 'Enregistrer'}
                     </button>
                   </div>

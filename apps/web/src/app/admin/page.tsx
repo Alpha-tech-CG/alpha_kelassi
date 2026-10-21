@@ -90,17 +90,17 @@ export default async function AdminOverviewPage() {
   const recentQ = analytics?.recent_questions ?? []
 
   const statCards = [
-    { label: 'Utilisateurs inscrits', value: totals.users.toLocaleString('fr'), icon: '👥', color: 'from-green-600 to-green-700' },
+    { label: 'Utilisateurs inscrits', value: totals.users.toLocaleString('fr'), icon: '👥', color: 'from-blue-600 to-blue-700' },
     { label: 'Abonnés actifs', value: totals.active_subs.toLocaleString('fr'), icon: '⭐', color: 'from-amber-500 to-orange-500' },
     { label: 'Revenus du mois', value: `${revenue.monthly_revenue_fcfa.toLocaleString('fr')} FCFA`, icon: '💰', color: 'from-emerald-500 to-teal-600' },
-    { label: 'Paiements Mobile Money', value: revenue.mobile_money_count.toLocaleString('fr'), icon: '📱', color: 'from-violet-500 to-purple-600' },
+    { label: 'Paiements Mobile Money', value: revenue.mobile_money_count.toLocaleString('fr'), icon: '📱', color: 'from-blue-500 to-[#35C0F0]' },
   ]
 
   return (
     <div className="px-4 md:px-8 py-6 md:py-8 max-w-6xl">
       <div className="mb-8">
         <h1 className="text-2xl font-black text-gray-900">Vue d&apos;ensemble</h1>
-        <p className="text-gray-500 text-sm mt-1">Tableau de bord administrateur Kelassi</p>
+        <p className="text-gray-500 text-sm mt-1">Tableau de bord administrateur Cognix</p>
       </div>
 
       {/* KPIs */}
@@ -131,7 +131,7 @@ export default async function AdminOverviewPage() {
                     <p className="text-sm font-medium text-gray-800 truncate">{d.title}</p>
                     <p className="text-xs text-gray-400 uppercase">{d.type} · {d.level.replace('_', ' ')}</p>
                   </div>
-                  <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full flex-shrink-0">
+                  <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full flex-shrink-0">
                     {d.count} vues
                   </span>
                 </div>
@@ -142,14 +142,14 @@ export default async function AdminOverviewPage() {
 
         {/* Questions récentes */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-bold text-gray-900 mb-4">Questions récentes posées à Kelassi</h2>
+          <h2 className="font-bold text-gray-900 mb-4">Questions récentes posées à Cognix</h2>
           {recentQ.length === 0 ? (
             <p className="text-gray-400 text-sm text-center py-6">Aucune donnée</p>
           ) : (
             <div className="space-y-3">
               {recentQ.map((q, i) => (
                 <div key={i} className="flex gap-3">
-                  <span className="text-green-500 flex-shrink-0 mt-0.5">🤖</span>
+                  <span className="text-blue-500 flex-shrink-0 mt-0.5">🤖</span>
                   <div className="min-w-0">
                     <p className="text-sm text-gray-700 leading-snug line-clamp-2">{q.content}</p>
                     <p className="text-xs text-gray-400 mt-0.5">

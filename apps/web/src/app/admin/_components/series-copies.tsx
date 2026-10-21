@@ -49,7 +49,7 @@ export function SeriesTargetPicker({ subjects, sourceName, exclude, value, onCha
       <div className="flex flex-wrap gap-2">
         {levels.map((l) => (
           <button key={l} type="button" onClick={() => toggle(l)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${l in value ? 'bg-green-700 text-white border-green-700' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}>
+            className={`px-3 py-1.5 rounded-full text-xs font-bold border ${l in value ? 'bg-blue-700 text-white border-blue-700' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'}`}>
             {l in value ? '✓ ' : ''}{LEVEL_META[l].label}
           </button>
         ))}
@@ -164,14 +164,14 @@ export function SeriesCopiesPanel({ chapterId }: { chapterId: string }) {
         </div>
       )}
       {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-3">{error}</div>}
-      {notice && <div className="p-3 bg-green-50 text-green-800 rounded-xl text-sm mb-3">{notice}</div>}
+      {notice && <div className="p-3 bg-blue-50 text-blue-800 rounded-xl text-sm mb-3">{notice}</div>}
 
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="min-w-0">
           <p className="font-bold text-gray-900 text-sm">🔗 Séries</p>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {info.members.map((m) => (
-              <span key={m.chapter_id} className={`inline-flex items-center gap-1.5 text-xs rounded-full px-2.5 py-1 ${m.is_original ? 'bg-green-50 text-green-800 font-bold' : 'bg-gray-100 text-gray-700'}`}>
+              <span key={m.chapter_id} className={`inline-flex items-center gap-1.5 text-xs rounded-full px-2.5 py-1 ${m.is_original ? 'bg-blue-50 text-blue-800 font-bold' : 'bg-gray-100 text-gray-700'}`}>
                 {m.chapter_id === chapterId ? '● ' : ''}{label(m)}{m.is_original && info.members.length > 1 ? ' (original)' : ''}
                 {!m.is_original && !info.is_copy && (
                   <button onClick={() => detach(m)} disabled={busy === m.chapter_id} title="Délier cette copie"
@@ -190,7 +190,7 @@ export function SeriesCopiesPanel({ chapterId }: { chapterId: string }) {
           )}
           {!info.is_copy && (
             <button onClick={() => setOpen((o) => !o)}
-              className="px-3 py-1.5 bg-green-50 hover:bg-green-100 rounded-lg text-xs font-bold text-green-700">
+              className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg text-xs font-bold text-blue-700">
               {open ? 'Fermer' : '➕ Ajouter à d’autres séries'}
             </button>
           )}
@@ -204,7 +204,7 @@ export function SeriesCopiesPanel({ chapterId }: { chapterId: string }) {
           </p>
           <SeriesTargetPicker subjects={subjects} sourceName={sourceName} exclude={exclude} value={picked} onChange={setPicked} />
           <button onClick={publish} disabled={busy === 'publish' || Object.keys(picked).length === 0}
-            className="mt-3 px-4 py-2 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+            className="mt-3 px-4 py-2 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
             {busy === 'publish' ? 'Publication…' : `Publier dans ${Object.keys(picked).length || ''} série${Object.keys(picked).length > 1 ? 's' : ''}`}
           </button>
         </div>

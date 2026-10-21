@@ -46,12 +46,12 @@ const TIPS = [
   {
     icon: '🔍',
     title: 'Demande des exemples',
-    desc: '"Donne-moi un exemple" → Kelassi adapte sa réponse à ton niveau.',
+    desc: '"Donne-moi un exemple" → Cognix adapte sa réponse à ton niveau.',
   },
   {
     icon: '🔄',
     title: 'Reformule si besoin',
-    desc: '"Je n\'ai pas compris, explique autrement" → Kelassi réessaie.',
+    desc: '"Je n\'ai pas compris, explique autrement" → Cognix réessaie.',
   },
 ]
 
@@ -152,7 +152,7 @@ export default function OnboardingPage() {
           {step === 0 && (
             <div>
               <p className="mb-4 text-center text-4xl">👋</p>
-              <h1 className="mb-2 text-center text-2xl font-bold">Bienvenue sur Kelassi !</h1>
+              <h1 className="mb-2 text-center text-2xl font-bold">Bienvenue sur Cognix !</h1>
               <p className="mb-8 text-center text-sm text-gray-500">
                 Quel type d'enseignement suis-tu ?
               </p>
@@ -260,7 +260,7 @@ export default function OnboardingPage() {
           {step === 3 && (
             <div>
               <p className="mb-4 text-center text-4xl">🤖</p>
-              <h2 className="mb-2 text-center text-xl font-bold">Comment utiliser Kelassi ?</h2>
+              <h2 className="mb-2 text-center text-xl font-bold">Comment utiliser Cognix ?</h2>
               <div className="my-6 space-y-3">
                 {TIPS.map((t) => (
                   <div key={t.title} className="flex items-start gap-3 rounded-xl bg-gray-50 p-3">
@@ -287,7 +287,7 @@ export default function OnboardingPage() {
               <p className="mb-4 text-center text-4xl">🚀</p>
               <h2 className="mb-2 text-center text-xl font-bold">Tout est prêt !</h2>
               <p className="mb-6 text-center text-sm text-gray-500">
-                Ton espace est configuré pour ton parcours. Bonne révision avec Kelassi !
+                Ton espace est configuré pour ton parcours. Bonne révision avec Cognix !
               </p>
               <button
                 onClick={handleComplete}

@@ -5,7 +5,6 @@
 /* KaTeX — rendu des formules mathématiques dans toute l'app */
 @import 'katex/dist/katex.min.css';
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@600;700;800;900&display=swap');
 
 @layer base {
   :root {
@@ -25,16 +24,16 @@
 
   body {
     @apply bg-white text-gray-900 antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-display), 'Montserrat', system-ui, sans-serif;
     background-color: #ffffff !important;
-    color: #111827 !important;
+    color: #0F1B2D !important;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    font-family: 'Nunito', 'Inter', system-ui, sans-serif;
+    font-family: var(--font-display), 'Montserrat', system-ui, sans-serif;
   }
 }
 

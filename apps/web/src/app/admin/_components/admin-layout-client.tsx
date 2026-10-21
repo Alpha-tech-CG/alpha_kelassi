@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import { Logo } from '@/components/brand/logo'
 import { AdminSidebar } from './sidebar'
 
 export function AdminLayoutClient({
@@ -17,14 +18,9 @@ export function AdminLayoutClient({
     <div className="min-h-screen bg-gray-950 flex flex-col md:flex-row">
       {/* Header mobile */}
       <header className="md:hidden flex items-center justify-between bg-gray-950 border-b border-gray-800 px-4 py-3 text-white sticky top-0 z-40">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-green-600 to-violet-600 rounded-lg flex items-center justify-center text-white text-sm font-black">
-            K
-          </div>
-          <div>
-            <p className="text-white font-bold text-sm leading-none">Kelassi</p>
-            <p className="text-gray-500 text-[10px] mt-0.5">Console Admin</p>
-          </div>
+        <div className="flex items-center gap-2">
+          <Logo dark size="sm" />
+          <span className="text-gray-400 text-[11px]">Admin</span>
         </div>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -47,7 +43,7 @@ export function AdminLayoutClient({
       )}
 
       {/* Contenu principal */}
-      <main className="flex-1 min-h-screen bg-gray-50 md:ml-64 w-full admin-content-override">
+      <main className="flex-1 min-h-screen bg-cx-paper md:ml-64 w-full admin-content-override">
         {children}
       </main>
     </div>

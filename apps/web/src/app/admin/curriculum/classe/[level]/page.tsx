@@ -118,7 +118,7 @@ export default function AdminClassSubjectsPage() {
           </div>
           <div className="col-span-12 md:col-span-2">
             <button type="submit" disabled={saving}
-              className="w-full px-4 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+              className="w-full px-4 py-2.5 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
               {saving ? '…' : 'Ajouter'}
             </button>
           </div>
@@ -128,7 +128,7 @@ export default function AdminClassSubjectsPage() {
 
       {/* Liste */}
       {loading ? (
-        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : rows.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">
           Aucune matière pour cette classe. Ajoute la première ci-dessus.
@@ -145,7 +145,7 @@ export default function AdminClassSubjectsPage() {
                   <p className="font-semibold text-gray-900 truncate">
                     {s.name}
                     {parent && (
-                      <span className="ml-2 text-[10px] font-bold text-violet-700 bg-violet-50 px-2 py-0.5 rounded-full align-middle">
+                      <span className="ml-2 text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full align-middle">
                         domaine de {parent.name}
                       </span>
                     )}

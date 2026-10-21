@@ -45,7 +45,7 @@ export default function AdminModerationPage() {
       <p className="text-gray-500 text-sm mb-6">Signalements ouverts (messages de groupe signalés ou bloqués automatiquement par l&apos;IA).</p>
 
       {loading ? (
-        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : rows.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucun signalement ouvert 🛡️</div>
       ) : (

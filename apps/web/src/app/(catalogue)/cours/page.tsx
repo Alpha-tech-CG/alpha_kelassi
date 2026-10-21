@@ -69,11 +69,11 @@ const LEVEL_CONFIG: Record<
   },
   bac_c: {
     label: 'BAC C',
-    color: 'text-violet-700',
-    bg: 'bg-violet-50',
-    border: 'border-violet-300',
-    headerBg: 'bg-violet-500',
-    dot: 'bg-violet-500',
+    color: 'text-blue-700',
+    bg: 'bg-blue-50',
+    border: 'border-blue-300',
+    headerBg: 'bg-blue-500',
+    dot: 'bg-blue-500',
   },
   bac_d: {
     label: 'BAC D',
@@ -117,11 +117,11 @@ const LEVEL_CONFIG: Record<
   },
   bac_h: {
     label: 'BAC H',
-    color: 'text-indigo-700',
-    bg: 'bg-indigo-50',
-    border: 'border-indigo-300',
-    headerBg: 'bg-indigo-500',
-    dot: 'bg-indigo-500',
+    color: 'text-blue-700',
+    bg: 'bg-blue-50',
+    border: 'border-blue-300',
+    headerBg: 'bg-blue-500',
+    dot: 'bg-blue-500',
   },
   bac_r: {
     label: 'BAC R',
@@ -283,7 +283,7 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
            (migration 052) : on l'oriente vers la connexion plutôt que de lui
            affirmer à tort que le catalogue est vide. */
         !user ? (
-          <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-6 py-16 text-center">
+          <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-blue-50 px-6 py-16 text-center">
             <p className="mb-3 text-4xl">🔐</p>
             <p className="mb-1 text-lg font-black text-gray-900">
               Connecte-toi pour voir les cours
@@ -294,7 +294,7 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/register"
-                className="rounded-xl bg-[#172554] px-5 py-2.5 font-bold text-white transition-all hover:brightness-125"
+                className="rounded-xl bg-[#0F1B2D] px-5 py-2.5 font-bold text-white transition-all hover:brightness-125"
               >
                 Créer un compte gratuit
               </Link>
@@ -344,7 +344,7 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
       {/* Entrée alternative : parcours par filière → série */}
       <Link
         href="/cours/matiere"
-        className="mt-10 flex items-center gap-3 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-5 py-4 transition-all hover:border-blue-400 hover:shadow-md"
+        className="mt-10 flex items-center gap-3 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-blue-50 px-5 py-4 transition-all hover:border-blue-400 hover:shadow-md"
       >
         <Sparkles className="h-6 w-6 flex-shrink-0 text-blue-600" strokeWidth={1.5} />
         <div className="min-w-0 flex-1">

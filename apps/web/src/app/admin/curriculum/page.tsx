@@ -23,13 +23,13 @@ const COLORS: Record<string, string> = {
   bepc: 'from-blue-500 to-blue-600',
   bac_bg: 'from-cyan-500 to-cyan-600',
   bac_a: 'from-amber-500 to-amber-600',
-  bac_c: 'from-violet-500 to-violet-600',
+  bac_c: 'from-blue-500 to-blue-600',
   bac_d: 'from-emerald-500 to-emerald-600',
   bac_e: 'from-orange-500 to-orange-600',
   bac_f3: 'from-slate-500 to-slate-600',
   bac_g2: 'from-teal-500 to-teal-600',
   bac_g3: 'from-lime-600 to-lime-700',
-  bac_h: 'from-indigo-500 to-indigo-600',
+  bac_h: 'from-[#35C0F0] to-[#35C0F0]',
   bac_r: 'from-fuchsia-500 to-fuchsia-600',
 }
 const CYCLE_COLOR = {

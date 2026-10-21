@@ -107,7 +107,7 @@ export default function AdminChaptersPage() {
 
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
-        {notice && <div className="p-3 bg-green-50 text-green-800 rounded-xl text-sm mb-4">{notice}</div>}
+        {notice && <div className="p-3 bg-blue-50 text-blue-800 rounded-xl text-sm mb-4">{notice}</div>}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
           <div className="col-span-12 md:col-span-5">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Titre</label>
@@ -131,7 +131,7 @@ export default function AdminChaptersPage() {
             </div>
           )}
           <div className="col-span-12">
-            <button type="submit" disabled={saving} className="px-5 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
+            <button type="submit" disabled={saving} className="px-5 py-2.5 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 disabled:opacity-50">
               {saving ? 'Ajout…' : 'Ajouter le chapitre'}
             </button>
           </div>
@@ -139,7 +139,7 @@ export default function AdminChaptersPage() {
       </form>
 
       {loading ? (
-        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-700 border-t-transparent rounded-full animate-spin" /></div>
+        <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" /></div>
       ) : rows.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucun chapitre.</div>
       ) : (
@@ -155,7 +155,7 @@ export default function AdminChaptersPage() {
                 <p className="text-xs text-gray-400 mt-0.5">
                   {ch.lesson_count} leçon{ch.lesson_count > 1 ? 's' : ''}{ch.description ? ` · ${ch.description}` : ''}
                   {ch.source_chapter_id && <span className="ml-1 text-amber-700 font-semibold">· 🔗 copie liée</span>}
-                  {ch.copy_count > 0 && <span className="ml-1 text-green-700 font-semibold">· 🔗 aussi dans {ch.copy_count} autre{ch.copy_count > 1 ? 's' : ''} série{ch.copy_count > 1 ? 's' : ''}</span>}
+                  {ch.copy_count > 0 && <span className="ml-1 text-blue-700 font-semibold">· 🔗 aussi dans {ch.copy_count} autre{ch.copy_count > 1 ? 's' : ''} série{ch.copy_count > 1 ? 's' : ''}</span>}
                 </p>
               </div>
               <Link href={`/admin/curriculum/chapter/${ch.id}`} className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-bold text-gray-700">Leçons →</Link>

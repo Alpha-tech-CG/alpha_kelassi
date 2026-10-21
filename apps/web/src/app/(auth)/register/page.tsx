@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { PASSWORD_RULES, isPasswordValid } from '@/lib/password'
+import { Logo } from '@/components/brand/logo'
 
 const LEVELS = [
   {
@@ -21,10 +22,10 @@ const LEVELS = [
     label: 'BAC C',
     sub: 'Mathématiques & Sciences Physiques',
     icon: '🔬',
-    gradient: 'from-violet-500 to-violet-600',
-    border: 'border-violet-300',
-    bg: 'bg-violet-50',
-    ring: 'ring-violet-500',
+    gradient: 'from-[#35C0F0] to-blue-600',
+    border: 'border-blue-300',
+    bg: 'bg-blue-50',
+    ring: 'ring-blue-500',
   },
   {
     value: 'bac_d',
@@ -113,8 +114,8 @@ export default function RegisterPage() {
   // ── SUCCESS ──
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-violet-50 px-4">
-        <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-10 text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-cx-paper via-white to-[#BFD9FB] px-4">
+        <div className="w-full max-w-md bg-white rounded-[40px] overflow-hidden shadow-[0_30px_80px_-40px_rgba(15,27,45,0.35)] p-10 text-center">
           <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">📧</div>
           <h2 className="text-2xl font-black text-gray-900 mb-3">Vérifie ton email !</h2>
           <p className="text-gray-500 text-sm leading-relaxed">
@@ -136,26 +137,23 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-start justify-center bg-gradient-to-br from-blue-50 via-white to-violet-50 px-4 py-10">
+    <div className="min-h-screen flex items-start justify-center bg-gradient-to-b from-cx-paper via-white to-[#BFD9FB] px-4 py-10">
       <div className="w-full max-w-md">
 
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2">
-            <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-black">K</span>
-            </div>
-            <span className="text-2xl font-black text-gray-900">Kelassi</span>
+            <Logo size="lg" />
           </div>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div className="bg-white rounded-[40px] overflow-hidden shadow-[0_30px_80px_-40px_rgba(15,27,45,0.35)] overflow-hidden">
 
           {/* Progress bar */}
           <div className="h-1.5 bg-gray-100">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-violet-500 transition-all duration-500"
+              className="h-full bg-gradient-to-r from-blue-600 to-[#35C0F0] transition-all duration-500"
               style={{ width: step === 1 ? '50%' : '100%' }}
             />
           </div>
