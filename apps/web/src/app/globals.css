@@ -30,7 +30,10 @@
     color: #111827 !important;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: 'Nunito', 'Inter', system-ui, sans-serif;
   }
 }
@@ -122,4 +125,278 @@
   margin: 1rem auto;
   border-radius: 0.75rem;
   border: 1px solid #e5e7eb;
+}
+
+/* Editorial styling for long-form lessons. */
+.course-prose {
+  color: #45463d;
+  font-size: 1rem;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+.course-prose > :first-child {
+  margin-top: 0;
+}
+
+.course-prose h1,
+.course-prose h2,
+.course-prose h3,
+.course-prose h4 {
+  font-family: 'Nunito', 'Inter', system-ui, sans-serif;
+  line-height: 1.35;
+}
+
+.course-prose h1 {
+  margin: 2.25rem 0 1rem;
+  color: #214b3d;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 900;
+}
+
+.course-prose h2 {
+  margin: 2.5rem 0 1rem;
+  border: 0;
+  border-left: 4px solid #e7a83e;
+  border-radius: 0 1rem 1rem 0;
+  background: linear-gradient(100deg, #fff6df, #fffaf0 75%, transparent);
+  padding: 0.8rem 1rem;
+  color: #24483b;
+  font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+  font-weight: 900;
+}
+
+.course-prose h2[data-section-kind='introduction'] {
+  border-left-color: #4c8a63;
+  background: linear-gradient(100deg, #eaf4e8, #f5faf0 75%, transparent);
+}
+
+.course-prose h2[data-section-kind='keywords'] {
+  border-left-color: #739c52;
+  background: linear-gradient(100deg, #eef5e9, #f8fbf4 75%, transparent);
+}
+
+.course-prose h2[data-section-kind='development'] {
+  margin-top: 3rem;
+  border-left-color: #d89a38;
+  background: linear-gradient(100deg, #fff1d1, #fffaf0 75%, transparent);
+}
+
+.course-prose h2[data-section-kind='conclusion'] {
+  border-left-color: #4c8a63;
+  background: linear-gradient(100deg, #eaf4e8, #f5faf0 75%, transparent);
+}
+
+.course-prose h2[data-section-kind]::before {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.course-prose h2[data-section-kind='introduction']::before {
+  content: 'Pour commencer';
+  color: #628356;
+}
+
+.course-prose h2[data-section-kind='keywords']::before {
+  content: 'Repères essentiels';
+  color: #628356;
+}
+
+.course-prose h2[data-section-kind='development']::before {
+  content: 'Le cours';
+  color: #a06d25;
+}
+
+.course-prose h2[data-section-kind='conclusion']::before {
+  content: 'À retenir';
+  color: #628356;
+}
+
+.course-prose h2[data-section-kind='introduction'] + p {
+  margin-top: 0.5rem;
+  border: 1px solid #e5eddf;
+  border-radius: 1rem;
+  background: #f8fbf5;
+  padding: 1rem 1.1rem;
+}
+
+.course-prose h2[data-section-kind='introduction'] + p::first-letter {
+  float: left;
+  margin: 0.08rem 0.45rem 0 0;
+  color: #4c8058;
+  font-family: 'Nunito', 'Inter', system-ui, sans-serif;
+  font-size: 2.7rem;
+  font-weight: 900;
+  line-height: 0.9;
+}
+
+.course-prose h3 {
+  margin: 1.8rem 0 0.75rem;
+  border-bottom: 1px solid #e8eddf;
+  padding-bottom: 0.45rem;
+  color: #397158;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.course-prose h4 {
+  margin: 1.4rem 0 0.5rem;
+  color: #855c26;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.course-prose p {
+  margin: 0.8rem 0;
+  color: #515147;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.course-prose strong {
+  border-radius: 0.25rem;
+  background: linear-gradient(transparent 42%, #ffedbd 42%);
+  padding: 0 0.12rem;
+  color: #24483b;
+  font-weight: 800;
+}
+
+.course-prose p[data-paragraph-kind='question'] {
+  margin: 1.1rem 0;
+  border: 1px solid #edd9aa;
+  border-radius: 1rem;
+  background: #fff8e8;
+  padding: 1rem 1.1rem;
+  color: #5e4a29;
+  font-weight: 600;
+}
+
+.course-prose p[data-paragraph-kind='note'] {
+  margin: 1rem 0;
+  border-left: 3px solid #7e9f61;
+  border-radius: 0 0.85rem 0.85rem 0;
+  background: #f2f7ed;
+  padding: 0.8rem 1rem;
+}
+
+.course-prose ul,
+.course-prose ol {
+  margin: 0.9rem 0 1.15rem;
+  padding-left: 1.5rem;
+}
+
+.course-prose li {
+  margin: 0.45rem 0;
+  padding-left: 0.25rem;
+  color: #515147;
+  line-height: 1.75;
+}
+
+.course-prose li::marker {
+  color: #c78b2e;
+  font-weight: 800;
+}
+
+.course-prose h2[data-section-kind='keywords'] + ul > li,
+.course-prose h2[data-section-kind='keywords'] + ol > li {
+  margin: 0.65rem 0;
+  border: 1px solid #eee5d4;
+  border-radius: 0.8rem;
+  background: #fffdfa;
+  padding: 0.7rem 0.8rem 0.7rem 0.5rem;
+}
+
+.course-prose li > strong:first-child {
+  display: inline-block;
+  margin-right: 0.3rem;
+  border: 1px solid #e8ddbf;
+  border-radius: 999px;
+  background: #fff4d9;
+  padding: 0.08rem 0.55rem;
+  color: #76501e;
+  font-size: 0.92em;
+}
+
+.course-prose blockquote {
+  margin: 1.35rem 0;
+  border: 1px solid #f1dfb7;
+  border-left: 4px solid #d89a38;
+  border-radius: 0 1rem 1rem 0;
+  background: linear-gradient(110deg, #fff8e8, #fffdf7);
+  padding: 0.8rem 1rem;
+  color: #655638;
+}
+
+.course-prose blockquote p {
+  margin: 0.35rem 0;
+  color: inherit;
+}
+
+.course-prose hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid #eee4d0;
+}
+
+.course-prose > div.overflow-x-auto {
+  margin: 1.4rem 0;
+  border: 1px solid #e9dfca;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px -22px rgba(58, 48, 27, 0.6);
+}
+
+.course-prose table {
+  width: 100%;
+  border: 0;
+  font-size: 0.93rem;
+}
+
+.course-prose th,
+.course-prose td {
+  border-color: #eee5d4;
+  padding: 0.75rem 0.9rem;
+}
+
+.course-prose th {
+  background: #edf5e9;
+  color: #284c3c;
+  text-align: left;
+}
+
+.course-prose tbody tr:nth-child(even) td {
+  background: #fffaf1;
+}
+
+.course-prose code {
+  border-radius: 0.35rem;
+  background: #f3f1e9;
+  padding: 0.1rem 0.35rem;
+  color: #80551d;
+}
+
+.course-prose img {
+  border-color: #eee4d0;
+  box-shadow: 0 10px 30px -22px rgba(30, 48, 38, 0.5);
+}
+
+@media (max-width: 640px) {
+  .course-prose {
+    font-size: 0.96rem;
+    line-height: 1.8;
+  }
+
+  .course-prose h2 {
+    margin-top: 2rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .course-prose th,
+  .course-prose td {
+    padding: 0.6rem 0.7rem;
+  }
 }

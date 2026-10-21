@@ -1,11 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { SubjectArtwork } from '@/components/subject-artwork'
 import { STUDY_LEVELS } from '@alpha-kelassi/types'
-import {
-  Calculator, FlaskConical, Leaf, BookOpen, Globe, Brain,
-  Languages, TrendingUp, Monitor, Activity, BookMarked, Sparkles,
-  type LucideIcon,
-} from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 /**
  * Catalogue des cours — construit sur le programme structuré
@@ -22,25 +19,118 @@ import {
  * agrègent donc ceux des enfants, et le lien pointe vers l'étape « domaines ».
  */
 
-interface SearchParams { level?: string }
+interface SearchParams {
+  level?: string
+}
 
 /* ── Config niveaux ─────────────────────────────────────────────────────── */
-const LEVEL_CONFIG: Record<string, {
-  label: string; color: string; bg: string; border: string
-  headerBg: string; dot: string
-}> = {
-  cepe:   { label: 'CEPE',   color: 'text-rose-700',    bg: 'bg-rose-50',    border: 'border-rose-300',    headerBg: 'bg-rose-500',    dot: 'bg-rose-500'    },
-  bepc:   { label: 'BEPC',   color: 'text-blue-700',    bg: 'bg-blue-50',    border: 'border-blue-300',    headerBg: 'bg-blue-500',    dot: 'bg-blue-500'    },
-  bac_bg: { label: 'BAC BG', color: 'text-cyan-700',    bg: 'bg-cyan-50',    border: 'border-cyan-300',    headerBg: 'bg-cyan-600',    dot: 'bg-cyan-600'    },
-  bac_a:  { label: 'BAC A',  color: 'text-amber-700',   bg: 'bg-amber-50',   border: 'border-amber-300',   headerBg: 'bg-amber-500',   dot: 'bg-amber-500'   },
-  bac_c:  { label: 'BAC C',  color: 'text-violet-700',  bg: 'bg-violet-50',  border: 'border-violet-300',  headerBg: 'bg-violet-500',  dot: 'bg-violet-500'  },
-  bac_d:  { label: 'BAC D',  color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-300', headerBg: 'bg-emerald-500', dot: 'bg-emerald-500' },
-  bac_e:  { label: 'BAC E',  color: 'text-orange-700',  bg: 'bg-orange-50',  border: 'border-orange-300',  headerBg: 'bg-orange-500',  dot: 'bg-orange-500'  },
-  bac_f3: { label: 'BAC F3', color: 'text-slate-700',   bg: 'bg-slate-50',   border: 'border-slate-300',   headerBg: 'bg-slate-600',   dot: 'bg-slate-600'   },
-  bac_g2: { label: 'BAC G2', color: 'text-teal-700',    bg: 'bg-teal-50',    border: 'border-teal-300',    headerBg: 'bg-teal-600',    dot: 'bg-teal-600'    },
-  bac_g3: { label: 'BAC G3', color: 'text-lime-700',    bg: 'bg-lime-50',    border: 'border-lime-300',    headerBg: 'bg-lime-600',    dot: 'bg-lime-600'    },
-  bac_h:  { label: 'BAC H',  color: 'text-indigo-700',  bg: 'bg-indigo-50',  border: 'border-indigo-300',  headerBg: 'bg-indigo-500',  dot: 'bg-indigo-500'  },
-  bac_r:  { label: 'BAC R',  color: 'text-fuchsia-700', bg: 'bg-fuchsia-50', border: 'border-fuchsia-300', headerBg: 'bg-fuchsia-600', dot: 'bg-fuchsia-600' },
+const LEVEL_CONFIG: Record<
+  string,
+  {
+    label: string
+    color: string
+    bg: string
+    border: string
+    headerBg: string
+    dot: string
+  }
+> = {
+  cepe: {
+    label: 'CEPE',
+    color: 'text-rose-700',
+    bg: 'bg-rose-50',
+    border: 'border-rose-300',
+    headerBg: 'bg-rose-500',
+    dot: 'bg-rose-500',
+  },
+  bepc: {
+    label: 'BEPC',
+    color: 'text-blue-700',
+    bg: 'bg-blue-50',
+    border: 'border-blue-300',
+    headerBg: 'bg-blue-500',
+    dot: 'bg-blue-500',
+  },
+  bac_bg: {
+    label: 'BAC BG',
+    color: 'text-cyan-700',
+    bg: 'bg-cyan-50',
+    border: 'border-cyan-300',
+    headerBg: 'bg-cyan-600',
+    dot: 'bg-cyan-600',
+  },
+  bac_a: {
+    label: 'BAC A',
+    color: 'text-amber-700',
+    bg: 'bg-amber-50',
+    border: 'border-amber-300',
+    headerBg: 'bg-amber-500',
+    dot: 'bg-amber-500',
+  },
+  bac_c: {
+    label: 'BAC C',
+    color: 'text-violet-700',
+    bg: 'bg-violet-50',
+    border: 'border-violet-300',
+    headerBg: 'bg-violet-500',
+    dot: 'bg-violet-500',
+  },
+  bac_d: {
+    label: 'BAC D',
+    color: 'text-emerald-700',
+    bg: 'bg-emerald-50',
+    border: 'border-emerald-300',
+    headerBg: 'bg-emerald-500',
+    dot: 'bg-emerald-500',
+  },
+  bac_e: {
+    label: 'BAC E',
+    color: 'text-orange-700',
+    bg: 'bg-orange-50',
+    border: 'border-orange-300',
+    headerBg: 'bg-orange-500',
+    dot: 'bg-orange-500',
+  },
+  bac_f3: {
+    label: 'BAC F3',
+    color: 'text-slate-700',
+    bg: 'bg-slate-50',
+    border: 'border-slate-300',
+    headerBg: 'bg-slate-600',
+    dot: 'bg-slate-600',
+  },
+  bac_g2: {
+    label: 'BAC G2',
+    color: 'text-teal-700',
+    bg: 'bg-teal-50',
+    border: 'border-teal-300',
+    headerBg: 'bg-teal-600',
+    dot: 'bg-teal-600',
+  },
+  bac_g3: {
+    label: 'BAC G3',
+    color: 'text-lime-700',
+    bg: 'bg-lime-50',
+    border: 'border-lime-300',
+    headerBg: 'bg-lime-600',
+    dot: 'bg-lime-600',
+  },
+  bac_h: {
+    label: 'BAC H',
+    color: 'text-indigo-700',
+    bg: 'bg-indigo-50',
+    border: 'border-indigo-300',
+    headerBg: 'bg-indigo-500',
+    dot: 'bg-indigo-500',
+  },
+  bac_r: {
+    label: 'BAC R',
+    color: 'text-fuchsia-700',
+    bg: 'bg-fuchsia-50',
+    border: 'border-fuchsia-300',
+    headerBg: 'bg-fuchsia-600',
+    dot: 'bg-fuchsia-600',
+  },
 }
 
 // Ordre d'affichage aligné sur la source partagée (packages/types/src/levels.ts).
@@ -48,32 +138,29 @@ const LEVEL_CONFIG: Record<string, {
 // la base tant que l'administration ne les ouvre pas) ne sont pas listées.
 const LEVEL_ORDER = STUDY_LEVELS.filter((l) => l in LEVEL_CONFIG)
 
-/* ── Icônes par matière ──────────────────────────────────────────────────── */
-function SubjectIcon({ name, className }: { name: string; className?: string }) {
-  const n = name.toLowerCase()
-  let Icon: LucideIcon = BookMarked
-  if (n.includes('math') || n.includes('numération') || n.includes('calcul')) Icon = Calculator
-  else if (n.includes('physique') || n.includes('chimie'))                    Icon = FlaskConical
-  else if (n.includes('svt') || n.includes('biolog') || n.includes('vie') || n.includes('éveil')) Icon = Leaf
-  else if (n.includes('français') || n.includes('litt') || n.includes('lecture') || n.includes('grammaire') || n.includes('conjugaison') || n.includes('orthographe') || n.includes('vocabulaire') || n.includes('expression')) Icon = BookOpen
-  else if (n.includes('histoire') || n.includes('géo'))                       Icon = Globe
-  else if (n.includes('philo'))                                               Icon = Brain
-  else if (n.includes('anglais') || n.includes('espagnol') || n.includes('latin') || n.includes('langue')) Icon = Languages
-  else if (n.includes('économ') || n.includes('gestion') || n.includes('production')) Icon = TrendingUp
-  else if (n.includes('info') || n.includes('technolog'))                      Icon = Monitor
-  else if (n.includes('sport') || n.includes('eps'))                           Icon = Activity
-  return <Icon className={className ?? 'w-8 h-8'} strokeWidth={1.5} />
-}
-
 /** Exécute une requête qui peut viser une table absente ; renvoie [] en cas d'erreur. */
 async function safe<T>(p: PromiseLike<{ data: T[] | null; error: unknown }>): Promise<T[]> {
-  try { const { data } = await p; return data ?? [] } catch { return [] }
+  try {
+    const { data } = await p
+    return data ?? []
+  } catch {
+    return []
+  }
 }
 
-interface SubjectRow { id: string; name: string; level: string; parent_subject_id: string | null }
+interface SubjectRow {
+  id: string
+  name: string
+  level: string
+  parent_subject_id: string | null
+}
 interface SubjectCard {
-  id: string; name: string; level: string
-  chapters: number; lessons: number; domains: number
+  id: string
+  name: string
+  level: string
+  chapters: number
+  lessons: number
+  domains: number
   href: string
 }
 
@@ -81,9 +168,18 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
   const { level } = await searchParams
   const supabase = await createClient()
 
-  const [{ data: { user } }, subjects, chapters, lessons] = await Promise.all([
+  const [
+    {
+      data: { user },
+    },
+    subjects,
+    chapters,
+    lessons,
+  ] = await Promise.all([
     supabase.auth.getUser(),
-    safe<SubjectRow>(supabase.from('subjects').select('id, name, level, parent_subject_id').order('name')),
+    safe<SubjectRow>(
+      supabase.from('subjects').select('id, name, level, parent_subject_id').order('name')
+    ),
     safe<{ id: string; subject_id: string }>(supabase.from('chapters').select('id, subject_id')),
     safe<{ chapter_id: string }>(supabase.from('lessons').select('chapter_id')),
   ])
@@ -93,7 +189,8 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
      éventuellement un sous-domaine. On remonte donc les compteurs jusqu'à la
      matière racine pour que « Français » affiche le total de ses domaines. */
   const lessonsByChapter = new Map<string, number>()
-  for (const l of lessons) lessonsByChapter.set(l.chapter_id, (lessonsByChapter.get(l.chapter_id) ?? 0) + 1)
+  for (const l of lessons)
+    lessonsByChapter.set(l.chapter_id, (lessonsByChapter.get(l.chapter_id) ?? 0) + 1)
 
   const own = new Map<string, { chapters: number; lessons: number }>()
   for (const c of chapters) {
@@ -139,22 +236,25 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
   const totalLessons = visible.reduce((a, c) => a + c.lessons, 0)
   const withContent = visible.filter((c) => c.lessons > 0).length
 
-  const levelTabs = [{ value: '', label: 'Tous les niveaux' }, ...LEVEL_ORDER.map((v) => ({ value: v, label: LEVEL_CONFIG[v]!.label }))]
+  const levelTabs = [
+    { value: '', label: 'Tous les niveaux' },
+    ...LEVEL_ORDER.map((v) => ({ value: v, label: LEVEL_CONFIG[v]!.label })),
+  ]
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-
+    <div className="mx-auto max-w-5xl px-4 py-8">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-black text-gray-900">Cours &amp; Révisions</h1>
-        <p className="text-gray-500 mt-1 text-sm">
-          {totalLessons} leçon{totalLessons !== 1 ? 's' : ''} · {withContent} matière{withContent !== 1 ? 's' : ''} avec du contenu
+        <p className="mt-1 text-sm text-gray-500">
+          {totalLessons} leçon{totalLessons !== 1 ? 's' : ''} · {withContent} matière
+          {withContent !== 1 ? 's' : ''} avec du contenu
           {activeLevel ? ` · ${LEVEL_CONFIG[activeLevel]!.label}` : ' · CEPE, BEPC et BAC'}
         </p>
       </div>
 
       {/* Onglets niveau */}
-      <div className="flex gap-2 mb-8 flex-wrap">
+      <div className="mb-8 flex flex-wrap gap-2">
         {levelTabs.map((tab) => {
           const cfg = LEVEL_CONFIG[tab.value]
           const isActive = activeLevel === tab.value
@@ -162,12 +262,12 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
             <Link
               key={tab.value || 'all'}
               href={tab.value ? `/cours?level=${tab.value}` : '/cours'}
-              className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+              className={`rounded-xl border-2 px-4 py-2 text-sm font-bold transition-all ${
                 isActive
                   ? cfg
-                    ? `${cfg.headerBg} text-white border-transparent shadow-md`
-                    : 'bg-gray-900 text-white border-transparent shadow-md'
-                  : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
+                    ? `${cfg.headerBg} border-transparent text-white shadow-md`
+                    : 'border-transparent bg-gray-900 text-white shadow-md'
+                  : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'
               }`}
             >
               {tab.label}
@@ -183,22 +283,32 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
            (migration 052) : on l'oriente vers la connexion plutôt que de lui
            affirmer à tort que le catalogue est vide. */
         !user ? (
-          <div className="text-center py-16 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-6">
-            <p className="text-4xl mb-3">🔐</p>
-            <p className="font-black text-gray-900 text-lg mb-1">Connecte-toi pour voir les cours</p>
-            <p className="text-sm text-gray-600 mb-5">Le catalogue complet — CEPE, BEPC et BAC — t'attend derrière un compte gratuit.</p>
-            <div className="flex items-center justify-center gap-3 flex-wrap">
-              <Link href="/register" className="bg-[#172554] text-white font-bold px-5 py-2.5 rounded-xl hover:brightness-125 transition-all">
+          <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-6 py-16 text-center">
+            <p className="mb-3 text-4xl">🔐</p>
+            <p className="mb-1 text-lg font-black text-gray-900">
+              Connecte-toi pour voir les cours
+            </p>
+            <p className="mb-5 text-sm text-gray-600">
+              Le catalogue complet — CEPE, BEPC et BAC — t'attend derrière un compte gratuit.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Link
+                href="/register"
+                className="rounded-xl bg-[#172554] px-5 py-2.5 font-bold text-white transition-all hover:brightness-125"
+              >
                 Créer un compte gratuit
               </Link>
-              <Link href="/login" className="text-blue-700 font-semibold px-4 py-2.5 hover:underline">
+              <Link
+                href="/login"
+                className="px-4 py-2.5 font-semibold text-blue-700 hover:underline"
+              >
                 J'ai déjà un compte
               </Link>
             </div>
           </div>
         ) : (
-          <div className="text-center py-20">
-            <p className="text-4xl mb-3">📭</p>
+          <div className="py-20 text-center">
+            <p className="mb-3 text-4xl">📭</p>
             <p className="text-gray-500">Aucune matière pour ce niveau.</p>
           </div>
         )
@@ -213,8 +323,10 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
             const lvlLessons = lvlCards.reduce((a, c) => a + c.lessons, 0)
             return (
               <div key={lvlKey}>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className={`px-3 py-1 rounded-lg text-sm font-black ${cfg.headerBg} text-white`}>
+                <div className="mb-4 flex items-center gap-3">
+                  <span
+                    className={`rounded-lg px-3 py-1 text-sm font-black ${cfg.headerBg} text-white`}
+                  >
                     {cfg.label}
                   </span>
                   <span className="text-xs text-gray-400">
@@ -232,14 +344,16 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
       {/* Entrée alternative : parcours par filière → série */}
       <Link
         href="/cours/matiere"
-        className="flex items-center gap-3 mt-10 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-5 py-4 hover:border-blue-400 hover:shadow-md transition-all"
+        className="mt-10 flex items-center gap-3 rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-violet-50 px-5 py-4 transition-all hover:border-blue-400 hover:shadow-md"
       >
-        <Sparkles className="w-6 h-6 text-blue-600 flex-shrink-0" strokeWidth={1.5} />
-        <div className="flex-1 min-w-0">
-          <p className="font-bold text-gray-900 text-sm">Parcours guidé</p>
-          <p className="text-xs text-gray-500">Naviguer par filière et série plutôt que par matière</p>
+        <Sparkles className="h-6 w-6 flex-shrink-0 text-blue-600" strokeWidth={1.5} />
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-bold text-gray-900">Parcours guidé</p>
+          <p className="text-xs text-gray-500">
+            Naviguer par filière et série plutôt que par matière
+          </p>
         </div>
-        <span className="text-blue-600 font-bold">→</span>
+        <span className="font-bold text-blue-600">→</span>
       </Link>
     </div>
   )
@@ -251,7 +365,7 @@ function SubjectGrid({ cards }: { cards: SubjectCard[] }) {
   const sorted = [...cards].sort((a, b) => b.lessons - a.lessons || a.name.localeCompare(b.name))
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
       {sorted.map((s) => {
         const cfg = LEVEL_CONFIG[s.level] ?? LEVEL_CONFIG['bepc']!
         const empty = s.lessons === 0
@@ -262,14 +376,13 @@ function SubjectGrid({ cards }: { cards: SubjectCard[] }) {
           return (
             <div
               key={s.id}
-              className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/60 p-4 flex flex-col gap-3"
+              className="overflow-hidden rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/60 opacity-75"
             >
-              <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 text-gray-300 flex items-center justify-center">
-                <SubjectIcon name={s.name} className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm text-gray-400 leading-tight">{s.name}</h3>
-                <p className="text-[11px] text-gray-400 mt-1">Bientôt disponible</p>
+              <SubjectArtwork name={s.name} className="h-28 sm:h-32">
+                <h3 className="text-sm font-bold leading-tight text-white">{s.name}</h3>
+              </SubjectArtwork>
+              <div className="px-3 py-2.5">
+                <p className="text-[11px] text-gray-400">Bientôt disponible</p>
               </div>
             </div>
           )
@@ -279,22 +392,25 @@ function SubjectGrid({ cards }: { cards: SubjectCard[] }) {
           <Link
             key={s.id}
             href={s.href}
-            className={`group rounded-2xl border-2 ${cfg.border} bg-white p-4 flex flex-col gap-3 hover:shadow-md hover:-translate-y-0.5 transition-all`}
+            className={`group overflow-hidden rounded-2xl border-2 ${cfg.border} bg-white transition-all hover:-translate-y-0.5 hover:shadow-md`}
           >
-            <div className={`w-12 h-12 rounded-xl ${cfg.bg} ${cfg.color} flex items-center justify-center`}>
-              <SubjectIcon name={s.name} className="w-6 h-6" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-sm text-gray-900 leading-tight">{s.name}</h3>
-              <p className="text-[11px] text-gray-500 mt-1">
+            <SubjectArtwork name={s.name} className="h-28 sm:h-32">
+              <h3 className="text-sm font-bold leading-tight text-white">{s.name}</h3>
+            </SubjectArtwork>
+            <div className="flex min-h-16 items-center justify-between gap-2 px-3 py-2.5">
+              <p className="min-w-0 text-[11px] text-gray-500">
                 {s.lessons} leçon{s.lessons !== 1 ? 's' : ''}
                 {s.domains > 0 && ` · ${s.domains} domaines`}
-                {s.domains === 0 && s.chapters > 0 && ` · ${s.chapters} chapitre${s.chapters !== 1 ? 's' : ''}`}
+                {s.domains === 0 &&
+                  s.chapters > 0 &&
+                  ` · ${s.chapters} chapitre${s.chapters !== 1 ? 's' : ''}`}
               </p>
+              <span
+                className={`shrink-0 text-xs font-bold ${cfg.color} opacity-0 transition-opacity group-hover:opacity-100`}
+              >
+                →
+              </span>
             </div>
-            <span className={`text-xs font-bold ${cfg.color} opacity-0 group-hover:opacity-100 transition-opacity self-end`}>
-              Ouvrir →
-            </span>
           </Link>
         )
       })}
