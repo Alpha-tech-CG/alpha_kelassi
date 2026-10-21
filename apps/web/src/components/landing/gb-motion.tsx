@@ -60,30 +60,119 @@ export function NavDrop({ children, className }: { children: ReactNode; classNam
   )
 }
 
+/* Géométrie de l'empilement (desktop) : chaque carte occupe une tranche de
+   défilement de STEP px ; son haut se pose à STICK px du haut de l'écran,
+   assez bas pour que le téléphone qui dépasse (~96 px) reste sous la
+   navigation. PAD = marge au-dessus de la carte dans sa tranche. */
+const STEP = 640
+const STICK = 176
+const PAD = 120
+
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
+
 /**
- * Carte de fonctionnalité empilée : sticky en haut de l'écran, elle grandit
- * de 0,9 à 1 en arrivant, et le téléphone qu'elle porte remonte en place.
+ * Cartes de fonctionnalités empilées. En arrivant, une carte grandit de 0,9
+ * à 1 et son téléphone remonte en place ; quand la suivante vient la
+ * recouvrir, elle recule légèrement et son téléphone s'efface, pour que les
+ * téléphones qui dépassent ne se superposent jamais. Sur mobile, pas
+ * d'empilement : les cartes se suivent.
  */
-export function StackCard({
-  children,
-  phone,
+export function StackCards({
+  items,
   className,
 }: {
-  children: ReactNode
-  phone: ReactNode
+  items: { content: ReactNode; phone: ReactNode }[]
   className?: string
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'start 45px'] })
-  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1])
-  const y = useTransform(scrollYProgress, [0, 1], [80, 0])
-  const phoneScale = useTransform(scrollYProgress, [0, 1], [1.1, 1])
-  // Empilement sticky à partir de la tablette ; sur mobile, les cartes se suivent.
+  const [geo, setGeo] = useState({ top: 0, vh: 800, desktop: false })
+  const { scrollY } = useScroll()
+
+  useEffect(() => {
+    const measure = () => {
+      const el = ref.current
+      if (!el) return
+      setGeo({
+        top: el.getBoundingClientRect().top + window.scrollY,
+        vh: window.innerHeight,
+        desktop: window.matchMedia('(min-width: 768px)').matches,
+      })
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    // Les images et polices peuvent décaler la section après le premier rendu.
+    const t = setTimeout(measure, 1200)
+    return () => {
+      window.removeEventListener('resize', measure)
+      clearTimeout(t)
+    }
+  }, [])
+
   return (
-    <div ref={ref} className="pt-10 md:sticky md:top-[45px] md:h-[640px] md:pt-28 md:last:h-auto">
+    // La marge basse laisse la dernière carte se poser avant que la pile ne parte.
+    <div ref={ref} className="md:pb-[200px]">
+      {items.map((it, i) => (
+        <StackItem
+          key={i}
+          index={i}
+          last={i === items.length - 1}
+          geo={geo}
+          scrollY={scrollY}
+          className={className}
+          phone={it.phone}
+        >
+          {it.content}
+        </StackItem>
+      ))}
+    </div>
+  )
+}
+
+function StackItem({
+  index,
+  last,
+  geo,
+  scrollY,
+  className,
+  phone,
+  children,
+}: {
+  index: number
+  last: boolean
+  geo: { top: number; vh: number; desktop: boolean }
+  scrollY: ReturnType<typeof useScroll>['scrollY']
+  className?: string
+  phone: ReactNode
+  children: ReactNode
+}) {
+  // Arrivée (0 → 1) : le haut de la carte passe du bas de l'écran à STICK.
+  const arrive = (v: number, i: number) => {
+    const cardTop = geo.top + i * STEP + PAD - v
+    return clamp01((cardTop - geo.vh) / (STICK - geo.vh))
+  }
+  const a = (v: number) => (geo.desktop ? arrive(v, index) : 1)
+  // Recouvrement (0 → 1) : la carte suivante arrive par-dessus.
+  const c = (v: number) => (geo.desktop && !last ? arrive(v, index + 1) : 0)
+
+  const scale = useTransform(scrollY, (v) => 0.9 + 0.1 * a(v) - 0.06 * c(v))
+  const y = useTransform(scrollY, (v) => 80 * (1 - a(v)))
+  const phoneScale = useTransform(scrollY, (v) => 1.1 - 0.1 * a(v))
+  const phoneOpacity = useTransform(scrollY, (v) => 1 - clamp01(c(v) * 2.6))
+  const dim = useTransform(scrollY, (v) => 1 - 0.35 * c(v))
+
+  return (
+    <div className="pt-10 md:sticky md:h-[640px] md:pt-[120px]" style={{ top: STICK - PAD }}>
       <motion.div data-motion style={{ scale, y }} className={className}>
-        {children}
-        <motion.div data-motion style={{ y, scale: phoneScale }} className="pointer-events-none">
+        <motion.div data-motion style={{ opacity: dim }}>
+          {children}
+        </motion.div>
+        <motion.div
+          data-motion
+          style={{ y, scale: phoneScale, opacity: phoneOpacity }}
+          // Couvre toute la carte (desktop) : le téléphone, en absolu, se place
+          // par rapport à la carte et dépasse par le haut, pas par le bas.
+          className="pointer-events-none md:absolute md:inset-0"
+        >
           {phone}
         </motion.div>
       </motion.div>

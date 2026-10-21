@@ -18,7 +18,7 @@ import {
   NavDrop,
   NotificationStack,
   ProgressLine,
-  StackCard,
+  StackCards,
 } from '@/components/landing/gb-motion'
 import { MobileMenu } from '@/components/landing/mobile-menu'
 import { PricingToggle } from '@/components/landing/pricing-toggle'
@@ -460,24 +460,26 @@ export default async function LandingPage() {
               text="Tout ce qu’il faut pour apprendre, s’entraîner et arriver prêt le jour de l’examen."
             />
             <div className="mx-auto mt-6 max-w-[1120px] pb-24">
-              {FEATURES.map((f) => (
-                <StackCard
-                  key={f.title}
-                  className="bg-cx-sky relative grid min-h-[476px] items-center overflow-visible rounded-[40px] px-8 py-10 md:grid-cols-[1fr_300px] md:px-12"
-                  phone={
+              <StackCards
+                className="bg-cx-sky ring-cx-navy/[0.06] relative grid min-h-[476px] items-center overflow-visible rounded-[40px] px-8 py-10 shadow-[0_-28px_60px_-30px_rgba(15,27,45,0.28)] ring-1 md:grid-cols-[1fr_300px] md:px-12"
+                items={FEATURES.map((f) => ({
+                  content: (
+                    <div className="max-w-[440px]">
+                      <h3 className="text-[28px] font-semibold leading-tight sm:text-[32px]">
+                        {f.title}
+                      </h3>
+                      <p className="mt-4 text-[16px] leading-relaxed">{f.text}</p>
+                    </div>
+                  ),
+                  phone: (
                     <div
                       className={`mx-auto mt-8 w-[210px] md:absolute md:-top-[96px] md:right-20 md:mt-0 md:w-[220px] ${f.tilt ? 'md:rotate-[8deg]' : ''}`}
                     >
                       <Phone name={f.shot} alt={f.alt} statusLight={!f.light} sizes="220px" />
                     </div>
-                  }
-                >
-                  <div className="max-w-[440px]">
-                    <h3 className="text-[28px] font-semibold leading-tight sm:text-[32px]">{f.title}</h3>
-                    <p className="mt-4 text-[16px] leading-relaxed">{f.text}</p>
-                  </div>
-                </StackCard>
-              ))}
+                  ),
+                }))}
+              />
             </div>
           </section>
 
