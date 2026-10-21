@@ -1,0 +1,172 @@
+/*
+ * Animations de la page d'accueil.
+ *
+ * L'entrée du hero est en CSS pur (et non via motion) : elle démarre dès le
+ * premier rendu, sans attendre l'hydratation, pour ne pas retarder le LCP sur
+ * les connexions lentes.
+ */
+
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-step {
+    animation: landing-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--step, 0) * 90ms);
+  }
+}
+
+/* Survol des boutons et des cartes : transform + ombre seulement. */
+.btn-lift {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s,
+    color 0.3s;
+}
+.btn-lift:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 28px -10px rgb(15 27 45 / 0.35);
+}
+.btn-lift:active {
+  transform: scale(0.99);
+}
+
+.card-lift {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 40px -22px rgb(15 27 45 / 0.3);
+}
+
+/* Prix mensuel / annuel superposés : fondu croisé au changement. */
+.price-swap {
+  transition:
+    opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.35s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  /* Neutralise les styles en ligne posés par motion (composants landing/motion). */
+  [data-motion] {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .btn-lift,
+  .card-lift,
+  .price-swap {
+    transition: none;
+  }
+  .btn-lift:hover,
+  .card-lift:hover {
+    transform: none;
+  }
+}
+
+/* ── Boucles du modèle « vert » : défilés, pulsations, scan ── */
+
+@keyframes gb-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes gb-ticker-up {
+  to {
+    transform: translateY(-50%);
+  }
+}
+@keyframes gb-ticker-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes gb-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 0.45;
+  }
+}
+@keyframes gb-travel {
+  0%,
+  100% {
+    transform: translateX(-46px);
+  }
+  50% {
+    transform: translateX(46px);
+  }
+}
+@keyframes gb-scan {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(96px);
+  }
+}
+
+.gb-marquee {
+  animation: gb-marquee 30s linear infinite;
+}
+.gb-marquee-slow {
+  animation: gb-marquee 45s linear infinite;
+}
+.gb-ticker-up {
+  animation: gb-ticker-up 26s linear infinite;
+}
+.gb-ticker-down {
+  animation: gb-ticker-down 26s linear infinite;
+}
+.gb-pulse {
+  animation: gb-pulse 2.4s ease-in-out infinite;
+}
+.gb-travel {
+  animation: gb-travel 3s ease-in-out infinite;
+}
+.gb-scan {
+  animation: gb-scan 2.6s ease-in-out infinite;
+}
+
+.gb-fade-x {
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.gb-fade-y {
+  mask-image: linear-gradient(180deg, transparent, #000 15%, #000 85%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gb-marquee,
+  .gb-marquee-slow,
+  .gb-ticker-up,
+  .gb-ticker-down,
+  .gb-pulse,
+  .gb-travel,
+  .gb-scan {
+    animation: none;
+  }
+}

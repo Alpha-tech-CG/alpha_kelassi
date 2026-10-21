@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 const supabaseAdmin = createAdminClient(
   process.env['NEXT_PUBLIC_SUPABASE_URL']!,
@@ -30,7 +31,7 @@ function parseVideoUrl(url: string): { provider: 'youtube' | 'vimeo'; external_i
 }
 
 /** GET /api/admin/videos — liste toutes les vidéos (admin) */
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
@@ -43,7 +44,13 @@ export async function GET(req: NextRequest) {
     .order('created_at', { ascending: false })
     .limit(300)
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/videos]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data: data ?? [] })
 }
 
@@ -51,7 +58,7 @@ const schema = z.object({
   subject_id:   z.string().uuid(),
   title:        z.string().min(3).max(200),
   description:  z.string().max(1000).optional(),
-  level:        z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  level:        z.enum(STUDY_LEVELS),
   url:          z.string().url(),
   duration_sec: z.number().int().positive().optional(),
   is_premium:   z.boolean().default(false),
@@ -99,6 +106,12 @@ export async function POST(req: NextRequest) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/videos]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data }, { status: 201 })
 }

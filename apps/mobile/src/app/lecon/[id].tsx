@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
+import { track } from '../../lib/analytics'
 
 type Block =
   | { type: 'subtitle'; text: string }
@@ -69,7 +72,7 @@ function buildHtml(title: string, blocks: Block[]): string {
     function render(){ if(window.renderMathInElement){ renderMathInElement(document.body, {
       delimiters:[{left:'\\\\[',right:'\\\\]',display:true},{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
       throwOnError:false }); } else { setTimeout(render, 120); } }
-    window.addEventListener('load', render);
+    window.addEventListener('load', render, { once: true });
   </script>
 </body></html>`
 }
@@ -81,6 +84,10 @@ export default function LeconScreen() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (id) track('lesson_opened', { course_lesson_id: id })
+  }, [id])
+
+  useEffect(() => {
     async function load() {
       const { data } = await supabase.from('course_lessons').select('id, title, content').eq('id', id).single()
       setLesson(data as unknown as Lesson | null)
@@ -89,7 +96,7 @@ export default function LeconScreen() {
     load()
   }, [id])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   if (!lesson) {
     return (
@@ -106,7 +113,7 @@ export default function LeconScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.headerTitle} numberOfLines={1}>Leçon</Text>
       </View>
       <WebView

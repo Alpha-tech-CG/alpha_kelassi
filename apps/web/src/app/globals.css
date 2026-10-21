@@ -5,7 +5,7 @@
 /* KaTeX — rendu des formules mathématiques dans toute l'app */
 @import 'katex/dist/katex.min.css';
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@600;700;800;900&display=swap');
 
 @layer base {
   :root {
@@ -28,6 +28,10 @@
     font-family: 'Inter', system-ui, sans-serif;
     background-color: #ffffff !important;
     color: #111827 !important;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Nunito', 'Inter', system-ui, sans-serif;
   }
 }
 
@@ -56,4 +60,66 @@
   .card-hover {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
   }
+}
+
+/* Surcharge adaptative des marges pour les pages d'administration */
+.admin-content-override > div {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
+}
+
+@media (min-width: 768px) {
+  .admin-content-override > div {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
+
+/* Contenu Markdown des cours (MarkdownRenderer) : tableaux et schémas.
+   Le plugin @tailwindcss/typography n'etant pas installe, les classes `prose-*`
+   ne produisent aucun style — ces regles dessinent donc les tableaux « comme
+   dans Word » et cadrent les images, en accord avec le rendu de l'app mobile. */
+.md-content table {
+  border-collapse: collapse;
+  width: auto;
+  max-width: 100%;
+  font-size: 0.9375rem;
+  background: #ffffff;
+}
+
+.md-content th,
+.md-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+}
+
+.md-content th {
+  background: #f0fdf4;
+  font-weight: 800;
+  color: #111827;
+  text-align: center;
+}
+
+.md-content td {
+  color: #374151;
+  /* Un tableau doit rester un tableau meme dans un bloc en gras (enonce de QCM). */
+  font-weight: 400;
+}
+
+.md-content tbody tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+.md-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
 }

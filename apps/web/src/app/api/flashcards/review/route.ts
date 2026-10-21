@@ -6,7 +6,7 @@ import { awardXP, checkAndAwardBadges } from '@/lib/xp'
 
 const schema = z.object({
   flashcard_id: z.string().uuid(),
-  quality:      z.number().int().min(0).max(5),
+  quality: z.number().int().min(0).max(5),
 })
 
 /** POST /api/flashcards/review — enregistre une révision SM-2 */
@@ -15,18 +15,28 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   let body: z.infer<typeof schema>
-  try { body = schema.parse(await req.json()) }
-  catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
+  try {
+    body = schema.parse(await req.json())
+  } catch {
+    return NextResponse.json({ error: 'Corps invalide' }, { status: 400 })
+  }
 
   const { flashcard_id, quality } = body
 
-  const { data: card } = await supabase
+  const { data: card, error: lookupError } = await supabase
     .from('flashcards')
     .select('ease_factor, interval, reps')
     .eq('id', flashcard_id)
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
 
+  if (lookupError) {
+    console.error('[/api/flashcards/review] card lookup failed', lookupError)
+    return NextResponse.json(
+      { error: { code: 'DB_ERROR', message: 'Impossible de charger cette carte.' } },
+      { status: 500 }
+    )
+  }
   if (!card) return NextResponse.json({ error: { code: 'NOT_FOUND' } }, { status: 404 })
 
   const result = computeSM2(
@@ -38,21 +48,31 @@ export async function POST(req: NextRequest) {
     .from('flashcards')
     .update({
       ease_factor: result.easeFactor,
-      interval:    result.interval,
-      reps:        result.reps,
+      interval: result.interval,
+      reps: result.reps,
       next_review: result.nextReview.toISOString(),
     })
     .eq('id', flashcard_id)
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error || !updated) {
+    console.error('[/api/flashcards/review]', error ?? 'Update returned no card.')
+    return NextResponse.json(
+      { error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } },
+      { status: 500 }
+    )
+  }
 
   // XP + badges en arrière-plan
   const xpAmount = quality >= 4 ? 3 : quality >= 3 ? 2 : 0
   if (xpAmount > 0) {
-    awardXP(user.id, xpAmount).catch(() => null)
-    checkAndAwardBadges(user.id).catch(() => null)
+    awardXP(user.id, xpAmount).catch((xpError) =>
+      console.error('[/api/flashcards/review] XP award failed', xpError)
+    )
+    checkAndAwardBadges(user.id).catch((badgeError) =>
+      console.error('[/api/flashcards/review] badge check failed', badgeError)
+    )
   }
 
   return NextResponse.json({ data: updated })

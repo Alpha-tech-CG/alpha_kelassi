@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { adminFetch } from '@/lib/admin-fetch'
+import { useUndoToast, restoreFromTrash } from '@/app/admin/_components/undo-toast'
 
 interface Quiz { id: string; title: string; level: string; is_premium: boolean; subject_name: string | null; question_count: number }
 interface Doc { id: string; title: string; level: string }
@@ -16,13 +18,15 @@ export default function AdminQuizPage() {
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
+  const undo = useUndoToast()
 
   const load = useCallback(async () => {
     const [qz, { data: documents }] = await Promise.all([
-      fetch('/api/admin/quiz', { credentials: 'include' }).then((r) => r.json()),
+      adminFetch<Quiz[]>('/api/admin/quiz'),
       supabase.from('documents').select('id, title, level').eq('type', 'cours').order('created_at', { ascending: false }).limit(200),
     ])
-    setQuizzes(qz.data ?? [])
+    if (qz.ok) setQuizzes(qz.data ?? [])
+    else setMsg(qz.error)
     setDocs((documents ?? []) as Doc[])
     setLoading(false)
   }, [supabase])
@@ -33,20 +37,30 @@ export default function AdminQuizPage() {
     e.preventDefault()
     if (!documentId) return
     setGenerating(true); setMsg(null)
-    const res = await fetch('/api/admin/quiz/generate', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ document_id: documentId, count, is_premium: isPremium }),
-    })
-    const json = await res.json()
-    if (!res.ok) setMsg(json.error?.message ?? 'Erreur de génération')
-    else { setMsg(`✅ QCM créé — ${json.data?.question_count ?? 0} questions`); await load() }
-    setGenerating(false)
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch<{ question_count?: number }>('/api/admin/quiz/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document_id: documentId, count, is_premium: isPremium }),
+      })
+      if (!res.ok) { setMsg(res.error ?? 'Erreur de génération'); return }
+      setMsg(`✅ QCM créé — ${res.data?.question_count ?? 0} questions`)
+      await load()
+    } finally {
+      setGenerating(false)
+    }
   }
 
   async function remove(id: string) {
-    if (!confirm('Supprimer ce QCM ?')) return
-    await fetch(`/api/admin/quiz/${id}`, { method: 'DELETE', credentials: 'include' })
+    const qz = quizzes.find((x) => x.id === id)
+    const res = await adminFetch(`/api/admin/quiz/${id}`, { method: 'DELETE' })
+    if (!res.ok) { setMsg(res.error); return }
     setQuizzes((q) => q.filter((x) => x.id !== id))
+    undo.show(`« ${qz?.title ?? 'QCM'} » placé dans la corbeille.`, async () => {
+      const err = await restoreFromTrash('quiz', id)
+      if (!err) await load()
+      return err
+    })
   }
 
   return (
@@ -59,8 +73,8 @@ export default function AdminQuizPage() {
       {/* Générateur */}
       <form onSubmit={generate} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 space-y-4">
         {msg && <div className="p-3 bg-green-50 text-green-800 rounded-xl text-sm">{msg}</div>}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="sm:col-span-2">
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Cours source</label>
             <select required value={documentId} onChange={(e) => setDocumentId(e.target.value)}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm">
@@ -79,7 +93,7 @@ export default function AdminQuizPage() {
         <div className="flex items-center justify-between pt-1">
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <input type="checkbox" checked={isPremium} onChange={(e) => setIsPremium(e.target.checked)} className="w-4 h-4" />
-            <span className="text-sm text-gray-700 font-medium">Réservé aux abonnés Premium</span>
+            <span className="text-sm text-gray-700 font-medium">Réservé aux abonnés (dès Starter)</span>
           </label>
           <button type="submit" disabled={generating || !documentId} className="px-6 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
             {generating ? 'Génération IA…' : '✨ Générer le QCM'}
@@ -105,6 +119,7 @@ export default function AdminQuizPage() {
           ))}
         </div>
       )}
+      {undo.node}
     </div>
   )
 }

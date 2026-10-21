@@ -24,8 +24,23 @@ export async function GET(req: NextRequest) {
   }
 
   const { searchParams } = new URL(req.url)
-  const filename = searchParams.get('filename') ?? 'document'
+  const filename = searchParams.get('filename') ?? 'document.pdf'
   const isPremium = searchParams.get('premium') === 'true'
+
+  if (filename.length > 200) {
+    return NextResponse.json({ error: 'Nom de fichier trop long' }, { status: 400 })
+  }
+
+  // Liste blanche d'extensions : l'URL pré-signée ne doit jamais permettre
+  // de déposer un type exécutable ou rendu (html, svg…) dans un bucket public.
+  const ALLOWED_EXT = ['pdf', 'docx', 'txt'] as const
+  const ext = (filename.split('.').pop() ?? '').toLowerCase()
+  if (!(ALLOWED_EXT as readonly string[]).includes(ext)) {
+    return NextResponse.json(
+      { error: 'Extension non autorisée (pdf, docx ou txt uniquement)' },
+      { status: 422 },
+    )
+  }
 
   const safeName = filename
     .replace(/[^a-zA-Z0-9._-]/g, '_')

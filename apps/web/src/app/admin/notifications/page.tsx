@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { adminFetch } from '@/lib/admin-fetch'
 
 const API_URL = ''  // routes Next.js locales
 
@@ -18,7 +19,7 @@ interface Notif {
   is_active: boolean; target_plan: string; expires_at: string | null; created_at: string
 }
 
-const EMPTY = { type: 'annonce' as const, title: '', message: '', cta_label: '', cta_url: '', is_active: true, target_plan: 'all', expires_at: '' }
+const EMPTY = { type: 'annonce' as keyof typeof TYPE_CONFIG, title: '', message: '', cta_label: '', cta_url: '', is_active: true, target_plan: 'all', expires_at: '' }
 
 async function getToken() {
   const { data: { session } } = await createClient().auth.getSession()
@@ -35,9 +36,11 @@ export default function AdminNotificationsPage() {
 
   async function load() {
     const token = await getToken()
-    const res = await fetch(`${API_URL}/api/admin/notifications`, { headers: { Authorization: `Bearer ${token}` } })
-    const { data } = await res.json()
-    setNotifs(data ?? [])
+    const res = await adminFetch<Notif[]>(`${API_URL}/api/admin/notifications`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (res.ok) setNotifs(res.data ?? [])
+    else setError(res.error)
     setLoading(false)
   }
 
@@ -46,16 +49,20 @@ export default function AdminNotificationsPage() {
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const token = await getToken()
-    const body = { ...form, cta_label: form.cta_label || null, cta_url: form.cta_url || null, expires_at: form.expires_at || null }
-    const res = await fetch(`${API_URL}/api/admin/notifications`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(body),
-    })
-    if (!res.ok) { const j = await res.json(); setError(j.error?.message ?? 'Erreur'); setSaving(false); return }
-    setForm(EMPTY); setShowForm(false)
-    await load()
-    setSaving(false)
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const token = await getToken()
+      const body = { ...form, cta_label: form.cta_label || null, cta_url: form.cta_url || null, expires_at: form.expires_at || null }
+      const res = await adminFetch(`${API_URL}/api/admin/notifications`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setForm(EMPTY); setShowForm(false)
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function handleToggle(n: Notif) {
@@ -95,12 +102,12 @@ export default function AdminNotificationsPage() {
           <h2 className="font-bold text-gray-900">Créer une notification</h2>
           {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Type</label>
               <select
                 value={form.type}
-                onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as any }))}
+                onChange={(e) => setForm((f) => ({ ...f, type: e.target.value as keyof typeof TYPE_CONFIG }))}
                 className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
               >
                 {Object.entries(TYPE_CONFIG).map(([k, v]) => (
@@ -117,7 +124,7 @@ export default function AdminNotificationsPage() {
               >
                 <option value="all">Tous les utilisateurs</option>
                 <option value="free">Utilisateurs gratuits</option>
-                <option value="premium">Abonnés Premium</option>
+                <option value="premium">Abonnés (toutes formules payantes)</option>
               </select>
             </div>
             <div>
@@ -151,7 +158,7 @@ export default function AdminNotificationsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wider">Texte du bouton (optionnel)</label>
               <input
@@ -212,7 +219,7 @@ export default function AdminNotificationsPage() {
                       <h3 className="font-bold text-gray-900">{n.title}</h3>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${cfg.color}`}>{cfg.label}</span>
                       <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                        {n.target_plan === 'all' ? 'Tous' : n.target_plan === 'free' ? 'Gratuits' : 'Premium'}
+                        {n.target_plan === 'all' ? 'Tous' : n.target_plan === 'free' ? 'Gratuits' : 'Abonnés'}
                       </span>
                       {!n.is_active && <span className="text-xs text-gray-400">· Désactivée</span>}
                       {n.expires_at && (

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { BookOpen, FileText, Bot, Layers, Crown, BarChart3, type LucideIcon } from 'lucide-react'
+import { formatFcfa, normalizePlan, planPrice } from '@alpha-kelassi/types'
 
 interface Shortcut {
   href: string; label: string; Icon: LucideIcon
@@ -10,7 +11,7 @@ interface Shortcut {
 
 const SHORTCUTS: Shortcut[] = [
   { href: '/cours',      label: 'Cours',      Icon: BookOpen, gradient: 'from-blue-500 to-blue-600',      bg: 'bg-blue-50',    text: 'text-blue-700',    iconColor: 'text-white' },
-  { href: '/examens',    label: 'Examens',    Icon: FileText, gradient: 'from-violet-500 to-violet-600',  bg: 'bg-violet-50',  text: 'text-violet-700',  iconColor: 'text-white' },
+  { href: '/examens',    label: 'Prépa',      Icon: FileText, gradient: 'from-violet-500 to-violet-600',  bg: 'bg-violet-50',  text: 'text-violet-700',  iconColor: 'text-white' },
   { href: '/tuteur',     label: 'Kelassi IA', Icon: Bot,      gradient: 'from-emerald-500 to-emerald-600',bg: 'bg-emerald-50', text: 'text-emerald-700', iconColor: 'text-white' },
   { href: '/flashcards', label: 'Flashcards', Icon: Layers,   gradient: 'from-amber-500 to-orange-500',   bg: 'bg-amber-50',   text: 'text-amber-700',   iconColor: 'text-white' },
 ]
@@ -20,7 +21,7 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   const [{ data: profile }, { data: progress }, { data: recentDocs }] = await Promise.all([
-    supabase.from('users').select('full_name, plan, onboarding_completed').eq('id', user!.id).single(),
+    supabase.from('users').select('full_name, plan, role, onboarding_completed').eq('id', user!.id).single(),
     supabase.from('user_progress').select('*, subjects(name)').eq('user_id', user!.id).limit(5),
     supabase.from('documents').select('id, title, type, level').eq('is_premium', false).order('created_at', { ascending: false }).limit(4),
   ])
@@ -36,20 +37,20 @@ export default async function DashboardPage() {
     <div className="px-6 py-8 max-w-5xl mx-auto space-y-8">
 
       {/* ── HERO GREETING ── */}
-      <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-violet-700 rounded-3xl px-8 py-10 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-[#1e3a8a] via-[#172554] to-[#111827] rounded-3xl px-8 py-10 overflow-hidden shadow-xl">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
         <div className="absolute bottom-0 left-1/2 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 pointer-events-none" />
         <div className="relative">
           <p className="text-blue-200 text-sm font-medium mb-1">{greeting} 👋</p>
           <h1 className="text-3xl font-black text-white mb-2">{firstName}</h1>
           <p className="text-blue-100 text-sm max-w-xs">Prêt à réviser aujourd'hui ? Continue là où tu t'es arrêté.</p>
-          {profile?.plan === 'free' && (
+          {normalizePlan(profile?.plan) === 'free' && profile?.role !== 'admin' && (
             <Link
               href="/billing"
               className="inline-flex items-center gap-2 mt-5 bg-white text-blue-700 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors"
             >
-              <Crown className="w-4 h-4" />
-              Passer Premium — 2 000 FCFA/mois
+              <Crown className="w-4 h-4" aria-hidden="true" />
+              Découvrir les formules — dès {formatFcfa(planPrice('starter', 'month'))} / mois
             </Link>
           )}
         </div>

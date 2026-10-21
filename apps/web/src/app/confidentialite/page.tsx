@@ -33,7 +33,7 @@ export default function ConfidentialitePage() {
             <li><strong>Identification</strong> : numéro de téléphone ou adresse e-mail (à l'inscription)</li>
             <li><strong>Profil</strong> : prénom/nom (optionnel), niveau scolaire</li>
             <li><strong>Usage</strong> : cours consultés, questions posées au tuteur IA, résultats de flashcards</li>
-            <li><strong>Paiement</strong> : référence de transaction Stripe ou CinetPay (jamais les numéros de carte)</li>
+            <li><strong>Paiement</strong> : référence de transaction Stripe ou FeexPay (jamais les numéros de carte)</li>
             <li><strong>Technique</strong> : adresse IP (pour la protection anti-abus), logs d'erreurs</li>
           </ul>
         </section>
@@ -67,7 +67,7 @@ export default function ConfidentialitePage() {
         <section>
           <h2 className="text-lg font-semibold mb-3">5. Durée de conservation</h2>
           <ul className="list-disc pl-6 space-y-1">
-            <li>Données de compte : jusqu'à la suppression du compte + 30 jours</li>
+            <li>Données de compte : conservées tant que le compte est actif ; supprimées immédiatement et définitivement lors de la suppression du compte, sans période de rétention supplémentaire</li>
             <li>Historique de chat IA : 12 mois glissants</li>
             <li>Logs techniques : 90 jours</li>
             <li>Données de paiement : 5 ans (obligation légale)</li>
@@ -81,7 +81,7 @@ export default function ConfidentialitePage() {
             <li><strong>Supabase</strong> (hébergement base de données, authentification) — Europe/US</li>
             <li><strong>Google Gemini</strong> (traitement IA des questions) — vos questions sont envoyées à l'API Google</li>
             <li><strong>Stripe</strong> (paiement international)</li>
-            <li><strong>CinetPay</strong> (paiement Afrique centrale)</li>
+            <li><strong>FeexPay</strong> (paiement Mobile Money)</li>
             <li><strong>Africa's Talking</strong> (envoi SMS OTP)</li>
           </ul>
           <p className="mt-2">Nous n'avons pas de partenaires publicitaires.</p>

@@ -1,52 +1,58 @@
 {
   "expo": {
-    "name": "Kelassi",
+    "name": "Cognix",
     "slug": "kelassi",
-    "version": "1.0.0",
-    "runtimeVersion": "1.0.0",
+    "version": "1.0.12",
+    "runtimeVersion": "1.0.6",
     "scheme": "kelassi",
     "orientation": "portrait",
+    "jsEngine": "hermes",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-blank.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0F8F4F"
+      "backgroundColor": "#00030C"
     },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.kelassi.app",
-      "buildNumber": "1",
+      "buildNumber": "13",
       "infoPlist": {
-        "NSCameraUsageDescription": "UtilisÃ© pour scanner des documents de cours",
-        "NSMicrophoneUsageDescription": "UtilisÃ© pour les questions vocales Ã  Kelassi",
+        "NSCameraUsageDescription": "Utilisé pour scanner des documents de cours",
+        "NSFaceIDUsageDescription": "Utilisé pour déverrouiller l'application après une période d'inactivité",
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0F8F4F"
+        "backgroundColor": "#00030C"
       },
       "package": "com.kelassi.app",
-      "versionCode": 1,
+      "versionCode": 13,
       "compileSdkVersion": 35,
       "targetSdkVersion": 35,
       "minSdkVersion": 24,
       "permissions": [
-        "android.permission.INTERNET",
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.INTERNET"
       ]
     },
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      "expo-local-authentication",
       [
         "expo-file-system",
         {}
       ],
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Utilisé pour joindre la photo de ton énoncé et de ton travail à corriger."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

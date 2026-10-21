@@ -1,19 +1,42 @@
 import { useEffect, useState } from 'react'
+import { Text as RNText, AppState, AppStateStatus, View, StyleSheet } from 'react-native'
 import { Stack, useRouter, useSegments, useRootNavigationState } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import {
+  useFonts,
+  Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold, Nunito_900Black,
+} from '@expo-google-fonts/nunito'
+import { Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black } from '@expo-google-fonts/poppins'
+import NetInfo from '@react-native-community/netinfo'
 import { supabase } from '../lib/supabase'
+import { viderLaFile } from '../lib/outbox'
+import { Splash, SPLASH_BG } from '../components/Splash'
+import { LockScreen } from '../components/LockScreen'
+import { startAppLockTracking, shouldRequireUnlock, clearAppLock } from '../lib/appLock'
+import { trackAppOpen } from '../lib/analytics'
 import type { Session } from '@supabase/supabase-js'
 
-// NOTE : WatermelonDB (cache offline) est temporairement retiré du chemin de
-// démarrage. Il s'initialisait ici (`jsi: true` + décorateurs sans babel config
-// legacy) et faisait planter l'app entière au lancement, alors qu'aucun écran ne
-// l'utilise encore. Les fichiers src/db/ restent en place ; à re-brancher
-// proprement (setup natif JSI + babel legacy decorators) quand la vraie feature
-// offline-first sera implémentée.
+// Police par défaut de toute l'app = Nunito (design final). Les titres passent
+// en Poppins via `fonts.heading` dans les styles.
+const RNTextAny = RNText as unknown as { defaultProps?: { style?: unknown } }
+RNTextAny.defaultProps = RNTextAny.defaultProps || {}
+RNTextAny.defaultProps.style = { fontFamily: 'Nunito_700Bold' }
+
+// NOTE : WatermelonDB a été entièrement retiré (dépendances + src/db/ supprimés) :
+// son init JSI au démarrage faisait planter l'app, pour aucun écran consommateur.
+// L'offline des leçons est assuré par src/lib/lessonCache.ts (expo-file-system :
+// texte + images mis en cache en tâche de fond). Un vrai offline-first structuré
+// (file de mutations synchronisée) reste à spécifier si besoin.
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold, Nunito_900Black,
+    Poppins_700Bold, Poppins_800ExtraBold, Poppins_900Black,
+  })
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
+  const [splashDone, setSplashDone] = useState(false) // animation du logo terminée et effacée
+  const [locked, setLocked] = useState(false)
   const segments = useSegments()
   const router = useRouter()
   const navState = useRootNavigationState()
@@ -26,8 +49,92 @@ export default function RootLayout() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s)
     })
-    return () => subscription.unsubscribe()
+    return () => { subscription.unsubscribe() }
   }, [])
+
+  // Verrouillage biométrique/PIN après inactivité (> 5 min en arrière-plan).
+  // Entièrement défensif : toute erreur d'API native est avalée, l'app ne
+  // doit jamais planter ni bloquer un utilisateur sans biométrie enrôlée.
+  useEffect(() => {
+    try {
+      startAppLockTracking()
+    } catch {
+      // no-op
+    }
+
+    // Vérifie aussi une fois au montage (cold start). Si l'OS a tué le process JS
+    // pendant que l'app était en arrière-plan depuis plus de 5 min, aucun événement
+    // AppState 'change' n'est émis au relancement (l'app démarre déjà 'active') :
+    // sans ce contrôle initial, le verrouillage serait silencieusement contourné.
+    shouldRequireUnlock()
+      .then((needsUnlock) => {
+        if (needsUnlock) setLocked(true)
+      })
+      .catch(() => {
+        // En cas de doute, on ne verrouille pas — on ne bloque jamais l'accès.
+      })
+
+    trackAppOpen()
+
+    const onChange = (state: AppStateStatus) => {
+      if (state !== 'active') return
+      trackAppOpen()
+      shouldRequireUnlock()
+        .then((needsUnlock) => {
+          if (needsUnlock) setLocked(true)
+        })
+        .catch(() => {
+          // En cas de doute, on ne verrouille pas — on ne bloque jamais l'accès.
+        })
+    }
+
+    let sub: { remove: () => void } | null = null
+    try {
+      sub = AppState.addEventListener('change', onChange)
+    } catch {
+      // no-op — API AppState indisponible sur cette plateforme/appareil.
+    }
+    return () => {
+      try { sub?.remove() } catch { /* no-op */ }
+    }
+  }, [])
+
+  // Drainage automatique de la file d'écriture hors-ligne (outbox) : au démarrage
+  // si l'appareil est en ligne, puis à chaque retour de connexion (hors-ligne ->
+  // en ligne). Entièrement défensif : viderLaFile() est un no-op sans session ni
+  // réseau, donc on ne bloque ni ne fait planter quoi que ce soit.
+  useEffect(() => {
+    let precedent: boolean | null = null
+    const drain = () => {
+      viderLaFile().catch(() => {
+        // no-op — les actions restent en file pour la prochaine occasion.
+      })
+    }
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      const online = state.isConnected ?? false
+      if (online && precedent === false) drain() // transition hors-ligne -> en ligne
+      precedent = online
+    })
+    NetInfo.fetch()
+      .then((state) => {
+        if (state.isConnected) drain()
+      })
+      .catch(() => {
+        // no-op
+      })
+    return () => {
+      try {
+        unsubscribe()
+      } catch {
+        // no-op
+      }
+    }
+  }, [])
+
+  function handleUnlock() {
+    setLocked(false)
+    clearAppLock().catch(() => { /* no-op */ })
+  }
 
   // Redirection selon l'état d'auth — UNIQUEMENT une fois la session connue ET le
   // navigateur racine monté (navState?.key). Sans ce garde, router.replace() était
@@ -50,17 +157,41 @@ export default function RootLayout() {
     }
   }, [ready, navState?.key, session, segments, router])
 
+  const appReady = fontsLoaded && ready
+
+  // Le splash animé reste monté par-dessus l'appli pendant que celle-ci démarre
+  // (polices, session, redirection) : il ne s'efface qu'une fois les deux prêts.
   return (
     <>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="cours/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="examens/[id]" options={{ headerShown: true, title: '' }} />
-        <Stack.Screen name="flashcards/index" options={{ headerShown: true, title: 'Flashcards' }} />
-        <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
-      </Stack>
-      <StatusBar style="dark" backgroundColor="#F5FBF0" />
+      {appReady ? (
+        <>
+        {/* Transitions animées entre les écrans : glissement latéral, fondu pour les
+            écrans de passage (connexion, choix du parcours). */}
+        <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right', animationDuration: 280 }}>
+          <Stack.Screen name="(auth)" options={{ animation: 'fade' }} />
+          <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
+          <Stack.Screen name="cours/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="examens/[id]" options={{ headerShown: true, title: '' }} />
+          {/* L'écran a son propre en-tête (bouton retour + compteur) */}
+          <Stack.Screen name="flashcards/index" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }} />
+        </Stack>
+        <StatusBar style={splashDone ? 'dark' : 'light'} backgroundColor={splashDone ? '#F4F8FE' : SPLASH_BG} />
+        {/* Verrouillage biométrique/PIN : overlay plein écran par-dessus la
+            navigation existante, affiché seulement quand un déverrouillage est
+            requis (retour au premier plan après > 5 min en arrière-plan). */}
+        {locked && session ? (
+          <View style={StyleSheet.absoluteFill}>
+            <LockScreen onUnlock={handleUnlock} />
+          </View>
+        ) : null}
+        </>
+      ) : null}
+      {!splashDone ? (
+        <View style={StyleSheet.absoluteFill}>
+          <Splash ready={appReady} onDone={() => setSplashDone(true)} />
+        </View>
+      ) : null}
     </>
   )
 }

@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { adminFetch } from '@/lib/admin-fetch'
+import { LevelOptions } from '@/app/admin/_components/level-options'
 
 interface Video {
   id: string; title: string; level: string; provider: string; url: string
@@ -22,10 +24,11 @@ export default function AdminVideosPage() {
 
   const load = useCallback(async () => {
     const [vids, { data: subs }] = await Promise.all([
-      fetch('/api/admin/videos', { credentials: 'include' }).then((r) => r.json()),
+      adminFetch<Video[]>('/api/admin/videos'),
       supabase.from('subjects').select('id, name, level').order('name'),
     ])
-    setVideos(vids.data ?? [])
+    if (vids.ok) setVideos(vids.data ?? [])
+    else setError(vids.error)
     setSubjects((subs ?? []) as Subject[])
     setLoading(false)
   }, [supabase])
@@ -35,14 +38,18 @@ export default function AdminVideosPage() {
   async function add(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true); setError(null)
-    const res = await fetch('/api/admin/videos', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify(form),
-    })
-    const json = await res.json()
-    if (!res.ok) { setError(json.error?.message ?? 'Erreur'); setSaving(false); return }
-    setForm(EMPTY); setSaving(false)
-    await load()
+    // `finally` : sans lui, une réponse inattendue laissait le bouton bloqué.
+    try {
+      const res = await adminFetch('/api/admin/videos', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) { setError(res.error); return }
+      setForm(EMPTY)
+      await load()
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function remove(id: string) {
@@ -61,7 +68,7 @@ export default function AdminVideosPage() {
       {/* Form ajout */}
       <form onSubmit={add} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6 space-y-4">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Matière</label>
             <select required value={form.subject_id} onChange={(e) => setForm((f) => ({ ...f, subject_id: e.target.value }))}
@@ -74,7 +81,7 @@ export default function AdminVideosPage() {
             <label className="block text-xs font-bold text-gray-600 mb-1.5 uppercase">Niveau</label>
             <select value={form.level} onChange={(e) => setForm((f) => ({ ...f, level: e.target.value }))}
               className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm">
-              {['bepc', 'bac_a', 'bac_c', 'bac_d'].map((l) => <option key={l} value={l}>{l.replace('_', ' ').toUpperCase()}</option>)}
+              <LevelOptions />
             </select>
           </div>
         </div>
@@ -91,7 +98,7 @@ export default function AdminVideosPage() {
         <div className="flex items-center justify-between pt-2">
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <input type="checkbox" checked={form.is_premium} onChange={(e) => setForm((f) => ({ ...f, is_premium: e.target.checked }))} className="w-4 h-4" />
-            <span className="text-sm text-gray-700 font-medium">Réservé aux abonnés Premium</span>
+            <span className="text-sm text-gray-700 font-medium">Réservé aux abonnés (dès Starter)</span>
           </label>
           <button type="submit" disabled={saving} className="px-6 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 disabled:opacity-50">
             {saving ? 'Ajout…' : 'Ajouter la vidéo'}
@@ -105,7 +112,7 @@ export default function AdminVideosPage() {
       ) : videos.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center text-gray-400">Aucune vidéo.</div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {videos.map((v) => (
             <div key={v.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-3">
               {v.thumbnail_url && (

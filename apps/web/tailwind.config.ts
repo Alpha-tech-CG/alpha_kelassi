@@ -10,8 +10,32 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        // Titres de la page d'accueil (variable posée par next/font dans app/page.tsx).
+        heading: ['var(--font-heading)', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        // Mots d'accent en italique dans les titres de la page d'accueil.
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
+        display: ['var(--font-display)', 'Montserrat', 'system-ui', 'sans-serif'],
       },
       colors: {
+        // Palette Cognix de la page d'accueil.
+        primary: '#101B4D',
+        secondary: '#1E3A8A',
+        accent: '#FFB703',
+        // Page d'accueil : encre, papier chaud et sable.
+        ink: '#0E1530',
+        paper: '#F7F5F0',
+        sand: '#EDE8DD',
+        // Page d'accueil : couleurs du logo et de l'app Cognix (bleu / blanc).
+        'cx-navy': '#0F1B2D',
+        'cx-blue': '#1E74E8',
+        'cx-sky': '#E7F0FD',
+        'cx-paper': '#F4F8FE',
+        'cx-cyan': '#35C0F0',
+        background: '#F8FAFC',
+        foreground: '#0F172A',
+        card: '#FFFFFF',
+        border: '#E2E8F0',
+        muted: { DEFAULT: '#F1F5F9', foreground: '#64748B' },
         brand: {
           50:  '#eff6ff',
           100: '#dbeafe',

@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import { UploadForm } from '../_components/upload-form'
 import { createClient } from '@/lib/supabase/client'
 import type { Level } from '@alpha-kelassi/types'
+import { adminFetch } from '@/lib/admin-fetch'
 
 const API_URL = ''  // routes Next.js locales
 
@@ -51,21 +52,26 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
   async function handleCorrigeUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (!corrigeDocId || !e.target.files?.[0]) return
     setUploadingCorrige(true)
-    const token = await getToken()
-    const fd = new FormData()
-    fd.append('file', e.target.files[0])
-    const res = await fetch(`${API_URL}/api/admin/documents/${corrigeDocId}/corrige`, {
-      method: 'PATCH',
-      headers: { Authorization: `Bearer ${token}` },
-      body: fd,
-    })
-    if (res.ok) {
-      const { data } = await res.json()
-      setDocs((prev) => prev.map((d) => d.id === corrigeDocId ? { ...d, corrige_url: data.corrige_url } : d))
+    // `finally` : sans lui, une réponse inattendue laissait l'envoi bloqué.
+    try {
+      const token = await getToken()
+      const fd = new FormData()
+      fd.append('file', e.target.files[0])
+      const res = await adminFetch<{ corrige_url: string }>(`${API_URL}/api/admin/documents/${corrigeDocId}/corrige`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      })
+      if (res.ok && res.data) {
+        setDocs((prev) => prev.map((d) => d.id === corrigeDocId ? { ...d, corrige_url: res.data!.corrige_url } : d))
+      } else if (!res.ok) {
+        alert(res.error ?? 'Envoi impossible')
+      }
+    } finally {
+      setUploadingCorrige(false)
+      setCorrigeDocId(null)
+      if (corrigeRef.current) corrigeRef.current.value = ''
     }
-    setUploadingCorrige(false)
-    setCorrigeDocId(null)
-    if (corrigeRef.current) corrigeRef.current.value = ''
   }
 
   return (

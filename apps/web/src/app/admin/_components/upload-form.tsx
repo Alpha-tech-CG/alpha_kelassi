@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { type StudyLevel } from '@alpha-kelassi/types'
+import { LevelOptions } from './level-options'
 
-type Level = 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+type Level = StudyLevel
 type DocType = 'cours' | 'examen'
 
 interface Subject { id: string; name: string; level: Level }
@@ -94,7 +96,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
 
       {error && <div className="p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
           <select
@@ -102,9 +104,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
             onChange={(e) => setForm((f) => ({ ...f, level: e.target.value as Level, subject_id: '' }))}
             className="w-full border rounded-lg px-3 py-2 text-sm"
           >
-            {(['bepc', 'bac_a', 'bac_c', 'bac_d'] as Level[]).map((l) => (
-              <option key={l} value={l}>{l.toUpperCase().replace('_', ' ')}</option>
-            ))}
+            <LevelOptions />
           </select>
         </div>
 
@@ -184,7 +184,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
             onChange={(e) => setForm((f) => ({ ...f, is_premium: e.target.checked }))}
             className="w-4 h-4"
           />
-          <span className="text-sm text-gray-700">Document Premium</span>
+          <span className="text-sm text-gray-700">Réservé aux abonnés (dès Starter)</span>
         </label>
       </div>
 

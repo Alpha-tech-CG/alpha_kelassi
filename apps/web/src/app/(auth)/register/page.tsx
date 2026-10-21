@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { PASSWORD_RULES, isPasswordValid } from '@/lib/password'
 
 const LEVELS = [
   {
@@ -48,16 +49,17 @@ const LEVELS = [
 ]
 
 export default function RegisterPage() {
-  const supabase = createClient()
-
+  const router = useRouter()
   // Step 1 fields
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [password2, setPassword2] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
   // Step 2 field
   const [level, setLevel] = useState('')
+  const [consent, setConsent] = useState(false)
 
   // UI state
   const [step, setStep] = useState(1)
@@ -68,7 +70,8 @@ export default function RegisterPage() {
   function validateStep1() {
     if (!fullName.trim()) return 'Entre ton nom complet.'
     if (!email.trim() || !email.includes('@')) return 'Adresse email invalide.'
-    if (password.length < 8) return 'Le mot de passe doit faire au moins 8 caractères.'
+    if (!isPasswordValid(password)) return 'Mot de passe trop faible : 8 caractères avec une minuscule, une majuscule et un chiffre.'
+    if (password !== password2) return 'Les deux mots de passe ne sont pas identiques.'
     return null
   }
 
@@ -81,23 +84,28 @@ export default function RegisterPage() {
 
   async function handleSubmit() {
     if (!level) { setError('Choisis ton niveau.'); return }
+    if (!consent) { setError('Tu dois accepter les CGU et la politique de confidentialité.'); return }
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName, study_level: level },
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    })
-
-    if (error) {
-      setError(error.message)
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, password, level }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setError(json.error?.message ?? 'Une erreur est survenue.')
+        setStep(1)
+      } else {
+        // Code à 6 chiffres envoyé par e-mail : on passe directement à sa saisie.
+        router.push(`/confirmer?email=${encodeURIComponent(email.trim().toLowerCase())}&fresh=1`)
+        return
+      }
+    } catch {
+      setError('Une erreur est survenue.')
       setStep(1)
-    } else {
-      setSuccess(true)
     }
     setLoading(false)
   }
@@ -215,7 +223,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <input
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="8 caractères minimum"
+                        placeholder="Mot de passe"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleNext()}
@@ -229,16 +237,29 @@ export default function RegisterPage() {
                         {showPassword ? '🙈' : '👁️'}
                       </button>
                     </div>
-                    {password.length > 0 && (
-                      <div className="mt-2 flex gap-1">
-                        {[...Array(4)].map((_, i) => (
-                          <div key={i} className={`h-1 flex-1 rounded-full transition-all ${
-                            password.length >= [4, 6, 8, 12][i]
-                              ? ['bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-green-500'][i]
-                              : 'bg-gray-100'
-                          }`} />
-                        ))}
-                      </div>
+                    <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                      {PASSWORD_RULES.map((r) => {
+                        const ok = r.test(password)
+                        return (
+                          <li key={r.label} className={`text-xs ${ok ? 'text-green-600' : 'text-gray-400'}`}>
+                            {ok ? '✓' : '•'} {r.label}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Confirme le mot de passe</label>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Retape ton mot de passe"
+                      value={password2}
+                      onChange={(e) => setPassword2(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleNext()}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                    {password2.length > 0 && password2 !== password && (
+                      <p className="mt-1.5 text-xs text-red-600">Les deux mots de passe ne correspondent pas.</p>
                     )}
                   </div>
                 </div>
@@ -303,18 +324,30 @@ export default function RegisterPage() {
                   ))}
                 </div>
 
+                <label className="flex items-start gap-2.5 mb-5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => { setConsent(e.target.checked); setError(null) }}
+                    className="mt-0.5 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="text-xs text-gray-500 leading-relaxed">
+                    J'accepte les{' '}
+                    <Link href="/cgu" target="_blank" className="underline hover:text-gray-700">CGU</Link>
+                    {' '}et la{' '}
+                    <Link href="/confidentialite" target="_blank" className="underline hover:text-gray-700">
+                      politique de confidentialité
+                    </Link>
+                  </span>
+                </label>
+
                 <button
                   onClick={handleSubmit}
-                  disabled={!level || loading}
+                  disabled={!level || !consent || loading}
                   className="w-full py-3.5 bg-blue-600 text-white rounded-2xl font-bold text-sm hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
                   {loading ? 'Création du compte…' : 'Créer mon compte 🚀'}
                 </button>
-
-                <p className="text-center text-xs text-gray-400 mt-4">
-                  En créant un compte, tu acceptes nos{' '}
-                  <Link href="/cgu" className="underline hover:text-gray-600">CGU</Link>
-                </p>
               </>
             )}
 

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Lesson { id: string; title: string; position: number }
 interface Objective { id: string; title: string; position: number; course_lessons: Lesson[] }
@@ -38,7 +40,7 @@ export default function CoursDetailScreen() {
     load()
   }, [id])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   if (!course) {
     return (
@@ -54,7 +56,7 @@ export default function CoursDetailScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.headerTitle} numberOfLines={1}>{course.subjects?.name ?? 'Cours'}</Text>
       </View>
 

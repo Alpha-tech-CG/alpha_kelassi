@@ -13,6 +13,7 @@ async function getAnalytics() {
       { data: activeSubs },
       { data: recentQuestions },
       { count: totalUsers },
+      { data: monthPayments },
     ] = await Promise.all([
       supabaseAdmin
         .from('document_views')
@@ -22,7 +23,7 @@ async function getAnalytics() {
 
       supabaseAdmin
         .from('subscriptions')
-        .select('plan, status, stripe_sub_id, cinetpay_ref, expires_at, created_at')
+        .select('plan, status, stripe_sub_id, cinetpay_ref, feexpay_ref, expires_at, created_at')
         .eq('status', 'active'),
 
       supabaseAdmin
@@ -33,12 +34,17 @@ async function getAnalytics() {
         .limit(50),
 
       supabaseAdmin.from('users').select('id', { count: 'exact', head: true }),
+
+      // Revenus réels : paiements confirmés depuis le 1er du mois.
+      supabaseAdmin.from('payment_transactions').select('amount')
+        .eq('status', 'successful')
+        .gte('created_at', new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)).toISOString()),
     ])
 
     // Agrège les vues par document
     const viewsByDoc = new Map<string, { count: number; title: string; type: string; level: string }>()
     for (const row of topDocs ?? []) {
-      const doc = row.documents as { title: string; type: string; level: string } | null
+      const doc = row.documents as unknown as { title: string; type: string; level: string } | null
       const cur = viewsByDoc.get(row.document_id) ?? { count: 0, title: doc?.title ?? '', type: doc?.type ?? '', level: doc?.level ?? '' }
       viewsByDoc.set(row.document_id, { ...cur, count: cur.count + 1 })
     }
@@ -48,15 +54,15 @@ async function getAnalytics() {
       .slice(0, 10)
 
     const stripeCount = (activeSubs ?? []).filter((s) => s.stripe_sub_id).length
-    const cinetpayCount = (activeSubs ?? []).filter((s) => s.cinetpay_ref).length
+    const mobileMoneyCount = (activeSubs ?? []).filter((s) => s.feexpay_ref || s.cinetpay_ref).length
 
     return {
       top_documents: topDocsSorted,
       revenue: {
         active_subscriptions: (activeSubs ?? []).length,
         stripe_count: stripeCount,
-        cinetpay_count: cinetpayCount,
-        monthly_revenue_fcfa: stripeCount * 2000 + cinetpayCount * 2000,
+        mobile_money_count: mobileMoneyCount,
+        monthly_revenue_fcfa: ((monthPayments ?? []) as { amount: number }[]).reduce((s, p) => s + p.amount, 0),
       },
       recent_questions: (recentQuestions ?? []).slice(0, 20).map((q) => ({
         content: q.content.slice(0, 120),
@@ -79,26 +85,26 @@ export default async function AdminOverviewPage() {
   const analytics = user ? await getAnalytics() : null
 
   const totals = analytics?.totals ?? { users: 0, active_subs: 0 }
-  const revenue = analytics?.revenue ?? { monthly_revenue_fcfa: 0, active_subscriptions: 0, stripe_count: 0, cinetpay_count: 0 }
+  const revenue = analytics?.revenue ?? { monthly_revenue_fcfa: 0, active_subscriptions: 0, stripe_count: 0, mobile_money_count: 0 }
   const topDocs = analytics?.top_documents ?? []
   const recentQ = analytics?.recent_questions ?? []
 
   const statCards = [
     { label: 'Utilisateurs inscrits', value: totals.users.toLocaleString('fr'), icon: '👥', color: 'from-green-600 to-green-700' },
-    { label: 'Abonnés Premium', value: totals.active_subs.toLocaleString('fr'), icon: '⭐', color: 'from-amber-500 to-orange-500' },
+    { label: 'Abonnés actifs', value: totals.active_subs.toLocaleString('fr'), icon: '⭐', color: 'from-amber-500 to-orange-500' },
     { label: 'Revenus du mois', value: `${revenue.monthly_revenue_fcfa.toLocaleString('fr')} FCFA`, icon: '💰', color: 'from-emerald-500 to-teal-600' },
-    { label: 'Paiements Mobile Money', value: revenue.cinetpay_count.toLocaleString('fr'), icon: '📱', color: 'from-violet-500 to-purple-600' },
+    { label: 'Paiements Mobile Money', value: revenue.mobile_money_count.toLocaleString('fr'), icon: '📱', color: 'from-violet-500 to-purple-600' },
   ]
 
   return (
-    <div className="px-8 py-8 max-w-6xl">
+    <div className="px-4 md:px-8 py-6 md:py-8 max-w-6xl">
       <div className="mb-8">
         <h1 className="text-2xl font-black text-gray-900">Vue d&apos;ensemble</h1>
         <p className="text-gray-500 text-sm mt-1">Tableau de bord administrateur Kelassi</p>
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-4 gap-5 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         {statCards.map((s) => (
           <div key={s.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <div className={`w-10 h-10 bg-gradient-to-br ${s.color} rounded-xl flex items-center justify-center text-xl mb-3`}>
@@ -110,7 +116,7 @@ export default async function AdminOverviewPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top documents */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
           <h2 className="font-bold text-gray-900 mb-4">Documents les plus consultés (7j)</h2>

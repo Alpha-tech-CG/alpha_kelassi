@@ -1,9 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { colors, radius, cardShadow } from '../../lib/theme'
+import { planErrorOf } from '../../lib/billing'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Plan { id: string; level: string; title: string; exam_date: string; days_remaining: number }
 interface ExamEvent { id: string; level: string; label: string; exam_date: string }
@@ -64,10 +67,30 @@ export default function PlanningScreen() {
     load()
   }, [loadSessions])
 
+  function explainLocked(json: unknown): boolean {
+    const planErr = planErrorOf(json)
+    if (!planErr?.info) return false
+    Alert.alert('Formule requise', `${planErr.info.title} ${planErr.info.body}`, [
+      { text: 'Voir les formules', onPress: () => router.push(`/abonnement?plan=${planErr.info!.requiredPlan}` as any) },
+      { text: 'Plus tard', style: 'cancel' },
+    ])
+    return true
+  }
+
   async function createPlan(exam: ExamEvent) {
-    await api('/plan', { method: 'POST', body: JSON.stringify({ level: exam.level, title: exam.label, exam_date: exam.exam_date }) })
+    const created = await api('/plan', { method: 'POST', body: JSON.stringify({ level: exam.level, title: exam.label, exam_date: exam.exam_date }) })
+    if (explainLocked(created)) return
     const planJson = await api('/plan')
     setPlan(planJson.data)
+  }
+
+  // Pro Max : reporte les séances manquées sur les prochains jours les moins chargés.
+  async function adapt() {
+    const json = await api('/adapt', { method: 'POST' })
+    if (explainLocked(json)) return
+    const moved = json.data?.moved ?? 0
+    Alert.alert('Plan réajusté', moved ? `${moved} séance(s) manquée(s) reportée(s).` : 'Aucune séance manquée à reporter.')
+    await loadSessions()
   }
 
   async function generate() {
@@ -77,8 +100,12 @@ export default function PlanningScreen() {
       method: 'POST',
       body: JSON.stringify({ plan_id: plan.id, subject_ids: [...picked], sessions_per_day: perDay, duration_min: 30 }),
     })
-    if (json.error) Alert.alert('Erreur', json.error.message ?? 'Génération impossible')
-    else await loadSessions()
+    if (explainLocked(json)) { /* explication affichée */ }
+    else if (json.error) Alert.alert('Erreur', json.error.message ?? 'Génération impossible')
+    else {
+      if (json.data?.adaptive) Alert.alert('Plan adaptatif', 'Les matières où tu te trompes le plus reviennent plus souvent dans ton planning.')
+      await loadSessions()
+    }
     setGenerating(false)
   }
 
@@ -87,7 +114,7 @@ export default function PlanningScreen() {
     await api(`/sessions/${s.id}`, { method: 'PATCH', body: JSON.stringify({ is_done: !s.is_done }) })
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   const today = new Date().toISOString().slice(0, 10)
   const todaySessions = sessions.filter((s) => s.scheduled_date === today)
@@ -95,9 +122,9 @@ export default function PlanningScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Mon planning</Text>
-        <View style={{ width: 20 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {!plan ? (
@@ -144,9 +171,14 @@ export default function PlanningScreen() {
                 </TouchableOpacity>
               ))}
             </View>
-            <TouchableOpacity style={[styles.genBtn, (picked.size === 0 || generating) && { opacity: 0.5 }]} onPress={generate} disabled={picked.size === 0 || generating}>
+            <TouchableOpacity style={[styles.genBtn, (picked.size === 0 || generating) && { opacity: 0.5 }]} onPress={generate} disabled={picked.size === 0 || generating} accessibilityRole="button">
               <Text style={styles.genText}>{generating ? 'Génération…' : 'Générer'}</Text>
             </TouchableOpacity>
+            {sessions.length > 0 && (
+              <TouchableOpacity style={styles.adaptBtn} onPress={adapt} accessibilityRole="button">
+                <Text style={styles.adaptText}>Reporter mes séances manquées (Pro Max)</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           <Text style={styles.sectionTitle}>Aujourd'hui</Text>
@@ -172,6 +204,8 @@ const styles = StyleSheet.create({
   back: { fontSize: 24, color: colors.text },
   title: { fontSize: 20, fontWeight: '800', color: colors.text },
   card: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow },
+  adaptBtn: { borderWidth: 1.5, borderColor: colors.primary, borderRadius: radius.md, paddingVertical: 11, alignItems: 'center', marginTop: 10 },
+  adaptText: { color: colors.primary, fontSize: 13, fontWeight: '800' },
   cardTitle: { fontSize: 16, fontWeight: '800', color: colors.text, marginBottom: 12 },
   empty: { fontSize: 13, color: colors.textMuted },
   examRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 13, borderTopWidth: 1, borderTopColor: colors.background },

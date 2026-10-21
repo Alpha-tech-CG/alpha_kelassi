@@ -1,0 +1,704 @@
+import { useEffect, useState, type ReactNode } from 'react'
+import {
+  ScrollView,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Linking,
+  ImageBackground,
+} from 'react-native'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { supabase } from '../../lib/supabase'
+import { API_URL } from '../../lib/config'
+import { colors, radius, cardShadow, fonts } from '../../lib/theme'
+import { useNetworkStatus } from '../../hooks/useNetworkStatus'
+import { enfiler } from '../../lib/outbox'
+import { readCachedLesson, writeCachedLesson } from '../../lib/lessonCache'
+import { LessonContent } from '../../components/LessonContent'
+import { MathLessonView, MathLessonReader } from '../../components/MathLessonView'
+import { ChapterSkeleton } from '../../components/Skeleton'
+import { LockedFeature } from '../../components/LockedFeature'
+import { useBilling } from '../../hooks/useBilling'
+import { subjectArtwork } from '../../lib/subjectArtwork'
+import { ImageTile } from '../../components/ImageTile'
+import { BackButton } from '../../components/BackButton'
+import { track } from '../../lib/analytics'
+
+// Contenu avec formules LaTeX ($...$) → rendu math natif ; sinon rendu léger (encarts BEPC).
+const hasMath = (s?: string | null) => !!s && /\$[^$\n]+\$|\$\$|^[ \t]*\$[ \t]*$/m.test(s)
+
+type LessonType = 'cours' | 'resume' | 'fiche' | 'quiz' | 'video'
+interface LessonVM {
+  id: string
+  type: LessonType
+  title: string
+  content: string | null
+  video_url: string | null
+  duration_min: number | null
+  order_index: number
+}
+const TABS: { type: LessonType; label: string }[] = [
+  { type: 'cours', label: 'Cours' },
+  { type: 'resume', label: 'Résumé' },
+  { type: 'fiche', label: 'Fiche' },
+  { type: 'quiz', label: 'Quiz' },
+  { type: 'video', label: 'Vidéo' },
+]
+
+export default function ChapitreScreen() {
+  const { chapterId } = useLocalSearchParams<{ chapterId: string }>()
+  const router = useRouter()
+  const { isOnline } = useNetworkStatus()
+  const [title, setTitle] = useState('')
+  const [subjectName, setSubjectName] = useState('')
+  const [lessons, setLessons] = useState<LessonVM[]>([])
+  const [done, setDone] = useState<Record<string, { completed: boolean; score: number | null }>>({})
+  const [tab, setTab] = useState<LessonType>('cours')
+  const [loading, setLoading] = useState(true)
+  const [fromCache, setFromCache] = useState(false)
+  const [busy, setBusy] = useState<string | null>(null)
+  const [flash, setFlash] = useState<string | null>(null)
+  const [scores, setScores] = useState<Record<string, string>>({})
+  const [openSub, setOpenSub] = useState<string | null>(null) // sous-chapitre ouvert (mode drill-down)
+  const [exCount, setExCount] = useState(0)
+  const { me, can } = useBilling()
+
+  useEffect(() => {
+    if (chapterId) track('chapter_opened', { chapter_id: chapterId })
+  }, [chapterId])
+  useEffect(() => {
+    if (openSub) track('lesson_opened', { lesson_id: openSub, chapter_id: chapterId ?? null })
+  }, [openSub, chapterId])
+
+  useEffect(() => {
+    let cancelled = false
+
+    function applyCached(parsed: { title: string; subject?: string; lessons: LessonVM[] }, isFromCache: boolean) {
+      if (cancelled) return
+      setTitle(parsed.title)
+      setSubjectName(parsed.subject ?? '')
+      setLessons(parsed.lessons)
+      setFromCache(isFromCache)
+      setTab(TABS.find((x) => parsed.lessons.some((l) => l.type === x.type))?.type ?? 'cours')
+    }
+
+    async function load() {
+      // 1) Cache d'abord : si présent, affichage instantané — indépendant de la
+      // rapidité/fiabilité du réseau (une requête qui reste bloquée plusieurs
+      // secondes avant d'échouer, plutôt que de rejeter tout de suite, ne doit
+      // jamais empêcher de lire un cours déjà téléchargé).
+      let hasCache = false
+      try {
+        const cached = await readCachedLesson(`chapter:${chapterId}`)
+        if (cached) {
+          const parsed = JSON.parse(cached) as { title: string; subject?: string; lessons: LessonVM[] }
+          applyCached(parsed, true)
+          hasCache = true
+          setLoading(false)
+        }
+      } catch {
+        /* cache absent/corrompu — on tentera le réseau ci-dessous */
+      }
+
+      // 2) Réseau ensuite, avec timeout : rafraîchit si ça répond, sinon on
+      // garde ce qui a déjà été affiché depuis le cache (ou l'état vide s'il
+      // n'y en avait pas). Toutes les requêtes indépendantes partent en
+      // parallèle (plutôt qu'enchaînées une par une) pour limiter l'attente
+      // sur une connexion lente — c'est là que se jouait l'essentiel de la
+      // lenteur perçue.
+      try {
+        // Sur un cache déjà affiché, ce n'est qu'un rafraîchissement en tâche
+        // de fond : pas la peine d'attendre longtemps. Sans cache, c'est le
+        // seul chemin vers le contenu : on laisse un peu plus de marge.
+        const timeoutMs = hasCache ? 4000 : 6000
+        const timeout = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('timeout')), timeoutMs)
+        )
+
+        const fetchAll = (async () => {
+          const [{ data: chapter }, { data: rows, error }, { count: exc }] = await Promise.all([
+            supabase.from('chapters').select('title, subjects(name)').eq('id', chapterId).maybeSingle(),
+            supabase
+              .from('lessons')
+              .select('id, type, title, content, video_url, duration_min, order_index')
+              .eq('chapter_id', chapterId)
+              .order('order_index'),
+            supabase
+              .from('exercises')
+              .select('id', { count: 'exact', head: true })
+              .eq('chapter_id', chapterId),
+          ])
+          if (error) throw error
+          const {
+            data: { user },
+          } = await supabase.auth.getUser()
+          const { data: prog } = user
+            ? await supabase
+                .from('lesson_progress')
+                .select('lesson_id, completed, score')
+                .eq('user_id', user.id)
+            : { data: [] }
+          return { chapter, rows, exc, prog }
+        })()
+
+        const { chapter, rows, exc, prog } = await Promise.race([fetchAll, timeout])
+        if (cancelled) return
+
+        const ls = (rows ?? []) as LessonVM[]
+        const t = (chapter as { title?: string } | null)?.title ?? 'Chapitre'
+        const subj = (chapter as { subjects?: { name?: string } | null } | null)?.subjects?.name ?? ''
+        const dmap: Record<string, { completed: boolean; score: number | null }> = {}
+        for (const p of (prog ?? []) as {
+          lesson_id: string
+          completed: boolean
+          score: number | null
+        }[])
+          dmap[p.lesson_id] = { completed: p.completed, score: p.score }
+
+        setExCount(exc ?? 0)
+        setDone(dmap)
+        applyCached({ title: t, subject: subj, lessons: ls }, false)
+        // Cache offline (texte + images, lisibles plus tard sans réseau)
+        writeCachedLesson(
+          `chapter:${chapterId}`,
+          'chapter',
+          JSON.stringify({ title: t, subject: subj, lessons: ls })
+        )
+      } catch {
+        // Réseau indisponible ou trop lent : on garde le cache déjà affiché
+        // (le cas échéant) — rien à faire de plus ici.
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+    setLoading(true)
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [chapterId])
+
+  async function complete(l: LessonVM) {
+    if (l.type === 'cours') {
+      const qz = lessons.filter((x) => x.type === 'quiz')
+      if (qz.length > 0 && !qz.every((q) => done[q.id]?.completed)) {
+        setFlash("Valide d'abord le quiz du chapitre.")
+        setTimeout(() => setFlash(null), 3000)
+        return
+      }
+    }
+    if (!isOnline) {
+      // Le QCM est noté côté serveur : il ne peut pas être validé hors-ligne.
+      if (l.type === 'quiz') {
+        setFlash('Reconnecte-toi pour valider le quiz.')
+        setTimeout(() => setFlash(null), 3000)
+        return
+      }
+      // Cours / résumé / vidéo : marquage idempotent mis en file et rejoué au
+      // retour du réseau. L'interface considère la leçon comme faite tout de suite.
+      await enfiler({
+        type: 'lesson_progress',
+        lessonId: l.id,
+        completed: true,
+        score: null,
+        at: Date.now(),
+      })
+      setDone((prev) => ({ ...prev, [l.id]: { completed: true, score: null } }))
+      setFlash('Enregistré hors-ligne — synchronisé au retour du réseau.')
+      setTimeout(() => setFlash(null), 3000)
+      return
+    }
+    setBusy(l.id)
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      const score =
+        l.type === 'quiz' ? Math.max(0, Math.min(100, Number(scores[l.id] ?? '0'))) : undefined
+      const res = await fetch(`${API_URL}/api/curriculum/lessons/${l.id}/complete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify(score !== undefined ? { score } : {}),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setFlash(json?.error?.message ?? 'Erreur, réessaie.')
+        return
+      }
+      setDone((prev) => ({ ...prev, [l.id]: { completed: true, score: score ?? null } }))
+      const xp = json?.data?.xp_awarded ?? 0
+      setFlash(
+        json?.data?.chapter_completed
+          ? `Chapitre terminé ! +${xp} XP`
+          : xp > 0
+            ? `+${xp} XP`
+            : 'Enregistré ✓'
+      )
+    } catch {
+      setFlash('Connexion impossible.')
+    } finally {
+      setBusy(null)
+      setTimeout(() => setFlash(null), 3000)
+    }
+  }
+
+  if (loading) return <ChapterSkeleton />
+
+  const visibleTabs = TABS.filter((x) => lessons.some((l) => l.type === x.type))
+  const items = lessons.filter((l) => l.type === tab).sort((a, b) => a.order_index - b.order_index)
+  // Un cours ne peut être marqué "lu" qu'une fois le(s) quiz du chapitre validé(s)
+  const quizLessons = lessons.filter((l) => l.type === 'quiz')
+  const quizzesValidated =
+    quizLessons.length === 0 || quizLessons.every((q) => done[q.id]?.completed)
+  // Mode drill-down : un chapitre avec plusieurs cours = plusieurs sous-chapitres (ex. Maths Terminale)
+  const coursList = lessons
+    .filter((l) => l.type === 'cours')
+    .sort((a, b) => a.order_index - b.order_index)
+  const subMode = coursList.length > 1
+  const openLesson = openSub ? (lessons.find((l) => l.id === openSub) ?? null) : null
+  // Les exercices se proposent en fin de page, une fois le contenu lu — pas avant.
+  const exFooter =
+    exCount > 0 ? (
+      <TouchableOpacity
+        style={styles.exBtn}
+        onPress={() => router.push(`/exercices/${chapterId}`)}
+        activeOpacity={0.9}
+      >
+        <Text style={styles.exBtnText}>
+          S'entraîner — {exCount} exercice{exCount > 1 ? 's' : ''}
+        </Text>
+        <Text style={styles.exBtnChevron}>→</Text>
+      </TouchableOpacity>
+    ) : null
+
+  // Lecteur plein écran pour les cours avec formules : la WebView défile
+  // elle-même (fluide), au lieu d'être une page très haute dans un ScrollView.
+  const reader = (l: LessonVM, top?: ReactNode) => {
+    const isDone = done[l.id]?.completed
+    const gatedNow = l.type === 'cours' && !quizzesValidated
+    return (
+      <View style={styles.readerWrap}>
+        {top}
+        <View style={styles.readerCard}>
+          <MathLessonReader content={l.content ?? ''} title={l.title} />
+        </View>
+        <View style={styles.readerBar}>
+          {isDone ? (
+            <View style={[styles.readerBtn, styles.readerDone]}>
+              <Text style={styles.donePillText}>✓ Terminé</Text>
+            </View>
+          ) : gatedNow ? (
+            <View style={[styles.readerBtn, styles.gated, { marginTop: 0 }]}>
+              <Text style={styles.gatedText} numberOfLines={2}>Valide d'abord le quiz du chapitre.</Text>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={[styles.readerBtn, styles.readerCta, (busy === l.id || fromCache) && styles.ctaDisabled]}
+              disabled={busy === l.id || fromCache}
+              onPress={() => complete(l)}
+            >
+              <Text style={styles.ctaText}>{busy === l.id ? '…' : 'Marquer comme lu'}</Text>
+            </TouchableOpacity>
+          )}
+          {exCount > 0 ? (
+            <TouchableOpacity
+              style={[styles.readerBtn, styles.readerEx]}
+              onPress={() => router.push(`/exercices/${chapterId}`)}
+            >
+              <Text style={styles.exBtnText} numberOfLines={1}>S'entraîner ({exCount}) →</Text>
+            </TouchableOpacity>
+          ) : null}
+          {l.type === 'cours' || l.type === 'resume' ? (
+            // Flashcards tirées de ce cours (sans IA, instantané) : l'écran s'ouvre sur cette leçon.
+            <TouchableOpacity
+              style={[styles.readerBtn, styles.readerEx, styles.readerCards]}
+              onPress={() => router.push({ pathname: '/flashcards', params: { lesson: l.id } })}
+              accessibilityLabel="Créer mes flashcards depuis ce cours"
+            >
+              <Text style={[styles.exBtnText, { flex: 0 }]} numberOfLines={1}>🃏 Cartes</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
+    )
+  }
+  // Tous les cours passent par le lecteur WebView (formules, encadrés colorés, sommaire repliable) :
+  // même présentation dans toutes les matières.
+  const isReadable = (l: LessonVM) =>
+    (l.type === 'cours' || l.type === 'resume' || l.type === 'fiche') && !!l.content
+
+  return (
+    <View style={styles.container}>
+      <ImageBackground source={subjectArtwork(subjectName || title)} style={styles.header} imageStyle={styles.headerImg}>
+        <View style={styles.headerShade} />
+        <BackButton tone="light" />
+        <Text style={styles.eyebrow}>{subjectName ? subjectName.toUpperCase() : 'COURS'}</Text>
+        <Text style={styles.title} numberOfLines={3}>
+          {title}
+        </Text>
+        <View style={styles.headerChips}>
+          {lessons.length > 0 && (
+            <Text style={styles.lessonCount}>
+              {lessons.length} étape{lessons.length > 1 ? 's' : ''} pour apprendre
+            </Text>
+          )}
+          {fromCache && <Text style={styles.lessonCount}>Version hors-ligne</Text>}
+        </View>
+      </ImageBackground>
+
+      {lessons.length === 0 && me && !can('full_courses') && !fromCache ? (
+        // Gratuit : seul le premier chapitre de chaque matière est ouvert ; la base
+        // ne renvoie pas les leçons des suivants.
+        <ScrollView contentContainerStyle={styles.content}>
+          <LockedFeature
+            info={{
+              feature: 'full_courses',
+              requiredPlan: 'starter',
+              title: 'Ce chapitre est disponible avec la formule Starter.',
+              body: 'En Gratuit, le premier chapitre de chaque matière est ouvert. Starter débloque tout le programme de ta classe, les annales et 30 questions Cognix IA par jour.',
+              price: '4 000 FCFA / mois',
+            }}
+          />
+        </ScrollView>
+      ) : lessons.length === 0 ? (
+        <View style={styles.empty}>
+          <Text style={styles.emptyText}>Contenu bientôt disponible.</Text>
+          {exFooter ? <View style={styles.emptyFooter}>{exFooter}</View> : null}
+        </View>
+      ) : subMode ? (
+        openLesson && isReadable(openLesson) ? (
+          reader(
+            openLesson,
+            <TouchableOpacity onPress={() => setOpenSub(null)} style={styles.readerBack} hitSlop={10}>
+              <Text style={styles.subBackText}>‹ Tous les sous-chapitres</Text>
+            </TouchableOpacity>
+          )
+        ) : openLesson ? (
+          /* Détail d'un sous-chapitre */
+          <ScrollView contentContainerStyle={styles.content}>
+            <TouchableOpacity onPress={() => setOpenSub(null)} style={styles.subBack} hitSlop={10}>
+              <Text style={styles.subBackText}>‹ Tous les sous-chapitres</Text>
+            </TouchableOpacity>
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>{openLesson.title}</Text>
+              {openLesson.content ? (
+                <View style={{ marginTop: 8 }}>
+                  {hasMath(openLesson.content) ? (
+                    <MathLessonView content={openLesson.content} />
+                  ) : (
+                    <LessonContent content={openLesson.content} />
+                  )}
+                </View>
+              ) : null}
+              {done[openLesson.id]?.completed ? (
+                <View style={styles.donePill}><Text style={styles.donePillText}>✓ Terminé</Text></View>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.cta, (busy === openLesson.id || fromCache) && styles.ctaDisabled]}
+                  disabled={busy === openLesson.id || fromCache}
+                  onPress={() => complete(openLesson)}
+                >
+                  <Text style={styles.ctaText}>
+                    {busy === openLesson.id ? '…' : 'Marquer comme lu'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            {exFooter}
+          </ScrollView>
+        ) : (
+          /* Liste des sous-chapitres */
+          <ScrollView contentContainerStyle={styles.content}>
+            {coursList.map((l, i) => (
+              <TouchableOpacity key={l.id} style={styles.subRow} onPress={() => setOpenSub(l.id)}>
+                <ImageTile source={subjectArtwork(subjectName || title)} label={String(i + 1)} done={!!done[l.id]?.completed} size={48} />
+                <Text style={styles.subRowText} numberOfLines={2}>
+                  {l.title}
+                </Text>
+                <Text style={styles.subRowChevron}>›</Text>
+              </TouchableOpacity>
+            ))}
+            {exFooter}
+          </ScrollView>
+        )
+      ) : (
+        <>
+          {/* Onglets segmentés */}
+          <View style={styles.tabs}>
+            {visibleTabs.map((x) => (
+              <TouchableOpacity
+                key={x.type}
+                style={[styles.tab, tab === x.type && styles.tabActive]}
+                onPress={() => setTab(x.type)}
+              >
+                <Text style={[styles.tabText, tab === x.type && styles.tabTextActive]}>
+                  {x.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {items.length === 1 && items[0] && isReadable(items[0]) ? (
+            reader(items[0])
+          ) : (
+          <ScrollView contentContainerStyle={styles.content}>
+            {items.map((l) => {
+              const isDone = done[l.id]?.completed
+              return (
+                <View key={l.id} style={styles.card}>
+                  <View style={styles.cardHead}>
+                    <Text style={styles.cardTitle}>{l.title}</Text>
+                    {l.duration_min ? <Text style={styles.dur}>{l.duration_min} min</Text> : null}
+                  </View>
+
+                  {(l.type === 'cours' || l.type === 'resume' || l.type === 'fiche') &&
+                  l.content ? (
+                    <View style={{ marginTop: 6 }}>
+                      <MathLessonView content={l.content} />
+                    </View>
+                  ) : null}
+
+                  {l.type === 'video' && l.video_url ? (
+                    <TouchableOpacity
+                      style={styles.videoBtn}
+                      onPress={() => Linking.openURL(l.video_url!)}
+                    >
+                      <Text style={styles.videoBtnText}>▶ Ouvrir la vidéo</Text>
+                    </TouchableOpacity>
+                  ) : null}
+
+                  {l.type === 'quiz' ? (
+                    <View style={styles.quizRow}>
+                      {l.content ? (
+                        hasMath(l.content) ? (
+                          <MathLessonView content={l.content} />
+                        ) : (
+                          <LessonContent content={l.content} />
+                        )
+                      ) : null}
+                      {!isDone && (
+                        <View style={styles.scoreRow}>
+                          <Text style={styles.scoreLabel}>Ton score :</Text>
+                          <TextInput
+                            style={styles.scoreInput}
+                            keyboardType="number-pad"
+                            placeholder="0-100"
+                            placeholderTextColor={colors.outline}
+                            value={scores[l.id] ?? ''}
+                            onChangeText={(v) =>
+                              setScores((p) => ({ ...p, [l.id]: v.replace(/[^0-9]/g, '') }))
+                            }
+                          />
+                          <Text style={styles.scoreLabel}>/ 100</Text>
+                        </View>
+                      )}
+                    </View>
+                  ) : null}
+
+                  {isDone ? (
+                    <View style={styles.donePill}>
+                      <Text style={styles.donePillText}>
+                        ✓ Terminé
+                        {l.type === 'quiz' && done[l.id]?.score != null
+                          ? ` · ${done[l.id]?.score}%`
+                          : ''}
+                      </Text>
+                    </View>
+                  ) : l.type === 'cours' && !quizzesValidated ? (
+                    <View style={styles.gated}>
+                      <Text style={styles.gatedText}>
+                        Valide d'abord le quiz du chapitre pour marquer le cours comme lu.
+                      </Text>
+                    </View>
+                  ) : (
+                    <TouchableOpacity
+                      style={[styles.cta, (busy === l.id || fromCache) && styles.ctaDisabled]}
+                      disabled={busy === l.id || fromCache}
+                      onPress={() => complete(l)}
+                    >
+                      <Text style={styles.ctaText}>
+                        {busy === l.id
+                          ? '…'
+                          : l.type === 'cours'
+                            ? 'Marquer comme lu'
+                            : l.type === 'video'
+                              ? 'Marquer comme visionné'
+                              : l.type === 'quiz'
+                                ? 'Valider le quiz'
+                                : 'Marquer comme fait'}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              )
+            })}
+            {exFooter}
+          </ScrollView>
+          )}
+        </>
+      )}
+
+      {flash && (
+        <View style={styles.toast}>
+          <Text style={styles.toastText}>{flash}</Text>
+        </View>
+      )}
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
+  header: {
+    paddingTop: 52,
+    paddingHorizontal: 18,
+    paddingBottom: 20,
+    marginBottom: 12,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
+    overflow: 'hidden',
+  },
+  headerImg: { borderBottomLeftRadius: 28, borderBottomRightRadius: 28 },
+  headerShade: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(20,92,192,0.84)' },
+  eyebrow: {
+    marginTop: 16,
+    marginBottom: 6,
+    color: '#ffffffcc',
+    fontSize: 10,
+    fontFamily: fonts.body,
+    letterSpacing: 1.3,
+  },
+  title: { fontSize: 23, lineHeight: 29, fontFamily: fonts.headingBlack, color: '#fff' },
+  headerChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
+  lessonCount: {
+    overflow: 'hidden',
+    borderRadius: radius.full,
+    paddingHorizontal: 11,
+    paddingVertical: 6,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: fonts.body,
+  },
+  exBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 4,
+    marginBottom: 24,
+    backgroundColor: colors.primaryTint,
+    borderRadius: radius.md,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+  },
+  exBtnText: { flex: 1, fontSize: 14, fontWeight: '800', color: colors.primary },
+  exBtnChevron: { fontSize: 18, color: colors.primary, fontWeight: '800' },
+  tabs: { flexDirection: 'row', paddingHorizontal: 16, gap: 8, marginBottom: 8, flexWrap: 'wrap' },
+  tab: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: radius.full,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+  },
+  tabActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  tabText: { fontSize: 13, fontWeight: '700', color: colors.textMuted },
+  tabTextActive: { color: '#fff' },
+  content: { padding: 16, gap: 14 },
+  card: {
+    backgroundColor: colors.card,
+    borderRadius: radius.xl,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    ...cardShadow,
+  },
+  cardHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  cardTitle: { flex: 1, fontSize: 16, fontWeight: '700', color: colors.text },
+  dur: { fontSize: 12, color: colors.textMuted },
+  body: { fontSize: 15, lineHeight: 23, color: colors.text, marginTop: 10 },
+  videoBtn: {
+    marginTop: 12,
+    backgroundColor: colors.primaryTint,
+    borderRadius: radius.md,
+    padding: 14,
+    alignItems: 'center',
+  },
+  videoBtnText: { color: colors.primary, fontWeight: '700', fontSize: 15 },
+  quizRow: { marginTop: 4 },
+  scoreRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 12 },
+  scoreLabel: { fontSize: 14, color: colors.textMuted },
+  scoreInput: {
+    width: 70,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: radius.sm,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    color: colors.text,
+  },
+  cta: {
+    marginTop: 14,
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  ctaDisabled: { opacity: 0.5 },
+  ctaText: { color: '#fff', fontWeight: '800', fontSize: 15 },
+  donePill: { alignSelf: 'flex-start', marginTop: 14, backgroundColor: colors.primaryTint, borderRadius: radius.full, paddingHorizontal: 12, paddingVertical: 6 },
+  donePillText: { color: colors.primary, fontFamily: fonts.body, fontSize: 13 },
+  gated: { marginTop: 14, backgroundColor: '#FEF3C7', borderRadius: radius.md, padding: 12 },
+  gatedText: { color: '#92400E', fontWeight: '600', fontSize: 13, lineHeight: 18 },
+  subRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.card,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    ...cardShadow,
+  },
+  subRowText: { flex: 1, fontSize: 15, fontWeight: '700', color: colors.text },
+  subRowChevron: { fontSize: 20, color: colors.primary, marginLeft: 8 },
+  subBack: { paddingVertical: 6, marginBottom: 4 },
+  readerWrap: { flex: 1, paddingHorizontal: 12, paddingTop: 4 },
+  readerBack: { paddingVertical: 8, paddingHorizontal: 4 },
+  readerCard: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    overflow: 'hidden',
+  },
+  readerBar: { flexDirection: 'row', gap: 10, paddingVertical: 10, paddingBottom: 18 },
+  readerBtn: { flex: 1, minHeight: 46, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 10 },
+  readerCta: { backgroundColor: colors.primary },
+  readerDone: { backgroundColor: colors.primaryTint },
+  readerEx: { backgroundColor: colors.primaryTint },
+  readerCards: { flex: 0, paddingHorizontal: 14 },
+  subBackText: { fontSize: 14, fontWeight: '700', color: colors.primary },
+  empty: { alignItems: 'center', paddingTop: 60 },
+  emptyText: { fontSize: 14, color: colors.textMuted },
+  emptyFooter: { alignSelf: 'stretch', paddingHorizontal: 16, marginTop: 24 },
+  toast: {
+    position: 'absolute',
+    bottom: 30,
+    alignSelf: 'center',
+    backgroundColor: '#111827',
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: radius.full,
+  },
+  toastText: { color: '#fff', fontWeight: '700', fontSize: 14 },
+})

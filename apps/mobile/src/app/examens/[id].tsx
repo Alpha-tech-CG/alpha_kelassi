@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Pdf from 'react-native-pdf'
 import { supabase } from '../../lib/supabase'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Doc { id: string; title: string; level: string; year: number | null; session: string | null; is_premium: boolean; pdf_url: string; subjects: { name: string } | null }
 
@@ -16,21 +17,11 @@ export default function ExamenDetailScreen() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase.from('documents').select('*, subjects(name)').eq('id', id).eq('type', 'examen').single()
-      if (!data) { setLoading(false); return }
+      // En Gratuit, une annale par matière est ouverte : la base masque les
+      // autres. Une annale invisible est donc une annale verrouillée.
+      const { data } = await supabase.from('documents').select('*, subjects(name)').eq('id', id).eq('type', 'examen').maybeSingle()
+      if (!data) { setIsPremiumBlocked(true); setLoading(false); return }
       setDoc(data as Doc)
-
-      if (data.is_premium) {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-          const { data: profile } = await supabase.from('users').select('plan').eq('id', user.id).single()
-          if (profile?.plan !== 'premium') {
-            setIsPremiumBlocked(true)
-            setLoading(false)
-            return
-          }
-        }
-      }
 
       const bucket = data.is_premium ? 'pdfs-premium' : 'pdfs-public'
       const fileName = data.pdf_url.split('/').pop() ?? ''
@@ -41,16 +32,16 @@ export default function ExamenDetailScreen() {
     load()
   }, [id])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#006B2E" />
+  if (loading) return <CognixLoader />
 
   if (isPremiumBlocked) {
     return (
       <View style={styles.blocked}>
-        <Text style={styles.blockedIcon}>⭐</Text>
-        <Text style={styles.blockedTitle}>Contenu Premium</Text>
-        <Text style={styles.blockedSub}>Cet examen est réservé aux abonnés Premium.</Text>
-        <TouchableOpacity style={styles.upgradeBtn} onPress={() => router.push('/(tabs)/profil')}>
-          <Text style={styles.upgradeBtnText}>Passer à Premium</Text>
+        <Text style={styles.blockedIcon}>🔒</Text>
+        <Text style={styles.blockedTitle}>L’accès complet aux annales est disponible avec la formule Starter.</Text>
+        <Text style={styles.blockedSub}>En Gratuit, une annale par matière est ouverte. Passe à Starter (4 000 FCFA / mois) pour toutes les annales disponibles.</Text>
+        <TouchableOpacity style={styles.upgradeBtn} onPress={() => router.push('/abonnement?plan=starter' as any)} accessibilityRole="button">
+          <Text style={styles.upgradeBtnText}>Voir la formule Starter</Text>
         </TouchableOpacity>
       </View>
     )
@@ -93,10 +84,10 @@ const styles = StyleSheet.create({
   docHeader: { padding: 16, borderBottomWidth: 1, borderBottomColor: '#EFF6EB' },
   docTitle: { fontSize: 17, fontWeight: '700', color: '#171D17', marginBottom: 6 },
   docMeta: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 4 },
-  levelBadge: { fontSize: 11, backgroundColor: '#F0ECFA', color: '#006B2E', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, fontWeight: '600' },
+  levelBadge: { fontSize: 11, backgroundColor: '#F0ECFA', color: '#1E74E8', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, fontWeight: '600' },
   metaText: { fontSize: 13, color: '#3E4A3E' },
-  sessionBadge: { fontSize: 11, backgroundColor: '#EFF6EB', color: '#006B2E', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-  rattrapageBadge: { backgroundColor: '#FFF7CC', color: '#006B2E' },
+  sessionBadge: { fontSize: 11, backgroundColor: '#EFF6EB', color: '#1E74E8', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
+  rattrapageBadge: { backgroundColor: '#FFF7CC', color: '#1E74E8' },
   subject: { fontSize: 12, color: '#3E4A3E' },
   pdf: { flex: 1 },
   noPdf: { flex: 1, alignItems: 'center', justifyContent: 'center' },
@@ -105,6 +96,6 @@ const styles = StyleSheet.create({
   blockedIcon: { fontSize: 56, marginBottom: 16 },
   blockedTitle: { fontSize: 20, fontWeight: '700', color: '#171D17', marginBottom: 8 },
   blockedSub: { fontSize: 14, color: '#3E4A3E', textAlign: 'center', marginBottom: 24 },
-  upgradeBtn: { backgroundColor: '#006B2E', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 28 },
+  upgradeBtn: { backgroundColor: '#1E74E8', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 28 },
   upgradeBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 })

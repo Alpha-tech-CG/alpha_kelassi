@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import Link from 'next/link'
-import { PDFViewerLazy as PDFViewer } from '../../cours/[id]/pdf-viewer-lazy'
+// Chemin absolu : la visionneuse vit dans le groupe (catalogue), pas (dashboard).
+import { PDFViewerLazy as PDFViewer } from '@/app/(catalogue)/cours/[id]/pdf-viewer-lazy'
 import { saveExamHistorique } from '../examens-historique'
 import { MarkdownRenderer } from '@/components/markdown-renderer'
 

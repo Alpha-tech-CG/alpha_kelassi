@@ -1,0 +1,102 @@
+{
+ "matiere": "Numération",
+ "subject_id": "7ad28942-3218-40c8-bbdd-114a14f2a157",
+ "chapitres": [
+  {
+   "chapter_id": "9ad82ad3-1439-4192-84de-bcd2dce008c7",
+   "titre": "La numération décimale — Rappels",
+   "questions": [
+    { "prompt": "Quel est le système de numération que nous utilisons tous les jours ?", "options": ["La base 2", "La base 10", "La base 100", "La base 1 000"], "correct_index": 1, "explanation": "Notre système de numération est en base 10, c'est-à-dire décimale : on compte par paquets de dix." },
+    { "prompt": "Que veut dire « valeur de position » ?", "options": ["Chaque chiffre vaut la même chose, où qu'il soit placé", "La valeur d'un chiffre dépend de la place qu'il occupe dans le nombre", "Seul le dernier chiffre d'un nombre a une valeur", "Un chiffre vaut toujours 10"], "correct_index": 1, "explanation": "Dans 4 257, le 2 ne vaut pas 2 mais 200 : la valeur d'un chiffre dépend de sa place." },
+    { "prompt": "Dans le nombre 4 257, que vaut le chiffre 2 ?", "options": ["2 unités", "2 dizaines", "2 centaines", "2 milliers"], "correct_index": 2, "explanation": "4 257 = 4 × 1000 + 2 × 100 + 5 × 10 + 7 : le 2 est au rang des centaines, il vaut 200." },
+    { "prompt": "Dans le tableau de numération, quelle classe vient juste avant les unités simples ?", "options": ["Les millions", "Les milliards", "Les milliers", "Les centaines"], "correct_index": 2, "explanation": "L'ordre des classes est : milliards, millions, milliers, puis unités simples." },
+    { "prompt": "Quel nombre correspond à 6 × 1000 + 3 × 100 + 0 × 10 + 9 ?", "options": ["639", "6 309", "6 039", "6 390"], "correct_index": 1, "explanation": "6 000 + 300 + 0 + 9 = 6 309. Le zéro garde la place des dizaines." },
+    { "prompt": "Comment lit-on le nombre 3 405 020 ?", "options": ["Trois millions quatre cent cinq mille vingt", "Trois cent quarante-cinq mille vingt", "Trois milliards quatre cent cinq mille vingt", "Trois millions quatre cent cinquante mille deux cents"], "correct_index": 0, "explanation": "On lit classe par classe, de gauche à droite : 3 millions, 405 mille, 20 unités." },
+    { "prompt": "Quelle est la bonne décomposition de 3 405 020 ?", "options": ["3 000 000 + 400 000 + 5 000 + 20", "3 000 000 + 40 000 + 5 000 + 20", "300 000 + 400 000 + 5 000 + 2", "3 000 000 + 405 + 20"], "correct_index": 0, "explanation": "3 405 020 = 3 000 000 + 400 000 + 5 000 + 20." },
+    { "prompt": "Pour comparer deux nombres entiers, que regarde-t-on en premier ?", "options": ["Le dernier chiffre", "Le nombre de chiffres", "Le chiffre le plus grand du nombre", "La somme des chiffres"], "correct_index": 1, "explanation": "On compare d'abord le nombre de chiffres ; si les deux nombres en ont autant, on compare les chiffres de gauche à droite." },
+    { "prompt": "Comment appelle-t-on le nombre 1 000 000 000 ?", "options": ["Un million", "Cent millions", "Un milliard", "Mille milliards"], "correct_index": 2, "explanation": "1 000 000 000, c'est un milliard, soit mille millions." },
+    { "prompt": "Dans le nombre 52 374, quel chiffre occupe le rang des dizaines de mille ?", "options": ["5", "2", "3", "7"], "correct_index": 0, "explanation": "52 374 : 5 dizaines de mille, 2 unités de mille, 3 centaines, 7 dizaines et 4 unités." }
+   ]
+  },
+  {
+   "chapter_id": "96504660-f51c-408e-bf1b-d1cc552d6d66",
+   "titre": "Les nombres décimaux — Lecture et écriture",
+   "questions": [
+    { "prompt": "Qu'est-ce qui sépare la partie entière de la partie décimale ?", "options": ["Un point", "Une virgule", "Un tiret", "Un espace"], "correct_index": 1, "explanation": "Dans un nombre décimal, la partie entière et la partie décimale sont séparées par une virgule." },
+    { "prompt": "Dans le nombre 3,456, à quel rang se trouve le chiffre 5 ?", "options": ["Aux unités", "Aux dixièmes", "Aux centièmes", "Aux millièmes"], "correct_index": 2, "explanation": "Après la virgule viennent les dixièmes (4), les centièmes (5) puis les millièmes (6)." },
+    { "prompt": "Que vaut 12,5 ?", "options": ["12 + 5 centièmes", "12 + 5 millièmes", "12 + 5 dixièmes", "1 + 2 + 5 dixièmes"], "correct_index": 2, "explanation": "Le chiffre qui suit la virgule est celui des dixièmes : 12,5 = 12 + 5 dixièmes." },
+    { "prompt": "À quel nombre décimal correspond « un quart » ?", "options": ["0,5", "0,75", "0,25", "0,1"], "correct_index": 2, "explanation": "Un quart s'écrit 1/4, soit 0,25." },
+    { "prompt": "Quelle est la partie entière du nombre 0,07 ?", "options": ["0", "7", "70", "Il n'y en a pas"], "correct_index": 0, "explanation": "La partie entière est ce qui se trouve avant la virgule : ici, c'est 0." },
+    { "prompt": "À quel nombre décimal correspond « trois quarts » ?", "options": ["0,34", "0,75", "0,25", "3,4"], "correct_index": 1, "explanation": "Trois quarts s'écrit 3/4, soit 0,75." },
+    { "prompt": "Comment écrit-on « quatre unités et trois dixièmes » ?", "options": ["43", "4,3", "4,03", "0,43"], "correct_index": 1, "explanation": "Les unités se placent avant la virgule et les dixièmes juste après : 4,3." },
+    { "prompt": "Dans le nombre 3,456, quel est le chiffre des millièmes ?", "options": ["3", "4", "5", "6"], "correct_index": 3, "explanation": "Le troisième chiffre après la virgule est celui des millièmes : c'est 6." },
+    { "prompt": "Quelle fraction correspond à 0,5 ?", "options": ["1/2", "1/4", "1/5", "1/10"], "correct_index": 0, "explanation": "0,5 est la moitié de 1 : c'est 1/2, un demi." },
+    { "prompt": "Comment écrit-on « sept centièmes » en chiffres ?", "options": ["0,7", "0,07", "7,00", "0,007"], "correct_index": 1, "explanation": "Les centièmes occupent la deuxième place après la virgule : sept centièmes s'écrit 0,07." }
+   ]
+  },
+  {
+   "chapter_id": "5f23996e-aab1-4769-adf6-5d81283fbff2",
+   "titre": "Comparaison et rangement des nombres décimaux",
+   "questions": [
+    { "prompt": "Pour comparer deux nombres décimaux, que compare-t-on en premier ?", "options": ["Les dixièmes", "La partie entière", "Les centièmes", "Les millièmes"], "correct_index": 1, "explanation": "On compare d'abord la partie entière ; on ne regarde les dixièmes que si elle est la même." },
+    { "prompt": "Ranger des nombres en ordre croissant, c'est les ranger :", "options": ["Du plus grand au plus petit", "Au hasard", "Du plus petit au plus grand", "En ne gardant que les nombres entiers"], "correct_index": 2, "explanation": "L'ordre croissant va du plus petit au plus grand ; l'ordre décroissant fait l'inverse." },
+    { "prompt": "Parmi 3,8 — 3,06 — 0,99, quel est le plus petit ?", "options": ["3,8", "3,06", "0,99", "Ils sont égaux"], "correct_index": 2, "explanation": "0,99 a la plus petite partie entière (0), c'est donc le plus petit." },
+    { "prompt": "Quel est l'ordre décroissant de 4,07 — 3,8 — 3,06 — 0,99 ?", "options": ["0,99 — 3,06 — 3,8 — 4,07", "4,07 — 3,8 — 3,06 — 0,99", "3,06 — 0,99 — 4,07 — 3,8", "3,8 — 4,07 — 0,99 — 3,06"], "correct_index": 1, "explanation": "Décroissant = du plus grand au plus petit : 4,07 puis 3,8 puis 3,06 puis 0,99." },
+    { "prompt": "Entre 5,3 et 5,03, quel est le plus grand ?", "options": ["5,3", "5,03", "Ils sont égaux", "On ne peut pas savoir"], "correct_index": 0, "explanation": "Les parties entières sont égales (5) ; on compare les dixièmes : 3 est plus grand que 0, donc 5,3 est plus grand." },
+    { "prompt": "Que peut-on dire de 5,3 et de 5,30 ?", "options": ["5,30 est plus grand", "5,3 est plus grand", "Ils sont égaux", "On ne peut pas les comparer"], "correct_index": 2, "explanation": "Un zéro ajouté tout à la fin de la partie décimale ne change rien : 5,3 est égal à 5,30." },
+    { "prompt": "Range en ordre croissant : 5,3 — 5,03 — 4,99 — 6,01.", "options": ["4,99 — 5,03 — 5,3 — 6,01", "4,99 — 5,3 — 5,03 — 6,01", "6,01 — 5,3 — 5,03 — 4,99", "5,03 — 4,99 — 5,3 — 6,01"], "correct_index": 0, "explanation": "On compare les parties entières (4, puis 5, puis 6), puis les dixièmes pour 5,03 et 5,3." },
+    { "prompt": "Si deux nombres décimaux ont la même partie entière, que compare-t-on ensuite ?", "options": ["Les dixièmes", "Les millièmes", "Le nombre de chiffres après la virgule", "La partie entière à nouveau"], "correct_index": 0, "explanation": "On avance rang par rang : d'abord les dixièmes, puis les centièmes, puis les millièmes." },
+    { "prompt": "Quelle comparaison est juste entre 3,06 et 3,8 ?", "options": ["3,06 est plus grand que 3,8", "3,06 est plus petit que 3,8", "3,06 est égal à 3,8", "Aucune comparaison n'est possible"], "correct_index": 1, "explanation": "Les parties entières sont égales ; 0 dixième est plus petit que 8 dixièmes, donc 3,06 est plus petit." },
+    { "prompt": "Entre 0,9 et 0,89, quel est le plus grand ?", "options": ["0,89, car il a plus de chiffres", "0,9", "Ils sont égaux", "0,89, car 89 est plus grand que 9"], "correct_index": 1, "explanation": "On compare les dixièmes : 9 dixièmes contre 8 dixièmes. Avoir plus de chiffres ne rend pas un nombre plus grand." }
+   ]
+  },
+  {
+   "chapter_id": "4c52bc90-67ec-4147-8888-ca2ee6572cfd",
+   "titre": "Les fractions — Définition et lecture",
+   "questions": [
+    { "prompt": "Dans la fraction 7/10, que représente le nombre 10 ?", "options": ["Le numérateur, le nombre de parts prises", "La valeur décimale de la fraction", "Le dénominateur, le nombre total de parts égales", "Le nombre de fois que la fraction est écrite"], "correct_index": 2, "explanation": "Le dénominateur, écrit en bas, indique en combien de parts égales le tout a été partagé." },
+    { "prompt": "Comment lit-on la fraction 1/2 ?", "options": ["Un tiers", "Un demi", "Un quart", "Un dixième"], "correct_index": 1, "explanation": "1/2 se lit « un demi » et vaut 0,5." },
+    { "prompt": "Quelle est la valeur décimale de 1/4 ?", "options": ["0,5", "0,2", "0,75", "0,25"], "correct_index": 3, "explanation": "Un quart vaut 0,25." },
+    { "prompt": "Quelle fraction correspond à 0,5 ?", "options": ["1/4", "1/2", "1/5", "1/10"], "correct_index": 1, "explanation": "0,5 est la moitié du tout : c'est 1/2." },
+    { "prompt": "Comment écrit-on « trois quarts » en fraction ?", "options": ["1/3", "3/1", "3/4", "4/3"], "correct_index": 2, "explanation": "Trois parts sur quatre s'écrit 3/4." },
+    { "prompt": "Quelle est la valeur décimale de 1/10 ?", "options": ["0,1", "0,01", "1,0", "0,5"], "correct_index": 0, "explanation": "Un dixième vaut 0,1." },
+    { "prompt": "Dans la fraction 3/4, quel est le numérateur ?", "options": ["3", "4", "7", "0,75"], "correct_index": 0, "explanation": "Le numérateur est écrit en haut : il indique le nombre de parts prises, ici 3." },
+    { "prompt": "Comment lit-on la fraction 1/3 ?", "options": ["Un demi", "Un tiers", "Un quart", "Un treizième"], "correct_index": 1, "explanation": "1/3 se lit « un tiers » et vaut environ 0,333." },
+    { "prompt": "Comment écrit-on « sept dixièmes » en fraction ?", "options": ["10/7", "7/10", "7/100", "70/10"], "correct_index": 1, "explanation": "Sept parts sur dix s'écrit 7/10, soit 0,7." },
+    { "prompt": "Quelle est la valeur décimale de 1/100 ?", "options": ["0,1", "0,01", "0,001", "100"], "correct_index": 1, "explanation": "Un centième vaut 0,01." }
+   ]
+  },
+  {
+   "chapter_id": "e2a95ef1-259f-4854-aede-b43b596661f7",
+   "titre": "Les opérations — Rappels essentiels",
+   "questions": [
+    { "prompt": "Combien font 7,3 + 2,45 ?", "options": ["9,75", "97,5", "7,55", "9,48"], "correct_index": 0, "explanation": "On aligne les virgules : 7,30 + 2,45 = 9,75." },
+    { "prompt": "Combien font 15,6 − 3,25 ?", "options": ["12,35", "12,85", "123,5", "12,45"], "correct_index": 0, "explanation": "On aligne les virgules : 15,60 − 3,25 = 12,35." },
+    { "prompt": "Combien font 5,2 × 3 ?", "options": ["1,56", "156", "15,6", "5,23"], "correct_index": 2, "explanation": "On calcule sans la virgule (52 × 3 = 156), puis on place une décimale : 15,6." },
+    { "prompt": "Si tu calcules 0,25 × 1,3, combien de décimales aura le résultat ?", "options": ["1", "2", "3", "4"], "correct_index": 2, "explanation": "0,25 a 2 décimales et 1,3 en a 1 : le résultat en a 2 + 1 = 3." },
+    { "prompt": "Comment transformer 5,4 ÷ 0,6 en division plus simple ?", "options": ["54 ÷ 6", "540 ÷ 6", "54 ÷ 60", "540 ÷ 60"], "correct_index": 0, "explanation": "On multiplie les deux termes par 10 : 5,4 ÷ 0,6 devient 54 ÷ 6, soit 9." },
+    { "prompt": "Pour additionner deux nombres décimaux en colonne, que faut-il faire ?", "options": ["Aligner les virgules", "Aligner le dernier chiffre de chaque nombre", "Enlever les virgules et les remettre au hasard", "Commencer le calcul par la gauche"], "correct_index": 0, "explanation": "On aligne les virgules : chaque rang se retrouve alors sous un rang de même valeur." },
+    { "prompt": "Combien font 3,6 ÷ 0,9 ?", "options": ["3", "4", "0,4", "40"], "correct_index": 1, "explanation": "3,6 ÷ 0,9 revient à 36 ÷ 9, soit 4." },
+    { "prompt": "Combien font 2,3 × 4 ?", "options": ["8,12", "9,2", "92", "0,92"], "correct_index": 1, "explanation": "23 × 4 = 92, et il y a 1 décimale au total : le résultat est 9,2." },
+    { "prompt": "Combien font 12,45 + 3,60 ?", "options": ["16,05", "15,05", "16,50", "48,45"], "correct_index": 0, "explanation": "12,45 + 3,60 = 16,05." },
+    { "prompt": "Combien font 8,30 − 2,75 ?", "options": ["6,55", "5,55", "5,65", "6,45"], "correct_index": 1, "explanation": "8,30 − 2,75 = 5,55." }
+   ]
+  },
+  {
+   "chapter_id": "15129955-75f4-4444-b31c-be9b1856d542",
+   "titre": "Les problèmes — Méthode de résolution",
+   "questions": [
+    { "prompt": "Quelle est la première étape pour résoudre un problème ?", "options": ["Poser l'opération", "Lire le problème attentivement", "Choisir l'opération", "Écrire la phrase réponse"], "correct_index": 1, "explanation": "On lit d'abord le problème attentivement, deux fois, avant toute chose." },
+    { "prompt": "Le problème dit « réunir » : quelle opération choisir ?", "options": ["L'addition", "La soustraction", "La multiplication", "La division"], "correct_index": 0, "explanation": "Réunir, ajouter, « en tout » annoncent une addition." },
+    { "prompt": "Le problème demande ce qui « reste » après une dépense : quelle opération ?", "options": ["L'addition", "La soustraction", "La multiplication", "La division"], "correct_index": 1, "explanation": "Ôter, dépenser, chercher le reste : c'est une soustraction." },
+    { "prompt": "Après avoir identifié ce qui est donné et ce qu'on cherche, que fait-on ?", "options": ["On relit le problème", "On choisit l'opération", "On écrit la phrase réponse", "On vérifie le résultat"], "correct_index": 1, "explanation": "L'ordre est : lire, identifier, choisir l'opération, calculer, puis rédiger la réponse." },
+    { "prompt": "Le problème demande de « partager » également : quelle opération ?", "options": ["L'addition", "La soustraction", "La multiplication", "La division"], "correct_index": 3, "explanation": "Partager en parts égales, « par portion » : c'est une division." },
+    { "prompt": "Quelle situation annonce une multiplication ?", "options": ["« Combien reste-t-il ? »", "« Autant de fois », « à chaque »", "« En tout » après avoir réuni", "« Partager en parts égales »"], "correct_index": 1, "explanation": "« Autant de fois » et « à chaque » annoncent une multiplication." },
+    { "prompt": "Un marchand vend 12 ananas à 250 FCFA chacun. Combien gagne-t-il en tout ?", "options": ["262 FCFA", "3 000 FCFA", "2 400 FCFA", "300 FCFA"], "correct_index": 1, "explanation": "Chaque ananas rapporte 250 FCFA : 12 × 250 = 3 000 FCFA." },
+    { "prompt": "Quelle est la dernière étape de la méthode ?", "options": ["Poser l'opération", "Choisir l'opération", "Rédiger la réponse en phrase complète", "Souligner les données"], "correct_index": 2, "explanation": "On termine toujours par une phrase réponse complète." },
+    { "prompt": "Awa a 1 500 FCFA et dépense 650 FCFA. Combien lui reste-t-il ?", "options": ["2 150 FCFA", "850 FCFA", "950 FCFA", "750 FCFA"], "correct_index": 1, "explanation": "C'est une soustraction : 1 500 − 650 = 850 FCFA." },
+    { "prompt": "On partage 24 cahiers entre 6 élèves. Combien chacun en reçoit-il ?", "options": ["3 cahiers", "4 cahiers", "6 cahiers", "18 cahiers"], "correct_index": 1, "explanation": "Partager en parts égales : 24 ÷ 6 = 4 cahiers par élève." }
+   ]
+  }
+ ]
+}
