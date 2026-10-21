@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { supabaseAdmin } from '@/lib/admin-guard'
+import { selectAll } from '@/lib/supabase/select-all'
 import { CYCLES, CYCLE_ORDER, LEVEL_META, levelsOfCycle, type StudyLevel } from '@alpha-kelassi/types'
 import { PublishToggle } from './publish-toggle'
 
@@ -15,6 +16,11 @@ import { PublishToggle } from './publish-toggle'
 
 async function safe<T>(p: PromiseLike<{ data: T[] | null; error?: unknown }>): Promise<{ rows: T[]; failed: boolean }> {
   try { const { data, error } = await p; return { rows: data ?? [], failed: !!error } } catch { return { rows: [], failed: true } }
+}
+
+/** Toutes les pages d'une requête, au format attendu par `safe` (une erreur la fait échouer). */
+function all<T>(page: Parameters<typeof selectAll<T>>[0]) {
+  return selectAll(page).then((data) => ({ data, error: null }))
 }
 
 /** Couleur des classes d'examen ; les classes intermédiaires prennent celle de leur cycle. */
@@ -48,8 +54,11 @@ type Stats = { subjects: number; chapters: number; lessons: number }
 export default async function CurriculumHubPage() {
   const [subjects, chapters, lessons, series, settings] = await Promise.all([
     safe<{ id: string; level: string }>(supabaseAdmin.from('subjects').select('id, level')),
-    safe<{ id: string; subject_id: string }>(supabaseAdmin.from('chapters').select('id, subject_id')),
-    safe<{ chapter_id: string }>(supabaseAdmin.from('lessons').select('chapter_id')),
+    // Paginé : PostgREST tronque à 1000 lignes (lessons en compte davantage).
+    safe(all<{ id: string; subject_id: string }>((from, to) =>
+      supabaseAdmin.from('chapters').select('id, subject_id').order('id').range(from, to))),
+    safe(all<{ chapter_id: string }>((from, to) =>
+      supabaseAdmin.from('lessons').select('chapter_id').order('id').range(from, to))),
     safe<{ id: string }>(supabaseAdmin.from('series').select('id')),
     safe<{ level: string; published: boolean }>(supabaseAdmin.from('study_level_settings').select('level, published')),
   ])

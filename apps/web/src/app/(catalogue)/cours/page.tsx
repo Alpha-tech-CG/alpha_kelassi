@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { selectAll } from '@/lib/supabase/select-all'
 import Link from 'next/link'
 import { STUDY_LEVELS } from '@alpha-kelassi/types'
 import {
@@ -70,6 +71,11 @@ async function safe<T>(p: PromiseLike<{ data: T[] | null; error: unknown }>): Pr
   try { const { data } = await p; return data ?? [] } catch { return [] }
 }
 
+/** Comme `safe`, mais lit toutes les pages (voir selectAll). */
+async function safeAll<T>(page: Parameters<typeof selectAll<T>>[0]): Promise<T[]> {
+  try { return await selectAll(page) } catch { return [] }
+}
+
 interface SubjectRow { id: string; name: string; level: string; parent_subject_id: string | null }
 interface SubjectCard {
   id: string; name: string; level: string
@@ -84,8 +90,12 @@ export default async function CoursPage({ searchParams }: { searchParams: Promis
   const [{ data: { user } }, subjects, chapters, lessons] = await Promise.all([
     supabase.auth.getUser(),
     safe<SubjectRow>(supabase.from('subjects').select('id, name, level, parent_subject_id').order('name')),
-    safe<{ id: string; subject_id: string }>(supabase.from('chapters').select('id, subject_id')),
-    safe<{ chapter_id: string }>(supabase.from('lessons').select('chapter_id')),
+    // chapters et lessons dépassent (ou approchent) la limite de 1000 lignes
+    // de PostgREST : sans pagination, les compteurs étaient tronqués.
+    safeAll<{ id: string; subject_id: string }>((from, to) =>
+      supabase.from('chapters').select('id, subject_id').order('id').range(from, to)),
+    safeAll<{ chapter_id: string }>((from, to) =>
+      supabase.from('lessons').select('chapter_id').order('id').range(from, to)),
   ])
 
   /* ── Agrégation des compteurs ───────────────────────────────────────────
