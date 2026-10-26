@@ -31,9 +31,6 @@
       },
       "package": "com.kelassi.app",
       "versionCode": 14,
-      "compileSdkVersion": 35,
-      "targetSdkVersion": 35,
-      "minSdkVersion": 24,
       "permissions": [
         "android.permission.INTERNET"
       ]
@@ -51,6 +48,17 @@
         "expo-image-picker",
         {
           "photosPermission": "Utilisé pour joindre la photo de ton énoncé et de ton travail à corriger."
+        }
+      ],
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "minSdkVersion": 24
+          }
         }
       ]
     ],

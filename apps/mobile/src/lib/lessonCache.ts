@@ -16,7 +16,7 @@
  * d'afficher le contenu tel que reçu de Supabase (URLs distantes) : la mise
  * en cache se fait en tâche de fond, sans bloquer l'affichage.
  */
-import * as FileSystem from 'expo-file-system'
+import * as FileSystem from 'expo-file-system/legacy'
 
 const CACHE_DIR = `${FileSystem.documentDirectory}lesson-cache/`
 const IMAGES_DIR = `${CACHE_DIR}images/`
@@ -114,7 +114,7 @@ export async function listCachedEntries(): Promise<CachedEntry[]> {
     const fichiers = (await FileSystem.readDirectoryAsync(CACHE_DIR)).filter((f) => f.endsWith('.json'))
     const entries = await Promise.all(fichiers.map(async (fileName) => {
       const chemin = `${CACHE_DIR}${fileName}`
-      const stat = await FileSystem.getInfoAsync(chemin, { size: true })
+      const stat = await FileSystem.getInfoAsync(chemin)
       let key = fileName.replace(/\.json$/, '')
       let cachedAt = 0
       try {
@@ -139,7 +139,7 @@ export async function cacheSize(): Promise<number> {
       if (!info.exists) return 0
       const noms = await FileSystem.readDirectoryAsync(dir)
       const tailles = await Promise.all(noms.map(async (n) => {
-        const stat = await FileSystem.getInfoAsync(`${dir}${n}`, { size: true })
+        const stat = await FileSystem.getInfoAsync(`${dir}${n}`)
         if (stat.exists && stat.isDirectory) return somme(`${dir}${n}/`)
         return stat.exists && 'size' in stat ? (stat.size ?? 0) : 0
       }))
