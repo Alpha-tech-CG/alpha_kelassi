@@ -8,6 +8,7 @@ test('production : nonce, strict-dynamic, ni unsafe-inline ni unsafe-eval pour l
   assert.equal(scriptSrc, "script-src 'self' 'nonce-abc123' 'strict-dynamic'")
   assert.match(csp, /frame-ancestors 'none'/)
   assert.match(csp, /object-src 'none'/)
+  assert.match(csp, /worker-src 'self' blob:/)   // service worker du site
 })
 
 test('développement : unsafe-eval autorisé pour le rechargement à chaud', () => {

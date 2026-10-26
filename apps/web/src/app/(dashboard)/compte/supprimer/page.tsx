@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { clearOfflineCaches } from '@/lib/offline-cache'
 
 const API_URL = ''  // routes Next.js locales
 
@@ -45,6 +46,7 @@ export default function SupprimerComptePage() {
       }
 
       await supabase.auth.signOut()
+      await clearOfflineCaches()
       setStep('done')
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : 'Erreur inconnue')

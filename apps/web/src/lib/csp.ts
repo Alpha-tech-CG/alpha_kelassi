@@ -14,7 +14,7 @@ export function buildCsp(nonce: string, dev: boolean): string {
     "img-src 'self' data: blob: https://*.supabase.co",
     "font-src 'self'",
     "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com",
-    "worker-src blob:",    // pdfjs worker
+    "worker-src 'self' blob:",    // service worker (public/sw.js) + pdfjs worker
     "frame-src 'none'",
     "frame-ancestors 'none'",   // équivalent moderne de X-Frame-Options: DENY
     "object-src 'none'",

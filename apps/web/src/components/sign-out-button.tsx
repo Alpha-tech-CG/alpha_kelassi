@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { LogOut } from 'lucide-react'
+import { clearOfflineCaches } from '@/lib/offline-cache'
 
 export function SignOutButton({ className }: { className?: string }) {
   const supabase = createClient()
@@ -10,6 +11,7 @@ export function SignOutButton({ className }: { className?: string }) {
 
   async function handleSignOut() {
     await supabase.auth.signOut()
+    await clearOfflineCaches()
     router.push('/login')
     router.refresh()
   }

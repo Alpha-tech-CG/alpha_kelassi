@@ -2,7 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { buildCsp, createNonce } from '@/lib/csp'
 
-const PUBLIC_ROUTES = ['/', '/login', '/register', '/forgot-password', '/update-password', '/verify-otp', '/mfa-challenge', '/confirmer', '/cgu', '/confidentialite', '/telecharger']
+const PUBLIC_ROUTES = ['/', '/login', '/register', '/forgot-password', '/update-password', '/verify-otp', '/mfa-challenge', '/confirmer', '/cgu', '/confidentialite', '/telecharger', '/offline']
 const AUTH_ROUTES = ['/login', '/register']
 
 /**
@@ -69,5 +69,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+  // sw.js et le manifeste restent hors middleware : un service worker ou un
+  // manifeste redirigé vers /login ne s'installe pas pour un visiteur.
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|sw\\.js|sw-off\\.js|manifest\\.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 }
