@@ -13,23 +13,26 @@ export const BAN_DURATION = '876000h'
 const LOWER = 'abcdefghijkmnpqrstuvwxyz'
 const UPPER = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
 const DIGITS = '23456789'
+// Supabase Auth exige aussi un symbole (réglage « Password requirements » du
+// projet, constaté le 27/10/2026) : ceux-ci se dictent sans ambiguïté.
+const SYMBOLS = '@#!+-'
 
 const pick = (set: string) => set[randomInt(set.length)]!
 
 /**
  * Mot de passe provisoire à transmettre à l'élève : 10 caractères, au moins
- * une minuscule, une majuscule et un chiffre (règles de Supabase Auth, voir
- * lib/password.ts), tirés au hasard cryptographique.
+ * une minuscule, une majuscule, un chiffre et un symbole (règles de Supabase
+ * Auth), tirés au hasard cryptographique.
  */
 export function generateTempPassword(): string {
   const all = LOWER + UPPER + DIGITS
-  const chars = [pick(LOWER), pick(UPPER), pick(DIGITS), ...Array.from({ length: 7 }, () => pick(all))]
-  // Mélange de Fisher-Yates, pour que les trois premiers ne soient pas prévisibles.
+  const chars = [pick(LOWER), pick(UPPER), pick(DIGITS), pick(SYMBOLS), ...Array.from({ length: 6 }, () => pick(all))]
+  // Mélange de Fisher-Yates, pour que les quatre premiers ne soient pas prévisibles.
   for (let i = chars.length - 1; i > 0; i--) {
     const j = randomInt(i + 1)
     ;[chars[i], chars[j]] = [chars[j]!, chars[i]!]
   }
-  // Une minuscule, une majuscule et un chiffre garantis : conforme par construction.
+  // Une minuscule, une majuscule, un chiffre et un symbole garantis : conforme par construction.
   return chars.join('')
 }
 

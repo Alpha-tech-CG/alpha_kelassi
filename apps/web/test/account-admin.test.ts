@@ -9,6 +9,7 @@ test('mot de passe provisoire conforme aux règles de Supabase Auth, sans caract
     const p = generateTempPassword()
     assert.equal(p.length, 10)
     assert.ok(isPasswordValid(p), p)
+    assert.match(p, /[@#!+-]/, p)   // symbole exigé par Supabase Auth
     assert.doesNotMatch(p, /[0O1lI]/, p)
     seen.add(p)
   }
