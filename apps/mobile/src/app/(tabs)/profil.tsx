@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, Switch, Share } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, Switch, Share, Linking } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
@@ -7,6 +7,8 @@ import { colors, radius, cardShadow, LEVEL_LABEL } from '../../lib/theme'
 import { syncAllForOffline, type SyncProgress } from '../../lib/offlineSync'
 import { useBilling } from '../../hooks/useBilling'
 import { CognixLoader, LoaderDots } from '../../components/CognixLoader'
+import { api } from '../../lib/billing'
+import { API_URL } from '../../lib/config'
 
 export default function ProfilScreen() {
   const router = useRouter()
@@ -21,6 +23,7 @@ export default function ProfilScreen() {
   const [loading, setLoading] = useState(true)
   const [syncing, setSyncing] = useState(false)
   const [syncProgress, setSyncProgress] = useState<SyncProgress | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -99,6 +102,44 @@ export default function ProfilScreen() {
       { text: 'Annuler', style: 'cancel' },
       { text: 'Déconnecter', style: 'destructive', onPress: async () => { await supabase.auth.signOut(); router.replace('/(auth)/login') } },
     ])
+  }
+
+  function openPage(path: string) {
+    Linking.openURL(`${API_URL}${path}`).catch(() => Alert.alert('Erreur', 'La page n’a pas pu s’ouvrir.'))
+  }
+
+  // Suppression exigée par le Play Store : double confirmation, puis effacement côté serveur.
+  function deleteAccount() {
+    Alert.alert(
+      'Supprimer mon compte',
+      'Ton profil, ta progression, tes flashcards et tes conversations seront effacés définitivement. Ton abonnement en cours ne sera pas remboursé.',
+      [
+        { text: 'Annuler', style: 'cancel' },
+        {
+          text: 'Continuer', style: 'destructive', onPress: () => Alert.alert(
+            'Dernière confirmation',
+            'Cette action est irréversible. Supprimer ton compte maintenant ?',
+            [
+              { text: 'Annuler', style: 'cancel' },
+              {
+                text: 'Supprimer', style: 'destructive', onPress: async () => {
+                  setDeleting(true)
+                  const res = await api('/api/account', { method: 'DELETE' })
+                  setDeleting(false)
+                  if (!res.ok) {
+                    Alert.alert('Erreur', res.json.error?.message ?? 'La suppression a échoué. Réessaie plus tard.')
+                    return
+                  }
+                  await supabase.auth.signOut().catch(() => null)
+                  Alert.alert('Compte supprimé', 'Toutes tes données ont été effacées. Merci d’avoir utilisé Cognix.')
+                  router.replace('/(auth)/login')
+                },
+              },
+            ],
+          ),
+        },
+      ],
+    )
   }
 
   if (loading) return <CognixLoader />
@@ -201,6 +242,30 @@ export default function ProfilScreen() {
               </Text>
             </View>
             <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.sectionTitle}>Compte & confidentialité</Text>
+        <View style={styles.settingsCard}>
+          <TouchableOpacity style={styles.settingRow} onPress={() => openPage('/cgu')} accessibilityRole="link">
+            <View style={[styles.settingIcon, { backgroundColor: colors.primaryTint }]}><Text style={{ fontSize: 18 }}>📄</Text></View>
+            <View style={{ flex: 1 }}><Text style={styles.settingTitle}>Conditions d’utilisation</Text></View>
+            <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow} onPress={() => openPage('/confidentialite')} accessibilityRole="link">
+            <View style={[styles.settingIcon, { backgroundColor: '#E8F5E9' }]}><Text style={{ fontSize: 18 }}>🔒</Text></View>
+            <View style={{ flex: 1 }}><Text style={styles.settingTitle}>Politique de confidentialité</Text></View>
+            <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.settingRow} onPress={deleteAccount} disabled={deleting} accessibilityRole="button">
+            <View style={[styles.settingIcon, { backgroundColor: '#FDF1F1' }]}><Text style={{ fontSize: 18 }}>🗑️</Text></View>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.settingTitle, { color: colors.red }]}>Supprimer mon compte</Text>
+              <Text style={styles.settingSub}>Efface définitivement toutes tes données</Text>
+            </View>
+            {deleting ? <LoaderDots color={colors.red} size={6} /> : <Text style={styles.chevron}>›</Text>}
           </TouchableOpacity>
         </View>
 

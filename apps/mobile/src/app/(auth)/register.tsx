@@ -10,6 +10,7 @@ import {
   ScrollView,
   Animated,
   ActivityIndicator,
+  Linking,
 } from 'react-native'
 import { router } from 'expo-router'
 import { supabase } from '../../lib/supabase'
@@ -494,7 +495,11 @@ export default function RegisterScreen() {
                 <Text style={styles.rule}>Les deux mots de passe ne correspondent pas.</Text>
               ) : null}
               <Text style={styles.legal}>
-                En créant ton compte, tu acceptes les CGU et la politique de confidentialité de Cognix.
+                En créant ton compte, tu acceptes les{' '}
+                <Text style={styles.legalLink} onPress={() => Linking.openURL(`${API_URL}/cgu`)}>CGU</Text>
+                {' '}et la{' '}
+                <Text style={styles.legalLink} onPress={() => Linking.openURL(`${API_URL}/confidentialite`)}>politique de confidentialité</Text>
+                {' '}de Cognix.
               </Text>
             </>
           )}
@@ -590,6 +595,7 @@ const styles = StyleSheet.create({
   rule: { fontFamily: fonts.regular, fontSize: 12, color: colors.textMuted },
   ruleOk: { color: '#0F8F4F' },
   legal: { fontFamily: fonts.regular, fontSize: 12, color: colors.textMuted, marginTop: 4, lineHeight: 17 },
+  legalLink: { color: colors.primary, textDecorationLine: 'underline' },
   error: {
     fontFamily: fonts.body,
     backgroundColor: '#FDECEC',
