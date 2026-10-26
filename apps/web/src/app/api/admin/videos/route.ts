@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/admin-guard'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { z } from 'zod'
 import { STUDY_LEVELS } from '@alpha-kelassi/types'
@@ -32,11 +32,8 @@ function parseVideoUrl(url: string): { provider: 'youtube' | 'vimeo'; external_i
 
 /** GET /api/admin/videos — liste toutes les vidéos (admin) */
 export async function GET(_req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-  const { data: profile } = await supabaseAdmin.from('users').select('role').eq('id', user.id).single()
-  if (profile?.role !== 'admin') return NextResponse.json({ error: 'Admin requis' }, { status: 403 })
+  const guard = await requireAdmin()   // liste blanche d'e-mails + rôle admin
+  if ('error' in guard) return guard.error
 
   const { data, error } = await supabaseAdmin
     .from('videos')
@@ -66,12 +63,8 @@ const schema = z.object({
 
 /** POST /api/admin/videos — ajoute un cours vidéo depuis une URL YouTube/Vimeo (admin) */
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-
-  const { data: profile } = await supabaseAdmin.from('users').select('role').eq('id', user.id).single()
-  if (profile?.role !== 'admin') return NextResponse.json({ error: 'Admin requis' }, { status: 403 })
+  const guard = await requireAdmin()   // liste blanche d'e-mails + rôle admin
+  if ('error' in guard) return guard.error
 
   let body: z.infer<typeof schema>
   try { body = schema.parse(await req.json()) }

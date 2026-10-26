@@ -146,6 +146,16 @@ export async function POST(req: NextRequest) {
     }, { status: 400 })
   }
 
+  // Session fournie : elle doit appartenir à l'élève (lue avec SON client, donc
+  // sous RLS). Les messages sont ensuite écrits avec la clé service : sans ce
+  // contrôle, un UUID de session d'autrui suffirait à écrire dans son historique.
+  // Placé avant le quota pour ne pas le consommer sur une requête refusée.
+  if (body.session_id) {
+    const { data: own } = await supabase.from('chat_sessions')
+      .select('id').eq('id', body.session_id).eq('user_id', user.id).maybeSingle()
+    if (!own) return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Conversation introuvable.' } }, { status: 404 })
+  }
+
   // Formule effective (serveur) — l'analyse d'une photo d'énoncé est une fonction Pro.
   const ent = await getEntitlements(user.id)
   if (body.image && !ent.can('ai_document_analysis')) return planRequired('ai_document_analysis')

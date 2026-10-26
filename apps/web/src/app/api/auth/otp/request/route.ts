@@ -41,7 +41,8 @@ export async function POST(req: Request) {
   const { error } = await supabase.auth.signInWithOtp({ phone: body.phone })
 
   if (error) {
-    return NextResponse.json({ error: { code: 'AUTH_ERROR', message: error.message } }, { status: 400 })
+    console.error('[/api/auth/otp/request]', error.message)
+    return NextResponse.json({ error: { code: 'AUTH_ERROR', message: 'Envoi du code impossible pour le moment. Réessaie plus tard.' } }, { status: 400 })
   }
 
   return NextResponse.json({ data: { ok: true } })

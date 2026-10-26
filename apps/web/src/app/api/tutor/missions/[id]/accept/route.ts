@@ -24,6 +24,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { data: updated, error } = await admin().from('correction_missions')
     .update({ status: 'assigned', tutor_id: user.id, accepted_at: new Date().toISOString(), due_at: dueAt })
     .eq('id', id).eq('status', 'pending')
+    .neq('student_id', user.id)   // pas de correction rémunérée de sa propre demande
     .select('id, exercise_url, work_url, due_at').maybeSingle()
   if (error) {
     console.error('[/api/tutor/missions/[id]/accept]', error)

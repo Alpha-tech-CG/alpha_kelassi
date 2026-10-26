@@ -63,6 +63,7 @@ const nextConfig: NextConfig = {
       "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com",
       "worker-src blob:",    // pdfjs worker
       "frame-src 'none'",
+      "frame-ancestors 'none'",   // équivalent moderne de X-Frame-Options: DENY
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",

@@ -8,7 +8,7 @@ const schema = z.object({
   answers: z.array(z.object({
     question_id:    z.string().uuid(),
     selected_index: z.number().int().min(0).nullable(),
-  })),
+  })).max(200),   // borne anti-épuisement mémoire (le plus long quiz compte 30 questions)
   duration_sec: z.number().int().min(0).max(86400),
   mode: z.enum(['entrainement', 'bac_test', 'bac_blanc', 'bac_rouge']).default('entrainement'),
 })

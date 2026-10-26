@@ -48,7 +48,7 @@ const blockSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('paragraph'), text: z.string().max(20000) }),
   z.object({ type: z.literal('image'), url: z.string().url(), caption: z.string().max(300).optional() }),
   z.object({ type: z.literal('formula'), latex: z.string().max(2000) }),
-  z.object({ type: z.literal('table'), rows: z.array(z.array(z.string().max(1000))).max(60) }),
+  z.object({ type: z.literal('table'), rows: z.array(z.array(z.string().max(1000)).max(30)).max(60) }),
 ])
 
 const saveSchema = z.object({
@@ -59,9 +59,9 @@ const saveSchema = z.object({
     title: z.string().min(1).max(300),
     lessons: z.array(z.object({
       title: z.string().min(1).max(300),
-      content: z.array(blockSchema).default([]),
-    })).default([]),
-  })).default([]),
+      content: z.array(blockSchema).max(1000).default([]),
+    })).max(100).default([]),
+  })).max(100).default([]),   // bornes larges : au 26/10, 7 objectifs, 4 leçons, 91 blocs au plus
 })
 
 /**
