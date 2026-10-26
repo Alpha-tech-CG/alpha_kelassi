@@ -45,6 +45,86 @@ export interface Stats {
   }
 }
 
+/** Agrégats de admin_web_vitals() (migration 076), valeurs en millisecondes. */
+export interface WebVitalsStats {
+  days: number
+  overall: Partial<Record<VitalMetric, { n: number; p75: number; poor_pct: number }>>
+  pages: { path: string; n: number; lcp: number | null; inp: number | null; ttfb: number | null }[]
+}
+
+type VitalMetric = 'LCP' | 'INP' | 'TTFB'
+
+/** Seuils officiels des Core Web Vitals : bon ≤ premier, mauvais > second. */
+const VITALS: { key: VitalMetric; label: string; hint: string; good: number; poor: number }[] = [
+  { key: 'LCP', label: 'Affichage du contenu', hint: 'LCP', good: 2500, poor: 4000 },
+  { key: 'INP', label: 'Réactivité aux clics', hint: 'INP', good: 200, poor: 500 },
+  { key: 'TTFB', label: 'Réponse du serveur', hint: 'TTFB', good: 800, poor: 1800 },
+]
+
+const vitalColor = (key: VitalMetric, v: number | null | undefined) => {
+  const t = VITALS.find((x) => x.key === key)!
+  if (v == null) return 'text-gray-400'
+  return v <= t.good ? 'text-green-700' : v <= t.poor ? 'text-amber-600' : 'text-red-600'
+}
+const ms = (v: number | null | undefined) =>
+  v == null ? '—' : v >= 1000 ? `${(v / 1000).toLocaleString('fr', { maximumFractionDigits: 1 })} s` : `${Math.round(v)} ms`
+
+function VitalsCard({ v }: { v: WebVitalsStats | null }) {
+  return (
+    <Card title={v ? `Vitesse ressentie sur le site (${v.days} jours)` : 'Vitesse ressentie sur le site'}>
+      {!v ? <Empty>Mesures indisponibles.</Empty> : Object.keys(v.overall).length === 0 ? (
+        <Empty>Aucune mesure reçue sur la période.</Empty>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+            {VITALS.map((t) => {
+              const o = v.overall[t.key]
+              return (
+                <div key={t.key} className="rounded-xl border border-gray-100 p-4">
+                  <p className={`text-2xl font-black tabular-nums ${vitalColor(t.key, o?.p75)}`}>{ms(o?.p75)}</p>
+                  <p className="text-xs font-semibold text-gray-600 mt-0.5">{t.label} <span className="text-gray-400">({t.hint})</span></p>
+                  <p className="text-[11px] text-gray-400 mt-1">
+                    {o ? `${o.n.toLocaleString('fr')} mesures · ${o.poor_pct.toLocaleString('fr')} % lentes` : 'pas de mesure'}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+          {v.pages.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs text-gray-500">
+                    <th className="font-semibold py-1 pr-3">Pages les plus lentes à afficher</th>
+                    <th className="font-semibold py-1 px-2 text-right">LCP</th>
+                    <th className="font-semibold py-1 px-2 text-right">INP</th>
+                    <th className="font-semibold py-1 px-2 text-right">TTFB</th>
+                    <th className="font-semibold py-1 pl-2 text-right">Visites</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {v.pages.map((p) => (
+                    <tr key={p.path} className="border-t border-gray-50">
+                      <td className="py-1.5 pr-3 font-mono text-xs text-gray-700 break-all">{p.path}</td>
+                      <td className={`py-1.5 px-2 text-right tabular-nums ${vitalColor('LCP', p.lcp)}`}>{ms(p.lcp)}</td>
+                      <td className={`py-1.5 px-2 text-right tabular-nums ${vitalColor('INP', p.inp)}`}>{ms(p.inp)}</td>
+                      <td className={`py-1.5 px-2 text-right tabular-nums ${vitalColor('TTFB', p.ttfb)}`}>{ms(p.ttfb)}</td>
+                      <td className="py-1.5 pl-2 text-right tabular-nums text-gray-500">{p.n}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      )}
+      <p className="text-[11px] text-gray-400 mt-4">
+        Élèves connectés, sur le site web uniquement · 75e centile (3 élèves sur 4 ont fait mieux) · vert = bon, orange = à améliorer, rouge = lent.
+      </p>
+    </Card>
+  )
+}
+
 const STEP_LABEL: Record<string, string> = {
   prenom: 'Prénom', nom: 'Nom', naissance: 'Date de naissance', classe: 'Classe',
   ecole: 'École', ville: 'Ville', objectif: 'Objectif', compte: 'E-mail et mot de passe',
@@ -53,6 +133,7 @@ const EVENT_LABEL: Record<string, string> = {
   app_open: 'Ouvertures d’app', register_step: 'Écrans d’inscription vus', register_submitted: 'Inscriptions envoyées',
   register_completed: 'Comptes confirmés', onboarding_completed: 'Parcours choisis', chapter_opened: 'Chapitres ouverts',
   lesson_opened: 'Leçons ouvertes', quiz_completed: 'QCM terminés', paywall_viewed: 'Visites de l’écran Abonnement',
+  web_vital: 'Mesures de vitesse (site)',
 }
 const KIND_LABEL: Record<string, string> = {
   new: 'Nouveaux', upgrade: 'Montées de formule', renewal: 'Renouvellements', downgrade: 'Descentes', inconnu: 'Non précisé',
@@ -129,7 +210,7 @@ const Empty = ({ children }: { children: React.ReactNode }) => (
   <p className="text-gray-400 text-sm text-center py-6">{children}</p>
 )
 
-export function Dashboard({ s }: { s: Stats }) {
+export function Dashboard({ s, vitals }: { s: Stats; vitals: WebVitalsStats | null }) {
   const r = s.retention
   const f = s.funnel
   const p = s.payments
@@ -309,6 +390,8 @@ export function Dashboard({ s }: { s: Stats }) {
           </p>
         </Card>
       </div>
+
+      <VitalsCard v={vitals} />
 
       <Card title={`Événements reçus (${s.events_period.toLocaleString('fr')})`}>
         {eventsSorted.length === 0 ? <Empty>Aucun événement reçu sur la période.</Empty> : (

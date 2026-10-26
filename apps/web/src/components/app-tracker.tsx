@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase/client'
  *   • app_open        — une fois par session de navigation
  *   • chapter_opened  — /cours/matiere/<matière>/<chapitre>
  *   • paywall_viewed  — /billing
+ *   • web_vital       — mesures de vitesse, envoyées par <WebVitals />
  * Visiteur non connecté : seul app_open part (policy anonyme). Toute erreur
  * est avalée, le suivi ne doit jamais gêner la navigation.
  *
@@ -38,7 +39,8 @@ function deviceId(): string {
   return id
 }
 
-async function send(name: string, props: Record<string, string> = {}) {
+/** Envoie un événement d'usage ; aussi utilisé par <WebVitals /> (`web_vital`). */
+export async function send(name: string, props: Record<string, string | number> = {}) {
   try {
     const supabase = createClient()
     const { data } = await supabase.auth.getSession()
