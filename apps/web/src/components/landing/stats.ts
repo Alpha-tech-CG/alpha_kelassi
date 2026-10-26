@@ -1,12 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
+import { unstable_cache } from 'next/cache'
 
 /**
  * Chiffres réels du catalogue affichés sur la page d'accueil (leçons,
- * chapitres). Lus avec la clé publique, sans cookies, pour que la page reste
- * statique (revalidée toutes les heures). En cas d'échec, valeurs de repli
- * prudentes plutôt qu'une erreur.
+ * chapitres). Lus avec la clé publique, sans cookies, et mis en cache une heure :
+ * la page est rendue à chaque visite (nonce de la CSP), pas ces comptages. En
+ * cas d'échec, valeurs de repli prudentes plutôt qu'une erreur.
  */
-export async function getCatalogueStats(): Promise<{ lessons: number; chapters: number }> {
+export const getCatalogueStats = unstable_cache(readCatalogueStats, ['catalogue-stats'], { revalidate: 3600 })
+
+async function readCatalogueStats(): Promise<{ lessons: number; chapters: number }> {
   const fallback = { lessons: 900, chapters: 300 }
   const url = process.env['NEXT_PUBLIC_SUPABASE_URL']
   const key = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']

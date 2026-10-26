@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Montserrat } from 'next/font/google'
+import { headers } from 'next/headers'
 import { WebVitals } from '@/components/web-vitals'
 import { AppTracker } from '@/components/app-tracker'
 import './globals.css'
@@ -56,7 +57,11 @@ export const viewport: Viewport = {
   maximumScale: 5,
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Nonce de la CSP, posé par le middleware. Lire les en-têtes rend chaque page
+  // dynamique : c'est voulu, une page mise en cache servirait un nonce périmé.
+  const nonce = (await headers()).get('x-nonce') ?? undefined
+
   return (
     <html lang="fr" className={montserrat.variable} style={{ colorScheme: 'light' }}>
       <head>
@@ -68,7 +73,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WebVitals />
         <AppTracker />
         {children}
-        <script dangerouslySetInnerHTML={{
+        {/* Le navigateur masque l'attribut nonce une fois la page chargée : sans
+            suppressHydrationWarning, React signale un faux décalage. */}
+        <script nonce={nonce} suppressHydrationWarning dangerouslySetInnerHTML={{
           __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}`,
         }} />
       </body>

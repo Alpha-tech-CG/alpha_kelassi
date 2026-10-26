@@ -26,10 +26,6 @@ import { Phone, type ShotName } from '@/components/landing/screenshots'
 import { SolarIcon, type SolarIconName } from '@/components/landing/solar-icon'
 import { getCatalogueStats } from '@/components/landing/stats'
 
-
-/** Chiffres du catalogue relus toutes les heures. */
-export const revalidate = 3600
-
 const DESCRIPTION =
   'L’application de révision des élèves du Congo, du CEPE au BAC : cours du programme, exercices corrigés, annales, simulations d’examen, Cognix IA et corrections par des tuteurs vérifiés.'
 

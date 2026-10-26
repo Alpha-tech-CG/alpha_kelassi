@@ -15,12 +15,6 @@ const SUPABASE_IMAGE_HOST = (() => {
 const nextConfig: NextConfig = {
   compress: true,
 
-  // Supabase JS v2.106 has complex type inference that requires regenerating
-  // database.ts from live schema. Disable TS build errors until `pnpm db:generate-types` is run.
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
@@ -54,24 +48,9 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
-    const csp = [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",   // Next.js + react-pdf worker
-      "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://*.supabase.co",
-      "font-src 'self'",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com",
-      "worker-src blob:",    // pdfjs worker
-      "frame-src 'none'",
-      "frame-ancestors 'none'",   // équivalent moderne de X-Frame-Options: DENY
-      "object-src 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "upgrade-insecure-requests",
-    ].join('; ')
-
+    // La Content-Security-Policy est posée par le middleware : elle porte un
+    // nonce propre à chaque requête (src/lib/csp.ts).
     const securityHeaders = [
-      { key: 'Content-Security-Policy',       value: csp },
       { key: 'Strict-Transport-Security',     value: 'max-age=63072000; includeSubDomains; preload' },
       { key: 'X-Frame-Options',               value: 'DENY' },
       { key: 'X-Content-Type-Options',        value: 'nosniff' },

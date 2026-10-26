@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { buildCsp, createNonce } from '@/lib/csp'
 
 const PUBLIC_ROUTES = ['/', '/login', '/register', '/forgot-password', '/update-password', '/verify-otp', '/mfa-challenge', '/confirmer', '/cgu', '/confidentialite', '/telecharger']
 const AUTH_ROUTES = ['/login', '/register']
@@ -13,7 +14,19 @@ const AUTH_ROUTES = ['/login', '/register']
 const PUBLIC_PREFIXES = ['/cours']
 
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
+  // CSP à nonce : transmise à Next.js dans la requête (il pose le nonce sur ses
+  // scripts) et renvoyée au navigateur dans la réponse.
+  const nonce = createNonce()
+  const csp = buildCsp(nonce, process.env.NODE_ENV !== 'production')
+  // Relit request.headers à chaque appel : Supabase peut y avoir réécrit les cookies.
+  const forward = () => {
+    const headers = new Headers(request.headers)
+    headers.set('x-nonce', nonce)
+    headers.set('Content-Security-Policy', csp)
+    return NextResponse.next({ request: { headers } })
+  }
+
+  let supabaseResponse = forward()
 
   const supabase = createServerClient(
     process.env['NEXT_PUBLIC_SUPABASE_URL']!,
@@ -25,7 +38,7 @@ export async function middleware(request: NextRequest) {
         },
         setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request })
+          supabaseResponse = forward()
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           )
@@ -51,6 +64,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
+  supabaseResponse.headers.set('Content-Security-Policy', csp)
   return supabaseResponse
 }
 
