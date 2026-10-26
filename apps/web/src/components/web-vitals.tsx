@@ -11,7 +11,7 @@ const TRACKED = new Set(['LCP', 'INP', 'TTFB'])
  * Rapporte les Core Web Vitals : dans la console en dev, et en prod dans
  * `app_events` (événement `web_vital`, élèves connectés seulement — policy de
  * la migration 069). La console admin les agrège par `admin_web_vitals()`
- * (migration 076), carte « Vitesse » de /admin/suivi.
+ * (migration 076), page Statistiques → Vitesse du site (/admin/stats/vitesse).
  *
  * Inclure dans le layout racine : <WebVitals />
  */

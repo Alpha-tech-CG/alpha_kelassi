@@ -1,7 +1,11 @@
 import Link from 'next/link'
 import { PLAN_META, formatFcfa, normalizePlan } from '@alpha-kelassi/types'
 
-/** Rendu du tableau de bord « Suivi de l'app » (données de admin_app_stats). */
+/**
+ * Sections des pages Statistiques et Finances de la console (données de
+ * admin_app_stats, migration 069, et admin_web_vitals, migration 076).
+ * Une section par page : rien n'est mélangé.
+ */
 
 export interface Stats {
   days: number
@@ -69,7 +73,7 @@ const vitalColor = (key: VitalMetric, v: number | null | undefined) => {
 const ms = (v: number | null | undefined) =>
   v == null ? '—' : v >= 1000 ? `${(v / 1000).toLocaleString('fr', { maximumFractionDigits: 1 })} s` : `${Math.round(v)} ms`
 
-function VitalsCard({ v }: { v: WebVitalsStats | null }) {
+export function VitalsCard({ v }: { v: WebVitalsStats | null }) {
   return (
     <Card title={v ? `Vitesse ressentie sur le site (${v.days} jours)` : 'Vitesse ressentie sur le site'}>
       {!v ? <Empty>Mesures indisponibles.</Empty> : Object.keys(v.overall).length === 0 ? (
@@ -142,11 +146,11 @@ const PAY_STATUS_LABEL: Record<string, string> = {
   successful: 'Réussis', failed: 'Échoués', pending: 'En attente', cancelled: 'Annulés', expired: 'Expirés',
 }
 
-const pct = (n: number, d: number) => (d > 0 ? `${Math.round((100 * n) / d)} %` : '—')
+export const pct = (n: number, d: number) => (d > 0 ? `${Math.round((100 * n) / d)} %` : '—')
 const planLabel = (p: string) => PLAN_META[normalizePlan(p)]?.label ?? p
 const dayLabel = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 
-function Card({ title, children, className = '' }: { title: string; children: React.ReactNode; className?: string }) {
+export function Card({ title, children, className = '' }: { title: string; children: React.ReactNode; className?: string }) {
   return (
     <section className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-5 md:p-6 ${className}`}>
       <h2 className="font-bold text-gray-900 mb-4">{title}</h2>
@@ -155,7 +159,7 @@ function Card({ title, children, className = '' }: { title: string; children: Re
   )
 }
 
-function Kpi({ label, value, hint }: { label: string; value: string; hint?: string }) {
+export function Kpi({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
       <p className="text-2xl font-black text-gray-900 tabular-nums">{value}</p>
@@ -206,26 +210,24 @@ function Bar({ label, value, max, right, color = 'bg-blue-600' }: { label: strin
   )
 }
 
-const Empty = ({ children }: { children: React.ReactNode }) => (
+export const Empty = ({ children }: { children: React.ReactNode }) => (
   <p className="text-gray-400 text-sm text-center py-6">{children}</p>
 )
 
-export function Dashboard({ s, vitals }: { s: Stats; vitals: WebVitalsStats | null }) {
-  const r = s.retention
-  const f = s.funnel
-  const p = s.payments
-  const c = s.conversions
-  const firstStep = f.steps.find((x) => x.index === 0)?.devices ?? 0
-  const funnelMax = Math.max(firstStep, f.submitted, f.signed_up, 1)
-  const paid = p.by_status['successful'] ?? 0
-  const failed = (p.by_status['failed'] ?? 0) + (p.by_status['cancelled'] ?? 0) + (p.by_status['expired'] ?? 0)
-  const topChapterMax = Math.max(1, ...s.top_chapters.map((x) => x.views))
-  const topLessonMax = Math.max(1, ...s.top_lessons.map((x) => x.views))
-  const eventsSorted = Object.entries(s.events_by_name).sort((a, b) => b[1] - a[1])
+/** Pied de carte commun : fraîcheur des données et période couverte. */
+function Freshness({ s }: { s: Stats }) {
+  return (
+    <p className="text-[11px] text-gray-400">
+      Mis à jour le {new Date(s.generated_at).toLocaleString('fr-FR', { timeZone: 'Africa/Brazzaville' })} · période du {dayLabel(s.from)} au {dayLabel(s.today)}
+    </p>
+  )
+}
 
+/** Statistiques → Activité : élèves actifs, courbes, rétention, plateformes. */
+export function ActivitySection({ s }: { s: Stats }) {
+  const r = s.retention
   return (
     <div className="space-y-6">
-      {/* ── Usage ─────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <Kpi label="Élèves inscrits" value={s.students_total.toLocaleString('fr')} hint={`+${s.signups_period} sur ${s.days} jours`} />
         <Kpi label="Actifs aujourd’hui" value={s.dau.toLocaleString('fr')} hint="heure du Congo" />
@@ -266,7 +268,24 @@ export function Dashboard({ s, vitals }: { s: Stats; vitals: WebVitalsStats | nu
         </Card>
       </div>
 
-      {/* ── Entonnoir ─────────────────────────────────────────── */}
+      <Freshness s={s} />
+    </div>
+  )
+}
+
+/** Statistiques → Inscriptions : entonnoir du questionnaire jusqu'au premier contenu. */
+export function SignupSection({ s }: { s: Stats }) {
+  const f = s.funnel
+  const firstStep = f.steps.find((x) => x.index === 0)?.devices ?? 0
+  const funnelMax = Math.max(firstStep, f.submitted, f.signed_up, 1)
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <Kpi label="Comptes créés" value={f.signed_up.toLocaleString('fr')} hint={`sur ${s.days} jours`} />
+        <Kpi label="Parcours choisi" value={pct(f.onboarded, f.signed_up)} hint={`${f.onboarded} élèves`} />
+        <Kpi label="Premier contenu ouvert" value={pct(f.first_content, f.signed_up)} hint={`${f.first_content} élèves`} />
+        <Kpi label="Questionnaires envoyés" value={f.submitted.toLocaleString('fr')} hint="application mobile" />
+      </div>
       <Card title="Entonnoir d’inscription (application mobile)">
         {f.steps.length === 0 && f.signed_up === 0 ? (
           <Empty>Pas encore de données : les étapes sont envoyées à partir de la version 1.0.12 de l’app.</Empty>
@@ -291,7 +310,17 @@ export function Dashboard({ s, vitals }: { s: Stats; vitals: WebVitalsStats | nu
         )}
       </Card>
 
-      {/* ── Contenus ──────────────────────────────────────────── */}
+      <Freshness s={s} />
+    </div>
+  )
+}
+
+/** Statistiques → Contenus consultés : chapitres et leçons les plus ouverts. */
+export function ContentSection({ s }: { s: Stats }) {
+  const topChapterMax = Math.max(1, ...s.top_chapters.map((x) => x.views))
+  const topLessonMax = Math.max(1, ...s.top_lessons.map((x) => x.views))
+  return (
+    <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Chapitres les plus ouverts">
           {s.top_chapters.length === 0 ? <Empty>Aucune ouverture de chapitre enregistrée.</Empty> : (
@@ -317,7 +346,19 @@ export function Dashboard({ s, vitals }: { s: Stats; vitals: WebVitalsStats | nu
         </Card>
       </div>
 
-      {/* ── Abonnements et paiements ──────────────────────────── */}
+      <Freshness s={s} />
+    </div>
+  )
+}
+
+/** Finances → Revenus & conversions : abonnés payants, conversion, paiements FeexPay. */
+export function RevenueSection({ s }: { s: Stats }) {
+  const p = s.payments
+  const c = s.conversions
+  const paid = p.by_status['successful'] ?? 0
+  const failed = (p.by_status['failed'] ?? 0) + (p.by_status['cancelled'] ?? 0) + (p.by_status['expired'] ?? 0)
+  return (
+    <div className="space-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <Kpi label="Abonnés payants actuels" value={c.paying_now.toLocaleString('fr')} hint={`${pct(c.paying_now, s.students_total)} des élèves`} />
         <Kpi label="Nouveaux payants" value={c.new_paying_period.toLocaleString('fr')} hint={`1er paiement sur ${s.days} jours`} />
@@ -391,8 +432,16 @@ export function Dashboard({ s, vitals }: { s: Stats; vitals: WebVitalsStats | nu
         </Card>
       </div>
 
-      <VitalsCard v={vitals} />
+      <Freshness s={s} />
+    </div>
+  )
+}
 
+/** Statistiques → Journal d'événements : détail technique de ce que l'app envoie. */
+export function EventsSection({ s }: { s: Stats }) {
+  const eventsSorted = Object.entries(s.events_by_name).sort((a, b) => b[1] - a[1])
+  return (
+    <div className="space-y-6">
       <Card title={`Événements reçus (${s.events_period.toLocaleString('fr')})`}>
         {eventsSorted.length === 0 ? <Empty>Aucun événement reçu sur la période.</Empty> : (
           <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-1 text-sm">
@@ -402,9 +451,10 @@ export function Dashboard({ s, vitals }: { s: Stats; vitals: WebVitalsStats | nu
           </ul>
         )}
         <p className="text-[11px] text-gray-400 mt-4">
-          Mis à jour le {new Date(s.generated_at).toLocaleString('fr-FR', { timeZone: 'Africa/Brazzaville' })} · période du {dayLabel(s.from)} au {dayLabel(s.today)}
+          Une ligne par type d’événement envoyé par l’app ou le site (table app_events). Les mesures de vitesse ont leur propre page.
         </p>
       </Card>
+      <Freshness s={s} />
     </div>
   )
 }

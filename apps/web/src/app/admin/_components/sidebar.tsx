@@ -4,17 +4,18 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { SignOutButton } from '@/components/sign-out-button'
 import {
-  BookMarked, CalendarDays, Clapperboard, CreditCard, GraduationCap, Headphones, LayoutDashboard,
-  Library, LineChart, ListChecks, Megaphone, Presentation, ShieldCheck, Trash2, Trophy, UserCheck,
-  Users, X, type LucideIcon,
+  Activity, BookMarked, CalendarDays, Clapperboard, CreditCard, Eye, Gauge, GraduationCap, Headphones,
+  LayoutDashboard, Library, LineChart, ListChecks, Megaphone, Presentation, ScrollText, ShieldCheck,
+  Trash2, Trophy, UserCheck, UserPlus, Users, X, type LucideIcon,
 } from 'lucide-react'
 import { Logo } from '@/components/brand/logo'
 
 /**
  * Navigation de la console admin.
  *
- * Les entrées sont regroupées par domaine plutôt que listées à plat : à treize
- * rubriques, une liste uniforme oblige à tout relire pour trouver la bonne.
+ * Les entrées sont regroupées par domaine, une page par sujet : les
+ * statistiques d'usage, la gestion des contenus, les médias, la communauté,
+ * les finances, la relation élèves et les outils ne se mélangent pas.
  */
 
 interface NavItem { href: string; label: string; icon: LucideIcon; hint?: string }
@@ -24,38 +25,63 @@ const GROUPS: NavGroup[] = [
   {
     title: 'Pilotage',
     items: [
-      { href: '/admin', label: 'Vue d\'ensemble', icon: LayoutDashboard },
-      { href: '/admin/suivi', label: 'Suivi de l\'app', icon: LineChart, hint: 'Usage, inscriptions, paiements' },
+      { href: '/admin', label: 'Vue d’ensemble', icon: LayoutDashboard, hint: 'Chiffres clés, à traiter' },
     ],
   },
   {
-    title: 'Contenu pédagogique',
+    title: 'Statistiques',
     items: [
-      { href: '/admin/subjects',   label: 'Matières',        icon: BookMarked },
-      { href: '/admin/curriculum', label: 'Cours & chapitres', icon: GraduationCap, hint: 'Leçons, exercices, QCM' },
+      { href: '/admin/stats/activite',     label: 'Activité',             icon: Activity, hint: 'Élèves actifs, rétention' },
+      { href: '/admin/stats/inscriptions', label: 'Inscriptions',         icon: UserPlus, hint: 'Entonnoir du questionnaire' },
+      { href: '/admin/stats/contenus',     label: 'Contenus consultés',   icon: Eye },
+      { href: '/admin/stats/vitesse',      label: 'Vitesse du site',      icon: Gauge },
+      { href: '/admin/stats/evenements',   label: 'Journal d’événements', icon: ScrollText },
+    ],
+  },
+  {
+    title: 'Contenu',
+    items: [
+      { href: '/admin/subjects',   label: 'Matières',            icon: BookMarked },
+      { href: '/admin/curriculum', label: 'Cours & chapitres',   icon: GraduationCap, hint: 'Leçons, exercices, QCM' },
       { href: '/admin/prepa',      label: 'Prépa — examens & TD', icon: Trophy, hint: 'Bac test, blanc, rouge, anciens bacs' },
       { href: '/admin/quiz',       label: 'QCM (génération IA)', icon: ListChecks },
-      { href: '/admin/documents',  label: 'Documents (PDF)', icon: Library },
-      { href: '/admin/videos',     label: 'Vidéos',          icon: Clapperboard },
-      { href: '/admin/corbeille',  label: 'Corbeille',       icon: Trash2, hint: 'Restaurer un élément supprimé' },
-      { href: '/admin/exams',      label: 'Dates d\'examen', icon: CalendarDays },
+    ],
+  },
+  {
+    title: 'Médias',
+    items: [
+      { href: '/admin/documents', label: 'Documents (PDF)', icon: Library },
+      { href: '/admin/videos',    label: 'Vidéos',          icon: Clapperboard },
     ],
   },
   {
     title: 'Communauté',
     items: [
-      { href: '/admin/users',    label: 'Utilisateurs',       icon: Users },
-      { href: '/admin/tutors',   label: 'Tuteurs',            icon: UserCheck, hint: 'Validation des dossiers' },
-      { href: '/admin/teachers', label: 'Enseignants',        icon: Presentation },
-      { href: '/admin/moderation', label: 'Modération',       icon: ShieldCheck },
+      { href: '/admin/users',      label: 'Utilisateurs', icon: Users },
+      { href: '/admin/tutors',     label: 'Tuteurs',      icon: UserCheck, hint: 'Validation des dossiers' },
+      { href: '/admin/teachers',   label: 'Enseignants',  icon: Presentation },
+      { href: '/admin/moderation', label: 'Modération',   icon: ShieldCheck },
     ],
   },
   {
-    title: 'Exploitation',
+    title: 'Finances',
     items: [
-      { href: '/admin/subscriptions', label: 'Abonnements', icon: CreditCard, hint: 'Formules, paiements, revenus' },
-      { href: '/admin/support',       label: 'Support',     icon: Headphones, hint: 'Demandes par priorité' },
-      { href: '/admin/notifications', label: 'Annonces',    icon: Megaphone },
+      { href: '/admin/subscriptions', label: 'Abonnements',           icon: CreditCard, hint: 'Gestion, expirations' },
+      { href: '/admin/revenus',       label: 'Revenus & conversions', icon: LineChart, hint: 'Paiements, passage au payant' },
+    ],
+  },
+  {
+    title: 'Relation élèves',
+    items: [
+      { href: '/admin/support',       label: 'Support',  icon: Headphones, hint: 'Demandes par priorité' },
+      { href: '/admin/notifications', label: 'Annonces', icon: Megaphone },
+    ],
+  },
+  {
+    title: 'Outils',
+    items: [
+      { href: '/admin/exams',     label: 'Dates d’examen', icon: CalendarDays },
+      { href: '/admin/corbeille', label: 'Corbeille',      icon: Trash2, hint: 'Restaurer un élément supprimé' },
     ],
   },
 ]

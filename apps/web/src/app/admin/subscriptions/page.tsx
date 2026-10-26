@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import Link from 'next/link'
 import { PLAN_META, SUBSCRIPTION_PLANS, formatFcfa, normalizePlan } from '@alpha-kelassi/types'
 import { adminFetch } from '@/lib/admin-fetch'
 
@@ -65,7 +66,10 @@ export default function AdminSubscriptionsPage() {
     <div className="px-4 md:px-8 py-6 md:py-8 max-w-7xl">
       <div className="mb-6">
         <h1 className="text-2xl font-black text-gray-900">Abonnements</h1>
-        <p className="text-gray-500 text-sm mt-1">Formules Cognix, paiements FeexPay et revenus par formule.</p>
+        <p className="text-gray-500 text-sm mt-1">
+          Gestion des abonnements et des transactions. Statistiques de paiement et de passage au payant :{' '}
+          <Link href="/admin/revenus" className="text-blue-700 font-semibold hover:underline">Revenus &amp; conversions</Link>.
+        </p>
       </div>
       {error && <div role="alert" className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
 
