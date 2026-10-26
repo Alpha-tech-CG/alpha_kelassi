@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
-import { rateLimit } from '@/lib/rate-limit'
+import { rateLimitStrict } from '@/lib/rate-limit'
 
 const schema = z.object({
   phone: z.string().regex(/^\+[0-9]{8,15}$/),
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
   }
 
   const ip = clientIp(req)
-  const ok = await rateLimit(`otp:${ip}:${body.phone}`, 5, 15 * 60)
+  const ok = await rateLimitStrict(`otp:${ip}:${body.phone}`, 5, 15 * 60)
   if (!ok) return rateLimited()
 
   const supabase = await createClient()

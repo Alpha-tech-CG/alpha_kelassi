@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
-import { rateLimit } from '@/lib/rate-limit'
+import { rateLimitStrict } from '@/lib/rate-limit'
 import { authErrorMessage } from '@/lib/auth-errors'
 import { isPasswordValid } from '@/lib/password'
 
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
   }
 
   const ip = clientIp(req)
-  const ok = await rateLimit(`register:${ip}`, 10, 60 * 60)
+  const ok = await rateLimitStrict(`register:${ip}`, 10, 60 * 60)
   if (!ok) return rateLimited()
 
   const { origin } = new URL(req.url)

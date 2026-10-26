@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { authenticate } from '@/lib/supabase/api'
 import { admin } from '@/lib/tutor'
-import { rateLimit, tooMany } from '@/lib/rate-limit'
+import { rateLimitStrict, tooMany } from '@/lib/rate-limit'
 import { assertTrustedOrigin } from '@/lib/origin-check'
 import { classifyPayoutResponse } from '@/lib/billing/payout-outcome'
 
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   const { user } = await authenticate(req)
   if (!user) return NextResponse.json({ error: { code: 'UNAUTHORIZED' } }, { status: 401 })
-  if (!(await rateLimit(`withdraw:${user.id}`, 3, 3600))) return tooMany()
+  if (!(await rateLimitStrict(`withdraw:${user.id}`, 3, 3600))) return tooMany()
 
   let body: z.infer<typeof schema>
   try { body = schema.parse(await req.json()) }

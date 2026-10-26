@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
-import { rateLimit } from '@/lib/rate-limit'
+import { rateLimitStrict } from '@/lib/rate-limit'
 import { authErrorMessage } from '@/lib/auth-errors'
 
 const schema = z.object({
@@ -36,7 +36,10 @@ export async function POST(req: Request) {
   }
 
   const ip = clientIp(req)
-  const ok = await rateLimit(`login:${ip}:${body.email.toLowerCase()}`, 5, 15 * 60)
+  const email = body.email.toLowerCase()
+  // Par IP + compte, puis par compte seul (changer d'IP ne relance pas les essais).
+  const ok = await rateLimitStrict(`login:${ip}:${email}`, 5, 15 * 60)
+    && await rateLimitStrict(`login-account:${email}`, 20, 60 * 60)
   if (!ok) return rateLimited()
 
   const supabase = await createClient()
