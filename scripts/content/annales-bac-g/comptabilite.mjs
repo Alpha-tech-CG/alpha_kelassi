@@ -2,11 +2,10 @@
 // Séries G2, G3, BG. Sujets officiels photographiés ; corrigés = méthode détaillée + calculs
 // quand l'énoncé est complet (⚠️ données manquantes sur la photo). Type porté par le titre.
 // Matières ciblées : « Comptabilité Analytique de Gestion », « Comptabilité Financière »
-// (G2/G3), « COMPTABILITÉ GÉNÉRALE » (BG).
+// (G2, G3 et BG : la « COMPTABILITÉ GÉNÉRALE » BG a été retirée de la base).
 
 const ANALYTIQUE = { subject: 'Comptabilité Analytique de Gestion', match: 'comptabilit* analytique*' }
 const FINANCIERE = { subject: 'Comptabilité Financière', match: 'comptabilit* financi*re' }
-const GENERALE = { subject: 'COMPTABILITÉ GÉNÉRALE', match: 'comptabilit* g*n*rale' }
 const CH = 'Annales et sujets type bac — Comptabilité'
 
 const daso = {
@@ -269,6 +268,6 @@ export const BLOCS = [
   { ...FINANCIERE, levels: ['bac_g2'], chapterTitle: CH, exercises: [pontonCegeSogexFin, rapprochementRoly] },
   { ...FINANCIERE, levels: ['bac_g2', 'bac_g3'], chapterTitle: CH, exercises: [claudy, amortissements, tdAmort] },
   { ...FINANCIERE, levels: ['bac_g3'], chapterTitle: CH, exercises: [bb2013Gen, r] },
-  // Comptabilité générale (BG)
-  { ...GENERALE, levels: ['bac_bg'], chapterTitle: CH, exercises: [bgJbm] },
+  // Comptabilité générale BG, publiée dans la Comptabilité Financière BG
+  { ...FINANCIERE, levels: ['bac_bg'], chapterTitle: CH, exercises: [bgJbm] },
 ]
