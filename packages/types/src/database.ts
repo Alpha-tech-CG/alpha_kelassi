@@ -1481,6 +1481,44 @@ export type Database = {
           },
         ]
       }
+      chapter_flashcards: {
+        Row: {
+          id: string
+          chapter_id: string
+          front: string
+          back: string
+          order_index: number
+          source: 'auto' | 'manuel'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          chapter_id: string
+          front: string
+          back: string
+          order_index?: number
+          source?: 'auto' | 'manuel'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          chapter_id?: string
+          front?: string
+          back?: string
+          order_index?: number
+          source?: 'auto' | 'manuel'
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'chapter_flashcards_chapter_id_fkey'
+            columns: ['chapter_id']
+            isOneToOne: false
+            referencedRelation: 'chapters'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       exam_results: {
         Row: {
           id: string

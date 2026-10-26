@@ -190,6 +190,20 @@ export default async function ChapterPage({
           chapterId={chapterId}
         />
 
+        <Link
+          href={`/cours/matiere/${subjectId}/${chapterId}/flashcards`}
+          className="mt-8 flex items-center gap-4 rounded-2xl border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-white px-5 py-4 transition-all hover:border-amber-400 hover:shadow-md"
+        >
+          <span className="text-2xl" aria-hidden="true">
+            🃏
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-gray-900">Flashcards du chapitre</p>
+            <p className="text-xs text-gray-500">15 cartes tirées au hasard · les notions clés à retenir</p>
+          </div>
+          <span className="font-bold text-amber-700">→</span>
+        </Link>
+
         {quiz && (
           <Link
             href={`/quiz/${quiz.id}`}

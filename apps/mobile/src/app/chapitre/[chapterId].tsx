@@ -314,11 +314,11 @@ export default function ChapitreScreen() {
             </TouchableOpacity>
           ) : null}
           {l.type === 'cours' || l.type === 'resume' ? (
-            // Flashcards tirées de ce cours (sans IA, instantané) : l'écran s'ouvre sur cette leçon.
+            // Flashcards du chapitre : 15 cartes tirées au hasard dans son paquet préparé (migration 075).
             <TouchableOpacity
               style={[styles.readerBtn, styles.readerEx, styles.readerCards]}
-              onPress={() => router.push({ pathname: '/flashcards', params: { lesson: l.id } })}
-              accessibilityLabel="Créer mes flashcards depuis ce cours"
+              onPress={() => router.push(`/flashcards/chapitre/${chapterId}` as any)}
+              accessibilityLabel="Réviser les flashcards du chapitre"
             >
               <Text style={[styles.exBtnText, { flex: 0 }]} numberOfLines={1}>🃏 Cartes</Text>
             </TouchableOpacity>
