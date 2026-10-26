@@ -19,7 +19,8 @@ async function loadStats(days: number): Promise<{ stats: Stats | null; vitals: W
   const key = process.env['SUPABASE_SERVICE_ROLE_KEY']
   if (!url || !key) return { stats: null, vitals: null, error: 'Clé de service Supabase absente côté serveur.' }
   const admin = createAdminClient(url, key, { auth: { persistSession: false } })
-  const rpc = admin.rpc as unknown as (fn: string, args: object) => Promise<{ data: unknown; error: { message: string } | null }>
+  // bind : sortie de l'objet, la méthode perdrait son `this` (le client Supabase).
+  const rpc = admin.rpc.bind(admin) as unknown as (fn: string, args: object) => Promise<{ data: unknown; error: { message: string } | null }>
   // Vitesse du site (migration 076) : plafonnée à 90 jours ; un échec ne
   // masque pas le reste du tableau de bord.
   const [stats, vitals] = await Promise.all([
