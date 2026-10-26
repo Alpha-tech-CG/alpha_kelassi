@@ -6,13 +6,17 @@ import {
   type SubscriptionPlan,
 } from '@alpha-kelassi/types'
 import { adminFetch } from '@/lib/admin-fetch'
+import { LevelOptions } from '../_components/level-options'
 
 interface AdminUser {
   id: string; full_name: string | null; email: string | null; phone: string | null; role: string; created_at: string
   plan: SubscriptionPlan; effective_plan: SubscriptionPlan; billing_interval: 'month' | 'year' | null
   expires_at: string | null; source: string | null; suspended: boolean; scheduled: number; plan_review: string | null
   usage: { ai_today: number; ai_bonus: number; corrections_month: number; corrections_bonus: number }
+  account: AccountState; onboarding_completed: boolean; signup_incomplete: boolean
 }
+
+interface AccountState { banned: boolean; banned_until: string | null; email_confirmed: boolean; last_sign_in_at: string | null }
 
 interface Detail {
   subscriptions: { id: string; plan: string; status: string; billing_interval: string | null; amount: number | null; started_at: string | null; expires_at: string | null; source: string; notes: string | null; created_at: string }[]
@@ -20,7 +24,7 @@ interface Detail {
   audit: { id: string; action: string; reason: string; created_at: string; admin: { email: string | null; full_name: string | null } | null; new_value: { detail?: Record<string, unknown> } | null }[]
 }
 
-type Filter = 'all' | SubscriptionPlan | 'review'
+type Filter = 'all' | SubscriptionPlan | 'review' | 'incomplete' | 'banned'
 
 const ACTION_LABEL: Record<string, string> = {
   set_plan: 'Formule modifiée', extend: 'Prolongation', suspend: 'Suspension', reactivate: 'Réactivation',
@@ -29,6 +33,15 @@ const ACTION_LABEL: Record<string, string> = {
 
 const dateFr = (d: string | null) => (d ? new Date(d).toLocaleDateString('fr-FR') : '—')
 
+const FILTER_LABEL: Partial<Record<Filter, string>> = {
+  all: 'Tous', review: 'À vérifier', incomplete: 'Inscription inachevée', banned: 'Bannis',
+}
+
+const ACCOUNT_ACTION_LABEL: Record<string, string> = {
+  create: 'Compte créé par la console', ban: 'Bannissement', unban: 'Débannissement',
+  confirm_email: 'E-mail confirmé à la main', reset_password: 'Mot de passe provisoire',
+}
+
 export function AdminUsersClient() {
   const [users, setUsers] = useState<AdminUser[]>([])
   const [loading, setLoading] = useState(true)
@@ -36,6 +49,7 @@ export function AdminUsersClient() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
   const [selected, setSelected] = useState<AdminUser | null>(null)
+  const [creating, setCreating] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -52,7 +66,11 @@ export function AdminUsersClient() {
   useEffect(() => { load() }, [load])
 
   const filtered = users.filter((u) => {
-    const matchPlan = filter === 'all' || (filter === 'review' ? !!u.plan_review : u.plan === filter)
+    const matchPlan = filter === 'all'
+      || (filter === 'review' ? !!u.plan_review
+        : filter === 'incomplete' ? u.signup_incomplete
+        : filter === 'banned' ? u.account.banned
+        : u.plan === filter)
     const q = search.toLowerCase()
     const matchSearch = !search || [u.full_name, u.email, u.phone].some((v) => (v ?? '').toLowerCase().includes(q))
     return matchPlan && matchSearch
@@ -62,13 +80,18 @@ export function AdminUsersClient() {
 
   return (
     <div className="px-4 md:px-8 py-6 md:py-8 max-w-7xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-black text-gray-900">Utilisateurs</h1>
-        <p className="text-gray-500 text-sm mt-1">{users.length} compte(s) — formule effective, échéance et usage du jour.</p>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-black text-gray-900">Utilisateurs</h1>
+          <p className="text-gray-500 text-sm mt-1">{users.length} compte(s) — formule, état du compte, usage du jour.</p>
+        </div>
+        <button type="button" onClick={() => setCreating(true)} className="px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700">
+          + Créer un compte élève
+        </button>
       </div>
       {error && <div role="alert" className="p-3 bg-red-50 text-red-700 rounded-xl text-sm mb-4">{error}</div>}
 
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
         {SUBSCRIPTION_PLANS.map((p) => (
           <div key={p} className="bg-white border border-gray-100 rounded-2xl px-4 py-3">
             <p className="text-2xl font-black text-gray-900">{count(p)}</p>
@@ -78,6 +101,14 @@ export function AdminUsersClient() {
         <div className="bg-amber-50 border border-amber-100 rounded-2xl px-4 py-3">
           <p className="text-2xl font-black text-amber-900">{users.filter((u) => u.plan_review).length}</p>
           <p className="text-sm text-amber-800">À vérifier</p>
+        </div>
+        <div className="bg-sky-50 border border-sky-100 rounded-2xl px-4 py-3">
+          <p className="text-2xl font-black text-sky-900">{users.filter((u) => u.signup_incomplete).length}</p>
+          <p className="text-sm text-sky-800">Inscriptions inachevées</p>
+        </div>
+        <div className="bg-red-50 border border-red-100 rounded-2xl px-4 py-3">
+          <p className="text-2xl font-black text-red-900">{users.filter((u) => u.account.banned).length}</p>
+          <p className="text-sm text-red-800">Bannis</p>
         </div>
       </div>
 
@@ -91,7 +122,7 @@ export function AdminUsersClient() {
           />
         </label>
         <div className="flex flex-wrap bg-gray-100 rounded-xl p-1 gap-1" role="group" aria-label="Filtrer par formule">
-          {(['all', ...SUBSCRIPTION_PLANS, 'review'] as Filter[]).map((p) => (
+          {(['all', ...SUBSCRIPTION_PLANS, 'review', 'incomplete', 'banned'] as Filter[]).map((p) => (
             <button
               key={p}
               type="button"
@@ -99,7 +130,7 @@ export function AdminUsersClient() {
               onClick={() => setFilter(p)}
               className={`px-3 py-1.5 rounded-lg text-sm font-medium ${filter === p ? 'bg-white shadow text-gray-900' : 'text-gray-600'}`}
             >
-              {p === 'all' ? 'Tous' : p === 'review' ? 'À vérifier' : PLAN_META[p].label}
+              {FILTER_LABEL[p] ?? PLAN_META[p as SubscriptionPlan].label}
             </button>
           ))}
         </div>
@@ -121,6 +152,12 @@ export function AdminUsersClient() {
                 <td className="px-4 py-3">
                   <p className="font-medium text-gray-900 truncate max-w-[200px]">{u.full_name ?? <span className="text-gray-400 italic">Sans nom</span>}</p>
                   <p className="text-xs text-gray-500">{u.email ?? u.phone ?? '—'}</p>
+                  {u.account.banned && <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-100 text-red-700">Banni</span>}
+                  {!u.account.banned && u.signup_incomplete && (
+                    <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-sky-100 text-sky-800">
+                      {!u.account.email_confirmed ? 'E-mail non confirmé' : 'Parcours non choisi'}
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <p className="font-semibold text-gray-900">{PLAN_META[u.plan].label}{u.billing_interval && <span className="text-xs text-gray-500"> · {u.billing_interval === 'month' ? 'mensuel' : 'annuel'}</span>}</p>
@@ -148,6 +185,7 @@ export function AdminUsersClient() {
       </div>
 
       {selected && <ManageDialog user={selected} onClose={() => setSelected(null)} onChanged={load} />}
+      {creating && <CreateDialog onClose={() => setCreating(false)} onCreated={load} />}
     </div>
   )
 }
@@ -217,7 +255,10 @@ function ManageDialog({ user, onClose, onChanged }: { user: AdminUser; onClose: 
           <button type="button" onClick={onClose} className="text-gray-500 hover:text-gray-900 text-sm font-semibold">Fermer</button>
         </div>
 
-        <form onSubmit={submit} className="mt-5 grid gap-3 sm:grid-cols-2 rounded-xl bg-gray-50 p-4">
+        <AccountPanel user={user} onChanged={onChanged} />
+
+        <h3 className="mt-6 font-bold text-gray-900">Abonnement et rôle</h3>
+        <form onSubmit={submit} className="mt-2 grid gap-3 sm:grid-cols-2 rounded-xl bg-gray-50 p-4">
           <label className="sm:col-span-2 text-sm font-semibold text-gray-700">
             Action
             <select value={action} onChange={(e) => setAction(e.target.value as typeof action)} className="mt-1 w-full border rounded-lg px-3 py-2 bg-white">
@@ -333,6 +374,215 @@ function ManageDialog({ user, onClose, onChanged }: { user: AdminUser; onClose: 
               )}
             </section>
           </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/** Mot de passe provisoire affiché une seule fois, avec bouton de copie. */
+function TempPassword({ email, password }: { email: string | null; password: string }) {
+  const [copied, setCopied] = useState(false)
+  return (
+    <div role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
+      <p className="font-semibold text-emerald-900">Mot de passe provisoire — affiché une seule fois</p>
+      <p className="mt-2 text-emerald-900">E-mail : <strong>{email ?? '—'}</strong></p>
+      <div className="mt-1 flex items-center gap-2">
+        <code className="px-3 py-1.5 rounded-lg bg-white border border-emerald-200 text-base font-mono tracking-wider select-all">{password}</code>
+        <button type="button" onClick={() => { void navigator.clipboard?.writeText(password).then(() => setCopied(true)) }}
+          className="px-3 py-1.5 rounded-lg bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800">
+          {copied ? 'Copié' : 'Copier'}
+        </button>
+      </div>
+      <p className="mt-2 text-xs text-emerald-800">
+        Transmets-le à l’élève (WhatsApp, appel). Il se connecte avec, puis le change depuis « Mot de passe oublié ».
+      </p>
+    </div>
+  )
+}
+
+interface AccountDetail {
+  state: AccountState
+  onboarding_completed: boolean
+  audit: { id: string; action: string; reason: string; created_at: string; admin: { email: string | null; full_name: string | null } | null }[]
+}
+
+type AccountAction = 'reset_password' | 'confirm_email' | 'ban' | 'unban'
+
+/** Compte et connexion : état dans Supabase Auth, aide à la connexion, bannissement. */
+function AccountPanel({ user, onChanged }: { user: AdminUser; onChanged: () => Promise<void> }) {
+  const [detail, setDetail] = useState<AccountDetail | null>(null)
+  const [action, setAction] = useState<AccountAction>('reset_password')
+  const [reason, setReason] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null)
+  const [password, setPassword] = useState<string | null>(null)
+
+  const load = useCallback(async () => {
+    const res = await adminFetch<AccountDetail>(`/api/admin/users/${user.id}/account`)
+    if (res.ok) setDetail(res.data)
+  }, [user.id])
+  useEffect(() => { load() }, [load])
+
+  const state = detail?.state ?? user.account
+  const canBan = user.role !== 'admin'
+  const options: { value: AccountAction; label: string }[] = [
+    { value: 'reset_password', label: 'Donner un mot de passe provisoire' },
+    ...(!state.email_confirmed ? [{ value: 'confirm_email' as const, label: 'Confirmer l’e-mail à la place de l’élève' }] : []),
+    ...(state.banned ? [{ value: 'unban' as const, label: 'Débannir le compte' }] : canBan ? [{ value: 'ban' as const, label: 'Bannir le compte' }] : []),
+  ]
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    if (action === 'ban' && !window.confirm(`Bannir ${user.full_name ?? user.email ?? 'ce compte'} ? Il ne pourra plus se connecter, ni sur l’app ni sur le site.`)) return
+    setSaving(true); setMessage(null); setPassword(null)
+    try {
+      const res = await adminFetch<{ state: AccountState; temp_password: string | null }>(`/api/admin/users/${user.id}/account`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, reason }),
+      })
+      if (!res.ok) { setMessage({ ok: false, text: res.error ?? 'Échec de l’action.' }); return }
+      if (res.data?.temp_password) setPassword(res.data.temp_password)
+      setMessage({ ok: true, text: `${ACCOUNT_ACTION_LABEL[action]} : fait et journalisé.` })
+      setReason('')
+      if (action !== 'reset_password') setAction('reset_password')
+      await Promise.all([load(), onChanged()])
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const fact = (ok: boolean, yes: string, no: string) => (
+    <li className={ok ? 'text-gray-700' : 'text-amber-800 font-semibold'}>{ok ? '✓' : '•'} {ok ? yes : no}</li>
+  )
+
+  return (
+    <section className="mt-5 rounded-xl border border-gray-200 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="font-bold text-gray-900">Compte et connexion</h3>
+        {state.banned && <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">Banni</span>}
+      </div>
+      <ul className="mt-2 grid sm:grid-cols-3 gap-1 text-sm">
+        {fact(state.email_confirmed, 'E-mail confirmé', 'E-mail non confirmé')}
+        {fact(detail?.onboarding_completed ?? user.onboarding_completed, 'Parcours choisi', 'Parcours non choisi')}
+        <li className="text-gray-700">Dernière connexion : {state.last_sign_in_at ? new Date(state.last_sign_in_at).toLocaleString('fr-FR') : 'jamais'}</li>
+      </ul>
+
+      <form onSubmit={submit} className="mt-4 grid gap-3 sm:grid-cols-2 rounded-xl bg-gray-50 p-4">
+        <label className="text-sm font-semibold text-gray-700">Action
+          <select value={action} onChange={(e) => setAction(e.target.value as AccountAction)} className="mt-1 w-full border rounded-lg px-3 py-2 bg-white">
+            {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </label>
+        <p className="text-xs text-gray-500 self-end">
+          {action === 'ban' ? 'L’élève ne peut plus se connecter. Une session déjà ouverte se coupe au plus tard dans l’heure.'
+            : action === 'unban' ? 'L’élève peut de nouveau se connecter.'
+            : action === 'confirm_email' ? 'Pour un élève qui ne reçoit pas le code de confirmation.'
+            : 'Remplace son mot de passe : l’ancien ne marche plus.'}
+          {!canBan && ' Un administrateur ne peut pas être banni.'}
+        </p>
+        <label className="sm:col-span-2 text-sm font-semibold text-gray-700">Raison (obligatoire, journalisée)
+          <textarea required minLength={5} value={reason} onChange={(e) => setReason(e.target.value)} rows={2} className="mt-1 w-full border rounded-lg px-3 py-2"
+            placeholder={action === 'ban' ? 'Ex. : insultes répétées dans les groupes' : 'Ex. : l’élève a oublié son mot de passe (appel du 26/10)'} />
+        </label>
+        <div className="sm:col-span-2 flex flex-col sm:flex-row sm:items-center gap-3">
+          <button type="submit" disabled={saving || reason.trim().length < 5}
+            className={`px-5 py-2.5 text-white rounded-xl text-sm font-bold disabled:opacity-50 ${action === 'ban' ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-900 hover:bg-gray-700'}`}>
+            {saving ? 'En cours…' : action === 'ban' ? 'Bannir' : 'Appliquer'}
+          </button>
+          {message && <p role="status" className={`text-sm ${message.ok ? 'text-emerald-700' : 'text-red-700'}`}>{message.text}</p>}
+        </div>
+      </form>
+
+      {password && <div className="mt-3"><TempPassword email={user.email} password={password} /></div>}
+
+      {detail && detail.audit.length > 0 && (
+        <div className="mt-4">
+          <h4 className="text-sm font-semibold text-gray-700 mb-1">Journal du compte</h4>
+          <ul className="text-xs space-y-1">
+            {detail.audit.map((a) => (
+              <li key={a.id}>
+                {new Date(a.created_at).toLocaleString('fr-FR')} · <strong>{ACCOUNT_ACTION_LABEL[a.action] ?? a.action}</strong> par {a.admin?.full_name ?? a.admin?.email ?? 'admin'} — « {a.reason} »
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  )
+}
+
+/** Création d'un compte élève par la console (aide à l'inscription). */
+function CreateDialog({ onClose, onCreated }: { onClose: () => void; onCreated: () => Promise<void> }) {
+  const [form, setForm] = useState({ first_name: '', last_name: '', email: '', study_level: '', phone: '', school: '', city: '', reason: '' })
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [created, setCreated] = useState<{ email: string; temp_password: string } | null>(null)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }))
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    setSaving(true); setError(null)
+    try {
+      const res = await adminFetch<{ email: string; temp_password: string }>('/api/admin/users', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form),
+      })
+      if (!res.ok || !res.data) { setError(res.error ?? 'Création impossible.'); return }
+      setCreated(res.data)
+      await onCreated()
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const input = 'mt-1 w-full border rounded-lg px-3 py-2 bg-white'
+  return (
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/40 p-4 overflow-y-auto" onClick={onClose}>
+      <div role="dialog" aria-modal="true" aria-labelledby="create-title" className="bg-white rounded-2xl shadow-xl w-full max-w-xl p-5 sm:p-6 my-8" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="create-title" className="text-lg font-black text-gray-900">Créer un compte élève</h2>
+            <p className="text-sm text-gray-600">Pour un élève qui n’arrive pas à s’inscrire. Le compte est créé déjà confirmé.</p>
+          </div>
+          <button type="button" onClick={onClose} className="text-gray-500 hover:text-gray-900 text-sm font-semibold">Fermer</button>
+        </div>
+
+        {created ? (
+          <div className="mt-5 space-y-4">
+            <TempPassword email={created.email} password={created.temp_password} />
+            <button type="button" onClick={onClose} className="px-5 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-gray-700">Terminé</button>
+          </div>
+        ) : (
+          <form onSubmit={submit} className="mt-5 grid gap-3 sm:grid-cols-2">
+            <label className="text-sm font-semibold text-gray-700">Prénom<input required value={form.first_name} onChange={set('first_name')} className={input} /></label>
+            <label className="text-sm font-semibold text-gray-700">Nom<input required value={form.last_name} onChange={set('last_name')} className={input} /></label>
+            <label className="sm:col-span-2 text-sm font-semibold text-gray-700">E-mail de l’élève<input required type="email" value={form.email} onChange={set('email')} className={input} /></label>
+            <label className="sm:col-span-2 text-sm font-semibold text-gray-700">Classe
+              <select required value={form.study_level} onChange={set('study_level')} className={input}>
+                <option value="">Choisir…</option>
+                <LevelOptions />
+              </select>
+            </label>
+            <label className="text-sm font-semibold text-gray-700">Téléphone <span className="font-normal text-gray-400">(facultatif)</span><input type="tel" value={form.phone} onChange={set('phone')} className={input} placeholder="+242 06 000 0000" /></label>
+            <label className="text-sm font-semibold text-gray-700">Ville <span className="font-normal text-gray-400">(facultatif)</span><input value={form.city} onChange={set('city')} className={input} /></label>
+            <label className="sm:col-span-2 text-sm font-semibold text-gray-700">École <span className="font-normal text-gray-400">(facultatif)</span><input value={form.school} onChange={set('school')} className={input} /></label>
+            <label className="sm:col-span-2 text-sm font-semibold text-gray-700">Raison (obligatoire, journalisée)
+              <textarea required minLength={5} rows={2} value={form.reason} onChange={set('reason')} className={input} placeholder="Ex. : l’élève n’arrivait pas à valider le code reçu par e-mail" />
+            </label>
+            {error && <p role="alert" className="sm:col-span-2 text-sm text-red-700">{error}</p>}
+            <div className="sm:col-span-2">
+              <button type="submit" disabled={saving || form.reason.trim().length < 5} className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-50">
+                {saving ? 'Création…' : 'Créer le compte'}
+              </button>
+            </div>
+          </form>
         )}
       </div>
     </div>

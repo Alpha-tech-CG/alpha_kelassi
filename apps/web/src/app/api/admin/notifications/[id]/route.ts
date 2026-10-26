@@ -7,7 +7,8 @@ const patchSchema = z.object({
   title:       z.string().min(2).max(120).optional(),
   message:     z.string().min(5).max(500).optional(),
   cta_label:   z.string().max(60).nullable().optional(),
-  cta_url:     z.string().url().nullable().optional(),
+  // https seulement : le lien devient un bouton sur le site et dans l'app.
+  cta_url:     z.string().url().refine((u) => u.startsWith('https://'), 'Le lien doit commencer par https://').nullable().optional(),
   is_active:   z.boolean().optional(),
   target_plan: z.enum(['all', 'free', 'premium']).optional(),
   expires_at:  z.string().datetime().nullable().optional(),

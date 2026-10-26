@@ -8,6 +8,8 @@ import { subjectArtwork } from '../../lib/subjectArtwork'
 import { SolarIcon } from '../../icons/solar'
 import { FadeIn } from '../../components/FadeIn'
 import { CognixLoader } from '../../components/CognixLoader'
+import { AnnouncementBanner } from '../../components/AnnouncementBanner'
+import { useBilling } from '../../hooks/useBilling'
 
 interface SubjectVM { id: string; name: string; icon: string | null; progress: number }
 
@@ -23,6 +25,8 @@ const ACTIONS = [
 export default function HomeScreen() {
   const router = useRouter()
   const { level, track, ready } = useLevel()
+  // Formule de l'élève : choisit les annonces qui le visent (gratuit / abonné).
+  const { me, loading: billingLoading } = useBilling()
   const [name, setName] = useState('')
   const [xp, setXp] = useState(0)
   const [streak, setStreak] = useState(0)
@@ -116,6 +120,9 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.body}>
+        {/* Annonce de la console admin */}
+        {!billingLoading && <AnnouncementBanner plan={me?.plan} />}
+
         {/* Raccourcis */}
         <View style={styles.actions}>
           {ACTIONS.map((a, i) => (
