@@ -39,3 +39,60 @@ export const MODE_LABEL: Record<ExamMode, { label: string; emoji: string; plan: 
 
 export const isRayon = (v: unknown): v is PrepaRayon =>
   typeof v === 'string' && (RAYONS as string[]).includes(v)
+
+/* ── Sujets rédigés (migration 074) ─────────────────────────────────────────
+ * Un sujet d'épreuve est un exercice dont `exam_kind` est renseigné : énoncé
+ * complet, durée officielle, barème. `origin` distingue les sujets réels
+ * (sessions officielles, bacs blancs d'inspection) des sujets créés par Cognix
+ * à partir d'eux (mêmes notions, mêmes questions posées autrement).
+ */
+export type PaperOrigin = 'reel' | 'genere'
+export interface BaremeItem { label: string; points: number }
+export interface Paper {
+  id: string
+  title: string
+  exam_kind: ExamKind
+  origin: PaperOrigin
+  exam_year: number | null
+  duration_min: number
+  bareme: BaremeItem[] | null
+}
+
+export const PAPER_COLUMNS = 'id, title, exam_kind, origin, exam_year, duration_min, bareme'
+
+export function parseBareme(v: unknown): BaremeItem[] {
+  if (!Array.isArray(v)) return []
+  return v.flatMap((it) => {
+    const o = it as { label?: unknown; points?: unknown }
+    return typeof o?.label === 'string' && typeof o.points === 'number' && o.points > 0
+      ? [{ label: o.label, points: o.points }]
+      : []
+  })
+}
+
+export const originLabel = (p: Pick<Paper, 'origin' | 'exam_year'>) =>
+  p.origin === 'reel' ? (p.exam_year ? `Sujet officiel ${p.exam_year}` : 'Sujet officiel') : 'Sujet Cognix (inédit)'
+
+/**
+ * Sujet de la prochaine simulation : on alterne sujet réel et sujet créé par Cognix
+ * (l'origine opposée à celle de la dernière copie rendue dans la matière), en
+ * privilégiant les sujets les moins faits ; si l'origine voulue manque, on prend l'autre.
+ */
+export function pickSimulationPaper(
+  papers: Pick<Paper, 'id' | 'origin'>[],
+  results: { exercise_id: string; created_at: string }[],
+  rand: () => number = Math.random,
+): string | null {
+  if (papers.length === 0) return null
+  const byId = new Map(papers.map((p) => [p.id, p]))
+  const mine = results.filter((r) => byId.has(r.exercise_id)).sort((a, b) => b.created_at.localeCompare(a.created_at))
+  const last = mine[0] ? byId.get(mine[0].exercise_id)!.origin : null
+  const wanted: PaperOrigin = last === 'reel' ? 'genere' : 'reel'
+  const done = new Map<string, number>()
+  for (const r of mine) done.set(r.exercise_id, (done.get(r.exercise_id) ?? 0) + 1)
+  const pool = papers.filter((p) => p.origin === wanted)
+  const candidates = pool.length > 0 ? pool : papers
+  const least = Math.min(...candidates.map((p) => done.get(p.id) ?? 0))
+  const fresh = candidates.filter((p) => (done.get(p.id) ?? 0) === least)
+  return fresh[Math.floor(rand() * fresh.length)]!.id
+}

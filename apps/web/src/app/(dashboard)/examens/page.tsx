@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getEntitlements } from '@/lib/subscription/server'
 import { allowedExamModes, EXAM_MODE_LABELS, EXAM_LEVELS, LEVEL_META, isStudyLevel, type ExamMode, type StudyLevel } from '@alpha-kelassi/types'
-import { RAYONS, isRayon, rayonMeta, examName, type PrepaRayon } from '@/lib/prepa'
+import { RAYONS, isRayon, rayonMeta, examName, originLabel, PAPER_COLUMNS, type Paper, type PrepaRayon } from '@/lib/prepa'
 import { ExamensHistorique } from './examens-historique'
 
 /**
@@ -16,12 +16,16 @@ import { ExamensHistorique } from './examens-historique'
  *
  * Même organisation que l'application mobile (`apps/mobile/src/app/prepa`).
  * Les épreuves sans question sont masquées (`question_total`, migration 059).
+ * Les sujets rédigés (exercices avec `exam_kind`, migration 074) s'ajoutent aux QCM :
+ * « Anciens bacs » liste les sujets réels ; Bac test / blanc / rouge proposent une
+ * simulation qui alterne sujet réel et sujet créé par Cognix (`/examens/simulation`).
  */
 
 interface SearchParams { rayon?: string; subject?: string; level?: string }
 interface Subject { id: string; name: string; level: string }
 interface Epreuve { id: string; title: string; year: number | null; time_limit_sec: number; is_premium: boolean; subject_id: string; question_total: number }
 interface Sujet { id: string; title: string; year: number | null; session: string | null; is_premium: boolean; corrige_url: string | null; subject_id: string }
+type PaperRow = Paper & { chapters: { subject_id: string } }
 interface TdChapter { id: string; title: string; order_index: number; subject_id: string; count: number }
 
 const ALL_MODES: ExamMode[] = ['entrainement', 'bac_test', 'bac_blanc', 'bac_rouge']
@@ -96,6 +100,7 @@ export default async function PrepaPage({ searchParams }: { searchParams: Promis
   let epreuves: Epreuve[] = []
   let sujets: Sujet[] = []
   let chapters: TdChapter[] = []
+  let papers: PaperRow[] = []
   if (ids.length > 0) {
     if (rayon === 'td') {
       const { data } = await supabase.from('exercises')
@@ -111,7 +116,12 @@ export default async function PrepaPage({ searchParams }: { searchParams: Promis
       }
       chapters = [...map.values()].sort((a, b) => a.order_index - b.order_index)
     } else {
-      const [{ data: qz }, docs] = await Promise.all([
+      let pq = supabase.from('exercises')
+        .select(`${PAPER_COLUMNS}, chapters!inner(subject_id)`)
+        .not('exam_kind', 'is', null).is('deleted_at', null).in('chapters.subject_id', ids)
+        .order('exam_year', { ascending: false, nullsFirst: false })
+      if (rayon === 'ancien_bac') pq = pq.eq('origin', 'reel')
+      const [{ data: qz }, docs, { data: pp }] = await Promise.all([
         supabase.from('quizzes')
           .select('id, title, year, time_limit_sec, is_premium, subject_id, question_total')
           .eq('is_exam', true).eq('exam_kind', rayon).is('deleted_at', null).in('subject_id', ids)
@@ -120,7 +130,9 @@ export default async function PrepaPage({ searchParams }: { searchParams: Promis
           ? supabase.from('documents').select('id, title, year, session, is_premium, corrige_url, subject_id')
               .eq('type', 'examen').in('subject_id', ids).order('year', { ascending: false, nullsFirst: false })
           : Promise.resolve({ data: [] }),
+        pq,
       ])
+      papers = (pp ?? []) as unknown as PaperRow[]
       epreuves = ((qz ?? []) as unknown as Epreuve[]).filter((e) => (e.question_total ?? 0) > 0)
       sujets = (docs.data ?? []) as unknown as Sujet[]
     }
@@ -129,7 +141,7 @@ export default async function PrepaPage({ searchParams }: { searchParams: Promis
   const counts = new Map<string, number>()
   const add = (sid: string, n = 1) => counts.set(sid, (counts.get(sid) ?? 0) + n)
   if (rayon === 'td') chapters.forEach((c) => add(c.subject_id, c.count))
-  else { epreuves.forEach((e) => add(e.subject_id)); sujets.forEach((d) => add(d.subject_id)) }
+  else { epreuves.forEach((e) => add(e.subject_id)); sujets.forEach((d) => add(d.subject_id)); papers.forEach((p) => add(p.chapters.subject_id)) }
 
   const subject = subjects.find((s) => s.id === sp.subject) ?? null
   const locked = !!meta.mode && !allowed.has(meta.mode)
@@ -209,6 +221,8 @@ export default async function PrepaPage({ searchParams }: { searchParams: Promis
   /* ── Étape 3 : épreuves de la matière ──────────────────────────────────── */
   const list = epreuves.filter((e) => e.subject_id === subject.id)
   const pdfs = sujets.filter((d) => d.subject_id === subject.id)
+  const redige = papers.filter((p) => p.chapters.subject_id === subject.id)
+  const paperHref = (p: PaperRow) => (locked ? '/billing' : `/examens/sujet/${p.id}?mode=${rayon}`)
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -222,7 +236,38 @@ export default async function PrepaPage({ searchParams }: { searchParams: Promis
         </Link>
       )}
 
-      {list.length === 0 && pdfs.length === 0 && (
+      {redige.length > 0 && meta.mode && (
+        <Link href={locked ? '/billing' : `/examens/simulation?rayon=${rayon}&subject=${subject.id}`}
+          className="flex items-center gap-4 rounded-2xl bg-emerald-700 text-white p-5 mb-4 hover:bg-emerald-800 transition-colors">
+          <span className="text-3xl">🎲</span>
+          <span className="flex-1 min-w-0">
+            <span className="block text-lg font-black">Lancer une simulation</span>
+            <span className="block text-sm text-emerald-50">Un sujet complet, chronométré, corrigé avec le barème. On alterne sujets officiels et sujets inédits.</span>
+          </span>
+          <span className="text-2xl">{locked ? '🔒' : '›'}</span>
+        </Link>
+      )}
+
+      {redige.length > 0 && (
+        <>
+          <h2 className="font-black text-gray-900 mb-3">Sujets rédigés</h2>
+          <div className="space-y-2 mb-8">
+            {redige.map((p) => (
+              <Link key={p.id} href={paperHref(p)} className={card}>
+                <span className="text-2xl">{p.origin === 'reel' ? '📜' : '✨'}</span>
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold text-gray-900">{p.title}</span>
+                  <span className="block text-xs text-gray-400 mt-0.5">{originLabel(p)} · {Math.floor(p.duration_min / 60)} h{p.duration_min % 60 ? ` ${p.duration_min % 60}` : ''} · corrigé et barème</span>
+                </span>
+                <span className="text-emerald-600 text-xl">{locked ? '🔒' : '›'}</span>
+              </Link>
+            ))}
+          </div>
+          {list.length > 0 && <h2 className="font-black text-gray-900 mb-3">QCM</h2>}
+        </>
+      )}
+
+      {list.length === 0 && pdfs.length === 0 && redige.length === 0 && (
         <p className="text-center text-gray-400 py-16">Aucun sujet « {meta.label} » dans cette matière pour l&apos;instant. Reviens bientôt !</p>
       )}
 

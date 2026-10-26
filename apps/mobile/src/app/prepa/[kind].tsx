@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
 import { useBilling } from '../../hooks/useBilling'
 import { colors, radius, cardShadow, fonts, subjectIcon } from '../../lib/theme'
-import { isRayon, rayonMeta, MODE_LABEL, type ExamMode } from '../../lib/prepa'
+import { isRayon, rayonMeta, MODE_LABEL, originLabel, pickSimulationPaper, PAPER_COLUMNS, type ExamMode, type Paper } from '../../lib/prepa'
 import { BackButton } from '../../components/BackButton'
 import { CognixLoader } from '../../components/CognixLoader'
 
@@ -13,11 +13,14 @@ import { CognixLoader } from '../../components/CognixLoader'
  * Un rayon de l'espace Prépa : l'élève choisit sa matière, puis une épreuve
  * (ou un chapitre de TD). Les épreuves sans question (encore en préparation
  * dans la console) sont masquées grâce à `question_total` (migration 059).
+ * Les sujets rédigés (migration 074) s'ajoutent aux QCM ; Bac test / blanc / rouge
+ * proposent une simulation qui alterne sujet réel et sujet créé par Cognix.
  */
 
 interface Subject { id: string; name: string }
 interface Epreuve { id: string; title: string; year: number | null; time_limit_sec: number; is_premium: boolean; subject_id: string; question_total: number }
 interface Sujet { id: string; title: string; year: number | null; session: string | null; is_premium: boolean; subject_id: string }
+type PaperRow = Paper & { subject_id: string }
 interface TdChapter { id: string; title: string; order_index: number; subject_id: string; count: number }
 
 const MODES: ExamMode[] = ['entrainement', 'bac_test', 'bac_blanc', 'bac_rouge']
@@ -37,6 +40,7 @@ export default function PrepaRayonScreen() {
   const [epreuves, setEpreuves] = useState<Epreuve[]>([])
   const [sujets, setSujets] = useState<Sujet[]>([])
   const [chapters, setChapters] = useState<TdChapter[]>([])
+  const [papers, setPapers] = useState<PaperRow[]>([])
   const [subjectId, setSubjectId] = useState<string | null>(null)
 
   useEffect(() => {
@@ -65,7 +69,12 @@ export default function PrepaRayonScreen() {
           }
           if (active) setChapters([...map.values()].sort((a, b) => a.order_index - b.order_index))
         } else {
-          const [{ data: qz }, docs] = await Promise.all([
+          let pq = supabase.from('exercises')
+            .select(`${PAPER_COLUMNS}, chapters!inner(subject_id)`)
+            .not('exam_kind', 'is', null).is('deleted_at', null).in('chapters.subject_id', ids)
+            .order('exam_year', { ascending: false, nullsFirst: false })
+          if (rayon === 'ancien_bac') pq = pq.eq('origin', 'reel')
+          const [{ data: qz }, docs, { data: pp }] = await Promise.all([
             supabase.from('quizzes')
               .select('id, title, year, time_limit_sec, is_premium, subject_id, question_total')
               .eq('is_exam', true).eq('exam_kind', rayon).is('deleted_at', null).in('subject_id', ids)
@@ -74,8 +83,13 @@ export default function PrepaRayonScreen() {
               ? supabase.from('documents').select('id, title, year, session, is_premium, subject_id')
                   .eq('type', 'examen').in('subject_id', ids).order('year', { ascending: false, nullsFirst: false })
               : Promise.resolve({ data: [] }),
+            pq,
           ])
           if (active) {
+            setPapers(((pp ?? []) as any[]).map((r) => {
+              const c = Array.isArray(r.chapters) ? r.chapters[0] : r.chapters
+              return { ...r, subject_id: c?.subject_id } as PaperRow
+            }))
             setEpreuves(((qz ?? []) as Epreuve[]).filter((e) => (e.question_total ?? 0) > 0))
             setSujets((docs.data ?? []) as Sujet[])
           }
@@ -91,9 +105,9 @@ export default function PrepaRayonScreen() {
     const m = new Map<string, number>()
     const add = (sid: string, n = 1) => m.set(sid, (m.get(sid) ?? 0) + n)
     if (rayon === 'td') chapters.forEach((c) => add(c.subject_id, c.count))
-    else { epreuves.forEach((e) => add(e.subject_id)); sujets.forEach((d) => add(d.subject_id)) }
+    else { epreuves.forEach((e) => add(e.subject_id)); sujets.forEach((d) => add(d.subject_id)); papers.forEach((p) => add(p.subject_id)) }
     return m
-  }, [rayon, chapters, epreuves, sujets])
+  }, [rayon, chapters, epreuves, sujets, papers])
 
   // Matières garnies d'abord : l'élève voit tout de suite où il y a du travail.
   const orderedSubjects = useMemo(
@@ -146,6 +160,27 @@ export default function PrepaRayonScreen() {
       }),
       { text: 'Annuler', style: 'cancel' as const },
     ])
+  }
+
+  function lockedAlert() {
+    openPlans(meta.plan ?? 'starter', `${meta.label} — formule ${meta.planLabel}`,
+      `Le ${meta.label} est inclus dans la formule ${meta.planLabel}.`)
+  }
+
+  function openPaper(p: PaperRow) {
+    if (me && meta.mode && !allowed.has(meta.mode)) { lockedAlert(); return }
+    router.push(`/sujet/${p.id}?mode=${rayon}` as any)
+  }
+
+  /** Simulation : sujet réel puis sujet Cognix, en alternance (copies rendues de la matière). */
+  async function simulation(list: PaperRow[]) {
+    if (me && meta.mode && !allowed.has(meta.mode)) { lockedAlert(); return }
+    const { data: { user } } = await supabase.auth.getUser()
+    const { data: res } = user
+      ? await supabase.from('exam_results').select('exercise_id, created_at').eq('user_id', user.id).in('exercise_id', list.map((p) => p.id))
+      : { data: [] }
+    const id = pickSimulationPaper(list, (res ?? []) as { exercise_id: string; created_at: string }[])
+    if (id) router.push(`/sujet/${id}?mode=${rayon}` as any)
   }
 
   const header = (
@@ -220,6 +255,7 @@ export default function PrepaRayonScreen() {
   // ── Étape 2 : épreuves de la matière ───────────────────────────────────────
   const list = epreuves.filter((e) => e.subject_id === subject.id)
   const pdfs = sujets.filter((d) => d.subject_id === subject.id)
+  const redige = papers.filter((p) => p.subject_id === subject.id)
   const locked = !!me && !!meta.mode && !allowed.has(meta.mode)
 
   return (
@@ -232,7 +268,31 @@ export default function PrepaRayonScreen() {
           </TouchableOpacity>
         )}
 
-        {list.length === 0 && pdfs.length === 0 && (
+        {redige.length > 0 && meta.mode && (
+          <TouchableOpacity style={styles.simu} activeOpacity={0.9} onPress={() => void simulation(redige)}>
+            <Text style={{ fontSize: 28 }}>🎲</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.simuTitle}>Lancer une simulation</Text>
+              <Text style={styles.simuSub}>Un sujet complet, chronométré, corrigé avec le barème. Sujets officiels et sujets inédits en alternance.</Text>
+            </View>
+            <Text style={[styles.chevron, { color: '#fff' }]}>{locked ? '🔒' : '›'}</Text>
+          </TouchableOpacity>
+        )}
+
+        {redige.length > 0 && <Text style={[styles.section, { marginTop: 0 }]}>Sujets rédigés</Text>}
+        {redige.map((p) => (
+          <TouchableOpacity key={p.id} style={styles.card} activeOpacity={0.9} onPress={() => openPaper(p)}>
+            <View style={styles.cardIcon}><Text style={{ fontSize: 20 }}>{p.origin === 'reel' ? '📜' : '✨'}</Text></View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.cardTitle} numberOfLines={2}>{p.title}</Text>
+              <Text style={styles.cardSub}>{originLabel(p)} · {Math.floor(p.duration_min / 60)} h{p.duration_min % 60 ? ` ${p.duration_min % 60}` : ''} · corrigé et barème</Text>
+            </View>
+            <Text style={styles.chevron}>{locked ? '🔒' : '›'}</Text>
+          </TouchableOpacity>
+        ))}
+        {redige.length > 0 && list.length > 0 && <Text style={styles.section}>QCM</Text>}
+
+        {list.length === 0 && pdfs.length === 0 && redige.length === 0 && (
           <Text style={styles.empty}>Aucun sujet « {meta.label} » dans cette matière pour l'instant. Reviens bientôt !</Text>
         )}
 
@@ -289,6 +349,9 @@ const styles = StyleSheet.create({
   chevron: { fontSize: 22, color: colors.primary },
   section: { fontSize: 15, fontWeight: '900', color: colors.text, marginTop: 14, marginBottom: 10 },
   empty: { fontSize: 14, color: colors.textMuted, textAlign: 'center', paddingVertical: 40, paddingHorizontal: 20 },
+  simu: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.primary, borderRadius: radius.lg, padding: 16, marginBottom: 14, ...cardShadow },
+  simuTitle: { fontSize: 17, fontWeight: '900', color: '#fff' },
+  simuSub: { fontSize: 12, color: '#fff', opacity: 0.9, marginTop: 3 },
   lockBanner: { backgroundColor: colors.card, borderRadius: radius.md, borderWidth: 1, borderColor: colors.cardBorder, padding: 12, marginBottom: 12 },
   lockBannerText: { fontSize: 13, fontWeight: '700', color: colors.text },
 })

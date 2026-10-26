@@ -1403,6 +1403,13 @@ export type Database = {
           is_premium: boolean
           order_index: number
           created_at: string
+          deleted_at: string | null
+          exam_kind: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac' | null
+          origin: 'reel' | 'genere' | null
+          variant_of: string | null
+          duration_min: number | null
+          bareme: Json | null
+          exam_year: number | null
         }
         Insert: {
           id?: string
@@ -1413,6 +1420,13 @@ export type Database = {
           is_premium?: boolean
           order_index?: number
           created_at?: string
+          deleted_at?: string | null
+          exam_kind?: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac' | null
+          origin?: 'reel' | 'genere' | null
+          variant_of?: string | null
+          duration_min?: number | null
+          bareme?: Json | null
+          exam_year?: number | null
         }
         Update: {
           id?: string
@@ -1423,6 +1437,13 @@ export type Database = {
           is_premium?: boolean
           order_index?: number
           created_at?: string
+          deleted_at?: string | null
+          exam_kind?: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac' | null
+          origin?: 'reel' | 'genere' | null
+          variant_of?: string | null
+          duration_min?: number | null
+          bareme?: Json | null
+          exam_year?: number | null
         }
         Relationships: [
           {
@@ -1455,6 +1476,50 @@ export type Database = {
             foreignKeyName: 'exercise_solutions_exercise_id_fkey'
             columns: ['exercise_id']
             isOneToOne: true
+            referencedRelation: 'exercises'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      exam_results: {
+        Row: {
+          id: string
+          user_id: string
+          exercise_id: string
+          mode: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac'
+          scores: Json
+          total: number | null
+          max_total: number | null
+          duration_sec: number | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          exercise_id: string
+          mode: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac'
+          scores?: Json
+          total?: number | null
+          max_total?: number | null
+          duration_sec?: number | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          exercise_id?: string
+          mode?: 'bac_test' | 'bac_blanc' | 'bac_rouge' | 'ancien_bac'
+          scores?: Json
+          total?: number | null
+          max_total?: number | null
+          duration_sec?: number | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'exam_results_exercise_id_fkey'
+            columns: ['exercise_id']
+            isOneToOne: false
             referencedRelation: 'exercises'
             referencedColumns: ['id']
           },
