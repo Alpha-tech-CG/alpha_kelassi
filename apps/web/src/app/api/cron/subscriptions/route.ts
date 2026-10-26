@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { timingSafeEqual } from 'crypto'
 import { supabaseAdmin } from '@/lib/admin-guard'
 import { processPayment } from '@/lib/billing/subscriptions'
+import { fetchPayoutStatus } from '@/lib/billing/feexpay'
 
 export const maxDuration = 60
 
@@ -22,6 +23,7 @@ function authorized(req: Request): boolean {
  *      (Les DROITS, eux, sont déjà calculés en temps réel par la base.)
  *   2. Relit auprès de FeexPay les paiements restés en attente (webhook perdu) ;
  *      au-delà de 24 h sans confirmation, la transaction est close « expirée ».
+ *   3. Rapproche les retraits tuteurs en attente (voir reconcilePendingPayouts).
  */
 export async function GET(req: Request) {
   if (!authorized(req)) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
@@ -51,5 +53,36 @@ export async function GET(req: Request) {
     }
   }
 
-  return NextResponse.json({ data: { subscriptions_refreshed: refreshed ?? null, transactions: outcomes } })
+  const payouts = await reconcilePendingPayouts(tenMinutesAgo)
+
+  return NextResponse.json({ data: { subscriptions_refreshed: refreshed ?? null, transactions: outcomes, payouts } })
+}
+
+/**
+ * 3. Rapproche les retraits tuteurs restés en attente : FeexPay dit
+ *    SUCCESSFUL → complété ; FAILED → recrédit atomique (reconcile_failed_payout).
+ *    Sans référence FeexPay, l'issue ne peut pas être relue : on la compte
+ *    en « needs_review » pour une vérification manuelle, sans jamais recréditer.
+ */
+async function reconcilePendingPayouts(olderThanIso: string): Promise<Record<string, number>> {
+  const { data: pending } = await supabaseAdmin.from('tutor_wallet_transactions')
+    .select('id, provider_ref').eq('type', 'withdrawal').eq('status', 'pending').lt('created_at', olderThanIso)
+    .order('created_at', { ascending: true }).limit(50)
+
+  const outcomes: Record<string, number> = {}
+  const count = (k: string) => { outcomes[k] = (outcomes[k] ?? 0) + 1 }
+  for (const p of (pending ?? []) as { id: string; provider_ref: string | null }[]) {
+    if (!p.provider_ref) { count('needs_review'); continue }
+    const status = await fetchPayoutStatus(p.provider_ref)
+    if (status === 'successful') {
+      await supabaseAdmin.from('tutor_wallet_transactions').update({ status: 'completed' }).eq('id', p.id).eq('status', 'pending')
+      count('completed')
+    } else if (status === 'failed') {
+      await supabaseAdmin.rpc('reconcile_failed_payout', { p_txn_id: p.id })
+      count('refunded')
+    } else {
+      count(status ?? 'unreachable')
+    }
+  }
+  return outcomes
 }

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useFocusEffect } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, fonts } from '../../lib/theme'
@@ -44,7 +44,11 @@ export default function DefisScreen() {
     const t = parseInt(target, 10)
     if (title.trim().length < 3 || !t || t < 1) return
     setBusy('create')
-    await supabase.rpc('create_solo_challenge', { p_title: title.trim(), p_metric: metric, p_target: t })
+    const { error } = await supabase.rpc('create_solo_challenge', { p_title: title.trim(), p_metric: metric, p_target: t })
+    if (error?.message.includes('TOO_MANY_SOLO_CHALLENGES')) {
+      setBusy(null)
+      return Alert.alert('Oups', 'Tu as déjà 3 défis perso en cours. Termine-en un avant d’en créer un autre.')
+    }
     setTitle(''); setTarget('3'); setShowForm(false)
     await load()
     setBusy(null)

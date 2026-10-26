@@ -30,8 +30,8 @@ export default function InviterParent() {
         {code ? (
           <>
             <View style={styles.codeBox}><Text style={styles.code}>{code}</Text></View>
-            <Text style={styles.expire}>Valable 24h — un seul usage</Text>
-            <TouchableOpacity style={styles.shareBtn} onPress={() => Share.share({ message: `Mon code parent Cognix : ${code} (valable 24h). Ouvre l'app Cognix → Espace parent → saisis ce code.` })}>
+            <Text style={styles.expire}>Valable 1 h — un seul usage</Text>
+            <TouchableOpacity style={styles.shareBtn} onPress={() => Share.share({ message: `Mon code parent Cognix : ${code} (valable 1 h). Ouvre l'app Cognix → Espace parent → saisis ce code.` })}>
               <Text style={styles.shareText}>Partager le code</Text>
             </TouchableOpacity>
           </>

@@ -4,6 +4,7 @@ import { authenticate } from '@/lib/supabase/api'
 import { admin } from '@/lib/tutor'
 import { rateLimit, tooMany } from '@/lib/rate-limit'
 import { assertTrustedOrigin } from '@/lib/origin-check'
+import { classifyPayoutResponse } from '@/lib/billing/payout-outcome'
 
 const schema = z.object({
   amount:  z.number().int().min(500),                 // retrait minimum 500 FCFA
@@ -57,8 +58,8 @@ export async function POST(req: Request) {
   }
 
   // Payout FeexPay — FeexPay génère la référence, renvoyée dans la réponse.
-  let status: string | undefined
-  let ref: string | undefined
+  let httpStatus: number | null = null
+  let data: { status?: string; reference?: string } | null = null
   try {
     const res = await fetch('https://api.feexpay.me/api/payouts/public/transfer/global', {
       method: 'POST',
@@ -70,23 +71,33 @@ export async function POST(req: Request) {
         network: body.network,
         motif: 'Retrait Kelassi tuteur',
       }),
+      signal: AbortSignal.timeout(20_000),
     })
-    const data = (await res.json().catch(() => ({}))) as { status?: string; reference?: string }
-    status = res.ok ? (data.status ?? 'PENDING') : 'FAILED'
-    ref = data.reference
+    httpStatus = res.status
+    data = await res.json().catch(() => null)
   } catch {
-    status = 'FAILED'
+    // Pas de réponse : le virement a pu partir quand même (classé « inconnu »).
   }
+  const outcome = classifyPayoutResponse(httpStatus, data)
+  const ref = typeof data?.reference === 'string' ? data.reference : null
 
-  if (status === 'FAILED') {
-    // Échec du transfert : on recrédite le wallet et on marque la transaction rejetée.
-    await admin().rpc('increment_tutor_wallet', { p_tutor_id: user.id, p_amount: body.amount })
-    await admin().from('tutor_wallet_transactions').update({ status: 'rejected' }).eq('id', txn.id)
+  if (outcome === 'refused') {
+    // Refus certain : recrédit atomique, seulement si la transaction est encore 'pending'.
+    await admin().rpc('reconcile_failed_payout', { p_txn_id: txn.id })
     return NextResponse.json({ error: { code: 'PAYOUT_FAILED', message: 'Le transfert a échoué. Solde recrédité.' } }, { status: 502 })
   }
 
+  if (outcome === 'unknown') {
+    // Issue inconnue : SURTOUT pas de recrédit (risque de double paiement).
+    // La transaction reste 'pending' ; la passe planifiée la rapproche si une
+    // référence FeexPay est connue, sinon un admin la vérifie à la main.
+    console.error('[/api/tutor/withdraw] issue du virement inconnue', { txn: txn.id, httpStatus })
+    if (ref) await admin().from('tutor_wallet_transactions').update({ provider_ref: ref }).eq('id', txn.id)
+    return NextResponse.json({ data: { ...txn, status: 'pending', provider_ref: ref } }, { status: 201 })
+  }
+
   // SUCCESSFUL → complété ; PENDING → transfert en cours (reste 'pending').
-  const finalStatus = status === 'SUCCESSFUL' ? 'completed' : 'pending'
+  const finalStatus = data?.status?.toUpperCase() === 'SUCCESSFUL' ? 'completed' : 'pending'
   await admin().from('tutor_wallet_transactions')
     .update({ status: finalStatus, provider_ref: ref ?? null })
     .eq('id', txn.id)

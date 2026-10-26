@@ -35,7 +35,8 @@ export default function ParentScreen() {
     setLinking(false)
     if (error) {
       const msg = error.message.includes('CODE_INVALID') ? 'Code invalide ou expiré.'
-        : error.message.includes('CODE_SELF') ? 'Tu ne peux pas te lier à toi-même.' : 'Liaison impossible.'
+        : error.message.includes('CODE_SELF') ? 'Tu ne peux pas te lier à toi-même.'
+        : error.message.includes('TOO_MANY_ATTEMPTS') ? 'Trop d’essais. Réessaie dans une heure.' : 'Liaison impossible.'
       return Alert.alert('Oups', msg)
     }
     setCode('')

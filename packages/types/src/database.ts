@@ -1831,6 +1831,10 @@ export type Database = {
         Args: { p_tutor_id: string; p_amount: number }
         Returns: number | null
       }
+      reconcile_failed_payout: {
+        Args: { p_txn_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

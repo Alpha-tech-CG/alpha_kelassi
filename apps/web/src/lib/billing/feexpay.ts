@@ -70,6 +70,30 @@ export interface ProviderTransaction {
   currency: string | null
 }
 
+/**
+ * Relit le statut d'un virement (payout) auprès de FeexPay.
+ * Renvoie null si FeexPay est injoignable ou ne répond rien d'exploitable.
+ */
+export async function fetchPayoutStatus(reference: string): Promise<'successful' | 'failed' | 'pending' | null> {
+  const cfg = feexpayConfig()
+  if (!cfg) return null
+  try {
+    const res = await fetch(`${API}/payouts/status/public/${encodeURIComponent(reference)}`, {
+      headers: { Authorization: `Bearer ${cfg.token}` },
+      signal: AbortSignal.timeout(15_000),
+    })
+    if (!res.ok) return null
+    const data = (await res.json().catch(() => ({}))) as { status?: string }
+    const status = (data.status ?? '').toUpperCase()
+    if (status === 'SUCCESSFUL') return 'successful'
+    if (status === 'FAILED') return 'failed'
+    if (status === 'PENDING') return 'pending'
+    return null
+  } catch {
+    return null
+  }
+}
+
 /** Relit le statut réel d'une transaction auprès de FeexPay. */
 export async function fetchTransactionStatus(reference: string): Promise<ProviderTransaction> {
   const cfg = feexpayConfig()

@@ -1,6 +1,17 @@
 import type { NextConfig } from 'next'
 import { withSentryConfig } from '@sentry/nextjs'
 
+// Seul NOTRE projet Supabase peut alimenter l'optimiseur d'images : un joker
+// `*.supabase.co` laisserait n'importe qui faire traiter un fichier hébergé
+// dans son propre projet (cf. audit sécurité du 26/10/2026, C1).
+const SUPABASE_IMAGE_HOST = (() => {
+  try {
+    return new URL(process.env['NEXT_PUBLIC_SUPABASE_URL'] ?? '').hostname
+  } catch {
+    return 'evtqdztycnttegzoleqb.supabase.co'
+  }
+})()
+
 const nextConfig: NextConfig = {
   compress: true,
 
@@ -13,7 +24,7 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
-      { protocol: 'https', hostname: '*.supabase.co' },
+      { protocol: 'https', hostname: SUPABASE_IMAGE_HOST, pathname: '/storage/v1/object/public/**' },
       { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
     ],
     minimumCacheTTL: 86400,
