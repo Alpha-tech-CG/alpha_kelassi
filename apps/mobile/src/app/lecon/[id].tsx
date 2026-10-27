@@ -7,6 +7,7 @@ import { colors, radius } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
 import { CognixLoader } from '../../components/CognixLoader'
 import { track } from '../../lib/analytics'
+import { keepLessonInWebView, LESSON_BASE_URL } from '../../lib/webviewLinks'
 
 type Block =
   | { type: 'subtitle'; text: string }
@@ -118,10 +119,11 @@ export default function LeconScreen() {
       </View>
       <WebView
         originWhitelist={['*']}
-        source={{ html, baseUrl: 'https://kelassi.app/' }}
+        source={{ html, baseUrl: LESSON_BASE_URL }}
         style={styles.web}
         showsVerticalScrollIndicator
         setSupportMultipleWindows={false}
+        onShouldStartLoadWithRequest={keepLessonInWebView}
       />
     </View>
   )

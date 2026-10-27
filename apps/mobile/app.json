@@ -2,7 +2,7 @@
   "expo": {
     "name": "Cognix",
     "slug": "kelassi",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "runtimeVersion": "1.0.6",
     "scheme": "kelassi",
     "orientation": "portrait",
@@ -31,7 +31,8 @@
         "backgroundColor": "#00030C"
       },
       "package": "com.kelassi.app",
-      "versionCode": 15,
+      "versionCode": 16,
+      "allowBackup": false,
       "permissions": [
         "android.permission.INTERNET"
       ]

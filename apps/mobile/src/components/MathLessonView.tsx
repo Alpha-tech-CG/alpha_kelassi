@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { colors } from '../lib/theme'
 import { KATEX_CSS, KATEX_JS_B64, MARKED_JS_B64 } from '../lib/katexBundle'
+import { keepLessonInWebView, LESSON_BASE_URL } from '../lib/webviewLinks'
 import { CognixLoader } from './CognixLoader'
 
 /**
@@ -30,11 +31,12 @@ export function MathLessonView({ content }: { content: string }) {
   return (
     <WebView
       originWhitelist={['*']}
-      source={{ html, baseUrl: 'https://kelassi.app/' }}
+      source={{ html, baseUrl: LESSON_BASE_URL }}
       style={{ height, backgroundColor: 'transparent' }}
       scrollEnabled={false}
       showsVerticalScrollIndicator={false}
       setSupportMultipleWindows={false}
+      onShouldStartLoadWithRequest={keepLessonInWebView}
       onMessage={(e) => {
         const h = Math.ceil(Number(e.nativeEvent.data))
         // Ignore les micro-variations : chaque setHeight relance la mise en page du parent.
@@ -53,11 +55,12 @@ export function MathLessonReader({ content, title }: { content: string; title?: 
   return (
     <WebView
       originWhitelist={['*']}
-      source={{ html, baseUrl: 'https://kelassi.app/' }}
+      source={{ html, baseUrl: LESSON_BASE_URL }}
       style={{ flex: 1, backgroundColor: '#fff' }}
       scrollEnabled
       showsVerticalScrollIndicator
       setSupportMultipleWindows={false}
+      onShouldStartLoadWithRequest={keepLessonInWebView}
       overScrollMode="never"
       decelerationRate="normal"
       startInLoadingState
