@@ -14,6 +14,8 @@ const SUPABASE_IMAGE_HOST = (() => {
 
 const nextConfig: NextConfig = {
   compress: true,
+  // Pas d'en-tête « X-Powered-By: Next.js » (audit du 27/10/2026, F6).
+  poweredByHeader: false,
 
   images: {
     formats: ['image/avif', 'image/webp'],
