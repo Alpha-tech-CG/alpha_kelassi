@@ -59,10 +59,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const result = data as unknown as RpcResult
   const ent = await getEntitlements(user.id)
 
-  // XP : 5 par bonne réponse (non bloquant, best-effort).
-  // Via le client admin : la RPC increment_xp n'est plus exposée aux clients.
+  // XP : 5 par bonne réponse AU-DELÀ du meilleur score précédent sur ce QCM.
+  // Resoumettre le même QCM (corrigé connu) ne rapporte donc plus rien
+  // (test d'intrusion du 27/10, P1). Best-effort, via le client admin : la RPC
+  // increment_xp n'est pas exposée aux clients et plafonne l'XP du jour.
   if (result.score > 0) {
-    supabaseAdmin.rpc('increment_xp', { p_user_id: user.id, p_amount: result.score * 5 }).then(() => {}, () => {})
+    const { data: best } = await supabaseAdmin.from('quiz_attempts')
+      .select('score')
+      .eq('user_id', user.id).eq('quiz_id', id).neq('id', result.attempt_id)
+      .order('score', { ascending: false }).limit(1).maybeSingle()
+    const gained = result.score - (best?.score ?? 0)
+    if (gained > 0) {
+      supabaseAdmin.rpc('increment_xp', { p_user_id: user.id, p_amount: gained * 5 }).then(() => {}, () => {})
+    }
   }
 
   // L'explication des réponses est une fonction Starter : en Gratuit, on

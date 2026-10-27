@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   const { data: card, error: lookupError } = await supabase
     .from('flashcards')
-    .select('ease_factor, interval, reps')
+    .select('ease_factor, interval, reps, next_review')
     .eq('id', flashcard_id)
     .eq('user_id', user.id)
     .maybeSingle()
@@ -64,8 +64,11 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  // XP + badges en arrière-plan
-  const xpAmount = quality >= 4 ? 3 : quality >= 3 ? 2 : 0
+  // XP + badges en arrière-plan, seulement pour une carte qui était à réviser :
+  // revoir en boucle une carte pas encore due ne rapporte rien
+  // (test d'intrusion du 27/10, P1).
+  const wasDue = !card.next_review || new Date(card.next_review).getTime() <= Date.now()
+  const xpAmount = !wasDue ? 0 : quality >= 4 ? 3 : quality >= 3 ? 2 : 0
   if (xpAmount > 0) {
     awardXP(user.id, xpAmount).catch((xpError) =>
       console.error('[/api/flashcards/review] XP award failed', xpError)
