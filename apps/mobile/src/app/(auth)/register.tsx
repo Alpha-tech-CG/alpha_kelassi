@@ -17,7 +17,7 @@ import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { LEVEL_LABEL, colors, fonts, radius, cardShadow } from '../../lib/theme'
 import { BackButton } from '../../components/BackButton'
-import { PASSWORD_RULES, isPasswordValid } from '../../lib/password'
+import { PASSWORD_RULES, WEAK_PASSWORD_MESSAGE, isPasswordValid } from '../../lib/password'
 import { track } from '../../lib/analytics'
 
 /**
@@ -173,9 +173,7 @@ export default function RegisterScreen() {
   async function submit() {
     const mail = email.trim().toLowerCase()
     if (!/^\S+@\S+\.\S+$/.test(mail)) return setError('Adresse e-mail invalide.')
-    if (!isPasswordValid(password)) {
-      return setError('Mot de passe trop faible : 8 caractères avec une minuscule, une majuscule et un chiffre.')
-    }
+    if (!isPasswordValid(password)) return setError(WEAK_PASSWORD_MESSAGE)
     if (password !== password2) return setError('Les deux mots de passe ne sont pas identiques.')
     setError(null)
     setLoading(true)
@@ -199,8 +197,12 @@ export default function RegisterScreen() {
     })
     setLoading(false)
     if (signUpError) {
+      // Mot de passe refusé par Supabase : le dire, jamais « vérifie ta connexion ».
+      const weak = signUpError.code === 'weak_password' || /password should|weak/i.test(signUpError.message)
       setError(
-        /already registered|already exists/i.test(signUpError.message)
+        weak
+          ? WEAK_PASSWORD_MESSAGE
+          : /already registered|already exists/i.test(signUpError.message)
           ? 'Un compte existe déjà avec cet e-mail. Connecte-toi.'
           : /rate limit/i.test(signUpError.message)
             ? 'Trop d’essais, réessaie dans quelques minutes.'

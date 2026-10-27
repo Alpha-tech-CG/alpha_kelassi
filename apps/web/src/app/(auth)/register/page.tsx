@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { PASSWORD_RULES, isPasswordValid } from '@/lib/password'
+import { PASSWORD_RULES, WEAK_PASSWORD_MESSAGE, isPasswordValid } from '@/lib/password'
 import { Logo } from '@/components/brand/logo'
 
 const LEVELS = [
@@ -71,7 +71,7 @@ export default function RegisterPage() {
   function validateStep1() {
     if (!fullName.trim()) return 'Entre ton nom complet.'
     if (!email.trim() || !email.includes('@')) return 'Adresse email invalide.'
-    if (!isPasswordValid(password)) return 'Mot de passe trop faible : 8 caractères avec une minuscule, une majuscule et un chiffre.'
+    if (!isPasswordValid(password)) return WEAK_PASSWORD_MESSAGE
     if (password !== password2) return 'Les deux mots de passe ne sont pas identiques.'
     return null
   }

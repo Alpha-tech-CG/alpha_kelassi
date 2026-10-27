@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Logo } from '@/components/brand/logo'
+import { PASSWORD_RULES, WEAK_PASSWORD_MESSAGE, isPasswordValid } from '@/lib/password'
+import { authErrorMessage } from '@/lib/auth-errors'
 
 export default function UpdatePasswordPage(): React.JSX.Element {
   const supabase = createClient()
@@ -32,8 +34,9 @@ export default function UpdatePasswordPage(): React.JSX.Element {
     e.preventDefault()
     setError(null)
 
-    if (password.length < 8) {
-      setError('Le mot de passe doit contenir au moins 8 caractères.')
+    // Mêmes règles qu'à l'inscription (Supabase Auth exige aussi un symbole).
+    if (!isPasswordValid(password)) {
+      setError(WEAK_PASSWORD_MESSAGE)
       return
     }
     if (password !== confirmPassword) {
@@ -46,7 +49,7 @@ export default function UpdatePasswordPage(): React.JSX.Element {
     setLoading(false)
 
     if (error) {
-      setError(error.message)
+      setError(authErrorMessage(error))
       return
     }
 
@@ -122,6 +125,16 @@ export default function UpdatePasswordPage(): React.JSX.Element {
                       {showPassword ? '🙈' : '👁️'}
                     </button>
                   </div>
+                  <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                    {PASSWORD_RULES.map((r) => {
+                      const ok = r.test(password)
+                      return (
+                        <li key={r.label} className={`text-xs ${ok ? 'text-green-600' : 'text-gray-400'}`}>
+                          {ok ? '✓' : '•'} {r.label}
+                        </li>
+                      )
+                    })}
+                  </ul>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1.5">Confirme le mot de passe</label>

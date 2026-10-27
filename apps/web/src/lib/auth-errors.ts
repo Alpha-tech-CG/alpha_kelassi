@@ -1,3 +1,5 @@
+import { WEAK_PASSWORD_MESSAGE } from './password'
+
 /**
  * Traduit les erreurs de Supabase Auth (en anglais) en messages pour l'élève.
  * Les codes (`error.code`) sont prioritaires ; le texte sert de repli pour les
@@ -17,7 +19,7 @@ export function authErrorMessage(error: { code?: string; message: string }): str
     return 'Un compte existe déjà avec cet e-mail. Connecte-toi.'
   }
   if (code === 'weak_password' || msg.includes('password should')) {
-    return 'Mot de passe trop faible : 8 caractères minimum.'
+    return WEAK_PASSWORD_MESSAGE
   }
   if (code === 'over_email_send_rate_limit' || msg.includes('rate limit')) {
     return 'Trop d’e-mails envoyés, réessaie dans quelques minutes.'
