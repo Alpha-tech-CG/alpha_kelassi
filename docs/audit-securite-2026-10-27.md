@@ -80,6 +80,8 @@ Second audit après celui du 26/10 (`docs/audit-securite-2026-10-26.md`), qui a 
 
 C'est le point M4 de l'audit du 26/10, toujours désactivé. C'est un réglage à faire par vous : Supabase → Authentication → Providers → Email → « Prevent use of leaked passwords ».
 
+**Fait le 27/10/2026** : option activée par l'utilisateur dans le tableau de bord Supabase.
+
 ## M4 — MOYEN — Événements illimités pour les comptes connectés
 
 **Constat.** Le déclencheur de la migration 073 borne la taille de chaque événement pour tous, mais le **débit** seulement pour les visiteurs anonymes. Un compte connecté peut insérer sans limite dans `app_events`, directement par REST. Depuis le 26/10, chaque page vue en produit aussi 3 lignes de mesure de vitesse.
@@ -103,4 +105,11 @@ C'est le point M4 de l'audit du 26/10, toujours désactivé. C'est un réglage �
 2. **Lot B (site) :** F6.
 3. **Lot C (app, prochain build EAS) :** F4 et F5.
 4. **Lot D, à votre charge :** M3 dans Supabase Auth.
+
+## Suivi (27/10/2026)
+
+- Lot A : migration 078 appliquée et testée en production (commit 28bc493).
+- Lot B : F6 déployé (commit 18fd245), plus d'en-tête `X-Powered-By` en production.
+- Lot C : F4 et F5 commités en 1.0.15 (c051146) ; build EAS repoussé au 01/11 (quota gratuit épuisé).
+- Lot D : M3 activé par l'utilisateur.
 5. **Plus tard :** F2 et F3, à la prochaine montée de version de zod, Expo et Sentry.
