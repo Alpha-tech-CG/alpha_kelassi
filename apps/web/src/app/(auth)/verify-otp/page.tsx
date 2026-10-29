@@ -1,11 +1,9 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 function VerifyOTPForm() {
-  const supabase = createClient()
   const router = useRouter()
   const searchParams = useSearchParams()
   const phone = searchParams.get('phone') ?? ''
@@ -21,16 +19,21 @@ function VerifyOTPForm() {
 
     const formattedPhone = phone.startsWith('+') ? phone : `+242${phone}`
 
-    const { error } = await supabase.auth.verifyOtp({
-      phone: formattedPhone,
-      token: otp,
-      type: 'sms',
-    })
-
-    if (error) {
+    try {
+      const res = await fetch('/api/auth/otp/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: formattedPhone, token: otp }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setError(json.error?.message ?? 'Code invalide ou expiré. Réessaie.')
+      } else {
+        router.push(json.data.redirectTo)
+        router.refresh()
+      }
+    } catch {
       setError('Code invalide ou expiré. Réessaie.')
-    } else {
-      router.push('/dashboard')
     }
     setLoading(false)
   }

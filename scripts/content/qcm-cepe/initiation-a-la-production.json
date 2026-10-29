@@ -1,0 +1,182 @@
+{
+ "matiere": "Initiation à la production",
+ "subject_id": "4e1485d3-4234-4830-bbb1-59dc65c0baaf",
+ "chapitres": [
+  {
+   "chapter_id": "ac88b1b2-7a36-4a3c-aeae-0568ffd3f429",
+   "titre": "Les domaines et spéculations de production",
+   "questions": [
+    { "prompt": "Que désignent les « spéculations » ?", "options": ["Les différentes activités de production d'un pays", "Les prix du marché", "Les outils agricoles", "Les saisons de l'année"], "correct_index": 0, "explanation": "Les spéculations sont les activités de production ; il en existe quatre domaines." },
+    { "prompt": "Combien y a-t-il de domaines de production ?", "options": ["Quatre", "Deux", "Trois", "Six"], "correct_index": 0, "explanation": "Production végétale, animale, artisanale et agroalimentaire." },
+    { "prompt": "À quel domaine appartient la culture du maïs ?", "options": ["La production végétale", "La production animale", "La production artisanale", "La production agroalimentaire"], "correct_index": 0, "explanation": "Cultiver des plantes relève de la production végétale." },
+    { "prompt": "À quel domaine appartient l'élevage des poulets ?", "options": ["La production animale", "La production végétale", "La production artisanale", "La production agroalimentaire"], "correct_index": 0, "explanation": "Élever des animaux relève de la production animale." },
+    { "prompt": "À quel domaine appartient la fabrication d'un panier ?", "options": ["La production artisanale", "La production végétale", "La production animale", "La production agroalimentaire"], "correct_index": 0, "explanation": "Panier, pirogue, poterie et vannerie relèvent de l'artisanat." },
+    { "prompt": "À quel domaine appartient la fabrication du yaourt ?", "options": ["La production agroalimentaire", "La production animale", "La production artisanale", "La production végétale"], "correct_index": 0, "explanation": "Transformer des produits agricoles relève de l'agroalimentaire." },
+    { "prompt": "À quel domaine appartient la pêche ?", "options": ["La production animale", "La production végétale", "La production artisanale", "La production agroalimentaire"], "correct_index": 0, "explanation": "Le poisson fait partie de la production animale." },
+    { "prompt": "À quel domaine appartient la culture du café ?", "options": ["La production végétale", "La production animale", "La production artisanale", "La production agroalimentaire"], "correct_index": 0, "explanation": "Le café est une culture : production végétale." },
+    { "prompt": "À quel domaine appartient la poterie ?", "options": ["La production artisanale", "La production agroalimentaire", "La production végétale", "La production animale"], "correct_index": 0, "explanation": "La poterie est fabriquée à la main : production artisanale." },
+    { "prompt": "À quel domaine appartient l'apiculture (élevage des abeilles) ?", "options": ["La production animale", "La production végétale", "La production artisanale", "La production agroalimentaire"], "correct_index": 0, "explanation": "L'abeille est un animal élevé : production animale." }
+   ]
+  },
+  {
+   "chapter_id": "a6d7c46f-acd1-4fb0-bfa0-d1e69670248d",
+   "titre": "Les facteurs climatiques",
+   "questions": [
+    { "prompt": "Que sont les facteurs climatiques ?", "options": ["Les éléments naturels du climat qui influencent la production", "Les outils du cultivateur", "Les engrais du sol", "Les maladies des plantes"], "correct_index": 0, "explanation": "Ce sont les éléments du climat qui influencent la croissance des plantes et l'élevage." },
+    { "prompt": "Combien de facteurs climatiques le cours retient-il ?", "options": ["Cinq", "Trois", "Quatre", "Sept"], "correct_index": 0, "explanation": "Température, pluie, insolation, lumière et vent : cinq facteurs." },
+    { "prompt": "Que rappelle le moyen mnémotechnique T.P.I.L.V. ?", "options": ["Température, Pluie, Insolation, Lumière, Vent", "Terre, Plante, Irrigation, Labour, Végétal", "Travail, Production, Industrie, Lait, Viande", "Temps, Pluie, Irrigation, Lumière, Vent"], "correct_index": 0, "explanation": "T.P.I.L.V. = Température, Pluie, Insolation, Lumière, Vent." },
+    { "prompt": "Quel est l'effet d'une température trop froide ou trop chaude ?", "options": ["Une mauvaise récolte", "Une récolte meilleure", "Aucun effet", "Une germination plus rapide"], "correct_index": 0, "explanation": "Une température inadaptée donne une mauvaise récolte." },
+    { "prompt": "Que se passe-t-il quand il pleut beaucoup trop ?", "options": ["Il y a des inondations", "Les plantes poussent toujours mieux", "Le sol devient plus chaud", "La pollinisation augmente"], "correct_index": 0, "explanation": "La pluie est indispensable, mais en excès elle provoque des inondations." },
+    { "prompt": "À quoi sert l'insolation ?", "options": ["Elle est nécessaire à la photosynthèse", "Elle refroidit le sol", "Elle remplace l'eau", "Elle empêche la germination"], "correct_index": 0, "explanation": "L'insolation, c'est la lumière du soleil, nécessaire à la photosynthèse." },
+    { "prompt": "Quel rôle joue la lumière ?", "options": ["Elle oriente la croissance des tiges et des feuilles", "Elle durcit le sol", "Elle remplace l'engrais", "Elle empêche le vent"], "correct_index": 0, "explanation": "La lumière oriente la croissance des tiges et des feuilles." },
+    { "prompt": "Quel rôle utile joue le vent ?", "options": ["Il aide à la pollinisation", "Il arrose les plantes", "Il réchauffe le sol", "Il remplace la lumière"], "correct_index": 0, "explanation": "Le vent aide à la pollinisation, mais trop fort il cause des dégâts." },
+    { "prompt": "Quel facteur est indispensable à la croissance des plantes ?", "options": ["La pluie", "Le bruit", "La poussière", "L'obscurité"], "correct_index": 0, "explanation": "La pluie apporte l'eau, indispensable à la croissance." },
+    { "prompt": "Un vent trop fort :", "options": ["Cause des dégâts aux cultures", "Améliore toujours la récolte", "Remplace la pluie", "Favorise la germination"], "correct_index": 0, "explanation": "Un vent violent abîme les cultures." }
+   ]
+  },
+  {
+   "chapter_id": "c6285047-8fd9-47f9-a745-dc3d826cd4c3",
+   "titre": "Les milieux de production",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un milieu de production ?", "options": ["L'endroit où l'on produit", "L'outil utilisé pour produire", "Le prix du produit", "La saison des récoltes"], "correct_index": 0, "explanation": "Le milieu de production est le lieu où se fait la production." },
+    { "prompt": "Qu'est-ce qu'un milieu naturel ?", "options": ["Un milieu non transformé par l'homme", "Un milieu créé par l'homme", "Un milieu toujours cultivé", "Un milieu sans eau"], "correct_index": 0, "explanation": "Forêt, mer, rivière, savane : milieux naturels." },
+    { "prompt": "Qu'est-ce qu'un milieu artificiel ?", "options": ["Un milieu créé ou modifié par l'homme", "Un milieu laissé à l'état sauvage", "Un milieu sans végétation", "Un milieu marin"], "correct_index": 0, "explanation": "Champ cultivé, étang, poulailler, serre : milieux artificiels." },
+    { "prompt": "Une forêt équatoriale est un milieu :", "options": ["Naturel", "Artificiel", "Agroalimentaire", "Industriel"], "correct_index": 0, "explanation": "La forêt n'a pas été transformée par l'homme." },
+    { "prompt": "Une rizière est un milieu :", "options": ["Artificiel", "Naturel", "Sauvage", "Marin"], "correct_index": 0, "explanation": "La rizière est aménagée par l'homme pour cultiver le riz." },
+    { "prompt": "Un lac est un milieu :", "options": ["Naturel", "Artificiel", "Cultivé", "Transformé"], "correct_index": 0, "explanation": "Le lac existe sans l'intervention de l'homme." },
+    { "prompt": "Une porcherie est un milieu :", "options": ["Artificiel", "Naturel", "Sauvage", "Forestier"], "correct_index": 0, "explanation": "La porcherie est construite par l'homme pour élever des porcs." },
+    { "prompt": "Un verger est un milieu :", "options": ["Artificiel", "Naturel", "Marin", "Sauvage"], "correct_index": 0, "explanation": "Le verger est planté et entretenu par l'homme." },
+    { "prompt": "Une serre est un milieu :", "options": ["Artificiel", "Naturel", "Marin", "Forestier"], "correct_index": 0, "explanation": "La serre est entièrement construite par l'homme." },
+    { "prompt": "La savane est un milieu :", "options": ["Naturel", "Artificiel", "Aménagé", "Industriel"], "correct_index": 0, "explanation": "La savane fait partie des milieux naturels." }
+   ]
+  },
+  {
+   "chapter_id": "216ca678-1916-477c-a2eb-0f06f8905594",
+   "titre": "La germination",
+   "questions": [
+    { "prompt": "Qu'est-ce que la germination ?", "options": ["La transformation d'une graine en jeune plante", "La récolte des fruits", "Le labour du sol", "La vente des graines"], "correct_index": 0, "explanation": "La germination transforme la graine en plantule." },
+    { "prompt": "Quelle est la première étape de la germination ?", "options": ["La graine absorbe de l'eau", "La tigelle sort", "Les feuilles apparaissent", "La radicule sort"], "correct_index": 0, "explanation": "Tout commence par l'absorption d'eau par la graine." },
+    { "prompt": "Quelle partie sort en premier de la graine ?", "options": ["La radicule", "La tigelle", "Les feuilles", "Le tégument"], "correct_index": 0, "explanation": "La radicule, qui deviendra la racine, sort la première." },
+    { "prompt": "Que représente la tigelle ?", "options": ["La future tige", "La future racine", "La réserve de nourriture", "L'enveloppe protectrice"], "correct_index": 0, "explanation": "La tigelle sort après la radicule et donne la tige." },
+    { "prompt": "Que faut-il dans le sol pour une bonne germination ?", "options": ["De l'eau, de la chaleur et de l'air", "Du sel et du sable", "De la lumière uniquement", "Du froid"], "correct_index": 0, "explanation": "Le sol doit contenir de l'eau, de la chaleur et de l'air." },
+    { "prompt": "La lumière est-elle nécessaire à la germination ?", "options": ["Non, ce sont l'eau et la chaleur qui la déclenchent", "Oui, elle est indispensable", "Oui, mais seulement la nuit", "Oui, plus que l'eau"], "correct_index": 0, "explanation": "C'est un piège fréquent : la lumière n'est pas nécessaire à la germination." },
+    { "prompt": "Que se passe-t-il si la graine est enterrée trop profondément ?", "options": ["Elle germe mal ou pas du tout", "Elle germe plus vite", "Elle donne un plus gros fruit", "Elle n'a plus besoin d'eau"], "correct_index": 0, "explanation": "Une graine enterrée trop profond ne germe pas correctement." },
+    { "prompt": "Quelle graine germe le mieux ?", "options": ["Une graine mûre et non abîmée", "Une graine très vieille", "Une graine cassée", "Une graine encore verte"], "correct_index": 0, "explanation": "La graine doit être mûre, saine et pas trop vieille." },
+    { "prompt": "Comment appelle-t-on les premières feuilles qui apparaissent ?", "options": ["Les cotylédons", "Les radicules", "Les tigelles", "Les téguments"], "correct_index": 0, "explanation": "Les cotylédons sont les premières feuilles de la plantule." },
+    { "prompt": "Quel est l'ordre correct de la germination ?", "options": ["Absorption d'eau, radicule, tigelle, premières feuilles", "Feuilles, tigelle, radicule, eau", "Radicule, eau, feuilles, tigelle", "Tigelle, radicule, eau, feuilles"], "correct_index": 0, "explanation": "C'est l'ordre donné par le cours." }
+   ]
+  },
+  {
+   "chapter_id": "3b6fcb28-baf7-4f27-bfab-0fa202de818a",
+   "titre": "La graine — Structure et types",
+   "questions": [
+    { "prompt": "Qu'est-ce que la graine ?", "options": ["L'organe reproducteur de la plante", "La racine de la plante", "La feuille la plus jeune", "Le fruit mûr"], "correct_index": 0, "explanation": "La graine est l'organe reproducteur : elle contient tout pour donner une nouvelle plante." },
+    { "prompt": "Quelles sont les trois parties d'une graine ?", "options": ["Tégument, cotylédon(s) et germe", "Racine, tige et feuille", "Fleur, fruit et graine", "Humus, sable et argile"], "correct_index": 0, "explanation": "La graine comprend le tégument, les cotylédons et le germe." },
+    { "prompt": "À quoi sert le tégument ?", "options": ["À protéger la graine", "À nourrir la plante", "À produire les racines", "À attirer les insectes"], "correct_index": 0, "explanation": "Le tégument est l'enveloppe qui protège la graine." },
+    { "prompt": "À quoi servent les cotylédons ?", "options": ["Ils servent de réserve de nourriture", "Ils protègent la graine", "Ils forment les racines", "Ils colorent le fruit"], "correct_index": 0, "explanation": "Les cotylédons constituent la réserve de nourriture." },
+    { "prompt": "Que deviendra le germe ?", "options": ["La future plante", "L'enveloppe", "La réserve de nourriture", "Le fruit"], "correct_index": 0, "explanation": "Le germe est le futur plant." },
+    { "prompt": "Combien de cotylédons a une graine monocotylédonée ?", "options": ["Un seul", "Deux", "Trois", "Aucun"], "correct_index": 0, "explanation": "Monocotylédonée : un seul cotylédon, comme le riz ou le maïs." },
+    { "prompt": "Combien de cotylédons a une graine dicotylédonée ?", "options": ["Deux", "Un", "Quatre", "Aucun"], "correct_index": 0, "explanation": "Dicotylédonée : deux cotylédons, comme l'arachide ou le haricot." },
+    { "prompt": "Le maïs est une graine :", "options": ["Monocotylédonée", "Dicotylédonée", "Sans cotylédon", "Artificielle"], "correct_index": 0, "explanation": "Riz, maïs, palmier et blé sont monocotylédonés." },
+    { "prompt": "Le haricot est une graine :", "options": ["Dicotylédonée", "Monocotylédonée", "Sans germe", "Sans tégument"], "correct_index": 0, "explanation": "Arachide, haricot, mangue et cacaoyer sont dicotylédonés." },
+    { "prompt": "L'arachide est une graine :", "options": ["Dicotylédonée", "Monocotylédonée", "Sans cotylédon", "Sans germe"], "correct_index": 0, "explanation": "L'arachide possède deux cotylédons." }
+   ]
+  },
+  {
+   "chapter_id": "c4d1c494-0135-4f05-b7e3-6404359e382d",
+   "titre": "Les sortes de semis",
+   "questions": [
+    { "prompt": "Qu'est-ce que le semis ?", "options": ["L'action de mettre les graines en terre", "La récolte des fruits", "Le désherbage du champ", "Le transport des récoltes"], "correct_index": 0, "explanation": "Semer, c'est mettre les graines en terre pour qu'elles germent." },
+    { "prompt": "Combien de types de semis le cours distingue-t-il ?", "options": ["Quatre", "Deux", "Trois", "Six"], "correct_index": 0, "explanation": "En lignes, à la volée, en pots et en paquets." },
+    { "prompt": "En quoi consiste le semis en lignes ?", "options": ["Semer les graines en rangées régulières", "Jeter les graines partout", "Semer dans des récipients", "Mettre plusieurs graines par trou"], "correct_index": 0, "explanation": "Le semis en lignes se fait en rangées régulières : maïs, haricot, arachide." },
+    { "prompt": "En quoi consiste le semis à la volée ?", "options": ["Épandre les graines à la main sur toute la surface", "Semer en rangées", "Semer dans des pots", "Semer trois graines par trou"], "correct_index": 0, "explanation": "À la volée : les graines sont répandues à la main, comme pour le riz et le blé." },
+    { "prompt": "Pour quelles plantes utilise-t-on le semis en pots ?", "options": ["La tomate, le piment, la laitue", "Le riz et le blé", "Le maïs uniquement", "Le manioc"], "correct_index": 0, "explanation": "Le semis en pots convient à la tomate, au piment et à la laitue." },
+    { "prompt": "En quoi consiste le semis en paquets ?", "options": ["Mettre plusieurs graines dans un même trou", "Épandre à la main", "Semer une graine par ligne", "Semer dans des sachets"], "correct_index": 0, "explanation": "En paquets : 3 à 4 graines par trou, comme pour le maïs." },
+    { "prompt": "Quel semis convient au riz ?", "options": ["Le semis à la volée", "Le semis en pots", "Le semis en paquets", "Le semis en lignes uniquement"], "correct_index": 0, "explanation": "Le riz et le blé se sèment à la volée." },
+    { "prompt": "Quel semis convient à l'arachide ?", "options": ["Le semis en lignes", "Le semis à la volée", "Le semis en pots", "Aucun semis"], "correct_index": 0, "explanation": "Maïs, haricot et arachide se sèment en lignes." },
+    { "prompt": "Combien de graines met-on par trou dans le semis en paquets du maïs ?", "options": ["3 à 4 graines", "1 graine", "10 graines", "20 graines"], "correct_index": 0, "explanation": "On met 3 à 4 graines par trou." },
+    { "prompt": "Quel semis permet un alignement régulier des plants ?", "options": ["Le semis en lignes", "Le semis à la volée", "Le semis en pots", "Le semis en paquets"], "correct_index": 0, "explanation": "Le semis en lignes donne des rangées régulières." }
+   ]
+  },
+  {
+   "chapter_id": "27952a58-6ff8-45ee-bbe8-778ea98c7e27",
+   "titre": "Les outils de la production végétale",
+   "questions": [
+    { "prompt": "À quoi sert la houe ?", "options": ["À labourer et aérer la terre", "À transporter la récolte", "À arroser les plants", "À couper les branches"], "correct_index": 0, "explanation": "La houe sert à labourer et à aérer la terre." },
+    { "prompt": "À quoi sert le plantoir ?", "options": ["À faire des trous pour planter les graines", "À arroser", "À transporter le compost", "À couper les herbes"], "correct_index": 0, "explanation": "Le plantoir creuse les trous de plantation." },
+    { "prompt": "À quoi sert l'arrosoir ?", "options": ["À arroser les plants", "À retourner la terre", "À transporter la récolte", "À couper les herbes"], "correct_index": 0, "explanation": "L'arrosoir sert à apporter de l'eau aux plants." },
+    { "prompt": "À quoi sert la brouette ?", "options": ["À transporter des charges comme le compost ou la récolte", "À creuser des trous", "À arroser", "À semer"], "correct_index": 0, "explanation": "La brouette transporte les charges." },
+    { "prompt": "À quoi sert la machette ?", "options": ["À couper les herbes et les plantes", "À arroser", "À transporter", "À semer en lignes"], "correct_index": 0, "explanation": "La machette ou le couteau sert à couper les herbes et les plantes." },
+    { "prompt": "À quoi sert la bêche ?", "options": ["À retourner la terre en profondeur", "À transporter la récolte", "À arroser les plants", "À faire des trous fins"], "correct_index": 0, "explanation": "La bêche retourne la terre en profondeur." },
+    { "prompt": "À quoi sert le panier ?", "options": ["À transporter la récolte", "À labourer", "À arroser", "À creuser"], "correct_index": 0, "explanation": "Le panier sert au transport de la récolte." },
+    { "prompt": "Quels outils servent au travail du sol ?", "options": ["La houe, la pelle et la bêche", "La brouette et le panier", "L'arrosoir et le panier", "Le panier et le plantoir"], "correct_index": 0, "explanation": "Houe, pelle et bêche sont les outils de travail du sol." },
+    { "prompt": "Quels outils servent au transport ?", "options": ["La brouette et le panier", "La houe et la bêche", "L'arrosoir et la machette", "Le plantoir et la pelle"], "correct_index": 0, "explanation": "La brouette et le panier servent à transporter." },
+    { "prompt": "À quoi sert la pelle ?", "options": ["À déplacer et remuer la terre", "À arroser les plants", "À couper les herbes", "À transporter la récolte"], "correct_index": 0, "explanation": "La pelle déplace et remue la terre." }
+   ]
+  },
+  {
+   "chapter_id": "dc08978d-bb0c-495e-ab47-28f0cce9ab3a",
+   "titre": "L'amélioration du sol",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'améliorer le sol ?", "options": ["Modifier ses propriétés pour le rendre plus fertile", "Le laisser se reposer sans rien faire", "Le couvrir de pierres", "Le vendre à un autre cultivateur"], "correct_index": 0, "explanation": "Améliorer le sol, c'est le rendre plus fertile et productif." },
+    { "prompt": "Qu'est-ce que l'amendement ?", "options": ["Ajouter au sol ce qui lui manque", "Évacuer l'excès d'eau", "Apporter de l'eau", "Labourer profondément"], "correct_index": 0, "explanation": "L'amendement ajoute chaux, fumier ou engrais à un sol pauvre." },
+    { "prompt": "Qu'est-ce que l'irrigation ?", "options": ["Apporter de l'eau dans un sol trop sec", "Évacuer l'eau en excès", "Ajouter du fumier", "Retourner la terre"], "correct_index": 0, "explanation": "L'irrigation apporte de l'eau par rigoles ou tuyaux." },
+    { "prompt": "Qu'est-ce que le drainage ?", "options": ["Évacuer l'excès d'eau du sol", "Arroser le sol", "Nourrir le sol", "Semer à la volée"], "correct_index": 0, "explanation": "Le drainage évacue l'excès d'eau d'un sol trop humide." },
+    { "prompt": "Quelle méthode utiliser en saison sèche ?", "options": ["L'irrigation", "Le drainage", "L'amendement", "Le semis à la volée"], "correct_index": 0, "explanation": "En saison sèche, on irrigue pour apporter de l'eau." },
+    { "prompt": "Quelle méthode utiliser sur un sol inondé ?", "options": ["Le drainage", "L'irrigation", "L'amendement", "Le labour"], "correct_index": 0, "explanation": "Un sol trop humide doit être drainé." },
+    { "prompt": "Quelle méthode utiliser sur un sol pauvre ou acide ?", "options": ["L'amendement", "Le drainage", "L'irrigation", "Le semis en pots"], "correct_index": 0, "explanation": "On amende un sol pauvre avec de la chaux, du fumier ou de l'engrais." },
+    { "prompt": "Que retenir de l'astuce du cours ?", "options": ["Amendement = nourrir, irrigation = arroser, drainage = assécher", "Amendement = arroser, irrigation = nourrir", "Drainage = nourrir le sol", "Irrigation = assécher le sol"], "correct_index": 0, "explanation": "Amendement nourrit, irrigation arrose, drainage assèche." },
+    { "prompt": "Le fumier sert à :", "options": ["Amender le sol", "Drainer le sol", "Irriguer le sol", "Couper les herbes"], "correct_index": 0, "explanation": "Le fumier est un amendement qui enrichit le sol." },
+    { "prompt": "Les rigoles et les tuyaux servent à :", "options": ["Irriguer", "Amender", "Récolter", "Semer"], "correct_index": 0, "explanation": "Rigoles et tuyaux servent à conduire l'eau d'irrigation." }
+   ]
+  },
+  {
+   "chapter_id": "bdc74d3d-35ae-4673-b140-d0dd9a49d58a",
+   "titre": "Les types de sol",
+   "questions": [
+    { "prompt": "Qu'est-ce que la terre arable ?", "options": ["La couche superficielle travaillée par l'agriculteur", "La couche la plus profonde", "Une couche de roche dure", "Une couche de sable marin"], "correct_index": 0, "explanation": "La terre arable est la couche labourée et ensemencée." },
+    { "prompt": "Qu'est-ce que la terre végétale ?", "options": ["La couche riche en matières organiques, très fertile", "La couche de sable", "Le sous-sol profond", "La roche mère"], "correct_index": 0, "explanation": "La terre végétale, ou humus, est riche en matières organiques." },
+    { "prompt": "Qu'est-ce que le sous-sol ?", "options": ["La couche profonde où les racines puisent l'eau et les minéraux", "La couche superficielle", "La couche d'humus", "Une couche artificielle"], "correct_index": 0, "explanation": "Le sous-sol est la couche profonde où puisent les racines." },
+    { "prompt": "Comment appelle-t-on aussi la terre végétale ?", "options": ["L'humus", "L'argile", "Le sable", "Le limon marin"], "correct_index": 0, "explanation": "La terre végétale est aussi appelée humus." },
+    { "prompt": "Quelles sont les caractéristiques du sol argileux ?", "options": ["Lourd, il retient bien l'eau mais est difficile à travailler", "Léger et très fertile", "Sans eau et sans minéraux", "Toujours le meilleur pour cultiver"], "correct_index": 0, "explanation": "Le sol argileux retient l'eau mais se travaille difficilement." },
+    { "prompt": "Quelles sont les caractéristiques du sol sableux ?", "options": ["Léger, il laisse passer l'eau rapidement et est peu fertile", "Lourd et très fertile", "Impossible à travailler", "Toujours inondé"], "correct_index": 0, "explanation": "Le sol sableux est léger, perméable et peu fertile." },
+    { "prompt": "Quel sol est le meilleur pour l'agriculture ?", "options": ["Le sol limoneux (humifère)", "Le sol sableux", "Le sol argileux", "Le sous-sol rocheux"], "correct_index": 0, "explanation": "Le sol limoneux est équilibré : c'est le meilleur pour cultiver." },
+    { "prompt": "Quelle couche l'agriculteur laboure-t-il ?", "options": ["La terre arable", "Le sous-sol", "La roche", "La nappe d'eau"], "correct_index": 0, "explanation": "La terre arable est la couche travaillée." },
+    { "prompt": "Dans quelle couche les racines puisent-elles l'eau en profondeur ?", "options": ["Le sous-sol", "La terre arable", "L'air", "L'humus de surface"], "correct_index": 0, "explanation": "Les racines puisent l'eau et les minéraux dans le sous-sol." },
+    { "prompt": "Quel sol retient le mieux l'eau ?", "options": ["Le sol argileux", "Le sol sableux", "Le sol rocheux", "Le sol limoneux"], "correct_index": 0, "explanation": "Le sol argileux retient bien l'eau." }
+   ]
+  },
+  {
+   "chapter_id": "3466c184-b547-4858-8bb0-f1ade16672d0",
+   "titre": "La coopérative",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une coopérative ?", "options": ["Une association de personnes qui travaillent ensemble vers un objectif commun", "Une entreprise d'une seule personne", "Un marché de quartier", "Une école agricole"], "correct_index": 0, "explanation": "La coopérative réunit des personnes qui partagent le travail et les bénéfices." },
+    { "prompt": "Comment les bénéfices sont-ils partagés dans une coopérative ?", "options": ["Équitablement entre les membres", "Par le chef uniquement", "Ils ne sont jamais partagés", "Par tirage au sort"], "correct_index": 0, "explanation": "Les bénéfices sont partagés équitablement." },
+    { "prompt": "Quel avantage présente l'achat groupé dans une coopérative ?", "options": ["Les outils et engrais coûtent moins cher", "Les produits sont de moins bonne qualité", "Il faut payer deux fois", "Les membres travaillent plus"], "correct_index": 0, "explanation": "Acheter en grande quantité fait baisser le prix." },
+    { "prompt": "Quel autre avantage offre la coopérative ?", "options": ["Partager les machines et les ressources", "Travailler chacun de son côté", "Cacher ses récoltes", "Augmenter les dettes"], "correct_index": 0, "explanation": "Les membres partagent machines et ressources." },
+    { "prompt": "Comment la coopérative aide-t-elle à la vente ?", "options": ["Elle permet de vendre les produits au meilleur prix", "Elle interdit la vente", "Elle baisse toujours les prix", "Elle vend uniquement à l'étranger"], "correct_index": 0, "explanation": "Groupés, les producteurs obtiennent de meilleurs prix." },
+    { "prompt": "Que font les membres en cas de difficulté ?", "options": ["Ils s'entraident", "Ils quittent tous la coopérative", "Ils se partagent les dettes au hasard", "Ils arrêtent de produire"], "correct_index": 0, "explanation": "L'entraide est l'un des avantages de la coopérative." },
+    { "prompt": "Quelle est une cause d'échec d'une coopérative ?", "options": ["La malhonnêteté de certains membres", "L'achat groupé des engrais", "Le partage des machines", "La vente au meilleur prix"], "correct_index": 0, "explanation": "La malhonnêteté fait échouer la coopérative." },
+    { "prompt": "Qu'est-ce qu'une malversation financière ?", "options": ["Un détournement d'argent", "Un prêt bancaire", "Une vente groupée", "Un achat d'outils"], "correct_index": 0, "explanation": "La malversation est le détournement de l'argent de la coopérative." },
+    { "prompt": "Quelle autre cause d'échec le cours cite-t-il ?", "options": ["Le manque de formation en gestion", "Le trop grand nombre d'outils", "La bonne entente des membres", "Le partage équitable"], "correct_index": 0, "explanation": "Sans formation en gestion, la coopérative est mal dirigée." },
+    { "prompt": "Pourquoi se regrouper en coopérative ?", "options": ["Pour être plus fort ensemble qu'isolé", "Pour travailler moins", "Pour éviter de vendre", "Pour payer plus cher les engrais"], "correct_index": 0, "explanation": "Le regroupement donne accès à de meilleurs prix, au partage et à l'entraide." }
+   ]
+  },
+  {
+   "chapter_id": "9b9ea889-66ac-46ed-98ef-45baf6f4acbd",
+   "titre": "La production agroalimentaire",
+   "questions": [
+    { "prompt": "En quoi consiste la production agroalimentaire ?", "options": ["Transformer des produits agricoles bruts en produits finis", "Cultiver des plantes", "Élever des animaux", "Fabriquer des paniers"], "correct_index": 0, "explanation": "L'agroalimentaire transforme les produits agricoles en produits prêts à consommer." },
+    { "prompt": "Que produit-on à partir de la canne à sucre ?", "options": ["Du sucre et du sirop", "De l'huile", "Du fromage", "De la farine de manioc"], "correct_index": 0, "explanation": "La canne à sucre donne du sucre et du sirop." },
+    { "prompt": "Que produit-on à partir du lait ?", "options": ["Du yaourt, du fromage et du beurre", "De l'huile", "Du chocolat", "Du tapioca"], "correct_index": 0, "explanation": "Le lait est transformé en yaourt, fromage et beurre." },
+    { "prompt": "Que produit-on à partir de l'arachide ?", "options": ["De l'huile d'arachide", "Du sucre", "Du yaourt", "De la confiture"], "correct_index": 0, "explanation": "L'arachide donne de l'huile." },
+    { "prompt": "Que produit-on à partir du cacao ?", "options": ["Du chocolat et de la poudre de cacao", "Du beurre de lait", "Du jus de fruits", "De la farine de manioc"], "correct_index": 0, "explanation": "Le cacao donne le chocolat et la poudre de cacao." },
+    { "prompt": "Que produit-on à partir du manioc ?", "options": ["De la farine de manioc et du tapioca", "Du sucre", "Du fromage", "De l'huile d'arachide"], "correct_index": 0, "explanation": "Le manioc donne la farine de manioc et le tapioca." },
+    { "prompt": "Que produit-on à partir des fruits ?", "options": ["Du jus, de la confiture et des conserves", "De l'huile", "Du beurre", "Du chocolat"], "correct_index": 0, "explanation": "Les fruits donnent jus, confitures et conserves." },
+    { "prompt": "Le produit brut est :", "options": ["Le produit agricole avant transformation", "Le produit fini en magasin", "Un produit importé", "Un produit artisanal"], "correct_index": 0, "explanation": "Le produit brut est la matière agricole de départ." },
+    { "prompt": "Le yaourt est un produit :", "options": ["Transformé", "Brut", "Végétal non transformé", "Artisanal en bois"], "correct_index": 0, "explanation": "Le yaourt est issu de la transformation du lait." },
+    { "prompt": "Pourquoi transformer les produits agricoles ?", "options": ["Pour obtenir des produits finis prêts à consommer", "Pour les rendre moins utiles", "Pour éviter de les vendre", "Pour les faire pourrir plus vite"], "correct_index": 0, "explanation": "La transformation donne des produits finis, consommables et conservables." }
+   ]
+  }
+ ]
+}

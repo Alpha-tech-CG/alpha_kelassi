@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { type StudyLevel } from '@alpha-kelassi/types'
+import { LevelOptions } from './level-options'
 
-type Level = 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+type Level = StudyLevel
 type DocType = 'cours' | 'examen'
 
 interface Subject { id: string; name: string; level: Level }
@@ -94,7 +96,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
 
       {error && <div className="p-3 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
           <select
@@ -102,9 +104,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
             onChange={(e) => setForm((f) => ({ ...f, level: e.target.value as Level, subject_id: '' }))}
             className="w-full border rounded-lg px-3 py-2 text-sm"
           >
-            {(['bepc', 'bac_a', 'bac_c', 'bac_d'] as Level[]).map((l) => (
-              <option key={l} value={l}>{l.toUpperCase().replace('_', ' ')}</option>
-            ))}
+            <LevelOptions />
           </select>
         </div>
 
@@ -184,7 +184,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
             onChange={(e) => setForm((f) => ({ ...f, is_premium: e.target.checked }))}
             className="w-4 h-4"
           />
-          <span className="text-sm text-gray-700">Document Premium</span>
+          <span className="text-sm text-gray-700">Réservé aux abonnés (dès Starter)</span>
         </label>
       </div>
 
@@ -198,7 +198,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
           accept="application/pdf,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx,text/plain,.txt"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           required
-          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-50 file:text-green-800 hover:file:bg-green-100"
+          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-800 hover:file:bg-blue-100"
         />
         {file && (
           <p className="text-xs text-gray-500 mt-1">
@@ -213,7 +213,7 @@ export function UploadForm({ subjects, onSuccess }: Props) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2.5 bg-green-700 text-white rounded-lg font-medium text-sm hover:bg-green-800 disabled:opacity-50"
+        className="w-full py-2.5 bg-blue-700 text-white rounded-lg font-medium text-sm hover:bg-blue-800 disabled:opacity-50"
       >
         {loading ? (progress ?? 'Upload en cours…') : 'Uploader le document'}
       </button>

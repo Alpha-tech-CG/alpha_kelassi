@@ -1,0 +1,192 @@
+{
+ "matiere": "Français — chapitres ajoutés avec le cahier CM2",
+ "chapitres": [
+  {
+   "subject_id": "0d2bda76-d0ea-4127-b37f-4f2f2f53634b",
+   "chapter_id": "d6417a48-2cfb-4a20-99ef-6e46bc576e7a",
+   "titre": "Le nom, le déterminant et l'adjectif",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un nom ?", "options": ["Un mot qui désigne une personne, un animal ou une chose", "Un mot placé devant le nom", "Un mot qui dit comment est le nom", "Un mot qui se conjugue"], "correct_index": 0, "explanation": "Fille, lion, table sont des noms." },
+    { "prompt": "Où se place le déterminant ?", "options": ["Devant le nom", "Après le verbe", "À la fin de la phrase", "Devant l'adjectif seulement"], "correct_index": 0, "explanation": "Le, la, les, un, une, des, mon, ces sont des déterminants placés devant le nom." },
+    { "prompt": "À quoi sert l'adjectif qualificatif ?", "options": ["À dire comment est le nom", "À remplacer le nom", "À conjuguer le verbe", "À relier deux phrases"], "correct_index": 0, "explanation": "Grand, joli, rouge précisent une qualité du nom." },
+    { "prompt": "Dans « La petite fille mange une mangue mûre », quel mot est un nom ?", "options": ["fille", "petite", "mange", "une"], "correct_index": 0, "explanation": "Fille et mangue sont les noms ; petite et mûre sont des adjectifs." },
+    { "prompt": "Avec quoi l'adjectif s'accorde-t-il ?", "options": ["Avec le nom, en genre et en nombre", "Avec le verbe", "Avec le déterminant seulement", "Avec rien, il est invariable"], "correct_index": 0, "explanation": "L'adjectif change comme le nom qu'il qualifie." },
+    { "prompt": "Accorde : « une robe (blanc) »", "options": ["une robe blanche", "une robe blanc", "une robe blancs", "une robe blanches"], "correct_index": 0, "explanation": "Féminin singulier : blanc devient blanche." },
+    { "prompt": "Accorde : « des garçons (content) »", "options": ["des garçons contents", "des garçons content", "des garçons contentes", "des garçons contente"], "correct_index": 0, "explanation": "Masculin pluriel : on ajoute un s." },
+    { "prompt": "Accorde : « les rues (large) »", "options": ["les rues larges", "les rues large", "les rues largees", "les rues largent"], "correct_index": 0, "explanation": "Féminin pluriel : large prend un s." },
+    { "prompt": "Accorde : « une (grand) maison »", "options": ["une grande maison", "une grand maison", "une grandes maison", "une grands maison"], "correct_index": 0, "explanation": "Féminin singulier : grand devient grande." },
+    { "prompt": "Quel est le féminin de « beau » ?", "options": ["belle", "beaue", "beaux", "beale"], "correct_index": 0, "explanation": "Beau devient belle, comme blanc devient blanche." }
+   ]
+  },
+  {
+   "subject_id": "0d2bda76-d0ea-4127-b37f-4f2f2f53634b",
+   "chapter_id": "5ff2bc0e-0b0e-40cf-9856-0a32c81b9122",
+   "titre": "Le complément d'objet — COD et COI",
+   "questions": [
+    { "prompt": "À quelles questions répond le COD ?", "options": ["Quoi ? ou qui ?", "À qui ? ou à quoi ?", "Où ?", "Quand ?"], "correct_index": 0, "explanation": "Le complément d'objet direct répond à « quoi ? » ou « qui ? » posé après le verbe." },
+    { "prompt": "À quelles questions répond le COI ?", "options": ["À qui ? à quoi ? de quoi ?", "Quoi ? qui ?", "Comment ?", "Pourquoi ?"], "correct_index": 0, "explanation": "Le complément d'objet indirect est introduit par à ou de." },
+    { "prompt": "Qu'est-ce qui distingue le COD du COI ?", "options": ["Le COD n'a pas de petit mot devant lui", "Le COD est toujours au pluriel", "Le COI se place avant le verbe", "Le COD désigne toujours une personne"], "correct_index": 0, "explanation": "Le COI est introduit par une préposition : à, de." },
+    { "prompt": "Dans « Je mange une mangue », quelle est la fonction de « une mangue » ?", "options": ["COD", "COI", "Sujet", "Complément de lieu"], "correct_index": 0, "explanation": "Je mange quoi ? Une mangue : c'est un COD." },
+    { "prompt": "Dans « Je parle à mon ami », quelle est la fonction de « à mon ami » ?", "options": ["COI", "COD", "Sujet", "Attribut"], "correct_index": 0, "explanation": "Je parle à qui ? À mon ami : c'est un COI." },
+    { "prompt": "Dans « Il a besoin de repos », quelle est la fonction de « de repos » ?", "options": ["COI", "COD", "Sujet", "Épithète"], "correct_index": 0, "explanation": "Il a besoin de quoi ? De repos : complément d'objet indirect." },
+    { "prompt": "Dans « Marie offre une fleur à sa mère », quel est le COD ?", "options": ["une fleur", "à sa mère", "Marie", "offre"], "correct_index": 0, "explanation": "Marie offre quoi ? Une fleur." },
+    { "prompt": "Dans la même phrase, quel est le COI ?", "options": ["à sa mère", "une fleur", "Marie", "offre"], "correct_index": 0, "explanation": "Marie offre à qui ? À sa mère." },
+    { "prompt": "Quelle phrase contient un COD ?", "options": ["Les élèves lisent un livre.", "Je pense à mes parents.", "Il parle de son voyage.", "Elle téléphone à son frère."], "correct_index": 0, "explanation": "Ils lisent quoi ? Un livre : COD, sans préposition." },
+    { "prompt": "Quelle phrase contient un COI ?", "options": ["Je téléphone à ma tante.", "Je mange du riz.", "Il ferme la porte.", "Nous regardons le match."], "correct_index": 0, "explanation": "Je téléphone à qui ? À ma tante : COI introduit par à." }
+   ]
+  },
+  {
+   "subject_id": "0d2bda76-d0ea-4127-b37f-4f2f2f53634b",
+   "chapter_id": "72371084-720b-4e25-938e-f7c48a7e5985",
+   "titre": "La négation",
+   "questions": [
+    { "prompt": "Comment forme-t-on une phrase négative ?", "options": ["On entoure le verbe avec ne … pas", "On ajoute pas à la fin", "On supprime le sujet", "On met le verbe au pluriel"], "correct_index": 0, "explanation": "La négation encadre le verbe : ne … pas." },
+    { "prompt": "Mets à la forme négative : « Il mange. »", "options": ["Il ne mange pas.", "Il mange pas.", "Ne il mange pas.", "Il mange non."], "correct_index": 0, "explanation": "Le verbe est encadré par ne et pas." },
+    { "prompt": "Que devient « ne » devant une voyelle ?", "options": ["Il devient n'", "Il disparaît", "Il devient ni", "Il reste ne"], "correct_index": 0, "explanation": "Je n'aime pas le piment." },
+    { "prompt": "Mets à la forme négative : « J'aime le piment. »", "options": ["Je n'aime pas le piment.", "Je ne aime pas le piment.", "J'aime pas le piment.", "Je n'aime le piment."], "correct_index": 0, "explanation": "Devant une voyelle, ne devient n'." },
+    { "prompt": "Quelle autre locution exprime la négation ?", "options": ["ne … jamais", "ne … toujours", "ne … souvent", "ne … beaucoup"], "correct_index": 0, "explanation": "ne … jamais, ne … plus, ne … rien sont aussi des négations." },
+    { "prompt": "Quelle est l'erreur la plus fréquente à l'écrit ?", "options": ["Oublier le « ne »", "Oublier le sujet", "Oublier le point", "Écrire le verbe au pluriel"], "correct_index": 0, "explanation": "À l'oral on dit « il mange pas », mais à l'écrit le ne est obligatoire." },
+    { "prompt": "Quelle phrase est correctement écrite ?", "options": ["Elle ne sort jamais le soir.", "Elle sort jamais le soir.", "Elle ne sort le soir.", "Elle non sort le soir."], "correct_index": 0, "explanation": "La négation complète est ne … jamais." },
+    { "prompt": "Mets à la forme négative : « Nous avons du pain. »", "options": ["Nous n'avons pas de pain.", "Nous avons pas du pain.", "Nous n'avons du pain.", "Nous avons non du pain."], "correct_index": 0, "explanation": "À la forme négative, « du » devient « de »." },
+    { "prompt": "Que signifie « ne … plus » ?", "options": ["Que cela a cessé", "Que cela continue", "Que cela augmente", "Que cela n'a jamais eu lieu"], "correct_index": 0, "explanation": "« Il ne pleut plus » : la pluie s'est arrêtée." },
+    { "prompt": "Quelle est la forme de la phrase « Je ne comprends rien » ?", "options": ["Négative", "Affirmative", "Interrogative", "Impérative"], "correct_index": 0, "explanation": "ne … rien marque la négation." }
+   ]
+  },
+  {
+   "subject_id": "0d2bda76-d0ea-4127-b37f-4f2f2f53634b",
+   "chapter_id": "c7ddf049-211f-479a-8028-88f5ace9ae08",
+   "titre": "Les mots de liaison",
+   "questions": [
+    { "prompt": "À quoi servent les mots de liaison ?", "options": ["À relier les phrases et rendre le texte fluide", "À conjuguer les verbes", "À accorder les adjectifs", "À poser des questions"], "correct_index": 0, "explanation": "Ils relient les idées entre elles." },
+    { "prompt": "Quel mot sert à ajouter une idée ?", "options": ["et", "mais", "car", "donc"], "correct_index": 0, "explanation": "« Je mange du riz et du poisson. »" },
+    { "prompt": "Quel mot sert à opposer deux idées ?", "options": ["mais", "et", "donc", "ensuite"], "correct_index": 0, "explanation": "« Il est petit, mais il est fort. »" },
+    { "prompt": "Quel mot donne la cause ?", "options": ["car", "donc", "mais", "enfin"], "correct_index": 0, "explanation": "« Je reste, car il pleut. »" },
+    { "prompt": "Quel mot donne la conséquence ?", "options": ["donc", "car", "mais", "d'abord"], "correct_index": 0, "explanation": "« Il pleut, donc je prends mon parapluie. »" },
+    { "prompt": "Quels mots servent à mettre dans l'ordre ?", "options": ["d'abord, ensuite, enfin", "et, ou, ni", "car, donc, mais", "qui, que, quoi"], "correct_index": 0, "explanation": "Ils organisent le récit ou la recette." },
+    { "prompt": "Complète : « J'ai faim, … je mange. »", "options": ["donc", "mais", "car", "ensuite"], "correct_index": 0, "explanation": "La faim est la cause, manger la conséquence : donc." },
+    { "prompt": "Complète : « Il court, … il est en retard. »", "options": ["mais", "donc", "car", "enfin"], "correct_index": 0, "explanation": "Les deux idées s'opposent : il court, et pourtant il est en retard." },
+    { "prompt": "Complète : « Elle est fatiguée, … elle a bien travaillé. »", "options": ["car", "mais", "donc", "ensuite"], "correct_index": 0, "explanation": "Le travail explique la fatigue : c'est la cause, introduite par car." },
+    { "prompt": "Dans « D'abord je me lave, ensuite je mange », que marquent ces mots ?", "options": ["L'ordre des actions", "La cause", "L'opposition", "La conséquence"], "correct_index": 0, "explanation": "D'abord, ensuite, enfin marquent la succession." }
+   ]
+  },
+  {
+   "subject_id": "0d2bda76-d0ea-4127-b37f-4f2f2f53634b",
+   "chapter_id": "69c9134e-43fc-4a1e-96aa-ce9d3c166725",
+   "titre": "Le discours direct et les guillemets",
+   "questions": [
+    { "prompt": "Qu'est-ce que le discours direct ?", "options": ["Il rapporte les paroles exactement comme elles ont été dites", "Il résume les paroles avec ses propres mots", "Il raconte une histoire au passé", "Il décrit un lieu"], "correct_index": 0, "explanation": "Les paroles sont rapportées telles quelles, entre guillemets." },
+    { "prompt": "Quel signe annonce que quelqu'un va parler ?", "options": ["Les deux points", "La virgule", "Le point-virgule", "Le tiret du bas"], "correct_index": 0, "explanation": "On écrit : Le maître dit : « Ouvrez vos cahiers. »" },
+    { "prompt": "Quels signes encadrent les paroles rapportées ?", "options": ["Les guillemets « »", "Les parenthèses", "Les crochets", "Les astérisques"], "correct_index": 0, "explanation": "Les guillemets ouvrent et ferment les paroles." },
+    { "prompt": "Que marque le tiret en début de ligne dans un dialogue ?", "options": ["Le changement de personne qui parle", "La fin du dialogue", "Une pause", "Une question"], "correct_index": 0, "explanation": "Chaque réplique nouvelle commence par un tiret." },
+    { "prompt": "Où se placent le point d'interrogation et le point d'exclamation des paroles ?", "options": ["À l'intérieur des guillemets", "Après les guillemets", "Avant les deux points", "Ils sont interdits"], "correct_index": 0, "explanation": "Ils appartiennent aux paroles rapportées." },
+    { "prompt": "Lequel de ces verbes est un verbe de parole ?", "options": ["répondre", "courir", "manger", "dormir"], "correct_index": 0, "explanation": "Dire, demander, répondre, crier, murmurer sont des verbes de parole." },
+    { "prompt": "Que se passe-t-il quand le verbe de parole est placé après les paroles ?", "options": ["Le sujet et le verbe sont inversés", "Le verbe disparaît", "Les guillemets disparaissent", "Le verbe se met au pluriel"], "correct_index": 0, "explanation": "« Où vas-tu ? » demanda ma mère." },
+    { "prompt": "Écris au discours direct : le maître demande aux élèves de se taire.", "options": ["Le maître demande : « Taisez-vous ! »", "Le maître demande que taisez-vous.", "Le maître demande : taisez-vous.", "« Le maître demande de se taire. »"], "correct_index": 0, "explanation": "Deux points, guillemets, et la phrase à l'impératif." },
+    { "prompt": "Écris au discours direct : ma sœur demande où est son cahier.", "options": ["Ma sœur demande : « Où est mon cahier ? »", "Ma sœur demande : où est son cahier ?", "Ma sœur demande « où est son cahier ».", "Ma sœur demande où est mon cahier ?"], "correct_index": 0, "explanation": "Les paroles exactes passent à la première personne, entre guillemets." },
+    { "prompt": "Quel verbe de parole convient le mieux pour une question ?", "options": ["demander", "répondre", "s'écrier", "ajouter"], "correct_index": 0, "explanation": "Demander annonce une question ; répondre annonce une réponse." }
+   ]
+  },
+  {
+   "subject_id": "b33d41ef-191c-41b0-87f4-d5567af9f06e",
+   "chapter_id": "26b4ab84-3964-4457-aa88-b6cce8325a00",
+   "titre": "Le passé composé avec ÊTRE",
+   "questions": [
+    { "prompt": "Avec l'auxiliaire être, avec quoi le participe passé s'accorde-t-il ?", "options": ["Avec le sujet", "Avec le complément", "Avec rien", "Avec l'auxiliaire"], "correct_index": 0, "explanation": "Il s'accorde en genre et en nombre avec le sujet." },
+    { "prompt": "Lequel de ces verbes se conjugue avec être au passé composé ?", "options": ["aller", "manger", "chanter", "finir"], "correct_index": 0, "explanation": "Aller, venir, arriver, partir, entrer, sortir, monter, descendre, naître, mourir, tomber, rester, devenir." },
+    { "prompt": "Quels autres verbes emploient toujours être ?", "options": ["Les verbes pronominaux, comme se laver", "Les verbes du 1er groupe", "Les verbes du 2e groupe", "Les verbes à l'infinitif"], "correct_index": 0, "explanation": "Se laver, se lever, se coucher se conjuguent avec être." },
+    { "prompt": "Complète : « Marie (partir) hier. »", "options": ["Marie est partie hier.", "Marie est parti hier.", "Marie a parti hier.", "Marie est partis hier."], "correct_index": 0, "explanation": "Sujet féminin singulier : partie." },
+    { "prompt": "Complète : « Les garçons (arriver) en retard. »", "options": ["Les garçons sont arrivés en retard.", "Les garçons ont arrivé en retard.", "Les garçons sont arrivé en retard.", "Les garçons est arrivés en retard."], "correct_index": 0, "explanation": "Masculin pluriel : arrivés." },
+    { "prompt": "Complète : « Ma tante (venir) hier. »", "options": ["Ma tante est venue hier.", "Ma tante a venu hier.", "Ma tante est venu hier.", "Ma tante est venues hier."], "correct_index": 0, "explanation": "Féminin singulier : venue." },
+    { "prompt": "Complète : « Nous (rester) à la maison. » (nous = des filles)", "options": ["Nous sommes restées à la maison.", "Nous sommes restés à la maison.", "Nous avons resté à la maison.", "Nous sommes resté à la maison."], "correct_index": 0, "explanation": "Féminin pluriel : restées." },
+    { "prompt": "Comment écrit-on le participe passé avec un sujet masculin pluriel ?", "options": ["On ajoute un s", "On ajoute un e", "On ajoute es", "On n'ajoute rien"], "correct_index": 0, "explanation": "Ils sont allés." },
+    { "prompt": "Quelle phrase est correcte ?", "options": ["Elles sont allées au marché.", "Elles sont allé au marché.", "Elles ont allées au marché.", "Elles sont allés au marché."], "correct_index": 0, "explanation": "Féminin pluriel avec être : allées." },
+    { "prompt": "Quelle différence y a-t-il avec l'auxiliaire avoir ?", "options": ["Avec avoir, le participe ne s'accorde pas avec le sujet", "Avec avoir, il s'accorde toujours", "Il n'y a aucune différence", "Avec avoir, le verbe est invariable"], "correct_index": 0, "explanation": "« Elles ont mangé » reste invariable, alors que « Elles sont parties » s'accorde." }
+   ]
+  },
+  {
+   "subject_id": "b33d41ef-191c-41b0-87f4-d5567af9f06e",
+   "chapter_id": "318fd4a6-5327-4f45-82a4-8b6db80bb1d3",
+   "titre": "L'impératif présent",
+   "questions": [
+    { "prompt": "À quoi sert l'impératif ?", "options": ["À donner un ordre ou un conseil", "À poser une question", "À raconter le passé", "À décrire un lieu"], "correct_index": 0, "explanation": "L'impératif ordonne ou conseille." },
+    { "prompt": "Qu'est-ce qui manque dans une phrase à l'impératif ?", "options": ["Le sujet", "Le verbe", "La ponctuation", "Le complément"], "correct_index": 0, "explanation": "On écrit « Mange ! » et non « Tu mange ! »." },
+    { "prompt": "À combien de personnes l'impératif se conjugue-t-il ?", "options": ["Trois : tu, nous, vous", "Six", "Deux", "Une seule"], "correct_index": 0, "explanation": "Seules les deuxièmes personnes et le nous existent." },
+    { "prompt": "Quelle est la règle du 1er groupe à la 2e personne du singulier ?", "options": ["Pas de s : Mange !", "On ajoute un s : Manges !", "On ajoute un e : Mangee !", "On ajoute un t : Manget !"], "correct_index": 0, "explanation": "Au 1er groupe, le s disparaît à l'impératif : chante, mange, écoute." },
+    { "prompt": "Conjugue « écouter » à l'impératif avec tu.", "options": ["écoute", "écoutes", "écoutez", "écoutons"], "correct_index": 0, "explanation": "Pas de s au 1er groupe." },
+    { "prompt": "Conjugue « finir » à l'impératif avec vous.", "options": ["finissez", "finis", "finissons", "finir"], "correct_index": 0, "explanation": "Vous finissez devient finissez !" },
+    { "prompt": "Conjugue « être » à l'impératif avec tu.", "options": ["sois", "es", "soit", "sois-tu"], "correct_index": 0, "explanation": "Être : sois, soyons, soyez." },
+    { "prompt": "Conjugue « avoir » à l'impératif avec vous.", "options": ["ayez", "avez", "ayons", "aies"], "correct_index": 0, "explanation": "Avoir : aie, ayons, ayez." },
+    { "prompt": "Conjugue « aller » à l'impératif avec tu.", "options": ["va", "vas", "aller", "allons"], "correct_index": 0, "explanation": "Aller : va, allons, allez." },
+    { "prompt": "Quelle phrase est correctement écrite ?", "options": ["Ferme la porte !", "Fermes la porte !", "Tu ferme la porte !", "Fermer la porte !"], "correct_index": 0, "explanation": "Impératif du 1er groupe, sans sujet et sans s." }
+   ]
+  },
+  {
+   "subject_id": "b33d41ef-191c-41b0-87f4-d5567af9f06e",
+   "chapter_id": "ab47d046-7815-4e9a-ab7f-b1c06097d910",
+   "titre": "Tableaux de conjugaison à connaître",
+   "questions": [
+    { "prompt": "Comment dit-on « être » au futur, avec je ?", "options": ["je serai", "je suis", "j'étais", "je fus"], "correct_index": 0, "explanation": "Être au futur : je serai, tu seras, il sera." },
+    { "prompt": "Comment dit-on « avoir » à l'imparfait, avec nous ?", "options": ["nous avions", "nous avons", "nous aurons", "nous eûmes"], "correct_index": 0, "explanation": "Avoir à l'imparfait : j'avais, tu avais, il avait, nous avions." },
+    { "prompt": "Quel est le passé composé de « être » avec il ?", "options": ["il a été", "il est été", "il était", "il fut"], "correct_index": 0, "explanation": "Être se conjugue avec l'auxiliaire avoir au passé composé : il a été." },
+    { "prompt": "Quel est le participe passé du verbe « prendre » ?", "options": ["pris", "prendu", "prené", "prit"], "correct_index": 0, "explanation": "Prendre → pris ; voir → vu ; faire → fait." },
+    { "prompt": "Quel est le participe passé du verbe « voir » ?", "options": ["vu", "voyé", "vit", "voir"], "correct_index": 0, "explanation": "Voir → vu." },
+    { "prompt": "Quel est le participe passé du verbe « faire » ?", "options": ["fait", "faisu", "fé", "fis"], "correct_index": 0, "explanation": "Faire → fait." },
+    { "prompt": "Comment dit-on « aller » au futur, avec je ?", "options": ["j'irai", "j'allerai", "je vais", "j'allais"], "correct_index": 0, "explanation": "Aller a un radical irrégulier au futur : ir-." },
+    { "prompt": "Quel est le passé simple de « venir » à la 3e personne du singulier ?", "options": ["il vint", "il venait", "il viendra", "il est venu"], "correct_index": 0, "explanation": "Venir au passé simple : il vint, ils vinrent." },
+    { "prompt": "Dans la méthode en quatre étapes, que cherche-t-on en premier ?", "options": ["L'infinitif et le groupe du verbe", "La terminaison", "Le sujet", "Le temps"], "correct_index": 0, "explanation": "On trouve l'infinitif et le groupe, puis le temps, puis le sujet, puis la terminaison." },
+    { "prompt": "Quel indice annonce l'imparfait ou le passé composé ?", "options": ["hier, autrefois", "demain", "maintenant", "dans un instant"], "correct_index": 0, "explanation": "Maintenant → présent ; hier, autrefois → passé ; demain → futur." }
+   ]
+  },
+  {
+   "subject_id": "f4cb6076-363a-4ef5-929f-1d84bf95dc4e",
+   "chapter_id": "f01152cd-393c-4c8e-89cb-5ea8272b44e0",
+   "titre": "Ces / Ses",
+   "questions": [
+    { "prompt": "Que signifie « ses » ?", "options": ["Ce qui appartient à lui ou à elle", "Un mot qui montre", "Le verbe être", "Un pronom réfléchi"], "correct_index": 0, "explanation": "Ses mains = les mains qui sont à lui ; on peut dire « mes mains »." },
+    { "prompt": "Que signifie « ces » ?", "options": ["Un mot qui montre, qui désigne", "Ce qui appartient à quelqu'un", "Le verbe être au pluriel", "Un pronom réfléchi"], "correct_index": 0, "explanation": "Ces fleurs : celles que l'on montre." },
+    { "prompt": "Quel test permet de reconnaître « ses » ?", "options": ["On peut le remplacer par « mes »", "On peut le remplacer par « étaient »", "On peut le remplacer par « me »", "On peut le supprimer"], "correct_index": 0, "explanation": "Ses mains → mes mains : c'est bien « ses »." },
+    { "prompt": "Complète : « Il lave … mains. »", "options": ["ses", "ces", "sais", "c'est"], "correct_index": 0, "explanation": "Ce sont ses propres mains : on peut dire « mes mains »." },
+    { "prompt": "Complète : « … fleurs sont belles. »", "options": ["Ces", "Ses", "C'est", "Sais"], "correct_index": 0, "explanation": "On montre les fleurs : c'est le démonstratif ces." },
+    { "prompt": "Quel test permet de reconnaître « sont » ?", "options": ["On peut le remplacer par « étaient »", "On peut le remplacer par « mes »", "On peut le remplacer par « me »", "On peut le supprimer"], "correct_index": 0, "explanation": "Sont est le verbe être : ces fleurs étaient belles." },
+    { "prompt": "Complète : « Il range … cahier. »", "options": ["son", "sont", "ces", "ses"], "correct_index": 0, "explanation": "Un seul cahier qui lui appartient : son." },
+    { "prompt": "Quel test permet de reconnaître « se » ?", "options": ["On peut le remplacer par « me » ou « te »", "On peut le remplacer par « cet »", "On peut le remplacer par « mes »", "On peut le remplacer par « étaient »"], "correct_index": 0, "explanation": "Il se lave → il me lave : c'est le pronom réfléchi." },
+    { "prompt": "Complète : « Il … lave avant de manger. »", "options": ["se", "ce", "ses", "ces"], "correct_index": 0, "explanation": "Devant un verbe, c'est le pronom réfléchi se." },
+    { "prompt": "Quelle phrase est entièrement correcte ?", "options": ["Ces fleurs sont belles et il lave ses mains.", "Ses fleurs sont belles et il lave ces mains.", "Ces fleurs son belles et il lave ses mains.", "Ses fleurs sont belles et il lave ses mains."], "correct_index": 0, "explanation": "Ces (on montre les fleurs), sont (étaient), ses (les siennes)." }
+   ]
+  },
+  {
+   "subject_id": "7d4caac9-3ede-4d31-94ff-f4a2dfa911e2",
+   "chapter_id": "49a2fa0f-fd13-43b1-9ad2-798cca8c815b",
+   "titre": "Le pluriel des noms et des adjectifs",
+   "questions": [
+    { "prompt": "Quelle est la règle générale du pluriel ?", "options": ["On ajoute un s", "On ajoute un x", "On ajoute aux", "On ne change rien"], "correct_index": 0, "explanation": "Un livre → des livres." },
+    { "prompt": "Que deviennent au pluriel les noms terminés par -s, -x ou -z ?", "options": ["Ils ne changent pas", "Ils prennent un s", "Ils prennent un x", "Ils perdent leur dernière lettre"], "correct_index": 0, "explanation": "Un pays → des pays ; une noix → des noix." },
+    { "prompt": "Quel est le pluriel de « un bateau » ?", "options": ["des bateaux", "des bateaus", "des bateau", "des bateauz"], "correct_index": 0, "explanation": "Les noms en -au, -eau, -eu prennent un x." },
+    { "prompt": "Quel est le pluriel de « un cheveu » ?", "options": ["des cheveux", "des cheveus", "des chevaux", "des cheveu"], "correct_index": 0, "explanation": "Les noms en -eu prennent un x." },
+    { "prompt": "Quel est le pluriel de « un cheval » ?", "options": ["des chevaux", "des chevals", "des chevaus", "des cheveaux"], "correct_index": 0, "explanation": "Les noms en -al font leur pluriel en -aux." },
+    { "prompt": "Quel est le pluriel de « un journal » ?", "options": ["des journaux", "des journals", "des journeaux", "des journaus"], "correct_index": 0, "explanation": "Même règle : -al devient -aux." },
+    { "prompt": "Quel est le pluriel de « un caillou » ?", "options": ["des cailloux", "des caillous", "des caillaux", "des cailloues"], "correct_index": 0, "explanation": "Bijou, caillou, chou, genou, hibou, joujou, pou prennent un x." },
+    { "prompt": "Lequel de ces noms en -ou prend un x au pluriel ?", "options": ["genou", "clou", "trou", "fou"], "correct_index": 0, "explanation": "Seuls les sept noms de la liste prennent un x ; les autres prennent un s." },
+    { "prompt": "Quel est le pluriel de « un pays » ?", "options": ["des pays", "des payss", "des payx", "des paies"], "correct_index": 0, "explanation": "Les noms déjà terminés par s ne changent pas." },
+    { "prompt": "Quel est le pluriel de « un trou » ?", "options": ["des trous", "des troux", "des traux", "des trou"], "correct_index": 0, "explanation": "Trou ne fait pas partie des exceptions : il prend un s." }
+   ]
+  },
+  {
+   "subject_id": "7d4caac9-3ede-4d31-94ff-f4a2dfa911e2",
+   "chapter_id": "088509c3-43e9-4748-8090-2411bb41f635",
+   "titre": "Les accents",
+   "questions": [
+    { "prompt": "Quel accent porte le e de « été » ?", "options": ["L'accent aigu", "L'accent grave", "L'accent circonflexe", "Le tréma"], "correct_index": 0, "explanation": "é est un accent aigu." },
+    { "prompt": "Quel accent porte le e de « mère » ?", "options": ["L'accent grave", "L'accent aigu", "L'accent circonflexe", "Le tréma"], "correct_index": 0, "explanation": "è est un accent grave." },
+    { "prompt": "Quel accent porte le e de « fête » ?", "options": ["L'accent circonflexe", "L'accent aigu", "L'accent grave", "Le tréma"], "correct_index": 0, "explanation": "ê est un accent circonflexe." },
+    { "prompt": "Devant quelles voyelles place-t-on une cédille au c ?", "options": ["a, o, u", "e, i, y", "toutes les voyelles", "aucune"], "correct_index": 0, "explanation": "Garçon, leçon, reçu : la cédille donne le son [s] devant a, o, u." },
+    { "prompt": "Met-on un accent devant une double consonne ?", "options": ["Non : belle, terre, cette", "Oui, toujours", "Oui, seulement un accent grave", "Oui, seulement un accent aigu"], "correct_index": 0, "explanation": "Pas d'accent devant une double consonne ni devant un x." },
+    { "prompt": "Quelle orthographe est correcte ?", "options": ["un examen", "un éxamen", "un èxamen", "un êxamen"], "correct_index": 0, "explanation": "Pas d'accent devant un x." },
+    { "prompt": "Quel mot change de sens selon l'accent ?", "options": ["a / à", "le / la", "et / ou", "mon / ton"], "correct_index": 0, "explanation": "« il a faim » (verbe avoir) et « il va à l'école » (préposition)." },
+    { "prompt": "Que désigne « où » avec un accent grave ?", "options": ["Le lieu", "Un choix entre deux choses", "Le verbe avoir", "Une négation"], "correct_index": 0, "explanation": "« La ville où je vis » indique le lieu ; « ou » sans accent propose un choix." },
+    { "prompt": "Le tréma est-il un accent ?", "options": ["Non : il sépare deux voyelles, comme dans Noël", "Oui, c'est un accent aigu double", "Oui, c'est un accent circonflexe", "Oui, il remplace la cédille"], "correct_index": 0, "explanation": "Noël, maïs : les deux voyelles se prononcent séparément." },
+    { "prompt": "Quelle est l'orthographe correcte ?", "options": ["la fenêtre", "la fenétre", "la fenètre", "la fenetre"], "correct_index": 0, "explanation": "Fenêtre prend un accent circonflexe." }
+   ]
+  }
+ ]
+}

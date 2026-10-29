@@ -1,0 +1,230 @@
+{
+ "matiere": "Grammaire",
+ "subject_id": "0d2bda76-d0ea-4127-b37f-4f2f2f53634b",
+ "chapitres": [
+  {
+   "chapter_id": "76feeedb-c9fb-4d87-85c6-1280adfed4aa",
+   "titre": "Les groupes de verbes",
+   "questions": [
+    { "prompt": "Quels verbes forment le 1er groupe ?", "options": ["Les verbes en -er, sauf aller", "Les verbes en -ir", "Les verbes en -re", "Les verbes irréguliers"], "correct_index": 0, "explanation": "Manger, danser, chanter, couper : les verbes en -er, sauf aller." },
+    { "prompt": "Comment se termine le participe présent des verbes du 2e groupe ?", "options": ["En -issant", "En -ant seulement", "En -ent", "En -é"], "correct_index": 0, "explanation": "Finir donne finissant, choisir donne choisissant." },
+    { "prompt": "À quel groupe appartient le verbe « aller » ?", "options": ["Au 3e groupe", "Au 1er groupe", "Au 2e groupe", "À aucun groupe"], "correct_index": 0, "explanation": "« Aller » se termine par -er mais il est irrégulier : 3e groupe." },
+    { "prompt": "À quel groupe appartient « finir » ?", "options": ["Au 2e groupe", "Au 1er groupe", "Au 3e groupe", "Au groupe des auxiliaires"], "correct_index": 0, "explanation": "Finir → finissant : c'est le 2e groupe." },
+    { "prompt": "À quel groupe appartient « prendre » ?", "options": ["Au 3e groupe", "Au 1er groupe", "Au 2e groupe", "Au groupe des adverbes"], "correct_index": 0, "explanation": "Prendre est un verbe irrégulier en -re : 3e groupe." },
+    { "prompt": "Quel est le participe présent de « partir » ?", "options": ["partant", "partissant", "parté", "partant-issant"], "correct_index": 0, "explanation": "Partir est du 3e groupe : son participe présent est partant, pas partissant." },
+    { "prompt": "À quel groupe appartient « marcher » ?", "options": ["Au 1er groupe", "Au 2e groupe", "Au 3e groupe", "À aucun"], "correct_index": 0, "explanation": "Marcher se termine par -er : 1er groupe." },
+    { "prompt": "À quel groupe appartient « vouloir » ?", "options": ["Au 3e groupe", "Au 1er groupe", "Au 2e groupe", "Au groupe des auxiliaires"], "correct_index": 0, "explanation": "Vouloir est un verbe irrégulier en -oir : 3e groupe." },
+    { "prompt": "À quel groupe appartient « remplir » ?", "options": ["Au 2e groupe", "Au 1er groupe", "Au 3e groupe", "À aucun"], "correct_index": 0, "explanation": "Remplir → remplissant : 2e groupe." },
+    { "prompt": "Quelle est la terminaison du participe présent des verbes du 1er groupe ?", "options": ["-ant", "-issant", "-ent", "-é"], "correct_index": 0, "explanation": "Manger → mangeant : le participe présent se termine par -ant." }
+   ]
+  },
+  {
+   "chapter_id": "77e40b45-68b3-4f0b-bbae-30ab97ec59ce",
+   "titre": "Comment analyser un verbe",
+   "questions": [
+    { "prompt": "Combien d'informations faut-il donner pour analyser un verbe ?", "options": ["Six", "Trois", "Quatre", "Dix"], "correct_index": 0, "explanation": "Infinitif, groupe, temps, personne, mode et forme : six informations." },
+    { "prompt": "Quelle information donne-t-on en premier ?", "options": ["L'infinitif du verbe", "Le temps", "La personne", "La forme"], "correct_index": 0, "explanation": "On commence par donner l'infinitif du verbe." },
+    { "prompt": "Que désigne la « forme » d'un verbe ?", "options": ["Affirmative ou négative", "Singulier ou pluriel", "Masculin ou féminin", "Simple ou composé"], "correct_index": 0, "explanation": "La forme est affirmative ou négative." },
+    { "prompt": "Dans « Tu joues », quelle est la personne du verbe ?", "options": ["2e personne du singulier", "1re personne du singulier", "3e personne du singulier", "2e personne du pluriel"], "correct_index": 0, "explanation": "« Tu » correspond à la 2e personne du singulier." },
+    { "prompt": "Dans « Tu joues », quel est le mode et le temps ?", "options": ["Présent de l'indicatif", "Présent du subjonctif", "Imparfait de l'indicatif", "Présent du conditionnel"], "correct_index": 0, "explanation": "« Tu joues » est au présent de l'indicatif." },
+    { "prompt": "Dans « Ils n'avaient pas mangé », quelle est la forme ?", "options": ["Négative", "Affirmative", "Interrogative", "Exclamative"], "correct_index": 0, "explanation": "La négation « n'… pas » indique la forme négative." },
+    { "prompt": "Dans « Ils n'avaient pas mangé », quel est le temps ?", "options": ["Plus-que-parfait de l'indicatif", "Passé composé", "Imparfait", "Futur antérieur"], "correct_index": 0, "explanation": "Avoir à l'imparfait + participe passé : c'est le plus-que-parfait." },
+    { "prompt": "Dans « Nous finissons », quel est le groupe du verbe ?", "options": ["2e groupe", "1er groupe", "3e groupe", "Aucun"], "correct_index": 0, "explanation": "Finir est un verbe du 2e groupe." },
+    { "prompt": "Dans « Nous finissons », quelle est la personne ?", "options": ["1re personne du pluriel", "1re personne du singulier", "2e personne du pluriel", "3e personne du pluriel"], "correct_index": 0, "explanation": "« Nous » correspond à la 1re personne du pluriel." },
+    { "prompt": "Dans « Les enfants courent vers leur école », quel est l'infinitif du verbe ?", "options": ["courir", "courer", "courrir", "courant"], "correct_index": 0, "explanation": "« Courent » vient du verbe courir, du 3e groupe." }
+   ]
+  },
+  {
+   "chapter_id": "e7fde704-8d62-47f6-9341-6642dbe7075d",
+   "titre": "Le sujet du verbe",
+   "questions": [
+    { "prompt": "Qu'est-ce que le sujet d'une phrase ?", "options": ["Le mot ou groupe de mots qui fait l'action", "Le mot qui subit l'action", "Le mot qui précise le verbe", "Le mot qui relie deux phrases"], "correct_index": 0, "explanation": "Le sujet fait l'action ou se trouve dans l'état décrit par le verbe." },
+    { "prompt": "Quelle question pose-t-on pour trouver le sujet d'une personne ?", "options": ["Qui est-ce qui ?", "Qu'est-ce que ?", "Où ?", "Comment ?"], "correct_index": 0, "explanation": "Pour les personnes et les animaux : « Qui est-ce qui ? » devant le verbe." },
+    { "prompt": "Quelle question pose-t-on pour trouver le sujet d'une chose ?", "options": ["Qu'est-ce qui ?", "Qui est-ce que ?", "Pourquoi ?", "Quand ?"], "correct_index": 0, "explanation": "Pour les choses : « Qu'est-ce qui ? »." },
+    { "prompt": "Quel est le sujet dans « Les élèves courent » ?", "options": ["Les élèves", "courent", "Les", "élèves courent"], "correct_index": 0, "explanation": "Qui est-ce qui court ? Les élèves." },
+    { "prompt": "Quel est le sujet dans « Le vent souffle fort » ?", "options": ["Le vent", "souffle", "fort", "souffle fort"], "correct_index": 0, "explanation": "Qu'est-ce qui souffle ? Le vent." },
+    { "prompt": "Quel est le sujet dans « Marie et Paul chantent » ?", "options": ["Marie et Paul", "Marie", "Paul", "chantent"], "correct_index": 0, "explanation": "Le sujet peut être composé de plusieurs mots : Marie et Paul." },
+    { "prompt": "Quel est le sujet dans « La pluie tombe fort » ?", "options": ["La pluie", "tombe", "fort", "tombe fort"], "correct_index": 0, "explanation": "Qu'est-ce qui tombe ? La pluie." },
+    { "prompt": "Où se trouve le sujet dans « Où vont ces enfants ? »", "options": ["Après le verbe : c'est un sujet inversé", "Avant le verbe", "Il n'y a pas de sujet", "C'est le mot « Où »"], "correct_index": 0, "explanation": "Dans les phrases interrogatives, le sujet peut être inversé." },
+    { "prompt": "Quel est le sujet dans « Mon père et ma mère travaillent » ?", "options": ["Mon père et ma mère", "Mon père", "ma mère", "travaillent"], "correct_index": 0, "explanation": "Qui est-ce qui travaille ? Mon père et ma mère." },
+    { "prompt": "Avec quoi le verbe s'accorde-t-il ?", "options": ["Avec son sujet", "Avec le complément", "Avec l'adjectif", "Avec l'adverbe"], "correct_index": 0, "explanation": "Le verbe s'accorde toujours avec son sujet." }
+   ]
+  },
+  {
+   "chapter_id": "978a035c-e469-42ee-8167-a6c9aebeaa59",
+   "titre": "Les types de phrases",
+   "questions": [
+    { "prompt": "Combien y a-t-il de types de phrases ?", "options": ["Quatre", "Deux", "Trois", "Six"], "correct_index": 0, "explanation": "Déclarative, interrogative, exclamative et impérative (ou injonctive)." },
+    { "prompt": "Quel type de phrase donne une information ?", "options": ["La phrase déclarative", "La phrase interrogative", "La phrase exclamative", "La phrase impérative"], "correct_index": 0, "explanation": "La phrase déclarative donne une information et se termine par un point." },
+    { "prompt": "Quelle ponctuation termine une phrase interrogative ?", "options": ["Le point d'interrogation", "Le point", "Le point d'exclamation", "Les points de suspension"], "correct_index": 0, "explanation": "La phrase interrogative pose une question et se termine par un point d'interrogation." },
+    { "prompt": "De quel type est « Que c'est beau ! » ?", "options": ["Exclamative", "Déclarative", "Interrogative", "Impérative"], "correct_index": 0, "explanation": "Elle exprime un sentiment fort : phrase exclamative." },
+    { "prompt": "De quel type est « Ferme la porte. » ?", "options": ["Impérative", "Déclarative", "Interrogative", "Exclamative"], "correct_index": 0, "explanation": "Elle donne un ordre : phrase impérative (ou injonctive)." },
+    { "prompt": "De quel type est « Il pleut aujourd'hui. » ?", "options": ["Déclarative", "Interrogative", "Exclamative", "Impérative"], "correct_index": 0, "explanation": "Elle donne une information : phrase déclarative." },
+    { "prompt": "De quel type est « Quelle heure est-il ? » ?", "options": ["Interrogative", "Déclarative", "Exclamative", "Impérative"], "correct_index": 0, "explanation": "Elle pose une question : phrase interrogative." },
+    { "prompt": "Quelle est la forme de « Je ne mange pas » ?", "options": ["Négative", "Affirmative", "Interrogative", "Impérative"], "correct_index": 0, "explanation": "« ne … pas » marque la forme négative." },
+    { "prompt": "Quelles locutions servent à la forme négative ?", "options": ["ne … pas, ne … plus, ne … jamais", "très, beaucoup, assez", "et, ou, mais", "ici, là, partout"], "correct_index": 0, "explanation": "La négation s'exprime par ne … pas, ne … plus, ne … jamais." },
+    { "prompt": "Que faire pour une phrase à la fois interrogative et exclamative comme « Comment oses-tu ! » ?", "options": ["Mettre le point d'exclamation si le sentiment prime", "Mettre toujours un point d'interrogation", "Ne mettre aucune ponctuation", "Mettre un simple point"], "correct_index": 0, "explanation": "Si le sentiment l'emporte, la phrase se termine par un point d'exclamation." }
+   ]
+  },
+  {
+   "chapter_id": "c4ddc1dc-f2f3-4f87-8849-ab0d0fd3cc80",
+   "titre": "L'adjectif qualificatif — Épithète et attribut",
+   "questions": [
+    { "prompt": "Que fait un adjectif qualificatif ?", "options": ["Il précise une qualité du nom", "Il remplace le nom", "Il conjugue le verbe", "Il relie deux phrases"], "correct_index": 0, "explanation": "L'adjectif qualificatif précise une qualité ou une caractéristique du nom." },
+    { "prompt": "Quand un adjectif est-il épithète ?", "options": ["Quand il est directement à côté du nom", "Quand il suit un verbe d'état", "Quand il est en fin de phrase", "Quand il est au pluriel"], "correct_index": 0, "explanation": "L'épithète se place à côté du nom, sans verbe entre les deux." },
+    { "prompt": "Quand un adjectif est-il attribut du sujet ?", "options": ["Quand il est relié au sujet par un verbe d'état", "Quand il est collé au nom", "Quand il est invariable", "Quand il commence la phrase"], "correct_index": 0, "explanation": "L'attribut est relié au sujet par un verbe d'état comme être." },
+    { "prompt": "Lequel est un verbe d'état ?", "options": ["sembler", "courir", "manger", "écrire"], "correct_index": 0, "explanation": "Être, paraître, sembler, devenir, rester : ce sont des verbes d'état." },
+    { "prompt": "Dans « J'ai vu un chien méchant », quelle est la fonction de « méchant » ?", "options": ["Épithète de chien", "Attribut du sujet", "Complément de lieu", "Sujet"], "correct_index": 0, "explanation": "L'adjectif est collé au nom, sans verbe d'état : il est épithète." },
+    { "prompt": "Dans « Ce chien semble méchant », quelle est la fonction de « méchant » ?", "options": ["Attribut du sujet", "Épithète", "Complément d'objet", "Adverbe"], "correct_index": 0, "explanation": "« Semble » est un verbe d'état : l'adjectif est attribut du sujet." },
+    { "prompt": "Dans « Elle est belle », quelle est la fonction de « belle » ?", "options": ["Attribut du sujet", "Épithète", "Sujet", "Complément circonstanciel"], "correct_index": 0, "explanation": "Le verbe être relie l'adjectif au sujet : c'est un attribut." },
+    { "prompt": "Dans « Elle porte une robe verte », quelle est la fonction de « verte » ?", "options": ["Épithète de robe", "Attribut du sujet", "Adverbe", "Sujet"], "correct_index": 0, "explanation": "L'adjectif est placé directement après le nom robe : il est épithète." },
+    { "prompt": "Dans « Mon ami est courageux », quelle est la fonction de « courageux » ?", "options": ["Attribut du sujet", "Épithète", "Complément de manière", "Déterminant"], "correct_index": 0, "explanation": "Relié au sujet par le verbe être : attribut du sujet." },
+    { "prompt": "Avec quoi l'adjectif qualificatif s'accorde-t-il ?", "options": ["Avec le nom qu'il qualifie", "Avec le verbe", "Avec l'adverbe", "Avec rien, il est invariable"], "correct_index": 0, "explanation": "L'adjectif s'accorde en genre et en nombre avec le nom." }
+   ]
+  },
+  {
+   "chapter_id": "41d84034-cc7b-4db5-8bbf-ef0d90b3fd55",
+   "titre": "Les adjectifs possessifs",
+   "questions": [
+    { "prompt": "Que montre un adjectif possessif ?", "options": ["À qui appartient la chose désignée", "La couleur de l'objet", "Le temps du verbe", "Le lieu de l'action"], "correct_index": 0, "explanation": "L'adjectif possessif indique le possesseur de la chose désignée." },
+    { "prompt": "Complète : « … livre est sur la table. » (à moi)", "options": ["Mon", "Ton", "Son", "Notre"], "correct_index": 0, "explanation": "Possesseur « je », nom masculin singulier : mon." },
+    { "prompt": "Complète : « … maison est grande. » (à lui)", "options": ["Sa", "Ma", "Ta", "Leur"], "correct_index": 0, "explanation": "Possesseur « il », nom féminin singulier : sa." },
+    { "prompt": "Complète : « … parents sont là. » (à nous)", "options": ["Nos", "Notre", "Nous", "Leurs"], "correct_index": 0, "explanation": "Possesseur « nous », nom pluriel : nos." },
+    { "prompt": "Quel possessif emploie-t-on devant « amie » ?", "options": ["mon amie", "ma amie", "mes amie", "ta amie"], "correct_index": 0, "explanation": "Devant un nom féminin commençant par une voyelle, on emploie mon, ton, son." },
+    { "prompt": "Quel possessif emploie-t-on devant « école » (à toi) ?", "options": ["ton école", "ta école", "tes école", "te école"], "correct_index": 0, "explanation": "Même règle : ton école, et non ta école." },
+    { "prompt": "Quel est le possessif pluriel correspondant à « il » ?", "options": ["ses", "ces", "leur", "sa"], "correct_index": 0, "explanation": "Possesseur « il » et nom pluriel : ses." },
+    { "prompt": "Quel possessif correspond à plusieurs possesseurs et plusieurs objets ?", "options": ["leurs", "leur", "ses", "notre"], "correct_index": 0, "explanation": "Plusieurs possesseurs et nom pluriel : leurs." },
+    { "prompt": "Complète : « … cahiers sont neufs. » (à vous)", "options": ["Vos", "Votre", "Vous", "Nos"], "correct_index": 0, "explanation": "Possesseur « vous », nom pluriel : vos." },
+    { "prompt": "Quelle est la nature du mot « mon » dans « mon livre » ?", "options": ["Un adjectif (déterminant) possessif", "Un pronom personnel", "Un adverbe", "Une préposition"], "correct_index": 0, "explanation": "« Mon » accompagne le nom : c'est un déterminant possessif." }
+   ]
+  },
+  {
+   "chapter_id": "0912bc77-6321-498b-bec3-0643649fc1c8",
+   "titre": "Les compléments circonstanciels",
+   "questions": [
+    { "prompt": "Qu'indique un complément circonstanciel ?", "options": ["Les circonstances de l'action", "Le sujet de l'action", "Le temps du verbe", "La nature du nom"], "correct_index": 0, "explanation": "Le CC indique les circonstances : temps, lieu, manière, cause." },
+    { "prompt": "Quelle question pose-t-on pour trouver un CC de temps ?", "options": ["Quand ?", "Où ?", "Comment ?", "Pourquoi ?"], "correct_index": 0, "explanation": "Le CC de temps répond à la question « Quand ? »." },
+    { "prompt": "Quelle question pose-t-on pour trouver un CC de lieu ?", "options": ["Où ?", "Quand ?", "Comment ?", "Pourquoi ?"], "correct_index": 0, "explanation": "Le CC de lieu répond à « Où ? »." },
+    { "prompt": "Quelle question pose-t-on pour trouver un CC de manière ?", "options": ["Comment ?", "Quand ?", "Où ?", "Combien ?"], "correct_index": 0, "explanation": "Le CC de manière répond à « Comment ? »." },
+    { "prompt": "Quelle question pose-t-on pour trouver un CC de cause ?", "options": ["Pourquoi ?", "Quand ?", "Où ?", "Comment ?"], "correct_index": 0, "explanation": "Le CC de cause répond à « Pourquoi ? »." },
+    { "prompt": "Dans « Je pars demain matin », quel est le CC ?", "options": ["demain matin, CC de temps", "Je, CC de lieu", "pars, CC de manière", "Il n'y en a pas"], "correct_index": 0, "explanation": "« Demain matin » répond à la question « Quand ? »." },
+    { "prompt": "Dans « Je joue dans la cour », quel est le CC ?", "options": ["dans la cour, CC de lieu", "Je, CC de temps", "joue, CC de manière", "Il n'y en a pas"], "correct_index": 0, "explanation": "« Dans la cour » répond à « Où ? »." },
+    { "prompt": "Dans « Il travaille avec soin », quel est le CC ?", "options": ["avec soin, CC de manière", "Il, CC de cause", "travaille, CC de temps", "Il n'y en a pas"], "correct_index": 0, "explanation": "« Avec soin » répond à « Comment ? »." },
+    { "prompt": "Quel test permet de repérer un complément circonstanciel ?", "options": ["Essayer de le supprimer : la phrase reste correcte", "Le mettre au pluriel", "Le remplacer par un verbe", "Changer le temps du verbe"], "correct_index": 0, "explanation": "Le CC peut généralement être supprimé ou déplacé sans rendre la phrase incorrecte." },
+    { "prompt": "Dans « Hier, nous avons joué au foot », quel est le CC de temps ?", "options": ["Hier", "nous", "au foot", "joué"], "correct_index": 0, "explanation": "« Hier » répond à la question « Quand ? »." }
+   ]
+  },
+  {
+   "chapter_id": "65646b51-584a-4397-a4a8-b99cd0f6e0fa",
+   "titre": "L'adverbe",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un adverbe ?", "options": ["Un mot invariable qui précise un verbe, un adjectif ou un autre adverbe", "Un mot qui remplace un nom", "Un mot qui indique le possesseur", "Un mot qui relie deux propositions"], "correct_index": 0, "explanation": "L'adverbe est invariable et modifie le sens d'un verbe, d'un adjectif ou d'un autre adverbe." },
+    { "prompt": "Dans « Il chante bien », que précise l'adverbe « bien » ?", "options": ["Le verbe", "Le sujet", "Un adjectif", "Un nom"], "correct_index": 0, "explanation": "« Bien » précise le verbe chanter." },
+    { "prompt": "Dans « Elle est très courageuse », que précise « très » ?", "options": ["L'adjectif", "Le verbe", "Le nom", "Le sujet"], "correct_index": 0, "explanation": "« Très » précise l'adjectif courageuse." },
+    { "prompt": "Dans « Il court très rapidement », que précise « très » ?", "options": ["Un autre adverbe", "Le verbe", "Le sujet", "Un nom"], "correct_index": 0, "explanation": "« Très » précise l'adverbe rapidement." },
+    { "prompt": "À quelle catégorie appartient « doucement » ?", "options": ["Adverbe de manière", "Adverbe de quantité", "Adverbe de lieu", "Adverbe de temps"], "correct_index": 0, "explanation": "Bien, mal, vite, doucement : adverbes de manière." },
+    { "prompt": "À quelle catégorie appartient « beaucoup » ?", "options": ["Adverbe de quantité", "Adverbe de lieu", "Adverbe de temps", "Adverbe de négation"], "correct_index": 0, "explanation": "Beaucoup, peu, trop, assez : adverbes de quantité." },
+    { "prompt": "À quelle catégorie appartient « partout » ?", "options": ["Adverbe de lieu", "Adverbe de temps", "Adverbe de manière", "Adverbe d'affirmation"], "correct_index": 0, "explanation": "Ici, là, partout, dehors : adverbes de lieu." },
+    { "prompt": "À quelle catégorie appartient « souvent » ?", "options": ["Adverbe de temps", "Adverbe de lieu", "Adverbe de quantité", "Adverbe de négation"], "correct_index": 0, "explanation": "Hier, aujourd'hui, toujours, souvent : adverbes de temps." },
+    { "prompt": "Quelle phrase est correcte ?", "options": ["Elle chante bien.", "Elle chante biens.", "Elles chantent biens.", "Ils travaillent beaucoups."], "correct_index": 0, "explanation": "L'adverbe est invariable : il ne prend jamais de s." },
+    { "prompt": "Que signifie « invariable » pour un adverbe ?", "options": ["Il ne change jamais de forme", "Il change au féminin", "Il change au pluriel", "Il change selon le temps"], "correct_index": 0, "explanation": "L'adverbe ne s'accorde jamais : sa forme ne change pas." }
+   ]
+  },
+  {
+   "chapter_id": "f73a76c8-3964-47bd-a6a4-2eb3e7d372c0",
+   "titre": "La formation des adverbes en -ment",
+   "questions": [
+    { "prompt": "Comment forme-t-on en général un adverbe en -ment ?", "options": ["En ajoutant -ment à l'adjectif au féminin", "En ajoutant -ment à l'adjectif au masculin", "En ajoutant -ment au verbe", "En ajoutant -ment au nom"], "correct_index": 0, "explanation": "On part de l'adjectif féminin : grande → grandement." },
+    { "prompt": "Quel adverbe forme-t-on à partir de « doux » ?", "options": ["doucement", "douxement", "douement", "doucemant"], "correct_index": 0, "explanation": "Féminin douce + -ment : doucement." },
+    { "prompt": "Quel adverbe forme-t-on à partir de « vif » ?", "options": ["vivement", "vifement", "vivament", "viment"], "correct_index": 0, "explanation": "Féminin vive + -ment : vivement." },
+    { "prompt": "Quel adverbe forme-t-on à partir de « lent » ?", "options": ["lentement", "lentment", "lenteument", "lentament"], "correct_index": 0, "explanation": "Féminin lente + -ment : lentement." },
+    { "prompt": "Que deviennent les adjectifs en -ent ?", "options": ["Des adverbes en -emment", "Des adverbes en -amment", "Des adverbes en -entment", "Des adverbes en -ement"], "correct_index": 0, "explanation": "Patient → patiemment ; prudent → prudemment." },
+    { "prompt": "Que deviennent les adjectifs en -ant ?", "options": ["Des adverbes en -amment", "Des adverbes en -emment", "Des adverbes en -antment", "Des adverbes en -ament"], "correct_index": 0, "explanation": "Bruyant → bruyamment ; puissant → puissamment." },
+    { "prompt": "Quel adverbe forme-t-on à partir de « prudent » ?", "options": ["prudemment", "prudamment", "prudentment", "prudement"], "correct_index": 0, "explanation": "Adjectif en -ent : prudemment." },
+    { "prompt": "Quel adverbe forme-t-on à partir de « élégant » ?", "options": ["élégamment", "élégemment", "éléguamment", "élégantment"], "correct_index": 0, "explanation": "Adjectif en -ant : élégamment." },
+    { "prompt": "Quel adverbe forme-t-on à partir de « courageux » ?", "options": ["courageusement", "courageuxment", "courageument", "couragement"], "correct_index": 0, "explanation": "Féminin courageuse + -ment : courageusement." },
+    { "prompt": "Quel adverbe forme-t-on à partir de « intelligent » ?", "options": ["intelligemment", "intelligamment", "intelligentment", "intelligement"], "correct_index": 0, "explanation": "Adjectif en -ent : intelligemment." }
+   ]
+  },
+  {
+   "chapter_id": "144597cb-734d-47bc-85ac-65e96d7f6444",
+   "titre": "Les pronoms personnels compléments",
+   "questions": [
+    { "prompt": "À quoi servent les pronoms personnels compléments ?", "options": ["À remplacer un groupe nominal complément pour éviter les répétitions", "À conjuguer les verbes", "À relier deux phrases", "À indiquer le possesseur"], "correct_index": 0, "explanation": "Ils remplacent un complément et évitent de répéter le même groupe de mots." },
+    { "prompt": "Où se placent les pronoms compléments ?", "options": ["Avant le verbe", "Après le verbe", "En fin de phrase", "Avant le sujet"], "correct_index": 0, "explanation": "Ils se placent avant le verbe : « Il la regarde »." },
+    { "prompt": "Remplace le complément : « Je prends le livre. »", "options": ["Je le prends.", "Je lui prends.", "Je les prends.", "Je leur prends."], "correct_index": 0, "explanation": "« Le livre » est masculin singulier COD : le." },
+    { "prompt": "Remplace le complément : « Elle parle à son ami. »", "options": ["Elle lui parle.", "Elle le parle.", "Elle la parle.", "Elle les parle."], "correct_index": 0, "explanation": "« À son ami » est un COI singulier : lui." },
+    { "prompt": "Remplace le complément : « Nous regardons les oiseaux. »", "options": ["Nous les regardons.", "Nous leur regardons.", "Nous le regardons.", "Nous lui regardons."], "correct_index": 0, "explanation": "« Les oiseaux » est un COD pluriel : les." },
+    { "prompt": "Remplace le complément : « Mon frère regarde la télé. »", "options": ["Il la regarde.", "Il lui regarde.", "Il le regarde.", "Il leur regarde."], "correct_index": 0, "explanation": "« La télé » est féminin singulier COD : la." },
+    { "prompt": "Quel pronom remplace un COI pluriel de personnes ?", "options": ["leur", "les", "lui", "le"], "correct_index": 0, "explanation": "« Je parle à mes amis » → « Je leur parle »." },
+    { "prompt": "Quelle est la fonction du pronom « lui » ?", "options": ["COI", "COD", "Sujet", "Attribut"], "correct_index": 0, "explanation": "« Lui » remplace un complément d'objet indirect désignant une personne." },
+    { "prompt": "Quelle est la fonction du pronom « les » ?", "options": ["COD", "COI", "Sujet", "Complément circonstanciel"], "correct_index": 0, "explanation": "« Les » remplace un complément d'objet direct au pluriel." },
+    { "prompt": "Quel pronom remplace la 1re personne du singulier en complément ?", "options": ["me ou m'", "te ou t'", "le ou la", "lui"], "correct_index": 0, "explanation": "Me / m' remplace la 1re personne du singulier, en COD ou COI." }
+   ]
+  },
+  {
+   "chapter_id": "b3ae474c-bf68-4afb-bdda-d5b851219632",
+   "titre": "Les pronoms indéfinis",
+   "questions": [
+    { "prompt": "Que désignent les pronoms indéfinis ?", "options": ["Des personnes ou des choses de manière vague", "Le possesseur d'un objet", "Le temps de l'action", "La qualité d'un nom"], "correct_index": 0, "explanation": "Ils remplacent un nom sans préciser clairement qui ou quoi." },
+    { "prompt": "Dans « Quelqu'un frappe à la porte », quel est le pronom indéfini ?", "options": ["Quelqu'un", "frappe", "porte", "à"], "correct_index": 0, "explanation": "« Quelqu'un » désigne une personne non identifiée." },
+    { "prompt": "Dans « Personne ne sait », quel est le pronom indéfini ?", "options": ["Personne", "ne", "sait", "Il n'y en a pas"], "correct_index": 0, "explanation": "« Personne » est un pronom indéfini de sens négatif." },
+    { "prompt": "Dans « Chacun fait son travail », que désigne « chacun » ?", "options": ["Chaque personne prise séparément", "Tout le monde ensemble", "Un objet précis", "Un lieu"], "correct_index": 0, "explanation": "« Chacun » désigne chaque individu du groupe." },
+    { "prompt": "Dans « Plusieurs sont absents », quel est le pronom indéfini ?", "options": ["Plusieurs", "sont", "absents", "Il n'y en a pas"], "correct_index": 0, "explanation": "« Plusieurs » désigne un nombre imprécis de personnes." },
+    { "prompt": "Dans « Il ne fait rien », quel est le pronom indéfini ?", "options": ["rien", "Il", "fait", "ne"], "correct_index": 0, "explanation": "« Rien » est un pronom indéfini." },
+    { "prompt": "Dans « Tous sont arrivés », quel est le pronom indéfini ?", "options": ["Tous", "sont", "arrivés", "Il n'y en a pas"], "correct_index": 0, "explanation": "« Tous » désigne l'ensemble des personnes." },
+    { "prompt": "Dans « On travaille bien ici », quelle est la nature de « on » ?", "options": ["Un pronom indéfini", "Un déterminant", "Un adverbe", "Une conjonction"], "correct_index": 0, "explanation": "« On » est un pronom indéfini qui sert aussi de pronom sujet." },
+    { "prompt": "Dans « Aucun n'est venu », que signifie « aucun » ?", "options": ["Pas une seule personne", "Tout le monde", "Quelques-uns", "Plusieurs"], "correct_index": 0, "explanation": "« Aucun » signifie pas un seul." },
+    { "prompt": "Dans « Certains réussissent, d'autres échouent », que désigne « certains » ?", "options": ["Quelques personnes parmi d'autres", "Toutes les personnes", "Aucune personne", "Une seule personne"], "correct_index": 0, "explanation": "« Certains » désigne une partie imprécise d'un groupe." }
+   ]
+  },
+  {
+   "chapter_id": "96ce27fc-2749-4980-bc86-94434d3f7ebb",
+   "titre": "La nature et la fonction d'un mot",
+   "questions": [
+    { "prompt": "Qu'appelle-t-on la nature d'un mot ?", "options": ["Ce qu'il est, sa catégorie grammaticale", "Le rôle qu'il joue dans la phrase", "Sa place dans la phrase", "Son nombre de lettres"], "correct_index": 0, "explanation": "La nature, c'est la catégorie grammaticale : nom, verbe, adjectif…" },
+    { "prompt": "Qu'appelle-t-on la fonction d'un mot ?", "options": ["Le rôle qu'il joue dans la phrase", "Sa catégorie grammaticale", "Son genre", "Son nombre"], "correct_index": 0, "explanation": "La fonction, c'est le rôle : sujet, COD, CC, attribut…" },
+    { "prompt": "Quelle est la nature du mot « vite » ?", "options": ["Un adverbe", "Un adjectif", "Un nom", "Un verbe"], "correct_index": 0, "explanation": "Vite, bien, très sont des adverbes." },
+    { "prompt": "Quelle est la nature du mot « dans » ?", "options": ["Une préposition", "Une conjonction", "Un adverbe", "Un pronom"], "correct_index": 0, "explanation": "À, de, dans, sur sont des prépositions." },
+    { "prompt": "Quelle est la nature du mot « mais » ?", "options": ["Une conjonction", "Une préposition", "Un déterminant", "Un pronom"], "correct_index": 0, "explanation": "Et, mais, ou, que, si sont des conjonctions." },
+    { "prompt": "Dans « Je mange du pain », quelle est la fonction de « du pain » ?", "options": ["COD", "Sujet", "COI", "Attribut"], "correct_index": 0, "explanation": "Je mange quoi ? Du pain : complément d'objet direct." },
+    { "prompt": "Dans « Je parle à mon ami », quelle est la fonction de « à mon ami » ?", "options": ["COI", "COD", "Sujet", "Épithète"], "correct_index": 0, "explanation": "Je parle à qui ? À mon ami : complément d'objet indirect." },
+    { "prompt": "Dans « Il est grand », quelle est la fonction de « grand » ?", "options": ["Attribut du sujet", "Épithète", "COD", "CC de manière"], "correct_index": 0, "explanation": "Relié au sujet par le verbe être : attribut du sujet." },
+    { "prompt": "Dans « un beau livre », quelle est la fonction de « beau » ?", "options": ["Épithète", "Attribut", "Sujet", "COD"], "correct_index": 0, "explanation": "L'adjectif est placé à côté du nom : épithète." },
+    { "prompt": "Quelle question permet de trouver le COD ?", "options": ["Verbe + qui ? ou quoi ?", "Verbe + à qui ?", "Où ?", "Quand ?"], "correct_index": 0, "explanation": "Le COD répond à « qui ? » ou « quoi ? » posé après le verbe." }
+   ]
+  },
+  {
+   "chapter_id": "2e4401a3-c273-4565-a068-df031cda3e05",
+   "titre": "La proposition subordonnée circonstancielle",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une proposition subordonnée circonstancielle ?", "options": ["Une proposition qui dépend de la principale et indique les circonstances", "Une proposition indépendante", "Un groupe nominal", "Un adverbe de manière"], "correct_index": 0, "explanation": "Elle dépend de la proposition principale et indique temps, lieu, cause, condition ou but." },
+    { "prompt": "Quelle conjonction introduit une subordonnée de temps ?", "options": ["lorsque", "parce que", "si", "pour que"], "correct_index": 0, "explanation": "Quand, lorsque, dès que, pendant que introduisent le temps." },
+    { "prompt": "Quelle conjonction introduit une subordonnée de cause ?", "options": ["parce que", "si", "pour que", "lorsque"], "correct_index": 0, "explanation": "Parce que, puisque, vu que introduisent la cause." },
+    { "prompt": "Quelle conjonction introduit une subordonnée de condition ?", "options": ["si", "parce que", "pour que", "dès que"], "correct_index": 0, "explanation": "Si, à condition que, pourvu que introduisent la condition." },
+    { "prompt": "Quelle conjonction introduit une subordonnée de but ?", "options": ["pour que", "parce que", "quand", "si"], "correct_index": 0, "explanation": "Pour que, afin que, de peur que introduisent le but." },
+    { "prompt": "Dans « Lorsque la cloche sonne, les élèves sortent », que marque la subordonnée ?", "options": ["Le temps", "La cause", "Le but", "La condition"], "correct_index": 0, "explanation": "« Lorsque » introduit une subordonnée de temps." },
+    { "prompt": "Dans « Parce qu'il pleut, nous restons à l'intérieur », que marque la subordonnée ?", "options": ["La cause", "Le temps", "Le but", "La condition"], "correct_index": 0, "explanation": "« Parce que » introduit la cause." },
+    { "prompt": "Dans « Si tu travailles, tu réussiras », que marque la subordonnée ?", "options": ["La condition", "La cause", "Le but", "Le lieu"], "correct_index": 0, "explanation": "« Si » introduit une subordonnée de condition." },
+    { "prompt": "Dans « Il parle fort pour que tout le monde entende », que marque la subordonnée ?", "options": ["Le but", "La cause", "Le temps", "Le lieu"], "correct_index": 0, "explanation": "« Pour que » introduit le but." },
+    { "prompt": "Dans « Restez où vous êtes », que marque la subordonnée ?", "options": ["Le lieu", "Le temps", "La cause", "Le but"], "correct_index": 0, "explanation": "« Où » introduit une subordonnée de lieu." }
+   ]
+  },
+  {
+   "chapter_id": "60dc72dd-4a44-485c-85e3-6a2995f38323",
+   "titre": "La cause, la condition et le but",
+   "questions": [
+    { "prompt": "Qu'exprime la cause ?", "options": ["Pourquoi l'action a lieu", "Ce qu'on veut obtenir", "Ce qu'il faut pour que l'action se réalise", "Le lieu de l'action"], "correct_index": 0, "explanation": "La cause explique pourquoi l'action a lieu." },
+    { "prompt": "Qu'exprime la condition ?", "options": ["Ce qu'il faut pour que l'action se réalise", "Le résultat voulu", "La raison du passé", "La manière"], "correct_index": 0, "explanation": "La condition exprime ce qui est nécessaire pour que l'action ait lieu." },
+    { "prompt": "Qu'exprime le but ?", "options": ["L'objectif, ce qu'on veut obtenir", "La raison passée", "La condition nécessaire", "Le moment de l'action"], "correct_index": 0, "explanation": "Le but indique l'objectif visé." },
+    { "prompt": "Quel mot clé annonce la cause ?", "options": ["puisque", "si", "afin que", "pourvu que"], "correct_index": 0, "explanation": "Parce que, puisque, car, vu que, à cause de annoncent la cause." },
+    { "prompt": "Quel mot clé annonce la condition ?", "options": ["à condition que", "parce que", "pour que", "car"], "correct_index": 0, "explanation": "Si, à condition que, pourvu que, au cas où annoncent la condition." },
+    { "prompt": "Quel mot clé annonce le but ?", "options": ["afin que", "vu que", "si", "puisque"], "correct_index": 0, "explanation": "Pour que, afin que, de peur que annoncent le but." },
+    { "prompt": "Dans « Il est resté à la maison parce qu'il était malade », que marque la proposition ?", "options": ["La cause", "La condition", "Le but", "Le temps"], "correct_index": 0, "explanation": "« Parce qu'il était malade » donne la raison." },
+    { "prompt": "Dans « Si tu étudies bien, tu réussiras le CEPE », que marque la proposition ?", "options": ["La condition", "La cause", "Le but", "Le lieu"], "correct_index": 0, "explanation": "« Si tu étudies bien » pose la condition de la réussite." },
+    { "prompt": "Dans « Elle parle lentement pour que les élèves comprennent », que marque la proposition ?", "options": ["Le but", "La cause", "La condition", "Le temps"], "correct_index": 0, "explanation": "« Pour que les élèves comprennent » indique l'objectif." },
+    { "prompt": "Dans « Il mange pour être fort », que marque le groupe en gras ?", "options": ["Le but", "La cause", "La condition", "La manière"], "correct_index": 0, "explanation": "« Pour être fort » indique l'objectif recherché." }
+   ]
+  }
+ ]
+}

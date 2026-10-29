@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import Link from 'next/link'
-import { PDFViewerLazy as PDFViewer } from '../../cours/[id]/pdf-viewer-lazy'
+// Chemin absolu : la visionneuse vit dans le groupe (catalogue), pas (dashboard).
+import { PDFViewerLazy as PDFViewer } from '@/app/(catalogue)/cours/[id]/pdf-viewer-lazy'
 import { saveExamHistorique } from '../examens-historique'
 import { MarkdownRenderer } from '@/components/markdown-renderer'
 
@@ -41,7 +42,7 @@ type Panel = 'enonce' | 'corrige'
 
 /* ─── Couleurs cycliques pour les chapitres ─── */
 const CHAPTER_COLORS = [
-  'bg-violet-100 text-violet-800 border-violet-200',
+  'bg-blue-100 text-blue-800 border-blue-200',
   'bg-blue-100 text-blue-800 border-blue-200',
   'bg-emerald-100 text-emerald-800 border-emerald-200',
   'bg-amber-100 text-amber-800 border-amber-200',
@@ -260,7 +261,7 @@ export function ExamenViewer({
               onClick={() => setActivePanel(panel)}
               className={`px-4 py-2 text-sm font-medium transition-colors ${
                 activePanel === panel
-                  ? panel === 'enonce' ? 'bg-purple-600 text-white' : 'bg-green-600 text-white'
+                  ? panel === 'enonce' ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -276,7 +277,7 @@ export function ExamenViewer({
       <div className={`flex gap-4 ${corrigeUrl ? 'lg:grid lg:grid-cols-2' : ''}`}>
         <div className={`flex-1 min-w-0 ${corrigeUrl && activePanel !== 'enonce' ? 'hidden lg:block' : ''}`}>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-purple-600 bg-purple-50 px-2 py-1 rounded-full">
+            <span className="text-xs font-semibold uppercase tracking-wide text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
               📄 Énoncé
             </span>
           </div>
@@ -308,11 +309,11 @@ export function ExamenViewer({
               {totalExercises} exercice{totalExercises > 1 ? 's' : ''} détecté{totalExercises > 1 ? 's' : ''}
             </h3>
             {isGrouped && (
-              <span className="text-xs text-violet-600 bg-violet-50 border border-violet-100 px-2 py-0.5 rounded-full font-medium">
+              <span className="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full font-medium">
                 {groups.length} chapitre{groups.length > 1 ? 's' : ''}
               </span>
             )}
-            <span className="text-xs text-gray-400">— Clique sur un exercice pour l'expliquer avec Kelassi</span>
+            <span className="text-xs text-gray-400">— Clique sur un exercice pour l'expliquer avec Cognix</span>
           </div>
 
           {/* Groupes */}
@@ -341,7 +342,7 @@ export function ExamenViewer({
                     key={ex.id}
                     id={`ex-${ex.id}`}
                     className={`border rounded-xl overflow-hidden bg-white scroll-mt-20 transition-shadow ${
-                      isOpen ? 'shadow-md border-violet-200' : 'hover:border-gray-200'
+                      isOpen ? 'shadow-md border-blue-200' : 'hover:border-gray-200'
                     }`}
                   >
                     {/* Accordéon header */}
@@ -351,7 +352,7 @@ export function ExamenViewer({
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <span className={`flex-shrink-0 w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center
-                          ${group.chapter ? group.color : 'bg-purple-100 text-purple-700'}`}
+                          ${group.chapter ? group.color : 'bg-blue-100 text-blue-700'}`}
                         >
                           {group.chapter ? idx + 1 : globalIdx + 1}
                         </span>
@@ -371,7 +372,7 @@ export function ExamenViewer({
                           className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs transition-colors ${
                             isCopied
                               ? 'bg-green-100 text-green-600'
-                              : 'bg-gray-100 text-gray-400 hover:bg-violet-100 hover:text-violet-600'
+                              : 'bg-gray-100 text-gray-400 hover:bg-blue-100 hover:text-blue-600'
                           }`}
                         >
                           {isCopied ? '✓' : '🔗'}
@@ -427,7 +428,7 @@ export function ExamenViewer({
                             className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
                               isCopied
                                 ? 'bg-green-50 text-green-700 border-green-200'
-                                : 'bg-white text-gray-600 border-gray-200 hover:border-violet-200 hover:text-violet-600'
+                                : 'bg-white text-gray-600 border-gray-200 hover:border-blue-200 hover:text-blue-600'
                             }`}
                           >
                             {isCopied ? '✓ Lien copié !' : '🔗 Partager'}
@@ -439,7 +440,7 @@ export function ExamenViewer({
                           <div className="rounded-xl border-2 border-amber-200 bg-amber-50/60 overflow-hidden">
                             <div className="flex items-center gap-2 px-4 py-2.5 bg-amber-100 border-b border-amber-200">
                               <span className="text-base">💡</span>
-                              <p className="text-xs font-bold text-amber-800 uppercase tracking-wide">Solution complète · Kelassi IA</p>
+                              <p className="text-xs font-bold text-amber-800 uppercase tracking-wide">Solution complète · Cognix IA</p>
                               {solutions[ex.id]?.streaming && (
                                 <span className="ml-auto inline-flex gap-0.5">
                                   <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -468,7 +469,7 @@ export function ExamenViewer({
         <div className="mt-2 flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
           <span className="text-2xl">🤖</span>
           <div className="flex-1">
-            <p className="text-sm font-medium text-emerald-800">Poser une question à Kelassi</p>
+            <p className="text-sm font-medium text-emerald-800">Poser une question à Cognix</p>
             <p className="text-xs text-emerald-600 mt-0.5">
               Le tuteur IA connaît ce document et peut t'expliquer n'importe quel exercice.
             </p>

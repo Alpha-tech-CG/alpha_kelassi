@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/admin-guard'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 
 const supabaseAdmin = createAdminClient(
@@ -8,24 +8,27 @@ const supabaseAdmin = createAdminClient(
 )
 
 export async function GET(req: NextRequest) {
-  // Auth
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-
-  // Vérif admin
-  const { data: profile } = await supabaseAdmin
-    .from('users')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-  if (profile?.role !== 'admin') {
-    return NextResponse.json({ error: 'Admin requis' }, { status: 403 })
-  }
+  const guard = await requireAdmin()   // liste blanche d'e-mails + rôle admin
+  if ('error' in guard) return guard.error
 
   const { searchParams } = new URL(req.url)
-  const filename = searchParams.get('filename') ?? 'document'
+  const filename = searchParams.get('filename') ?? 'document.pdf'
   const isPremium = searchParams.get('premium') === 'true'
+
+  if (filename.length > 200) {
+    return NextResponse.json({ error: 'Nom de fichier trop long' }, { status: 400 })
+  }
+
+  // Liste blanche d'extensions : l'URL pré-signée ne doit jamais permettre
+  // de déposer un type exécutable ou rendu (html, svg…) dans un bucket public.
+  const ALLOWED_EXT = ['pdf', 'docx', 'txt'] as const
+  const ext = (filename.split('.').pop() ?? '').toLowerCase()
+  if (!(ALLOWED_EXT as readonly string[]).includes(ext)) {
+    return NextResponse.json(
+      { error: 'Extension non autorisée (pdf, docx ou txt uniquement)' },
+      { status: 422 },
+    )
+  }
 
   const safeName = filename
     .replace(/[^a-zA-Z0-9._-]/g, '_')
@@ -41,7 +44,8 @@ export async function GET(req: NextRequest) {
     .createSignedUploadUrl(storagePath)
 
   if (error || !data) {
-    return NextResponse.json({ error: error?.message ?? 'Erreur presign' }, { status: 500 })
+    console.error('[/api/admin/documents/presign]', error?.message)
+    return NextResponse.json({ error: 'Préparation du téléversement impossible.' }, { status: 500 })
   }
 
   return NextResponse.json({ signedUrl: data.signedUrl, path: storagePath, bucket })

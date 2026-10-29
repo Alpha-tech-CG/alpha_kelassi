@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, supabaseAdmin } from '@/lib/admin-guard'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
 
 /** GET /api/admin/courses — liste les cours (avec matière + nb d'O.G) */
 export async function GET(_req: NextRequest) {
@@ -14,7 +15,13 @@ export async function GET(_req: NextRequest) {
     .order('position', { ascending: true })
     .order('created_at', { ascending: false })
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/courses]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
 
   const rows = (data ?? []).map((c: Record<string, unknown>) => ({
     id: c['id'],
@@ -32,7 +39,7 @@ export async function GET(_req: NextRequest) {
 
 const schema = z.object({
   subject_id: z.string().uuid(),
-  level: z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  level: z.enum(STUDY_LEVELS),
   title: z.string().min(3).max(200),
   subtitle: z.string().max(300).optional(),
   is_premium: z.boolean().default(false),
@@ -59,6 +66,12 @@ export async function POST(req: NextRequest) {
     .select('id')
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/courses]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data }, { status: 201 })
 }

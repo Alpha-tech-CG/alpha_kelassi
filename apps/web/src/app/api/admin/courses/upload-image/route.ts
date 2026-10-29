@@ -13,14 +13,26 @@ export async function POST(req: NextRequest) {
   if (!(file instanceof File)) {
     return NextResponse.json({ error: { code: 'NO_FILE', message: 'Aucun fichier.' } }, { status: 400 })
   }
-  if (!file.type.startsWith('image/')) {
-    return NextResponse.json({ error: { code: 'BAD_TYPE', message: 'Le fichier doit être une image.' } }, { status: 422 })
+  // Liste blanche stricte : `image/*` laisserait passer image/svg+xml, qui est
+  // rendu comme du HTML depuis un bucket public (XSS stockée).
+  const ALLOWED = {
+    'image/jpeg': 'jpg',
+    'image/png':  'png',
+    'image/webp': 'webp',
+    'image/gif':  'gif',
+  } as const
+  const ext = ALLOWED[file.type as keyof typeof ALLOWED]
+  if (!ext) {
+    return NextResponse.json(
+      { error: { code: 'BAD_TYPE', message: 'Formats acceptés : JPEG, PNG, WebP, GIF.' } },
+      { status: 422 },
+    )
   }
   if (file.size > 5 * 1024 * 1024) {
     return NextResponse.json({ error: { code: 'TOO_BIG', message: 'Image trop lourde (max 5 Mo).' } }, { status: 422 })
   }
 
-  const ext = (file.name.split('.').pop() ?? 'jpg').replace(/[^a-zA-Z0-9]/g, '').slice(0, 5) || 'jpg'
+  // L'extension vient de la liste blanche, jamais du nom fourni par le client.
   const path = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`
   const buffer = Buffer.from(await file.arrayBuffer())
 
@@ -28,7 +40,13 @@ export async function POST(req: NextRequest) {
     .from('course-images')
     .upload(path, buffer, { contentType: file.type, upsert: false })
 
-  if (error) return NextResponse.json({ error: { code: 'UPLOAD_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/courses/upload-image]', error)
+
+    return NextResponse.json({ error: { code: 'UPLOAD_ERROR', message: "Échec de l'envoi du fichier, réessaie plus tard." } }, { status: 500 })
+
+  }
 
   const { data } = supabaseAdmin.storage.from('course-images').getPublicUrl(path)
   return NextResponse.json({ data: { url: data.publicUrl } }, { status: 201 })

@@ -1,13 +1,42 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
+import { LessonContent } from '../../components/LessonContent'
+import { latexToText } from '../../lib/latexText'
+import { LockedFeature } from '../../components/LockedFeature'
+import { planErrorOf, type LockedInfo } from '../../lib/billing'
+import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
+import { track } from '../../lib/analytics'
+
+/**
+ * Un énoncé de QCM est du texte simple dans l'immense majorité des cas, et le
+ * `Text` stylé ci-dessous lui donne le bon poids visuel. Depuis que la console
+ * admin permet d'y insérer des tableaux et des schémas, on bascule sur le rendu
+ * Markdown *uniquement* quand l'énoncé en contient — sinon les questions
+ * ordinaires perdraient leur mise en forme.
+ */
+const isRichMarkdown = (s: string) =>
+  /^\s*\|.*\|\s*$/m.test(s) || /!\[[^\]]*\]\((?:https?|file):\/\/[^\s)]+\)/.test(s)
 
 interface Question { id: string; position: number; prompt: string; options: string[] }
 interface Quiz { id: string; title: string; time_limit_sec: number; questions: Question[] }
 interface Correction { question_id: string; correct_index: number; explanation: string | null }
-interface Result { attempt_id: string; score: number; total: number; corrections: Correction[] }
+interface Result {
+  attempt_id: string; score: number; penalized_score?: number; wrong?: number; total: number; mode?: string; corrections: Correction[]
+  /** Résultats détaillés (formule Pro). */
+  details?: { correct: number; wrong: number; blank: number; penalty: number; seconds_per_question: number | null; best_rate: number; delta_vs_last: number | null; advice: string } | null
+}
+
+type Mode = 'entrainement' | 'bac_test' | 'bac_blanc' | 'bac_rouge'
+const MODE_META: Record<Mode, { label: string; emoji: string; timed: boolean }> = {
+  entrainement: { label: 'Entraînement libre', emoji: '🎯', timed: false },
+  bac_test:     { label: 'Bac test',           emoji: '⏱️', timed: true },
+  bac_blanc:    { label: 'Bac blanc',          emoji: '📝', timed: true },
+  bac_rouge:    { label: 'Bac rouge',          emoji: '🔴', timed: true },
+}
 
 function fmt(sec: number) {
   const m = Math.floor(sec / 60)
@@ -16,7 +45,9 @@ function fmt(sec: number) {
 }
 
 export default function QuizTakeScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const { id, mode: modeParam } = useLocalSearchParams<{ id: string; mode?: string }>()
+  const mode: Mode = (['entrainement', 'bac_test', 'bac_blanc', 'bac_rouge'] as const).includes(modeParam as Mode) ? (modeParam as Mode) : 'bac_blanc'
+  const meta = MODE_META[mode]
   const router = useRouter()
   const [quiz, setQuiz] = useState<Quiz | null>(null)
   const [loading, setLoading] = useState(true)
@@ -25,6 +56,8 @@ export default function QuizTakeScreen() {
   const [remaining, setRemaining] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState<Result | null>(null)
+  const [locked, setLocked] = useState<LockedInfo | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const startRef = useRef(Date.now())
 
   async function getToken() {
@@ -36,7 +69,8 @@ export default function QuizTakeScreen() {
     async function load() {
       const token = await getToken()
       const res = await fetch(`${API_URL}/api/quiz/${id}`, { headers: { Authorization: `Bearer ${token}` } })
-      const json = await res.json()
+      const json = await res.json().catch(() => ({}))
+      if (json.data?.locked) setLocked(json.data.locked)
       if (json.data) {
         setQuiz(json.data)
         setRemaining(json.data.time_limit_sec)
@@ -59,36 +93,72 @@ export default function QuizTakeScreen() {
     const res = await fetch(`${API_URL}/api/quiz/${id}/submit`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body:    JSON.stringify({ answers: payload, duration_sec }),
+      body:    JSON.stringify({ answers: payload, duration_sec, mode }),
     })
-    const json = await res.json()
-    if (json.data) setResult(json.data)
+    const json = await res.json().catch(() => ({}))
+    const planErr = planErrorOf(json)
+    if (planErr?.info) setLocked(planErr.info)
+    else if (json.data) {
+      setResult(json.data)
+      track('quiz_completed', { quiz_id: id, mode: mode ?? null, score: json.data.score ?? null, total: json.data.total ?? null })
+    }
+    else setSubmitError(json.error?.message ?? 'Envoi impossible. Tes réponses sont conservées : réessaie.')
     setSubmitting(false)
-  }, [quiz, submitting, result, answers, id])
+  }, [quiz, submitting, result, answers, id, mode])
 
-  // Chrono
+  // Chrono — désactivé en mode entraînement libre (sans pression)
   useEffect(() => {
-    if (loading || result || !quiz) return
+    if (loading || result || !quiz || !meta.timed || locked || quiz.questions.length === 0) return
     if (remaining <= 0) { submit(); return }
     const t = setTimeout(() => setRemaining((r) => r - 1), 1000)
     return () => clearTimeout(t)
-  }, [remaining, loading, result, quiz, submit])
+  }, [remaining, loading, result, quiz, submit, meta.timed])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#006B2E" />
+  if (loading) return <CognixLoader />
   if (!quiz) return <View style={styles.center}><Text>QCM introuvable.</Text></View>
+
+  // Formule insuffisante : explication et accès aux offres, jamais un QCM vide.
+  if (locked) {
+    return (
+      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+        <BackButton />
+        <Text style={{ fontSize: 16, fontWeight: '800', textAlign: 'center', marginBottom: 8 }}>{quiz.title}</Text>
+        <LockedFeature info={locked} />
+      </ScrollView>
+    )
+  }
 
   // ---------- Résultat ----------
   if (result) {
-    const pct = result.total > 0 ? Math.round((100 * result.score) / result.total) : 0
+    const shownScore = mode === 'bac_rouge' && result.penalized_score != null ? result.penalized_score : result.score
+    const pct = result.total > 0 ? Math.round((100 * shownScore) / result.total) : 0
     const byId = new Map(result.corrections.map((c) => [c.question_id, c]))
     return (
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <View style={styles.resultCard}>
           <Text style={styles.resultEmoji}>{pct >= 50 ? '🏆' : '💪'}</Text>
-          <Text style={styles.resultScore}>{result.score}/{result.total}</Text>
-          <Text style={styles.resultPct}>{pct}% de bonnes réponses</Text>
+          <Text style={styles.resultScore}>{shownScore}/{result.total}</Text>
+          <Text style={styles.resultPct}>{meta.emoji} {meta.label} · {pct}%</Text>
+          {mode === 'bac_rouge' && (result.wrong ?? 0) > 0 && (
+            <Text style={styles.penalty}>🔴 {result.wrong} erreur{(result.wrong ?? 0) > 1 ? 's' : ''} · pénalité −{result.wrong} (brut : {result.score})</Text>
+          )}
           {result.score > 0 && <Text style={styles.xp}>+{result.score * 5} XP</Text>}
         </View>
+
+        {result.details ? (
+          <View style={styles.resultCard}>
+            <Text style={{ fontSize: 15, fontWeight: '900', marginBottom: 6 }}>Résultats détaillés</Text>
+            <Text>✅ {result.details.correct} bonne(s) · ❌ {result.details.wrong} erreur(s) · ○ {result.details.blank} sans réponse</Text>
+            {result.details.seconds_per_question !== null && <Text>⏱️ {result.details.seconds_per_question} s par question</Text>}
+            <Text>🏅 Meilleur résultat sur ce sujet : {result.details.best_rate} %</Text>
+            {result.details.delta_vs_last !== null && <Text>📈 Par rapport à la dernière fois : {result.details.delta_vs_last >= 0 ? '+' : ''}{result.details.delta_vs_last} points</Text>}
+            <Text style={{ fontWeight: '800', marginTop: 6, textAlign: 'center' }}>{result.details.advice}</Text>
+          </View>
+        ) : (
+          <TouchableOpacity onPress={() => router.push('/abonnement?plan=pro' as any)} accessibilityRole="button">
+            <Text style={{ textAlign: 'center', color: '#3E4A3E', marginBottom: 12 }}>Résultats détaillés (rythme, évolution, conseils) avec la formule Pro →</Text>
+          </TouchableOpacity>
+        )}
 
         {quiz.questions.map((q) => {
           const corr = byId.get(q.id)
@@ -96,7 +166,14 @@ export default function QuizTakeScreen() {
           const ok = corr && picked === corr.correct_index
           return (
             <View key={q.id} style={styles.reviewCard}>
-              <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}. {q.prompt}</Text>
+              {isRichMarkdown(q.prompt) ? (
+                <>
+                  <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}.</Text>
+                  <LessonContent content={latexToText(q.prompt)} />
+                </>
+              ) : (
+                <Text style={styles.reviewPrompt}>{ok ? '✅' : '❌'} {q.position}. {latexToText(q.prompt)}</Text>
+              )}
               {q.options.map((opt, i) => {
                 const isRight = corr?.correct_index === i
                 const isPicked = picked === i
@@ -105,11 +182,18 @@ export default function QuizTakeScreen() {
                     key={i}
                     style={[styles.reviewOpt, isRight && styles.reviewRight, isPicked && !isRight && styles.reviewWrong]}
                   >
-                    {opt}
+                    {latexToText(opt)}
                   </Text>
                 )
               })}
-              {corr?.explanation && <Text style={styles.explanation}>💡 {corr.explanation}</Text>}
+              {corr?.explanation && (isRichMarkdown(corr.explanation) ? (
+                <View style={styles.explanationRich}>
+                  <Text style={styles.explanation}>💡</Text>
+                  <LessonContent content={latexToText(corr.explanation)} />
+                </View>
+              ) : (
+                <Text style={styles.explanation}>💡 {latexToText(corr.explanation)}</Text>
+              ))}
             </View>
           )
         })}
@@ -132,15 +216,19 @@ export default function QuizTakeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Text style={styles.counter}>Question {current + 1}/{quiz.questions.length}</Text>
-        <Text style={[styles.timer, lowTime && styles.timerLow]}>⏱ {fmt(remaining)}</Text>
+        <Text style={styles.counter}>{meta.emoji} {meta.label} · {current + 1}/{quiz.questions.length}</Text>
+        {meta.timed
+          ? <Text style={[styles.timer, lowTime && styles.timerLow]}>⏱ {fmt(remaining)}</Text>
+          : <Text style={styles.timer}>Libre</Text>}
       </View>
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: `${(answeredCount / quiz.questions.length) * 100}%` }]} />
       </View>
 
       <ScrollView contentContainerStyle={styles.qContent}>
-        <Text style={styles.prompt}>{q.prompt}</Text>
+        {isRichMarkdown(q.prompt)
+          ? <View style={styles.promptRich}><LessonContent content={latexToText(q.prompt)} /></View>
+          : <Text style={styles.prompt}>{latexToText(q.prompt)}</Text>}
         {q.options.map((opt, i) => {
           const selected = answers[q.id] === i
           return (
@@ -152,7 +240,7 @@ export default function QuizTakeScreen() {
               <Text style={[styles.optionLetter, selected && styles.optionLetterSelected]}>
                 {String.fromCharCode(65 + i)}
               </Text>
-              <Text style={[styles.optionText, selected && styles.optionTextSelected]}>{opt}</Text>
+              <Text style={[styles.optionText, selected && styles.optionTextSelected]}>{latexToText(opt)}</Text>
             </TouchableOpacity>
           )
         })}
@@ -172,17 +260,18 @@ export default function QuizTakeScreen() {
             <Text style={styles.navNextText}>Suivant →</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.finishBtn} onPress={submit} disabled={submitting}>
+          <TouchableOpacity style={styles.finishBtn} onPress={() => { setSubmitError(null); submit() }} disabled={submitting}>
             <Text style={styles.finishText}>{submitting ? 'Correction…' : 'Terminer'}</Text>
           </TouchableOpacity>
         )}
       </View>
+      {!!submitError && <Text style={{ color: '#C62828', textAlign: 'center', paddingHorizontal: 16, paddingBottom: 12 }} accessibilityLiveRegion="polite">{submitError}</Text>}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5FBF0' },
+  container: { flex: 1, backgroundColor: '#F4F8FE' },
   content: { padding: 20, paddingTop: 60 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   topBar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 60, marginBottom: 10 },
@@ -190,13 +279,15 @@ const styles = StyleSheet.create({
   timer: { fontSize: 15, fontWeight: '700', color: '#171D17' },
   timerLow: { color: '#E12822' },
   progressBar: { height: 4, backgroundColor: '#E3EADF', marginHorizontal: 20, borderRadius: 2, overflow: 'hidden', marginBottom: 16 },
-  progressFill: { height: '100%', backgroundColor: '#006B2E' },
+  progressFill: { height: '100%', backgroundColor: '#1E74E8' },
   qContent: { padding: 20 },
   prompt: { fontSize: 18, fontWeight: '700', color: '#171D17', marginBottom: 20, lineHeight: 26 },
+  // Énoncé riche (tableau / schéma) : LessonContent apporte sa propre typographie.
+  promptRich: { marginBottom: 20 },
   option: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#E3EADF', borderRadius: 14, padding: 14, marginBottom: 10 },
-  optionSelected: { borderColor: '#006B2E', backgroundColor: '#EFF6EB' },
+  optionSelected: { borderColor: '#1E74E8', backgroundColor: '#EFF6EB' },
   optionLetter: { width: 26, height: 26, borderRadius: 13, borderWidth: 1, borderColor: '#E3EADF', textAlign: 'center', lineHeight: 26, fontWeight: '700', fontSize: 12, color: '#3E4A3E', marginRight: 12 },
-  optionLetterSelected: { borderColor: '#006B2E', color: '#006B2E' },
+  optionLetterSelected: { borderColor: '#1E74E8', color: '#1E74E8' },
   optionText: { flex: 1, fontSize: 15, color: '#171D17' },
   optionTextSelected: { color: '#1e3a8a', fontWeight: '500' },
   navBar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderTopWidth: 1, borderTopColor: '#EFF6EB' },
@@ -204,19 +295,21 @@ const styles = StyleSheet.create({
   navPrevText: { color: '#3E4A3E', fontSize: 14 },
   navNext: { backgroundColor: '#171D17', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24 },
   navNextText: { color: '#fff', fontWeight: '700', fontSize: 14 },
-  finishBtn: { backgroundColor: '#006B2E', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 28 },
+  finishBtn: { backgroundColor: '#1E74E8', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 28 },
   finishText: { color: '#fff', fontWeight: '700', fontSize: 14 },
   resultCard: { backgroundColor: '#fff', borderRadius: 20, padding: 28, alignItems: 'center', marginBottom: 20, borderWidth: 1, borderColor: '#EFF6EB' },
   resultEmoji: { fontSize: 48, marginBottom: 8 },
   resultScore: { fontSize: 34, fontWeight: '800', color: '#171D17' },
   resultPct: { fontSize: 14, color: '#3E4A3E', marginTop: 4 },
-  xp: { fontSize: 14, fontWeight: '700', color: '#006B2E', marginTop: 8 },
+  penalty: { fontSize: 12, fontWeight: '700', color: '#E12822', marginTop: 8, textAlign: 'center' },
+  xp: { fontSize: 14, fontWeight: '700', color: '#1E74E8', marginTop: 8 },
   reviewCard: { backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 10, borderWidth: 1, borderColor: '#EFF6EB' },
   reviewPrompt: { fontSize: 14, fontWeight: '600', color: '#171D17', marginBottom: 10 },
   reviewOpt: { fontSize: 13, color: '#3E4A3E', paddingVertical: 6, paddingHorizontal: 10, borderRadius: 8, marginBottom: 4 },
-  reviewRight: { backgroundColor: '#EFF6EB', color: '#006B2E', fontWeight: '600' },
+  reviewRight: { backgroundColor: '#EFF6EB', color: '#1E74E8', fontWeight: '600' },
   reviewWrong: { backgroundColor: '#FCE9E8', color: '#E12822' },
   explanation: { fontSize: 13, color: '#3E4A3E', fontStyle: 'italic', marginTop: 6 },
-  primaryBtn: { backgroundColor: '#006B2E', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 8 },
+  explanationRich: { marginTop: 6 },
+  primaryBtn: { backgroundColor: '#1E74E8', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 8 },
   primaryBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 })

@@ -13,7 +13,10 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     .select('id, subject_id, level, title, subtitle, is_premium, subjects(name)')
     .eq('id', id)
     .single()
-  if (error) return NextResponse.json({ error: { code: 'NOT_FOUND', message: error.message } }, { status: 404 })
+  if (error) {
+    console.error('[/admin/courses/[id]]', error)
+    return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Ressource introuvable.' } }, { status: 404 })
+  }
 
   const { data: objectives } = await supabaseAdmin
     .from('course_objectives')
@@ -45,7 +48,7 @@ const blockSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('paragraph'), text: z.string().max(20000) }),
   z.object({ type: z.literal('image'), url: z.string().url(), caption: z.string().max(300).optional() }),
   z.object({ type: z.literal('formula'), latex: z.string().max(2000) }),
-  z.object({ type: z.literal('table'), rows: z.array(z.array(z.string().max(1000))).max(60) }),
+  z.object({ type: z.literal('table'), rows: z.array(z.array(z.string().max(1000)).max(30)).max(60) }),
 ])
 
 const saveSchema = z.object({
@@ -56,9 +59,9 @@ const saveSchema = z.object({
     title: z.string().min(1).max(300),
     lessons: z.array(z.object({
       title: z.string().min(1).max(300),
-      content: z.array(blockSchema).default([]),
-    })).default([]),
-  })).default([]),
+      content: z.array(blockSchema).max(1000).default([]),
+    })).max(100).default([]),
+  })).max(100).default([]),   // bornes larges : au 26/10, 7 objectifs, 4 leçons, 91 blocs au plus
 })
 
 /**
@@ -120,6 +123,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if ('error' in guard) return guard.error
   const { id } = await params
   const { error } = await supabaseAdmin.from('courses').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/admin/courses/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: { deleted: true } })
 }

@@ -1,3 +1,7 @@
 export type { Database } from './database'
+export type { StudyLevel } from './levels'
+export * from './levels'
 export * from './models'
 export * from './api'
+export * from './curriculum'
+export * from './subscriptions'

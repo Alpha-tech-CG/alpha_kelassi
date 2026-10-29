@@ -1,0 +1,232 @@
+{
+  "created_at": "2026-10-29T09:30:22.155Z",
+  "note": "État AVANT restructuration Terminale HG (A/C/D)",
+  "subjects": [
+    {
+      "id": "31b27322-14ad-4379-93ce-28d11808bb9c",
+      "name": "GÉOGRAPHIE",
+      "level": "bac_a",
+      "country_code": "CG",
+      "icon": "🌍",
+      "created_at": "2026-10-26T13:09:38.354518+00:00",
+      "track_type": "generale",
+      "parent_subject_id": null,
+      "display_order": 0,
+      "updated_at": "2026-10-26T13:09:38.354518+00:00"
+    },
+    {
+      "id": "8860f08b-7300-4c92-8f0a-5c317c86ce60",
+      "name": "Histoire-Géographie",
+      "level": "bac_a",
+      "country_code": "CG",
+      "icon": "🗺️",
+      "created_at": "2026-07-08T14:18:28.098597+00:00",
+      "track_type": "generale",
+      "parent_subject_id": null,
+      "display_order": 0,
+      "updated_at": "2026-07-08T14:18:28.098597+00:00"
+    },
+    {
+      "id": "786e46b1-6633-4291-81d1-e2db13240487",
+      "name": "CHIMIE",
+      "level": "bac_c",
+      "country_code": "CG",
+      "icon": "🧪⚗️",
+      "created_at": "2026-10-07T12:39:28.152596+00:00",
+      "track_type": "generale",
+      "parent_subject_id": null,
+      "display_order": 0,
+      "updated_at": "2026-10-07T12:39:28.152596+00:00"
+    },
+    {
+      "id": "4202d209-291e-4adf-88fd-b52af08c3a47",
+      "name": "Histoire-Géographie",
+      "level": "bac_c",
+      "country_code": "CG",
+      "icon": "🗺️",
+      "created_at": "2026-07-08T14:18:28.098597+00:00",
+      "track_type": "generale",
+      "parent_subject_id": null,
+      "display_order": 0,
+      "updated_at": "2026-07-08T14:18:28.098597+00:00"
+    },
+    {
+      "id": "1edb1110-6546-4e8a-a252-be8b59bafc6b",
+      "name": "GÉOGRAPHIE",
+      "level": "bac_c",
+      "country_code": "CG",
+      "icon": "🌍",
+      "created_at": "2026-10-28T02:40:21.034844+00:00",
+      "track_type": "generale",
+      "parent_subject_id": null,
+      "display_order": 0,
+      "updated_at": "2026-10-28T02:40:21.034844+00:00"
+    },
+    {
+      "id": "8386f566-931a-440d-a521-15100981090b",
+      "name": "Histoire-Géographie",
+      "level": "bac_d",
+      "country_code": "CG",
+      "icon": "🗺️",
+      "created_at": "2026-07-08T14:18:28.098597+00:00",
+      "track_type": "generale",
+      "parent_subject_id": null,
+      "display_order": 0,
+      "updated_at": "2026-07-08T14:18:28.098597+00:00"
+    },
+    {
+      "id": "40e981ca-b9b9-4616-bff9-bfcc09afb4d3",
+      "name": "CHIMIE",
+      "level": "bac_d",
+      "country_code": "CG",
+      "icon": "🧪⚗️",
+      "created_at": "2026-10-26T11:05:21.192926+00:00",
+      "track_type": "generale",
+      "parent_subject_id": null,
+      "display_order": 0,
+      "updated_at": "2026-10-26T11:05:21.192926+00:00"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "361060e1-d9da-4e42-a662-eb098801201f",
+      "title": "Le milieu physique du Congo",
+      "order_index": 0,
+      "source_chapter_id": "d38c28e9-db3c-49ae-9f42-c84bc481f78d",
+      "_subject_id": "8860f08b-7300-4c92-8f0a-5c317c86ce60"
+    },
+    {
+      "id": "c6c3ea2e-12dd-4361-b693-da16a63ea9ed",
+      "title": "Histoire",
+      "order_index": 1,
+      "source_chapter_id": "423a60c5-356a-4e0a-bef0-09c6d0d3e9ae",
+      "_subject_id": "8860f08b-7300-4c92-8f0a-5c317c86ce60"
+    },
+    {
+      "id": "0f3fe8eb-9cef-475f-a52a-f01f83062505",
+      "title": "Chapitre 2: l'ONU",
+      "order_index": 2,
+      "source_chapter_id": "8c587dde-d959-4118-9ee1-7fa5e6f6f0ea",
+      "_subject_id": "8860f08b-7300-4c92-8f0a-5c317c86ce60"
+    },
+    {
+      "id": "77717795-0a51-4381-a8d8-369c98f7e846",
+      "title": "Chapitre 3: la Guerre  Froide 1947 - 1953",
+      "order_index": 3,
+      "source_chapter_id": "36e29426-348f-441f-ab5b-439723ac59d5",
+      "_subject_id": "8860f08b-7300-4c92-8f0a-5c317c86ce60"
+    },
+    {
+      "id": "4967b19a-3313-4afa-b9b7-99dddc6c61d3",
+      "title": "Chapitre 4 : La DÉCOLONISATION ",
+      "order_index": 4,
+      "source_chapter_id": "5fcca307-8cf0-41ae-a391-8764a43bcb72",
+      "_subject_id": "8860f08b-7300-4c92-8f0a-5c317c86ce60"
+    },
+    {
+      "id": "6ffdb813-bc0a-4321-a403-43816dde90d9",
+      "title": "Méthodologie : commentaire de document et dissertation",
+      "order_index": 5,
+      "source_chapter_id": "bc2f23aa-69bf-4247-b774-e6e2f59c5ae2",
+      "_subject_id": "8860f08b-7300-4c92-8f0a-5c317c86ce60"
+    },
+    {
+      "id": "d38c28e9-db3c-49ae-9f42-c84bc481f78d",
+      "title": "Le milieu physique du Congo",
+      "order_index": 1,
+      "source_chapter_id": null,
+      "_subject_id": "4202d209-291e-4adf-88fd-b52af08c3a47"
+    },
+    {
+      "id": "423a60c5-356a-4e0a-bef0-09c6d0d3e9ae",
+      "title": "Histoire",
+      "order_index": 1,
+      "source_chapter_id": null,
+      "_subject_id": "4202d209-291e-4adf-88fd-b52af08c3a47"
+    },
+    {
+      "id": "8c587dde-d959-4118-9ee1-7fa5e6f6f0ea",
+      "title": "Chapitre 2: l'ONU",
+      "order_index": 2,
+      "source_chapter_id": null,
+      "_subject_id": "4202d209-291e-4adf-88fd-b52af08c3a47"
+    },
+    {
+      "id": "36e29426-348f-441f-ab5b-439723ac59d5",
+      "title": "Chapitre 3: la Guerre  Froide 1947 - 1953",
+      "order_index": 3,
+      "source_chapter_id": null,
+      "_subject_id": "4202d209-291e-4adf-88fd-b52af08c3a47"
+    },
+    {
+      "id": "5fcca307-8cf0-41ae-a391-8764a43bcb72",
+      "title": "Chapitre 4 : La DÉCOLONISATION ",
+      "order_index": 4,
+      "source_chapter_id": null,
+      "_subject_id": "4202d209-291e-4adf-88fd-b52af08c3a47"
+    },
+    {
+      "id": "618afad0-74ff-4c80-8c54-1d4164671568",
+      "title": "Méthodologie : commentaire de document et dissertation",
+      "order_index": 5,
+      "source_chapter_id": "bc2f23aa-69bf-4247-b774-e6e2f59c5ae2",
+      "_subject_id": "4202d209-291e-4adf-88fd-b52af08c3a47"
+    },
+    {
+      "id": "fa9668b2-9e66-471c-a9f7-a323cac21942",
+      "title": "Annales et sujets type bac — Histoire-Géographie",
+      "order_index": 6,
+      "source_chapter_id": null,
+      "_subject_id": "4202d209-291e-4adf-88fd-b52af08c3a47"
+    },
+    {
+      "id": "3444cda2-c7ef-476c-8fbe-7bf90ee300f0",
+      "title": "Le milieu physique du Congo",
+      "order_index": 0,
+      "source_chapter_id": null,
+      "_subject_id": "8386f566-931a-440d-a521-15100981090b"
+    },
+    {
+      "id": "af03c99b-232d-445e-8178-a29462f2c12b",
+      "title": "Histoire",
+      "order_index": 1,
+      "source_chapter_id": "423a60c5-356a-4e0a-bef0-09c6d0d3e9ae",
+      "_subject_id": "8386f566-931a-440d-a521-15100981090b"
+    },
+    {
+      "id": "b171a2ac-a0f2-4945-8130-93346110fe4c",
+      "title": "Chapitre 2: l'ONU",
+      "order_index": 2,
+      "source_chapter_id": "8c587dde-d959-4118-9ee1-7fa5e6f6f0ea",
+      "_subject_id": "8386f566-931a-440d-a521-15100981090b"
+    },
+    {
+      "id": "b0fcfd79-b6d1-4c0c-a688-7df119e25716",
+      "title": "Chapitre 3: la Guerre  Froide 1947 - 1953",
+      "order_index": 3,
+      "source_chapter_id": "36e29426-348f-441f-ab5b-439723ac59d5",
+      "_subject_id": "8386f566-931a-440d-a521-15100981090b"
+    },
+    {
+      "id": "24da5d9f-3f81-43cb-baad-6b8e2250346f",
+      "title": "Chapitre 4 : La DÉCOLONISATION ",
+      "order_index": 4,
+      "source_chapter_id": "5fcca307-8cf0-41ae-a391-8764a43bcb72",
+      "_subject_id": "8386f566-931a-440d-a521-15100981090b"
+    },
+    {
+      "id": "bc2f23aa-69bf-4247-b774-e6e2f59c5ae2",
+      "title": "Méthodologie : commentaire de document et dissertation",
+      "order_index": 5,
+      "source_chapter_id": null,
+      "_subject_id": "8386f566-931a-440d-a521-15100981090b"
+    },
+    {
+      "id": "aa66f477-c835-4b09-bfba-799670c72879",
+      "title": "Annales et sujets type bac — Histoire-Géographie",
+      "order_index": 6,
+      "source_chapter_id": null,
+      "_subject_id": "8386f566-931a-440d-a521-15100981090b"
+    }
+  ]
+}

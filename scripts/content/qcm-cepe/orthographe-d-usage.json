@@ -1,0 +1,38 @@
+{
+ "matiere": "Orthographe d'usage",
+ "subject_id": "7d4caac9-3ede-4d31-94ff-f4a2dfa911e2",
+ "chapitres": [
+  {
+   "chapter_id": "d7043928-070c-4809-868b-040bd1c65448",
+   "titre": "Les noms féminins en « -ée »",
+   "questions": [
+    { "prompt": "Comment s'écrivent en général les noms féminins qui désignent une durée ou une quantité ?", "options": ["En -ée", "En -é", "En -er", "En -ez"], "correct_index": 0, "explanation": "La journée, la matinée, la soirée, la bouchée : ces noms féminins prennent -ée." },
+    { "prompt": "Quelle orthographe est correcte ?", "options": ["la journé", "la journée", "la journer", "la journés"], "correct_index": 1, "explanation": "« La journée » désigne une durée : elle s'écrit avec -ée." },
+    { "prompt": "Quel nom fait exception et s'écrit sans « e » final ?", "options": ["la soirée", "la santé", "la rentrée", "la dictée"], "correct_index": 1, "explanation": "La santé, la beauté, la bonté, la liberté s'écrivent en -é, sans e final." },
+    { "prompt": "Comment écrit-on le mot qui désigne l'objet servant à ouvrir une porte ?", "options": ["la clée", "la clé (ou la clef)", "la cler", "la clais"], "correct_index": 1, "explanation": "On écrit la clé, ou la clef : c'est une exception à la règle du -ée." },
+    { "prompt": "Dans « une maison dorée », pourquoi « dorée » prend-il -ée ?", "options": ["Parce que c'est un adjectif féminin accordé, pas un nom", "Parce que c'est une durée", "Parce que c'est une quantité", "Parce que c'est une exception"], "correct_index": 0, "explanation": "La règle des noms en -ée ne concerne pas les adjectifs : « dorée » est accordé avec « maison »." },
+    { "prompt": "Quelle est la bonne orthographe de l'exercice d'orthographe que fait le maître ?", "options": ["la dicté", "la dictée", "la dicter", "la dictai"], "correct_index": 1, "explanation": "« La dictée » est un nom féminin en -ée." },
+    { "prompt": "Quel mot fait partie des exceptions en -é ?", "options": ["la moitié", "la matinée", "la poignée", "la pensée"], "correct_index": 0, "explanation": "La moitié, comme la pitié, s'écrit sans e final." },
+    { "prompt": "Quelle orthographe est fausse ?", "options": ["la bonté", "la liberté", "la beautée", "la fierté"], "correct_index": 2, "explanation": "On écrit « la beauté », sans e final : c'est une exception." },
+    { "prompt": "Comment écrit-on le nom du retour à l'école en septembre ?", "options": ["la rentrer", "la rentré", "la rentrée", "la rentrais"], "correct_index": 2, "explanation": "« La rentrée » suit la règle des noms féminins en -ée." },
+    { "prompt": "Quelle orthographe est correcte pour la quantité contenue dans une cuillère ?", "options": ["une cuillérée", "une cuilléré", "une cuillérer", "une cuilléres"], "correct_index": 0, "explanation": "Une cuillérée, comme une bouchée ou une poignée, désigne une quantité : -ée." }
+   ]
+  },
+  {
+   "chapter_id": "1eedbcb5-2037-45a8-b6b9-bee55dec8425",
+   "titre": "Les noms masculins en -eau, -au, -al",
+   "questions": [
+    { "prompt": "Quel est le pluriel de « un gâteau » ?", "options": ["des gâteaus", "des gâteaux", "des gâteaud", "des gâteauxs"], "correct_index": 1, "explanation": "Les noms en -eau font leur pluriel en -eaux." },
+    { "prompt": "Quel est le pluriel de « un tuyau » ?", "options": ["des tuyaux", "des tuyaus", "des tuyeaux", "des tuyals"], "correct_index": 0, "explanation": "Les noms en -au font leur pluriel en -aux." },
+    { "prompt": "Quel est le pluriel de « un cheval » ?", "options": ["des chevals", "des chevaux", "des chevaus", "des cheveaux"], "correct_index": 1, "explanation": "Les noms en -al font leur pluriel en -aux." },
+    { "prompt": "Quel est le pluriel de « un animal » ?", "options": ["des animals", "des animaux", "des animeaux", "des animaus"], "correct_index": 1, "explanation": "Animal suit la règle des noms en -al : des animaux." },
+    { "prompt": "Quel est le pluriel de « un journal » ?", "options": ["des journals", "des journeaux", "des journaux", "des journaus"], "correct_index": 2, "explanation": "Un journal donne des journaux." },
+    { "prompt": "Quel est le pluriel de « un bal » ?", "options": ["des baux", "des bals", "des balaux", "des baus"], "correct_index": 1, "explanation": "Bal est une exception : son pluriel régulier est bals." },
+    { "prompt": "Quel est le pluriel de « un carnaval » ?", "options": ["des carnavaux", "des carnavals", "des carnaveaux", "des carnavales"], "correct_index": 1, "explanation": "Carnaval fait partie des exceptions en -als." },
+    { "prompt": "Quel est le pluriel de « un festival » ?", "options": ["des festivaux", "des festivals", "des festiveaux", "des festivales"], "correct_index": 1, "explanation": "Festival est une exception : des festivals." },
+    { "prompt": "Quel est le pluriel de « un bateau » ?", "options": ["des bateaus", "des bateaux", "des bateaud", "des batals"], "correct_index": 1, "explanation": "Les noms en -eau prennent -eaux au pluriel." },
+    { "prompt": "Quelle est la règle générale pour les noms masculins en -al ?", "options": ["Ils font leur pluriel en -aux", "Ils font leur pluriel en -als", "Ils ne changent pas", "Ils font leur pluriel en -eaux"], "correct_index": 0, "explanation": "La règle générale est -al → -aux, sauf bal, carnaval et festival." }
+   ]
+  }
+ ]
+}

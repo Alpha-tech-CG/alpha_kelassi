@@ -1,0 +1,70 @@
+{
+ "matiere": "Expression écrite",
+ "subject_id": "22c62bae-8b0d-49a0-8059-61c113f1cc6f",
+ "chapitres": [
+  {
+   "chapter_id": "f241ab90-ee60-40c3-bf29-bac8375d8822",
+   "titre": "La structure d'un devoir de rédaction",
+   "questions": [
+    { "prompt": "Quelles sont les trois parties obligatoires d'une rédaction ?", "options": ["Introduction, développement, conclusion", "Titre, dessin, signature", "Début, dialogue, morale", "Résumé, questions, réponses"], "correct_index": 0, "explanation": "Toute rédaction comporte une introduction, un développement et une conclusion." },
+    { "prompt": "Que présente l'introduction ?", "options": ["La situation : qui, quand, où", "La fin de l'histoire", "La leçon apprise", "Les corrections"], "correct_index": 0, "explanation": "L'introduction présente la situation : qui ? quand ? où ? dans quelles circonstances ?" },
+    { "prompt": "Que contient le développement ?", "options": ["Le déroulement des faits, les descriptions et les actions", "La date et le lieu uniquement", "Le sentiment final", "La signature"], "correct_index": 0, "explanation": "Le développement raconte les événements : actions, descriptions, dialogues." },
+    { "prompt": "Que contient la conclusion ?", "options": ["Le résultat final, la leçon ou le sentiment ressenti", "La présentation des personnages", "La liste des personnages", "Le titre du devoir"], "correct_index": 0, "explanation": "La conclusion termine le récit : résultat, leçon apprise, sentiment." },
+    { "prompt": "Lequel de ces mots est un connecteur logique ?", "options": ["ensuite", "beau", "maison", "courir"], "correct_index": 0, "explanation": "D'abord, ensuite, puis, enfin, finalement sont des connecteurs logiques." },
+    { "prompt": "Pourquoi utiliser des synonymes dans une rédaction ?", "options": ["Pour varier le vocabulaire et éviter les répétitions", "Pour allonger le texte", "Pour compliquer les phrases", "Pour remplacer la ponctuation"], "correct_index": 0, "explanation": "Varier le vocabulaire rend le texte plus agréable et évite les répétitions." },
+    { "prompt": "Quel conseil donne le cours sur les phrases ?", "options": ["Écrire des phrases courtes et claires", "Écrire une seule très longue phrase", "Éviter la ponctuation", "Écrire sans verbes"], "correct_index": 0, "explanation": "Des phrases courtes et claires se comprennent mieux." },
+    { "prompt": "Que faut-il faire avant de rendre son devoir ?", "options": ["Relire et corriger", "Le plier soigneusement", "Effacer l'introduction", "Ajouter un dessin"], "correct_index": 0, "explanation": "On relit et on corrige l'orthographe et la ponctuation avant de rendre." },
+    { "prompt": "Quelles sont les trois étapes d'un récit ?", "options": ["Situation initiale, événement, résolution", "Titre, résumé, morale", "Appel, corps, politesse", "Question, réponse, conclusion"], "correct_index": 0, "explanation": "Un récit se compose d'une situation initiale, d'un événement, puis d'une résolution." },
+    { "prompt": "Lequel de ces mots sert à organiser un récit dans le temps ?", "options": ["soudain", "grand", "rouge", "table"], "correct_index": 0, "explanation": "Un jour, d'abord, ensuite, soudain, finalement organisent le récit dans le temps." }
+   ]
+  },
+  {
+   "chapter_id": "1330dec4-d3c2-4858-9dd5-373639b4767c",
+   "titre": "La lettre — Structure et modèle",
+   "questions": [
+    { "prompt": "Que place-t-on en haut d'une lettre ?", "options": ["Le lieu et la date", "La signature", "La formule de politesse", "Le développement"], "correct_index": 0, "explanation": "La lettre commence par le lieu suivi de la date." },
+    { "prompt": "Qu'est-ce que la formule d'appel ?", "options": ["La formule qui ouvre la lettre, comme « Mon cher ami, »", "La signature finale", "Le résumé de la lettre", "L'adresse de l'expéditeur"], "correct_index": 0, "explanation": "La formule d'appel s'adresse au destinataire : Mon cher ami, Monsieur, Madame." },
+    { "prompt": "Que contient le premier paragraphe du corps de la lettre ?", "options": ["L'objet de la lettre", "La conclusion", "La politesse", "La date"], "correct_index": 0, "explanation": "Le premier paragraphe annonce l'objet de la lettre." },
+    { "prompt": "Que contient le dernier paragraphe du corps de la lettre ?", "options": ["La conclusion ou la demande", "L'objet de la lettre", "Le lieu et la date", "La formule d'appel"], "correct_index": 0, "explanation": "Le troisième paragraphe conclut ou formule la demande." },
+    { "prompt": "Où se place la formule de politesse ?", "options": ["Juste avant la signature", "Au tout début", "Après la date", "Au milieu du développement"], "correct_index": 0, "explanation": "La formule de politesse précède la signature." },
+    { "prompt": "Laquelle est une formule de politesse finale ?", "options": ["Reçois mes cordiales salutations,", "Mon cher ami,", "Je t'écris pour t'annoncer que…", "Brazzaville, le 3 mars"], "correct_index": 0, "explanation": "« Reçois mes cordiales salutations » termine la lettre." },
+    { "prompt": "Laquelle est une formule d'introduction ?", "options": ["J'ai le plaisir de t'informer que…", "Ton ami qui t'aime bien,", "Madame,", "Signature"], "correct_index": 0, "explanation": "« Je t'écris pour t'annoncer que… » ou « J'ai le plaisir de t'informer que… » ouvrent le corps." },
+    { "prompt": "Qu'écrit-on tout à la fin de la lettre ?", "options": ["La signature", "La date", "L'objet", "La formule d'appel"], "correct_index": 0, "explanation": "La lettre se termine par la signature." },
+    { "prompt": "Quelle formule d'appel convient pour une personne que l'on ne connaît pas ?", "options": ["Monsieur,", "Mon cher ami,", "Salut toi,", "Cher frère,"], "correct_index": 0, "explanation": "Pour une personne inconnue, on emploie Monsieur, ou Madame,." },
+    { "prompt": "Quel est le bon ordre des éléments d'une lettre ?", "options": ["Lieu et date, appel, corps, politesse, signature", "Signature, corps, date, appel", "Appel, signature, corps, date", "Corps, appel, date, politesse"], "correct_index": 0, "explanation": "C'est la structure présentée dans le cours." }
+   ]
+  },
+  {
+   "chapter_id": "352c4035-e194-43f4-b65c-f3323a50613e",
+   "titre": "Sujets traités et modèles de rédaction",
+   "questions": [
+    { "prompt": "Dans le modèle « La rentrée scolaire », que donne l'introduction ?", "options": ["La date et le moment de la journée", "La leçon apprise", "Le nom du maître", "La liste des fournitures"], "correct_index": 0, "explanation": "L'introduction situe la scène : le mercredi 1er octobre, dès 7 heures du matin." },
+    { "prompt": "Dans ce modèle, qui accueille tout le monde dans la cour ?", "options": ["Le directeur", "Le maître de CM2", "Un parent d'élève", "Le président"], "correct_index": 0, "explanation": "Le directeur accueille les élèves et prononce un discours." },
+    { "prompt": "Dans le modèle « Un voyage en avion », que fait-on d'abord à l'aéroport ?", "options": ["Présenter les billets et enregistrer les bagages", "Monter directement dans l'avion", "Manger un repas", "Éteindre les téléphones"], "correct_index": 0, "explanation": "On présente les billets et on enregistre les bagages." },
+    { "prompt": "Que demande l'hôtesse de l'air dans ce modèle ?", "options": ["D'éteindre les téléphones", "De fermer les rideaux", "De chanter", "De descendre de l'avion"], "correct_index": 0, "explanation": "L'hôtesse accueille les passagers et demande d'éteindre les téléphones." },
+    { "prompt": "Combien de temps dure le vol dans ce modèle ?", "options": ["45 minutes", "15 minutes", "2 heures", "5 heures"], "correct_index": 0, "explanation": "Après 45 minutes de vol, l'avion atterrit à Brazzaville." },
+    { "prompt": "Dans le modèle « La pluie », en quoi la cour se transforme-t-elle ?", "options": ["En un véritable lac", "En terrain de football", "En jardin", "En marché"], "correct_index": 0, "explanation": "La pluie s'intensifie et transforme la cour en un véritable lac." },
+    { "prompt": "Qu'est-ce qui illumine le ciel dans ce modèle ?", "options": ["Des éclairs", "Le soleil", "Des lampes", "La lune"], "correct_index": 0, "explanation": "Des éclairs illuminent le ciel, suivis de coups de tonnerre." },
+    { "prompt": "Dans quelle partie exprime-t-on le sentiment final ?", "options": ["Dans la conclusion", "Dans l'introduction", "Au milieu du développement", "Dans le titre"], "correct_index": 0, "explanation": "La conclusion exprime le résultat et le sentiment ressenti." },
+    { "prompt": "Quel connecteur ouvre souvent le développement ?", "options": ["D'abord", "Enfin", "Donc", "Signature"], "correct_index": 0, "explanation": "« D'abord » ouvre le récit des événements, avant « puis » et « enfin »." },
+    { "prompt": "À quoi servent ces modèles de rédaction ?", "options": ["À s'inspirer de la structure pour écrire soi-même", "À les recopier mot à mot le jour de l'examen", "À apprendre les mathématiques", "À remplacer le cours de grammaire"], "correct_index": 0, "explanation": "Les modèles montrent comment organiser introduction, développement et conclusion." }
+   ]
+  },
+  {
+   "chapter_id": "03e28ce6-3c50-4d0d-88c4-15b5dba41f6f",
+   "titre": "Poème : Le Corbeau et le Renard",
+   "questions": [
+    { "prompt": "Qui est l'auteur de la fable « Le Corbeau et le Renard » ?", "options": ["Jean de La Fontaine", "Victor Hugo", "Charles Perrault", "Jean de Brazza"], "correct_index": 0, "explanation": "Cette fable est de Jean de La Fontaine (1621-1695)." },
+    { "prompt": "Que tenait le Corbeau dans son bec ?", "options": ["Un fromage", "Une branche", "Un poisson", "Une plume"], "correct_index": 0, "explanation": "Maître Corbeau tenait en son bec un fromage." },
+    { "prompt": "Pourquoi le Renard flatte-t-il le Corbeau ?", "options": ["Pour obtenir le fromage", "Pour devenir son ami", "Pour l'aider à chanter", "Pour le faire descendre de l'arbre et jouer"], "correct_index": 0, "explanation": "Le Renard, attiré par l'odeur, flatte le Corbeau afin d'obtenir le fromage." },
+    { "prompt": "Que se passe-t-il quand le Corbeau ouvre le bec ?", "options": ["Il laisse tomber le fromage", "Il chante magnifiquement", "Il s'envole", "Il mange le fromage"], "correct_index": 0, "explanation": "En voulant montrer sa belle voix, il laisse tomber sa proie." },
+    { "prompt": "Quelle est la morale de cette fable ?", "options": ["Il faut se méfier des flatteurs", "Il faut toujours chanter", "Il faut partager sa nourriture", "Il faut se lever tôt"], "correct_index": 0, "explanation": "Tout flatteur vit aux dépens de celui qui l'écoute : méfie-toi des flatteurs." },
+    { "prompt": "Que signifie « ramage » ?", "options": ["Le chant des oiseaux", "L'ensemble des plumes", "Le nid", "La branche"], "correct_index": 0, "explanation": "Le ramage est le chant des oiseaux." },
+    { "prompt": "Que signifie « plumage » ?", "options": ["L'ensemble des plumes", "Le chant", "Le bec", "Le vol"], "correct_index": 0, "explanation": "Le plumage est l'ensemble des plumes de l'oiseau." },
+    { "prompt": "Que signifie « alléché » ?", "options": ["Attiré par une bonne odeur", "Fatigué", "Effrayé", "Endormi"], "correct_index": 0, "explanation": "Alléché signifie attiré par une odeur appétissante." },
+    { "prompt": "Que désigne « le Phénix » dans le poème ?", "options": ["Un oiseau légendaire, symbole de perfection", "Un corbeau ordinaire", "Un arbre", "Un fromage rare"], "correct_index": 0, "explanation": "Le Phénix est un oiseau légendaire, symbole de perfection et de rareté." },
+    { "prompt": "Que veut dire « vivre aux dépens de quelqu'un » ?", "options": ["Profiter de cette personne", "Vivre loin d'elle", "Travailler pour elle", "L'admirer"], "correct_index": 0, "explanation": "Vivre aux dépens de quelqu'un, c'est profiter de lui." }
+   ]
+  }
+ ]
+}

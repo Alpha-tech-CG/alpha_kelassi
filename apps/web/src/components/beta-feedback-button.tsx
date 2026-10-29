@@ -17,7 +17,7 @@ export function BetaFeedbackButton() {
     if (rating === 0) return
     setLoading(true)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
+      await supabase.auth.getSession()
       await fetch(`${API_URL}/api/feedback`, {
         method:      'POST',
         headers:     { 'Content-Type': 'application/json' },
@@ -59,7 +59,7 @@ export function BetaFeedbackButton() {
             ) : (
               <>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-lg">Ton avis sur Kelassi</h3>
+                  <h3 className="font-bold text-lg">Ton avis sur Cognix</h3>
                   <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
                 </div>
 

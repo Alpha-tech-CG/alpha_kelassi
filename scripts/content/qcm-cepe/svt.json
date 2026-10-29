@@ -1,0 +1,262 @@
+{
+ "matiere": "SVT",
+ "subject_id": "e860452f-e7f7-4f7e-9b42-b88054bce677",
+ "chapitres": [
+  {
+   "chapter_id": "9b16123b-66fd-4d26-86c8-8b3ff1df8ffa",
+   "titre": "Les fonctions vitales de l'homme",
+   "questions": [
+    { "prompt": "Que sont les fonctions vitales ?", "options": ["Les activités indispensables à la vie", "Les loisirs de l'homme", "Les métiers de l'homme", "Les maladies du corps"], "correct_index": 0, "explanation": "Les fonctions vitales sont les activités indispensables à la vie." },
+    { "prompt": "Combien y a-t-il de fonctions vitales ?", "options": ["Cinq", "Trois", "Quatre", "Sept"], "correct_index": 0, "explanation": "Nutrition, respiration, locomotion, reproduction et excrétion." },
+    { "prompt": "En quoi consiste la nutrition ?", "options": ["Se nourrir pour avoir de l'énergie", "Se déplacer", "Éliminer les déchets", "Respirer"], "correct_index": 0, "explanation": "La nutrition, c'est se nourrir pour avoir de l'énergie." },
+    { "prompt": "En quoi consiste la respiration ?", "options": ["Absorber l'oxygène et rejeter le gaz carbonique", "Manger des aliments", "Se déplacer", "Éliminer les déchets"], "correct_index": 0, "explanation": "Respirer, c'est absorber l'oxygène et rejeter le gaz carbonique." },
+    { "prompt": "En quoi consiste la locomotion ?", "options": ["Se déplacer d'un endroit à un autre", "Se nourrir", "Respirer", "Se reproduire"], "correct_index": 0, "explanation": "La locomotion, c'est le déplacement." },
+    { "prompt": "En quoi consiste la reproduction ?", "options": ["Donner naissance à des êtres de la même espèce", "Manger", "Respirer", "Éliminer les déchets"], "correct_index": 0, "explanation": "La reproduction donne naissance à des êtres de la même espèce." },
+    { "prompt": "En quoi consiste l'excrétion ?", "options": ["Éliminer les déchets du corps", "Absorber l'oxygène", "Se déplacer", "Se nourrir"], "correct_index": 0, "explanation": "L'excrétion élimine les déchets du corps." },
+    { "prompt": "Que rappelle le moyen mnémotechnique N-R-L-R-E ?", "options": ["Nutrition, Respiration, Locomotion, Reproduction, Excrétion", "Nourriture, Repos, Lumière, Récolte, Eau", "Nez, Reins, Langue, Rate, Estomac", "Nutrition, Repos, Lecture, Respiration, Énergie"], "correct_index": 0, "explanation": "N-R-L-R-E reprend les initiales des cinq fonctions vitales." },
+    { "prompt": "Quelle fonction permet au corps d'obtenir de l'énergie ?", "options": ["La nutrition", "L'excrétion", "La reproduction", "La locomotion"], "correct_index": 0, "explanation": "C'est en se nourrissant que le corps obtient son énergie." },
+    { "prompt": "Quelle fonction assure la survie de l'espèce ?", "options": ["La reproduction", "La respiration", "L'excrétion", "La locomotion"], "correct_index": 0, "explanation": "La reproduction permet à l'espèce de se perpétuer." }
+   ]
+  },
+  {
+   "chapter_id": "7ae5e97a-a2d8-46ea-9209-768f060100bd",
+   "titre": "Le Globe terrestre — Structure de la Terre",
+   "questions": [
+    { "prompt": "Qu'est-ce que le globe terrestre ?", "options": ["Une maquette, un modèle réduit de la Terre", "Le noyau de la Terre", "Une couche de gaz", "Une carte des océans"], "correct_index": 0, "explanation": "Le globe terrestre est une maquette de la planète Terre." },
+    { "prompt": "Comment s'appelle la couche de gaz qui entoure la Terre ?", "options": ["L'atmosphère", "L'écorce", "Le manteau", "Le noyau"], "correct_index": 0, "explanation": "La Terre est entourée de l'atmosphère." },
+    { "prompt": "Quelles sont les trois couches internes de la Terre ?", "options": ["L'écorce, le manteau et le noyau", "L'atmosphère, la mer et la terre", "Le sable, l'argile et le calcaire", "Le foyer, l'épicentre et la faille"], "correct_index": 0, "explanation": "L'écorce terrestre, le manteau et le noyau." },
+    { "prompt": "Qu'est-ce que l'écorce terrestre ?", "options": ["La couche externe solide où nous vivons", "Le centre très chaud de la Terre", "Une couche de gaz", "Une roche en fusion"], "correct_index": 0, "explanation": "L'écorce est la couche externe solide, la surface où nous vivons." },
+    { "prompt": "Qu'est-ce que le manteau ?", "options": ["La couche intermédiaire de roches en fusion", "La couche externe solide", "Le centre de la Terre", "La couche de gaz"], "correct_index": 0, "explanation": "Le manteau est la couche intermédiaire, faite de roches en fusion." },
+    { "prompt": "Qu'est-ce que le noyau ?", "options": ["Le centre de la Terre, très chaud", "La surface de la Terre", "Une montagne", "Un océan profond"], "correct_index": 0, "explanation": "Le noyau est le centre très chaud de la Terre." },
+    { "prompt": "Dans la comparaison avec l'œuf, que représente la coquille ?", "options": ["L'écorce terrestre", "Le manteau", "Le noyau", "L'atmosphère"], "correct_index": 0, "explanation": "La coquille représente l'écorce, le blanc le manteau et le jaune le noyau." },
+    { "prompt": "Dans cette comparaison, que représente le jaune de l'œuf ?", "options": ["Le noyau", "L'écorce", "Le manteau", "L'atmosphère"], "correct_index": 0, "explanation": "Le jaune, au centre, représente le noyau." },
+    { "prompt": "Qu'est-ce qui recouvre la Terre ?", "options": ["Des continents, des océans, des végétaux et des animaux", "Uniquement des océans", "Uniquement des roches", "Uniquement du sable"], "correct_index": 0, "explanation": "La Terre est recouverte de continents, d'océans, de végétaux et d'animaux." },
+    { "prompt": "Quelle couche est la plus proche de nous ?", "options": ["L'écorce terrestre", "Le manteau", "Le noyau", "Le magma profond"], "correct_index": 0, "explanation": "Nous vivons sur l'écorce terrestre." }
+   ]
+  },
+  {
+   "chapter_id": "eacfa961-be86-4534-8b96-7fa952f51ff6",
+   "titre": "Les types de roches",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une roche ?", "options": ["Un produit naturel du sous-sol, ensemble de minéraux", "Un objet fabriqué par l'homme", "Une plante fossilisée", "Un type de sol cultivé"], "correct_index": 0, "explanation": "La roche est une matière première naturelle du sous-sol, formée de minéraux." },
+    { "prompt": "Combien de types de roches existe-t-il ?", "options": ["Trois", "Deux", "Quatre", "Cinq"], "correct_index": 0, "explanation": "Magmatiques, sédimentaires et métamorphiques." },
+    { "prompt": "Comment se forment les roches magmatiques ?", "options": ["À partir du magma, roche en fusion", "Par dépôts dans la mer", "Par transformation sous la chaleur et la pression", "Par l'action du vent seulement"], "correct_index": 0, "explanation": "Les roches magmatiques viennent du magma : granite, basalte." },
+    { "prompt": "Comment se forment les roches sédimentaires ?", "options": ["Par des dépôts dans la mer ou les lacs", "À partir du magma", "Par transformation sous pression", "Dans le noyau terrestre"], "correct_index": 0, "explanation": "Elles se forment par dépôts : sable, argile, calcaire." },
+    { "prompt": "Comment se forment les roches métamorphiques ?", "options": ["Par transformation d'autres roches sous la chaleur et la pression", "Par dépôts marins", "Directement à partir du magma", "Par l'érosion du vent uniquement"], "correct_index": 0, "explanation": "Marbre et ardoise viennent de la transformation d'autres roches." },
+    { "prompt": "Le granite est une roche :", "options": ["Magmatique", "Sédimentaire", "Métamorphique", "Artificielle"], "correct_index": 0, "explanation": "Le granite, comme le basalte, est une roche magmatique." },
+    { "prompt": "Le calcaire est une roche :", "options": ["Sédimentaire", "Magmatique", "Métamorphique", "Volcanique"], "correct_index": 0, "explanation": "Le calcaire se forme par dépôts : roche sédimentaire." },
+    { "prompt": "Le marbre est une roche :", "options": ["Métamorphique", "Magmatique", "Sédimentaire", "Fossile"], "correct_index": 0, "explanation": "Le marbre résulte de la transformation d'une autre roche." },
+    { "prompt": "Le sable est une roche :", "options": ["Sédimentaire", "Magmatique", "Métamorphique", "En fusion"], "correct_index": 0, "explanation": "Le sable provient de dépôts : roche sédimentaire." },
+    { "prompt": "Où se forment les roches sédimentaires ?", "options": ["À la surface, dans les mers, lacs et rivières", "Dans le noyau de la Terre", "Dans l'atmosphère", "Dans le magma"], "correct_index": 0, "explanation": "Elles se forment à la surface, contrairement aux roches magmatiques." }
+   ]
+  },
+  {
+   "chapter_id": "0d968f73-f176-4018-9b07-6bcf4ca8272d",
+   "titre": "Les types de sol et leur utilité",
+   "questions": [
+    { "prompt": "Quelle est la caractéristique du sol sableux ?", "options": ["Il est perméable et laisse passer l'eau", "Il retient l'eau comme une bassine", "Il est riche en pierres", "Il est toujours humide"], "correct_index": 0, "explanation": "Le sol sableux a des grains fins et laisse passer l'eau." },
+    { "prompt": "Quelle est la caractéristique du sol argileux ?", "options": ["Il est imperméable et retient l'eau", "Il laisse passer l'eau", "Il est rempli de cailloux", "Il est toujours sec"], "correct_index": 0, "explanation": "L'argile retient l'eau et se laboure difficilement." },
+    { "prompt": "Qu'est-ce qu'un sol meuble ?", "options": ["Un sol qui se laboure facilement", "Un sol rempli de pierres", "Un sol imperméable", "Un sol toujours inondé"], "correct_index": 0, "explanation": "Le sol meuble est facile à travailler." },
+    { "prompt": "Quel sol est perméable ?", "options": ["Le sol sableux", "Le sol argileux", "Le sol calcaire", "Le sol caillouteux"], "correct_index": 0, "explanation": "Le sable laisse passer l'eau comme un filtre." },
+    { "prompt": "Quels sols sont imperméables ?", "options": ["Les sols argileux et calcaires", "Les sols sableux", "Les sols meubles", "Les sols humides uniquement"], "correct_index": 0, "explanation": "L'argile et le calcaire ne laissent pas passer l'eau." },
+    { "prompt": "Quelle est la caractéristique du sol caillouteux ?", "options": ["Il est riche en pierres et pauvre en eau", "Il retient beaucoup d'eau", "Il est très fertile", "Il est formé de grains fins"], "correct_index": 0, "explanation": "Le sol caillouteux contient beaucoup de pierres et peu d'eau." },
+    { "prompt": "Quel sol convient le mieux à l'agriculture ?", "options": ["Un sol meuble et humide", "Un sol caillouteux", "Un sol entièrement sableux", "Un sol rocheux"], "correct_index": 0, "explanation": "Un sol meuble et humide se travaille bien et nourrit les plantes." },
+    { "prompt": "Avec quel sol fabrique-t-on des pots et du ciment ?", "options": ["L'argile", "Le sable de mer", "Le sol caillouteux", "L'humus"], "correct_index": 0, "explanation": "L'argile sert à fabriquer pots et matériaux de construction." },
+    { "prompt": "Quelle utilité des sols le cours cite-t-il ?", "options": ["Construire des maisons", "Fabriquer des vêtements", "Produire de l'électricité", "Fabriquer du verre uniquement"], "correct_index": 0, "explanation": "On construit des maisons avec l'argile et le calcaire." },
+    { "prompt": "Pourquoi le sol argileux est-il difficile à labourer ?", "options": ["Parce qu'il est lourd et retient l'eau", "Parce qu'il est trop sec", "Parce qu'il est plein de sable", "Parce qu'il est trop léger"], "correct_index": 0, "explanation": "L'argile retient l'eau, ce qui la rend lourde et compacte." }
+   ]
+  },
+  {
+   "chapter_id": "fd17b406-b3e4-44ac-acb1-5cfc5310ac70",
+   "titre": "Un séisme (tremblement de terre)",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un séisme ?", "options": ["De violentes secousses à la surface de la Terre", "Une pluie très forte", "Une éruption de volcan uniquement", "Un vent violent"], "correct_index": 0, "explanation": "Le séisme est fait de violentes secousses durant de quelques secondes à quelques minutes." },
+    { "prompt": "Combien de temps dure généralement un séisme ?", "options": ["De quelques secondes à quelques minutes", "Plusieurs jours", "Plusieurs semaines", "Une année entière"], "correct_index": 0, "explanation": "Un séisme dure de quelques secondes à quelques minutes." },
+    { "prompt": "Comment appelle-t-on le point d'origine d'un séisme en profondeur ?", "options": ["Le foyer", "L'épicentre", "Le noyau", "La faille"], "correct_index": 0, "explanation": "Le séisme prend naissance au foyer, en profondeur." },
+    { "prompt": "Comment appelle-t-on le point situé à la surface, juste au-dessus du foyer ?", "options": ["L'épicentre", "Le foyer", "Le manteau", "Le cratère"], "correct_index": 0, "explanation": "L'épicentre est à la verticale du foyer, en surface." },
+    { "prompt": "Où prend naissance un séisme ?", "options": ["Dans les profondeurs de la Terre", "Dans l'atmosphère", "Dans l'océan uniquement", "Sur la cime des montagnes"], "correct_index": 0, "explanation": "Le séisme naît dans les profondeurs de la Terre." },
+    { "prompt": "Quelle est une conséquence d'un séisme ?", "options": ["La destruction des habitations", "L'amélioration des récoltes", "Le réchauffement du sol", "L'augmentation des pluies"], "correct_index": 0, "explanation": "Les séismes détruisent habitations, ponts et rails." },
+    { "prompt": "Quelle autre conséquence le cours cite-t-il ?", "options": ["De nombreuses victimes humaines", "Une meilleure santé", "Plus de récoltes", "Un sol plus fertile"], "correct_index": 0, "explanation": "Les séismes font de nombreuses victimes humaines." },
+    { "prompt": "Quelles infrastructures peuvent être détruites par un séisme ?", "options": ["Les ponts et les rails de chemin de fer", "Les nuages", "Les océans", "Les graines"], "correct_index": 0, "explanation": "Ponts, rails et habitations sont détruits." },
+    { "prompt": "Un autre nom du séisme est :", "options": ["Le tremblement de terre", "L'inondation", "La sécheresse", "L'éclipse"], "correct_index": 0, "explanation": "Séisme et tremblement de terre désignent le même phénomène." },
+    { "prompt": "Le foyer et l'épicentre, quelle différence ?", "options": ["Le foyer est en profondeur, l'épicentre en surface", "Le foyer est en surface, l'épicentre en profondeur", "Les deux sont en surface", "Les deux sont dans l'atmosphère"], "correct_index": 0, "explanation": "Le foyer est le point d'origine en profondeur ; l'épicentre est au-dessus, en surface." }
+   ]
+  },
+  {
+   "chapter_id": "5fea7ffa-81ed-43b2-92ac-1119790f8d47",
+   "titre": "La circulation du sang",
+   "questions": [
+    { "prompt": "Quel organe est le moteur de la circulation du sang ?", "options": ["Le cœur", "Le poumon", "Le foie", "L'estomac"], "correct_index": 0, "explanation": "Le cœur est le moteur de la circulation sanguine." },
+    { "prompt": "En combien de parties le cœur est-il divisé ?", "options": ["Quatre", "Deux", "Trois", "Six"], "correct_index": 0, "explanation": "Deux oreillettes et deux ventricules : quatre parties." },
+    { "prompt": "Quelles sont les quatre parties du cœur ?", "options": ["Deux oreillettes et deux ventricules", "Deux poumons et deux veines", "Deux artères et deux veines", "Quatre ventricules"], "correct_index": 0, "explanation": "Oreillette droite, oreillette gauche, ventricule droit, ventricule gauche." },
+    { "prompt": "Quel est le trajet de la petite circulation ?", "options": ["Ventricule droit, poumons, oreillette gauche", "Ventricule gauche, organes, oreillette droite", "Oreillette droite, foie, ventricule gauche", "Poumons, estomac, cœur"], "correct_index": 0, "explanation": "La petite circulation est pulmonaire : ventricule droit → poumons → oreillette gauche." },
+    { "prompt": "Quel est le rôle de la petite circulation ?", "options": ["Oxygéner le sang dans les poumons", "Nourrir les muscles", "Filtrer les déchets", "Digérer les aliments"], "correct_index": 0, "explanation": "La petite circulation oxygène le sang." },
+    { "prompt": "Quel est le trajet de la grande circulation ?", "options": ["Ventricule gauche, tous les organes, oreillette droite", "Ventricule droit, poumons, oreillette gauche", "Oreillette gauche, poumons, ventricule droit", "Foie, cœur, poumons"], "correct_index": 0, "explanation": "La grande circulation irrigue tous les organes sauf les poumons." },
+    { "prompt": "Quel est le rôle de la grande circulation ?", "options": ["Apporter l'oxygène à tous les organes", "Oxygéner le sang dans les poumons", "Produire la bile", "Filtrer l'air"], "correct_index": 0, "explanation": "Elle apporte l'oxygène à l'ensemble des organes." },
+    { "prompt": "Que transportent les artères ?", "options": ["Le sang du cœur vers les organes", "Le sang des organes vers le cœur", "L'air vers les poumons", "Les aliments vers l'estomac"], "correct_index": 0, "explanation": "Les artères partent du cœur vers les organes." },
+    { "prompt": "Que transportent les veines ?", "options": ["Le sang des organes vers le cœur", "Le sang du cœur vers les organes", "L'oxygène vers les poumons", "La bile vers l'intestin"], "correct_index": 0, "explanation": "Les veines ramènent le sang au cœur." },
+    { "prompt": "Quel est le trajet simplifié du sang ?", "options": ["Cœur, artères, capillaires, organes, veines, cœur", "Cœur, veines, organes, artères, cœur", "Poumons, cœur, estomac, cœur", "Organes, cœur, organes"], "correct_index": 0, "explanation": "Cœur → artères → capillaires → organes → veines → cœur." }
+   ]
+  },
+  {
+   "chapter_id": "d85da32b-21d3-4c1e-b379-ad39a5126957",
+   "titre": "L'appareil digestif et la digestion",
+   "questions": [
+    { "prompt": "Qu'est-ce que la digestion ?", "options": ["La transformation des aliments dans le tube digestif", "Le transport de l'oxygène", "La fabrication du sang", "L'élimination de l'air"], "correct_index": 0, "explanation": "La digestion transforme les aliments en nutriments." },
+    { "prompt": "Comment appelle-t-on le passage des nutriments dans le sang ?", "options": ["L'absorption intestinale", "La respiration", "L'excrétion", "La circulation"], "correct_index": 0, "explanation": "C'est l'absorption intestinale, dans l'intestin grêle." },
+    { "prompt": "Quel est le trajet des aliments ?", "options": ["Bouche, pharynx, œsophage, estomac, intestin grêle, gros intestin, anus", "Bouche, estomac, poumons, anus", "Bouche, œsophage, foie, anus", "Pharynx, bouche, estomac, intestin"], "correct_index": 0, "explanation": "C'est le trajet complet du tube digestif." },
+    { "prompt": "Quel est le rôle de la bouche ?", "options": ["Broyer les aliments et les mélanger à la salive", "Produire la bile", "Absorber les nutriments", "Former les selles"], "correct_index": 0, "explanation": "Les dents broient les aliments, mélangés à la salive." },
+    { "prompt": "Quelle est la longueur de l'œsophage ?", "options": ["25 cm", "5 cm", "1 mètre", "2 mètres"], "correct_index": 0, "explanation": "L'œsophage mesure environ 25 cm." },
+    { "prompt": "Grâce à quoi l'estomac digère-t-il les aliments ?", "options": ["Aux sucs gastriques", "À la salive", "À l'air", "Au sang"], "correct_index": 0, "explanation": "L'estomac digère grâce aux sucs gastriques." },
+    { "prompt": "Que produit le foie ?", "options": ["La bile", "Les sucs gastriques", "La salive", "Le sang"], "correct_index": 0, "explanation": "Le foie produit la bile, qui aide à digérer les graisses." },
+    { "prompt": "Quel organe absorbe les nutriments dans le sang ?", "options": ["L'intestin grêle", "L'estomac", "Le gros intestin", "Le pharynx"], "correct_index": 0, "explanation": "L'absorption se fait dans l'intestin grêle." },
+    { "prompt": "Quel est le rôle du gros intestin ?", "options": ["Absorber l'eau et former les selles", "Produire la bile", "Broyer les aliments", "Oxygéner le sang"], "correct_index": 0, "explanation": "Le gros intestin absorbe l'eau et forme les selles." },
+    { "prompt": "Le foie fait-il partie du trajet des aliments ?", "options": ["Non, il produit la bile qui aide la digestion", "Oui, les aliments y passent après l'estomac", "Oui, juste avant la bouche", "Oui, il remplace l'intestin"], "correct_index": 0, "explanation": "Le foie n'est pas sur le trajet : il produit la bile qui agit dans l'intestin grêle." }
+   ]
+  },
+  {
+   "chapter_id": "709c513b-e94c-48a1-949c-915bf67b2345",
+   "titre": "La respiration",
+   "questions": [
+    { "prompt": "En quoi consiste la respiration ?", "options": ["Absorber de l'oxygène et rejeter du gaz carbonique", "Absorber du gaz carbonique et rejeter de l'oxygène", "Transformer les aliments", "Éliminer les selles"], "correct_index": 0, "explanation": "On absorbe l'oxygène (O₂) et on rejette le gaz carbonique (CO₂)." },
+    { "prompt": "Qu'est-ce que l'inspiration ?", "options": ["L'entrée de l'air dans les poumons", "La sortie de l'air", "La digestion de l'air", "L'arrêt de la respiration"], "correct_index": 0, "explanation": "L'inspiration fait entrer l'air dans les poumons." },
+    { "prompt": "Qu'est-ce que l'expiration ?", "options": ["La sortie de l'air hors des poumons", "L'entrée de l'air", "L'absorption d'oxygène", "La circulation du sang"], "correct_index": 0, "explanation": "L'expiration rejette l'air hors des poumons." },
+    { "prompt": "Quel gaz absorbe-t-on en inspirant ?", "options": ["L'oxygène", "Le gaz carbonique", "L'azote pur", "La vapeur d'eau"], "correct_index": 0, "explanation": "On absorbe l'oxygène, noté O₂." },
+    { "prompt": "Quel gaz rejette-t-on en expirant ?", "options": ["Le gaz carbonique", "L'oxygène", "L'hydrogène", "L'hélium"], "correct_index": 0, "explanation": "On rejette le gaz carbonique, noté CO₂." },
+    { "prompt": "Quel est le trajet de l'air ?", "options": ["Narines, larynx, trachée, bronches, poumons", "Bouche, œsophage, estomac, poumons", "Narines, poumons, trachée, bronches", "Bronches, narines, larynx, poumons"], "correct_index": 0, "explanation": "Narines → larynx → trachée → bronches → poumons." },
+    { "prompt": "Combien l'homme a-t-il de poumons ?", "options": ["Deux : un droit et un gauche", "Un seul", "Trois", "Quatre"], "correct_index": 0, "explanation": "Il y a un poumon droit et un poumon gauche." },
+    { "prompt": "La respiration est une fonction :", "options": ["Vitale, commune à tous les êtres vivants", "Réservée à l'homme", "Réservée aux animaux marins", "Facultative"], "correct_index": 0, "explanation": "La respiration est une fonction vitale commune à tous les êtres vivants." },
+    { "prompt": "Quel organe, en plus des poumons, permet la respiration ?", "options": ["Le diaphragme", "L'estomac", "Le foie", "Le cœur"], "correct_index": 0, "explanation": "La respiration se fait grâce aux poumons et au diaphragme." },
+    { "prompt": "Quel conduit relie le larynx aux bronches ?", "options": ["La trachée", "L'œsophage", "L'artère", "Le pharynx"], "correct_index": 0, "explanation": "La trachée conduit l'air du larynx vers les bronches." }
+   ]
+  },
+  {
+   "chapter_id": "91f39ee1-0643-48d9-bccd-c97cd0ced3c3",
+   "titre": "Les os et le squelette",
+   "questions": [
+    { "prompt": "Que sont les os ?", "options": ["Les parties dures du corps humain", "Les parties molles du corps", "Les organes de la digestion", "Les muscles du bras"], "correct_index": 0, "explanation": "Les os sont les parties dures du corps." },
+    { "prompt": "Qu'est-ce que le squelette ?", "options": ["L'ensemble de tous les os du corps", "L'ensemble des muscles", "L'ensemble des articulations", "L'ensemble des organes"], "correct_index": 0, "explanation": "Le squelette est l'ensemble des os." },
+    { "prompt": "Combien d'os compte le corps humain ?", "options": ["208", "108", "306", "32"], "correct_index": 0, "explanation": "Le corps humain comprend 208 os." },
+    { "prompt": "Quel est l'os le plus long du corps ?", "options": ["Le fémur", "L'humérus", "La rotule", "L'omoplate"], "correct_index": 0, "explanation": "Le fémur, os de la cuisse, est le plus long." },
+    { "prompt": "Quel élément donne à l'os sa souplesse ?", "options": ["L'ossine", "Le calcaire", "La moelle", "Le cartilage"], "correct_index": 0, "explanation": "L'ossine, une protéine, donne la souplesse." },
+    { "prompt": "Quel élément donne à l'os sa dureté ?", "options": ["Le calcaire (calcium)", "L'ossine", "La moelle", "Le périoste"], "correct_index": 0, "explanation": "Le calcaire donne la dureté et la rigidité." },
+    { "prompt": "La rotule est un os :", "options": ["Rond", "Long", "Plat", "Napiforme"], "correct_index": 0, "explanation": "Les os ronds ont une forme de roue ou de disque, comme la rotule." },
+    { "prompt": "L'omoplate est un os :", "options": ["Plat", "Long", "Rond", "Napiforme"], "correct_index": 0, "explanation": "Les os plats sont larges et plats, comme l'omoplate." },
+    { "prompt": "Quelles sont les trois grandes parties du squelette ?", "options": ["La tête, le tronc et les membres", "Les bras, les jambes et le cou", "Le crâne, les côtes et la peau", "Le squelette, les muscles et les nerfs"], "correct_index": 0, "explanation": "La tête, le tronc et les membres." },
+    { "prompt": "Que contient la cavité médullaire d'un os long ?", "options": ["La moelle osseuse", "Du sang pur", "De l'air", "Du cartilage"], "correct_index": 0, "explanation": "La cavité médullaire contient la moelle osseuse." }
+   ]
+  },
+  {
+   "chapter_id": "516afcd5-a586-45cf-afca-3c245e142339",
+   "titre": "Les articulations",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une articulation ?", "options": ["Le lieu où se rencontrent deux os", "Un muscle du bras", "Un type de nerf", "Un organe de la digestion"], "correct_index": 0, "explanation": "L'articulation est le point de rencontre de deux os." },
+    { "prompt": "À quoi servent les articulations ?", "options": ["Elles permettent les mouvements du corps", "Elles transportent le sang", "Elles digèrent les aliments", "Elles produisent la salive"], "correct_index": 0, "explanation": "Les articulations permettent les mouvements." },
+    { "prompt": "Qu'est-ce qu'une articulation fixe ?", "options": ["Une articulation où les os ne bougent pas", "Une articulation très mobile", "Une articulation du genou", "Une articulation du coude"], "correct_index": 0, "explanation": "Les os du crâne forment des articulations fixes." },
+    { "prompt": "Lequel est un exemple d'articulation mobile ?", "options": ["Le genou", "Les os du crâne", "Le fémur", "La colonne du périoste"], "correct_index": 0, "explanation": "Genou, coude et épaule sont des articulations mobiles." },
+    { "prompt": "Quel est le rôle du cartilage articulaire ?", "options": ["Protéger les extrémités des os", "Produire le sang", "Relier le muscle à l'os", "Transmettre les informations"], "correct_index": 0, "explanation": "Le cartilage protège les extrémités des os." },
+    { "prompt": "Quel est le rôle du liquide synovial ?", "options": ["Lubrifier l'articulation pour permettre le glissement", "Durcir les os", "Transporter l'oxygène", "Produire les mouvements"], "correct_index": 0, "explanation": "Le liquide synovial lubrifie l'articulation." },
+    { "prompt": "Que relie un ligament ?", "options": ["Un os à un autre os", "Un muscle à un os", "Un nerf au cerveau", "Un organe à un autre"], "correct_index": 0, "explanation": "Le ligament relie os à os." },
+    { "prompt": "Que relie un tendon ?", "options": ["Un muscle à un os", "Un os à un autre os", "Deux muscles entre eux", "Un nerf à un muscle"], "correct_index": 0, "explanation": "Le tendon relie muscle à os." },
+    { "prompt": "Qui produit le liquide synovial ?", "options": ["La membrane synoviale", "Le tendon", "Le ligament", "Le cartilage"], "correct_index": 0, "explanation": "La membrane synoviale produit le liquide synovial." },
+    { "prompt": "Qu'est-ce qui produit le mouvement au niveau d'une articulation ?", "options": ["Le muscle", "Le cartilage", "Le liquide synovial", "La capsule"], "correct_index": 0, "explanation": "C'est le muscle qui produit le mouvement." }
+   ]
+  },
+  {
+   "chapter_id": "7a4f6ef4-8cc4-4654-bb6d-095612d41208",
+   "titre": "Les muscles",
+   "questions": [
+    { "prompt": "Que sont les muscles ?", "options": ["Des organes mous et contractiles", "Les parties dures du corps", "Des conduits de sang", "Des nerfs du cerveau"], "correct_index": 0, "explanation": "Les muscles sont des organes mous et contractiles, appelés aussi la viande." },
+    { "prompt": "Comment les muscles permettent-ils le mouvement ?", "options": ["En se contractant et en se relâchant", "En grandissant", "En durcissant les os", "En produisant du sang"], "correct_index": 0, "explanation": "Le mouvement vient de la contraction et du relâchement." },
+    { "prompt": "Qu'est-ce que la flexion ?", "options": ["Le muscle se contracte et se raccourcit", "Le muscle se relâche et s'allonge", "Le muscle disparaît", "Le muscle se divise"], "correct_index": 0, "explanation": "En flexion, le muscle se contracte : le biceps se gonfle." },
+    { "prompt": "Qu'est-ce que l'extension ?", "options": ["Le muscle se relâche et s'allonge", "Le muscle se contracte", "Le muscle se durcit", "Le muscle se raccourcit"], "correct_index": 0, "explanation": "En extension, le muscle se relâche et s'allonge." },
+    { "prompt": "Quel muscle assure la flexion du bras ?", "options": ["Le biceps", "Le triceps", "Le fémur", "Le tendon"], "correct_index": 0, "explanation": "Le biceps, devant le bras, assure la flexion." },
+    { "prompt": "Quel muscle assure l'extension du bras ?", "options": ["Le triceps", "Le biceps", "L'humérus", "Le ligament"], "correct_index": 0, "explanation": "Le triceps, derrière le bras, assure l'extension." },
+    { "prompt": "Que sont des muscles antagonistes ?", "options": ["Des muscles qui travaillent par paires en sens contraire", "Des muscles identiques", "Des muscles qui ne bougent jamais", "Des muscles du cœur uniquement"], "correct_index": 0, "explanation": "Quand l'un se contracte, l'autre se relâche : biceps et triceps." },
+    { "prompt": "Un muscle peut-il se contracter et s'étirer en même temps ?", "options": ["Non, jamais", "Oui, toujours", "Oui, pendant la course", "Oui, s'il est fatigué"], "correct_index": 0, "explanation": "Un muscle ne produit qu'un mouvement à la fois : d'où les paires antagonistes." },
+    { "prompt": "Que se passe-t-il pour le biceps pendant la flexion ?", "options": ["Il se gonfle et se durcit", "Il s'allonge", "Il disparaît", "Il se refroidit"], "correct_index": 0, "explanation": "En se contractant, le biceps se gonfle et se durcit." },
+    { "prompt": "Que fait le triceps quand le biceps se contracte ?", "options": ["Il se relâche", "Il se contracte aussi", "Il se détache de l'os", "Il durcit également"], "correct_index": 0, "explanation": "Les muscles antagonistes alternent : l'un se contracte, l'autre se relâche." }
+   ]
+  },
+  {
+   "chapter_id": "0d8f9589-cb4a-4275-81f4-915ff51336c7",
+   "titre": "La dent",
+   "questions": [
+    { "prompt": "De quoi une dent est-elle formée ?", "options": ["D'ivoire couvert d'émail sur la couronne", "De calcaire uniquement", "De muscle et de peau", "De cartilage"], "correct_index": 0, "explanation": "La dent est un organe dur fait d'ivoire, couvert d'émail sur la couronne." },
+    { "prompt": "Quel est le rôle des incisives ?", "options": ["Couper les aliments", "Déchirer les aliments", "Broyer les aliments", "Avaler les aliments"], "correct_index": 0, "explanation": "Les incisives, devant la bouche, coupent les aliments." },
+    { "prompt": "Quel est le rôle des canines ?", "options": ["Déchirer les aliments", "Couper les aliments", "Broyer les aliments", "Produire la salive"], "correct_index": 0, "explanation": "Les canines déchirent les aliments." },
+    { "prompt": "Quel est le rôle des molaires ?", "options": ["Broyer et écraser les aliments", "Couper les aliments", "Déchirer les aliments", "Absorber les nutriments"], "correct_index": 0, "explanation": "Les molaires, au fond de la bouche, broient les aliments." },
+    { "prompt": "Comment appelle-t-on la partie visible de la dent ?", "options": ["La couronne", "La racine", "Le collet", "La pulpe"], "correct_index": 0, "explanation": "La couronne est la partie visible, au-dessus de la gencive." },
+    { "prompt": "Comment appelle-t-on la partie de la dent située dans l'os de la mâchoire ?", "options": ["La racine", "La couronne", "L'émail", "Le collet"], "correct_index": 0, "explanation": "La racine est enfoncée dans l'os de la mâchoire." },
+    { "prompt": "Que contient la pulpe de la dent ?", "options": ["Les nerfs et les vaisseaux sanguins", "De l'air", "De l'émail", "Du calcaire pur"], "correct_index": 0, "explanation": "La pulpe contient nerfs et vaisseaux sanguins." },
+    { "prompt": "Combien de dents a un adulte ?", "options": ["32", "20", "28", "36"], "correct_index": 0, "explanation": "La formule dentaire de l'adulte donne 32 dents." },
+    { "prompt": "Combien de dents de lait a un enfant ?", "options": ["20", "32", "24", "16"], "correct_index": 0, "explanation": "L'enfant a 20 dents de lait." },
+    { "prompt": "À quoi servent les dents dans la digestion ?", "options": ["À réduire les aliments en petits morceaux", "À produire les sucs gastriques", "À absorber les nutriments", "À fabriquer la bile"], "correct_index": 0, "explanation": "Les dents réduisent les aliments pour faciliter la digestion." }
+   ]
+  },
+  {
+   "chapter_id": "8cae8bb4-ca65-4bb1-a474-f46955aaa68e",
+   "titre": "Les microbes",
+   "questions": [
+    { "prompt": "Que sont les microbes ?", "options": ["Des êtres vivants très petits, invisibles à l'œil nu", "De petits animaux visibles", "Des roches minuscules", "Des cellules du sang"], "correct_index": 0, "explanation": "Les microbes sont des êtres vivants très petits, invisibles à l'œil nu." },
+    { "prompt": "Avec quel instrument observe-t-on les microbes ?", "options": ["Le microscope", "Le télescope", "La loupe simple", "Le thermomètre"], "correct_index": 0, "explanation": "On observe les microbes au microscope." },
+    { "prompt": "Qui a découvert les microbes ?", "options": ["Louis Pasteur", "Victor Schœlcher", "Pierre Savorgnan de Brazza", "Jean de La Fontaine"], "correct_index": 0, "explanation": "Les microbes ont été découverts par le savant français Louis Pasteur." },
+    { "prompt": "Qu'est-ce qu'un microbe pathogène ?", "options": ["Un microbe qui donne des maladies", "Un microbe utile au corps", "Un microbe mort", "Un microbe visible à l'œil nu"], "correct_index": 0, "explanation": "Les microbes pathogènes provoquent des maladies." },
+    { "prompt": "Qu'est-ce qu'un microbe non pathogène ?", "options": ["Un microbe qui ne donne pas de maladie", "Un microbe qui tue", "Un microbe géant", "Un microbe des roches"], "correct_index": 0, "explanation": "Les microbes non pathogènes sont neutres ou utiles." },
+    { "prompt": "Combien de groupes de microbes existe-t-il ?", "options": ["Quatre", "Deux", "Trois", "Six"], "correct_index": 0, "explanation": "Bactéries, champignons, protozoaires et virus." },
+    { "prompt": "À quel groupe appartient le staphylocoque ?", "options": ["Les bactéries", "Les virus", "Les champignons", "Les protozoaires"], "correct_index": 0, "explanation": "Staphylocoque et salmonelle sont des bactéries." },
+    { "prompt": "À quel groupe appartient le plasmodium, responsable du paludisme ?", "options": ["Les protozoaires", "Les bactéries", "Les virus", "Les champignons"], "correct_index": 0, "explanation": "Le plasmodium est un protozoaire." },
+    { "prompt": "À quel groupe appartient le microbe de la grippe ?", "options": ["Les virus", "Les bactéries", "Les champignons", "Les protozoaires"], "correct_index": 0, "explanation": "Grippe, rougeole et COVID-19 sont causées par des virus." },
+    { "prompt": "Quel exemple de microbe utile le cours donne-t-il ?", "options": ["Les bactéries qui fabriquent le yaourt", "Le microbe de la tuberculose", "Le plasmodium", "Le virus de la grippe"], "correct_index": 0, "explanation": "Certaines bactéries non pathogènes servent à fabriquer le yaourt." }
+   ]
+  },
+  {
+   "chapter_id": "b4a9f230-eb09-4e68-9840-ef11c400df45",
+   "titre": "Les modes de déplacement chez les vertébrés",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un animal vertébré ?", "options": ["Un animal qui possède une colonne vertébrale", "Un animal sans os", "Un animal qui vit dans l'eau", "Un animal qui vole"], "correct_index": 0, "explanation": "Les vertébrés possèdent une colonne vertébrale." },
+    { "prompt": "Comment se déplacent les animaux à pattes sur le sol ?", "options": ["Ils marchent, courent ou sautent", "Ils rampent uniquement", "Ils nagent", "Ils volent"], "correct_index": 0, "explanation": "Chien, lion et grenouille prennent appui sur leurs pattes." },
+    { "prompt": "Comment se déplacent les poissons ?", "options": ["Ils nagent", "Ils rampent", "Ils volent", "Ils marchent"], "correct_index": 0, "explanation": "Les animaux aquatiques nagent." },
+    { "prompt": "Grâce à quoi les oiseaux volent-ils ?", "options": ["À leurs ailes", "À leurs pattes", "À leur queue seulement", "À leur bec"], "correct_index": 0, "explanation": "Les ailes permettent le vol." },
+    { "prompt": "Combien de modes de déplacement les oiseaux ont-ils ?", "options": ["Deux : marcher et voler", "Un seul : voler", "Trois", "Aucun"], "correct_index": 0, "explanation": "Les oiseaux marchent grâce à leurs pattes et volent grâce à leurs ailes." },
+    { "prompt": "Comment se déplace un serpent ?", "options": ["Il rampe", "Il marche", "Il vole", "Il saute"], "correct_index": 0, "explanation": "Sans organes de déplacement, le serpent rampe." },
+    { "prompt": "Pourquoi le serpent rampe-t-il ?", "options": ["Parce qu'il n'a pas d'organes de déplacement", "Parce qu'il est trop lourd", "Parce qu'il vit dans l'eau", "Parce qu'il a des ailes"], "correct_index": 0, "explanation": "C'est un vertébré sans pattes : il se déplace en rampant." },
+    { "prompt": "Dans quel milieu se déplace la baleine ?", "options": ["Dans l'eau", "Dans l'air", "Sur le sol", "Sous la terre"], "correct_index": 0, "explanation": "La baleine est un animal aquatique : elle nage." },
+    { "prompt": "Comment se déplace la grenouille ?", "options": ["Elle saute grâce à ses pattes", "Elle vole", "Elle rampe sans pattes", "Elle ne se déplace pas"], "correct_index": 0, "explanation": "La grenouille prend appui sur ses pattes pour sauter." },
+    { "prompt": "Quel mode de déplacement se fait dans l'air ?", "options": ["Le vol", "La nage", "La reptation", "La marche"], "correct_index": 0, "explanation": "Le vol est le déplacement dans l'air." }
+   ]
+  },
+  {
+   "chapter_id": "c0538d59-38f1-4315-810e-535508a54acb",
+   "titre": "Le système nerveux",
+   "questions": [
+    { "prompt": "Qu'est-ce que le système nerveux ?", "options": ["L'ensemble des organes qui mettent le corps en contact avec le milieu extérieur", "L'ensemble des os du corps", "L'ensemble des muscles", "L'ensemble des vaisseaux sanguins"], "correct_index": 0, "explanation": "Il reçoit les informations et commande les réactions du corps." },
+    { "prompt": "Quels sont les deux composants du système nerveux ?", "options": ["Les centres nerveux et les nerfs", "Les os et les muscles", "Le cœur et les poumons", "Les veines et les artères"], "correct_index": 0, "explanation": "Les centres nerveux et les nerfs." },
+    { "prompt": "Que comprend l'encéphale ?", "options": ["Le cerveau, le cervelet et le bulbe rachidien", "Le cœur et les poumons", "La moelle épinière seule", "Les nerfs des bras"], "correct_index": 0, "explanation": "L'encéphale est formé du cerveau, du cervelet et du bulbe rachidien." },
+    { "prompt": "Quels sont les centres nerveux ?", "options": ["L'encéphale et la moelle épinière", "Les nerfs crâniens et rachidiens", "Le cœur et le cerveau", "Les muscles et les tendons"], "correct_index": 0, "explanation": "Les centres nerveux sont l'encéphale et la moelle épinière." },
+    { "prompt": "À quoi servent les nerfs ?", "options": ["À transmettre les informations", "À produire le sang", "À digérer les aliments", "À soutenir le corps"], "correct_index": 0, "explanation": "Les nerfs sont les canaux qui transmettent les informations." },
+    { "prompt": "D'où partent les nerfs crâniens ?", "options": ["De l'encéphale", "De la moelle épinière", "Du cœur", "Des muscles"], "correct_index": 0, "explanation": "Les nerfs crâniens partent de l'encéphale." },
+    { "prompt": "D'où partent les nerfs rachidiens ?", "options": ["De la moelle épinière", "De l'encéphale", "Du foie", "Des poumons"], "correct_index": 0, "explanation": "Les nerfs rachidiens partent de la moelle épinière." },
+    { "prompt": "Quel est le rôle d'un nerf sensitif ?", "options": ["Conduire les excitations vers le cerveau", "Transmettre les ordres aux muscles", "Produire le mouvement", "Fabriquer le sang"], "correct_index": 0, "explanation": "Le nerf sensitif conduit les informations sensorielles vers le cerveau." },
+    { "prompt": "Quel est le rôle d'un nerf moteur ?", "options": ["Transmettre les informations du cerveau aux muscles", "Conduire les excitations vers le cerveau", "Filtrer le sang", "Protéger les os"], "correct_index": 0, "explanation": "Le nerf moteur commande le mouvement des muscles." },
+    { "prompt": "Comment retenir la différence entre nerf sensitif et nerf moteur ?", "options": ["Sensitif vers le cerveau, moteur du cerveau vers les muscles", "Sensitif vers les muscles, moteur vers le cerveau", "Les deux vont vers le cerveau", "Les deux partent des muscles"], "correct_index": 0, "explanation": "On reçoit l'information par le nerf sensitif, on réagit par le nerf moteur." }
+   ]
+  },
+  {
+   "chapter_id": "b7d27a44-b192-40a3-82aa-be657d812fc8",
+   "titre": "Sciences-Physique — Les caractéristiques d'une force",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une force ?", "options": ["Une action exercée sur un objet, qui peut le déplacer, le déformer ou l'arrêter", "Un déplacement d'électrons", "Une mesure de la température", "Un type de roche"], "correct_index": 0, "explanation": "La force peut déplacer, déformer ou arrêter un objet." },
+    { "prompt": "Combien de caractéristiques une force possède-t-elle ?", "options": ["Quatre", "Deux", "Trois", "Cinq"], "correct_index": 0, "explanation": "Point d'application, intensité, direction et sens." },
+    { "prompt": "Que rappelle le moyen mnémotechnique P.I.D.S. ?", "options": ["Point d'application, Intensité, Direction, Sens", "Poids, Intensité, Distance, Surface", "Puissance, Intensité, Durée, Sens", "Point, Infini, Droite, Segment"], "correct_index": 0, "explanation": "P.I.D.S. = Point d'application, Intensité, Direction, Sens." },
+    { "prompt": "Qu'est-ce que le point d'application ?", "options": ["L'endroit où la force s'applique sur l'objet", "La valeur de la force", "La ligne d'action", "L'unité de mesure"], "correct_index": 0, "explanation": "C'est l'endroit où la force agit, comme le pied qui frappe le ballon." },
+    { "prompt": "Qu'est-ce que l'intensité d'une force ?", "options": ["Sa valeur, sa puissance", "Son point d'application", "Sa ligne d'action", "Son sens"], "correct_index": 0, "explanation": "L'intensité est la valeur de la force." },
+    { "prompt": "Dans quelle unité mesure-t-on l'intensité d'une force ?", "options": ["Le Newton (N)", "Le kilogramme", "Le mètre", "Le litre"], "correct_index": 0, "explanation": "L'intensité se mesure en Newton, symbole N." },
+    { "prompt": "Qu'est-ce que la direction d'une force ?", "options": ["La ligne sur laquelle agit la force", "La valeur de la force", "Le point où elle s'applique", "Son unité"], "correct_index": 0, "explanation": "La direction peut être verticale, horizontale ou oblique." },
+    { "prompt": "Comment représente-t-on une force sur un schéma ?", "options": ["Par une flèche (vecteur)", "Par un cercle", "Par un carré", "Par un simple trait sans pointe"], "correct_index": 0, "explanation": "La force se représente par une flèche, c'est-à-dire un vecteur." },
+    { "prompt": "Que représente la longueur de la flèche ?", "options": ["L'intensité de la force", "Le sens de la force", "Le point d'application", "La direction uniquement"], "correct_index": 0, "explanation": "Plus la flèche est longue, plus la force est intense." },
+    { "prompt": "Que représente la pointe de la flèche ?", "options": ["Le sens de la force", "L'intensité", "Le point d'application", "L'unité de mesure"], "correct_index": 0, "explanation": "La pointe indique le sens ; le point de départ est le point d'application." }
+   ]
+  }
+ ]
+}

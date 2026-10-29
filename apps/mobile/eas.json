@@ -11,6 +11,9 @@
         "buildType": "apk",
         "gradleCommand": ":app:assembleDebug"
       },
+      "ios": {
+        "simulator": true
+      },
       "env": {
         "EXPO_PUBLIC_APP_ENV": "development",
         "EXPO_PUBLIC_SUPABASE_URL": "https://evtqdztycnttegzoleqb.supabase.co",
@@ -23,6 +26,7 @@
       "android": {
         "buildType": "apk"
       },
+      "ios": {},
       "env": {
         "EXPO_PUBLIC_APP_ENV": "preview",
         "EXPO_PUBLIC_SUPABASE_URL": "https://evtqdztycnttegzoleqb.supabase.co",
@@ -35,6 +39,7 @@
       "android": {
         "buildType": "app-bundle"
       },
+      "ios": {},
       "env": {
         "EXPO_PUBLIC_APP_ENV": "production",
         "EXPO_PUBLIC_SUPABASE_URL": "https://evtqdztycnttegzoleqb.supabase.co",
@@ -48,7 +53,8 @@
       "android": {
         "serviceAccountKeyPath": "./google-play-key.json",
         "track": "internal"
-      }
+      },
+      "ios": {}
     }
   }
 }

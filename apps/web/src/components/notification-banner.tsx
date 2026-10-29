@@ -8,7 +8,7 @@ const API_URL = ''  // routes Next.js locales
 const TYPE_STYLE = {
   annonce: { bg: 'bg-blue-600',   text: 'text-white',      btn: 'bg-white/20 hover:bg-white/30 text-white' },
   promo:   { bg: 'bg-amber-500',  text: 'text-white',      btn: 'bg-white/20 hover:bg-white/30 text-white' },
-  pub:     { bg: 'bg-violet-600', text: 'text-white',      btn: 'bg-white/20 hover:bg-white/30 text-white' },
+  pub:     { bg: 'bg-blue-600', text: 'text-white',      btn: 'bg-white/20 hover:bg-white/30 text-white' },
   alerte:  { bg: 'bg-red-600',    text: 'text-white',      btn: 'bg-white/20 hover:bg-white/30 text-white' },
 }
 

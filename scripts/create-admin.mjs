@@ -2,7 +2,7 @@
  * Crée (ou promeut en admin) un compte utilisateur Supabase.
  * Usage : node scripts/create-admin.mjs <email> [password]
  * Si password est omis, un mot de passe aléatoire fort est généré et affiché.
- * Lit SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY depuis apps/api/.env.local.
+ * Lit l'URL Supabase + SUPABASE_SERVICE_ROLE_KEY depuis apps/web/.env.local.
  */
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
@@ -18,16 +18,16 @@ if (!emailArg) {
 }
 
 const env = Object.fromEntries(
-  readFileSync(join(__dirname, '..', 'apps', 'api', '.env.local'), 'utf-8')
+  readFileSync(join(__dirname, '..', 'apps', 'web', '.env.local'), 'utf-8')
     .split('\n')
     .filter((l) => l.includes('=') && !l.startsWith('#'))
     .map((l) => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()] })
 )
 
-const SUPABASE_URL = env.SUPABASE_URL
+const SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL || env.SUPABASE_URL
 const SERVICE_ROLE_KEY = env.SUPABASE_SERVICE_ROLE_KEY
 if (!SUPABASE_URL || !SERVICE_ROLE_KEY || SUPABASE_URL.includes('xxxx')) {
-  console.error('SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY manquants ou non configurés dans apps/api/.env.local')
+  console.error('URL Supabase / SUPABASE_SERVICE_ROLE_KEY manquants ou non configurés dans apps/web/.env.local')
   process.exit(1)
 }
 

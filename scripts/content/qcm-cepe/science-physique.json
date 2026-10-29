@@ -1,0 +1,54 @@
+{
+ "matiere": "Science-physique",
+ "subject_id": "640fe0aa-370a-484f-93ea-d8854294feb6",
+ "chapitres": [
+  {
+   "chapter_id": "70ddf064-2dd0-4a5d-aff5-e06af440b628",
+   "titre": "La force",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une force ?", "options": ["Une action capable de modifier l'état d'un objet", "Une matière contenue dans les objets lourds", "Une mesure de la température", "Un déplacement d'électrons"], "correct_index": 0, "explanation": "La force est une action qui peut mettre en mouvement, arrêter, changer la direction ou déformer un objet." },
+    { "prompt": "Combien d'effets principaux la force peut-elle produire ?", "options": ["Deux", "Trois", "Quatre", "Six"], "correct_index": 2, "explanation": "Quatre : mettre en mouvement, arrêter le mouvement, changer la direction, déformer." },
+    { "prompt": "Frapper un ballon immobile : quel effet de la force ?", "options": ["Mettre en mouvement", "Arrêter le mouvement", "Changer la direction", "Déformer"], "correct_index": 0, "explanation": "Un objet immobile se met à se déplacer : la force le met en mouvement." },
+    { "prompt": "Attraper un ballon qui arrive vers toi : quel effet ?", "options": ["Mettre en mouvement", "Arrêter le mouvement", "Changer la direction", "Déformer"], "correct_index": 1, "explanation": "L'objet en mouvement s'arrête : la force arrête le mouvement." },
+    { "prompt": "Écraser une boîte en aluminium : quel effet ?", "options": ["Mettre en mouvement", "Arrêter le mouvement", "Changer la direction", "Déformer"], "correct_index": 3, "explanation": "L'objet change de forme : la force le déforme." },
+    { "prompt": "Frapper une bille qui roule pour l'envoyer ailleurs : quel effet ?", "options": ["Mettre en mouvement", "Arrêter le mouvement", "Changer la direction", "Déformer"], "correct_index": 2, "explanation": "L'objet continue de bouger mais sur une autre trajectoire : la force change sa direction." },
+    { "prompt": "Qu'est-ce qu'un effet dynamique ?", "options": ["Un effet qui modifie le mouvement", "Un effet qui déforme sans déplacer", "Un effet qui chauffe l'objet", "Un effet sans aucune conséquence"], "correct_index": 0, "explanation": "L'effet dynamique modifie le mouvement, comme un coup de marteau sur une pointe." },
+    { "prompt": "Étirer un ressort : de quel type d'effet s'agit-il ?", "options": ["Un effet dynamique", "Un effet statique", "Un effet électrique", "Aucun effet"], "correct_index": 1, "explanation": "L'effet statique déforme l'objet sans le déplacer : étirer un ressort, comprimer de l'argile." },
+    { "prompt": "Un aimant qui attire un morceau de fer sans le toucher exerce une force :", "options": ["Avec contact", "Sans contact", "Qui n'existe pas", "Uniquement statique"], "correct_index": 1, "explanation": "L'aimant et la gravité agissent à distance : ce sont des forces sans contact." },
+    { "prompt": "Pousser une caisse sur le sol est un exemple de force :", "options": ["Sans contact", "Avec contact", "Magnétique", "Électrique"], "correct_index": 1, "explanation": "La main touche la caisse : la force s'exerce avec contact." }
+   ]
+  },
+  {
+   "chapter_id": "937b0734-16f7-4e65-bbd5-5e1f36e02da9",
+   "titre": "Représentation et mesure de la force",
+   "questions": [
+    { "prompt": "Quelle est l'unité de mesure d'une force ?", "options": ["Le kilogramme", "Le Newton", "Le litre", "Le mètre"], "correct_index": 1, "explanation": "La force se mesure en Newton, dont le symbole est N." },
+    { "prompt": "Quel instrument sert à mesurer une force ?", "options": ["La balance", "Le thermomètre", "Le dynamomètre", "Le mètre ruban"], "correct_index": 2, "explanation": "On mesure une force avec un dynamomètre." },
+    { "prompt": "Par quoi représente-t-on une force sur un schéma ?", "options": ["Par un vecteur, c'est-à-dire une flèche", "Par un cercle", "Par un carré", "Par un point seulement"], "correct_index": 0, "explanation": "La force est représentée par un vecteur : un segment fléché qui montre sa direction et son sens." },
+    { "prompt": "Quel est le symbole du Newton ?", "options": ["N", "Nw", "Nt", "No"], "correct_index": 0, "explanation": "Le symbole du Newton est la lettre N." },
+    { "prompt": "Que désigne le point d'application d'une force ?", "options": ["L'endroit où la force s'exerce", "La valeur de la force", "Le sens de la force", "L'instrument de mesure"], "correct_index": 0, "explanation": "Le point d'application est l'endroit précis où la force agit sur l'objet." },
+    { "prompt": "Comment appelle-t-on la valeur d'une force, exprimée en Newton ?", "options": ["Sa direction", "Son sens", "Son intensité", "Son point d'application"], "correct_index": 2, "explanation": "L'intensité est la valeur de la force, mesurée en Newton." },
+    { "prompt": "Horizontale, verticale ou oblique : de quelle caractéristique parle-t-on ?", "options": ["Du point d'application", "De la direction", "De l'intensité", "De l'unité"], "correct_index": 1, "explanation": "La direction indique la droite selon laquelle la force agit : horizontale, verticale ou oblique." },
+    { "prompt": "À combien de Newton correspond environ 1 kilogramme de masse ?", "options": ["1 N", "10 N", "100 N", "1 000 N"], "correct_index": 1, "explanation": "1 kg correspond à environ 10 N de force gravitationnelle." },
+    { "prompt": "Un objet de 5 kg pèse environ :", "options": ["5 N", "15 N", "50 N", "500 N"], "correct_index": 2, "explanation": "5 kg × 10 = environ 50 N." },
+    { "prompt": "Un sac de 8 kg pèse environ :", "options": ["8 N", "18 N", "80 N", "800 N"], "correct_index": 2, "explanation": "8 kg × 10 = environ 80 N." }
+   ]
+  },
+  {
+   "chapter_id": "9e3db737-5fd6-484c-9055-b5737329bdb5",
+   "titre": "Le courant électrique — Continu et alternatif",
+   "questions": [
+    { "prompt": "Qu'est-ce que le courant électrique ?", "options": ["Un déplacement de particules électriques dans un conducteur", "Une force exercée sans contact", "Une source de chaleur uniquement", "Un mouvement de l'air"], "correct_index": 0, "explanation": "Le courant électrique est un déplacement d'électrons dans un conducteur." },
+    { "prompt": "Qu'est-ce qui caractérise le courant continu ?", "options": ["Il circule toujours dans le même sens", "Il change de sens régulièrement", "Il ne circule que la nuit", "Il n'a pas de sens"], "correct_index": 0, "explanation": "Le courant continu (CC) circule toujours dans le même sens." },
+    { "prompt": "Qu'est-ce qui caractérise le courant alternatif ?", "options": ["Il circule toujours dans le même sens", "Il change de sens à intervalles réguliers", "Il est toujours plus faible", "Il ne sert qu'aux piles"], "correct_index": 1, "explanation": "Le courant alternatif (CA) change de sens à intervalles réguliers." },
+    { "prompt": "Quel type de courant une pile produit-elle ?", "options": ["Du courant continu", "Du courant alternatif", "Les deux à la fois", "Aucun courant"], "correct_index": 0, "explanation": "Les piles, les batteries et les panneaux solaires produisent du courant continu." },
+    { "prompt": "Quel type de courant produit un barrage hydroélectrique ?", "options": ["Du courant continu", "Du courant alternatif", "Aucun courant", "Du courant magnétique"], "correct_index": 1, "explanation": "Les barrages, les dynamos et les groupes électrogènes produisent du courant alternatif." },
+    { "prompt": "Un panneau solaire produit :", "options": ["Du courant continu", "Du courant alternatif", "De la chaleur seulement", "Aucun courant"], "correct_index": 0, "explanation": "Le panneau solaire fait partie des sources de courant continu." },
+    { "prompt": "Comment appelle-t-on l'accident causé par le contact avec un fil sous tension ?", "options": ["Un court-circuit", "Une électrocution", "Une surtension", "Un incendie"], "correct_index": 1, "explanation": "Le contact avec un fil sous tension provoque une électrocution : il ne faut jamais toucher un fil dénudé." },
+    { "prompt": "Quelle précaution évite les courts-circuits et les incendies ?", "options": ["Ne pas surcharger les prises", "Brancher le maximum d'appareils sur une prise", "Utiliser des fils dénudés", "Laisser tous les appareils allumés"], "correct_index": 0, "explanation": "On évite de surcharger les prises et on éteint les appareils inutilisés." },
+    { "prompt": "Pourquoi ne faut-il jamais utiliser un appareil électrique près de l'eau ?", "options": ["Parce que l'eau conduit l'électricité", "Parce que l'eau éteint le courant", "Parce que l'appareil rouille aussitôt", "Parce que l'eau augmente la tension"], "correct_index": 0, "explanation": "L'eau conduit l'électricité : le risque d'électrocution est très élevé." },
+    { "prompt": "Dans une maison, quel courant alimente les prises ?", "options": ["Le courant continu", "Le courant alternatif", "Aucun des deux", "Le courant des piles"], "correct_index": 1, "explanation": "Les maisons, les écoles et les hôpitaux sont alimentés en courant alternatif." }
+   ]
+  }
+ ]
+}

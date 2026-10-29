@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import { UploadForm } from '../_components/upload-form'
 import { createClient } from '@/lib/supabase/client'
 import type { Level } from '@alpha-kelassi/types'
+import { adminFetch } from '@/lib/admin-fetch'
 
 const API_URL = ''  // routes Next.js locales
 
@@ -51,21 +52,26 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
   async function handleCorrigeUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (!corrigeDocId || !e.target.files?.[0]) return
     setUploadingCorrige(true)
-    const token = await getToken()
-    const fd = new FormData()
-    fd.append('file', e.target.files[0])
-    const res = await fetch(`${API_URL}/api/admin/documents/${corrigeDocId}/corrige`, {
-      method: 'PATCH',
-      headers: { Authorization: `Bearer ${token}` },
-      body: fd,
-    })
-    if (res.ok) {
-      const { data } = await res.json()
-      setDocs((prev) => prev.map((d) => d.id === corrigeDocId ? { ...d, corrige_url: data.corrige_url } : d))
+    // `finally` : sans lui, une réponse inattendue laissait l'envoi bloqué.
+    try {
+      const token = await getToken()
+      const fd = new FormData()
+      fd.append('file', e.target.files[0])
+      const res = await adminFetch<{ corrige_url: string }>(`${API_URL}/api/admin/documents/${corrigeDocId}/corrige`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      })
+      if (res.ok && res.data) {
+        setDocs((prev) => prev.map((d) => d.id === corrigeDocId ? { ...d, corrige_url: res.data!.corrige_url } : d))
+      } else if (!res.ok) {
+        alert(res.error ?? 'Envoi impossible')
+      }
+    } finally {
+      setUploadingCorrige(false)
+      setCorrigeDocId(null)
+      if (corrigeRef.current) corrigeRef.current.value = ''
     }
-    setUploadingCorrige(false)
-    setCorrigeDocId(null)
-    if (corrigeRef.current) corrigeRef.current.value = ''
   }
 
   return (
@@ -78,7 +84,7 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
         </div>
         <button
           onClick={() => setShowForm((v) => !v)}
-          className="px-4 py-2.5 bg-green-700 text-white rounded-xl text-sm font-bold hover:bg-green-800 shadow-sm"
+          className="px-4 py-2.5 bg-blue-700 text-white rounded-full text-sm font-bold hover:bg-blue-800 shadow-sm"
         >
           {showForm ? '✕ Annuler' : '+ Uploader un PDF'}
         </button>
@@ -100,7 +106,7 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
           placeholder="Rechercher..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
         <div className="flex bg-gray-100 rounded-xl p-1">
           {(['all', 'cours', 'examen'] as const).map((t) => (
@@ -131,13 +137,13 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
                 <td className="px-4 py-3 font-medium text-gray-900 max-w-[200px] truncate">{doc.title}</td>
                 <td className="px-4 py-3 text-gray-500">{doc.subjects?.name ?? '—'}</td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${doc.type === 'examen' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-800'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${doc.type === 'examen' ? 'bg-blue-100 text-blue-700' : 'bg-blue-100 text-blue-800'}`}>
                     {doc.type}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-gray-500 uppercase text-xs">{doc.level.replace('_', ' ')}</td>
                 <td className="px-4 py-3">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${doc.is_premium ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${doc.is_premium ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
                     {doc.is_premium ? '⭐ Premium' : 'Gratuit'}
                   </span>
                 </td>
@@ -148,7 +154,7 @@ export function AdminDocumentsClient({ subjects, documents: initial }: { subject
                     <button
                       onClick={() => { setCorrigeDocId(doc.id); setTimeout(() => corrigeRef.current?.click(), 50) }}
                       disabled={uploadingCorrige}
-                      className="text-xs text-green-700 hover:text-green-800 font-medium disabled:opacity-50"
+                      className="text-xs text-blue-700 hover:text-blue-800 font-medium disabled:opacity-50"
                     >
                       {uploadingCorrige && corrigeDocId === doc.id ? 'Upload…' : '+ Ajouter'}
                     </button>

@@ -36,6 +36,15 @@ function getRedis(): Redis {
   return _redis
 }
 
+/**
+ * Client Upstash réel, SANS repli : null si Redis n'est pas configuré, et les
+ * erreurs remontent à l'appelant. Réservé aux usages qui doivent savoir que
+ * Redis manque (limites de débit strictes, voir rateLimitStrict).
+ */
+export function rawRedis(): Redis | null {
+  return isConfigured ? getRedis() : null
+}
+
 // Valeurs de repli sûres si une commande Redis échoue (ex: quota Upstash
 // dépassé, réseau) — pour ne JAMAIS casser l'appelant (quota IA, cache…).
 function failOpen(prop: string): unknown {

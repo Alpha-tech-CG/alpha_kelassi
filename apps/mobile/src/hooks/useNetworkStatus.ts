@@ -8,7 +8,9 @@ export function useNetworkStatus() {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOnline(state.isConnected ?? true)
     })
-    return unsubscribe
+    // Teardown explicite : le listener NetInfo est retiré au démontage,
+    // sinon il retient le setState d'un composant déjà disparu.
+    return () => { unsubscribe() }
   }, [])
 
   return { isOnline }

@@ -17,7 +17,7 @@ const MAX_ITEMS = 5
 const LEVEL_COLORS: Record<string, string> = {
   bepc:  'bg-blue-100 text-blue-700',
   bac_a: 'bg-amber-100 text-amber-700',
-  bac_c: 'bg-violet-100 text-violet-700',
+  bac_c: 'bg-blue-100 text-blue-700',
   bac_d: 'bg-emerald-100 text-emerald-700',
 }
 
@@ -43,11 +43,11 @@ export function ExamensHistorique() {
           <Link
             key={item.id}
             href={`/examens/${item.id}`}
-            className="inline-flex items-center gap-2 px-3 py-2 bg-white rounded-xl border border-gray-100 hover:border-violet-200 hover:bg-violet-50 transition-all group shadow-sm"
+            className="inline-flex items-center gap-2 px-3 py-2 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-all group shadow-sm"
           >
             <span className="text-base">📝</span>
             <div className="min-w-0">
-              <p className="text-xs font-medium text-gray-800 truncate max-w-[180px] group-hover:text-violet-700">
+              <p className="text-xs font-medium text-gray-800 truncate max-w-[180px] group-hover:text-blue-700">
                 {item.title}
               </p>
               <div className="flex items-center gap-1 mt-0.5">

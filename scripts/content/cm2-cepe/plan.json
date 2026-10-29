@@ -1,0 +1,975 @@
+[
+ {
+  "matiere": "Grammaire",
+  "chapitre": "Les types de phrases",
+  "mode": "improve",
+  "lecon": "La phrase et la ponctuation — méthode et exercices",
+  "sections": [
+   "🇫🇷 Français – La phrase"
+  ],
+  "reponses": [
+   {
+    "semaine": 1,
+    "cle": "Français"
+   }
+  ]
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "Le nom, le déterminant et l'adjectif",
+  "mode": "new",
+  "lecon": "Le nom, le déterminant et l'adjectif",
+  "description": "Reconnaître ces trois mots dans une phrase et accorder l'adjectif.",
+  "sections": [
+   "🇫🇷 Français – Le nom, le déterminant, l'adjectif"
+  ],
+  "reponses": [
+   {
+    "semaine": 2,
+    "cle": "Français"
+   }
+  ]
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "Le sujet du verbe",
+  "mode": "improve",
+  "lecon": "Trouver le verbe et son sujet — méthode et exercices",
+  "sections": [
+   "🇫🇷 Français – Le verbe et le sujet"
+  ],
+  "reponses": [
+   {
+    "semaine": 3,
+    "cle": "Français"
+   }
+  ]
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "Le complément d'objet — COD et COI",
+  "mode": "new",
+  "lecon": "Le complément d'objet direct et indirect",
+  "description": "Poser les bonnes questions pour distinguer le COD du COI.",
+  "sections": [
+   "🇫🇷 Français – Le complément d'objet (COD / COI)"
+  ]
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "Les pronoms personnels compléments",
+  "mode": "improve",
+  "lecon": "Les pronoms personnels sujets et compléments",
+  "sections": [
+   "🇫🇷 Français – Les pronoms personnels"
+  ],
+  "reponses": [
+   {
+    "semaine": 5,
+    "cle": "Français"
+   }
+  ]
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "Les compléments circonstanciels",
+  "mode": "improve",
+  "lecon": "Reconnaître les compléments circonstanciels",
+  "sections": [
+   "🇫🇷 Français – Les compléments circonstanciels (CC)"
+  ]
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "La négation",
+  "mode": "new",
+  "lecon": "La phrase négative",
+  "description": "Transformer une phrase affirmative en phrase négative.",
+  "sections": [
+   "🇫🇷 Français – La négation"
+  ]
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "Les mots de liaison",
+  "mode": "new",
+  "lecon": "Les mots de liaison",
+  "description": "Relier ses idées : mais, donc, car, puis, enfin.",
+  "sections": [
+   "🇫🇷 Français – Les mots de liaison"
+  ],
+  "reponses": [
+   {
+    "semaine": 9,
+    "cle": "Liaison"
+   }
+  ]
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "Le discours direct et les guillemets",
+  "mode": "new",
+  "lecon": "Le discours direct",
+  "description": "Rapporter les paroles de quelqu'un avec les guillemets et les tirets.",
+  "sections": [
+   "🇫🇷 Français – Le discours direct"
+  ],
+  "complement": "discours-direct.md"
+ },
+ {
+  "matiere": "Grammaire",
+  "chapitre": "La nature et la fonction d'un mot",
+  "mode": "improve",
+  "lecon": "Nature et fonction — tableau récapitulatif",
+  "sections": [
+   "🔤 Grammaire – Nature et fonction"
+  ]
+ },
+ {
+  "matiere": "Conjugaison",
+  "chapitre": "Le présent de l'indicatif — 1er groupe",
+  "mode": "improve",
+  "lecon": "Présent et imparfait du 1er groupe — méthode et pièges",
+  "sections": [
+   "🕐 Conjugaison – Présent et imparfait (1er groupe)"
+  ],
+  "reponses": [
+   {
+    "semaine": 3,
+    "cle": "Conjugaison"
+   }
+  ]
+ },
+ {
+  "matiere": "Conjugaison",
+  "chapitre": "Le futur simple — ÊTRE et AVOIR",
+  "mode": "improve",
+  "lecon": "Le futur simple des trois groupes",
+  "sections": [
+   "🕐 Conjugaison – Le futur simple"
+  ],
+  "reponses": [
+   {
+    "semaine": 4,
+    "cle": "Futur"
+   }
+  ]
+ },
+ {
+  "matiere": "Conjugaison",
+  "chapitre": "Le passé composé — 1er groupe",
+  "mode": "improve",
+  "lecon": "Le passé composé avec AVOIR — méthode",
+  "sections": [
+   "🕐 Conjugaison – Le passé composé avec « avoir »"
+  ],
+  "reponses": [
+   {
+    "semaine": 5,
+    "cle": "Passé composé"
+   }
+  ]
+ },
+ {
+  "matiere": "Conjugaison",
+  "chapitre": "Le passé composé avec ÊTRE",
+  "mode": "new",
+  "lecon": "Le passé composé avec ÊTRE",
+  "description": "Former le passé composé avec être et accorder le participe passé.",
+  "sections": [
+   "🕐 Conjugaison – Le passé composé avec « être »"
+  ],
+  "reponses": [
+   {
+    "semaine": 6,
+    "cle": "Conjugaison"
+   }
+  ]
+ },
+ {
+  "matiere": "Conjugaison",
+  "chapitre": "L'impératif présent",
+  "mode": "new",
+  "lecon": "L'impératif présent",
+  "description": "Donner un ordre ou un conseil : trois personnes seulement.",
+  "sections": [
+   "🕐 Conjugaison – L'impératif présent"
+  ],
+  "reponses": [
+   {
+    "semaine": 7,
+    "cle": "Impératif"
+   }
+  ]
+ },
+ {
+  "matiere": "Conjugaison",
+  "chapitre": "Le passé simple — ÊTRE et AVOIR",
+  "mode": "improve",
+  "lecon": "Le passé simple des verbes fréquents",
+  "sections": [
+   "🕐 Conjugaison – Le passé simple (3e personne)"
+  ]
+ },
+ {
+  "matiere": "Conjugaison",
+  "chapitre": "Tableaux de conjugaison à connaître",
+  "mode": "new",
+  "lecon": "Tous les tableaux de conjugaison",
+  "description": "Être, avoir, les trois groupes et les verbes irréguliers les plus utilisés.",
+  "sections": [
+   "🕐 Révision de conjugaison"
+  ],
+  "bloc": "# 📚 Annexe – Tableaux de conjugaison"
+ },
+ {
+  "matiere": "Orthographe grammaticale",
+  "chapitre": "A / À",
+  "mode": "improve",
+  "lecon": "Les trois pièges : a/à, et/est, on/ont",
+  "sections": [
+   "✏️ Orthographe – a / à · et / est · on / ont"
+  ],
+  "reponses": [
+   {
+    "semaine": 4,
+    "cle": "Orthographe"
+   }
+  ]
+ },
+ {
+  "matiere": "Orthographe grammaticale",
+  "chapitre": "Ces / Ses",
+  "mode": "new",
+  "lecon": "Ces / Ses, son / sont, ce / se",
+  "description": "Choisir entre les homophones les plus fréquents de la dictée.",
+  "sections": [
+   "✏️ Orthographe – ces/ses · son/sont · ce/se"
+  ]
+ },
+ {
+  "matiere": "Orthographe d'usage",
+  "chapitre": "Le pluriel des noms et des adjectifs",
+  "mode": "new",
+  "lecon": "Former le pluriel",
+  "description": "La règle du s, les pluriels en -x et les cas particuliers.",
+  "sections": [
+   "✏️ Orthographe – Le pluriel"
+  ]
+ },
+ {
+  "matiere": "Orthographe d'usage",
+  "chapitre": "Les accents",
+  "mode": "new",
+  "lecon": "Les accents",
+  "description": "Accent aigu, grave et circonflexe : quand les écrire.",
+  "sections": [
+   "✏️ Orthographe – Les accents"
+  ],
+  "complement": "accents.md"
+ },
+ {
+  "matiere": "Vocabulaire",
+  "chapitre": "La famille de mots — Le radical",
+  "mode": "improve",
+  "lecon": "Synonymes, antonymes et familles — rappel express",
+  "sections": [
+   "📚 Vocabulaire"
+  ]
+ },
+ {
+  "matiere": "Lecture & Dictée",
+  "chapitre": "Comprendre un texte : stratégies de compréhension",
+  "mode": "improve",
+  "lecon": "Le texte narratif — qui, où, quand, quoi",
+  "sections": [
+   "📖 Lecture – Comprendre un texte narratif"
+  ]
+ },
+ {
+  "matiere": "Lecture & Dictée",
+  "chapitre": "Le texte descriptif",
+  "mode": "new",
+  "lecon": "Lire un texte descriptif",
+  "description": "Repérer les informations dans un texte qui décrit.",
+  "sections": [
+   "📖 Lecture – Le texte descriptif"
+  ],
+  "complement": "texte-descriptif.md"
+ },
+ {
+  "matiere": "Lecture & Dictée",
+  "chapitre": "Lire un dialogue",
+  "mode": "new",
+  "lecon": "Le dialogue",
+  "description": "Comprendre qui parle et ce qui se dit.",
+  "sections": [
+   "📖 Lecture – Le dialogue"
+  ],
+  "complement": "dialogue.md"
+ },
+ {
+  "matiere": "Expression écrite",
+  "chapitre": "La structure d'un devoir de rédaction",
+  "mode": "improve",
+  "lecon": "Rédiger pas à pas — plan et rédaction libre",
+  "sections": [
+   "🇫🇷 Français – La rédaction structurée",
+   "🇫🇷 Français – Rédaction libre guidée"
+  ]
+ },
+ {
+  "matiere": "Expression écrite",
+  "chapitre": "La lettre — Structure et modèle",
+  "mode": "improve",
+  "lecon": "Écrire une lettre — modèle complet",
+  "sections": [
+   "🇫🇷 Français – Écrire une lettre",
+   "🇫🇷 Français – La lettre complète"
+  ]
+ },
+ {
+  "matiere": "Expression écrite",
+  "chapitre": "Décrire un lieu et un objet",
+  "mode": "new",
+  "lecon": "La description",
+  "description": "Décrire un lieu puis un objet, avec un ordre et des mots précis.",
+  "sections": [
+   "🇫🇷 Français – Décrire un lieu",
+   "🇫🇷 Français – Décrire un objet"
+  ]
+ },
+ {
+  "matiere": "Expression écrite",
+  "chapitre": "Raconter au passé et écrire un dialogue",
+  "mode": "new",
+  "lecon": "Raconter et faire parler",
+  "description": "Récit à partir d'un début, récit au passé, événement vécu et dialogue.",
+  "sections": [
+   "🇫🇷 Français – Écrire un récit à partir d'un début",
+   "🇫🇷 Français – Raconter au passé",
+   "🇫🇷 Français – Raconter un événement vécu",
+   "🇫🇷 Français – Le dialogue"
+  ]
+ },
+ {
+  "matiere": "Expression écrite",
+  "chapitre": "S'entraîner dans les conditions du CEPE",
+  "mode": "new",
+  "lecon": "Épreuve de bilan et préparation finale",
+  "description": "Une épreuve de bilan, puis le programme des quatre dernières semaines.",
+  "sections": [
+   "📝 Épreuve de bilan (dans les conditions du CEPE)",
+   "🔬 Révisions"
+  ],
+  "bloc": "# 🟥 MOIS 6 – Préparation au CEPE"
+ },
+ {
+  "matiere": "Numération",
+  "chapitre": "La numération décimale — Rappels",
+  "mode": "improve",
+  "lecon": "Lire, comparer et ranger les grands nombres",
+  "sections": [
+   "➗ Mathématiques – Les grands nombres"
+  ],
+  "reponses": [
+   {
+    "semaine": 1,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Numération",
+  "chapitre": "La division — quotient et reste",
+  "mode": "new",
+  "lecon": "Poser une division",
+  "description": "Diviser par un chiffre, trouver le quotient et le reste.",
+  "sections": [
+   "➗ Mathématiques – La division"
+  ],
+  "reponses": [
+   {
+    "semaine": 4,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Numération",
+  "chapitre": "Multiples, diviseurs et divisibilité",
+  "mode": "new",
+  "lecon": "Multiples, diviseurs et critères de divisibilité",
+  "description": "Nombres pairs et impairs, multiples, diviseurs et critères par 2, 3, 5 et 9.",
+  "sections": [
+   "🔢 Mathématiques – Multiples, diviseurs, divisibilité"
+  ],
+  "reponses": [
+   {
+    "semaine": 5,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Numération",
+  "chapitre": "Les fractions — Définition et lecture",
+  "mode": "improve",
+  "lecon": "Comprendre et comparer les fractions",
+  "sections": [
+   "🔢 Mathématiques – Les fractions simples"
+  ],
+  "reponses": [
+   {
+    "semaine": 7,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Numération",
+  "chapitre": "Additionner et soustraire des fractions",
+  "mode": "new",
+  "lecon": "Additionner et soustraire des fractions",
+  "description": "Calculer avec des fractions de même dénominateur.",
+  "sections": [
+   "➕➖ Mathématiques – Additionner et soustraire des fractions"
+  ],
+  "reponses": [
+   {
+    "semaine": 9,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Numération",
+  "chapitre": "Les nombres décimaux — Lecture et écriture",
+  "mode": "improve",
+  "lecon": "Les décimaux — méthode et exercices",
+  "sections": [
+   "🔢 Mathématiques – Les nombres décimaux"
+  ],
+  "reponses": [
+   {
+    "semaine": 10,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Numération",
+  "chapitre": "Les opérations — Rappels essentiels",
+  "mode": "improve",
+  "lecon": "Calculer avec les décimaux — exercices guidés",
+  "sections": [
+   "➕➖✖️ Mathématiques – Calculs avec les décimaux"
+  ],
+  "reponses": [
+   {
+    "semaine": 11,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Calcul rapide & mental",
+  "chapitre": "Addition et soustraction rapides",
+  "mode": "improve",
+  "lecon": "Poser une addition et une soustraction",
+  "sections": [
+   "➕➖ Mathématiques – Addition et soustraction"
+  ],
+  "reponses": [
+   {
+    "semaine": 2,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Calcul rapide & mental",
+  "chapitre": "Multiplication et division rapides",
+  "mode": "improve",
+  "lecon": "Poser une multiplication — méthode et exercices",
+  "sections": [
+   "✖️ Mathématiques – La multiplication"
+  ],
+  "reponses": [
+   {
+    "semaine": 3,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Problèmes & mesures",
+  "chapitre": "Méthode de résolution d'un problème",
+  "mode": "improve",
+  "lecon": "Problèmes à deux ou trois opérations",
+  "sections": [
+   "➕✖️ Mathématiques – Problèmes à plusieurs opérations"
+  ],
+  "reponses": [
+   {
+    "semaine": 6,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Problèmes & mesures",
+  "chapitre": "Les longueurs et leurs conversions",
+  "mode": "new",
+  "lecon": "Mesurer et convertir des longueurs",
+  "description": "Du millimètre au kilomètre, avec le tableau de conversion.",
+  "sections": [
+   "📏 Mathématiques – Les longueurs"
+  ],
+  "reponses": [
+   {
+    "semaine": 13,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Problèmes & mesures",
+  "chapitre": "Les masses et les capacités",
+  "mode": "new",
+  "lecon": "Masses et capacités",
+  "description": "Grammes, kilogrammes, litres et centilitres : lire et convertir.",
+  "sections": [
+   "⚖️ Mathématiques – Masses et capacités"
+  ],
+  "reponses": [
+   {
+    "semaine": 14,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Problèmes & mesures",
+  "chapitre": "Les mesures de temps",
+  "mode": "improve",
+  "lecon": "Calculer une durée — méthode et exercices",
+  "sections": [
+   "⏰ Mathématiques – Heures et durées"
+  ],
+  "reponses": [
+   {
+    "semaine": 15,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Problèmes & mesures",
+  "chapitre": "Les figures planes",
+  "mode": "new",
+  "lecon": "Point, droite, segment et figures planes",
+  "description": "Reconnaître et tracer le carré, le rectangle, le triangle et le cercle.",
+  "sections": [
+   "📐 Mathématiques – Les figures planes"
+  ]
+ },
+ {
+  "matiere": "Problèmes & mesures",
+  "chapitre": "Périmètre et aire des figures usuelles",
+  "mode": "improve",
+  "lecon": "Périmètre et aire — triangle et cercle compris",
+  "sections": [
+   "📏 Mathématiques – Périmètre et aire"
+  ],
+  "reponses": [
+   {
+    "semaine": 18,
+    "cle": "Maths"
+   }
+  ]
+ },
+ {
+  "matiere": "Problèmes & mesures",
+  "chapitre": "Les solides et les volumes",
+  "mode": "new",
+  "lecon": "Les solides et le volume du cube et du pavé",
+  "description": "Cube, pavé droit, cylindre, cône, pyramide et sphère.",
+  "sections": [
+   "📐 Mathématiques – Solides et volumes"
+  ]
+ },
+ {
+  "matiere": "Problèmes & mesures",
+  "chapitre": "La symétrie et le repérage sur quadrillage",
+  "mode": "new",
+  "lecon": "Symétrie axiale et quadrillage",
+  "description": "Tracer un symétrique et se repérer sur un quadrillage.",
+  "sections": [
+   "📐 Mathématiques – Symétrie et quadrillage"
+  ],
+  "complement": "symetrie.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "La respiration",
+  "mode": "improve",
+  "lecon": "Respiration et circulation — l'essentiel",
+  "sections": [
+   "🔬 Sciences – Respiration et circulation"
+  ]
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "L'appareil digestif et la digestion",
+  "mode": "improve",
+  "lecon": "La digestion — résumé simple",
+  "sections": [
+   "🔬 Sciences – La digestion"
+  ]
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "La dent",
+  "mode": "improve",
+  "lecon": "Dents, alimentation et eau potable",
+  "sections": [
+   "🔬 Sciences – Dents, alimentation, eau potable"
+  ]
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "Les plantes et leurs parties",
+  "mode": "new",
+  "lecon": "Les parties de la plante et leur rôle",
+  "description": "Racines, tige, feuilles, fleur et fruit.",
+  "sections": [
+   "🔬 Sciences – Les plantes"
+  ],
+  "complement": "plantes.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "Les animaux et leurs habitats",
+  "mode": "new",
+  "lecon": "Les animaux et leurs milieux de vie",
+  "description": "Où vivent les animaux et de quoi ils se nourrissent.",
+  "sections": [
+   "🔬 Sciences – Animaux et habitats"
+  ],
+  "complement": "animaux.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "L'alimentation équilibrée",
+  "mode": "new",
+  "lecon": "Bien manger pour grandir",
+  "description": "Aliments qui donnent de l'énergie, qui construisent et qui protègent.",
+  "sections": [
+   "🔬 Sciences – Alimentation équilibrée"
+  ],
+  "complement": "alimentation.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "Les cinq sens",
+  "mode": "new",
+  "lecon": "Les sens et leurs organes",
+  "description": "La vue, l'ouïe, l'odorat, le goût et le toucher.",
+  "sections": [
+   "🔬 Sciences – Les sens"
+  ],
+  "complement": "les-sens.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "Les déchets, la pollution et le reboisement",
+  "mode": "new",
+  "lecon": "Protéger son milieu",
+  "description": "Trier, ne pas brûler n'importe quoi, replanter.",
+  "sections": [
+   "🔬 Sciences – Déchets, pollution, reboisement"
+  ],
+  "complement": "dechets.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "L'eau : pollution et économie",
+  "mode": "new",
+  "lecon": "L'eau, un bien précieux",
+  "description": "D'où vient l'eau, comment elle se salit et comment l'économiser.",
+  "sections": [
+   "🔬 Sciences – L'eau"
+  ],
+  "complement": "eau.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "L'air et sa pollution",
+  "mode": "new",
+  "lecon": "L'air que nous respirons",
+  "description": "À quoi sert l'air et ce qui le pollue.",
+  "sections": [
+   "🔬 Sciences – L'air"
+  ],
+  "complement": "air.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "La forêt et sa protection",
+  "mode": "new",
+  "lecon": "La forêt congolaise",
+  "description": "Ce que la forêt apporte et pourquoi il faut la protéger.",
+  "sections": [
+   "🔬 Sciences – La forêt"
+  ],
+  "complement": "foret.md"
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "Les types de sol et leur utilité",
+  "mode": "improve",
+  "lecon": "Le sol et l'érosion",
+  "sections": [
+   "🔬 Sciences – Le sol et l'érosion"
+  ]
+ },
+ {
+  "matiere": "SVT",
+  "chapitre": "Les microbes",
+  "mode": "improve",
+  "lecon": "Les maladies transmissibles et leur prévention",
+  "sections": [
+   "🔬 Sciences – Maladies transmissibles"
+  ]
+ },
+ {
+  "matiere": "Science-physique",
+  "chapitre": "Le courant électrique — Continu et alternatif",
+  "mode": "improve",
+  "lecon": "L'énergie à la maison et la sécurité",
+  "sections": [
+   "🔬 Sciences – L'énergie à la maison"
+  ]
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "L'hygiène et la prévention des maladies",
+  "mode": "improve",
+  "lecon": "Mon corps, l'hygiène du milieu et le paludisme",
+  "sections": [
+   "🔬 Sciences – Mon corps et l'hygiène",
+   "🔬 Sciences – L'hygiène du milieu",
+   "🔬 Sciences – Le paludisme"
+  ]
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "La famille et l'école",
+  "mode": "improve",
+  "lecon": "Politesse, école et communauté",
+  "sections": [
+   "🤝 Éducation civique – Politesse et respect",
+   "🤝 Éducation civique – L'école",
+   "🤝 Éducation civique – Famille et communauté"
+  ]
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "Les droits et les devoirs de l'enfant",
+  "mode": "new",
+  "lecon": "Mes droits et mes devoirs",
+  "description": "Ce que l'enfant a le droit d'avoir et ce qu'il doit faire.",
+  "sections": [
+   "🤝 Éducation civique – Les droits de l'enfant",
+   "🤝 Éducation civique – Les devoirs de l'enfant"
+  ]
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "La solidarité et l'entraide",
+  "mode": "new",
+  "lecon": "La solidarité",
+  "description": "Aider les autres dans la classe, la famille et le quartier.",
+  "sections": [
+   "🤝 Éducation civique – La solidarité"
+  ],
+  "complement": "solidarite.md"
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "Le respect des lois",
+  "mode": "new",
+  "lecon": "Respecter les lois",
+  "description": "À quoi servent les règles et les lois.",
+  "sections": [
+   "🤝 Éducation civique – Respecter les lois"
+  ],
+  "complement": "lois.md"
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "La paix et la non-violence",
+  "mode": "new",
+  "lecon": "Vivre en paix",
+  "description": "Régler les disputes sans violence.",
+  "sections": [
+   "🤝 Éducation civique – La paix"
+  ],
+  "complement": "paix.md"
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "Protéger l'environnement",
+  "mode": "new",
+  "lecon": "Protéger mon environnement",
+  "description": "Les gestes simples pour garder un cadre de vie sain.",
+  "sections": [
+   "🤝 Éducation civique – Protéger l'environnement"
+  ],
+  "complement": "environnement.md"
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "Les accidents et les premiers soins",
+  "mode": "new",
+  "lecon": "Éviter les accidents et porter secours",
+  "description": "Les dangers de la maison et les premiers gestes.",
+  "sections": [
+   "🔬 Sciences – Accidents et premiers soins"
+  ],
+  "complement": "accidents.md"
+ },
+ {
+  "matiere": "Éducation civique & santé",
+  "chapitre": "Les institutions et symboles de la République",
+  "mode": "improve",
+  "lecon": "Symboles et institutions — l'essentiel",
+  "sections": [
+   "🤝 Éducation civique – Les symboles nationaux",
+   "🤝 Éducation civique – Les institutions",
+   "🤝 Éducation civique – Drapeau, hymne, devise"
+  ]
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "Les premiers habitants et royaumes traditionnels",
+  "mode": "improve",
+  "lecon": "Premiers habitants, royaumes et situation du Congo",
+  "sections": [
+   "🏛️ Histoire – Les premiers habitants et les royaumes",
+   "🌍 Histoire-Géographie – Où est le Congo ?"
+  ]
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "Les villes du Congo",
+  "mode": "new",
+  "lecon": "Les villes et la carte du Congo",
+  "description": "Brazzaville, Pointe-Noire et les autres villes à connaître.",
+  "sections": [
+   "🌍 Géographie – Les villes du Congo",
+   "🌍 Repères – La carte du Congo"
+  ]
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "Le Congo : fleuve, relief et départements",
+  "mode": "improve",
+  "lecon": "Fleuve, relief et place du Congo en Afrique centrale",
+  "sections": [
+   "🌍 Géographie – Le fleuve Congo",
+   "🌍 Géographie – Le relief",
+   "🌍 Histoire-Géographie – Le Congo dans l'Afrique centrale"
+  ]
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "Le climat, les saisons et la végétation",
+  "mode": "new",
+  "lecon": "Climat, saisons et végétation",
+  "description": "Saison sèche, saison des pluies, forêt et savane.",
+  "sections": [
+   "🌍 Géographie – Le climat",
+   "🌍 Géographie – La végétation"
+  ]
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "La traite négrière",
+  "mode": "new",
+  "lecon": "La traite négrière et ses conséquences",
+  "description": "Le commerce des esclaves et son abolition.",
+  "sections": [
+   "🏛️ Histoire – La traite négrière"
+  ],
+  "complement": "traite-negriere.md"
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "La colonisation et les grands explorateurs",
+  "mode": "improve",
+  "lecon": "Colonisation française et travaux forcés",
+  "sections": [
+   "🏛️ Histoire – La colonisation française",
+   "🏛️ Histoire – Les travaux forcés"
+  ]
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "La Conférence de Brazzaville (1944)",
+  "mode": "new",
+  "lecon": "La Conférence de Brazzaville",
+  "description": "1944 : la réunion qui ouvre la marche vers l'indépendance.",
+  "sections": [
+   "🏛️ Histoire – La Conférence de Brazzaville (1944)"
+  ],
+  "complement": "brazzaville-1944.md"
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "L'indépendance du 15 août 1960",
+  "mode": "new",
+  "lecon": "L'indépendance du Congo",
+  "description": "Du 28 novembre 1958 au 15 août 1960.",
+  "sections": [
+   "🏛️ Histoire – L'indépendance"
+  ],
+  "complement": "independance.md"
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "Le Congo indépendant et ses grandes dates",
+  "mode": "new",
+  "lecon": "Le Congo depuis l'indépendance",
+  "description": "Les grandes périodes et les dates à retenir pour le CEPE.",
+  "sections": [
+   "🏛️ Histoire – Le Congo indépendant",
+   "🏛️ Histoire – Les grandes dates"
+  ]
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "Les fêtes nationales",
+  "mode": "new",
+  "lecon": "Les fêtes nationales",
+  "description": "Les dates fêtées dans le pays et ce qu'elles rappellent.",
+  "sections": [
+   "🏛️ Histoire – Les fêtes nationales"
+  ],
+  "complement": "fetes-nationales.md"
+ },
+ {
+  "matiere": "Histoire-Géographie",
+  "chapitre": "Les ressources naturelles et l'économie",
+  "mode": "new",
+  "lecon": "Ressources, pétrole et activités économiques",
+  "description": "Ce que produit le Congo et comment vivent ses habitants.",
+  "sections": [
+   "🌍 Géographie – Les ressources naturelles",
+   "🌍 Géographie – Le pétrole",
+   "🌍 Géographie – L'agriculture",
+   "🌍 Géographie – Activités économiques"
+  ]
+ }
+]

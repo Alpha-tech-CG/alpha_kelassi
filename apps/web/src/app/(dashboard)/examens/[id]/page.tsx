@@ -2,13 +2,15 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ExamenViewer } from './examen-viewer'
-import { FreeLimitGate } from '@/components/free-limit-gate'
+import { LockedFeature } from '@/components/subscription/locked-feature'
+import { getEntitlements } from '@/lib/subscription/server'
+import { supabaseAdmin } from '@/lib/admin-guard'
 import { DocumentReaderClient } from '@/components/document-reader-client'
 
 const LEVEL_CONFIG: Record<string, { label: string; bg: string; color: string }> = {
   bepc:  { label: 'BEPC',  bg: 'bg-blue-100',   color: 'text-blue-700' },
   bac_a: { label: 'BAC A', bg: 'bg-amber-100',  color: 'text-amber-700' },
-  bac_c: { label: 'BAC C', bg: 'bg-violet-100', color: 'text-violet-700' },
+  bac_c: { label: 'BAC C', bg: 'bg-blue-100', color: 'text-blue-700' },
   bac_d: { label: 'BAC D', bg: 'bg-emerald-100',color: 'text-emerald-700' },
 }
 
@@ -23,26 +25,24 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
     .select('*, subjects(id, name, level)')
     .eq('id', id)
     .eq('type', 'examen')
-    .single()
+    .maybeSingle()
 
-  if (!doc) notFound()
-
-  const { data: profile } = await supabase.from('users').select('plan').eq('id', user.id).single()
-  const plan = profile?.plan ?? 'free'
-
-  // Gate contenu premium
-  if (doc.is_premium && plan !== 'premium') {
+  // En Gratuit, une annale par matière est ouverte ; la base masque les autres.
+  if (!doc) {
+    const { data: exists } = await supabaseAdmin.from('documents').select('id').eq('id', id).eq('type', 'examen').maybeSingle()
+    if (!exists) notFound()
     return (
-      <div className="max-w-2xl mx-auto px-6 py-20 text-center">
-        <p className="text-5xl mb-4">⭐</p>
-        <h2 className="text-xl font-bold mb-2">Contenu Premium</h2>
-        <p className="text-gray-500 mb-6">Cet examen est réservé aux abonnés Premium.</p>
-        <Link
-          href="/billing"
-          className="inline-block px-6 py-3 bg-amber-500 text-white rounded-xl font-semibold hover:bg-amber-600 transition-colors"
-        >
-          Passer à Premium — 2 000 FCFA/mois
-        </Link>
+      <div className="max-w-2xl mx-auto px-6 py-20">
+        <LockedFeature feature="full_annals" backHref="/examens" backLabel="← Retour aux annales" />
+      </div>
+    )
+  }
+
+  const ent = await getEntitlements(user.id)
+  if (doc.is_premium && !ent.can('full_annals')) {
+    return (
+      <div className="max-w-2xl mx-auto px-6 py-20">
+        <LockedFeature feature="full_annals" backHref="/examens" backLabel="← Retour aux annales" />
       </div>
     )
   }
@@ -96,7 +96,7 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
         <span>›</span>
         {doc.level && (
           <>
-            <Link href={`/examens?level=${doc.level}`} className="hover:text-violet-600 transition-colors">
+            <Link href={`/examens?level=${doc.level}`} className="hover:text-blue-600 transition-colors">
               {lvl.label}
             </Link>
             <span>›</span>
@@ -138,7 +138,7 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
             )}
             {hasCorrige && doc.is_premium && (
               <span className="text-xs bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full font-semibold border border-amber-100">
-                ⭐ Corrigé Premium inclus
+                ⭐ Corrigé inclus pour les abonnés
               </span>
             )}
             {!hasCorrige && (
@@ -149,17 +149,17 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
           </div>
         </div>
 
-        {/* CTA Kelassi */}
+        {/* CTA Cognix */}
         <Link
           href={`/tuteur?document=${doc.id}`}
           className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-sm"
         >
-          🤖 Demander à Kelassi
+          🤖 Demander à Cognix
         </Link>
       </div>
 
       {/* Visionneuse avec gate freemium */}
-      <FreeLimitGate type="exam" plan={plan}>
+      <div>
         {isPdf && enonceUrl ? (
           /* Fichier PDF → visionneuse PDF avec exercices */
           <ExamenViewer
@@ -170,7 +170,7 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
             enonceUrl={enonceUrl}
             corrigeUrl={corrigeUrl}
             corrigeIsPremium={!!doc.is_premium}
-            exercises={exercises ?? []}
+            exercises={(exercises ?? []).map((e) => ({ ...e, metadata: e.metadata as Record<string, unknown> }))}
             contextChunks={contextChunks ?? []}
           />
         ) : textContent ? (
@@ -185,7 +185,7 @@ export default async function ExamenDetailPage({ params }: { params: Promise<{ i
             <p className="text-sm mt-1">Reviens dans quelques instants.</p>
           </div>
         )}
-      </FreeLimitGate>
+      </div>
     </div>
   )
 }

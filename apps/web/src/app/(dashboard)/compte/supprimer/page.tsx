@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { clearOfflineCaches } from '@/lib/offline-cache'
 
 const API_URL = ''  // routes Next.js locales
 
@@ -45,6 +46,7 @@ export default function SupprimerComptePage() {
       }
 
       await supabase.auth.signOut()
+      await clearOfflineCaches()
       setStep('done')
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : 'Erreur inconnue')
@@ -58,9 +60,9 @@ export default function SupprimerComptePage() {
         <p className="text-5xl mb-4">✅</p>
         <h1 className="text-xl font-bold mb-2">Compte supprimé</h1>
         <p className="text-gray-500 text-sm mb-6">
-          Toutes tes données ont été effacées. Merci d'avoir utilisé Kelassi.
+          Toutes tes données ont été effacées. Merci d'avoir utilisé Cognix.
         </p>
-        <Link href="/" className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
+        <Link href="/" className="px-5 py-2.5 bg-blue-600 text-white rounded-full text-sm font-medium hover:bg-blue-700">
           Retour à l'accueil
         </Link>
       </div>
@@ -100,7 +102,7 @@ export default function SupprimerComptePage() {
           <li>• Ton profil et tes informations personnelles</li>
           <li>• Tout ton historique de cours et d'examens consultés</li>
           <li>• Tes flashcards et ta progression SM-2</li>
-          <li>• Tes conversations avec Kelassi IA</li>
+          <li>• Tes conversations avec Cognix IA</li>
           <li>• Ton abonnement actif (aucun remboursement)</li>
         </ul>
 

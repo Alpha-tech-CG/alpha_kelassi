@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import type { Database } from '@alpha-kelassi/types'
 import { GoogleGenAI } from '@google/genai'
 import { z } from 'zod'
 import { createHash } from 'crypto'
 import { redis } from '@/lib/redis'
 import { searchRelevantChunks } from '@/lib/ai/vector-search'
-import { checkAndIncrementQuota } from '@/lib/ai/quota'
+import { checkAndIncrementQuota, refundLegacyQuota } from '@/lib/ai/quota'
+import {
+  consumeUsage, getEntitlements, planRequired, quotaExceeded, refundUsage, requestKeyOf, UsageUnavailableError,
+} from '@/lib/subscription/server'
+import { rateLimit, tooMany } from '@/lib/rate-limit'
+import { detectInjectionAttempt } from '@/lib/ai/prompt-guard'
 
 export const maxDuration = 60
 
@@ -18,10 +24,10 @@ function getGenai(): GoogleGenAI {
   return _genai
 }
 
-let _admin: ReturnType<typeof createAdminClient> | null = null
+let _admin: ReturnType<typeof createAdminClient<Database>> | null = null
 function getAdmin() {
   if (!_admin) {
-    _admin = createAdminClient(
+    _admin = createAdminClient<Database>(
       process.env['NEXT_PUBLIC_SUPABASE_URL']!,
       process.env['SUPABASE_SERVICE_ROLE_KEY']!
     )
@@ -109,6 +115,11 @@ export async function POST(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
+  // Rate limit court terme (anti-burst) — vérifié AVANT le quota journalier
+  // pour économiser l'appel Gemini si l'utilisateur spam le endpoint.
+  const withinBurstLimit = await rateLimit(`ai-chat:${user.id}`, 5, 60)
+  if (!withinBurstLimit) return tooMany()
+
   // Validation du body
   let body: z.infer<typeof chatSchema>
   try {
@@ -117,25 +128,64 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Corps invalide' }, { status: 400 })
   }
 
-  // Plan + quota
-  const { data: profile } = await getAdmin()
-    .from('users').select('plan').eq('id', user.id).single()
-  const plan  = profile?.plan ?? 'free'
-  const quota = await checkAndIncrementQuota(user.id, plan)
+  const question = sanitize(body.question)
 
-  if (!quota.allowed) {
+  // Détection basique de tentative de prompt injection (override du system
+  // prompt). On reste bienveillant : ce sont des élèves, pas des attaquants
+  // professionnels — objectif = filtrer les tentatives évidentes, pas
+  // bloquer agressivement des questions légitimes. Placée AVANT
+  // checkAndIncrementQuota (qui incrémente inconditionnellement, cf.
+  // lib/ai/quota.ts) pour ne pas consommer le quota journalier de l'élève
+  // sur une requête qui de toute façon n'appellera jamais Gemini.
+  if (detectInjectionAttempt(question)) {
     return NextResponse.json({
       error: {
-        code: 'QUOTA_EXCEEDED',
-        message: `Limite journalière atteinte (${plan === 'free' ? '5' : '200'} questions/jour).${
-          plan === 'free' ? ' Passe à Premium pour continuer.' : ' Réessaie demain.'
-        }`,
-        remaining: 0,
+        code: 'INJECTION_BLOCKED',
+        message: 'Je ne peux pas traiter cette demande. Reformule ta question sur le cours et je serai ravi de t’aider !',
       },
-    }, { status: 429 })
+    }, { status: 400 })
   }
 
-  const question = sanitize(body.question)
+  // Session fournie : elle doit appartenir à l'élève (lue avec SON client, donc
+  // sous RLS). Les messages sont ensuite écrits avec la clé service : sans ce
+  // contrôle, un UUID de session d'autrui suffirait à écrire dans son historique.
+  // Placé avant le quota pour ne pas le consommer sur une requête refusée.
+  if (body.session_id) {
+    const { data: own } = await supabase.from('chat_sessions')
+      .select('id').eq('id', body.session_id).eq('user_id', user.id).maybeSingle()
+    if (!own) return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Conversation introuvable.' } }, { status: 404 })
+  }
+
+  // Formule effective (serveur) — l'analyse d'une photo d'énoncé est une fonction Pro.
+  const ent = await getEntitlements(user.id)
+  if (body.image && !ent.can('ai_document_analysis')) return planRequired('ai_document_analysis')
+
+  // Quota quotidien : consommé AVANT l'appel Gemini, rendu si la requête échoue.
+  // La clé d'idempotence (en-tête Idempotency-Key) évite qu'une nouvelle
+  // tentative après une coupure réseau compte deux fois.
+  const requestKey = requestKeyOf(req)
+  let refund: () => Promise<void>
+  let quota: { remaining: number; used: number; limit: number; summary?: string; detail?: string }
+  try {
+    const usage = await consumeUsage(ent, 'ai_questions', requestKey)
+    if (!usage.allowed) return quotaExceeded('ai_questions', usage)
+    quota = {
+      remaining: usage.remaining ?? 0, used: usage.used, limit: (usage.limit ?? 0) + usage.bonus,
+      summary: usage.message.summary, detail: usage.message.detail,
+    }
+    refund = () => refundUsage(user.id, 'ai_questions', requestKey)
+  } catch (err) {
+    if (!(err instanceof UsageUnavailableError)) throw err
+    // Repli tant que la migration 057 n'est pas appliquée.
+    const legacy = await checkAndIncrementQuota(user.id, ent.plan)
+    if (!legacy.allowed) {
+      return NextResponse.json({
+        error: { code: 'QUOTA_EXCEEDED', usage_type: 'ai_questions', message: `Ton quota quotidien Cognix IA est atteint (${legacy.limit} questions). Il sera renouvelé demain.`, remaining: 0 },
+      }, { status: 429 })
+    }
+    quota = legacy
+    refund = () => refundLegacyQuota(user.id)
+  }
 
   // Session : crée ou récupère
   let sessionId = body.session_id
@@ -151,7 +201,7 @@ export async function POST(req: NextRequest) {
   // Cache Redis (clé incluant le plan — une réponse construite avec du
   // contenu premium ne doit jamais être servie depuis le cache à un élève
   // gratuit posant la même question)
-  const cacheKey = `cache:chat:${plan}:${createHash('sha256').update(question.toLowerCase()).digest('hex')}`
+  const cacheKey = `cache:chat:${ent.level >= 1 ? 'paid' : 'free'}:${createHash('sha256').update(question.toLowerCase()).digest('hex')}`
   const cached = await redis.get<string>(cacheKey)
   if (cached) {
     saveChatMessages(getAdmin(), sessionId, question, cached).catch(() => {})
@@ -182,7 +232,7 @@ export async function POST(req: NextRequest) {
     matchCount:    8,
     minSimilarity: 0.72,
     documentId:    body.document_id,
-    isPremium:     plan === 'premium',
+    isPremium:     ent.level >= 1,
   })
 
   // Historique des 5 derniers tours
@@ -222,14 +272,24 @@ export async function POST(req: NextRequest) {
   }
 
   // thinkingBudget:0 — désactive le mode "réflexion" de Gemini 2.5 Flash
-  const stream = await getGenai().models.generateContentStream({
-    model:    'gemini-2.5-flash',
-    config:   {
-      systemInstruction: SYSTEM_PROMPT,
-      thinkingConfig:    { thinkingBudget: 0 },
-    },
-    contents: [{ role: 'user', parts }],
-  })
+  let stream: Awaited<ReturnType<GoogleGenAI['models']['generateContentStream']>>
+  try {
+    stream = await getGenai().models.generateContentStream({
+      model:    'gemini-2.5-flash',
+      config:   {
+        systemInstruction: SYSTEM_PROMPT,
+        thinkingConfig:    { thinkingBudget: 0 },
+      },
+      contents: [{ role: 'user', parts }],
+    })
+  } catch (err) {
+    // Une requête qui n'aboutit pas ne consomme pas de quota.
+    await refund()
+    console.error('[chat] Gemini indisponible:', err instanceof Error ? err.message : err)
+    return NextResponse.json({
+      error: { code: 'AI_UNAVAILABLE', message: 'Cognix IA ne répond pas pour le moment. Ta question n’a pas été décomptée, réessaie.' },
+    }, { status: 502 })
+  }
 
   let fullResponse = ''
 
@@ -243,6 +303,7 @@ export async function POST(req: NextRequest) {
           `event: meta\ndata: ${JSON.stringify({
             session_id:      sessionId,
             quota_remaining: quota.remaining,
+            quota:           { used: quota.used, limit: quota.limit, remaining: quota.remaining, summary: quota.summary, detail: quota.detail },
             sources_count:   chunks.length,
           })}\n\n`
         ))
@@ -266,6 +327,8 @@ export async function POST(req: NextRequest) {
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erreur Gemini inconnue'
         console.error('[chat/stream] error:', message)
+        // Réponse interrompue avant tout contenu : la question n'est pas décomptée.
+        if (!fullResponse) await refund().catch(() => {})
         try {
           controller.enqueue(enc.encode(`data: ${JSON.stringify({ error: message })}\n\n`))
           controller.close()

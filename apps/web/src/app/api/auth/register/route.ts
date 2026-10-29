@@ -1,0 +1,62 @@
+import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import { createClient } from '@/lib/supabase/server'
+import { rateLimitStrict } from '@/lib/rate-limit'
+import { authErrorMessage } from '@/lib/auth-errors'
+import { isPasswordValid } from '@/lib/password'
+
+const schema = z.object({
+  fullName: z.string().min(1),
+  email: z.string().email(),
+  // Doublé par le réglage « Password requirements » de Supabase Auth.
+  password: z.string().min(8).max(72).refine(isPasswordValid),
+  level: z.string().min(1),
+})
+
+function rateLimited() {
+  return NextResponse.json(
+    { error: { code: 'RATE_LIMITED', message: 'Trop de tentatives, réessaie dans quelques minutes.' } },
+    { status: 429 }
+  )
+}
+
+function clientIp(req: Request): string {
+  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+}
+
+/**
+ * POST /api/auth/register — création de compte (email/mot de passe).
+ *
+ * Passe par le serveur pour appliquer un rate limiting anti-spam. Le seuil
+ * est plus permissif qu'au login (une inscription légitime est rare, donc
+ * un plafond par IP suffit sans pénaliser les usages normaux).
+ */
+export async function POST(req: Request) {
+  let body: z.infer<typeof schema>
+  try {
+    body = schema.parse(await req.json())
+  } catch {
+    return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Requête invalide.' } }, { status: 400 })
+  }
+
+  const ip = clientIp(req)
+  const ok = await rateLimitStrict(`register:${ip}`, 10, 60 * 60)
+  if (!ok) return rateLimited()
+
+  const { origin } = new URL(req.url)
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signUp({
+    email: body.email,
+    password: body.password,
+    options: {
+      data: { full_name: body.fullName, study_level: body.level },
+      emailRedirectTo: `${origin}/auth/callback`,
+    },
+  })
+
+  if (error) {
+    return NextResponse.json({ error: { code: 'AUTH_ERROR', message: authErrorMessage(error) } }, { status: 400 })
+  }
+
+  return NextResponse.json({ data: { ok: true } })
+}
