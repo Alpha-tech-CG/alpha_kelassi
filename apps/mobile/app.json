@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.kelassi.app",
-      "buildNumber": "14",
+      "buildNumber": "15",
       "infoPlist": {
         "NSCameraUsageDescription": "Utilisé pour scanner des documents de cours",
         "NSFaceIDUsageDescription": "Utilisé pour déverrouiller l'application après une période d'inactivité",
