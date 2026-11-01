@@ -13,7 +13,7 @@ export function buildCsp(nonce: string, dev: boolean): string {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://*.supabase.co",
     "font-src 'self'",
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com https://www.alphatechcongo.com", // + suivi temps réel Alpha Tech
     "worker-src 'self' blob:",    // service worker (public/sw.js) + pdfjs worker
     "frame-src 'none'",
     "frame-ancestors 'none'",   // équivalent moderne de X-Frame-Options: DENY

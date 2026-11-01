@@ -78,6 +78,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script nonce={nonce} suppressHydrationWarning dangerouslySetInnerHTML={{
           __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}`,
         }} />
+        {/* Suivi temps réel dans le portail Alpha Tech (Supervision > Temps réel). */}
+        <script nonce={nonce} suppressHydrationWarning defer src="https://www.alphatechcongo.com/t.js" data-key="aba3590cec230e618d768b80" />
       </body>
     </html>
   )
