@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
 import { z } from 'zod'
+import { STUDY_LEVELS } from '@alpha-kelassi/types'
+import { getEntitlements, planRequired } from '@/lib/subscription/server'
 
 /** GET /api/planning/plan — plan actif de l'élève + compte à rebours */
 export async function GET(req: Request) {
@@ -23,7 +25,7 @@ export async function GET(req: Request) {
 }
 
 const schema = z.object({
-  level:     z.enum(['bepc', 'bac_a', 'bac_c', 'bac_d']),
+  level:     z.enum(STUDY_LEVELS),
   title:     z.string().min(3).max(120),
   exam_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 })
@@ -32,6 +34,10 @@ const schema = z.object({
 export async function POST(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+
+  // Le compte à rebours (GET) reste libre ; créer un plan personnalisé est Starter.
+  const ent = await getEntitlements(user.id)
+  if (!ent.can('personalized_study_plan')) return planRequired('personalized_study_plan')
 
   let body: z.infer<typeof schema>
   try { body = schema.parse(await req.json()) }
@@ -46,6 +52,12 @@ export async function POST(req: NextRequest) {
     .select('id, level, title, exam_date')
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/planning/plan]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data }, { status: 201 })
 }

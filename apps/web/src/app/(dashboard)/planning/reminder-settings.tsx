@@ -2,12 +2,16 @@
 
 import { useEffect, useState } from 'react'
 import { MessageCircle } from 'lucide-react'
+import type { LockedFeatureInfo } from '@alpha-kelassi/types'
+import { LockedFeature } from '@/components/subscription/locked-feature'
+import { planErrorOf } from '@/lib/subscription/client'
 
 interface Prefs { phone: string | null; whatsapp_opt_in: boolean; reminder_hour: number }
 
 export function ReminderSettings() {
   const [prefs, setPrefs] = useState<Prefs | null>(null)
   const [saving, setSaving] = useState(false)
+  const [locked, setLocked] = useState<LockedFeatureInfo | null>(null)
 
   useEffect(() => {
     fetch('/api/reminders', { credentials: 'include' })
@@ -17,14 +21,24 @@ export function ReminderSettings() {
 
   async function save(patch: Partial<Prefs>) {
     if (!prefs) return
+    const previous = prefs
     const next = { ...prefs, ...patch }
     setPrefs(next)
     setSaving(true)
-    await fetch('/api/reminders', {
-      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
-      body: JSON.stringify({ whatsapp_opt_in: next.whatsapp_opt_in, reminder_hour: next.reminder_hour }),
-    })
-    setSaving(false)
+    setLocked(null)
+    try {
+      const res = await fetch('/api/reminders', {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+        body: JSON.stringify({ whatsapp_opt_in: next.whatsapp_opt_in, reminder_hour: next.reminder_hour }),
+      })
+      if (!res.ok) {
+        // Refus (formule Gratuit) : l'interrupteur revient à son état réel.
+        setPrefs(previous)
+        setLocked(planErrorOf(await res.json().catch(() => null))?.info ?? null)
+      }
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (!prefs) return null
@@ -39,6 +53,8 @@ export function ReminderSettings() {
         <button
           role="switch"
           aria-checked={prefs.whatsapp_opt_in}
+          aria-label="Activer les rappels WhatsApp"
+          disabled={saving}
           onClick={() => save({ whatsapp_opt_in: !prefs.whatsapp_opt_in })}
           className={`relative w-11 h-6 rounded-full transition ${prefs.whatsapp_opt_in ? 'bg-emerald-500' : 'bg-gray-300'}`}
         >
@@ -46,24 +62,15 @@ export function ReminderSettings() {
         </button>
       </div>
 
+      {locked && <div className="mt-3"><LockedFeature info={locked} compact /></div>}
+
       {!prefs.phone && (
         <p className="text-xs text-amber-600 mt-2">Ajoute un numéro de téléphone à ton compte pour recevoir les rappels.</p>
       )}
 
+      {/* Une seule passe par jour (cron quotidien, plan Vercel Hobby) : l'heure n'est plus au choix. */}
       {prefs.whatsapp_opt_in && (
-        <div className="flex items-center gap-2 mt-4 text-sm">
-          <span className="text-gray-600">Heure du rappel quotidien</span>
-          <select
-            value={prefs.reminder_hour}
-            onChange={(e) => save({ reminder_hour: Number(e.target.value) })}
-            className="border rounded-lg px-2 py-1"
-            disabled={saving}
-          >
-            {Array.from({ length: 24 }, (_, h) => (
-              <option key={h} value={h}>{h.toString().padStart(2, '0')}h00</option>
-            ))}
-          </select>
-        </div>
+        <p className="mt-4 text-sm text-gray-600">Le rappel quotidien part chaque matin vers 8 h.</p>
       )}
       <p className="text-xs text-gray-400 mt-3">
         On t&apos;enverra un rappel WhatsApp (ou SMS) quand tu as des révisions prévues. Réponds STOP pour te désabonner.

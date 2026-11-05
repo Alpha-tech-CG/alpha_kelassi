@@ -1,0 +1,54 @@
+{
+ "matiere": "Calcul rapide & mental",
+ "subject_id": "2eacfc7d-30b5-4cab-81e9-0c68ecfe9c15",
+ "chapitres": [
+  {
+   "chapter_id": "ff7421fe-6430-419a-afe0-4de738ec4f5e",
+   "titre": "Addition et soustraction rapides",
+   "questions": [
+    { "prompt": "Quelle est la méthode la plus rapide pour calculer 99 + 47 ?", "options": ["Poser l'addition en colonne", "Calculer (100 + 47) puis enlever 1", "Compter un par un", "Multiplier par 2"], "correct_index": 1, "explanation": "On arrondit 99 à 100, puis on corrige : (100 + 47) − 1 = 146." },
+    { "prompt": "Un article coûte 850 frs et le client paie avec un billet de 1 000 frs. Que rend-on ?", "options": ["100 frs", "150 frs", "250 frs", "50 frs"], "correct_index": 1, "explanation": "On compte à partir du prix : de 850 à 900 (50), puis de 900 à 1 000 (100). On rend 150 frs." },
+    { "prompt": "En comptant par bonds, combien font 48 + 25 ?", "options": ["63", "73", "83", "68"], "correct_index": 1, "explanation": "48 + 20 = 68, puis 68 + 5 = 73." },
+    { "prompt": "En comptant par bonds (36 + 20 puis + 4), combien font 36 + 24 ?", "options": ["50", "60", "58", "64"], "correct_index": 1, "explanation": "36 + 20 = 56, puis 56 + 4 = 60." },
+    { "prompt": "Pour additionner vite plusieurs petits nombres, que fait-on ?", "options": ["On regroupe ceux qui font 10", "On commence toujours par le plus grand", "On les multiplie entre eux", "On les pose en colonne un par un"], "correct_index": 0, "explanation": "Regrouper les nombres qui font 10 rend le calcul bien plus rapide." },
+    { "prompt": "Comment vérifier le résultat d'une addition ?", "options": ["En refaisant la même addition", "En faisant la soustraction inverse", "En multipliant le résultat par 2", "En comptant les chiffres du résultat"], "correct_index": 1, "explanation": "L'opération inverse sert de contrôle : pour une addition, on vérifie par une soustraction." },
+    { "prompt": "Quand on pose une addition de grands nombres, que faut-il respecter ?", "options": ["Aligner les chiffres par colonne, unités sous unités", "Écrire le plus grand nombre en bas", "Commencer par les chiffres de gauche", "Aligner tous les chiffres à gauche"], "correct_index": 0, "explanation": "On aligne par colonne (unités sous unités, dizaines sous dizaines) et on calcule de droite à gauche." },
+    { "prompt": "Un article coûte 650 frs, payé avec un billet de 1 000 frs. Combien rend-on ?", "options": ["250 frs", "350 frs", "450 frs", "300 frs"], "correct_index": 1, "explanation": "De 650 à 700 (50), puis de 700 à 1 000 (300) : on rend 350 frs." },
+    { "prompt": "Dans une soustraction posée, que fait-on si le chiffre du haut est plus petit que celui du bas ?", "options": ["On inverse les deux chiffres", "On emprunte une dizaine au rang voisin", "On écrit zéro", "On arrête le calcul"], "correct_index": 1, "explanation": "On emprunte 1 dizaine (ou 1 centaine) au rang de gauche pour pouvoir soustraire." },
+    { "prompt": "Quelle astuce permet de calculer 998 + 235 rapidement ?", "options": ["(1 000 + 235) − 2", "(1 000 + 235) + 2", "(998 + 200) seulement", "Il n'existe pas d'astuce"], "correct_index": 0, "explanation": "On arrondit 998 à 1 000, puis on corrige : (1 000 + 235) − 2 = 1 233." }
+   ]
+  },
+  {
+   "chapter_id": "09a91ea8-ccc2-4aa5-bce7-3ee599a05534",
+   "titre": "Multiplication et division rapides",
+   "questions": [
+    { "prompt": "Comment multiplier rapidement un nombre entier par 10 ?", "options": ["On ajoute un zéro à droite", "On ajoute un zéro à gauche", "On double le nombre", "On ajoute 10 au nombre"], "correct_index": 0, "explanation": "24 × 10 = 240 : on ajoute un zéro à droite." },
+    { "prompt": "Quelle est l'astuce pour multiplier par 5 ?", "options": ["Multiplier par 10 puis prendre la moitié", "Prendre la moitié puis enlever 5", "Doubler le nombre", "Ajouter 5 autant de fois que possible"], "correct_index": 0, "explanation": "24 × 5 = 240 ÷ 2 = 120." },
+    { "prompt": "Comment multiplier rapidement par 4 ?", "options": ["On double, puis on double encore", "On multiplie par 2 puis on ajoute 2", "On divise par 2 deux fois", "On ajoute quatre zéros"], "correct_index": 0, "explanation": "24 × 4 = 48 × 2 = 96 : doubler deux fois de suite." },
+    { "prompt": "Combien font 240 ÷ 10 ?", "options": ["2 400", "24", "2,4", "230"], "correct_index": 1, "explanation": "Diviser par 10 revient à retirer un zéro : 240 ÷ 10 = 24." },
+    { "prompt": "Quelle astuce permet de diviser rapidement par 5 ?", "options": ["Multiplier par 2 puis diviser par 10", "Diviser par 10 puis multiplier par 5", "Diviser par 2 deux fois", "Retirer 5 au nombre"], "correct_index": 0, "explanation": "240 ÷ 5 = 480 ÷ 10 = 48." },
+    { "prompt": "Quelle est l'astuce de la table de 9 ?", "options": ["Multiplier par 10 puis retirer le nombre une fois", "Multiplier par 10 puis ajouter le nombre", "Doubler puis ajouter 1", "Diviser par 3 deux fois"], "correct_index": 0, "explanation": "7 × 9 = 70 − 7 = 63 : on multiplie par 10 puis on retire le nombre une fois." },
+    { "prompt": "Comment diviser rapidement par 4 ?", "options": ["Diviser par 2, puis encore par 2", "Diviser par 2 puis multiplier par 2", "Retirer deux zéros", "Multiplier par 2 puis diviser par 8"], "correct_index": 0, "explanation": "48 ÷ 4 = 24 ÷ 2 = 12 : deux divisions par 2 de suite." },
+    { "prompt": "Combien font 24 × 100 ?", "options": ["240", "2 400", "24 000", "124"], "correct_index": 1, "explanation": "Multiplier par 100 revient à ajouter deux zéros : 2 400." },
+    { "prompt": "Quand on pose 342 × 23, que fait-on pour la deuxième ligne (les dizaines) ?", "options": ["On la décale d'un rang vers la gauche", "On l'écrit exactement sous la première", "On la décale d'un rang vers la droite", "On la soustrait de la première"], "correct_index": 0, "explanation": "La ligne des dizaines se décale d'un rang vers la gauche, puis on additionne les deux lignes." },
+    { "prompt": "En utilisant l'astuce du 5, combien font 36 × 5 ?", "options": ["150", "170", "180", "190"], "correct_index": 2, "explanation": "36 × 10 = 360, et la moitié de 360 est 180." }
+   ]
+  },
+  {
+   "chapter_id": "ffeb1c2a-10ca-40aa-a681-53a6e9d1d96b",
+   "titre": "Doubles, moitiés, triples et quarts",
+   "questions": [
+    { "prompt": "Que veut dire « le double » d'un nombre ?", "options": ["Le nombre multiplié par 2", "Le nombre divisé par 2", "Le nombre multiplié par 3", "Le nombre plus 2"], "correct_index": 0, "explanation": "Le double, c'est le nombre × 2." },
+    { "prompt": "Que veut dire « la moitié » d'un nombre ?", "options": ["Le nombre × 2", "Le nombre ÷ 2", "Le nombre ÷ 4", "Le nombre − 2"], "correct_index": 1, "explanation": "La moitié, c'est le nombre ÷ 2." },
+    { "prompt": "Quel est le triple de 12 ?", "options": ["24", "36", "15", "4"], "correct_index": 1, "explanation": "Le triple, c'est × 3 : 12 × 3 = 36." },
+    { "prompt": "Comment trouver le quart d'un nombre ?", "options": ["On divise deux fois de suite par 2", "On divise par 2 puis on multiplie par 2", "On multiplie par 4", "On enlève 4 au nombre"], "correct_index": 0, "explanation": "Le quart est la moitié de la moitié : diviser par 2, puis encore par 2." },
+    { "prompt": "Quel est le quart de 200 ?", "options": ["100", "50", "25", "800"], "correct_index": 1, "explanation": "Moitié de 200 = 100, puis moitié de 100 = 50." },
+    { "prompt": "Quelle opération correspond au mot « quadruple » ?", "options": ["× 2", "× 3", "× 4", "÷ 4"], "correct_index": 2, "explanation": "Quadruple veut dire quatre fois plus : × 4." },
+    { "prompt": "Quelle est la moitié de 90 ?", "options": ["35", "45", "40", "180"], "correct_index": 1, "explanation": "90 ÷ 2 = 45." },
+    { "prompt": "« Mon père a le triple de mon âge. » Si j'ai 9 ans, quel âge a mon père ?", "options": ["12 ans", "18 ans", "27 ans", "3 ans"], "correct_index": 2, "explanation": "Le triple de 9 : 9 × 3 = 27 ans." },
+    { "prompt": "Quel est le quart de 48 ?", "options": ["12", "24", "16", "8"], "correct_index": 0, "explanation": "Moitié de 48 = 24, puis moitié de 24 = 12." },
+    { "prompt": "Quel est le double de 35 ?", "options": ["55", "70", "65", "17"], "correct_index": 1, "explanation": "35 × 2 = 70." }
+   ]
+  }
+ ]
+}

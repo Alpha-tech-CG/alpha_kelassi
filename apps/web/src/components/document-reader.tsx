@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
@@ -75,35 +76,44 @@ export function DocumentReader({ text, title }: Props) {
 
 /**
  * Barre de progression de lecture fixée en haut de page.
+ *
+ * Le listener 'scroll' est posé dans un effet et retiré au démontage : avec un
+ * script inline (dangerouslySetInnerHTML), chaque navigation client en ajoutait
+ * un nouveau sans jamais retirer l'ancien.
  */
 function ReadingProgress() {
-  if (typeof window === 'undefined') return null
+  const barRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const bar = barRef.current
+    if (!bar) return
+
+    const update = () => {
+      const total = document.body.scrollHeight - window.innerHeight
+      const pct = total > 0 ? Math.min(100, (window.scrollY / total) * 100) : 0
+      bar.style.width = `${pct}%`
+    }
+
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    update()
+
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
   return (
     <div
       className="fixed top-0 left-0 right-0 z-50 h-1 bg-gray-100"
       suppressHydrationWarning
     >
       <div
+        ref={barRef}
         id="reading-progress-bar"
         className="h-full bg-blue-500 transition-all duration-150"
         style={{ width: '0%' }}
-      />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function(){
-              var bar = document.getElementById('reading-progress-bar');
-              if (!bar) return;
-              function update() {
-                var scrolled = window.scrollY;
-                var total = document.body.scrollHeight - window.innerHeight;
-                bar.style.width = total > 0 ? Math.min(100, (scrolled / total) * 100) + '%' : '0%';
-              }
-              window.addEventListener('scroll', update, { passive: true });
-              update();
-            })()
-          `,
-        }}
       />
     </div>
   )

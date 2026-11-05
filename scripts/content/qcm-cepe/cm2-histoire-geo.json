@@ -1,0 +1,134 @@
+{
+ "matiere": "Histoire-Géographie — chapitres ajoutés avec le cahier CM2",
+ "subject_id": "39c4caac-6a89-455d-ac4d-65ee0bb42f83",
+ "chapitres": [
+  {
+   "chapter_id": "a87dd329-567a-4275-893d-0e7607b486a4",
+   "titre": "Les villes du Congo",
+   "questions": [
+    { "prompt": "Quelle est la capitale politique du Congo ?", "options": ["Brazzaville", "Pointe-Noire", "Dolisie", "Ouesso"], "correct_index": 0, "explanation": "Brazzaville, au bord du fleuve Congo, est la capitale politique." },
+    { "prompt": "Quelle ville est la capitale économique ?", "options": ["Pointe-Noire", "Brazzaville", "Nkayi", "Owando"], "correct_index": 0, "explanation": "Pointe-Noire est la capitale économique et le grand port du pays." },
+    { "prompt": "Au bord de quoi se trouve Brazzaville ?", "options": ["Du fleuve Congo", "De l'océan Atlantique", "De la Sangha", "Du lac Tchad"], "correct_index": 0, "explanation": "Brazzaville est située sur la rive droite du fleuve Congo." },
+    { "prompt": "Sur quelle étendue d'eau s'ouvre Pointe-Noire ?", "options": ["L'océan Atlantique", "Le fleuve Congo", "L'Oubangui", "La Sangha"], "correct_index": 0, "explanation": "Pointe-Noire est un port maritime sur l'Atlantique." },
+    { "prompt": "Dans quelle région se trouve Dolisie ?", "options": ["Le Niari", "La Cuvette", "La Sangha", "La Bouenza"], "correct_index": 0, "explanation": "Dolisie est le chef-lieu du Niari." },
+    { "prompt": "Pour quelle production Nkayi est-elle connue ?", "options": ["Le sucre", "Le pétrole", "Le bois", "Le poisson"], "correct_index": 0, "explanation": "Nkayi, dans la Bouenza, est connue pour la canne à sucre." },
+    { "prompt": "Où se trouve Ouesso ?", "options": ["Au nord, sur la Sangha", "Au sud, sur la côte", "À l'ouest, au Mayombe", "Au centre, sur les plateaux"], "correct_index": 0, "explanation": "Ouesso est une ville du nord, sur la rivière Sangha." },
+    { "prompt": "Dans quelle région se trouve Owando ?", "options": ["La Cuvette", "Le Niari", "Le Kouilou", "Les Plateaux"], "correct_index": 0, "explanation": "Owando est le chef-lieu de la Cuvette." },
+    { "prompt": "Quels éléments faut-il savoir placer sur la carte du Congo ?", "options": ["Brazzaville, Pointe-Noire, le fleuve Congo et les pays voisins", "Seulement les routes", "Seulement les montagnes d'Europe", "Les capitales du monde"], "correct_index": 0, "explanation": "On y place aussi l'Oubangui, le Mayombe et l'océan Atlantique." },
+    { "prompt": "Quelle ville est le grand port du pays ?", "options": ["Pointe-Noire", "Brazzaville", "Ouesso", "Dolisie"], "correct_index": 0, "explanation": "C'est par Pointe-Noire que passent les importations et les exportations." }
+   ]
+  },
+  {
+   "chapter_id": "0e5eb9e0-842c-4886-a1db-c8237b38e4df",
+   "titre": "Le climat, les saisons et la végétation",
+   "questions": [
+    { "prompt": "Quel climat connaît le Congo ?", "options": ["Un climat chaud et humide", "Un climat froid et sec", "Un climat polaire", "Un climat désertique"], "correct_index": 0, "explanation": "L'équateur traverse le pays : il y fait chaud et humide." },
+    { "prompt": "Quelle ligne imaginaire traverse le Congo ?", "options": ["L'équateur", "Le tropique du Cancer", "Le cercle polaire", "Le méridien de Greenwich"], "correct_index": 0, "explanation": "L'équateur passe notamment par Makoua." },
+    { "prompt": "Quand se situe la saison des pluies ?", "options": ["D'octobre à mai", "De juin à septembre", "Toute l'année", "En décembre seulement"], "correct_index": 0, "explanation": "Avec une petite pause en janvier-février." },
+    { "prompt": "Quand se situe la saison sèche ?", "options": ["De juin à septembre", "D'octobre à mai", "En janvier", "En avril"], "correct_index": 0, "explanation": "La grande saison sèche va de juin à septembre." },
+    { "prompt": "Combien de grandes saisons le Congo connaît-il ?", "options": ["Deux : la saison des pluies et la saison sèche", "Quatre", "Une seule", "Trois"], "correct_index": 0, "explanation": "Le climat équatorial alterne pluies et saison sèche." },
+    { "prompt": "Où trouve-t-on la forêt dense ?", "options": ["Au nord et dans le Mayombe", "Sur les plateaux Batéké", "Sur la côte seulement", "Dans les villes"], "correct_index": 0, "explanation": "La forêt dense occupe le nord et le massif du Mayombe." },
+    { "prompt": "Quelle végétation trouve-t-on sur les plateaux Batéké ?", "options": ["La savane", "La forêt dense", "La mangrove", "Le désert"], "correct_index": 0, "explanation": "Les plateaux Batéké sont couverts de savanes." },
+    { "prompt": "Quelle végétation pousse sur la côte ?", "options": ["La mangrove", "La forêt dense", "La savane sèche", "La steppe"], "correct_index": 0, "explanation": "Les mangroves bordent le littoral." },
+    { "prompt": "Que donne la forêt aux habitants ?", "options": ["Du bois, des remèdes, de la nourriture et de l'air pur", "Du pétrole", "Du sel", "Du sucre"], "correct_index": 0, "explanation": "Elle fournit aussi l'oxygène et abrite les animaux." },
+    { "prompt": "Pourquoi fait-il humide au Congo ?", "options": ["Parce que le pays est traversé par l'équateur", "Parce qu'il est au bord du désert", "Parce qu'il est en altitude", "Parce qu'il est loin de la mer"], "correct_index": 0, "explanation": "Le climat équatorial est chaud et humide toute l'année." }
+   ]
+  },
+  {
+   "chapter_id": "0b191edd-ea41-4dea-98dd-f16a6d2f0b1d",
+   "titre": "La traite négrière",
+   "questions": [
+    { "prompt": "Qu'est-ce que la traite négrière ?", "options": ["Le commerce d'êtres humains réduits en esclavage", "Un commerce de bois précieux", "Un échange de monnaies", "Une fête traditionnelle"], "correct_index": 0, "explanation": "Des Africains étaient capturés, vendus puis déportés de force." },
+    { "prompt": "Vers quel continent les captifs étaient-ils surtout déportés ?", "options": ["Les Amériques", "L'Asie", "L'Océanie", "L'Europe du Nord"], "correct_index": 0, "explanation": "Ils y travaillaient dans les plantations de canne à sucre, de coton et de café." },
+    { "prompt": "Dans quelles plantations étaient-ils employés ?", "options": ["Canne à sucre, coton et café", "Manioc et maïs", "Blé et orge", "Vigne et olivier"], "correct_index": 0, "explanation": "Ce sont les cultures des colonies américaines." },
+    { "prompt": "Comment les captifs rejoignaient-ils la côte ?", "options": ["Par des semaines de marche enchaînés", "En voiture", "En train", "En pirogue de plaisance"], "correct_index": 0, "explanation": "La marche vers les comptoirs durait des semaines." },
+    { "prompt": "Quel comptoir de la côte est cité dans le cours ?", "options": ["Loango", "Ouesso", "Djambala", "Makoua"], "correct_index": 0, "explanation": "À Loango, les captifs étaient échangés contre des marchandises." },
+    { "prompt": "Contre quoi les captifs étaient-ils échangés ?", "options": ["Des tissus, de l'alcool et des armes", "Des maisons", "De l'or uniquement", "Du manioc"], "correct_index": 0, "explanation": "Ces marchandises arrivaient par bateau d'Europe." },
+    { "prompt": "Quelle a été une conséquence pour l'Afrique ?", "options": ["Des villages dépeuplés et des familles brisées", "Une population plus nombreuse", "Un développement plus rapide", "Plus de paix entre les royaumes"], "correct_index": 0, "explanation": "Les plus jeunes et les plus valides étaient emmenés." },
+    { "prompt": "Quand l'esclavage a-t-il été aboli dans les colonies françaises ?", "options": ["En 1848", "En 1880", "En 1944", "En 1960"], "correct_index": 0, "explanation": "L'abolition date du 27 avril 1848." },
+    { "prompt": "Quel homme est associé à cette abolition ?", "options": ["Victor Schœlcher", "Pierre Savorgnan de Brazza", "Le roi Makoko", "Félix Éboué"], "correct_index": 0, "explanation": "Victor Schœlcher a porté le décret d'abolition." },
+    { "prompt": "Quelle différence y a-t-il entre la traite et la colonisation ?", "options": ["La traite précède la colonisation, qui commence ici en 1880", "Ce sont deux mots pour la même chose", "La colonisation a eu lieu avant la traite", "La traite n'a pas touché l'Afrique centrale"], "correct_index": 0, "explanation": "Le traité Brazza-Makoko de 1880 ouvre la période coloniale." }
+   ]
+  },
+  {
+   "chapter_id": "66491a8f-265d-46da-954b-84e4b63a9ca4",
+   "titre": "La Conférence de Brazzaville (1944)",
+   "questions": [
+    { "prompt": "En quelle année s'est tenue la Conférence de Brazzaville ?", "options": ["1944", "1880", "1958", "1960"], "correct_index": 0, "explanation": "Elle s'est tenue du 30 janvier au 8 février 1944." },
+    { "prompt": "Dans quelle ville s'est-elle tenue ?", "options": ["Brazzaville", "Pointe-Noire", "Paris", "Dakar"], "correct_index": 0, "explanation": "D'où son nom : la Conférence de Brazzaville." },
+    { "prompt": "Quel général a réuni cette conférence ?", "options": ["Le général de Gaulle", "Le général Leclerc", "Le roi Makoko", "Pierre Savorgnan de Brazza"], "correct_index": 0, "explanation": "De Gaulle réunit les gouverneurs des colonies françaises d'Afrique." },
+    { "prompt": "Quel rôle Brazzaville jouait-elle pendant la guerre ?", "options": ["Capitale de la France libre en Afrique", "Capitale de l'Allemagne", "Ville neutre", "Capitale du Gabon"], "correct_index": 0, "explanation": "Dès 1940, Brazzaville devient la capitale de la France libre en Afrique." },
+    { "prompt": "Quel gouverneur a conduit le ralliement à la France libre ?", "options": ["Félix Éboué", "Fulbert Youlou", "Victor Schœlcher", "Marien Ngouabi"], "correct_index": 0, "explanation": "Félix Éboué, gouverneur, rallie le Tchad puis l'AEF à la France libre." },
+    { "prompt": "Pourquoi cette conférence a-t-elle été organisée ?", "options": ["Pour décider de l'avenir des colonies après la guerre", "Pour déclarer l'indépendance", "Pour fonder Brazzaville", "Pour signer un traité avec le Makoko"], "correct_index": 0, "explanation": "Elle prépare les réformes de l'après-guerre." },
+    { "prompt": "Quelle décision importante y a été annoncée ?", "options": ["La suppression du travail forcé", "L'indépendance immédiate", "La fermeture des écoles", "La création de l'ONU"], "correct_index": 0, "explanation": "Le travail forcé sera effectivement supprimé en 1946." },
+    { "prompt": "Quel régime de punitions réservé aux colonisés devait prendre fin ?", "options": ["L'indigénat", "Le protectorat", "La traite", "Le servage"], "correct_index": 0, "explanation": "La fin de l'indigénat faisait partie des réformes annoncées." },
+    { "prompt": "La conférence a-t-elle accordé l'indépendance ?", "options": ["Non, elle l'a même refusée", "Oui, immédiatement", "Oui, pour 1950", "Oui, mais seulement au Gabon"], "correct_index": 0, "explanation": "Elle annonce des réformes, pas l'indépendance : celle-ci viendra en 1960." },
+    { "prompt": "Quelle est la bonne suite de dates ?", "options": ["1944, 1958, 1960", "1960, 1958, 1944", "1958, 1944, 1960", "1944, 1960, 1958"], "correct_index": 0, "explanation": "Conférence de Brazzaville, proclamation de la République, puis indépendance." }
+   ]
+  },
+  {
+   "chapter_id": "76a622ee-fa3e-4cbd-b085-9413849c5c05",
+   "titre": "L'indépendance du 15 août 1960",
+   "questions": [
+    { "prompt": "Quelle est la date de l'indépendance du Congo ?", "options": ["Le 15 août 1960", "Le 28 novembre 1958", "Le 13 août 1963", "Le 10 juin 1991"], "correct_index": 0, "explanation": "Le 15 août 1960 est la fête nationale." },
+    { "prompt": "Que s'est-il passé le 28 novembre 1958 ?", "options": ["La République du Congo a été proclamée", "Le pays est devenu indépendant", "Brazzaville a été fondée", "La conférence de Berlin s'est tenue"], "correct_index": 0, "explanation": "Le pays devient une république, mais n'est pas encore indépendant." },
+    { "prompt": "Qui fut le premier président du Congo indépendant ?", "options": ["L'abbé Fulbert Youlou", "Marien Ngouabi", "Alphonse Massamba-Débat", "Félix Éboué"], "correct_index": 0, "explanation": "Fulbert Youlou dirige le pays à partir de l'indépendance." },
+    { "prompt": "Que signifie AEF ?", "options": ["Afrique Équatoriale Française", "Association des États Francophones", "Afrique de l'Est Française", "Agence Économique Française"], "correct_index": 0, "explanation": "Le Congo en faisait partie avant l'indépendance." },
+    { "prompt": "Quels territoires composaient l'AEF ?", "options": ["Le Congo, le Gabon, le Tchad et l'Oubangui-Chari", "Le Congo et la RDC", "Le Congo, le Cameroun et le Nigeria", "Le Congo, l'Angola et la Zambie"], "correct_index": 0, "explanation": "L'Oubangui-Chari est devenu la RCA." },
+    { "prompt": "Quelle ville était la capitale de l'AEF ?", "options": ["Brazzaville", "Libreville", "Bangui", "N'Djamena"], "correct_index": 0, "explanation": "Brazzaville était le siège de la fédération." },
+    { "prompt": "Quel événement de 1880 avait ouvert la pénétration française ?", "options": ["Le traité signé avec le roi Makoko", "La conférence de Berlin", "La construction du CFCO", "La proclamation de la République"], "correct_index": 0, "explanation": "Le traité Brazza-Makoko date du 10 septembre 1880." },
+    { "prompt": "Combien d'années séparent le traité Makoko de l'indépendance ?", "options": ["80 ans", "50 ans", "100 ans", "20 ans"], "correct_index": 0, "explanation": "De 1880 à 1960, il s'écoule 80 ans." },
+    { "prompt": "Quelle date est la fête nationale du Congo ?", "options": ["Le 15 août", "Le 28 novembre", "Le 1er mai", "Le 1er janvier"], "correct_index": 0, "explanation": "Le 15 août commémore l'indépendance de 1960." },
+    { "prompt": "Comment ne pas confondre 1958 et 1960 ?", "options": ["1958, c'est la République ; 1960, c'est l'indépendance", "1958, c'est l'indépendance ; 1960, la République", "Les deux désignent l'indépendance", "Les deux désignent la colonisation"], "correct_index": 0, "explanation": "En 1958 le pays se donne des institutions ; en 1960 il se dirige lui-même." }
+   ]
+  },
+  {
+   "chapter_id": "67639700-45cb-4a46-9c1a-eff5408a8047",
+   "titre": "Le Congo indépendant et ses grandes dates",
+   "questions": [
+    { "prompt": "Qui dirige le Congo à partir de 1960 ?", "options": ["Fulbert Youlou", "Alphonse Massamba-Débat", "Marien Ngouabi", "Denis Sassou Nguesso"], "correct_index": 0, "explanation": "Il est le premier président du pays indépendant." },
+    { "prompt": "Qui succède à Fulbert Youlou en 1963 ?", "options": ["Alphonse Massamba-Débat", "Marien Ngouabi", "Félix Éboué", "Denis Sassou Nguesso"], "correct_index": 0, "explanation": "Massamba-Débat prend la tête de l'État en 1963." },
+    { "prompt": "Quel président arrive au pouvoir en 1968 ?", "options": ["Marien Ngouabi", "Fulbert Youlou", "Alphonse Massamba-Débat", "Denis Sassou Nguesso"], "correct_index": 0, "explanation": "Marien Ngouabi dirige le pays à partir de 1968." },
+    { "prompt": "Quel président arrive au pouvoir en 1979 ?", "options": ["Denis Sassou Nguesso", "Marien Ngouabi", "Fulbert Youlou", "Alphonse Massamba-Débat"], "correct_index": 0, "explanation": "Denis Sassou Nguesso accède à la présidence en 1979." },
+    { "prompt": "Que s'est-il passé en 1991 ?", "options": ["La conférence nationale, une ouverture démocratique", "L'indépendance", "La conférence de Brazzaville", "Le traité Makoko"], "correct_index": 0, "explanation": "La Conférence nationale souveraine s'achève le 10 juin 1991." },
+    { "prompt": "Que rappelle la date de 1880 ?", "options": ["Le traité entre Brazza et le roi Makoko", "La conférence de Brazzaville", "L'indépendance", "La conférence nationale"], "correct_index": 0, "explanation": "Ce traité ouvre la présence française sur la rive droite." },
+    { "prompt": "Que rappelle la date de 1944 ?", "options": ["La Conférence de Brazzaville", "L'indépendance", "La proclamation de la République", "La conférence nationale"], "correct_index": 0, "explanation": "De Gaulle y réunit les gouverneurs des colonies." },
+    { "prompt": "Que rappelle la date de 1960 ?", "options": ["L'indépendance du Congo", "La fondation de Brazzaville", "L'abolition de l'esclavage", "La conférence de Berlin"], "correct_index": 0, "explanation": "Le 15 août 1960 : accession à l'indépendance." },
+    { "prompt": "Quelle est la bonne chronologie ?", "options": ["1880, 1944, 1960, 1991", "1944, 1880, 1991, 1960", "1960, 1944, 1880, 1991", "1991, 1960, 1944, 1880"], "correct_index": 0, "explanation": "Traité Makoko, conférence de Brazzaville, indépendance, conférence nationale." },
+    { "prompt": "Quel événement marque une ouverture démocratique ?", "options": ["La conférence nationale de 1991", "Le traité de 1880", "La conférence de 1944", "L'indépendance de 1960"], "correct_index": 0, "explanation": "Elle ouvre une période de transition démocratique." }
+   ]
+  },
+  {
+   "chapter_id": "8f1fee2e-a1db-4417-b9e4-565cf1117c02",
+   "titre": "Les fêtes nationales",
+   "questions": [
+    { "prompt": "Que célèbre-t-on le 15 août ?", "options": ["L'indépendance du Congo", "La fête du Travail", "Le Jour de l'An", "La proclamation de la République"], "correct_index": 0, "explanation": "C'est la fête nationale, en souvenir de 1960." },
+    { "prompt": "Que rappelle le 28 novembre ?", "options": ["La proclamation de la République en 1958", "L'indépendance en 1960", "La fête du Travail", "Noël"], "correct_index": 0, "explanation": "C'est la fête de la République." },
+    { "prompt": "Que célèbre-t-on le 1er mai ?", "options": ["La fête du Travail", "L'indépendance", "Le Jour de l'An", "La fête de la République"], "correct_index": 0, "explanation": "Le 1er mai honore les travailleurs et leurs droits." },
+    { "prompt": "Que célèbre-t-on le 1er janvier ?", "options": ["Le Jour de l'An", "La fête nationale", "La fête du Travail", "La République"], "correct_index": 0, "explanation": "C'est le premier jour de l'année nouvelle." },
+    { "prompt": "Quelle fête religieuse est chômée le 25 décembre ?", "options": ["Noël", "Pâques", "L'Ascension", "La Toussaint"], "correct_index": 0, "explanation": "Noël est un jour férié dans tout le pays." },
+    { "prompt": "Qu'est-ce qu'un jour férié ?", "options": ["Un jour chômé, où écoles et administrations sont fermées", "Un jour de classe supplémentaire", "Un jour de marché", "Un jour de paie"], "correct_index": 0, "explanation": "Les fêtes nationales sont des jours fériés." },
+    { "prompt": "Que fait-on le 15 août au matin ?", "options": ["On hisse le drapeau et on chante l'hymne", "On ferme les frontières", "On vote", "On rentre à l'école"], "correct_index": 0, "explanation": "Un défilé est également organisé." },
+    { "prompt": "Comment s'appelle l'hymne chanté lors des fêtes nationales ?", "options": ["La Congolaise", "La Marseillaise", "L'Africaine", "Le Chant du fleuve"], "correct_index": 0, "explanation": "« La Congolaise » est l'hymne national." },
+    { "prompt": "Quelles sont les deux dates les plus importantes à retenir ?", "options": ["Le 15 août et le 28 novembre", "Le 1er janvier et le 25 décembre", "Le 1er mai et le 25 décembre", "Le 15 août et le 1er mai"], "correct_index": 0, "explanation": "Indépendance (1960) et République (1958)." },
+    { "prompt": "En quelle année a eu lieu l'événement fêté le 28 novembre ?", "options": ["1958", "1960", "1944", "1991"], "correct_index": 0, "explanation": "La République du Congo a été proclamée le 28 novembre 1958." }
+   ]
+  },
+  {
+   "chapter_id": "9790c3bb-1df1-4cd5-9f23-aa5edf7c2bec",
+   "titre": "Les ressources naturelles et l'économie",
+   "questions": [
+    { "prompt": "Quelle est la première richesse du Congo ?", "options": ["Le pétrole", "Le sucre", "Le café", "Le fer"], "correct_index": 0, "explanation": "Le pétrole est la première ressource du pays." },
+    { "prompt": "Où le pétrole est-il extrait ?", "options": ["En mer, près de Pointe-Noire", "Dans la forêt du nord", "Sur les plateaux Batéké", "À Brazzaville"], "correct_index": 0, "explanation": "L'extraction se fait au large de Pointe-Noire." },
+    { "prompt": "Quelle ressource vient de la forêt ?", "options": ["Le bois", "Le pétrole", "La potasse", "Le sel marin"], "correct_index": 0, "explanation": "Le bois est une ressource majeure du nord du pays." },
+    { "prompt": "Lequel de ces minerais est cité parmi les ressources du Congo ?", "options": ["La potasse", "L'or blanc", "Le charbon de bois", "Le diamant bleu"], "correct_index": 0, "explanation": "Potasse et fer font partie des ressources minières." },
+    { "prompt": "Quelle plante donne le sucre ?", "options": ["La canne à sucre", "Le manioc", "L'arachide", "Le cacao"], "correct_index": 0, "explanation": "La canne à sucre est cultivée notamment dans la Bouenza." },
+    { "prompt": "Quelle culture vivrière est la plus répandue ?", "options": ["Le manioc", "Le blé", "La vigne", "L'orge"], "correct_index": 0, "explanation": "Manioc, banane plantain, arachide et maïs nourrissent la population." },
+    { "prompt": "Lequel de ces produits est une culture d'exportation ?", "options": ["Le cacao", "Le manioc", "La patate douce", "Le piment"], "correct_index": 0, "explanation": "Cacao, café, canne à sucre et palmier à huile sont des cultures de rente." },
+    { "prompt": "Quelle activité économique est pratiquée sur le fleuve et en mer ?", "options": ["La pêche", "L'extraction de la potasse", "Le commerce de bois", "L'artisanat"], "correct_index": 0, "explanation": "La pêche fait partie des activités économiques du pays." },
+    { "prompt": "Quelle activité consiste à élever des animaux ?", "options": ["L'élevage", "L'agriculture", "La pêche", "Le commerce"], "correct_index": 0, "explanation": "Élevage, agriculture, pêche, bois, commerce, pétrole et artisanat." },
+    { "prompt": "Quelle ressource est indispensable à la vie et abondante au Congo ?", "options": ["L'eau", "Le charbon", "Le pétrole raffiné", "Le gaz importé"], "correct_index": 0, "explanation": "Le fleuve Congo et ses affluents offrent d'importantes réserves d'eau." }
+   ]
+  }
+ ]
+}

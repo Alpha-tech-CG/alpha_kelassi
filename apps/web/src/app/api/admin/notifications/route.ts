@@ -13,7 +13,13 @@ export async function GET() {
     .order('created_at', { ascending: false })
     .limit(100)
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/admin/notifications]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data: data ?? [] })
 }
 
@@ -22,7 +28,8 @@ const schema = z.object({
   title:       z.string().min(2).max(120),
   message:     z.string().min(5).max(500),
   cta_label:   z.string().max(60).nullable().optional(),
-  cta_url:     z.string().url().nullable().optional(),
+  // https seulement : le lien devient un bouton sur le site et dans l'app.
+  cta_url:     z.string().url().refine((u) => u.startsWith('https://'), 'Le lien doit commencer par https://').nullable().optional(),
   is_active:   z.boolean().default(true),
   target_plan: z.enum(['all', 'free', 'premium']).default('all'),
   expires_at:  z.string().datetime().nullable().optional(),
@@ -38,6 +45,9 @@ export async function POST(req: NextRequest) {
   catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
 
   const { data, error } = await supabaseAdmin.from('notifications').insert(body).select().single()
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/notifications]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data }, { status: 201 })
 }

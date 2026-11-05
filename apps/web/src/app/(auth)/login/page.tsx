@@ -1,11 +1,18 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Logo } from '@/components/brand/logo'
 
 type Tab = 'email' | 'phone'
+
+// Fournisseurs désactivés dans Supabase Auth (pas de Twilio, pas d'OAuth Google) :
+// les afficher menait tout droit à « Unsupported phone provider ». À rallumer
+// une fois configurés dans le dashboard.
+const SMS_ENABLED = false
+const GOOGLE_ENABLED = false
 
 export default function LoginPage(): React.JSX.Element {
   const supabase = createClient()
@@ -17,14 +24,42 @@ export default function LoginPage(): React.JSX.Element {
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
+
+  // Retour du lien de confirmation d'e-mail (/auth/callback) ou d'un lien ouvert
+  // depuis l'app : on dit à l'élève où il en est au lieu d'un écran muet.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('confirmed') === '1') {
+      setNotice('Ton e-mail est confirmé ✅ Connecte-toi ici ou dans l’app Cognix.')
+    } else if (params.get('error') === 'auth_callback_error') {
+      setError('Ce lien a expiré ou a été ouvert sur un autre appareil. Si tu as déjà cliqué dessus, ton e-mail est confirmé : connecte-toi.')
+    }
+  }, [])
 
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) setError(error.message)
-    else router.push('/dashboard')
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const json = await res.json()
+      if (!res.ok && json.error?.code === 'EMAIL_NOT_CONFIRMED') {
+        router.push(`/confirmer?email=${encodeURIComponent(email.trim().toLowerCase())}`)
+        return
+      }
+      if (!res.ok) setError(json.error?.message ?? 'Une erreur est survenue.')
+      else {
+        router.push(json.data.redirectTo)
+        router.refresh()
+      }
+    } catch {
+      setError('Une erreur est survenue.')
+    }
     setLoading(false)
   }
 
@@ -39,34 +74,45 @@ export default function LoginPage(): React.JSX.Element {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: phone.startsWith('+') ? phone : `+242${phone}`,
-    })
-    if (error) setError(error.message)
-    else router.push(`/verify-otp?phone=${encodeURIComponent(phone)}`)
+    try {
+      const res = await fetch('/api/auth/otp/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone.startsWith('+') ? phone : `+242${phone}` }),
+      })
+      const json = await res.json()
+      if (!res.ok) setError(json.error?.message ?? 'Une erreur est survenue.')
+      else router.push(`/verify-otp?phone=${encodeURIComponent(phone)}`)
+    } catch {
+      setError('Une erreur est survenue.')
+    }
     setLoading(false)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-violet-50 px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-cx-paper via-white to-[#BFD9FB] px-4 py-10">
       <div className="w-full max-w-md">
 
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-black">K</span>
-            </div>
-            <span className="text-2xl font-black text-gray-900">Kelassi</span>
+            <Logo size="lg" />
           </Link>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-xl p-8">
-          <h1 className="text-2xl font-black text-gray-900 mb-1 text-center">Bon retour ! 👋</h1>
+        <div className="bg-white rounded-[40px] shadow-[0_30px_80px_-40px_rgba(15,27,45,0.35)] p-8">
+          <h1 className="text-2xl font-black text-gray-900 mb-1 text-center">Bon retour !</h1>
           <p className="text-sm text-gray-400 text-center mb-7">Connecte-toi pour continuer à réviser</p>
 
+          {notice && (
+            <div className="mb-5 p-3 bg-green-50 border border-green-100 text-green-700 rounded-xl text-sm">
+              {notice}
+            </div>
+          )}
+
           {/* Tabs */}
+          {SMS_ENABLED && (
           <div className="flex rounded-2xl bg-gray-100 p-1 mb-6">
             {(['email', 'phone'] as Tab[]).map((t) => (
               <button
@@ -80,6 +126,7 @@ export default function LoginPage(): React.JSX.Element {
               </button>
             ))}
           </div>
+          )}
 
           {error && (
             <div className="mb-5 p-3 bg-red-50 border border-red-100 text-red-700 rounded-xl text-sm">
@@ -161,6 +208,7 @@ export default function LoginPage(): React.JSX.Element {
             </form>
           )}
 
+          {GOOGLE_ENABLED && (<>
           {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
@@ -184,6 +232,7 @@ export default function LoginPage(): React.JSX.Element {
             </svg>
             Continuer avec Google
           </button>
+          </>)}
 
           <p className="text-center text-xs text-gray-400 mt-6">
             Pas encore de compte ?{' '}

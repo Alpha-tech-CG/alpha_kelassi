@@ -1,113 +1,71 @@
-import { useEffect, useState, useMemo } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
-import { supabase } from '../../lib/supabase'
 import { useLevel } from '../../hooks/useLevel'
-import { colors, radius, cardShadow, LEVEL_LABEL, levelBadgeStyle } from '../../lib/theme'
+import { useBilling } from '../../hooks/useBilling'
+import { colors, radius, cardShadow, fonts, LEVEL_LABEL, levelBadgeStyle } from '../../lib/theme'
+import { RAYONS, rayonMeta, examName, type PrepaRayon } from '../../lib/prepa'
 
-interface Doc { id: string; title: string; level: string; year: number | null; session: string | null; is_premium: boolean; subjects: { name: string } | null }
-
-export default function ExamensScreen() {
+/**
+ * Espace « Prépa » — remplace l'ancienne page Examens (liste de PDF).
+ *
+ * L'élève choisit d'abord CE QU'IL VEUT FAIRE (Bac test, Bac blanc, Bac rouge,
+ * anciens sujets ou TD), puis la matière : les épreuves et les exercices sont
+ * rangés par matière. Les rayons fermés par la formule restent visibles, avec
+ * leur cadenas, pour que l'élève sache ce qui existe.
+ */
+export default function PrepaScreen() {
   const router = useRouter()
-  const { level, ready } = useLevel()
-  const [docs, setDocs] = useState<Doc[]>([])
-  const [loading, setLoading] = useState(true)
-  const [year, setYear] = useState<string>('') // '' = toutes
-
-  useEffect(() => {
-    if (!ready) return
-    let q = supabase
-      .from('documents')
-      .select('id, title, level, year, session, is_premium, subjects(name)')
-      .eq('type', 'examen')
-      .order('year', { ascending: false })
-      .limit(200)
-    if (level) q = q.eq('level', level) // uniquement les annales du niveau de l'élève
-    q.then(({ data }) => {
-      setDocs((data ?? []).map((doc) => ({
-        ...doc,
-        subjects: Array.isArray(doc.subjects) ? (doc.subjects[0] ?? null) : doc.subjects,
-      })) as Doc[])
-      setLoading(false)
-    })
-  }, [ready, level])
-
-  const years = useMemo(() => {
-    const set = new Set<string>()
-    for (const d of docs) if (d.year) set.add(String(d.year))
-    return [...set].sort((a, b) => b.localeCompare(a))
-  }, [docs])
-
-  const filtered = year ? docs.filter((d) => String(d.year) === year) : docs
-
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
-
+  const { level } = useLevel()
+  const { me } = useBilling()
+  const allowed = new Set(me?.exam_modes ?? [])
   const badge = level ? levelBadgeStyle(level) : { bg: colors.red, fg: colors.onRed }
+
+  // Un rayon à mode fixe est verrouillé si la formule n'ouvre pas ce mode.
+  // `me` absent (chargement, hors-ligne) : on n'affiche pas de cadenas à tort.
+  const isLocked = (r: PrepaRayon) => {
+    const m = rayonMeta(r, level)
+    return !!me && !!m.mode && !allowed.has(m.mode)
+  }
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         {level && (
           <View style={[styles.levelPill, { backgroundColor: badge.bg }]}>
-            <Text style={[styles.levelPillText, { color: badge.fg }]}>{LEVEL_LABEL[level]}</Text>
+            <Text style={[styles.levelPillText, { color: badge.fg }]}>{LEVEL_LABEL[level] ?? level}</Text>
           </View>
         )}
-        <Text style={styles.title}>Annales & Examens</Text>
+        <Text style={styles.title}>Prépa</Text>
+        <Text style={styles.subtitle}>Choisis comment tu veux t'entraîner pour le {examName(level)}, puis ta matière.</Text>
 
-        {/* Hero */}
-        <View style={styles.hero}>
-          <Text style={styles.heroKicker}>OBJECTIF MENTION</Text>
-          <Text style={styles.heroText}>Révise avec les sujets officiels corrigés de ton niveau.</Text>
-        </View>
-
-        {/* Statistique clé */}
-        <View style={styles.statCard}>
-          <Text style={styles.statValue}>94%</Text>
-          <Text style={styles.statText}>de taux de réussite chez nos utilisateurs actifs</Text>
-        </View>
-
-        {/* Filtre par année */}
-        {years.length > 0 && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.yearsScroll} contentContainerStyle={styles.years}>
-            <TouchableOpacity style={[styles.yearChip, year === '' && styles.yearChipActive]} onPress={() => setYear('')}>
-              <Text style={[styles.yearChipText, year === '' && styles.yearChipTextActive]}>Toutes</Text>
-            </TouchableOpacity>
-            {years.map((y) => (
-              <TouchableOpacity key={y} style={[styles.yearChip, year === y && styles.yearChipActive]} onPress={() => setYear(y)}>
-                <Text style={[styles.yearChipText, year === y && styles.yearChipTextActive]}>{y}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        )}
-
-        <Text style={styles.sectionTitle}>Sujets disponibles{year ? ` (${year})` : ''}</Text>
-
-        {filtered.length === 0 ? (
-          <View style={styles.empty}>
-            <Text style={styles.emptyIcon}>📭</Text>
-            <Text style={styles.emptyText}>Aucun sujet disponible pour le moment.</Text>
-          </View>
-        ) : (
-          filtered.map((doc) => (
-            <View key={doc.id} style={styles.card}>
-              <View style={styles.cardIconBox}><Text style={styles.cardIcon}>📝</Text></View>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.cardTitle} numberOfLines={2}>{doc.title} {doc.is_premium ? '⭐' : ''}</Text>
-                <View style={styles.cardMeta}>
-                  {doc.subjects && <Text style={styles.subjectText}>{doc.subjects.name}</Text>}
-                  {doc.year && <Text style={styles.metaDot}>· {doc.year}</Text>}
-                  {doc.session && <Text style={styles.metaDot}>· {doc.session}</Text>}
-                </View>
+        {RAYONS.map((r) => {
+          const m = rayonMeta(r, level)
+          const locked = isLocked(r)
+          const featured = r === 'bac_blanc'
+          return (
+            <TouchableOpacity
+              key={r}
+              style={[styles.card, featured && styles.cardFeatured]}
+              activeOpacity={0.9}
+              onPress={() => router.push(`/prepa/${r}` as any)}
+              accessibilityRole="button"
+              accessibilityLabel={`${m.label} : ${m.desc}${locked ? `, formule ${m.planLabel} requise` : ''}`}
+            >
+              <View style={[styles.iconBox, featured && styles.iconBoxFeatured]}>
+                <Text style={styles.icon}>{m.emoji}</Text>
               </View>
-              <TouchableOpacity style={styles.iconBtnGhost} onPress={() => router.push(`/examens/${doc.id}` as any)}>
-                <Text style={styles.iconBtnGhostText}>⬇︎</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.iconBtnPrimary} onPress={() => router.push(`/examens/${doc.id}` as any)}>
-                <Text style={styles.iconBtnPrimaryText}>👁</Text>
-              </TouchableOpacity>
-            </View>
-          ))
-        )}
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.cardTitle, featured && styles.cardTitleFeatured]}>{m.label}</Text>
+                <Text style={[styles.cardDesc, featured && styles.cardDescFeatured]}>{m.desc}</Text>
+              </View>
+              {locked ? (
+                <View style={styles.lock}><Text style={styles.lockText}>🔒 {m.planLabel}</Text></View>
+              ) : (
+                <Text style={[styles.chevron, featured && { color: '#fff' }]}>›</Text>
+              )}
+            </TouchableOpacity>
+          )
+        })}
       </ScrollView>
     </View>
   )
@@ -115,35 +73,24 @@ export default function ExamensScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 16, paddingTop: 56 },
+  content: { padding: 16, paddingTop: 56, paddingBottom: 40 },
   levelPill: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 5, borderRadius: radius.full, marginBottom: 8 },
   levelPillText: { fontSize: 12, fontWeight: '800' },
-  title: { fontSize: 26, fontWeight: '800', color: colors.text, marginBottom: 16 },
-  hero: { backgroundColor: colors.primary, borderRadius: radius.lg, padding: 22, marginBottom: 14, ...cardShadow },
-  heroKicker: { color: '#83FB9C', fontSize: 13, fontWeight: '800', letterSpacing: 1, marginBottom: 8 },
-  heroText: { color: '#fff', fontSize: 17, fontWeight: '600', lineHeight: 24 },
-  statCard: { backgroundColor: colors.card, borderRadius: radius.lg, padding: 22, alignItems: 'center', marginBottom: 18, borderWidth: 1, borderColor: colors.cardBorder },
-  statValue: { fontSize: 52, fontWeight: '800', color: colors.primary, lineHeight: 56 },
-  statText: { fontSize: 14, color: colors.textMuted, textAlign: 'center', marginTop: 4 },
-  yearsScroll: { marginBottom: 16 },
-  years: { gap: 8, paddingRight: 16 },
-  yearChip: { paddingHorizontal: 18, paddingVertical: 9, borderRadius: radius.full, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder },
-  yearChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  yearChipText: { fontSize: 14, fontWeight: '700', color: colors.textMuted },
-  yearChipTextActive: { color: '#fff' },
-  sectionTitle: { fontSize: 16, fontWeight: '800', color: colors.text, marginBottom: 10 },
-  card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: radius.md, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: colors.cardBorder, gap: 12, ...cardShadow },
-  cardIconBox: { width: 44, height: 44, borderRadius: radius.sm, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
-  cardIcon: { fontSize: 20 },
-  cardTitle: { fontSize: 15, fontWeight: '700', color: colors.text, marginBottom: 3 },
-  cardMeta: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 },
-  subjectText: { fontSize: 12, color: colors.textMuted, fontWeight: '600' },
-  metaDot: { fontSize: 12, color: colors.outline },
-  iconBtnGhost: { width: 38, height: 38, borderRadius: radius.sm, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
-  iconBtnGhostText: { fontSize: 16, color: colors.textMuted },
-  iconBtnPrimary: { width: 38, height: 38, borderRadius: radius.full, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
-  iconBtnPrimaryText: { fontSize: 15 },
-  empty: { backgroundColor: colors.card, borderRadius: radius.md, borderWidth: 1, borderColor: colors.cardBorder, padding: 30, alignItems: 'center' },
-  emptyIcon: { fontSize: 36, marginBottom: 8 },
-  emptyText: { fontSize: 14, color: colors.textMuted, textAlign: 'center' },
+  title: { fontSize: 28, fontFamily: fonts.headingBlack, color: colors.text },
+  subtitle: { fontSize: 14, color: colors.textMuted, marginTop: 4, marginBottom: 20, lineHeight: 20 },
+  card: {
+    flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: colors.card, borderRadius: radius.lg,
+    padding: 18, marginBottom: 12, borderWidth: 1, borderColor: colors.cardBorder, ...cardShadow,
+  },
+  cardFeatured: { backgroundColor: colors.primary, borderColor: colors.primary },
+  iconBox: { width: 52, height: 52, borderRadius: 16, backgroundColor: colors.primaryTint, alignItems: 'center', justifyContent: 'center' },
+  iconBoxFeatured: { backgroundColor: 'rgba(255,255,255,0.18)' },
+  icon: { fontSize: 26 },
+  cardTitle: { fontSize: 17, fontWeight: '900', color: colors.text },
+  cardTitleFeatured: { color: '#fff' },
+  cardDesc: { fontSize: 13, color: colors.textMuted, marginTop: 2 },
+  cardDescFeatured: { color: 'rgba(255,255,255,0.85)' },
+  chevron: { fontSize: 26, color: colors.primary },
+  lock: { backgroundColor: colors.background, borderRadius: radius.full, paddingHorizontal: 10, paddingVertical: 5 },
+  lockText: { fontSize: 11, fontWeight: '800', color: colors.textMuted },
 })

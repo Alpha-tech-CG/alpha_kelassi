@@ -14,8 +14,12 @@ import { supabase } from '../../lib/supabase'
 
 type Tab = 'email' | 'phone'
 
+// Le fournisseur SMS (Twilio) n'est pas configuré dans Supabase : l'onglet SMS
+// renvoyait « Unsupported phone provider ». À rallumer une fois configuré.
+const SMS_ENABLED = false
+
 export default function LoginScreen() {
-  const [tab, setTab] = useState<Tab>('phone')
+  const [tab, setTab] = useState<Tab>(SMS_ENABLED ? 'phone' : 'email')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
@@ -23,9 +27,20 @@ export default function LoginScreen() {
 
   async function handleEmailLogin() {
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) Alert.alert('Erreur', error.message)
-    else router.replace('/(tabs)')
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+    // Pas de navigation ici : le layout racine envoie vers l'onboarding ou les
+    // onglets selon le profil (un router.replace('/(tabs)') sautait le parcours).
+    if (error && /not confirmed/i.test(error.message)) {
+      // Compte créé mais jamais confirmé : on propose la saisie du code.
+      router.push({ pathname: '/(auth)/verify-email', params: { email: email.trim().toLowerCase() } } as any)
+    } else if (error) {
+      Alert.alert(
+        'Connexion impossible',
+        /invalid login credentials/i.test(error.message)
+            ? 'E-mail ou mot de passe incorrect.'
+            : error.message
+      )
+    }
     setLoading(false)
   }
 
@@ -47,10 +62,11 @@ export default function LoginScreen() {
       style={styles.container}
     >
       <View style={styles.inner}>
-        <Text style={styles.title}>Kelassi</Text>
+        <Text style={styles.title}>Cognix</Text>
         <Text style={styles.subtitle}>Prépare ton examen avec l'IA</Text>
 
         {/* Tabs */}
+        {SMS_ENABLED ? (
         <View style={styles.tabs}>
           {(['phone', 'email'] as Tab[]).map((t) => (
             <TouchableOpacity
@@ -64,6 +80,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           ))}
         </View>
+        ) : null}
 
         {tab === 'phone' ? (
           <>
@@ -118,8 +135,8 @@ export default function LoginScreen() {
           </>
         )}
 
-        <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
-          <Text style={styles.link}>Pas de compte ? S'inscrire</Text>
+        <TouchableOpacity onPress={() => router.push('/(auth)/register' as any)}>
+          <Text style={styles.link}>Pas de compte ? Crée-le gratuitement</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -127,9 +144,9 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5FBF0' },
+  container: { flex: 1, backgroundColor: '#F4F8FE' },
   inner: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
-  title: { fontSize: 36, fontWeight: '800', textAlign: 'center', color: '#006B2E', marginBottom: 4 },
+  title: { fontSize: 36, fontWeight: '800', textAlign: 'center', color: '#1E74E8', marginBottom: 4 },
   subtitle: { fontSize: 14, color: '#3E4A3E', textAlign: 'center', marginBottom: 32 },
   tabs: { flexDirection: 'row', backgroundColor: '#E3EADF', borderRadius: 10, padding: 4, marginBottom: 20 },
   tab: { flex: 1, paddingVertical: 8, borderRadius: 8, alignItems: 'center' },
@@ -141,8 +158,8 @@ const styles = StyleSheet.create({
   prefix: { backgroundColor: '#EFF6EB', borderWidth: 1, borderColor: '#E3EADF', borderRightWidth: 0, borderTopLeftRadius: 10, borderBottomLeftRadius: 10, paddingHorizontal: 14, justifyContent: 'center' },
   prefixText: { fontSize: 15, color: '#171D17' },
   phoneInput: { flex: 1, borderTopLeftRadius: 0, borderBottomLeftRadius: 0, marginBottom: 0 },
-  button: { backgroundColor: '#006B2E', borderRadius: 10, paddingVertical: 15, alignItems: 'center', marginBottom: 16 },
+  button: { backgroundColor: '#1E74E8', borderRadius: 10, paddingVertical: 15, alignItems: 'center', marginBottom: 16 },
   buttonDisabled: { opacity: 0.5 },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-  link: { textAlign: 'center', color: '#006B2E', fontSize: 14 },
+  link: { textAlign: 'center', color: '#1E74E8', fontSize: 14 },
 })

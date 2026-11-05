@@ -1,0 +1,134 @@
+{
+ "matiere": "SVT — chapitres ajoutés avec le cahier CM2",
+ "subject_id": "e860452f-e7f7-4f7e-9b42-b88054bce677",
+ "chapitres": [
+  {
+   "chapter_id": "c030fe57-57ad-45cf-9cf2-b32ea601c960",
+   "titre": "Les plantes et leurs parties",
+   "questions": [
+    { "prompt": "Quelle partie de la plante absorbe l'eau du sol ?", "options": ["Les racines", "La tige", "Les feuilles", "La fleur"], "correct_index": 0, "explanation": "Les racines fixent la plante et absorbent l'eau et les sels minéraux." },
+    { "prompt": "Quel est le rôle de la tige ?", "options": ["Porter les feuilles et conduire la sève", "Absorber l'eau", "Fabriquer les graines", "Protéger le fruit"], "correct_index": 0, "explanation": "La tige porte les feuilles et les fleurs et conduit la sève." },
+    { "prompt": "Où la plante fabrique-t-elle sa nourriture ?", "options": ["Dans les feuilles, grâce à la lumière", "Dans les racines", "Dans la fleur", "Dans le fruit"], "correct_index": 0, "explanation": "Les feuilles fabriquent la nourriture et rejettent l'oxygène." },
+    { "prompt": "Quel est le rôle de la fleur ?", "options": ["C'est l'organe de reproduction : elle donne le fruit", "Elle absorbe l'eau", "Elle conduit la sève", "Elle protège les racines"], "correct_index": 0, "explanation": "La fleur donne le fruit, qui contient les graines." },
+    { "prompt": "Que protège le fruit ?", "options": ["Les graines", "Les racines", "La tige", "Les feuilles"], "correct_index": 0, "explanation": "Les graines donneront de nouvelles plantes." },
+    { "prompt": "De quoi une plante a-t-elle besoin pour vivre ?", "options": ["D'eau, de lumière, d'air et d'un sol riche", "D'eau seulement", "De lumière seulement", "De sel et de sucre"], "correct_index": 0, "explanation": "Privée de l'un de ces éléments, elle jaunit puis meurt." },
+    { "prompt": "Que rejettent les feuilles dans l'air ?", "options": ["De l'oxygène", "Du sable", "De l'eau salée", "Du gaz toxique"], "correct_index": 0, "explanation": "C'est grâce aux plantes que l'air contient de l'oxygène." },
+    { "prompt": "Quel est l'ordre des parties, de bas en haut ?", "options": ["Racine, tige, feuille, fleur, fruit", "Fruit, fleur, feuille, tige, racine", "Tige, racine, fleur, fruit, feuille", "Feuille, racine, tige, fruit, fleur"], "correct_index": 0, "explanation": "C'est le trajet de la sève et celui de la croissance." },
+    { "prompt": "Que se passe-t-il si une plante manque d'eau ?", "options": ["Elle jaunit, se couche, puis meurt", "Elle grandit plus vite", "Elle devient plus verte", "Elle donne plus de fruits"], "correct_index": 0, "explanation": "L'eau est indispensable à la plante." },
+    { "prompt": "Que nous apportent les plantes ?", "options": ["De la nourriture, des remèdes, du bois et de l'oxygène", "Uniquement de l'ombre", "Uniquement du bois", "Rien d'utile"], "correct_index": 0, "explanation": "Elles nourrissent, soignent, abritent et produisent l'oxygène." }
+   ]
+  },
+  {
+   "chapter_id": "93cddafe-82ce-4bb2-a87f-2ee0bc882f00",
+   "titre": "Les animaux et leurs habitats",
+   "questions": [
+    { "prompt": "Qu'est-ce que l'habitat d'un animal ?", "options": ["Son lieu de vie", "Sa nourriture", "Son petit", "Sa taille"], "correct_index": 0, "explanation": "L'habitat est le milieu où vit l'animal." },
+    { "prompt": "Quel est l'habitat du gorille ?", "options": ["La forêt", "Le fleuve", "La savane", "Le désert"], "correct_index": 0, "explanation": "Gorille, éléphant de forêt, singe et perroquet vivent dans la forêt." },
+    { "prompt": "Quel est l'habitat de l'hippopotame ?", "options": ["L'eau, fleuve ou rivière", "La forêt sèche", "Les arbres", "Le ciel"], "correct_index": 0, "explanation": "L'hippopotame, le crocodile et le poisson vivent dans l'eau." },
+    { "prompt": "Quels animaux vivent dans la savane ?", "options": ["L'antilope et le buffle", "Le poisson et le crocodile", "L'aigle et l'hirondelle", "La poule et le chien"], "correct_index": 0, "explanation": "Ils courent vite dans l'herbe haute." },
+    { "prompt": "Qu'est-ce qu'un animal domestique ?", "options": ["Un animal élevé et nourri par l'homme", "Un animal qui vit libre dans la forêt", "Un animal qui vole", "Un animal protégé par la loi"], "correct_index": 0, "explanation": "Poule, chèvre, bœuf et chien sont des animaux domestiques." },
+    { "prompt": "Que mange un animal herbivore ?", "options": ["De l'herbe, des feuilles et des fruits", "De la viande", "Un peu de tout", "Des insectes seulement"], "correct_index": 0, "explanation": "L'éléphant, la chèvre et l'antilope sont herbivores." },
+    { "prompt": "Que mange un animal carnivore ?", "options": ["De la viande", "De l'herbe", "Des feuilles", "Des graines"], "correct_index": 0, "explanation": "La panthère, le crocodile et le chat sont carnivores." },
+    { "prompt": "Qu'est-ce qu'un animal omnivore ?", "options": ["Il mange un peu de tout", "Il ne mange que des plantes", "Il ne mange que de la viande", "Il ne mange pas"], "correct_index": 0, "explanation": "La poule, le porc et l'homme sont omnivores." },
+    { "prompt": "Quel est le régime alimentaire de l'éléphant ?", "options": ["Herbivore", "Carnivore", "Omnivore", "Il ne mange que des poissons"], "correct_index": 0, "explanation": "L'éléphant se nourrit de plantes." },
+    { "prompt": "À quoi servent les parcs nationaux ?", "options": ["À protéger les animaux menacés et leur milieu", "À élever des poules", "À couper du bois", "À cultiver le manioc"], "correct_index": 0, "explanation": "Le gorille et l'éléphant sont protégés : leur chasse est interdite." }
+   ]
+  },
+  {
+   "chapter_id": "07e7f5a9-3e1e-460e-ae8a-b5992b675d82",
+   "titre": "L'alimentation équilibrée",
+   "questions": [
+    { "prompt": "Combien y a-t-il de groupes d'aliments ?", "options": ["Trois", "Deux", "Quatre", "Six"], "correct_index": 0, "explanation": "Les énergétiques, les bâtisseurs et les protecteurs." },
+    { "prompt": "À quoi servent les aliments énergétiques ?", "options": ["Ils donnent de la force", "Ils construisent les muscles", "Ils protègent des maladies", "Ils remplacent l'eau"], "correct_index": 0, "explanation": "Manioc, riz, foufou, banane plantain donnent de l'énergie." },
+    { "prompt": "Dans quel groupe se trouve le poisson ?", "options": ["Les aliments bâtisseurs", "Les aliments énergétiques", "Les aliments protecteurs", "Les boissons"], "correct_index": 0, "explanation": "Poisson, viande, œufs, haricots et lait construisent le corps." },
+    { "prompt": "Dans quel groupe se trouve la mangue ?", "options": ["Les aliments protecteurs", "Les aliments énergétiques", "Les aliments bâtisseurs", "Les sucreries"], "correct_index": 0, "explanation": "Fruits et légumes protègent des maladies." },
+    { "prompt": "Qu'est-ce qu'un repas équilibré ?", "options": ["Un repas qui contient les trois groupes d'aliments", "Un repas composé uniquement de riz", "Un repas très copieux", "Un repas sans eau"], "correct_index": 0, "explanation": "Par exemple foufou, poisson et feuilles de manioc." },
+    { "prompt": "Pourquoi ne faut-il pas sauter le petit-déjeuner ?", "options": ["On se fatigue vite et on se concentre mal", "On grandit plus vite", "On a moins soif", "On digère mieux"], "correct_index": 0, "explanation": "Le petit-déjeuner donne l'énergie de la matinée." },
+    { "prompt": "Que faut-il faire avant de manger un fruit ?", "options": ["Le laver et se laver les mains", "Le faire cuire", "Le saler", "Le laisser au soleil"], "correct_index": 0, "explanation": "C'est une règle d'hygiène qui évite les microbes." },
+    { "prompt": "Quel est le danger d'une consommation excessive de sucreries ?", "options": ["Les caries dentaires", "Une meilleure vue", "Des muscles plus forts", "Une digestion plus rapide"], "correct_index": 0, "explanation": "Les sucreries donnent des caries et apportent peu de force." },
+    { "prompt": "Comment appelle-t-on l'état d'un enfant qui manque d'aliments bâtisseurs ?", "options": ["La malnutrition", "La digestion", "La germination", "L'hygiène"], "correct_index": 0, "explanation": "L'enfant devient maigre, fatigué et tombe souvent malade." },
+    { "prompt": "Quelle boisson accompagne le mieux un repas ?", "options": ["De l'eau potable", "Une boisson sucrée", "Du café fort", "De l'alcool"], "correct_index": 0, "explanation": "L'eau potable est la boisson de tous les repas." }
+   ]
+  },
+  {
+   "chapter_id": "1fccd8c1-42e3-4570-ac46-15e2323db115",
+   "titre": "Les cinq sens",
+   "questions": [
+    { "prompt": "Quel organe correspond à la vue ?", "options": ["Les yeux", "Les oreilles", "Le nez", "La peau"], "correct_index": 0, "explanation": "La vue me permet de voir les formes et les couleurs." },
+    { "prompt": "Quel organe correspond à l'ouïe ?", "options": ["Les oreilles", "Les yeux", "La langue", "La peau"], "correct_index": 0, "explanation": "L'ouïe me permet d'entendre les sons." },
+    { "prompt": "Quel organe correspond à l'odorat ?", "options": ["Le nez", "La langue", "Les yeux", "Les oreilles"], "correct_index": 0, "explanation": "L'odorat me permet de sentir les odeurs." },
+    { "prompt": "Quel organe correspond au goût ?", "options": ["La langue", "Le nez", "La peau", "Les yeux"], "correct_index": 0, "explanation": "La langue reconnaît le sucré, le salé, l'acide et l'amer." },
+    { "prompt": "Quel organe correspond au toucher ?", "options": ["La peau", "Les oreilles", "Les yeux", "Le nez"], "correct_index": 0, "explanation": "La peau sent le chaud, le froid, le doux et le piquant." },
+    { "prompt": "Combien l'homme a-t-il de sens ?", "options": ["Cinq", "Trois", "Quatre", "Six"], "correct_index": 0, "explanation": "Vue, ouïe, odorat, goût et toucher." },
+    { "prompt": "Par quoi les informations des sens sont-elles transportées au cerveau ?", "options": ["Les nerfs sensitifs", "Les veines", "Les muscles", "Les os"], "correct_index": 0, "explanation": "Les nerfs sensitifs conduisent les excitations vers le cerveau." },
+    { "prompt": "Comment les sens nous protègent-ils ?", "options": ["Ils nous avertissent du danger", "Ils nous font grandir", "Ils digèrent les aliments", "Ils produisent le sang"], "correct_index": 0, "explanation": "L'odeur de fumée prévient d'un incendie, la douleur fait retirer la main." },
+    { "prompt": "Comment protéger ses yeux ?", "options": ["Ne pas regarder le soleil en face ni se frotter les yeux avec des mains sales", "Les frotter souvent", "Lire dans le noir", "Les laver au savon"], "correct_index": 0, "explanation": "Ce sont les règles d'hygiène de la vue." },
+    { "prompt": "Quelle saveur la langue ne reconnaît-elle pas ?", "options": ["Le froid", "Le sucré", "Le salé", "L'amer"], "correct_index": 0, "explanation": "Le froid est perçu par le toucher, pas par le goût." }
+   ]
+  },
+  {
+   "chapter_id": "f5c9357b-3377-45ef-88f6-c87013711920",
+   "titre": "Les déchets, la pollution et le reboisement",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un déchet ?", "options": ["Ce dont on n'a plus besoin", "Un aliment protecteur", "Un objet neuf", "Une plante sauvage"], "correct_index": 0, "explanation": "Épluchures, sachets, bouteilles, papiers et piles usagées sont des déchets." },
+    { "prompt": "Que se passe-t-il quand les déchets bouchent les caniveaux ?", "options": ["L'eau stagne, les moustiques se multiplient et le quartier s'inonde", "Le quartier devient plus propre", "L'eau devient potable", "Les plantes poussent mieux"], "correct_index": 0, "explanation": "Les caniveaux bouchés provoquent inondations et maladies." },
+    { "prompt": "Quels déchets peuvent devenir du compost ?", "options": ["Les épluchures et les feuilles", "Le plastique", "Le verre", "Les piles"], "correct_index": 0, "explanation": "Les déchets qui pourrissent nourrissent le jardin." },
+    { "prompt": "Combien de temps un sachet plastique peut-il rester dans la terre ?", "options": ["Des dizaines d'années", "Quelques jours", "Une semaine", "Un mois"], "correct_index": 0, "explanation": "Le plastique ne pourrit pas comme les déchets organiques." },
+    { "prompt": "Pourquoi ne faut-il pas brûler le plastique ?", "options": ["La fumée dégagée est toxique", "Cela coûte cher", "Cela prend trop de temps", "Cela nourrit le sol"], "correct_index": 0, "explanation": "Brûler le plastique pollue l'air et nuit à la santé." },
+    { "prompt": "Que veut dire « réduire » dans les trois R ?", "options": ["Éviter ce qui ne sert à rien", "Jeter plus vite", "Brûler les déchets", "Enterrer les ordures"], "correct_index": 0, "explanation": "Par exemple prendre un panier plutôt qu'un sachet." },
+    { "prompt": "Que veut dire « réutiliser » ?", "options": ["Se resservir d'un objet pour un autre usage", "Jeter à la poubelle", "Brûler", "Acheter du neuf"], "correct_index": 0, "explanation": "Une bouteille devient un arrosoir, une boîte un pot à crayons." },
+    { "prompt": "Que veut dire « reboiser » ?", "options": ["Replanter des arbres là où la forêt a disparu", "Couper les arbres", "Brûler la brousse", "Nettoyer la cour"], "correct_index": 0, "explanation": "Le reboisement redonne de l'ombre, de l'oxygène et retient la terre." },
+    { "prompt": "Que font les arbres pour le sol ?", "options": ["Ils retiennent la terre", "Ils la rendent stérile", "Ils la font glisser", "Ils la sèchent"], "correct_index": 0, "explanation": "Leurs racines empêchent l'érosion." },
+    { "prompt": "Où faut-il jeter ses ordures ?", "options": ["Dans une poubelle", "Dans le caniveau", "Dans la rivière", "Au bord de la route"], "correct_index": 0, "explanation": "C'est le geste de base pour garder un quartier sain." }
+   ]
+  },
+  {
+   "chapter_id": "24a8ec8e-e63a-48ff-b324-5dce7da251cc",
+   "titre": "L'eau : pollution et économie",
+   "questions": [
+    { "prompt": "Quels sont les trois états de l'eau ?", "options": ["Liquide, solide et gazeux", "Liquide et solide seulement", "Chaud, tiède et froid", "Propre, sale et trouble"], "correct_index": 0, "explanation": "Eau liquide, glace et vapeur." },
+    { "prompt": "D'où vient l'eau que nous buvons ?", "options": ["De la pluie, des puits, des sources et des forages", "Uniquement du robinet", "Uniquement de la mer", "Des nuages directement"], "correct_index": 0, "explanation": "L'eau de pluie s'infiltre ou coule vers les rivières, puis on la puise." },
+    { "prompt": "Comment reconnaît-on une eau potable ?", "options": ["Elle est claire, sans odeur et sans microbe", "Elle est trouble", "Elle sent fort", "Elle est tiède"], "correct_index": 0, "explanation": "L'eau potable se boit sans danger." },
+    { "prompt": "Quelle maladie peut donner une eau sale ?", "options": ["Le choléra", "La fracture", "La myopie", "La carie uniquement"], "correct_index": 0, "explanation": "Diarrhée, choléra et typhoïde viennent d'une eau polluée." },
+    { "prompt": "Quelle est la méthode la plus sûre pour rendre une eau potable ?", "options": ["La filtrer puis la faire bouillir", "La laisser reposer une nuit", "La mettre au soleil une heure", "Y ajouter du sucre"], "correct_index": 0, "explanation": "On filtre les saletés, puis on tue les microbes par ébullition." },
+    { "prompt": "Comment conserver l'eau traitée ?", "options": ["Dans un récipient propre et couvert", "Dans un seau ouvert", "Dans une bouteille sale", "Dehors, au soleil"], "correct_index": 0, "explanation": "On la puise avec un gobelet propre pour ne pas la recontaminer." },
+    { "prompt": "Qu'est-ce qui pollue l'eau ?", "options": ["Les ordures jetées dans la rivière et les eaux sales", "La pluie", "Le vent", "Les poissons"], "correct_index": 0, "explanation": "Ordures, huiles, carburants et latrines trop proches d'un puits." },
+    { "prompt": "Pourquoi ne faut-il pas creuser une latrine près d'un puits ?", "options": ["Elle peut polluer l'eau du puits", "Elle rend le puits plus profond", "Elle assèche le puits", "Elle fait monter l'eau"], "correct_index": 0, "explanation": "Les saletés s'infiltrent jusqu'à l'eau du puits." },
+    { "prompt": "Quel geste permet d'économiser l'eau ?", "options": ["Fermer le robinet pendant le brossage des dents", "Laisser couler l'eau", "Laver à grande eau tous les jours", "Arroser à midi"], "correct_index": 0, "explanation": "On évite aussi les fuites et on réutilise l'eau de rinçage." },
+    { "prompt": "Une eau claire est-elle forcément potable ?", "options": ["Non, elle peut contenir des microbes", "Oui, toujours", "Oui, si elle est fraîche", "Oui, si elle vient d'une rivière"], "correct_index": 0, "explanation": "Les microbes sont invisibles : eau douteuse, eau bouillie." }
+   ]
+  },
+  {
+   "chapter_id": "3af1352d-777c-4497-af38-6a708798a246",
+   "titre": "L'air et sa pollution",
+   "questions": [
+    { "prompt": "Qu'est-ce que l'air ?", "options": ["Un mélange de gaz invisible", "Un liquide transparent", "Une poussière fine", "Une vapeur d'eau uniquement"], "correct_index": 0, "explanation": "L'air est invisible, sans odeur et sans couleur." },
+    { "prompt": "Comment appelle-t-on la couche d'air qui entoure la Terre ?", "options": ["L'atmosphère", "L'écorce", "Le noyau", "La cuvette"], "correct_index": 0, "explanation": "L'atmosphère entoure toute la planète." },
+    { "prompt": "Quel gaz de l'air sert à la respiration ?", "options": ["L'oxygène", "Le gaz carbonique", "L'azote", "La vapeur d'eau"], "correct_index": 0, "explanation": "Hommes, animaux et plantes respirent l'oxygène." },
+    { "prompt": "Quel gaz les plantes utilisent-elles pour fabriquer leur nourriture ?", "options": ["Le gaz carbonique", "L'oxygène", "L'azote", "La fumée"], "correct_index": 0, "explanation": "Les feuilles l'utilisent avec la lumière du soleil." },
+    { "prompt": "Quel usage de l'air est cité dans le cours ?", "options": ["Il gonfle les ballons et les pneus", "Il nourrit les hommes", "Il remplace l'eau", "Il fabrique le sol"], "correct_index": 0, "explanation": "L'air fait aussi tourner les moulins et sèche le linge." },
+    { "prompt": "Quelle est une cause de pollution de l'air en ville ?", "options": ["La fumée des véhicules", "La pluie", "Les arbres", "Le vent"], "correct_index": 0, "explanation": "Véhicules, usines, feux de brousse et poussière polluent l'air." },
+    { "prompt": "Pourquoi les feux de brousse polluent-ils ?", "options": ["Ils dégagent une fumée noire nocive", "Ils apportent de l'oxygène", "Ils nettoient l'air", "Ils font tomber la pluie"], "correct_index": 0, "explanation": "La fumée pique les yeux et abîme les poumons." },
+    { "prompt": "Quelle maladie un air pollué peut-il provoquer ?", "options": ["Des maladies des poumons", "Des caries", "Des fractures", "Le paludisme"], "correct_index": 0, "explanation": "Toux, maladies des poumons et maux de tête." },
+    { "prompt": "Quel geste protège l'air ?", "options": ["Planter des arbres", "Brûler les ordures", "Laisser tourner les moteurs", "Rouler avec un véhicule mal entretenu"], "correct_index": 0, "explanation": "Les arbres produisent l'oxygène et assainissent l'air." },
+    { "prompt": "Quelle chaîne faut-il retenir ?", "options": ["Arbres, oxygène, respiration", "Feu, fumée, santé", "Eau, sol, pluie", "Soleil, chaleur, vent"], "correct_index": 0, "explanation": "Moins d'arbres, moins d'air pur." }
+   ]
+  },
+  {
+   "chapter_id": "2afb75a1-1278-4c12-bfa4-fe7c523d0d57",
+   "titre": "La forêt et sa protection",
+   "questions": [
+    { "prompt": "Dans quelle partie du Congo la forêt est-elle la plus étendue ?", "options": ["Au nord, dans la cuvette congolaise", "Au sud, près de l'océan", "Autour de Brazzaville", "Dans les plateaux Batékés"], "correct_index": 0, "explanation": "La cuvette congolaise appartient au grand bassin forestier du Congo." },
+    { "prompt": "Quel gaz les arbres rejettent-ils ?", "options": ["De l'oxygène", "Du gaz carbonique", "De la fumée", "De l'azote pur"], "correct_index": 0, "explanation": "Les arbres produisent l'oxygène que nous respirons." },
+    { "prompt": "Quel animal vit dans la forêt congolaise ?", "options": ["Le gorille", "Le chameau", "Le pingouin", "Le mouton de savane"], "correct_index": 0, "explanation": "Éléphants, gorilles, singes et oiseaux y vivent." },
+    { "prompt": "Comment les racines des arbres protègent-elles le sol ?", "options": ["Elles retiennent la terre et luttent contre l'érosion", "Elles assèchent le sol", "Elles le rendent dur", "Elles empêchent la pluie"], "correct_index": 0, "explanation": "Sans racines, la pluie emporte la terre." },
+    { "prompt": "Quelle essence précieuse trouve-t-on dans la forêt congolaise ?", "options": ["L'okoumé", "Le palmier dattier", "Le pin des neiges", "Le bambou de mer"], "correct_index": 0, "explanation": "Okoumé, sapelli et limba sont des bois recherchés." },
+    { "prompt": "Qu'est-ce qui détruit la forêt ?", "options": ["Les feux de brousse et l'abattage sans replanter", "La pluie", "Les oiseaux", "L'ombre des arbres"], "correct_index": 0, "explanation": "La culture sur brûlis répétée l'épuise également." },
+    { "prompt": "Comment appelle-t-on la disparition de la forêt ?", "options": ["La déforestation", "Le reboisement", "L'érosion", "La germination"], "correct_index": 0, "explanation": "Déboisée sans replantation, la forêt disparaît." },
+    { "prompt": "Que se passe-t-il quand la forêt disparaît ?", "options": ["Le sol s'appauvrit et les animaux s'en vont", "Il pleut davantage", "Le sol devient plus riche", "Les sources deviennent plus fortes"], "correct_index": 0, "explanation": "Les sources se tarissent et la terre est emportée." },
+    { "prompt": "Quel geste protège la forêt ?", "options": ["Reboiser et éviter les feux de brousse", "Couper le plus d'arbres possible", "Brûler les herbes chaque saison", "Chasser les animaux protégés"], "correct_index": 0, "explanation": "On coupe seulement ce dont on a besoin et on replante." },
+    { "prompt": "Que sont Odzala et Nouabalé-Ndoki ?", "options": ["Des parcs nationaux", "Des villes du sud", "Des fleuves", "Des montagnes"], "correct_index": 0, "explanation": "Ce sont des aires protégées du Congo." }
+   ]
+  }
+ ]
+}

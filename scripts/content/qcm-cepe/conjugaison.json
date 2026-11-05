@@ -1,0 +1,150 @@
+{
+ "matiere": "Conjugaison",
+ "subject_id": "b33d41ef-191c-41b0-87f4-d5567af9f06e",
+ "chapitres": [
+  {
+   "chapter_id": "935ffdad-a9ad-44b4-b9d8-f233057abd46",
+   "titre": "Les groupes et les modes",
+   "questions": [
+    { "prompt": "Quels verbes appartiennent au 1er groupe ?", "options": ["Les verbes en -er, sauf aller", "Les verbes en -ir", "Les verbes en -re", "Tous les verbes irréguliers"], "correct_index": 0, "explanation": "Le 1er groupe réunit les verbes en -er, sauf aller : aimer, manger, chanter." },
+    { "prompt": "Comment reconnaît-on un verbe du 2e groupe ?", "options": ["Il se termine par -ir et fait son participe présent en -issant", "Il se termine par -er", "Il se termine par -oir", "Il est toujours irrégulier"], "correct_index": 0, "explanation": "Finir, grandir, choisir : -ir avec un participe présent en -issant." },
+    { "prompt": "Quel verbe appartient au 3e groupe ?", "options": ["prendre", "chanter", "finir", "grandir"], "correct_index": 0, "explanation": "Le 3e groupe réunit les verbes irréguliers en -ir, -re, -oir : voir, venir, faire, prendre, aller." },
+    { "prompt": "Dans quel groupe classe-t-on le verbe « aller » ?", "options": ["Le 3e groupe", "Le 1er groupe", "Le 2e groupe", "Aucun groupe"], "correct_index": 0, "explanation": "Bien qu'il se termine par -er, « aller » est un verbe du 3e groupe." },
+    { "prompt": "Quel mode exprime une certitude, un fait réel ?", "options": ["L'indicatif", "Le subjonctif", "Le conditionnel", "L'impératif"], "correct_index": 0, "explanation": "L'indicatif exprime un fait réel : présent, imparfait, futur, passé simple, passé composé." },
+    { "prompt": "Quel mode exprime le doute, le souhait ou la crainte ?", "options": ["Le subjonctif", "L'indicatif", "L'impératif", "L'infinitif"], "correct_index": 0, "explanation": "Le subjonctif exprime le doute, le souhait, la crainte." },
+    { "prompt": "Quel mode sert à donner un ordre ou un conseil ?", "options": ["L'impératif", "L'indicatif", "Le participe", "L'infinitif"], "correct_index": 0, "explanation": "L'impératif donne un ordre ou un conseil." },
+    { "prompt": "Quel mode exprime une condition ou la politesse ?", "options": ["Le conditionnel", "L'indicatif", "L'impératif", "Le participe"], "correct_index": 0, "explanation": "Le conditionnel exprime une condition ou une demande polie." },
+    { "prompt": "Combien de modes compte la conjugaison française selon le cours ?", "options": ["Six", "Trois", "Quatre", "Dix"], "correct_index": 0, "explanation": "Indicatif, subjonctif, conditionnel, impératif, infinitif et participe : six modes." },
+    { "prompt": "Quel mode correspond à la forme non conjuguée du verbe ?", "options": ["L'infinitif", "L'indicatif", "Le subjonctif", "L'impératif"], "correct_index": 0, "explanation": "L'infinitif est la forme nominale du verbe, non conjuguée." }
+   ]
+  },
+  {
+   "chapter_id": "15ddb66c-11d2-4b38-805b-5c40b22e64fe",
+   "titre": "Le présent de l'indicatif — 1er groupe",
+   "questions": [
+    { "prompt": "Quelles sont les terminaisons du présent pour les verbes du 1er groupe ?", "options": ["-e, -es, -e, -ons, -ez, -ent", "-ais, -ais, -ait, -ions, -iez, -aient", "-ai, -as, -a, -ons, -ez, -ont", "-s, -s, -t, -ons, -ez, -ent"], "correct_index": 0, "explanation": "Au présent : je -e, tu -es, il -e, nous -ons, vous -ez, ils -ent." },
+    { "prompt": "Complète : « Je … » (verbe chanter, présent)", "options": ["chante", "chantes", "chantent", "chanter"], "correct_index": 0, "explanation": "À la 1re personne du singulier : je chante." },
+    { "prompt": "Complète : « Tu … » (verbe chanter, présent)", "options": ["chantes", "chante", "chantent", "chantez"], "correct_index": 0, "explanation": "À la 2e personne du singulier : tu chantes." },
+    { "prompt": "Complète : « Nous … » (verbe chanter, présent)", "options": ["chantons", "chantez", "chantent", "chantions"], "correct_index": 0, "explanation": "À la 1re personne du pluriel : nous chantons." },
+    { "prompt": "Complète : « Vous … » (verbe parler, présent)", "options": ["parlez", "parlons", "parlent", "parliez"], "correct_index": 0, "explanation": "À la 2e personne du pluriel : vous parlez." },
+    { "prompt": "Complète : « Ils … » (verbe jouer, présent)", "options": ["jouent", "joue", "jouons", "jouez"], "correct_index": 0, "explanation": "À la 3e personne du pluriel : ils jouent." },
+    { "prompt": "Que faut-il savoir sur le « -ent » de « ils chantent » ?", "options": ["Il ne se prononce pas", "Il se prononce « ant »", "Il se prononce « eine »", "Il se prononce comme « ont »"], "correct_index": 0, "explanation": "Le -ent final de la 3e personne du pluriel ne se prononce pas." },
+    { "prompt": "Complète : « Elle … le riz. » (verbe manger, présent)", "options": ["mange", "manges", "mangent", "mangeons"], "correct_index": 0, "explanation": "3e personne du singulier : elle mange." },
+    { "prompt": "Quelle phrase est correctement conjuguée ?", "options": ["Les élèves travaillent bien.", "Les élèves travaille bien.", "Les élèves travaillons bien.", "Les élèves travaillez bien."], "correct_index": 0, "explanation": "Sujet à la 3e personne du pluriel : terminaison -ent." },
+    { "prompt": "Quel verbe n'appartient pas au 1er groupe ?", "options": ["aller", "chanter", "jouer", "parler"], "correct_index": 0, "explanation": "« Aller » se termine par -er mais appartient au 3e groupe." }
+   ]
+  },
+  {
+   "chapter_id": "e00917e8-dca7-4628-965e-1e503d9c0b9d",
+   "titre": "L'imparfait de l'indicatif — 1er groupe",
+   "questions": [
+    { "prompt": "Quelles sont les terminaisons de l'imparfait ?", "options": ["-ais, -ais, -ait, -ions, -iez, -aient", "-e, -es, -e, -ons, -ez, -ent", "-ai, -as, -a, -ons, -ez, -ont", "-us, -us, -ut, -ûmes, -ûtes, -urent"], "correct_index": 0, "explanation": "Ces terminaisons sont valables pour tous les verbes à l'imparfait." },
+    { "prompt": "Complète : « Je … » (verbe manger, imparfait)", "options": ["mangeais", "mangeai", "mange", "mangerai"], "correct_index": 0, "explanation": "À l'imparfait : je mangeais." },
+    { "prompt": "Complète : « Il … » (verbe manger, imparfait)", "options": ["mangeait", "mangeais", "mangeaient", "mangea"], "correct_index": 0, "explanation": "3e personne du singulier : il mangeait." },
+    { "prompt": "Complète : « Nous … » (verbe manger, imparfait)", "options": ["mangions", "mangeons", "mangeions", "mangeâmes"], "correct_index": 0, "explanation": "À l'imparfait : nous mangions." },
+    { "prompt": "Complète : « Vous … » (verbe chanter, imparfait)", "options": ["chantiez", "chantez", "chantiers", "chanterez"], "correct_index": 0, "explanation": "2e personne du pluriel : vous chantiez." },
+    { "prompt": "Complète : « Ils … » (verbe manger, imparfait)", "options": ["mangeaient", "mangeait", "mangent", "mangèrent"], "correct_index": 0, "explanation": "3e personne du pluriel : ils mangeaient." },
+    { "prompt": "À quoi sert l'imparfait ?", "options": ["À décrire une action habituelle dans le passé", "À donner un ordre", "À exprimer une action future", "À poser une condition"], "correct_index": 0, "explanation": "L'imparfait décrit une habitude passée : « Chaque matin, il mangeait »." },
+    { "prompt": "Quelle phrase emploie correctement l'imparfait ?", "options": ["Chaque matin, il mangeait du pain.", "Chaque matin, il mangeais du pain.", "Chaque matin, il mangeaient du pain.", "Chaque matin, il mangea du pain hier."], "correct_index": 0, "explanation": "3e personne du singulier : -ait." },
+    { "prompt": "Les terminaisons de l'imparfait valent pour :", "options": ["Tous les verbes", "Seulement le 1er groupe", "Seulement le 2e groupe", "Seulement être et avoir"], "correct_index": 0, "explanation": "Les terminaisons -ais, -ais, -ait, -ions, -iez, -aient valent pour tous les verbes." },
+    { "prompt": "Complète : « Tu … dans la cour. » (verbe jouer, imparfait)", "options": ["jouais", "jouait", "joues", "joueras"], "correct_index": 0, "explanation": "2e personne du singulier : tu jouais." }
+   ]
+  },
+  {
+   "chapter_id": "326a6afd-27b7-4ddb-a9ad-3902b8fec21c",
+   "titre": "Le passé composé — 1er groupe",
+   "questions": [
+    { "prompt": "Comment se forme le passé composé des verbes du 1er groupe ?", "options": ["Auxiliaire avoir au présent + participe passé", "Infinitif + terminaisons du futur", "Radical + terminaisons de l'imparfait", "Auxiliaire être à l'imparfait + infinitif"], "correct_index": 0, "explanation": "Passé composé = avoir au présent + participe passé." },
+    { "prompt": "Comment se termine le participe passé des verbes du 1er groupe ?", "options": ["En -é", "En -i", "En -u", "En -is"], "correct_index": 0, "explanation": "Chanter donne chanté, manger donne mangé." },
+    { "prompt": "Complète : « J'… » (verbe manger, passé composé)", "options": ["ai mangé", "ai mangée", "avais mangé", "mangeais"], "correct_index": 0, "explanation": "1re personne du singulier : j'ai mangé." },
+    { "prompt": "Complète : « Tu … » (verbe chanter, passé composé)", "options": ["as chanté", "a chanté", "as chantée", "avais chanté"], "correct_index": 0, "explanation": "2e personne du singulier : tu as chanté." },
+    { "prompt": "Complète : « Il … » (verbe manger, passé composé)", "options": ["a mangé", "as mangé", "ont mangé", "avait mangé"], "correct_index": 0, "explanation": "3e personne du singulier : il a mangé." },
+    { "prompt": "Complète : « Nous … » (verbe chanter, passé composé)", "options": ["avons chanté", "avez chanté", "avons chantés", "avions chanté"], "correct_index": 0, "explanation": "1re personne du pluriel : nous avons chanté." },
+    { "prompt": "Complète : « Vous … » (verbe manger, passé composé)", "options": ["avez mangé", "avons mangé", "avez mangés", "aviez mangé"], "correct_index": 0, "explanation": "2e personne du pluriel : vous avez mangé." },
+    { "prompt": "Complète : « Ils … » (verbe chanter, passé composé)", "options": ["ont chanté", "on chanté", "ont chantés", "avaient chanté"], "correct_index": 0, "explanation": "3e personne du pluriel : ils ont chanté, sans accord du participe." },
+    { "prompt": "Quel auxiliaire emploie-t-on ici pour les verbes du 1er groupe ?", "options": ["Avoir", "Être", "Aller", "Faire"], "correct_index": 0, "explanation": "Le passé composé se forme ici avec l'auxiliaire avoir au présent." },
+    { "prompt": "Quelle phrase est correctement écrite ?", "options": ["Elles ont chanté.", "Elles ont chantées.", "Elles ont chantés.", "Elles ont chantée."], "correct_index": 0, "explanation": "Avec avoir, le participe passé ne s'accorde pas avec le sujet." }
+   ]
+  },
+  {
+   "chapter_id": "983fca3d-309e-4859-8801-95c9144d8166",
+   "titre": "Le futur simple — ÊTRE et AVOIR",
+   "questions": [
+    { "prompt": "Quelles sont les terminaisons du futur simple ?", "options": ["-ai, -as, -a, -ons, -ez, -ont", "-ais, -ais, -ait, -ions, -iez, -aient", "-e, -es, -e, -ons, -ez, -ent", "-us, -us, -ut, -ûmes, -ûtes, -urent"], "correct_index": 0, "explanation": "Au futur : -ai, -as, -a, -ons, -ez, -ont, ajoutées à l'infinitif." },
+    { "prompt": "Complète : « Je … » (verbe être, futur)", "options": ["serai", "serais", "suis", "fus"], "correct_index": 0, "explanation": "Être au futur : je serai." },
+    { "prompt": "Complète : « Tu … » (verbe avoir, futur)", "options": ["auras", "aura", "avais", "eus"], "correct_index": 0, "explanation": "Avoir au futur : tu auras." },
+    { "prompt": "Complète : « Il … » (verbe être, futur)", "options": ["sera", "serai", "serait", "fut"], "correct_index": 0, "explanation": "3e personne du singulier : il sera." },
+    { "prompt": "Complète : « Nous … » (verbe avoir, futur)", "options": ["aurons", "avons", "aurions", "eûmes"], "correct_index": 0, "explanation": "1re personne du pluriel : nous aurons." },
+    { "prompt": "Complète : « Vous … » (verbe être, futur)", "options": ["serez", "seriez", "êtes", "fûtes"], "correct_index": 0, "explanation": "2e personne du pluriel : vous serez." },
+    { "prompt": "Complète : « Ils … » (verbe avoir, futur)", "options": ["auront", "ont", "auraient", "eurent"], "correct_index": 0, "explanation": "3e personne du pluriel : ils auront." },
+    { "prompt": "Quel est le radical du verbe « aller » au futur ?", "options": ["ir-", "all-", "aill-", "ira-"], "correct_index": 0, "explanation": "Aller donne j'irai : le radical est ir-." },
+    { "prompt": "Quel est le radical du verbe « faire » au futur ?", "options": ["fer-", "fais-", "fait-", "fais"], "correct_index": 0, "explanation": "Faire donne je ferai : le radical est fer-." },
+    { "prompt": "Quel est le radical du verbe « voir » au futur ?", "options": ["verr-", "voi-", "voy-", "vu-"], "correct_index": 0, "explanation": "Voir donne je verrai : le radical est verr-." }
+   ]
+  },
+  {
+   "chapter_id": "f922dc17-8cc3-4e21-9bb7-066fde0c1f6f",
+   "titre": "Le passé simple — ÊTRE et AVOIR",
+   "questions": [
+    { "prompt": "Complète : « Je … » (verbe être, passé simple)", "options": ["fus", "fut", "fûmes", "serai"], "correct_index": 0, "explanation": "Être au passé simple : je fus." },
+    { "prompt": "Complète : « Il … » (verbe être, passé simple)", "options": ["fut", "fus", "fût", "furent"], "correct_index": 0, "explanation": "3e personne du singulier : il fut." },
+    { "prompt": "Complète : « Nous … » (verbe être, passé simple)", "options": ["fûmes", "fumes", "fûtes", "furent"], "correct_index": 0, "explanation": "1re personne du pluriel : nous fûmes, avec accent circonflexe." },
+    { "prompt": "Complète : « Vous … » (verbe être, passé simple)", "options": ["fûtes", "futes", "fûmes", "furent"], "correct_index": 0, "explanation": "2e personne du pluriel : vous fûtes, avec accent circonflexe." },
+    { "prompt": "Complète : « Ils … » (verbe être, passé simple)", "options": ["furent", "furrent", "fûrent", "fut"], "correct_index": 0, "explanation": "3e personne du pluriel : ils furent." },
+    { "prompt": "Complète : « J'… » (verbe avoir, passé simple)", "options": ["eus", "eut", "eûmes", "aurai"], "correct_index": 0, "explanation": "Avoir au passé simple : j'eus." },
+    { "prompt": "Complète : « Il … » (verbe avoir, passé simple)", "options": ["eut", "eus", "eurent", "eût"], "correct_index": 0, "explanation": "3e personne du singulier : il eut." },
+    { "prompt": "Complète : « Nous … » (verbe avoir, passé simple)", "options": ["eûmes", "eumes", "eûtes", "eurent"], "correct_index": 0, "explanation": "1re personne du pluriel : nous eûmes." },
+    { "prompt": "Complète : « Ils … » (verbe avoir, passé simple)", "options": ["eurent", "eûrent", "eut", "eurrent"], "correct_index": 0, "explanation": "3e personne du pluriel : ils eurent." },
+    { "prompt": "Quel piège faut-il éviter au passé simple du verbe être ?", "options": ["Oublier l'accent circonflexe de « fûmes » et « fûtes »", "Oublier le s de « je fus »", "Écrire « ils furent » avec un t", "Confondre avec le présent"], "correct_index": 0, "explanation": "Les deux premières personnes du pluriel prennent un accent circonflexe." }
+   ]
+  },
+  {
+   "chapter_id": "aa1c8d29-82d5-4800-9742-a440bbcd2c7a",
+   "titre": "Le présent du conditionnel",
+   "questions": [
+    { "prompt": "Comment se forme le conditionnel présent ?", "options": ["Infinitif + terminaisons de l'imparfait", "Infinitif + terminaisons du futur", "Radical + -e, -es, -e", "Auxiliaire avoir + participe passé"], "correct_index": 0, "explanation": "Conditionnel = infinitif + -ais, -ais, -ait, -ions, -iez, -aient." },
+    { "prompt": "Complète : « Je … » (verbe être, conditionnel présent)", "options": ["serais", "serai", "suis", "fus"], "correct_index": 0, "explanation": "Conditionnel : je serais ; futur : je serai." },
+    { "prompt": "Complète : « Il … » (verbe avoir, conditionnel présent)", "options": ["aurait", "aura", "avait", "eut"], "correct_index": 0, "explanation": "3e personne du singulier : il aurait." },
+    { "prompt": "Complète : « Nous … » (verbe être, conditionnel présent)", "options": ["serions", "serons", "sommes", "fûmes"], "correct_index": 0, "explanation": "1re personne du pluriel : nous serions." },
+    { "prompt": "Complète : « Ils … » (verbe avoir, conditionnel présent)", "options": ["auraient", "auront", "avaient", "eurent"], "correct_index": 0, "explanation": "3e personne du pluriel : ils auraient." },
+    { "prompt": "Quel emploi illustre « Si tu venais, nous serions heureux » ?", "options": ["Un fait hypothétique", "Un ordre", "Une certitude", "Une action passée"], "correct_index": 0, "explanation": "Le conditionnel exprime ici un fait hypothétique." },
+    { "prompt": "Quel emploi illustre « J'aimerais être médecin » ?", "options": ["Un souhait", "Un ordre", "Une obligation", "Une action terminée"], "correct_index": 0, "explanation": "Le conditionnel exprime un souhait, un rêve." },
+    { "prompt": "Quel emploi illustre « Pourriez-vous m'aider ? »", "options": ["Une demande polie", "Un ordre sec", "Une menace", "Une certitude"], "correct_index": 0, "explanation": "Le conditionnel sert à formuler une demande polie." },
+    { "prompt": "Quel emploi illustre « Il serait malade » ?", "options": ["Une information incertaine", "Une certitude absolue", "Un ordre", "Un souvenir"], "correct_index": 0, "explanation": "Le conditionnel marque ici une information non confirmée." },
+    { "prompt": "Quelle différence y a-t-il entre « je serai » et « je serais » ?", "options": ["Le premier est au futur, le second au conditionnel", "Le premier est au conditionnel, le second au futur", "Les deux sont au futur", "Les deux sont au passé"], "correct_index": 0, "explanation": "« Je serai » est le futur ; « je serais » est le conditionnel présent." }
+   ]
+  },
+  {
+   "chapter_id": "55d0d72e-eda4-4094-b36a-ae4a832eea13",
+   "titre": "Le présent du subjonctif",
+   "questions": [
+    { "prompt": "Par quel mot le subjonctif est-il toujours introduit ?", "options": ["que ou qu'", "si", "mais", "donc"], "correct_index": 0, "explanation": "Le subjonctif est toujours introduit par que / qu'." },
+    { "prompt": "Complète : « Je veux que tu … » (verbe venir)", "options": ["viennes", "viens", "viendras", "venais"], "correct_index": 0, "explanation": "Après « je veux que », on emploie le subjonctif : que tu viennes." },
+    { "prompt": "Complète : « J'aimerais qu'il … là. » (verbe être)", "options": ["soit", "est", "sera", "était"], "correct_index": 0, "explanation": "Subjonctif présent du verbe être : qu'il soit." },
+    { "prompt": "Complète : « Je ne crois pas qu'il … raison. » (verbe avoir)", "options": ["ait", "a", "aura", "avait"], "correct_index": 0, "explanation": "Subjonctif présent du verbe avoir : qu'il ait." },
+    { "prompt": "Complète : « que je … » (verbe être, subjonctif)", "options": ["sois", "suis", "serai", "fus"], "correct_index": 0, "explanation": "Subjonctif : que je sois." },
+    { "prompt": "Complète : « que nous … » (verbe être, subjonctif)", "options": ["soyons", "sommes", "serons", "fûmes"], "correct_index": 0, "explanation": "Subjonctif : que nous soyons." },
+    { "prompt": "Complète : « que vous … » (verbe avoir, subjonctif)", "options": ["ayez", "avez", "aurez", "eûtes"], "correct_index": 0, "explanation": "Subjonctif : que vous ayez." },
+    { "prompt": "Complète : « qu'ils … » (verbe avoir, subjonctif)", "options": ["aient", "ont", "auront", "eurent"], "correct_index": 0, "explanation": "Subjonctif : qu'ils aient." },
+    { "prompt": "Quel sentiment exprime « Je crains qu'il ne soit en retard » ?", "options": ["La crainte", "La certitude", "L'ordre", "La joie"], "correct_index": 0, "explanation": "Le subjonctif s'emploie après un verbe exprimant la crainte." },
+    { "prompt": "Quel emploi illustre « Je fais cela pour que vous compreniez » ?", "options": ["Le but", "Le doute", "La certitude", "Le passé"], "correct_index": 0, "explanation": "« Pour que » introduit un but, suivi du subjonctif." }
+   ]
+  },
+  {
+   "chapter_id": "c1c92fc9-c798-4f43-9c42-05ea06a1b6bb",
+   "titre": "Le verbe AVOIR aux quatre temps composés",
+   "questions": [
+    { "prompt": "Complète : « J'… » (avoir, passé composé)", "options": ["ai eu", "avais eu", "eus eu", "aurai eu"], "correct_index": 0, "explanation": "Passé composé du verbe avoir : j'ai eu." },
+    { "prompt": "Complète : « J'… » (avoir, plus-que-parfait)", "options": ["avais eu", "ai eu", "eus eu", "aurai eu"], "correct_index": 0, "explanation": "Plus-que-parfait : j'avais eu." },
+    { "prompt": "Complète : « J'… » (avoir, passé antérieur)", "options": ["eus eu", "ai eu", "avais eu", "aurai eu"], "correct_index": 0, "explanation": "Passé antérieur : j'eus eu." },
+    { "prompt": "Complète : « J'… » (avoir, futur antérieur)", "options": ["aurai eu", "ai eu", "avais eu", "eus eu"], "correct_index": 0, "explanation": "Futur antérieur : j'aurai eu." },
+    { "prompt": "Complète : « Nous … » (avoir, plus-que-parfait)", "options": ["avions eu", "avons eu", "eûmes eu", "aurons eu"], "correct_index": 0, "explanation": "Plus-que-parfait : nous avions eu." },
+    { "prompt": "Complète : « Ils … » (avoir, futur antérieur)", "options": ["auront eu", "ont eu", "avaient eu", "eurent eu"], "correct_index": 0, "explanation": "Futur antérieur : ils auront eu." },
+    { "prompt": "Qu'exprime le plus-que-parfait ?", "options": ["Une action terminée avant une autre action passée", "Une action future", "Un ordre", "Une action en cours"], "correct_index": 0, "explanation": "Le plus-que-parfait marque l'antériorité par rapport à un autre fait passé." },
+    { "prompt": "Qu'exprime le futur antérieur ?", "options": ["Une action terminée avant une autre action future", "Une action passée lointaine", "Un souhait", "Une habitude"], "correct_index": 0, "explanation": "Le futur antérieur marque une action achevée avant une autre action à venir." },
+    { "prompt": "Quel temps composé appartient surtout à la langue littéraire ?", "options": ["Le passé antérieur", "Le passé composé", "Le futur antérieur", "Le plus-que-parfait"], "correct_index": 0, "explanation": "Le passé antérieur s'emploie surtout en langue littéraire." },
+    { "prompt": "De quoi un temps composé est-il formé ?", "options": ["D'un auxiliaire et d'un participe passé", "D'un seul verbe conjugué", "D'un infinitif seul", "D'un adverbe et d'un verbe"], "correct_index": 0, "explanation": "Un temps composé associe un auxiliaire conjugué et le participe passé." }
+   ]
+  }
+ ]
+}

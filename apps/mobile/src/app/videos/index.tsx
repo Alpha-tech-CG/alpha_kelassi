@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image, Linking } from 'react-native'
-import { useRouter } from 'expo-router'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Image, Linking } from 'react-native'
 import { supabase } from '../../lib/supabase'
 import { API_URL } from '../../lib/config'
 import { useLevel } from '../../hooks/useLevel'
 import { colors, radius, cardShadow } from '../../lib/theme'
+import { BackButton, BACK_BUTTON_WIDTH } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Video {
   id: string
@@ -18,7 +19,6 @@ interface Video {
 }
 
 export default function VideosScreen() {
-  const router = useRouter()
   const { level, ready } = useLevel()
   const [videos, setVideos] = useState<Video[]>([])
   const [loading, setLoading] = useState(true)
@@ -41,14 +41,14 @@ export default function VideosScreen() {
     Linking.openURL(v.url).catch(() => null)
   }
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <Text style={styles.title}>Cours vidéo</Text>
-        <View style={{ width: 24 }} />
+        <View style={{ width: BACK_BUTTON_WIDTH }} />
       </View>
 
       {videos.length === 0 ? (

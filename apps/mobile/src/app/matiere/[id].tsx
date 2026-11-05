@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { colors, radius, cardShadow, subjectAccent, subjectIcon } from '../../lib/theme'
+import { BackButton } from '../../components/BackButton'
+import { CognixLoader } from '../../components/CognixLoader'
 
 interface Course { id: string; title: string; subtitle: string | null; is_premium: boolean }
 
@@ -31,14 +33,14 @@ export default function MatiereDetailScreen() {
     load()
   }, [id])
 
-  if (loading) return <ActivityIndicator style={{ flex: 1, backgroundColor: colors.background }} color={colors.primary} />
+  if (loading) return <CognixLoader />
 
   const accent = subjectAccent(name)
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={12}><Text style={styles.back}>←</Text></TouchableOpacity>
+        <BackButton />
         <View style={[styles.iconBox, { backgroundColor: accent + '1A' }]}>
           <Text style={styles.iconText}>{icon || subjectIcon(name)}</Text>
         </View>
@@ -53,6 +55,16 @@ export default function MatiereDetailScreen() {
             <Text style={styles.quizBannerSub}>{quizCount} quiz disponible{quizCount > 1 ? 's' : ''} pour t'entraîner</Text>
           </View>
           <Text style={styles.quizBannerArrow}>›</Text>
+        </TouchableOpacity>
+
+        {/* Parcours structuré (chapitres → cours, résumé, quiz, vidéo) */}
+        <TouchableOpacity style={styles.parcoursBanner} onPress={() => router.push(`/parcours/${id}` as any)}>
+          <Text style={styles.parcoursIcon}>🎓</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.parcoursTitle}>Parcours structuré</Text>
+            <Text style={styles.parcoursSub}>Chapitres • cours, résumé, quiz & vidéo</Text>
+          </View>
+          <Text style={styles.chevron}>›</Text>
         </TouchableOpacity>
 
         <Text style={styles.sectionTitle}>Cours</Text>
@@ -92,6 +104,13 @@ const styles = StyleSheet.create({
   quizBannerTitle: { color: '#fff', fontSize: 16, fontWeight: '800' },
   quizBannerSub: { color: '#ffffffcc', fontSize: 13, marginTop: 3 },
   quizBannerArrow: { color: '#fff', fontSize: 28, fontWeight: '300' },
+  parcoursBanner: {
+    flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.card,
+    borderRadius: radius.lg, padding: 16, borderWidth: 1, borderColor: colors.primary, ...cardShadow,
+  },
+  parcoursIcon: { fontSize: 26 },
+  parcoursTitle: { fontSize: 16, fontWeight: '800', color: colors.text },
+  parcoursSub: { fontSize: 12, color: colors.textMuted, marginTop: 2 },
   sectionTitle: { fontSize: 18, fontWeight: '800', color: colors.text, marginTop: 10, marginBottom: 2 },
   lessonRow: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: radius.md,

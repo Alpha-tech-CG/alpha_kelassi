@@ -1,0 +1,54 @@
+{
+ "matiere": "Problèmes & mesures",
+ "subject_id": "b9a8b15f-8224-42f6-8812-b9264b62474f",
+ "chapitres": [
+  {
+   "chapter_id": "7f2cc25f-e11a-4d4d-8279-969409c072f4",
+   "titre": "Périmètre et aire des figures usuelles",
+   "questions": [
+    { "prompt": "Qu'est-ce que le périmètre d'une figure ?", "options": ["La longueur de son contour", "La surface à l'intérieur", "La longueur du plus grand côté", "Le nombre de ses côtés"], "correct_index": 0, "explanation": "Le périmètre est la longueur du contour de la figure." },
+    { "prompt": "Comment calcule-t-on le périmètre d'un carré ?", "options": ["Côté × côté", "Côté × 4", "Côté + 4", "(Côté × 2) + 2"], "correct_index": 1, "explanation": "Les quatre côtés d'un carré sont égaux : périmètre = côté × 4." },
+    { "prompt": "Quel est le périmètre d'un carré de 9 m de côté ?", "options": ["18 m", "36 m", "81 m", "27 m"], "correct_index": 1, "explanation": "9 × 4 = 36 m." },
+    { "prompt": "Comment calcule-t-on l'aire d'un carré ?", "options": ["Côté × 4", "Côté + côté", "Côté × côté", "Côté ÷ 4"], "correct_index": 2, "explanation": "L'aire d'un carré est côté × côté." },
+    { "prompt": "Quelle est l'aire d'un terrain carré de 25 m de côté ?", "options": ["100 m²", "625 m²", "50 m²", "500 m²"], "correct_index": 1, "explanation": "25 × 25 = 625 m²." },
+    { "prompt": "Comment calcule-t-on le périmètre d'un rectangle ?", "options": ["Longueur × largeur", "(Longueur + largeur) × 2", "Longueur + largeur", "Longueur × 4"], "correct_index": 1, "explanation": "On ajoute la longueur et la largeur, puis on multiplie par 2." },
+    { "prompt": "Un carré a un périmètre de 160 m. Quelle est la longueur de son côté ?", "options": ["16 m", "40 m", "80 m", "640 m"], "correct_index": 1, "explanation": "On divise le périmètre par 4 : 160 ÷ 4 = 40 m." },
+    { "prompt": "Dans quelle unité exprime-t-on une aire ?", "options": ["En mètres (m)", "En mètres carrés (m²)", "En litres (L)", "En kilogrammes (kg)"], "correct_index": 1, "explanation": "L'aire mesure une surface : elle s'exprime en unités carrées, comme le m² ou le cm²." },
+    { "prompt": "Un rectangle mesure 8 m de long et 5 m de large. Quel est son périmètre ?", "options": ["13 m", "26 m", "40 m", "20 m"], "correct_index": 1, "explanation": "(8 + 5) × 2 = 13 × 2 = 26 m." },
+    { "prompt": "Un rectangle mesure 8 m de long et 5 m de large. Quelle est son aire ?", "options": ["26 m²", "40 m²", "13 m²", "80 m²"], "correct_index": 1, "explanation": "Aire d'un rectangle = longueur × largeur : 8 × 5 = 40 m²." }
+   ]
+  },
+  {
+   "chapter_id": "75233764-7861-4a5b-bfea-26eefee0dde8",
+   "titre": "Les mesures de temps",
+   "questions": [
+    { "prompt": "Combien de minutes compte une heure ?", "options": ["30 minutes", "60 minutes", "100 minutes", "24 minutes"], "correct_index": 1, "explanation": "Une heure compte 60 minutes." },
+    { "prompt": "Combien d'heures compte une journée ?", "options": ["12 heures", "24 heures", "60 heures", "7 heures"], "correct_index": 1, "explanation": "Une journée compte 24 heures." },
+    { "prompt": "Un train part à 6h30 et arrive à 11h30. Quelle est la durée du trajet ?", "options": ["4 heures", "5 heures", "5 heures 30", "6 heures"], "correct_index": 1, "explanation": "11h30 − 6h30 = 5 heures." },
+    { "prompt": "Combien de temps s'écoule entre 6h35 et 6h55 ?", "options": ["15 minutes", "20 minutes", "25 minutes", "30 minutes"], "correct_index": 1, "explanation": "55 − 35 = 20 minutes." },
+    { "prompt": "Combien de temps s'écoule entre 8h40 et 8h57 ?", "options": ["7 minutes", "17 minutes", "20 minutes", "23 minutes"], "correct_index": 1, "explanation": "57 − 40 = 17 minutes." },
+    { "prompt": "Quelle est la durée entre 6h30 et 11h00 ?", "options": ["4 heures", "4 heures 30", "5 heures", "5 heures 30"], "correct_index": 1, "explanation": "De 6h30 à 11h00, il s'écoule 4 heures et 30 minutes." },
+    { "prompt": "Combien de jours compte une semaine ?", "options": ["5 jours", "7 jours", "10 jours", "30 jours"], "correct_index": 1, "explanation": "Une semaine compte 7 jours." },
+    { "prompt": "Combien de minutes font 2 heures ?", "options": ["60 minutes", "100 minutes", "120 minutes", "200 minutes"], "correct_index": 2, "explanation": "2 × 60 = 120 minutes." },
+    { "prompt": "Un car part à 7h15 et arrive à 9h45. Quelle est la durée du voyage ?", "options": ["2 heures", "2 heures 30", "3 heures", "1 heure 30"], "correct_index": 1, "explanation": "De 7h15 à 9h15 il y a 2 heures, puis 30 minutes jusqu'à 9h45 : 2h30." },
+    { "prompt": "Quand les minutes ne tombent pas juste, quelle méthode utilise-t-on ?", "options": ["On avance jusqu'à l'heure ronde, puis on ajoute le reste", "On arrondit toujours à l'heure supérieure", "On compte seulement les heures", "On multiplie les minutes par 60"], "correct_index": 0, "explanation": "On va d'abord jusqu'à l'heure ronde, puis on ajoute les minutes restantes." }
+   ]
+  },
+  {
+   "chapter_id": "24473edd-9e52-4f95-8e15-a4e844b1a49a",
+   "titre": "Méthode de résolution d'un problème",
+   "questions": [
+    { "prompt": "Quelle est la première étape de la méthode ?", "options": ["Lire attentivement l'énoncé et repérer la question", "Choisir l'opération", "Poser le calcul", "Écrire la phrase réponse"], "correct_index": 0, "explanation": "On commence par lire attentivement l'énoncé et repérer la question posée." },
+    { "prompt": "Que fait-on juste après avoir lu l'énoncé ?", "options": ["On relève les données utiles", "On calcule tout de suite", "On vérifie le résultat", "On rédige la réponse"], "correct_index": 0, "explanation": "La deuxième étape consiste à relever les données utiles : les nombres et ce qu'ils représentent." },
+    { "prompt": "L'énoncé dit « au total » : quelle opération choisir ?", "options": ["L'addition", "La soustraction", "La multiplication", "La division"], "correct_index": 0, "explanation": "« En tout », « ensemble », « au total » annoncent une addition." },
+    { "prompt": "L'énoncé demande « combien il reste » : quelle opération ?", "options": ["L'addition", "La soustraction", "La multiplication", "La division"], "correct_index": 1, "explanation": "« Il reste », « rendre la monnaie » annoncent une soustraction." },
+    { "prompt": "L'énoncé demande « la part de chacun » après un partage : quelle opération ?", "options": ["L'addition", "La soustraction", "La multiplication", "La division"], "correct_index": 3, "explanation": "« Partager entre », « la part de chacun » annoncent une division." },
+    { "prompt": "L'énoncé donne le prix d'un objet et en demande plusieurs : quelle opération ?", "options": ["L'addition", "La soustraction", "La multiplication", "La division"], "correct_index": 2, "explanation": "« Chacun », « le prix de n objets » annoncent une multiplication." },
+    { "prompt": "Un papa partage 1 200 frs entre ses 4 enfants. Quelle est la part de chacun ?", "options": ["200 frs", "300 frs", "400 frs", "4 800 frs"], "correct_index": 1, "explanation": "1 200 ÷ 4 = 300 frs." },
+    { "prompt": "Comment vérifier que 1 200 ÷ 4 = 300 est juste ?", "options": ["En refaisant la même division", "En calculant 300 × 4, qui doit donner 1 200", "En ajoutant 300 et 4", "En divisant 300 par 4"], "correct_index": 1, "explanation": "On contrôle avec l'opération inverse : 300 × 4 = 1 200." },
+    { "prompt": "Quelle est la dernière étape de la méthode ?", "options": ["Calculer, puis vérifier que la réponse a du sens", "Relire l'énoncé", "Souligner les nombres", "Choisir l'opération"], "correct_index": 0, "explanation": "On calcule, puis on vérifie que la réponse répond bien à la question posée." },
+    { "prompt": "Un élève achète 5 cahiers à 350 frs l'unité. Combien paie-t-il ?", "options": ["355 frs", "1 750 frs", "1 500 frs", "70 frs"], "correct_index": 1, "explanation": "C'est une multiplication : 5 × 350 = 1 750 frs." }
+   ]
+  }
+ ]
+}

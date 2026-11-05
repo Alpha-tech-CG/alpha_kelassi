@@ -1,0 +1,141 @@
+{
+ "matiere": "Mathématiques — chapitres ajoutés avec le cahier CM2",
+ "chapitres": [
+  {
+   "subject_id": "7ad28942-3218-40c8-bbdd-114a14f2a157",
+   "chapter_id": "cd0a8647-319b-4d24-a557-58495581b51c",
+   "titre": "La division — quotient et reste",
+   "questions": [
+    { "prompt": "Que veut dire diviser ?", "options": ["Partager équitablement", "Ajouter plusieurs fois", "Enlever une quantité", "Compter de dix en dix"], "correct_index": 0, "explanation": "Diviser, c'est partager en parts égales." },
+    { "prompt": "Comment appelle-t-on le nombre que l'on partage ?", "options": ["Le dividende", "Le diviseur", "Le quotient", "Le reste"], "correct_index": 0, "explanation": "Dividende ÷ diviseur = quotient, et il peut rester un reste." },
+    { "prompt": "Que peut-on dire du reste d'une division ?", "options": ["Il est toujours plus petit que le diviseur", "Il est toujours plus grand que le diviseur", "Il est toujours égal à zéro", "Il est toujours égal au quotient"], "correct_index": 0, "explanation": "Si le reste était plus grand que le diviseur, on pourrait encore partager." },
+    { "prompt": "Comment vérifier une division ?", "options": ["diviseur × quotient + reste = dividende", "dividende × quotient = diviseur", "quotient + reste = diviseur", "dividende − reste = quotient"], "correct_index": 0, "explanation": "Pour 85 ÷ 4 = 21 reste 1 : 4 × 21 + 1 = 85." },
+    { "prompt": "Combien font 85 ÷ 4 ?", "options": ["21, reste 1", "20, reste 5", "22, reste 3", "21, reste 3"], "correct_index": 0, "explanation": "4 × 21 = 84, et il reste 1." },
+    { "prompt": "Combien font 96 ÷ 3 ?", "options": ["32", "33", "23", "31"], "correct_index": 0, "explanation": "3 × 32 = 96, le reste est nul." },
+    { "prompt": "Combien font 157 ÷ 6 ?", "options": ["26, reste 1", "25, reste 7", "26, reste 5", "27, reste 1"], "correct_index": 0, "explanation": "6 × 26 = 156, il reste 1." },
+    { "prompt": "On partage 84 mangues entre 7 enfants. Combien chacun en reçoit-il ?", "options": ["12 mangues", "11 mangues", "14 mangues", "13 mangues"], "correct_index": 0, "explanation": "84 ÷ 7 = 12." },
+    { "prompt": "135 élèves sont répartis en 5 classes égales. Combien par classe ?", "options": ["27 élèves", "25 élèves", "30 élèves", "26 élèves"], "correct_index": 0, "explanation": "135 ÷ 5 = 27." },
+    { "prompt": "Dans 85 ÷ 4, quel nombre est le diviseur ?", "options": ["4", "85", "21", "1"], "correct_index": 0, "explanation": "Le diviseur est le nombre par lequel on partage : ici 4." }
+   ]
+  },
+  {
+   "subject_id": "7ad28942-3218-40c8-bbdd-114a14f2a157",
+   "chapter_id": "0e9d2bd5-b37c-409b-a8a8-99f17b85dfc9",
+   "titre": "Multiples, diviseurs et divisibilité",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un multiple de 4 ?", "options": ["Un nombre de la table de 4 : 4, 8, 12, 16…", "Un nombre qui divise 4", "Un nombre plus petit que 4", "Un nombre qui finit par 4"], "correct_index": 0, "explanation": "Les multiples de 4 sont 4, 8, 12, 16, 20… : la table de 4 qui continue." },
+    { "prompt": "Qu'est-ce qu'un diviseur de 12 ?", "options": ["Un nombre qui divise 12 sans reste", "Un multiple de 12", "Un nombre plus grand que 12", "Le résultat de 12 ÷ 2"], "correct_index": 0, "explanation": "Les diviseurs de 12 sont 1, 2, 3, 4, 6 et 12." },
+    { "prompt": "Par quel chiffre se termine un nombre pair ?", "options": ["0, 2, 4, 6 ou 8", "1, 3, 5, 7 ou 9", "Seulement 0", "Seulement 2"], "correct_index": 0, "explanation": "Un nombre pair finit par 0, 2, 4, 6 ou 8." },
+    { "prompt": "Quand un nombre est-il divisible par 3 ?", "options": ["Quand la somme de ses chiffres est dans la table de 3", "Quand il est pair", "Quand il finit par 3", "Quand il finit par 0 ou 5"], "correct_index": 0, "explanation": "4 725 : 4+7+2+5 = 18, qui est dans la table de 3." },
+    { "prompt": "Quand un nombre est-il divisible par 5 ?", "options": ["Quand il finit par 0 ou 5", "Quand il est pair", "Quand il finit par 5 seulement", "Quand la somme de ses chiffres fait 5"], "correct_index": 0, "explanation": "235 et 340 sont divisibles par 5." },
+    { "prompt": "Quand un nombre est-il divisible par 10 ?", "options": ["Quand il finit par 0", "Quand il finit par 1", "Quand il est impair", "Quand il finit par 5"], "correct_index": 0, "explanation": "340 finit par 0 : il est divisible par 10." },
+    { "prompt": "5 436 est-il divisible par 9 ?", "options": ["Oui, car 5+4+3+6 = 18", "Non, car il est pair", "Non, car il ne finit pas par 9", "Oui, car il finit par 6"], "correct_index": 0, "explanation": "La somme des chiffres fait 18, qui est dans la table de 9." },
+    { "prompt": "Quels sont les cinq premiers multiples de 7 ?", "options": ["7, 14, 21, 28, 35", "1, 7, 14, 21, 28", "7, 17, 27, 37, 47", "7, 14, 20, 28, 35"], "correct_index": 0, "explanation": "On récite la table de 7." },
+    { "prompt": "Quels sont tous les diviseurs de 20 ?", "options": ["1, 2, 4, 5, 10, 20", "1, 2, 4, 20", "2, 4, 5, 10", "1, 2, 3, 4, 5, 20"], "correct_index": 0, "explanation": "20 ÷ 1, ÷ 2, ÷ 4, ÷ 5, ÷ 10 et ÷ 20 tombent juste ; 20 ÷ 3 laisse un reste." },
+    { "prompt": "345 est-il divisible par 5 ?", "options": ["Oui, il finit par 5", "Non, il est impair", "Non, il finit par 5", "Oui, car 3+4+5 = 12"], "correct_index": 0, "explanation": "Un nombre qui finit par 0 ou 5 est divisible par 5." }
+   ]
+  },
+  {
+   "subject_id": "7ad28942-3218-40c8-bbdd-114a14f2a157",
+   "chapter_id": "5d0a6424-078b-4799-af6f-f93a56779a80",
+   "titre": "Additionner et soustraire des fractions",
+   "questions": [
+    { "prompt": "Comment additionne-t-on deux fractions de même dénominateur ?", "options": ["On additionne les numérateurs et on garde le dénominateur", "On additionne tout, en haut et en bas", "On additionne les dénominateurs", "On multiplie les numérateurs"], "correct_index": 0, "explanation": "2/7 + 3/7 = 5/7 : 2 parts plus 3 parts, toujours sur 7." },
+    { "prompt": "Combien font 2/7 + 3/7 ?", "options": ["5/7", "5/14", "6/7", "1/7"], "correct_index": 0, "explanation": "On ajoute les numérateurs : 2 + 3 = 5." },
+    { "prompt": "Combien font 6/8 − 1/8 ?", "options": ["5/8", "5/16", "7/8", "6/7"], "correct_index": 0, "explanation": "On soustrait les numérateurs : 6 − 1 = 5." },
+    { "prompt": "À quoi est égale la fraction 5/5 ?", "options": ["À 1, c'est-à-dire le tout", "À 0", "À 5", "À 1/5"], "correct_index": 0, "explanation": "Quand le numérateur et le dénominateur sont égaux, la fraction vaut 1." },
+    { "prompt": "Combien font 3/9 + 4/9 ?", "options": ["7/9", "7/18", "12/9", "1/9"], "correct_index": 0, "explanation": "3 + 4 = 7, le dénominateur ne change pas." },
+    { "prompt": "Combien font 7/10 − 2/10 ?", "options": ["5/10", "5/20", "9/10", "2/10"], "correct_index": 0, "explanation": "7 − 2 = 5, sur 10." },
+    { "prompt": "Un fût contient 8/8 d'eau. On en utilise 3/8. Que reste-t-il ?", "options": ["5/8", "3/8", "11/8", "5/16"], "correct_index": 0, "explanation": "8/8 − 3/8 = 5/8." },
+    { "prompt": "Amina mange 1/5 du gâteau et Joël 2/5. Quelle part ont-ils mangée ?", "options": ["3/5", "3/10", "2/5", "1/5"], "correct_index": 0, "explanation": "1/5 + 2/5 = 3/5." },
+    { "prompt": "Après avoir mangé 3/5 d'un gâteau, quelle part reste-t-il ?", "options": ["2/5", "3/5", "5/5", "1/5"], "correct_index": 0, "explanation": "5/5 − 3/5 = 2/5." },
+    { "prompt": "Que devient le dénominateur quand on additionne 1/6 et 4/6 ?", "options": ["Il reste 6", "Il devient 12", "Il devient 5", "Il devient 10"], "correct_index": 0, "explanation": "Le dénominateur ne change pas : 1/6 + 4/6 = 5/6." }
+   ]
+  },
+  {
+   "subject_id": "b9a8b15f-8224-42f6-8812-b9264b62474f",
+   "chapter_id": "bb36a942-6d35-4a90-ad18-17b011d209c4",
+   "titre": "Les longueurs et leurs conversions",
+   "questions": [
+    { "prompt": "Quelle est l'unité principale des longueurs ?", "options": ["Le mètre", "Le litre", "Le gramme", "L'heure"], "correct_index": 0, "explanation": "Le mètre est l'unité de base ; les autres en découlent." },
+    { "prompt": "Dans le tableau de conversion, chaque unité vaut combien de fois celle placée à sa droite ?", "options": ["10 fois", "2 fois", "100 fois", "1 000 fois"], "correct_index": 0, "explanation": "On passe d'une colonne à l'autre en multipliant ou divisant par 10." },
+    { "prompt": "Combien de mètres font 1 kilomètre ?", "options": ["1 000 m", "100 m", "10 m", "10 000 m"], "correct_index": 0, "explanation": "1 km = 1 000 m." },
+    { "prompt": "Combien de centimètres font 1 mètre ?", "options": ["100 cm", "10 cm", "1 000 cm", "50 cm"], "correct_index": 0, "explanation": "1 m = 100 cm." },
+    { "prompt": "Convertis : 3,5 km = … m", "options": ["3 500 m", "350 m", "35 000 m", "305 m"], "correct_index": 0, "explanation": "3 km = 3 000 m et 0,5 km = 500 m." },
+    { "prompt": "Convertis : 450 cm = … m", "options": ["4,5 m", "45 m", "0,45 m", "4,05 m"], "correct_index": 0, "explanation": "450 cm = 4 m et 50 cm, soit 4,5 m." },
+    { "prompt": "Convertis : 7 km = … m", "options": ["7 000 m", "700 m", "70 m", "70 000 m"], "correct_index": 0, "explanation": "On multiplie par 1 000." },
+    { "prompt": "Convertis : 2 m 30 cm = … cm", "options": ["230 cm", "23 cm", "2 030 cm", "2 300 cm"], "correct_index": 0, "explanation": "2 m = 200 cm, plus 30 cm." },
+    { "prompt": "Un trajet fait 2,4 km. Quelle distance parcourt-on en le faisant 5 fois ?", "options": ["12 km", "10 km", "14 km", "7,4 km"], "correct_index": 0, "explanation": "2,4 × 5 = 12 km." },
+    { "prompt": "Quelle unité convient le mieux pour mesurer la longueur d'un crayon ?", "options": ["Le centimètre", "Le kilomètre", "Le mètre", "Le millimètre seulement"], "correct_index": 0, "explanation": "Un crayon se mesure en centimètres." }
+   ]
+  },
+  {
+   "subject_id": "b9a8b15f-8224-42f6-8812-b9264b62474f",
+   "chapter_id": "ad3bcd9f-01f9-4805-996e-e561b06466f8",
+   "titre": "Les masses et les capacités",
+   "questions": [
+    { "prompt": "Combien de grammes font 1 kilogramme ?", "options": ["1 000 g", "100 g", "10 g", "10 000 g"], "correct_index": 0, "explanation": "1 kg = 1 000 g." },
+    { "prompt": "Combien de kilogrammes font 1 tonne ?", "options": ["1 000 kg", "100 kg", "10 kg", "500 kg"], "correct_index": 0, "explanation": "1 tonne = 1 000 kg." },
+    { "prompt": "Combien de centilitres font 1 litre ?", "options": ["100 cl", "10 cl", "1 000 cl", "50 cl"], "correct_index": 0, "explanation": "1 l = 10 dl = 100 cl = 1 000 ml." },
+    { "prompt": "Combien de millilitres font 1 litre ?", "options": ["1 000 ml", "100 ml", "10 ml", "10 000 ml"], "correct_index": 0, "explanation": "1 l = 1 000 ml." },
+    { "prompt": "Convertis : 2 500 g = … kg", "options": ["2,5 kg", "25 kg", "0,25 kg", "250 kg"], "correct_index": 0, "explanation": "2 000 g = 2 kg, plus 500 g = 0,5 kg." },
+    { "prompt": "Convertis : 3 l = … cl", "options": ["300 cl", "30 cl", "3 000 cl", "0,3 cl"], "correct_index": 0, "explanation": "Chaque litre vaut 100 cl." },
+    { "prompt": "1 kg de poisson coûte 3 000 F. Combien coûtent 1,5 kg ?", "options": ["4 500 F", "4 000 F", "3 500 F", "6 000 F"], "correct_index": 0, "explanation": "1,5 kg = 1 kg + 500 g : 3 000 + 1 500 = 4 500 F." },
+    { "prompt": "Combien coûtent 3 kg à 800 F le kilo ?", "options": ["2 400 F", "2 000 F", "1 600 F", "3 800 F"], "correct_index": 0, "explanation": "800 × 3 = 2 400 F." },
+    { "prompt": "Quelle unité utilise-t-on pour mesurer une quantité d'eau ?", "options": ["Le litre", "Le gramme", "Le mètre", "La tonne"], "correct_index": 0, "explanation": "Les capacités se mesurent en litres et en sous-unités." },
+    { "prompt": "Avec quel instrument mesure-t-on une masse ?", "options": ["La balance", "Le mètre ruban", "Le verre doseur", "La montre"], "correct_index": 0, "explanation": "La balance mesure les masses ; le verre doseur mesure les capacités." }
+   ]
+  },
+  {
+   "subject_id": "b9a8b15f-8224-42f6-8812-b9264b62474f",
+   "chapter_id": "bc2c13c5-a142-4c68-893e-e80c3e01b7a4",
+   "titre": "Les figures planes",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un segment ?", "options": ["Un bout de droite avec deux extrémités", "Une ligne sans fin", "Une position notée A", "Un angle droit"], "correct_index": 0, "explanation": "Le segment est limité par deux extrémités ; la droite, elle, est sans fin." },
+    { "prompt": "Qu'est-ce qu'un angle droit ?", "options": ["Un angle comme le coin d'une feuille, de 90°", "Un angle très ouvert", "Un angle de 45°", "Un angle sans sommet"], "correct_index": 0, "explanation": "L'angle droit mesure 90° : c'est le coin d'une feuille." },
+    { "prompt": "Quelles sont les caractéristiques du carré ?", "options": ["4 côtés égaux et 4 angles droits", "4 angles droits et des côtés inégaux", "3 côtés égaux", "Aucun angle droit"], "correct_index": 0, "explanation": "Le carré a quatre côtés égaux et quatre angles droits." },
+    { "prompt": "Quelles sont les caractéristiques du rectangle ?", "options": ["4 angles droits, côtés opposés égaux", "4 côtés tous égaux", "3 côtés", "Aucun angle droit"], "correct_index": 0, "explanation": "Ses côtés opposés sont égaux deux à deux." },
+    { "prompt": "Comment appelle-t-on un triangle qui a deux côtés égaux ?", "options": ["Un triangle isocèle", "Un triangle équilatéral", "Un triangle rectangle", "Un triangle quelconque"], "correct_index": 0, "explanation": "Isocèle : deux côtés égaux ; équilatéral : trois côtés égaux." },
+    { "prompt": "Qu'est-ce qu'un triangle rectangle ?", "options": ["Un triangle qui a un angle droit", "Un triangle à 4 côtés", "Un triangle aux 3 côtés égaux", "Un triangle sans sommet"], "correct_index": 0, "explanation": "Il possède un angle droit." },
+    { "prompt": "Qu'est-ce qui caractérise le cercle ?", "options": ["Tous ses points sont à la même distance du centre", "Il a quatre angles droits", "Il a trois côtés", "Ses côtés opposés sont égaux"], "correct_index": 0, "explanation": "C'est la définition même du cercle." },
+    { "prompt": "Quelle relation lie le diamètre et le rayon ?", "options": ["Diamètre = 2 × rayon", "Diamètre = rayon ÷ 2", "Diamètre = rayon", "Diamètre = 4 × rayon"], "correct_index": 0, "explanation": "Le diamètre traverse le cercle : il vaut deux rayons." },
+    { "prompt": "Quel instrument sert à tracer un cercle ?", "options": ["Le compas", "L'équerre", "La règle", "Le rapporteur"], "correct_index": 0, "explanation": "Le compas trace les cercles ; l'équerre vérifie les angles droits." },
+    { "prompt": "Quel instrument sert à vérifier un angle droit ?", "options": ["L'équerre", "Le compas", "La règle graduée", "Le crayon"], "correct_index": 0, "explanation": "L'équerre possède un angle droit." }
+   ]
+  },
+  {
+   "subject_id": "b9a8b15f-8224-42f6-8812-b9264b62474f",
+   "chapter_id": "f98440f2-f80f-42de-960f-b5b32a489d59",
+   "titre": "Les solides et les volumes",
+   "questions": [
+    { "prompt": "Combien de faces a un cube, et de quelle forme ?", "options": ["6 faces carrées", "4 faces carrées", "6 faces rectangulaires", "8 faces triangulaires"], "correct_index": 0, "explanation": "Le cube a 6 faces carrées, comme un dé." },
+    { "prompt": "Quel solide ressemble à une boîte ou à une brique ?", "options": ["Le pavé droit", "Le cube", "Le cylindre", "La sphère"], "correct_index": 0, "explanation": "Le pavé droit a 6 faces rectangulaires." },
+    { "prompt": "Quel solide ressemble à une boîte de conserve ?", "options": ["Le cylindre", "Le cône", "La pyramide", "Le cube"], "correct_index": 0, "explanation": "La boîte de conserve est un cylindre." },
+    { "prompt": "Quel solide ressemble à un ballon ?", "options": ["La sphère", "Le cône", "Le cylindre", "Le cube"], "correct_index": 0, "explanation": "Le ballon est une sphère." },
+    { "prompt": "Quel solide a la forme d'un chapeau pointu ?", "options": ["Le cône", "La pyramide", "Le cylindre", "La sphère"], "correct_index": 0, "explanation": "Le cône se termine en pointe sur une base ronde." },
+    { "prompt": "Comment calcule-t-on le volume d'un cube d'arête c ?", "options": ["c × c × c", "c × 6", "c × c", "c + c + c"], "correct_index": 0, "explanation": "Le volume du cube est le produit de ses trois dimensions égales." },
+    { "prompt": "Comment calcule-t-on le volume d'un pavé droit ?", "options": ["Longueur × largeur × hauteur", "Longueur × largeur", "(Longueur + largeur) × 2", "Longueur × 6"], "correct_index": 0, "explanation": "Volume = L × l × h." },
+    { "prompt": "Une caisse mesure 5 dm, 4 dm et 3 dm. Quel est son volume ?", "options": ["60 dm³", "12 dm³", "120 dm³", "35 dm³"], "correct_index": 0, "explanation": "5 × 4 × 3 = 60 dm³, soit 60 litres." },
+    { "prompt": "Quel est le volume d'un cube de 6 cm d'arête ?", "options": ["216 cm³", "36 cm³", "18 cm³", "72 cm³"], "correct_index": 0, "explanation": "6 × 6 × 6 = 216 cm³." },
+    { "prompt": "À combien de litres correspond 1 dm³ ?", "options": ["1 litre", "10 litres", "100 litres", "0,1 litre"], "correct_index": 0, "explanation": "1 dm³ = 1 litre : une caisse de 60 dm³ contient 60 litres." }
+   ]
+  },
+  {
+   "subject_id": "b9a8b15f-8224-42f6-8812-b9264b62474f",
+   "chapter_id": "9a868239-ad08-4828-a513-6b435dedce2f",
+   "titre": "La symétrie et le repérage sur quadrillage",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un axe de symétrie ?", "options": ["Une droite qui partage la figure en deux parties qui se superposent", "Le plus grand côté de la figure", "Le centre de la figure", "Une diagonale quelconque"], "correct_index": 0, "explanation": "En pliant le long de l'axe, les deux parties se superposent exactement." },
+    { "prompt": "Combien d'axes de symétrie a un carré ?", "options": ["4", "2", "1", "Aucun"], "correct_index": 0, "explanation": "Le carré en a quatre." },
+    { "prompt": "Combien d'axes de symétrie a un rectangle ?", "options": ["2", "4", "1", "Aucun"], "correct_index": 0, "explanation": "Le rectangle en a deux." },
+    { "prompt": "Combien d'axes de symétrie a un cercle ?", "options": ["Une infinité", "Un seul", "Deux", "Quatre"], "correct_index": 0, "explanation": "Tous les diamètres sont des axes de symétrie." },
+    { "prompt": "Où se trouve le symétrique d'un point par rapport à un axe ?", "options": ["À la même distance de l'axe, de l'autre côté", "Juste à côté du point", "Sur l'axe lui-même", "Deux fois plus loin de l'axe"], "correct_index": 0, "explanation": "La distance à l'axe est conservée." },
+    { "prompt": "Un point est à 3 carreaux à gauche de l'axe. Où est son symétrique ?", "options": ["À 3 carreaux à droite, sur la même ligne", "À 3 carreaux plus haut", "À 6 carreaux à droite", "Sur l'axe"], "correct_index": 0, "explanation": "Même distance, de l'autre côté, sur la même ligne." },
+    { "prompt": "La figure symétrique a-t-elle la même taille que la figure de départ ?", "options": ["Oui, même taille et même forme", "Non, elle est plus petite", "Non, elle est plus grande", "Oui, mais la forme change"], "correct_index": 0, "explanation": "Seul le sens change, comme dans un miroir." },
+    { "prompt": "Sur un quadrillage, que lit-on en premier pour repérer une case ?", "options": ["La colonne, puis la ligne", "La ligne, puis la colonne", "Le centre de la case", "Le nombre de carreaux"], "correct_index": 0, "explanation": "On lit toujours la colonne d'abord : la case B3 est en colonne B, ligne 3." },
+    { "prompt": "Que désigne la case D5 ?", "options": ["La colonne D, ligne 5", "La ligne D, colonne 5", "Le point situé 4 carreaux à droite", "Le centre du quadrillage"], "correct_index": 0, "explanation": "Colonne D puis ligne 5." },
+    { "prompt": "Quelle figure n'a aucun axe de symétrie ?", "options": ["Un triangle quelconque", "Un carré", "Un cercle", "Un triangle équilatéral"], "correct_index": 0, "explanation": "Le triangle quelconque n'en a aucun ; l'équilatéral en a trois." }
+   ]
+  }
+ ]
+}

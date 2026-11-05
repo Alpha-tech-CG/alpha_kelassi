@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
+import { parseLevelParam } from '@/lib/query-validation'
 
 /** GET /api/planning/exams?level= — dates d'examen officielles (à venir) */
 export async function GET(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
-  const level = req.nextUrl.searchParams.get('level')
+  const level = parseLevelParam(req.nextUrl.searchParams.get('level'))
+  if (level === undefined) {
+    return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Paramètre level invalide.' } }, { status: 400 })
+  }
   const today = new Date().toISOString().slice(0, 10)
 
   let query = supabase
@@ -18,6 +22,9 @@ export async function GET(req: NextRequest) {
   if (level) query = query.eq('level', level)
 
   const { data, error } = await query.limit(20)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/planning/exams]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: data ?? [] })
 }

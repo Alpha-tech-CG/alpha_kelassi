@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-type Level = 'bepc' | 'bac_a' | 'bac_c' | 'bac_d' | null
+// Valeur de l'enum `study_level` : cepe, bepc, bac_a/c/d et les séries techniques.
+type Level = string | null
+type Track = 'generale' | 'technique' | 'professionnel' | null
 
 /**
- * Niveau d'examen choisi par l'élève à l'inscription (users.study_level_pref).
- * Sert à scoper TOUT le contenu : un élève Bac C ne voit que du Bac C.
+ * Profil scolaire choisi à l'inscription :
+ *  - level = parcours/examen (users.study_level_pref)
+ *  - track = filière (users.track_type)
+ * Sert à scoper TOUT le contenu : un élève ne voit que son parcours ET sa filière.
+ * `isAdmin` permet aux écrans de proposer la consultation des autres classes.
  */
 export function useLevel() {
   const [level, setLevel] = useState<Level>(null)
+  const [track, setTrack] = useState<Track>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -18,16 +25,19 @@ export function useLevel() {
       if (!user) { if (active) setReady(true); return }
       const { data } = await supabase
         .from('users')
-        .select('study_level_pref')
+        .select('study_level_pref, track_type, role')
         .eq('id', user.id)
         .single()
       if (active) {
-        setLevel(((data as { study_level_pref?: Level })?.study_level_pref ?? null))
+        const row = data as { study_level_pref?: Level; track_type?: Track; role?: string } | null
+        setLevel(row?.study_level_pref ?? null)
+        setTrack(row?.track_type ?? null)
+        setIsAdmin(row?.role === 'admin')
         setReady(true)
       }
     })()
     return () => { active = false }
   }, [])
 
-  return { level, ready }
+  return { level, track, isAdmin, ready }
 }

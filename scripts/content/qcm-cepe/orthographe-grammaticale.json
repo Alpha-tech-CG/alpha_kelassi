@@ -1,0 +1,134 @@
+{
+ "matiere": "Orthographe grammaticale",
+ "subject_id": "f4cb6076-363a-4ef5-929f-1d84bf95dc4e",
+ "chapitres": [
+  {
+   "chapter_id": "9266f0b1-779c-4486-be27-13e48a173e65",
+   "titre": "Son / Sont",
+   "questions": [
+    { "prompt": "Que signifie « sont » ?", "options": ["Le verbe être conjugué à la 3e personne du pluriel", "Un déterminant possessif", "Une préposition", "Un pronom réfléchi"], "correct_index": 0, "explanation": "« Sont » est le verbe être au présent, 3e personne du pluriel." },
+    { "prompt": "Par quel mot peut-on remplacer « sont » pour le reconnaître ?", "options": ["étaient", "mon", "ton", "avaient"], "correct_index": 0, "explanation": "Si on peut remplacer par « étaient », on écrit « sont »." },
+    { "prompt": "Par quel mot peut-on remplacer « son » pour le reconnaître ?", "options": ["mon ou ton", "étaient", "avaient", "et puis"], "correct_index": 0, "explanation": "« Son » est un déterminant possessif : on peut le remplacer par mon ou ton." },
+    { "prompt": "Complète : « Les élèves … attentifs. »", "options": ["sont", "son", "sons", "sonts"], "correct_index": 0, "explanation": "Les élèves étaient attentifs : on écrit « sont »." },
+    { "prompt": "Complète : « Il range … sac. »", "options": ["son", "sont", "sons", "cent"], "correct_index": 0, "explanation": "Il range mon sac : on écrit « son »." },
+    { "prompt": "Complète : « Ils … arrivés en retard. »", "options": ["sont", "son", "sons", "sonts"], "correct_index": 0, "explanation": "Ils étaient arrivés : on écrit « sont »." },
+    { "prompt": "Complète : « Il prend … cahier. »", "options": ["son", "sont", "sons", "ont"], "correct_index": 0, "explanation": "Il prend ton cahier : on écrit « son »." },
+    { "prompt": "Quelle phrase est correctement écrite ?", "options": ["Les enfants sont fatigués.", "Les enfants son fatigués.", "Les enfant sont fatigué.", "Les enfants sonts fatigués."], "correct_index": 0, "explanation": "« Les enfants étaient fatigués » fonctionne : c'est bien « sont »." },
+    { "prompt": "À quelle personne « sont » est-il conjugué ?", "options": ["3e personne du pluriel", "1re personne du singulier", "2e personne du pluriel", "3e personne du singulier"], "correct_index": 0, "explanation": "« Ils sont », « elles sont » : 3e personne du pluriel." },
+    { "prompt": "Quelle est la nature du mot « son » dans « son livre » ?", "options": ["Un déterminant possessif", "Un verbe", "Une conjonction", "Un adverbe"], "correct_index": 0, "explanation": "« Son » accompagne le nom : c'est un déterminant (adjectif) possessif." }
+   ]
+  },
+  {
+   "chapter_id": "638f70a1-a60b-4796-88be-eaf8adc35f89",
+   "titre": "On / Ont",
+   "questions": [
+    { "prompt": "Que signifie « ont » ?", "options": ["Le verbe avoir à la 3e personne du pluriel", "Un pronom sujet", "Une préposition", "Un déterminant"], "correct_index": 0, "explanation": "« Ont » est le verbe avoir conjugué : ils ont, elles ont." },
+    { "prompt": "Par quel mot peut-on remplacer « ont » pour le reconnaître ?", "options": ["avaient", "étaient", "il", "mon"], "correct_index": 0, "explanation": "Si « avaient » fonctionne, on écrit « ont »." },
+    { "prompt": "Par quel mot peut-on remplacer « on » pour le reconnaître ?", "options": ["il ou elle", "avaient", "étaient", "et puis"], "correct_index": 0, "explanation": "« On » est un pronom personnel sujet : il se remplace par il ou elle." },
+    { "prompt": "Complète : « … a sonné à la porte. »", "options": ["On", "Ont", "Ons", "Hon"], "correct_index": 0, "explanation": "Il a sonné à la porte : on écrit « On »." },
+    { "prompt": "Complète : « Ils … faim. »", "options": ["ont", "on", "onts", "ons"], "correct_index": 0, "explanation": "Ils avaient faim : on écrit « ont »." },
+    { "prompt": "Complète : « … mange à midi. »", "options": ["On", "Ont", "Hon", "Ons"], "correct_index": 0, "explanation": "Il mange à midi : on écrit « On »." },
+    { "prompt": "Complète : « Elles … chanté. »", "options": ["ont", "on", "onts", "ons"], "correct_index": 0, "explanation": "Elles avaient chanté : on écrit « ont »." },
+    { "prompt": "Complète : « … part demain. »", "options": ["On", "Ont", "Ons", "Honts"], "correct_index": 0, "explanation": "Il part demain : on écrit « On »." },
+    { "prompt": "Quelle phrase est correctement écrite ?", "options": ["Les élèves ont réussi.", "Les élèves on réussi.", "Les élèves ons réussi.", "Les élève ont réussit."], "correct_index": 0, "explanation": "Les élèves avaient réussi : c'est bien « ont »." },
+    { "prompt": "Quelle est la nature du mot « on » ?", "options": ["Un pronom personnel sujet", "Un verbe", "Un déterminant possessif", "Une conjonction"], "correct_index": 0, "explanation": "« On » est un pronom personnel sujet de la 3e personne du singulier." }
+   ]
+  },
+  {
+   "chapter_id": "14a129ff-a926-4a18-8bbb-d4a2b5847091",
+   "titre": "Se / Ce",
+   "questions": [
+    { "prompt": "Quelle est la nature de « ce » devant un nom ?", "options": ["Un déterminant démonstratif", "Un pronom réfléchi", "Un verbe", "Une préposition"], "correct_index": 0, "explanation": "« Ce livre » : ce est un déterminant démonstratif." },
+    { "prompt": "Par quels mots peut-on remplacer « ce » pour le reconnaître ?", "options": ["cet ou cette", "me ou te", "étaient", "avaient"], "correct_index": 0, "explanation": "Si « cet » ou « cette » convient, on écrit « ce »." },
+    { "prompt": "Par quels mots peut-on remplacer « se » pour le reconnaître ?", "options": ["me ou te", "cet ou cette", "il ou elle", "et puis"], "correct_index": 0, "explanation": "« Se » est un pronom réfléchi : il se remplace par me ou te." },
+    { "prompt": "Où se place toujours « se » ?", "options": ["Devant un verbe", "Devant un nom", "À la fin de la phrase", "Après un adjectif"], "correct_index": 0, "explanation": "Le pronom réfléchi « se » se place toujours devant un verbe." },
+    { "prompt": "Complète : « … livre est intéressant. »", "options": ["Ce", "Se", "Ces", "Ses"], "correct_index": 0, "explanation": "Cet ouvrage est intéressant : on écrit « Ce »." },
+    { "prompt": "Complète : « Il … lave les mains. »", "options": ["se", "ce", "ses", "c'est"], "correct_index": 0, "explanation": "Il me lave les mains : on écrit « se »." },
+    { "prompt": "Complète : « … sont mes amis. »", "options": ["Ce", "Se", "Ses", "Ces"], "correct_index": 0, "explanation": "« Ce sont mes amis » : ce est ici un pronom démonstratif." },
+    { "prompt": "Complète : « … chien est méchant. »", "options": ["Ce", "Se", "Ses", "C'est"], "correct_index": 0, "explanation": "Cet animal est méchant : on écrit « Ce »." },
+    { "prompt": "Complète : « Elle … lève tôt. »", "options": ["se", "ce", "ces", "ses"], "correct_index": 0, "explanation": "Elle me lève tôt : le pronom réfléchi s'écrit « se »." },
+    { "prompt": "Complète : « … matin, il fait froid. »", "options": ["Ce", "Se", "Ses", "Ces"], "correct_index": 0, "explanation": "Cette matinée : le démonstratif s'écrit « Ce »." }
+   ]
+  },
+  {
+   "chapter_id": "7d84bdcc-3c99-4e84-ad54-32fd205a322e",
+   "titre": "A / À",
+   "questions": [
+    { "prompt": "Que représente « a » sans accent ?", "options": ["Le verbe avoir conjugué", "Une préposition", "Un déterminant", "Un adverbe"], "correct_index": 0, "explanation": "« A » sans accent est le verbe avoir à la 3e personne du singulier." },
+    { "prompt": "Que représente « à » avec accent ?", "options": ["Une préposition", "Le verbe avoir", "Le verbe être", "Un pronom"], "correct_index": 0, "explanation": "« À » avec accent est une préposition." },
+    { "prompt": "Quel test permet de reconnaître « a » sans accent ?", "options": ["On peut le remplacer par « avait »", "On peut le remplacer par « étaient »", "On peut le remplacer par « et puis »", "On peut le supprimer"], "correct_index": 0, "explanation": "Si « avait » fonctionne, on écrit « a » sans accent." },
+    { "prompt": "Complète : « Il … peur. »", "options": ["a", "à", "as", "ah"], "correct_index": 0, "explanation": "Il avait peur : on écrit « a » sans accent." },
+    { "prompt": "Complète : « Elle va … Brazzaville. »", "options": ["à", "a", "as", "ah"], "correct_index": 0, "explanation": "« Elle va avait Brazzaville » est impossible : on écrit « à »." },
+    { "prompt": "Complète : « Mon frère … réussi son examen. »", "options": ["a", "à", "as", "ha"], "correct_index": 0, "explanation": "Mon frère avait réussi : on écrit « a »." },
+    { "prompt": "Complète : « Il … mangé. »", "options": ["a", "à", "as", "ah"], "correct_index": 0, "explanation": "Il avait mangé : « a » sans accent." },
+    { "prompt": "Complète : « Elle … un livre … lire. »", "options": ["a … à", "à … a", "a … a", "à … à"], "correct_index": 0, "explanation": "Elle avait un livre (a), et « à lire » est une préposition." },
+    { "prompt": "Quelle phrase est correctement écrite ?", "options": ["Il a donné un cahier à son ami.", "Il à donné un cahier a son ami.", "Il a donné un cahier a son ami.", "Il à donné un cahier à son ami."], "correct_index": 0, "explanation": "Il avait donné (a) un cahier à son ami (préposition)." },
+    { "prompt": "Pourquoi ne peut-on pas remplacer « à » par « avait » ?", "options": ["Parce que ce n'est pas un verbe", "Parce qu'il est au pluriel", "Parce qu'il est féminin", "Parce qu'il se place en fin de phrase"], "correct_index": 0, "explanation": "« À » est une préposition, pas une forme du verbe avoir." }
+   ]
+  },
+  {
+   "chapter_id": "31af1cce-41b4-49b5-8790-33cd5d08e94b",
+   "titre": "Et / Est",
+   "questions": [
+    { "prompt": "Que représente « est » ?", "options": ["Le verbe être conjugué", "Une conjonction", "Un déterminant", "Une préposition"], "correct_index": 0, "explanation": "« Est » est le verbe être à la 3e personne du singulier." },
+    { "prompt": "Que représente « et » ?", "options": ["Une conjonction de coordination", "Le verbe être", "Le verbe avoir", "Un pronom"], "correct_index": 0, "explanation": "« Et » relie deux mots ou deux groupes de mots." },
+    { "prompt": "Par quel mot peut-on remplacer « est » ?", "options": ["était", "et puis", "avait", "mon"], "correct_index": 0, "explanation": "Si « était » fonctionne, on écrit « est »." },
+    { "prompt": "Par quels mots peut-on remplacer « et » ?", "options": ["et puis", "était", "avait", "cela"], "correct_index": 0, "explanation": "Si « et puis » fonctionne, on écrit « et »." },
+    { "prompt": "Complète : « Il … grand. »", "options": ["est", "et", "ait", "ais"], "correct_index": 0, "explanation": "Il était grand : on écrit « est »." },
+    { "prompt": "Complète : « Il mange … boit. »", "options": ["et", "est", "ait", "ais"], "correct_index": 0, "explanation": "Il mange et puis boit : on écrit « et »." },
+    { "prompt": "Complète : « Mon père … ma mère travaillent. »", "options": ["et", "est", "ait", "es"], "correct_index": 0, "explanation": "Mon père et puis ma mère : conjonction « et »." },
+    { "prompt": "Complète : « La route … longue. »", "options": ["est", "et", "ait", "es"], "correct_index": 0, "explanation": "La route était longue : on écrit « est »." },
+    { "prompt": "Quelle phrase est correctement écrite ?", "options": ["Le cahier est propre et neuf.", "Le cahier et propre est neuf.", "Le cahier est propre est neuf.", "Le cahier et propre et neuf."], "correct_index": 0, "explanation": "Le cahier était propre (est) et puis neuf (et)." },
+    { "prompt": "À quoi sert une conjonction de coordination comme « et » ?", "options": ["À relier deux éléments", "À conjuguer un verbe", "À poser une question", "À marquer le pluriel"], "correct_index": 0, "explanation": "« Et » relie deux mots, deux groupes ou deux propositions." }
+   ]
+  },
+  {
+   "chapter_id": "1172b8fe-5220-4f82-98b2-b9a1667684e5",
+   "titre": "L'infinitif après un verbe conjugué",
+   "questions": [
+    { "prompt": "Quand deux verbes se suivent, à quelle forme se met le deuxième ?", "options": ["À l'infinitif", "Au participe passé", "À l'imparfait", "Au futur"], "correct_index": 0, "explanation": "Le second verbe se met à l'infinitif : « Je veux aller »." },
+    { "prompt": "Complète : « Il veut … »", "options": ["partir", "parti", "partie", "partis"], "correct_index": 0, "explanation": "Après le verbe conjugué « veut », on emploie l'infinitif : partir." },
+    { "prompt": "Complète : « Nous devons … notre travail. »", "options": ["finir", "fini", "finis", "finie"], "correct_index": 0, "explanation": "Après « devons », l'infinitif : finir." },
+    { "prompt": "Complète : « Elle aime … »", "options": ["danser", "dansé", "dansée", "dansés"], "correct_index": 0, "explanation": "Après « aime », on emploie l'infinitif : danser." },
+    { "prompt": "Quelle phrase est correcte ?", "options": ["Je veux aller au marché.", "Je veux allé au marché.", "Je veux allait au marché.", "Je veux allée au marché."], "correct_index": 0, "explanation": "Après un verbe conjugué, c'est l'infinitif « aller »." },
+    { "prompt": "Dans « Les élèves doivent finir leurs devoirs », quel mot est à l'infinitif ?", "options": ["finir", "doivent", "élèves", "devoirs"], "correct_index": 0, "explanation": "« Doivent » est conjugué, « finir » est à l'infinitif." },
+    { "prompt": "Quel test aide à choisir l'infinitif en -er ?", "options": ["Remplacer par un verbe comme « finir »", "Remplacer par « était »", "Remplacer par « avait »", "Mettre la phrase au pluriel"], "correct_index": 0, "explanation": "Si « finir » convient à l'oreille, on écrit l'infinitif en -er, pas le participe en -é." },
+    { "prompt": "Quelle phrase est fautive ?", "options": ["Il va mangé.", "Il va manger.", "Il veut manger.", "Il aime manger."], "correct_index": 0, "explanation": "Après « va », il faut l'infinitif : « Il va manger »." },
+    { "prompt": "Complète : « Tu peux … la porte. »", "options": ["fermer", "fermé", "fermée", "fermés"], "correct_index": 0, "explanation": "Après « peux », on emploie l'infinitif : fermer." },
+    { "prompt": "Complète : « Ils espèrent … le concours. »", "options": ["réussir", "réussi", "réussis", "réussie"], "correct_index": 0, "explanation": "Après « espèrent », on emploie l'infinitif : réussir." }
+   ]
+  },
+  {
+   "chapter_id": "32780134-48df-411a-a35f-a086d97f5e24",
+   "titre": "Le participe passé avec AVOIR",
+   "questions": [
+    { "prompt": "Avec l'auxiliaire AVOIR, le participe passé s'accorde-t-il avec le sujet ?", "options": ["Non, jamais", "Oui, toujours", "Seulement au féminin", "Seulement au pluriel"], "correct_index": 0, "explanation": "Avec AVOIR, le participe passé ne s'accorde jamais avec le sujet." },
+    { "prompt": "Complète : « Elle a … » (verbe marcher)", "options": ["marché", "marchée", "marchés", "marchées"], "correct_index": 0, "explanation": "Avec avoir, le participe reste invariable : elle a marché." },
+    { "prompt": "Complète : « Ils ont … le travail. » (verbe finir)", "options": ["fini", "finis", "finie", "finies"], "correct_index": 0, "explanation": "Avec avoir, pas d'accord avec le sujet : ils ont fini." },
+    { "prompt": "Complète : « Nous avons … » (verbe chanter)", "options": ["chanté", "chantés", "chantée", "chantées"], "correct_index": 0, "explanation": "Nous avons chanté : le participe reste invariable." },
+    { "prompt": "Complète : « Elles ont … » (verbe manger)", "options": ["mangé", "mangée", "mangés", "mangées"], "correct_index": 0, "explanation": "Avec avoir, même avec un sujet féminin pluriel, le participe ne change pas." },
+    { "prompt": "Quelle phrase est correcte ?", "options": ["Les filles ont joué.", "Les filles ont jouées.", "Les filles ont jouée.", "Les filles ont joués."], "correct_index": 0, "explanation": "Avec avoir, le participe ne regarde pas le sujet : joué reste invariable." },
+    { "prompt": "Quelle astuce retenir pour l'accord avec AVOIR ?", "options": ["Le participe passé ne regarde pas le sujet", "Le participe passé suit toujours le sujet", "On ajoute un s au pluriel", "On ajoute un e au féminin"], "correct_index": 0, "explanation": "Avec AVOIR, le participe passé ne regarde pas le sujet." },
+    { "prompt": "Complète : « Il a … son cahier. » (verbe ranger)", "options": ["rangé", "rangée", "rangés", "ranger"], "correct_index": 0, "explanation": "Avec avoir, on écrit le participe passé invariable : rangé." },
+    { "prompt": "Quelle phrase est fautive ?", "options": ["Nous avons chantés.", "Nous avons chanté.", "Ils ont mangé.", "Elle a marché."], "correct_index": 0, "explanation": "« Nous avons chantés » est faux : avec avoir, le participe reste invariable." },
+    { "prompt": "Quel auxiliaire est employé dans « ils ont fini » ?", "options": ["Avoir", "Être", "Aller", "Faire"], "correct_index": 0, "explanation": "« Ont » est le verbe avoir : c'est l'auxiliaire avoir." }
+   ]
+  },
+  {
+   "chapter_id": "fdc0e981-c95e-479a-8785-7e30a9523d6f",
+   "titre": "Le participe passé avec ÊTRE",
+   "questions": [
+    { "prompt": "Avec l'auxiliaire ÊTRE, avec quoi le participe passé s'accorde-t-il ?", "options": ["Avec le sujet, en genre et en nombre", "Avec le complément", "Avec rien du tout", "Avec l'auxiliaire"], "correct_index": 0, "explanation": "Avec ÊTRE, le participe passé s'accorde en genre et en nombre avec le sujet." },
+    { "prompt": "Complète : « Elle est … » (verbe partir)", "options": ["partie", "parti", "partis", "parties"], "correct_index": 0, "explanation": "Sujet féminin singulier : on ajoute un e, partie." },
+    { "prompt": "Complète : « Ils sont … » (verbe partir)", "options": ["partis", "parti", "partie", "parties"], "correct_index": 0, "explanation": "Sujet masculin pluriel : on ajoute un s, partis." },
+    { "prompt": "Complète : « Elles sont … » (verbe partir)", "options": ["parties", "partis", "partie", "parti"], "correct_index": 0, "explanation": "Sujet féminin pluriel : on ajoute es, parties." },
+    { "prompt": "Complète : « Il est … » (verbe arriver)", "options": ["arrivé", "arrivée", "arrivés", "arrivées"], "correct_index": 0, "explanation": "Sujet masculin singulier : pas de marque, arrivé." },
+    { "prompt": "Complète : « Les feuilles sont … » (verbe tomber)", "options": ["tombées", "tombé", "tombés", "tombée"], "correct_index": 0, "explanation": "« Feuilles » est féminin pluriel : tombées." },
+    { "prompt": "Complète : « La petite fille est … voir sa grand-mère. » (verbe aller)", "options": ["allée", "allé", "allés", "allées"], "correct_index": 0, "explanation": "« Fille » est féminin singulier : allée." },
+    { "prompt": "Complète : « Les garçons sont … » (verbe venir)", "options": ["venus", "venu", "venue", "venues"], "correct_index": 0, "explanation": "« Garçons » est masculin pluriel : venus." },
+    { "prompt": "Quelle phrase est correcte ?", "options": ["Les filles sont tombées.", "Les filles sont tombé.", "Les filles sont tombés.", "Les filles sont tombée."], "correct_index": 0, "explanation": "Sujet féminin pluriel : le participe prend es." },
+    { "prompt": "Quelle marque ajoute-t-on au participe passé quand le sujet est féminin singulier ?", "options": ["Un e", "Un s", "Un es", "Aucune"], "correct_index": 0, "explanation": "Féminin singulier : on ajoute un e (elle est partie)." }
+   ]
+  }
+ ]
+}

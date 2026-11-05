@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
+import { getEntitlements, planRequired, planRequiredFromDbError } from '@/lib/subscription/server'
 
 /** GET /api/reminders — préférences de rappel de l'élève */
 export async function GET() {
@@ -14,7 +15,13 @@ export async function GET() {
     .eq('id', user.id)
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+
+    console.error('[/api/reminders]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data })
 }
 
@@ -33,6 +40,12 @@ export async function PATCH(req: NextRequest) {
   try { body = schema.parse(await req.json()) }
   catch { return NextResponse.json({ error: 'Corps invalide' }, { status: 400 }) }
 
+  // Activer les rappels WhatsApp est une fonction Starter (désactiver reste libre).
+  if (body.whatsapp_opt_in === true) {
+    const ent = await getEntitlements(user.id)
+    if (!ent.can('whatsapp_reminders')) return planRequired('whatsapp_reminders')
+  }
+
   const { data, error } = await supabase
     .from('users')
     .update(body)
@@ -40,6 +53,14 @@ export async function PATCH(req: NextRequest) {
     .select('whatsapp_opt_in, reminder_hour')
     .single()
 
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    const locked = planRequiredFromDbError(error.message)
+    if (locked) return locked
+
+    console.error('[/api/reminders]', error)
+
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+
+  }
   return NextResponse.json({ data })
 }
