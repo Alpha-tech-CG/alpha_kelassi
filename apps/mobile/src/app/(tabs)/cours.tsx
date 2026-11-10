@@ -137,7 +137,7 @@ export default function MatieresScreen() {
               <TouchableOpacity
                 activeOpacity={0.85}
                 style={styles.card}
-                onPress={() => router.push((s.level === 'cepe' ? `/progression?subject=${s.id}&level=${s.level}` : `/parcours/${s.id}`) as any)}
+                onPress={() => router.push((s.hasChildren ? `/parcours/domaines/${s.id}` : `/parcours/${s.id}`) as any)}
               >
                 <ImageBackground source={subjectArtwork(s.name)} style={styles.cardImage} imageStyle={styles.cardImageInner}>
                   <View style={styles.cardImageOverlay} />

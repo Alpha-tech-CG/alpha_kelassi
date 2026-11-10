@@ -1,0 +1,62 @@
+{
+  "created_at": "2026-11-05T23:53:23.743Z",
+  "note": "État AVANT rédaction contenu Français 3e",
+  "lessons": [
+    {
+      "id": "4d7da735-c2f8-410f-9591-0fe9a9c6c876",
+      "chapter_id": "420663ff-3104-4c1d-930a-242f2cc2ab60",
+      "type": "cours",
+      "title": "Expression écrite",
+      "content": "### Au programme de ce chapitre\n\n- Le récit (situation initiale, événement, résolution)\n- La description (lieu, personnage, objet)\n- La lettre (familiale, administrative)\n- Le texte argumentatif (thèse, arguments, exemples)\n- Le résumé de texte",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:55.436801+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-18T01:04:14.082349+00:00"
+    },
+    {
+      "id": "fc823839-e475-4d44-a198-a1ec827b8064",
+      "chapter_id": "794e8438-219b-4296-87f7-4b694fd7b59e",
+      "type": "cours",
+      "title": "Grammaire : phrase complexe",
+      "content": "### Au programme de ce chapitre\n\n- Propositions indépendantes, juxtaposées, coordonnées\n- Subordonnées relatives (fonctions, antécédent)\n- Subordonnées conjonctives (complétives, circonstancielles)\n- Discours rapporté (direct/indirect)",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:55.026835+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-18T01:04:13.906089+00:00"
+    },
+    {
+      "id": "ba9dd0af-ef10-4a53-b6fa-95e52672770f",
+      "chapter_id": "88a2171e-ec71-41eb-bcfe-df41321f51d8",
+      "type": "cours",
+      "title": "Orthographe et vocabulaire",
+      "content": "### Au programme de ce chapitre\n\n- Accords (sujet-verbe, participe passé, adjectif)\n- Homophones grammaticaux (a/à, ce/se, etc.)\n- Enrichissement du vocabulaire (champs lexicaux, synonymes, antonymes)\n- Formation des mots (préfixes, suffixes)",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:55.305298+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-18T01:04:14.021844+00:00"
+    },
+    {
+      "id": "3659e72c-7073-4955-90ec-43cf46e4e748",
+      "chapter_id": "e47b8c17-ccdd-4142-9712-8294ac715d1b",
+      "type": "cours",
+      "title": "Conjugaison : temps et modes",
+      "content": "### Au programme de ce chapitre\n\n- Révision des temps du récit (imparfait, passé simple, passé composé)\n- Subjonctif présent (formation, emplois)\n- Conditionnel présent (souhait, hypothèse)\n- Temps composés (plus-que-parfait, futur antérieur, passé antérieur)\n- Concordance des temps",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:55.166084+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-18T01:04:13.967544+00:00"
+    }
+  ]
+}
