@@ -1,0 +1,107 @@
+{
+  "created_at": "2026-11-10T20:28:01.363Z",
+  "chapters": [
+    {
+      "id": "e3c0e7c2-3a30-4721-9293-2f6211d52898",
+      "subject_id": "d31aede0-7812-464a-bd13-e51a130debc3",
+      "series_id": null,
+      "title": "Le Pleurer-Rire d'Henri Lopes",
+      "order_index": 1,
+      "description": "Œuvre au programme : utilité et inutilité du roman, dissertation corrigée sur le titre.",
+      "created_at": "2026-10-19T14:12:54.530284+00:00",
+      "source_chapter_id": null,
+      "updated_at": "2026-10-19T14:12:54.530284+00:00"
+    },
+    {
+      "id": "f3b163f5-60bb-40eb-923f-bea5c066725d",
+      "subject_id": "08a44176-47f6-45af-aa4c-f69dd6c50847",
+      "series_id": null,
+      "title": "Le Pleurer-Rire d'Henri Lopes",
+      "order_index": 0,
+      "description": "Œuvre au programme : utilité et inutilité du roman, dissertation corrigée sur le titre.",
+      "created_at": "2026-10-19T14:12:55.381017+00:00",
+      "source_chapter_id": "e3c0e7c2-3a30-4721-9293-2f6211d52898",
+      "updated_at": "2026-10-19T14:12:55.558445+00:00"
+    },
+    {
+      "id": "dd1dc155-c760-4f6d-897e-7e76108c5046",
+      "subject_id": "d31aede0-7812-464a-bd13-e51a130debc3",
+      "series_id": null,
+      "title": "Méthodologie et sujets de type bac (Français C-D)",
+      "order_index": 2,
+      "description": "Les fonctions de la littérature ; dissertations et études de texte argumentatif corrigées (devoirs dirigés et bac blanc zonal 2022).",
+      "created_at": "2026-10-19T14:12:55.885911+00:00",
+      "source_chapter_id": null,
+      "updated_at": "2026-10-19T14:12:55.885911+00:00"
+    },
+    {
+      "id": "7696e355-e0da-4fdd-ab1d-3e801a7d0a8b",
+      "subject_id": "08a44176-47f6-45af-aa4c-f69dd6c50847",
+      "series_id": null,
+      "title": "Méthodologie et sujets de type bac (Français C-D)",
+      "order_index": 1,
+      "description": "Les fonctions de la littérature ; dissertations et études de texte argumentatif corrigées (devoirs dirigés et bac blanc zonal 2022).",
+      "created_at": "2026-10-19T14:12:56.92754+00:00",
+      "source_chapter_id": "dd1dc155-c760-4f6d-897e-7e76108c5046",
+      "updated_at": "2026-10-19T14:12:57.006239+00:00"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "9c34c486-0057-4206-93d3-cf94cca291e7",
+      "chapter_id": "7696e355-e0da-4fdd-ab1d-3e801a7d0a8b",
+      "type": "cours",
+      "title": "Les fonctions de la littérature",
+      "content": "*Fiche de cours.*\n\n### I. Définition de la littérature\nLa littérature est l'ensemble des œuvres **orales ou écrites** auxquelles on reconnaît une **finalité esthétique**. Elle est la vision du monde propre à un écrivain ou à un groupe d'écrivains. Elle remplit plusieurs fonctions.\n\n### II. Les fonctions de la littérature\nLa littérature (le roman, le théâtre, la poésie) présente de multiples avantages ; d'où l'étude de ses finalités.\n\n**A. La fonction d'évasion (divertissement)**\nLa première fonction de la littérature est le **divertissement**. Elle fait s'évader le lecteur à travers les histoires racontées. Par la lecture, l'homme se détend, se décrispe ; cette détente favorise son équilibre mental et son bien-être. La littérature libère aussi l'être humain de ses obsessions. Pour Guy Des Cars, le romancier n'a pas à livrer un message : le roman, c'est l'évasion. Exemples : *Le Tour du monde en quatre-vingts jours* de Jules Verne, *L'Enfant noir* de Camara Laye.\n\n**B. La fonction de dénonciation (engagement)**\nL'écrivain doit **prendre position**, **critiquer**, **dénoncer** les abus et les injustices sociales : il lève le voile sur la société. Il doit donc être **engagé**. Jean-Paul Sartre affirme que l'écrivain doit s'engager tout entier dans ses ouvrages ; pour lui, la fonction de l'écrivain est « d'appeler un chat un chat ». L'artiste se fait le **porte-parole des sans-voix** (le peuple) : Aimé Césaire, dans le *Cahier d'un retour au pays natal*, fait de sa bouche celle des malheureux qui n'en ont pas. Richard Wright, écrivain noir américain, voulait défendre les droits de ses compatriotes opprimés. L'artiste devient ainsi un **mage**, un **guide** qui conduit le peuple et dissipe l'obscurantisme : pour Paul Éluard, le poète est un frère voyant qui conduit son frère aveugle ; pour John Steinbeck, le devoir de l'écrivain est de dénoncer les faiblesses et les échecs humains afin que l'homme puisse se perfectionner.\n\n**C. La fonction esthétique**\nL'œuvre littéraire a une finalité esthétique : le **Beau**. Elle procure du **plaisir** par les mots, le langage, les sonorités, les images. C'est l'art pour l'art : un art sans but utile, sans préoccupation morale. Théophile Gautier affirme qu'il n'y a de vraiment beau que ce qui ne peut servir à rien.\n\n**D. La fonction didactique**\nLa finalité de l'écrivain est de **conscientiser**, de **moraliser**, de **former** : il critique les idées afin d'épurer, de purifier l'homme. Pour Sartre, « l'homme est à inventer chaque jour ». L'écrivain doit parler à tous ses contemporains, exprimer leurs joies et leurs colères, les **consoler**. Thomas Mann, dans « L'artiste et la société », reconnaît que l'art n'a jamais pu arrêter le triomphe du mal : il n'est pas une puissance, il n'est qu'une consolation.\n\nLa littérature renfermerait enfin la totalité de la **condition humaine** et deviendrait **anthropologique**. Albert Camus, dans son *Discours de Suède* (1957), déclare que l'écrivain est « embarqué » dans son temps.\n\n### À retenir\n| Fonction | Rôle | Exemple de référence |\n|---|---|---|\n| Évasion | divertir, détendre | Jules Verne, Camara Laye |\n| Dénonciation | critiquer, s'engager | Sartre, Césaire, Wright |\n| Esthétique | créer le Beau, plaire | Théophile Gautier |\n| Didactique | instruire, moraliser, consoler | Sartre, Thomas Mann, Camus |",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-10-19T14:12:56.92754+00:00",
+      "source_id": "e42f9d65-521b-4e01-bfdf-7ec4bca9d44b",
+      "updated_at": "2026-10-19T14:12:57.006239+00:00"
+    },
+    {
+      "id": "e42f9d65-521b-4e01-bfdf-7ec4bca9d44b",
+      "chapter_id": "dd1dc155-c760-4f6d-897e-7e76108c5046",
+      "type": "cours",
+      "title": "Les fonctions de la littérature",
+      "content": "*Fiche de cours.*\n\n### I. Définition de la littérature\nLa littérature est l'ensemble des œuvres **orales ou écrites** auxquelles on reconnaît une **finalité esthétique**. Elle est la vision du monde propre à un écrivain ou à un groupe d'écrivains. Elle remplit plusieurs fonctions.\n\n### II. Les fonctions de la littérature\nLa littérature (le roman, le théâtre, la poésie) présente de multiples avantages ; d'où l'étude de ses finalités.\n\n**A. La fonction d'évasion (divertissement)**\nLa première fonction de la littérature est le **divertissement**. Elle fait s'évader le lecteur à travers les histoires racontées. Par la lecture, l'homme se détend, se décrispe ; cette détente favorise son équilibre mental et son bien-être. La littérature libère aussi l'être humain de ses obsessions. Pour Guy Des Cars, le romancier n'a pas à livrer un message : le roman, c'est l'évasion. Exemples : *Le Tour du monde en quatre-vingts jours* de Jules Verne, *L'Enfant noir* de Camara Laye.\n\n**B. La fonction de dénonciation (engagement)**\nL'écrivain doit **prendre position**, **critiquer**, **dénoncer** les abus et les injustices sociales : il lève le voile sur la société. Il doit donc être **engagé**. Jean-Paul Sartre affirme que l'écrivain doit s'engager tout entier dans ses ouvrages ; pour lui, la fonction de l'écrivain est « d'appeler un chat un chat ». L'artiste se fait le **porte-parole des sans-voix** (le peuple) : Aimé Césaire, dans le *Cahier d'un retour au pays natal*, fait de sa bouche celle des malheureux qui n'en ont pas. Richard Wright, écrivain noir américain, voulait défendre les droits de ses compatriotes opprimés. L'artiste devient ainsi un **mage**, un **guide** qui conduit le peuple et dissipe l'obscurantisme : pour Paul Éluard, le poète est un frère voyant qui conduit son frère aveugle ; pour John Steinbeck, le devoir de l'écrivain est de dénoncer les faiblesses et les échecs humains afin que l'homme puisse se perfectionner.\n\n**C. La fonction esthétique**\nL'œuvre littéraire a une finalité esthétique : le **Beau**. Elle procure du **plaisir** par les mots, le langage, les sonorités, les images. C'est l'art pour l'art : un art sans but utile, sans préoccupation morale. Théophile Gautier affirme qu'il n'y a de vraiment beau que ce qui ne peut servir à rien.\n\n**D. La fonction didactique**\nLa finalité de l'écrivain est de **conscientiser**, de **moraliser**, de **former** : il critique les idées afin d'épurer, de purifier l'homme. Pour Sartre, « l'homme est à inventer chaque jour ». L'écrivain doit parler à tous ses contemporains, exprimer leurs joies et leurs colères, les **consoler**. Thomas Mann, dans « L'artiste et la société », reconnaît que l'art n'a jamais pu arrêter le triomphe du mal : il n'est pas une puissance, il n'est qu'une consolation.\n\nLa littérature renfermerait enfin la totalité de la **condition humaine** et deviendrait **anthropologique**. Albert Camus, dans son *Discours de Suède* (1957), déclare que l'écrivain est « embarqué » dans son temps.\n\n### À retenir\n| Fonction | Rôle | Exemple de référence |\n|---|---|---|\n| Évasion | divertir, détendre | Jules Verne, Camara Laye |\n| Dénonciation | critiquer, s'engager | Sartre, Césaire, Wright |\n| Esthétique | créer le Beau, plaire | Théophile Gautier |\n| Didactique | instruire, moraliser, consoler | Sartre, Thomas Mann, Camus |",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-10-19T14:12:56.050463+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-19T14:12:56.050463+00:00"
+    },
+    {
+      "id": "f037ab96-1717-4255-8792-377b9db31bc2",
+      "chapter_id": "e3c0e7c2-3a30-4721-9293-2f6211d52898",
+      "type": "cours",
+      "title": "Le Pleurer-Rire : utilité et inutilité du roman",
+      "content": "*Fiche de cours (Lycée Chaminade, page de l'apprenant). Roman d'Henri Lopes, 1982.*\n\n### Introduction\nParler de l'utilité ou de l'inutilité du *Pleurer-Rire* est difficile, sinon impossible, si l'on ne se réfère pas à l'art en tant qu'activité humaine et à son utilité dans la vie sociale.\n\n### I. Ce que l'art exprime\n1. L'art exprime le **réel**, la nature, de façon à les faire apparaître comme vrais.\n2. Il exprime l'**imagination** de l'artiste.\n3. Il exprime la **beauté**.\n\n### II. L'art pour l'art\n- L'art a pour seule finalité la **beauté** et le **plaisir**, sans aucun souci moral (idée reprise par Théophile Gautier, Théodore de Banville puis le Parnasse).\n- L'art doit être éternel et ne doit pas chercher l'utile.\n- Chercher l'utile, c'est flatter le public aux dépens du travail artistique, qui seul assure la pérennité de l'œuvre.\n- Cette conception s'oppose à l'engagement romantique et aux diverses tendances moralisantes.\n\n### III. L'utilité de l'art\n**1. En quoi l'art peut-il être utile ?**\n- en donnant une **culture** par la lecture ;\n- en donnant une **formation morale**, sous forme de préceptes, en nous faisant prendre conscience de nous-mêmes ;\n- en **réformant la société** par la satire sociale et l'engagement de l'écrivain.\n\n**2. Pourquoi l'écrivain doit-il chercher à être utile ?**\n- L'écrivain est **responsable de son temps** : pour Albert Camus, l'artiste est « embarqué » dans son époque.\n- Il rend compte de son génie : il voit ce qui échappe aux autres (c'est un **visionnaire**), il sent et pense mieux.\n- Grâce aux prestiges de l'art, il donne une forme frappante et durable aux idées encore informes des hommes.\n- Il peut être utile par des engagements directs, par des œuvres à thèse, ou simplement en exprimant toute la réalité et en lui donnant la beauté artistique (peinture totale des séductions et des horreurs, comme dans *Phèdre* ; effet de purification, comme dans *Madame Bovary*).\n\n### IV. *Le Pleurer-Rire* : utilité et inutilité\n**1. L'utilité du roman**\n- **Par sa forme** : le roman procure un plaisir esthétique grâce à sa forme variée : système de collage (extrait de *Jacques le Fataliste* de Diderot), forme épistolaire (lettres entre Maître et le jeune compatriote en exil), récit qui est à la fois narration et critique de la narration ; la chronologie est brisée pour porter un regard critique sur l'histoire racontée. C'est un véritable culte de l'art.\n- **Par son contenu** : c'est un roman contre l'**oppression**, la confiscation des **libertés**, la **démagogie**, le **tribalisme** et la **corruption**. Lopes ose dévoiler l'inhumain et l'immoral ; pour lui, le bon romancier est celui qui dit ce qu'on n'ose pas dire. Le roman est donc un **appel** (pour Sartre, l'œuvre d'art vaut parce qu'elle est appel).\n- Le roman véhicule l'**amour de la patrie** : le jeune compatriote en exil s'informe de la situation du pays ; le capitaine Yabaka défend les droits de l'homme ; Malaïka Yabaka et Soukali s'opposent aux agissements du régime de Tonton et encouragent les manifestations.\n- Henri Lopes se fait la **« voix des sans-voix »**, le porte-parole du peuple meurtri, dans l'esprit d'Aimé Césaire qui, dans le *Cahier d'un retour au pays natal*, veut que sa bouche soit celle des malheurs qui n'en ont pas.\n\n**2. L'inutilité du roman**\nParler de l'inutilité du *Pleurer-Rire* serait méconnaître les finalités de la littérature. Le roman paraît pourtant **impuissant** face à l'oppression, à la corruption et à la dictature : depuis sa parution (1982), il n'a pu empêcher la tyrannie, la violence ni les coups d'État. L'homme politique tel que le décrit Lopes reste le même dans ses pratiques :\n- le culte de la personnalité ;\n- la confiscation des libertés ;\n- la manipulation de la presse ;\n- le maintien au pouvoir par tous les moyens (surarmement, militarisation de jeunes égarés, changements de constitution).\n\n### Conclusion\nQuoi qu'il en soit, l'œuvre littéraire incite à la **prise de conscience** et au changement des mœurs : sa contribution éducative et morale est forte, même si elle ne transforme pas immédiatement la réalité.",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-10-19T14:12:54.801439+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-19T14:12:54.801439+00:00"
+    },
+    {
+      "id": "7716b5ee-161e-4fc0-ac01-b6998e8835e8",
+      "chapter_id": "f3b163f5-60bb-40eb-923f-bea5c066725d",
+      "type": "cours",
+      "title": "Le Pleurer-Rire : utilité et inutilité du roman",
+      "content": "*Fiche de cours (Lycée Chaminade, page de l'apprenant). Roman d'Henri Lopes, 1982.*\n\n### Introduction\nParler de l'utilité ou de l'inutilité du *Pleurer-Rire* est difficile, sinon impossible, si l'on ne se réfère pas à l'art en tant qu'activité humaine et à son utilité dans la vie sociale.\n\n### I. Ce que l'art exprime\n1. L'art exprime le **réel**, la nature, de façon à les faire apparaître comme vrais.\n2. Il exprime l'**imagination** de l'artiste.\n3. Il exprime la **beauté**.\n\n### II. L'art pour l'art\n- L'art a pour seule finalité la **beauté** et le **plaisir**, sans aucun souci moral (idée reprise par Théophile Gautier, Théodore de Banville puis le Parnasse).\n- L'art doit être éternel et ne doit pas chercher l'utile.\n- Chercher l'utile, c'est flatter le public aux dépens du travail artistique, qui seul assure la pérennité de l'œuvre.\n- Cette conception s'oppose à l'engagement romantique et aux diverses tendances moralisantes.\n\n### III. L'utilité de l'art\n**1. En quoi l'art peut-il être utile ?**\n- en donnant une **culture** par la lecture ;\n- en donnant une **formation morale**, sous forme de préceptes, en nous faisant prendre conscience de nous-mêmes ;\n- en **réformant la société** par la satire sociale et l'engagement de l'écrivain.\n\n**2. Pourquoi l'écrivain doit-il chercher à être utile ?**\n- L'écrivain est **responsable de son temps** : pour Albert Camus, l'artiste est « embarqué » dans son époque.\n- Il rend compte de son génie : il voit ce qui échappe aux autres (c'est un **visionnaire**), il sent et pense mieux.\n- Grâce aux prestiges de l'art, il donne une forme frappante et durable aux idées encore informes des hommes.\n- Il peut être utile par des engagements directs, par des œuvres à thèse, ou simplement en exprimant toute la réalité et en lui donnant la beauté artistique (peinture totale des séductions et des horreurs, comme dans *Phèdre* ; effet de purification, comme dans *Madame Bovary*).\n\n### IV. *Le Pleurer-Rire* : utilité et inutilité\n**1. L'utilité du roman**\n- **Par sa forme** : le roman procure un plaisir esthétique grâce à sa forme variée : système de collage (extrait de *Jacques le Fataliste* de Diderot), forme épistolaire (lettres entre Maître et le jeune compatriote en exil), récit qui est à la fois narration et critique de la narration ; la chronologie est brisée pour porter un regard critique sur l'histoire racontée. C'est un véritable culte de l'art.\n- **Par son contenu** : c'est un roman contre l'**oppression**, la confiscation des **libertés**, la **démagogie**, le **tribalisme** et la **corruption**. Lopes ose dévoiler l'inhumain et l'immoral ; pour lui, le bon romancier est celui qui dit ce qu'on n'ose pas dire. Le roman est donc un **appel** (pour Sartre, l'œuvre d'art vaut parce qu'elle est appel).\n- Le roman véhicule l'**amour de la patrie** : le jeune compatriote en exil s'informe de la situation du pays ; le capitaine Yabaka défend les droits de l'homme ; Malaïka Yabaka et Soukali s'opposent aux agissements du régime de Tonton et encouragent les manifestations.\n- Henri Lopes se fait la **« voix des sans-voix »**, le porte-parole du peuple meurtri, dans l'esprit d'Aimé Césaire qui, dans le *Cahier d'un retour au pays natal*, veut que sa bouche soit celle des malheurs qui n'en ont pas.\n\n**2. L'inutilité du roman**\nParler de l'inutilité du *Pleurer-Rire* serait méconnaître les finalités de la littérature. Le roman paraît pourtant **impuissant** face à l'oppression, à la corruption et à la dictature : depuis sa parution (1982), il n'a pu empêcher la tyrannie, la violence ni les coups d'État. L'homme politique tel que le décrit Lopes reste le même dans ses pratiques :\n- le culte de la personnalité ;\n- la confiscation des libertés ;\n- la manipulation de la presse ;\n- le maintien au pouvoir par tous les moyens (surarmement, militarisation de jeunes égarés, changements de constitution).\n\n### Conclusion\nQuoi qu'il en soit, l'œuvre littéraire incite à la **prise de conscience** et au changement des mœurs : sa contribution éducative et morale est forte, même si elle ne transforme pas immédiatement la réalité.",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-10-19T14:12:55.381017+00:00",
+      "source_id": "f037ab96-1717-4255-8792-377b9db31bc2",
+      "updated_at": "2026-10-19T14:12:55.558445+00:00"
+    }
+  ]
+}
