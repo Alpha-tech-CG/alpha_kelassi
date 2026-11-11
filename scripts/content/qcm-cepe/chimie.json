@@ -1,0 +1,70 @@
+{
+ "matiere": "Chimie",
+ "subject_id": "bfeea02a-7e9e-423b-a293-9568c98df677",
+ "chapitres": [
+  {
+   "chapter_id": "0f298623-36da-4eac-bc5a-349ff75e03f8",
+   "titre": "Les métaux — Définition et caractéristiques",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un métal ?", "options": ["Un corps simple, naturel ou obtenu par traitement de minerais", "Un mélange de terre et d'eau", "Une matière vivante", "Un gaz présent dans l'air"], "correct_index": 0, "explanation": "Les métaux sont des corps simples, naturels ou obtenus par le traitement des minerais." },
+    { "prompt": "Quel métal est liquide à température ordinaire ?", "options": ["Le fer", "Le cuivre", "Le mercure", "L'aluminium"], "correct_index": 2, "explanation": "Tous les métaux sont solides à température ordinaire, sauf le mercure, qui est liquide." },
+    { "prompt": "Comment appelle-t-on la brillance caractéristique des métaux ?", "options": ["La malléabilité", "L'éclat métallique", "La sonorité", "La conductibilité"], "correct_index": 1, "explanation": "L'éclat métallique est la brillance propre aux métaux, sauf lorsqu'ils rouillent." },
+    { "prompt": "Que signifie « bonne conductibilité » pour un métal ?", "options": ["Il conduit la chaleur et l'électricité", "Il se casse facilement", "Il flotte sur l'eau", "Il change de couleur à la chaleur"], "correct_index": 0, "explanation": "Les métaux conduisent bien la chaleur et l'électricité." },
+    { "prompt": "Que veut dire « malléable » ?", "options": ["Qui se casse au moindre choc", "Qui peut être étiré et mis en forme sans se casser", "Qui fond au soleil", "Qui attire les aimants"], "correct_index": 1, "explanation": "Un métal malléable peut être étiré, aplati, mis en forme sans se casser." },
+    { "prompt": "Quelle propriété fait qu'un métal frappé produit un son particulier ?", "options": ["La sonorité", "L'éclat", "La malléabilité", "La conductibilité"], "correct_index": 0, "explanation": "La sonorité est le son caractéristique que rend un métal quand on le frappe." },
+    { "prompt": "Dans le moyen mnémotechnique É.S.C.M.S., que rappelle la lettre C ?", "options": ["La couleur", "La conductibilité", "La corrosion", "Le carbone"], "correct_index": 1, "explanation": "É.S.C.M.S. = Éclat, Solide, Conductibilité, Malléabilité, Sonorité." },
+    { "prompt": "Dans quel état se trouvent la plupart des métaux à température ordinaire ?", "options": ["À l'état solide", "À l'état liquide", "À l'état gazeux", "À l'état de poudre"], "correct_index": 0, "explanation": "Les métaux sont solides à température ordinaire, le mercure mis à part." },
+    { "prompt": "Pourquoi utilise-t-on le cuivre dans les câbles électriques ?", "options": ["Parce qu'il est très léger", "Parce qu'il conduit bien l'électricité", "Parce qu'il est transparent", "Parce qu'il ne coûte rien"], "correct_index": 1, "explanation": "Le cuivre est un excellent conducteur de l'électricité." },
+    { "prompt": "Que perd un métal lorsqu'il rouille ?", "options": ["Son éclat métallique", "Sa forme carrée", "Son poids total", "Sa sonorité uniquement"], "correct_index": 0, "explanation": "Un métal rouillé perd sa brillance : il n'a plus son éclat métallique." }
+   ]
+  },
+  {
+   "chapter_id": "0e5cda9b-0a32-4d55-83df-a4ab0b881548",
+   "titre": "Les types et l'utilité des métaux",
+   "questions": [
+    { "prompt": "Dans quelle catégorie classe-t-on l'or, l'argent et le platine ?", "options": ["Les métaux précieux", "Les métaux usuels", "Les oligo-éléments", "Les minerais"], "correct_index": 0, "explanation": "Rares, brillants et résistants à la corrosion, ce sont les métaux précieux." },
+    { "prompt": "Dans quelle catégorie classe-t-on le fer, le cuivre et l'aluminium ?", "options": ["Les métaux précieux", "Les métaux usuels", "Les oligo-éléments", "Les métaux radioactifs"], "correct_index": 1, "explanation": "Courants et abordables, ce sont les métaux usuels : outils, câbles, véhicules, casseroles." },
+    { "prompt": "Qu'est-ce qu'un oligo-élément ?", "options": ["Un métal présent en petite quantité dans le corps", "Un métal réservé aux bijoux", "Un minerai non utilisable", "Un gaz rare"], "correct_index": 0, "explanation": "Les oligo-éléments sont présents en petite quantité dans l'organisme et sont utiles à la santé." },
+    { "prompt": "Quel est le rôle du fer dans l'organisme ?", "options": ["Transporter l'oxygène dans le sang", "Solidifier les os", "Faire pousser les cheveux", "Protéger la vue"], "correct_index": 0, "explanation": "Le fer assure le transport de l'oxygène dans le sang." },
+    { "prompt": "Quel oligo-élément assure la solidité des os et des dents ?", "options": ["Le zinc", "Le calcium", "Le magnésium", "Le fer"], "correct_index": 1, "explanation": "Le calcium donne leur solidité aux os et aux dents." },
+    { "prompt": "Quel oligo-élément intervient dans le fonctionnement des muscles et du système nerveux ?", "options": ["Le magnésium", "Le calcium", "Le plomb", "L'or"], "correct_index": 0, "explanation": "Le magnésium est utile aux muscles et au système nerveux." },
+    { "prompt": "Quel oligo-élément aide à la défense immunitaire et à la cicatrisation ?", "options": ["Le fer", "Le calcium", "Le zinc", "Le mercure"], "correct_index": 2, "explanation": "Le zinc participe aux défenses du corps et à la cicatrisation." },
+    { "prompt": "Pourquoi les métaux précieux sont-ils utilisés pour les bijoux et la monnaie ?", "options": ["Parce qu'ils sont rares et résistent à la corrosion", "Parce qu'ils sont très lourds", "Parce qu'ils fondent facilement", "Parce qu'ils sont présents dans le corps humain"], "correct_index": 0, "explanation": "Ils sont rares, brillants et résistent à la corrosion." },
+    { "prompt": "À quoi servent surtout les métaux usuels ?", "options": ["Aux outils, câbles, véhicules et casseroles", "Uniquement aux bijoux", "Uniquement aux médicaments", "À rien dans la vie courante"], "correct_index": 0, "explanation": "Les métaux usuels servent aux outils, aux câbles, aux véhicules et aux ustensiles." },
+    { "prompt": "Lequel de ces métaux est un métal précieux ?", "options": ["Le plomb", "Le fer", "Le platine", "Le cuivre"], "correct_index": 2, "explanation": "Le platine, comme l'or et l'argent, fait partie des métaux précieux." }
+   ]
+  },
+  {
+   "chapter_id": "17f11b35-dee3-46f9-a079-ae4dd8c64803",
+   "titre": "Les dangers des métaux et leur protection",
+   "questions": [
+    { "prompt": "Quelle maladie le plomb provoque-t-il ?", "options": ["Le saturnisme", "Le paludisme", "La rougeole", "Le tétanos"], "correct_index": 0, "explanation": "Le plomb provoque le saturnisme : fatigue, maux de tête, problèmes rénaux." },
+    { "prompt": "Quels organes le mercure attaque-t-il principalement ?", "options": ["Le système nerveux et les reins", "Les os et les dents", "La peau seulement", "Les yeux seulement"], "correct_index": 0, "explanation": "Le mercure est très toxique pour le système nerveux et les reins." },
+    { "prompt": "Pourquoi l'uranium est-il dangereux ?", "options": ["Il est radioactif et provoque cancers et malformations", "Il rouille très vite", "Il est trop lourd à transporter", "Il fond à basse température"], "correct_index": 0, "explanation": "L'uranium est radioactif : il provoque des cancers et des malformations." },
+    { "prompt": "En quoi consiste la galvanisation ?", "options": ["Recouvrir le fer d'une couche de zinc", "Peindre le métal en noir", "Chauffer le métal au rouge", "Plonger le métal dans l'eau salée"], "correct_index": 0, "explanation": "La galvanisation consiste à recouvrir le fer d'une couche de zinc pour le protéger." },
+    { "prompt": "Comment la peinture protège-t-elle un métal ?", "options": ["Elle l'isole de l'air et de l'eau", "Elle le rend plus lourd", "Elle le rend conducteur", "Elle le durcit de l'intérieur"], "correct_index": 0, "explanation": "La couche de peinture isole le métal de l'air et de l'eau, donc de la rouille." },
+    { "prompt": "À quoi sert la graisse ou l'huile sur une pièce métallique ?", "options": ["À empêcher le contact avec l'humidité", "À la faire briller uniquement", "À la rendre malléable", "À augmenter sa sonorité"], "correct_index": 0, "explanation": "La graisse empêche l'humidité d'atteindre le métal." },
+    { "prompt": "Quel métal rouille le plus facilement ?", "options": ["L'or", "L'aluminium", "Le fer", "Le platine"], "correct_index": 2, "explanation": "La rouille touche surtout le fer et ses alliages." },
+    { "prompt": "Que peut-on dire de l'or et de l'aluminium ?", "options": ["Ils ne rouillent pas", "Ils rouillent plus vite que le fer", "Ils sont radioactifs", "Ils sont liquides"], "correct_index": 0, "explanation": "L'or et l'aluminium ne rouillent pas, contrairement au fer." },
+    { "prompt": "Que fait un produit antirouille ?", "options": ["Il bloque l'oxydation du métal", "Il nettoie seulement la surface", "Il ramollit le métal", "Il augmente la rouille"], "correct_index": 0, "explanation": "L'antirouille est un produit chimique qui bloque l'oxydation." },
+    { "prompt": "Que désigne le symbole Pb ?", "options": ["Le plomb", "Le mercure", "Le platine", "Le zinc"], "correct_index": 0, "explanation": "Pb est le symbole du plomb, métal toxique responsable du saturnisme." }
+   ]
+  },
+  {
+   "chapter_id": "89181bd6-df3f-4592-84b5-462f2ec0ccd5",
+   "titre": "L'obtention des métaux",
+   "questions": [
+    { "prompt": "Qu'est-ce que la métallurgie ?", "options": ["La science de l'extraction et du traitement des métaux", "L'art de fabriquer des bijoux", "L'étude des roches volcaniques", "La fabrication du verre"], "correct_index": 0, "explanation": "La métallurgie est la science de l'extraction et du traitement des métaux à partir des minerais." },
+    { "prompt": "Qu'est-ce qu'un minerai ?", "options": ["Une roche qui contient du métal", "Un métal déjà pur", "Un outil de mineur", "Un produit antirouille"], "correct_index": 0, "explanation": "Le minerai est la roche dans laquelle le métal se trouve avant traitement." },
+    { "prompt": "Quelle est la première étape pour obtenir un métal ?", "options": ["L'extraction du minerai", "La fusion", "L'affinage", "Le concassage"], "correct_index": 0, "explanation": "On commence par extraire le minerai dans les mines, à ciel ouvert ou souterraines." },
+    { "prompt": "Que vient-on faire juste après l'extraction ?", "options": ["Le concassage", "L'affinage", "La vente", "La peinture"], "correct_index": 0, "explanation": "Après l'extraction, on concasse le minerai, c'est-à-dire qu'on le broie en petits morceaux." },
+    { "prompt": "Dans quel appareil chauffe-t-on le minerai pour en séparer le métal ?", "options": ["Dans un haut-fourneau", "Dans un réfrigérateur", "Dans une forge de bijoutier", "Dans une pompe"], "correct_index": 0, "explanation": "La fusion se fait dans un haut-fourneau." },
+    { "prompt": "À quoi sert l'affinage ?", "options": ["À purifier le métal obtenu", "À colorer le métal", "À broyer le minerai", "À creuser la mine"], "correct_index": 0, "explanation": "L'affinage est la purification du métal après la fusion." },
+    { "prompt": "Quel métier consiste à fabriquer des objets en métal à la forge ?", "options": ["Le forgeron", "Le tôlier", "Le mécanicien", "Le bijoutier"], "correct_index": 0, "explanation": "Le forgeron travaille le métal au feu, à la forge." },
+    { "prompt": "Quel métier assemble les pièces métalliques par soudure ?", "options": ["Le soudeur", "Le forgeron", "Le bijoutier", "Le mineur"], "correct_index": 0, "explanation": "Le soudeur assemble les pièces métalliques par soudure." },
+    { "prompt": "Quel métier travaille les feuilles de métal ?", "options": ["Le tôlier", "Le mécanicien", "Le bijoutier", "Le soudeur"], "correct_index": 0, "explanation": "Le tôlier travaille la tôle, c'est-à-dire les feuilles de métal." },
+    { "prompt": "Quel métier fabrique des objets en métaux précieux ?", "options": ["Le bijoutier", "Le tôlier", "Le mécanicien", "Le forgeron"], "correct_index": 0, "explanation": "Le bijoutier fabrique des bijoux en métaux précieux." }
+   ]
+  }
+ ]
+}

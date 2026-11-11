@@ -1,0 +1,102 @@
+{
+ "matiere": "Technologie",
+ "subject_id": "ee7f5c6a-4efd-4dd0-a5c9-6b7ad025533b",
+ "chapitres": [
+  {
+   "chapter_id": "c0b5d82d-3a19-4642-b213-10bc6e9b5eaa",
+   "titre": "Les objets démontables et non démontables",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un objet démontable ?", "options": ["Un objet qu'on peut démonter et remonter sans le détruire", "Un objet qui se casse facilement", "Un objet fabriqué en usine", "Un objet très lourd"], "correct_index": 0, "explanation": "Un objet démontable peut être démonté puis remonté sans destruction." },
+    { "prompt": "Qu'est-ce qu'un objet non démontable ?", "options": ["Un objet qu'on ne peut pas démonter sans le détruire", "Un objet qu'on peut réparer", "Un objet en plastique", "Un objet ancien"], "correct_index": 0, "explanation": "On ne peut pas le démonter sans le détruire : pile, pointe, stylo à bille." },
+    { "prompt": "Quelle question permet de savoir si un objet est démontable ?", "options": ["Peut-on le remettre en état après avoir retiré ses pièces ?", "Est-il lourd ?", "Est-il cher ?", "Est-il fabriqué en métal ?"], "correct_index": 0, "explanation": "Si l'on peut le remettre en état, il est démontable." },
+    { "prompt": "Lequel de ces objets est démontable ?", "options": ["Un vélo", "Une pile", "Une pointe", "Un stylo à bille"], "correct_index": 0, "explanation": "Le vélo peut être démonté et remonté : il est démontable." },
+    { "prompt": "Lequel de ces objets est non démontable ?", "options": ["Une pile", "Une radio", "Un téléphone", "Une chaise à vis"], "correct_index": 0, "explanation": "Une pile ne peut pas être démontée sans être détruite." },
+    { "prompt": "Une table en kit est :", "options": ["Démontable", "Non démontable", "Ni l'un ni l'autre", "Toujours en métal"], "correct_index": 0, "explanation": "La table en kit s'assemble et se démonte : elle est démontable." },
+    { "prompt": "Une bouteille en verre soufflé est :", "options": ["Non démontable", "Démontable", "Démontable avec des vis", "Démontable avec une clé"], "correct_index": 0, "explanation": "Elle forme un seul bloc : on ne peut pas la démonter sans la casser." },
+    { "prompt": "Une bicyclette est un objet :", "options": ["Démontable", "Non démontable", "Jetable", "Sans liaison"], "correct_index": 0, "explanation": "On peut retirer ses roues, sa selle et son guidon, puis les remonter." },
+    { "prompt": "Une ampoule est un objet :", "options": ["Non démontable", "Démontable", "Toujours réparable", "Assemblé par vis"], "correct_index": 0, "explanation": "On ne peut pas l'ouvrir sans la détruire." },
+    { "prompt": "Pourquoi fabrique-t-on des objets démontables ?", "options": ["Pour pouvoir les réparer et les entretenir", "Pour qu'ils soient plus lourds", "Pour qu'ils coûtent plus cher", "Pour empêcher leur réparation"], "correct_index": 0, "explanation": "Un objet démontable peut être entretenu et réparé pièce par pièce." }
+   ]
+  },
+  {
+   "chapter_id": "a1f35812-04e7-4b90-b730-6aed5f90aa85",
+   "titre": "Les liaisons — Définition et caractères",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une liaison ?", "options": ["L'assemblage de deux ou plusieurs pièces d'un objet technique", "Le poids d'un objet", "La couleur d'une pièce", "Le prix d'un objet"], "correct_index": 0, "explanation": "La liaison est l'assemblage de plusieurs pièces d'un objet technique." },
+    { "prompt": "Qu'est-ce qu'une liaison complète ?", "options": ["Elle assure toutes les contraintes entre deux pièces", "Elle laisse les pièces libres", "Elle se défait toute seule", "Elle unit trois pièces au minimum"], "correct_index": 0, "explanation": "Soudure et vissage donnent des liaisons complètes." },
+    { "prompt": "Qu'est-ce qu'une liaison rigide ?", "options": ["Elle résiste aux chocs, sans mouvement possible", "Elle permet un mouvement libre", "Elle se démonte facilement", "Elle est toujours en plastique"], "correct_index": 0, "explanation": "Clous et colle forte donnent des liaisons rigides." },
+    { "prompt": "Qu'est-ce qu'une liaison directe ?", "options": ["Les deux pièces sont jointes sans intermédiaire", "Une troisième pièce relie les deux autres", "Elle est toujours démontable", "Elle est toujours soudée"], "correct_index": 0, "explanation": "Une vis plantée dans le bois assure une liaison directe." },
+    { "prompt": "Qu'est-ce qu'une liaison indirecte ?", "options": ["Deux pièces reliées par une pièce intermédiaire", "Deux pièces collées entre elles", "Une pièce unique", "Une liaison toujours rigide"], "correct_index": 0, "explanation": "Un écrou avec un boulon relie deux pièces : liaison indirecte." },
+    { "prompt": "Quel assemblage donne une liaison démontable ?", "options": ["Des vis et des écrous", "Une soudure", "De la colle", "Des rivets"], "correct_index": 0, "explanation": "Vis, écrous et boutons peuvent être défaits sans destruction." },
+    { "prompt": "Quel assemblage donne une liaison non démontable ?", "options": ["La soudure", "Le vissage", "Le boulonnage", "Le bouton-pression"], "correct_index": 0, "explanation": "Soudure, colle et rivets ne se défont pas sans destruction." },
+    { "prompt": "Comment est la liaison entre le manche et la lame d'un couteau ?", "options": ["Rigide, non démontable et indirecte", "Souple et démontable", "Directe et démontable", "Complète et démontable"], "correct_index": 0, "explanation": "Le manche est fixé à la lame par des rivets : liaison rigide, non démontable, indirecte." },
+    { "prompt": "Quelle différence y a-t-il entre liaison directe et indirecte ?", "options": ["Dans la liaison directe, les deux pièces se touchent sans intermédiaire", "La liaison directe utilise toujours de la colle", "La liaison indirecte est toujours rigide", "Il n'y a aucune différence"], "correct_index": 0, "explanation": "La liaison indirecte fait intervenir une troisième pièce." },
+    { "prompt": "Les rivets donnent une liaison :", "options": ["Non démontable", "Démontable", "Souple", "Temporaire"], "correct_index": 0, "explanation": "Pour défaire des rivets, il faut les détruire." }
+   ]
+  },
+  {
+   "chapter_id": "5b8006c2-f2bb-4721-bbd0-6c80487b86c2",
+   "titre": "Les fonctions mécaniques complexes",
+   "questions": [
+    { "prompt": "Que sont les fonctions mécaniques complexes ?", "options": ["Les rôles assurés par les assemblages d'un objet technique", "Les couleurs des pièces", "Le poids de l'objet", "Le prix des matériaux"], "correct_index": 0, "explanation": "Ce sont les rôles qui garantissent le bon fonctionnement de l'objet." },
+    { "prompt": "Quelle fonction consiste à joindre deux pièces ?", "options": ["La liaison", "Le guidage", "La lubrification", "L'étanchéité"], "correct_index": 0, "explanation": "La liaison joint deux pièces ensemble." },
+    { "prompt": "Quelle fonction oriente et contrôle le déplacement d'une pièce ?", "options": ["Le guidage", "La protection", "L'étanchéité", "La liaison"], "correct_index": 0, "explanation": "Le guidage oriente et contrôle le déplacement." },
+    { "prompt": "Quelle fonction réduit le frottement entre deux pièces mobiles ?", "options": ["La lubrification", "La protection", "La liaison", "Le guidage"], "correct_index": 0, "explanation": "La lubrification réduit le frottement." },
+    { "prompt": "Quelle fonction empêche le passage des liquides ou des gaz ?", "options": ["L'étanchéité", "Le guidage", "La liaison", "La lubrification"], "correct_index": 0, "explanation": "L'étanchéité empêche les fuites." },
+    { "prompt": "Quelle fonction protège les pièces des chocs et de la corrosion ?", "options": ["La protection", "Le guidage", "La liaison", "L'étanchéité"], "correct_index": 0, "explanation": "La protection met les pièces à l'abri des chocs et de la rouille." },
+    { "prompt": "Quelle fonction assurent les roulements d'une roue de vélo ?", "options": ["Le guidage", "L'étanchéité", "La protection", "La liaison"], "correct_index": 0, "explanation": "Les roulements guident la rotation de la roue." },
+    { "prompt": "Quelle fonction assure l'huile dans un moteur ?", "options": ["La lubrification", "L'étanchéité", "Le guidage", "La liaison"], "correct_index": 0, "explanation": "L'huile lubrifie les pistons." },
+    { "prompt": "Quelle fonction assurent les joints en caoutchouc d'un robinet ?", "options": ["L'étanchéité", "La lubrification", "Le guidage", "La protection"], "correct_index": 0, "explanation": "Les joints empêchent les fuites d'eau : c'est l'étanchéité." },
+    { "prompt": "Quelle fonction assure un boulon qui assemble deux planches ?", "options": ["La liaison", "Le guidage", "La lubrification", "L'étanchéité"], "correct_index": 0, "explanation": "Le boulon joint deux pièces : c'est la fonction de liaison." }
+   ]
+  },
+  {
+   "chapter_id": "4c346078-048e-4eac-b7f1-4ed8576baf0b",
+   "titre": "La transformation du mouvement",
+   "questions": [
+    { "prompt": "Qu'est-ce que la transformation du mouvement ?", "options": ["Le changement de la nature d'un mouvement d'une pièce à une autre", "L'arrêt complet d'une machine", "Le changement de couleur d'une pièce", "Le graissage des pièces"], "correct_index": 0, "explanation": "Elle permet de changer la forme du mouvement dans un mécanisme." },
+    { "prompt": "Qu'est-ce qu'un mouvement de rotation ?", "options": ["Un mouvement qui tourne autour d'un axe", "Un déplacement en ligne droite", "Un va-et-vient", "Une absence de mouvement"], "correct_index": 0, "explanation": "La roue et le ventilateur ont un mouvement de rotation." },
+    { "prompt": "Qu'est-ce qu'un mouvement de translation ?", "options": ["Un déplacement en ligne droite", "Une rotation autour d'un axe", "Un va-et-vient régulier", "Un mouvement circulaire"], "correct_index": 0, "explanation": "Le tiroir et le piston se déplacent en ligne droite." },
+    { "prompt": "Qu'est-ce qu'un mouvement alternatif ?", "options": ["Un va-et-vient régulier", "Une rotation continue", "Un déplacement unique", "Un mouvement circulaire"], "correct_index": 0, "explanation": "La scie et le balancier ont un mouvement alternatif." },
+    { "prompt": "Quel exemple illustre un mouvement de rotation ?", "options": ["Un ventilateur", "Un tiroir", "Une scie", "Un balancier"], "correct_index": 0, "explanation": "Le ventilateur tourne autour d'un axe." },
+    { "prompt": "Quel exemple illustre un mouvement de translation ?", "options": ["Un tiroir qu'on ouvre", "Une roue qui tourne", "Un ventilateur", "Une toupie"], "correct_index": 0, "explanation": "Le tiroir se déplace en ligne droite." },
+    { "prompt": "Que transforme la manivelle d'une pompe à eau manuelle ?", "options": ["La rotation en translation", "La translation en rotation", "Le poids en vitesse", "La chaleur en mouvement"], "correct_index": 0, "explanation": "La manivelle transforme la rotation en translation." },
+    { "prompt": "Que transforme le pédalier d'un vélo ?", "options": ["Le mouvement alternatif des jambes en rotation de la roue", "La rotation en chaleur", "La translation en vibration", "Le vent en électricité"], "correct_index": 0, "explanation": "Le pédalier transforme le mouvement des jambes en rotation de la roue." },
+    { "prompt": "Quelle transformation est la plus courante dans les machines ?", "options": ["Rotation vers translation", "Translation vers chaleur", "Rotation vers rotation uniquement", "Aucune"], "correct_index": 0, "explanation": "Un moteur tourne et le piston monte et descend : rotation vers translation." },
+    { "prompt": "Quel mouvement a un piston dans un moteur ?", "options": ["Un mouvement de translation (il monte et descend)", "Un mouvement de rotation", "Aucun mouvement", "Un mouvement circulaire"], "correct_index": 0, "explanation": "Le piston monte et descend : c'est une translation." }
+   ]
+  },
+  {
+   "chapter_id": "e658b371-cc5a-425b-a367-77d93fb33709",
+   "titre": "La poulie, la courroie et la chaîne",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une poulie ?", "options": ["Une roue portée par un axe qui reçoit un lien flexible", "Une bande souple", "Une suite d'anneaux métalliques", "Un axe sans roue"], "correct_index": 0, "explanation": "La poulie est une roue sur un axe qui reçoit un câble, une courroie ou une chaîne." },
+    { "prompt": "Qu'est-ce qu'une courroie ?", "options": ["Une bande souple reliant deux poulies", "Une roue dentée", "Un axe métallique", "Un écrou"], "correct_index": 0, "explanation": "La courroie relie deux poulies pour transmettre le mouvement." },
+    { "prompt": "Qu'est-ce qu'une chaîne ?", "options": ["Une suite d'anneaux métalliques qui s'engrènent dans des roues dentées", "Une bande en caoutchouc", "Une roue lisse", "Un type de soudure"], "correct_index": 0, "explanation": "La chaîne est faite d'anneaux métalliques reliés entre eux." },
+    { "prompt": "Comment appelle-t-on aussi la roue dentée ?", "options": ["Le pignon", "La courroie", "La manivelle", "L'axe"], "correct_index": 0, "explanation": "La roue dentée s'appelle aussi un pignon." },
+    { "prompt": "Quel est le trajet du mouvement sur une bicyclette ?", "options": ["Pédalier, plateau, chaîne, pignon, roue arrière", "Roue avant, chaîne, guidon, selle", "Chaîne, pédalier, frein, roue avant", "Pignon, selle, plateau, roue arrière"], "correct_index": 0, "explanation": "Le mouvement va du pédalier au plateau, puis par la chaîne au pignon et à la roue arrière." },
+    { "prompt": "Pourquoi la bicyclette utilise-t-elle une chaîne plutôt qu'une courroie ?", "options": ["Parce que la chaîne ne glisse pas et ne perd pas de puissance", "Parce que la chaîne est plus légère", "Parce que la courroie coûte plus cher", "Parce que la chaîne est plus silencieuse"], "correct_index": 0, "explanation": "La chaîne ne glisse pas, contrairement à la courroie." },
+    { "prompt": "Comment appelle-t-on la grande roue dentée du vélo ?", "options": ["Le plateau", "Le pignon", "La poulie", "Le moyeu"], "correct_index": 0, "explanation": "Le plateau est la grande roue dentée, reliée au pédalier." },
+    { "prompt": "Sur quelle roue le pignon est-il monté ?", "options": ["La roue arrière", "La roue avant", "Le guidon", "La selle"], "correct_index": 0, "explanation": "Le pignon entraîne la roue arrière." },
+    { "prompt": "Le plateau a 40 dents et le pignon 10. Combien de tours fait la roue arrière pour un tour de pédalier ?", "options": ["2 tours", "4 tours", "10 tours", "40 tours"], "correct_index": 1, "explanation": "40 ÷ 10 = 4 : la roue arrière tourne 4 fois." },
+    { "prompt": "À quoi sert l'ensemble poulie-courroie ou chaîne-pignon ?", "options": ["À transmettre le mouvement d'une roue à une autre", "À freiner la machine", "À protéger les pièces de la rouille", "À lubrifier le moteur"], "correct_index": 0, "explanation": "Ces systèmes transmettent le mouvement d'une roue à l'autre." }
+   ]
+  },
+  {
+   "chapter_id": "8f95ca9f-ecfb-4601-a9cf-a51ce8da10eb",
+   "titre": "La fabrication d'un objet technique",
+   "questions": [
+    { "prompt": "En quoi consiste la fabrication d'un objet ?", "options": ["Transformer des matières premières en objet fini utile", "Acheter un objet tout fait", "Démonter un objet existant", "Dessiner un objet sans le construire"], "correct_index": 0, "explanation": "Fabriquer, c'est transformer des matières premières en un objet fini, en suivant des étapes." },
+    { "prompt": "Quelle est la première étape de la fabrication ?", "options": ["Identifier le besoin", "Assembler les pièces", "Peindre l'objet", "Découper les matériaux"], "correct_index": 0, "explanation": "On se demande d'abord à quoi l'objet va servir." },
+    { "prompt": "Quelle est la deuxième étape ?", "options": ["Choisir les matériaux", "Assembler", "Décorer", "Vendre l'objet"], "correct_index": 0, "explanation": "On choisit ensuite les matériaux : bois, métal, plastique, tissu." },
+    { "prompt": "Que fait-on à l'étape « tracer et découper » ?", "options": ["On prépare les pièces", "On peint l'objet", "On vend l'objet", "On range les outils"], "correct_index": 0, "explanation": "Tracer et découper, c'est préparer les pièces avant l'assemblage." },
+    { "prompt": "Que fait-on à l'étape d'assemblage ?", "options": ["On réunit les pièces avec de la colle, des vis ou des clous", "On choisit les matériaux", "On ponce et on peint", "On identifie le besoin"], "correct_index": 0, "explanation": "L'assemblage réunit les pièces entre elles." },
+    { "prompt": "Quelle est la dernière étape de la fabrication ?", "options": ["Finir et décorer, puis vérifier", "Choisir les matériaux", "Tracer les pièces", "Identifier le besoin"], "correct_index": 0, "explanation": "On termine par la finition : poncer, peindre et vérifier." },
+    { "prompt": "Qu'est-ce qu'un cahier de fabrication ?", "options": ["Un document décrivant les étapes, les outils et les matériaux", "Un cahier d'exercices de mathématiques", "La facture de l'objet", "Le mode d'emploi du client"], "correct_index": 0, "explanation": "Le cahier de fabrication décrit toutes les étapes, les outils et les matériaux nécessaires." },
+    { "prompt": "Lequel de ces éléments est une matière première ?", "options": ["Le bois", "Le marteau", "La scie", "Le cahier de fabrication"], "correct_index": 0, "explanation": "Le bois, le métal, le plastique et le tissu sont des matières premières." },
+    { "prompt": "Pourquoi vérifier l'objet à la fin ?", "options": ["Pour s'assurer qu'il répond bien au besoin", "Pour le rendre plus lourd", "Pour changer de matériau", "Pour recommencer la fabrication"], "correct_index": 0, "explanation": "La vérification finale contrôle que l'objet fonctionne et répond au besoin." },
+    { "prompt": "Combien d'étapes compte le cahier de fabrication présenté ?", "options": ["Cinq", "Trois", "Quatre", "Sept"], "correct_index": 0, "explanation": "Identifier le besoin, choisir les matériaux, tracer et découper, assembler, finir et décorer." }
+   ]
+  }
+ ]
+}

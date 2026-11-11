@@ -26,7 +26,7 @@ function levelFloor(level: number): number {
   return [0, 0, 100, 300, 600, 1000][level] ?? 0
 }
 
-const LEVEL_GRADIENTS = ['', 'from-gray-400 to-gray-500', 'from-blue-500 to-blue-600', 'from-purple-500 to-purple-600', 'from-orange-500 to-orange-600', 'from-yellow-400 to-yellow-500']
+const LEVEL_GRADIENTS = ['', 'from-gray-400 to-gray-500', 'from-blue-500 to-blue-600', 'from-[#35C0F0] to-[#35C0F0]', 'from-orange-500 to-orange-600', 'from-yellow-400 to-yellow-500']
 
 export default async function ProgressionPage() {
   const supabase = await createClient()
@@ -112,7 +112,7 @@ export default async function ProgressionPage() {
     ? 100
     : Math.round(((d.xp - levelFloor(d.level)) / (d.next_level_xp - levelFloor(d.level))) * 100)
 
-  const gradient = LEVEL_GRADIENTS[d.level] ?? 'from-purple-500 to-purple-600'
+  const gradient = LEVEL_GRADIENTS[d.level] ?? 'from-[#35C0F0] to-[#35C0F0]'
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8 space-y-6">
@@ -166,7 +166,7 @@ export default async function ProgressionPage() {
         {[
           { label: 'Documents vus', value: d.stats.documents_viewed, icon: '📄', color: 'bg-blue-50 text-blue-600' },
           { label: 'Questions IA', value: d.stats.questions_asked, icon: '🤖', color: 'bg-emerald-50 text-emerald-600' },
-          { label: 'Flashcards', value: d.stats.flashcards_reviewed, icon: '🃏', color: 'bg-violet-50 text-violet-600' },
+          { label: 'Flashcards', value: d.stats.flashcards_reviewed, icon: '🃏', color: 'bg-blue-50 text-blue-600' },
         ].map((s) => (
           <div key={s.label} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
             <div className={`w-10 h-10 ${s.color} rounded-xl flex items-center justify-center text-xl mx-auto mb-2`}>
@@ -258,7 +258,7 @@ export default async function ProgressionPage() {
                 </div>
                 <div className="w-full bg-gray-100 rounded-full h-2">
                   <div
-                    className="bg-gradient-to-r from-blue-500 to-violet-500 h-2 rounded-full transition-all"
+                    className="bg-gradient-to-r from-blue-500 to-[#35C0F0] h-2 rounded-full transition-all"
                     style={{ width: `${Math.min(Math.round(p.score_avg * 100), 100)}%` }}
                   />
                 </div>

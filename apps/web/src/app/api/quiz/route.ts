@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticate } from '@/lib/supabase/api'
+import { parseUuidParam, parseLevelParam } from '@/lib/query-validation'
 
 /** GET /api/quiz?subject_id=&level= — liste des QCM disponibles */
 export async function GET(req: NextRequest) {
   const { user, supabase } = await authenticate(req)
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
-  const subjectId = req.nextUrl.searchParams.get('subject_id')
-  const level = req.nextUrl.searchParams.get('level')
+  const subjectId = parseUuidParam(req.nextUrl.searchParams.get('subject_id'))
+  const level = parseLevelParam(req.nextUrl.searchParams.get('level'))
+  if (subjectId === undefined || level === undefined) {
+    return NextResponse.json({ error: { code: 'BAD_REQUEST', message: 'Paramètre subject_id ou level invalide.' } }, { status: 400 })
+  }
 
   let query = supabase
     .from('quizzes')
@@ -18,6 +22,9 @@ export async function GET(req: NextRequest) {
   if (level) query = query.eq('level', level)
 
   const { data, error } = await query.limit(100)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/quiz]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: data ?? [] })
 }

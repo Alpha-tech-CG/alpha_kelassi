@@ -1,0 +1,192 @@
+{
+ "matiere": "Éducation civique, expression écrite et lecture — chapitres ajoutés avec le cahier CM2",
+ "chapitres": [
+  {
+   "subject_id": "ebf2b1d5-19b1-4169-b837-63990b5c9423",
+   "chapter_id": "e3f25fee-e35e-4b46-8c96-609b8494df3f",
+   "titre": "Les accidents et les premiers soins",
+   "questions": [
+    { "prompt": "Que faut-il faire en premier devant un accident ?", "options": ["Protéger, pour ne pas être blessé à son tour", "Déplacer le blessé", "Donner un médicament", "Partir chercher de l'eau"], "correct_index": 0, "explanation": "Protéger, alerter, secourir : c'est l'ordre des trois gestes." },
+    { "prompt": "Que fait-on juste après avoir protégé ?", "options": ["On alerte un adulte et les secours", "On soigne seul", "On nettoie la pièce", "On attend"], "correct_index": 0, "explanation": "Alerter permet d'obtenir de l'aide rapidement." },
+    { "prompt": "Que faire en cas de brûlure ?", "options": ["Passer la zone sous l'eau froide plusieurs minutes", "Mettre de l'huile", "Percer la cloque", "Appliquer du dentifrice"], "correct_index": 0, "explanation": "L'eau froide calme la brûlure ; huile et dentifrice aggravent la plaie." },
+    { "prompt": "Que faire devant une petite plaie ?", "options": ["Laver à l'eau et au savon, désinfecter et couvrir", "La laisser à l'air et au sable", "La frotter avec de la terre", "La serrer très fort"], "correct_index": 0, "explanation": "On protège la plaie avec un pansement propre." },
+    { "prompt": "Que faire en cas de saignement de nez ?", "options": ["S'asseoir, pencher la tête en avant et pincer le nez", "Pencher la tête en arrière", "S'allonger sur le dos", "Boire de l'eau glacée"], "correct_index": 0, "explanation": "La tête en avant évite d'avaler le sang." },
+    { "prompt": "Quel danger la cuisine présente-t-elle surtout ?", "options": ["Les brûlures", "La noyade", "Les piqûres de moustiques", "La chute d'arbre"], "correct_index": 0, "explanation": "Marmite, huile chaude et braises provoquent des brûlures." },
+    { "prompt": "Comment éviter une intoxication à la maison ?", "options": ["Ne jamais boire dans une bouteille sans étiquette", "Goûter pour vérifier", "Ranger les produits à portée des enfants", "Transvaser le pétrole dans une bouteille d'eau"], "correct_index": 0, "explanation": "Les produits dangereux se rangent en hauteur, dans leur emballage." },
+    { "prompt": "Comment éviter la noyade ?", "options": ["Ne jamais se baigner seul", "Nager après le repas", "Jouer au bord du puits", "Se baigner la nuit"], "correct_index": 0, "explanation": "On ne se baigne jamais seul et on ne joue pas près d'un puits." },
+    { "prompt": "Que ne faut-il jamais faire à un blessé ?", "options": ["Lui donner un médicament de sa propre initiative", "Le rassurer", "Appeler un adulte", "Le couvrir"], "correct_index": 0, "explanation": "C'est de l'automédication : elle est dangereuse." },
+    { "prompt": "Que faire si un blessé a mal au dos ou au cou ?", "options": ["Ne pas le déplacer", "Le porter rapidement", "Le faire marcher", "Le faire asseoir de force"], "correct_index": 0, "explanation": "Le déplacer pourrait aggraver sa blessure." }
+   ]
+  },
+  {
+   "subject_id": "ebf2b1d5-19b1-4169-b837-63990b5c9423",
+   "chapter_id": "305657dd-e30e-4006-bc73-90045f913e22",
+   "titre": "Les droits et les devoirs de l'enfant",
+   "questions": [
+    { "prompt": "Quel est le premier droit de tout enfant ?", "options": ["Avoir un nom", "Choisir son école", "Travailler", "Voter"], "correct_index": 0, "explanation": "Tout enfant a droit à un nom, à une identité." },
+    { "prompt": "Quel droit permet à l'enfant d'apprendre ?", "options": ["Le droit d'aller à l'école", "Le droit de jouer", "Le droit d'être soigné", "Le droit d'être protégé"], "correct_index": 0, "explanation": "L'instruction est un droit fondamental de l'enfant." },
+    { "prompt": "Quel droit protège la santé de l'enfant ?", "options": ["Le droit d'être soigné", "Le droit de jouer", "Le droit de donner son avis", "Le droit d'avoir un nom"], "correct_index": 0, "explanation": "Tout enfant malade doit être soigné." },
+    { "prompt": "Quel droit permet à l'enfant de s'exprimer ?", "options": ["Le droit de donner son avis", "Le droit d'être protégé", "Le droit d'être soigné", "Le droit de jouer"], "correct_index": 0, "explanation": "L'enfant a le droit d'exprimer son opinion." },
+    { "prompt": "Le jeu est-il un droit de l'enfant ?", "options": ["Oui, c'est un droit", "Non, c'est interdit", "Seulement le dimanche", "Seulement après 12 ans"], "correct_index": 0, "explanation": "Le droit de jouer fait partie des droits de l'enfant." },
+    { "prompt": "Que vont toujours ensemble ?", "options": ["Les droits et les devoirs", "Les droits et les punitions", "Les devoirs et les vacances", "Les droits et l'argent"], "correct_index": 0, "explanation": "Avoir des droits implique d'assumer des devoirs." },
+    { "prompt": "Quel est un devoir de l'enfant à l'école ?", "options": ["Aller à l'école et respecter les règles", "Arriver quand il veut", "Choisir ses matières", "Corriger le maître"], "correct_index": 0, "explanation": "Assiduité et respect des règles sont des devoirs." },
+    { "prompt": "Quel est un devoir de l'enfant à la maison ?", "options": ["Aider aux tâches de la famille", "Ne rien faire", "Commander les adultes", "Sortir sans prévenir"], "correct_index": 0, "explanation": "Aider à la maison fait partie des devoirs de l'enfant." },
+    { "prompt": "Comment l'enfant doit-il se comporter avec les autres ?", "options": ["Les respecter", "Se moquer d'eux", "Les ignorer", "Les commander"], "correct_index": 0, "explanation": "Le respect des autres est un devoir." },
+    { "prompt": "Un enfant qui n'est pas inscrit à l'école est-il privé d'un droit ?", "options": ["Oui, le droit à l'éducation", "Non, l'école est facultative", "Non, seulement après 15 ans", "Oui, mais seulement en ville"], "correct_index": 0, "explanation": "Le droit d'aller à l'école appartient à tous les enfants." }
+   ]
+  },
+  {
+   "subject_id": "ebf2b1d5-19b1-4169-b837-63990b5c9423",
+   "chapter_id": "60e5623a-b4a6-446e-b414-61524b078749",
+   "titre": "La solidarité et l'entraide",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'être solidaire ?", "options": ["Aider les autres sans rien attendre en retour", "Aider seulement sa famille", "Aider pour recevoir de l'argent", "Travailler seul"], "correct_index": 0, "explanation": "La solidarité repose sur l'entraide désintéressée." },
+    { "prompt": "Quel exemple de solidarité à l'école est cité ?", "options": ["Expliquer une leçon à un camarade en difficulté", "Souffler pendant un devoir", "Rire d'une erreur", "Cacher son cahier"], "correct_index": 0, "explanation": "Aider un camarade à comprendre, c'est être solidaire." },
+    { "prompt": "Quel exemple de solidarité dans le quartier est cité ?", "options": ["Aider une personne âgée à porter sa charge", "Jeter ses ordures chez le voisin", "Faire du bruit la nuit", "Ignorer les malades"], "correct_index": 0, "explanation": "Participer au nettoyage et rendre visite à un malade en font partie." },
+    { "prompt": "Pourquoi être solidaire ?", "options": ["Parce que chacun peut un jour avoir besoin des autres", "Pour être payé", "Pour être le chef", "Pour éviter l'école"], "correct_index": 0, "explanation": "L'entraide rend la famille, la classe et le quartier plus forts." },
+    { "prompt": "Souffler une réponse pendant un examen, est-ce de la solidarité ?", "options": ["Non, c'est de la tricherie", "Oui, c'est s'entraider", "Oui, si l'on est ami", "Oui, si le maître ne voit pas"], "correct_index": 0, "explanation": "Cela n'aide pas le camarade à apprendre." },
+    { "prompt": "Comment aider un camarade malade depuis une semaine ?", "options": ["Lui apporter les leçons et l'aider à rattraper", "Ne rien faire", "Lui dire qu'il a de la chance", "Cacher qu'il y a eu un devoir"], "correct_index": 0, "explanation": "C'est une forme concrète d'entraide." },
+    { "prompt": "Quelles formes d'entraide traditionnelles existent ?", "options": ["Se réunir pour les travaux des champs ou une construction", "Vendre son champ", "Travailler chacun seul", "Fermer sa porte"], "correct_index": 0, "explanation": "Les familles s'entraident aussi lors des mariages et des deuils." },
+    { "prompt": "Sur quel esprit reposent les coopératives ?", "options": ["Mettre en commun pour que chacun s'en sorte mieux", "La compétition", "Le secret", "L'individualisme"], "correct_index": 0, "explanation": "C'est le même esprit d'entraide." },
+    { "prompt": "Aider, est-ce faire à la place de l'autre ?", "options": ["Non, c'est l'aider à faire par lui-même", "Oui, toujours", "Oui, si cela va plus vite", "Oui, pour les devoirs"], "correct_index": 0, "explanation": "Faire à la place de l'autre ne l'aide pas à progresser." },
+    { "prompt": "Que peut-on faire après une inondation dans le pays ?", "options": ["Aider les sinistrés et donner ce dont on ne se sert plus", "Attendre que l'État agisse seul", "Vendre plus cher", "Se moquer des victimes"], "correct_index": 0, "explanation": "La solidarité s'exerce aussi à l'échelle du pays." }
+   ]
+  },
+  {
+   "subject_id": "ebf2b1d5-19b1-4169-b837-63990b5c9423",
+   "chapter_id": "6c3fecc6-445a-4e08-b3a1-48bb76dfa25a",
+   "titre": "Le respect des lois",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'une loi ?", "options": ["Une règle écrite qui s'applique à tout le pays", "Une habitude de la famille", "Un conseil du maître", "Un règlement d'école"], "correct_index": 0, "explanation": "La loi s'applique à tout le monde, partout dans le pays." },
+    { "prompt": "Qui vote les lois ?", "options": ["Les députés et les sénateurs", "Les maîtres d'école", "Les chefs de quartier", "Les parents"], "correct_index": 0, "explanation": "L'Assemblée nationale et le Sénat votent la loi." },
+    { "prompt": "À quoi sert la loi ?", "options": ["À protéger les personnes, leurs biens et leur liberté", "À punir les plus pauvres", "À favoriser les plus forts", "À augmenter les impôts"], "correct_index": 0, "explanation": "Sans règle, le plus fort imposerait sa volonté." },
+    { "prompt": "Quelle différence entre un règlement et une loi ?", "options": ["Le règlement ne vaut que dans un lieu précis", "Il n'y a aucune différence", "Le règlement s'applique au pays entier", "La loi ne concerne que l'école"], "correct_index": 0, "explanation": "Le règlement intérieur ne vaut que dans l'école ; la loi vaut partout." },
+    { "prompt": "Quel exemple de loi connais-tu déjà ?", "options": ["Le code de la route", "L'heure du dîner", "Le règlement du jeu de cartes", "L'ordre des places en classe"], "correct_index": 0, "explanation": "Traverser au passage piéton, respecter les feux." },
+    { "prompt": "Comment appelle-t-on le fait de désobéir à la loi ?", "options": ["Une infraction", "Une erreur de calcul", "Une absence", "Un oubli"], "correct_index": 0, "explanation": "L'infraction peut être punie d'une amende ou d'une peine." },
+    { "prompt": "Qui prononce les peines ?", "options": ["Le tribunal", "Le maître", "Le voisin", "Le chef du quartier"], "correct_index": 0, "explanation": "La justice est rendue par les tribunaux." },
+    { "prompt": "Que signifie « la loi est la même pour tous » ?", "options": ["Nul n'est au-dessus de la loi", "Seuls les pauvres sont jugés", "Les riches sont exemptés", "Les enfants ne sont pas concernés"], "correct_index": 0, "explanation": "C'est l'égalité devant la loi." },
+    { "prompt": "Quelle loi protège la nature ?", "options": ["L'interdiction de braconner les animaux protégés", "L'obligation de couper les arbres", "L'autorisation de brûler les ordures", "L'interdiction de planter"], "correct_index": 0, "explanation": "Les espèces protégées ne peuvent pas être chassées." },
+    { "prompt": "L'obligation d'aller à l'école est-elle une loi ?", "options": ["Oui", "Non, c'est un conseil", "Non, c'est un règlement d'école", "Oui, mais seulement en ville"], "correct_index": 0, "explanation": "L'instruction est obligatoire : c'est la loi." }
+   ]
+  },
+  {
+   "subject_id": "ebf2b1d5-19b1-4169-b837-63990b5c9423",
+   "chapter_id": "d5fa1dbc-813c-400a-93a3-006ccea6d2d5",
+   "titre": "La paix et la non-violence",
+   "questions": [
+    { "prompt": "Qu'est-ce que la paix ?", "options": ["Vivre ensemble sans violence, en se respectant", "L'absence de voisins", "Le silence complet", "Ne jamais être en désaccord"], "correct_index": 0, "explanation": "La paix, ce n'est pas seulement l'absence de guerre." },
+    { "prompt": "Le désaccord est-il normal ?", "options": ["Oui, c'est la violence qui ne l'est pas", "Non, il faut toujours être d'accord", "Oui, et il justifie la bagarre", "Non, il faut se taire"], "correct_index": 0, "explanation": "On peut ne pas être d'accord sans se battre." },
+    { "prompt": "Quelle est la première étape pour régler un conflit ?", "options": ["Se calmer", "Répondre immédiatement", "Appeler ses amis", "Frapper d'abord"], "correct_index": 0, "explanation": "On respire et on ne répond pas sous le coup de la colère." },
+    { "prompt": "Que fait-on après s'être calmé ?", "options": ["On écoute l'autre jusqu'au bout", "On crie plus fort", "On s'en va", "On se venge"], "correct_index": 0, "explanation": "Écouter sans interrompre est la deuxième étape." },
+    { "prompt": "Comment exprimer ce que l'on ressent ?", "options": ["Avec des mots, calmement", "Avec des coups", "Avec des insultes", "En boudant"], "correct_index": 0, "explanation": "« Quand tu as pris mon cahier, cela m'a fâché. »" },
+    { "prompt": "Que faire si le conflit ne se règle pas à deux ?", "options": ["Demander l'aide d'un adulte", "Se battre", "Appeler d'autres élèves pour se venger", "Abandonner l'école"], "correct_index": 0, "explanation": "Un adulte aide à trouver une solution." },
+    { "prompt": "Quelle forme de violence n'est pas physique ?", "options": ["Les insultes et les moqueries", "Les coups", "Les bousculades", "Les gifles"], "correct_index": 0, "explanation": "Les moqueries et les rumeurs sont aussi des violences." },
+    { "prompt": "Quelle conséquence ont les moqueries ?", "options": ["Tristesse et perte de confiance", "Plus d'amis", "De meilleures notes", "Rien du tout"], "correct_index": 0, "explanation": "Elles brisent les amitiés et blessent durablement." },
+    { "prompt": "Que fait un artisan de paix à l'école ?", "options": ["Il défend celui qui est seul et refuse les moqueries", "Il encourage les bagarres", "Il répète les rumeurs", "Il regarde sans rien dire"], "correct_index": 0, "explanation": "Il prévient aussi un adulte quand une bagarre se prépare." },
+    { "prompt": "Quelle phrase résume la leçon ?", "options": ["On règle les conflits par la parole, jamais par les coups", "Le plus fort a toujours raison", "Il faut se venger vite", "Mieux vaut ignorer les autres"], "correct_index": 0, "explanation": "C'est le principe de la non-violence." }
+   ]
+  },
+  {
+   "subject_id": "ebf2b1d5-19b1-4169-b837-63990b5c9423",
+   "chapter_id": "4273ae93-1835-4371-a24c-cd60ae0fae78",
+   "titre": "Protéger l'environnement",
+   "questions": [
+    { "prompt": "Qu'est-ce que l'environnement ?", "options": ["Tout ce qui nous entoure : air, eau, sol, plantes, animaux", "Seulement la forêt", "Seulement les animaux", "Seulement la ville"], "correct_index": 0, "explanation": "Le protéger, c'est protéger notre santé." },
+    { "prompt": "Que se passe-t-il quand on jette les ordures dans le caniveau ?", "options": ["Il se bouche, l'eau stagne et le quartier s'inonde", "Le quartier devient propre", "L'eau devient potable", "Les moustiques disparaissent"], "correct_index": 0, "explanation": "L'eau stagnante attire les moustiques et provoque des inondations." },
+    { "prompt": "Que provoque le rejet des déchets dans la rivière ?", "options": ["L'eau devient impropre à la boisson et les poissons meurent", "L'eau devient plus claire", "Les poissons se multiplient", "La rivière se nettoie seule"], "correct_index": 0, "explanation": "La pollution de l'eau tue la vie aquatique." },
+    { "prompt": "Pourquoi ne pas brûler les plastiques ?", "options": ["La fumée est toxique", "Cela coûte cher", "Cela fait du bruit", "Cela attire la pluie"], "correct_index": 0, "explanation": "L'air devient irrespirable." },
+    { "prompt": "Que provoque la coupe d'arbres sans replanter ?", "options": ["L'érosion du sol et moins d'ombre", "Un sol plus riche", "Plus de pluie", "Un air plus pur"], "correct_index": 0, "explanation": "Sans racines, la terre est emportée par la pluie." },
+    { "prompt": "Quel geste simple protège l'environnement à la maison ?", "options": ["Fermer le robinet et ne pas gaspiller l'eau", "Laisser couler l'eau", "Laisser la lumière allumée", "Jeter par la fenêtre"], "correct_index": 0, "explanation": "On éteint aussi la lumière en sortant d'une pièce." },
+    { "prompt": "Que veut dire trier ses déchets ?", "options": ["Séparer ce qui peut resservir", "Tout jeter ensemble", "Tout brûler", "Tout enterrer"], "correct_index": 0, "explanation": "Bouteilles, boîtes et papier peuvent être réutilisés ou recyclés." },
+    { "prompt": "Que rappellent les trois R ?", "options": ["Réduire, Réutiliser, Recycler", "Ramasser, Ranger, Rincer", "Répéter, Réviser, Réussir", "Remplir, Remuer, Rendre"], "correct_index": 0, "explanation": "C'est la règle de base de la protection de l'environnement." },
+    { "prompt": "Comment agir à l'école pour l'environnement ?", "options": ["Participer au nettoyage et entretenir le jardin scolaire", "Jeter dans la cour", "Arracher les plantes", "Laisser les robinets ouverts"], "correct_index": 0, "explanation": "Un élève qui change ses habitudes entraîne toute une maison." },
+    { "prompt": "Pourquoi protéger l'environnement ?", "options": ["Pour notre santé et celle des générations suivantes", "Pour gagner de l'argent", "Pour faire plaisir au maître", "Pour éviter les devoirs"], "correct_index": 0, "explanation": "Un environnement sain protège la santé de tous." }
+   ]
+  },
+  {
+   "subject_id": "22c62bae-8b0d-49a0-8059-61c113f1cc6f",
+   "chapter_id": "a0801443-0297-4e98-87a2-cc1b225edc68",
+   "titre": "Décrire un lieu et un objet",
+   "questions": [
+    { "prompt": "Dans quel ordre décrit-on un lieu ?", "options": ["Du général au détail", "Du détail au général", "Au hasard", "De la fin au début"], "correct_index": 0, "explanation": "On présente l'ensemble, puis on entre dans les détails." },
+    { "prompt": "Quels mots aident à situer les éléments d'un lieu ?", "options": ["À gauche, devant, au fond, près de", "Hier, demain, ensuite", "Car, donc, mais", "Qui, que, dont"], "correct_index": 0, "explanation": "Ce sont les mots de lieu." },
+    { "prompt": "Quelle classe de mots est la plus utile pour décrire ?", "options": ["Les adjectifs qualificatifs", "Les conjonctions", "Les pronoms", "Les adverbes de temps"], "correct_index": 0, "explanation": "Les adjectifs disent la forme, la taille, la couleur." },
+    { "prompt": "Que peut-on mobiliser pour enrichir une description ?", "options": ["Ses cinq sens", "Ses souvenirs d'école", "Ses résultats scolaires", "Ses calculs"], "correct_index": 0, "explanation": "La vue, l'ouïe, l'odorat, le goût et le toucher rendent la description vivante." },
+    { "prompt": "Dans « Au fond, on entend les enfants qui rient », quel sens est sollicité ?", "options": ["L'ouïe", "La vue", "L'odorat", "Le goût"], "correct_index": 0, "explanation": "On entend : c'est l'ouïe." },
+    { "prompt": "Que donne-t-on en premier quand on décrit un objet ?", "options": ["Son nom", "Son prix", "Son propriétaire", "Son âge"], "correct_index": 0, "explanation": "Puis la forme, la taille, la couleur, la matière et l'utilité." },
+    { "prompt": "Lequel de ces éléments décrit la matière d'un objet ?", "options": ["En bois", "Grand", "Rouge", "Rond"], "correct_index": 0, "explanation": "La matière dit de quoi l'objet est fait." },
+    { "prompt": "Quel élément manque dans : « une bouteille en plastique, transparente, d'un litre » ?", "options": ["Son utilité", "Sa matière", "Sa couleur", "Sa taille"], "correct_index": 0, "explanation": "Il reste à dire à quoi elle sert." },
+    { "prompt": "Un texte qui décrit répond surtout à quelle question ?", "options": ["Comment est-ce ?", "Que s'est-il passé ?", "Pourquoi ?", "Quand ?"], "correct_index": 0, "explanation": "La description montre, elle ne raconte pas." },
+    { "prompt": "Quelle phrase appartient à une description ?", "options": ["Au centre du village, une grande place ombragée s'étend.", "Soudain, la pluie est tombée.", "Il courut jusqu'à la maison.", "Enfin, il rentra chez lui."], "correct_index": 0, "explanation": "Les autres phrases racontent des actions." }
+   ]
+  },
+  {
+   "subject_id": "22c62bae-8b0d-49a0-8059-61c113f1cc6f",
+   "chapter_id": "ddcc4473-9527-48e6-9410-58ba227ba589",
+   "titre": "Raconter au passé et écrire un dialogue",
+   "questions": [
+    { "prompt": "Quel temps sert à planter le décor d'un récit au passé ?", "options": ["L'imparfait", "Le passé composé", "Le futur", "Le présent"], "correct_index": 0, "explanation": "« Il faisait beau » : l'imparfait décrit le décor et les habitudes." },
+    { "prompt": "Quel temps sert aux actions qui surviennent ?", "options": ["Le passé composé", "L'imparfait", "Le futur", "Le conditionnel"], "correct_index": 0, "explanation": "« Soudain, la pluie est tombée. »" },
+    { "prompt": "Quand on continue un récit commencé, que faut-il garder ?", "options": ["Les mêmes personnages et le même temps", "De nouveaux personnages", "Un autre temps", "Un autre lieu"], "correct_index": 0, "explanation": "La cohérence du récit l'exige." },
+    { "prompt": "Comment appelle-t-on la fin d'un récit ?", "options": ["La chute", "L'introduction", "Le décor", "Le dialogue"], "correct_index": 0, "explanation": "La chute termine l'histoire." },
+    { "prompt": "Quel pronom emploie-t-on pour raconter un événement vécu ?", "options": ["Je", "Il", "Nous", "On"], "correct_index": 0, "explanation": "On raconte à la première personne ce qu'on a vécu." },
+    { "prompt": "Que faut-il exprimer dans le récit d'un événement vécu ?", "options": ["Ce que l'on a ressenti", "Le prix des choses", "Les résultats scolaires", "La météo seulement"], "correct_index": 0, "explanation": "Les sentiments rendent le récit vivant." },
+    { "prompt": "Comment commence chaque réplique d'un dialogue ?", "options": ["Par un tiret, à la ligne", "Par une virgule", "Par un point", "Par une majuscule seulement"], "correct_index": 0, "explanation": "Le tiret marque le changement de personne." },
+    { "prompt": "Quel verbe convient pour introduire une réponse ?", "options": ["répondre", "demander", "courir", "manger"], "correct_index": 0, "explanation": "Dire, demander, répondre, crier sont des verbes de parole." },
+    { "prompt": "Quelle phrase est au passé composé ?", "options": ["La pluie est tombée.", "Il faisait beau.", "Les enfants jouaient.", "Le soleil brillait."], "correct_index": 0, "explanation": "Les trois autres sont à l'imparfait." },
+    { "prompt": "Dans un récit, à quoi sert le dialogue ?", "options": ["À faire parler les personnages et rendre l'histoire vivante", "À allonger le texte", "À résumer l'histoire", "À remplacer la conclusion"], "correct_index": 0, "explanation": "Le dialogue donne vie aux personnages." }
+   ]
+  },
+  {
+   "subject_id": "22c62bae-8b0d-49a0-8059-61c113f1cc6f",
+   "chapter_id": "d1738601-0426-4526-baa9-593689d2c037",
+   "titre": "S'entraîner dans les conditions du CEPE",
+   "questions": [
+    { "prompt": "Que comprend l'épreuve de français ?", "options": ["Une dictée, des questions de texte, de la conjugaison et une rédaction", "Seulement une dictée", "Seulement une rédaction", "Seulement des questions de cours"], "correct_index": 0, "explanation": "L'épreuve de bilan reprend ces quatre parties." },
+    { "prompt": "Que comprend l'épreuve de mathématiques ?", "options": ["Les quatre opérations, des problèmes, des fractions et des décimaux", "Seulement des problèmes", "Seulement des additions", "Seulement de la géométrie"], "correct_index": 0, "explanation": "On y ajoute les mesures et la géométrie en fin d'année." },
+    { "prompt": "Quelle est la première étape de la méthode de révision ?", "options": ["Relire la leçon", "Refaire les exercices", "Cacher la leçon", "Noter ses erreurs"], "correct_index": 0, "explanation": "On relit, puis on cache la leçon pour se tester." },
+    { "prompt": "Que fait-on après avoir caché la leçon ?", "options": ["On essaie de la dire à voix haute", "On passe à la suivante", "On la recopie", "On la relit encore"], "correct_index": 0, "explanation": "Se réciter la leçon montre ce qui est réellement su." },
+    { "prompt": "Comment utiliser les exercices résolus pour réviser ?", "options": ["Les refaire sans regarder la correction", "Les lire seulement", "Les recopier", "Les sauter"], "correct_index": 0, "explanation": "Refaire sans regarder vérifie qu'on a compris la méthode." },
+    { "prompt": "Que fait-on de ses erreurs ?", "options": ["On les note et on les corrige", "On les oublie", "On les cache", "On change d'exercice"], "correct_index": 0, "explanation": "Corriger ses erreurs est la partie la plus utile de la révision." },
+    { "prompt": "Combien de fois faut-il se relire après une dictée ?", "options": ["Trois fois, avec un objectif différent", "Une seule fois", "Jamais", "Dix fois"], "correct_index": 0, "explanation": "Majuscules et ponctuation, puis accords, puis mots difficiles." },
+    { "prompt": "Comment répond-on à une question d'étude de texte ?", "options": ["Par une phrase complète", "Par un seul mot", "Par un dessin", "Par un chiffre"], "correct_index": 0, "explanation": "On souligne les mots-clés et on rédige une phrase complète." },
+    { "prompt": "Quelle est la méthode des problèmes ?", "options": ["Lire, chercher, calculer, répondre, vérifier", "Calculer puis lire", "Répondre au hasard", "Recopier l'énoncé"], "correct_index": 0, "explanation": "On termine toujours par une phrase réponse et une vérification." },
+    { "prompt": "Que contient la simulation complète du CEPE ?", "options": ["Français, mathématiques, puis histoire-géo, sciences et éducation civique", "Seulement le français", "Seulement les mathématiques", "Seulement un questionnaire oral"], "correct_index": 0, "explanation": "On corrige ensuite et on révise les points faibles." }
+   ]
+  },
+  {
+   "subject_id": "dcc96d92-8a61-4423-982c-0c79ddfbbf42",
+   "chapter_id": "85621518-f535-4d81-9774-19c8d92a3927",
+   "titre": "Le texte descriptif",
+   "questions": [
+    { "prompt": "Que fait un texte descriptif ?", "options": ["Il montre comment est une chose", "Il raconte une histoire", "Il donne un ordre", "Il pose des questions"], "correct_index": 0, "explanation": "Il répond à la question « Comment est-ce ? »." },
+    { "prompt": "Quelle classe de mots y est la plus fréquente ?", "options": ["Les adjectifs", "Les conjonctions", "Les pronoms", "Les prépositions"], "correct_index": 0, "explanation": "Une case basse, un toit rouillé, une cour sablonneuse." },
+    { "prompt": "Quels mots indiquent la place des éléments ?", "options": ["Devant, derrière, à droite, au fond", "Hier, demain, ensuite", "Car, donc, mais", "Toujours, jamais, souvent"], "correct_index": 0, "explanation": "Ce sont les mots de lieu." },
+    { "prompt": "Quels verbes reviennent souvent dans une description ?", "options": ["Les verbes d'état : être, paraître, sembler", "Les verbes d'action rapide", "Les verbes de parole", "Les verbes à l'impératif"], "correct_index": 0, "explanation": "Ils servent à dire comment sont les choses." },
+    { "prompt": "Quel temps est souvent employé dans une description au passé ?", "options": ["L'imparfait", "Le passé simple", "Le futur", "L'impératif"], "correct_index": 0, "explanation": "« La rivière coulait doucement. »" },
+    { "prompt": "Comment repère-t-on l'information demandée ?", "options": ["On repère le mot-clé de la question et on le cherche dans le texte", "On répond de mémoire", "On devine", "On recopie tout le texte"], "correct_index": 0, "explanation": "Le mot-clé guide la recherche." },
+    { "prompt": "Dans quel ordre la description est-elle organisée ?", "options": ["Souvent du proche au lointain, ou de gauche à droite", "Toujours au hasard", "Toujours de la fin au début", "Par ordre alphabétique"], "correct_index": 0, "explanation": "Suivre l'ordre choisi aide à répondre aux questions." },
+    { "prompt": "Dans « une petite case au toit de tôle », quels sont les mots qui décrivent ?", "options": ["petite et de tôle", "case et toit", "une et au", "il et y"], "correct_index": 0, "explanation": "Ils donnent la taille et la matière." },
+    { "prompt": "Comment faut-il répondre aux questions de compréhension ?", "options": ["Par une phrase complète reprenant les mots du texte", "Par oui ou non", "Par un seul mot", "Par un dessin"], "correct_index": 0, "explanation": "C'est la règle constante de l'étude de texte." },
+    { "prompt": "Quelle phrase vient d'un texte descriptif ?", "options": ["Devant la porte, un manguier large donnait de l'ombre.", "Soudain, il se mit à courir.", "Le lendemain, elle partit au marché.", "Enfin, ils rentrèrent."], "correct_index": 0, "explanation": "Les autres phrases racontent des actions." }
+   ]
+  },
+  {
+   "subject_id": "dcc96d92-8a61-4423-982c-0c79ddfbbf42",
+   "chapter_id": "09946fbe-c5b7-48cb-9582-6fc11f2dbbed",
+   "titre": "Lire un dialogue",
+   "questions": [
+    { "prompt": "Qu'est-ce qu'un dialogue ?", "options": ["Une conversation entre deux personnes ou plus", "Une description de lieu", "Une liste de mots", "Un récit sans personnage"], "correct_index": 0, "explanation": "Le dialogue rapporte les paroles échangées." },
+    { "prompt": "Comment repère-t-on un dialogue dans un texte ?", "options": ["Aux guillemets, aux tirets et aux retours à la ligne", "Aux chiffres", "Aux titres", "Aux parenthèses"], "correct_index": 0, "explanation": "Sa présentation le rend reconnaissable au premier coup d'œil." },
+    { "prompt": "Que marque le tiret en début de ligne ?", "options": ["Un changement de personne qui parle", "La fin du texte", "Une addition", "Une pause longue"], "correct_index": 0, "explanation": "Chaque réplique commence par un tiret." },
+    { "prompt": "Quel signe annonce la première prise de parole ?", "options": ["Les deux points suivis des guillemets", "Le point-virgule", "La parenthèse", "L'astérisque"], "correct_index": 0, "explanation": "Le marchand demanda : « Combien de mangues veux-tu ? »" },
+    { "prompt": "Quels verbes indiquent qui parle ?", "options": ["dit, répond, demande, crie", "court, mange, dort", "est, a, va", "finit, grandit, choisit"], "correct_index": 0, "explanation": "Ce sont les verbes de parole." },
+    { "prompt": "Comment savoir qui parle quand le verbe de parole manque ?", "options": ["On compte les tirets : les répliques alternent", "On devine au hasard", "On lit la fin du texte", "On regarde le titre"], "correct_index": 0, "explanation": "Les personnages prennent la parole à tour de rôle." },
+    { "prompt": "Dans le dialogue du marchand et de Mireille, combien de personnes parlent ?", "options": ["Deux", "Trois", "Une", "Quatre"], "correct_index": 0, "explanation": "Le marchand et Mireille." },
+    { "prompt": "Que demande le marchand à Mireille ?", "options": ["Combien de mangues elle veut", "Où elle habite", "Son âge", "Si elle va à l'école"], "correct_index": 0, "explanation": "« Combien de mangues veux-tu ? »" },
+    { "prompt": "Combien coûtent les cinq mangues dans ce dialogue ?", "options": ["500 francs", "100 francs", "1 000 francs", "250 francs"], "correct_index": 0, "explanation": "« Ce sera 500 francs », dit le marchand." },
+    { "prompt": "Quelle question revient le plus souvent à l'examen sur un dialogue ?", "options": ["Qui parle ?", "Combien de lignes ?", "Quelle est la date ?", "Quel est le titre ?"], "correct_index": 0, "explanation": "Il faut savoir attribuer chaque réplique à son personnage." }
+   ]
+  }
+ ]
+}

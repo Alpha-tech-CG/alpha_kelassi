@@ -1,0 +1,394 @@
+{
+  "created_at": "2026-11-10T19:53:17.126Z",
+  "note": "État AVANT ajout to be / to have (Anglais 3e)",
+  "subject": {
+    "id": "26c7e1e0-9ee9-47e4-8ecc-17854f9a78e8",
+    "name": "Anglais"
+  },
+  "chapters": [
+    {
+      "id": "754101f6-3e37-4b2b-8468-55261e6b0d11",
+      "title": "La voix passive (Passive Voice)",
+      "order_index": 0
+    },
+    {
+      "id": "43dbb29a-9cdd-496c-80c0-ef3b361079a8",
+      "title": "Les comparatifs (Comparatives)",
+      "order_index": 1
+    },
+    {
+      "id": "ad2cbe11-9392-4083-9e0e-c6ddec7df15d",
+      "title": "Les superlatifs (Superlatives)",
+      "order_index": 2
+    },
+    {
+      "id": "c3131ffe-d6d5-4670-a63c-fc7c9d73185b",
+      "title": "Le discours indirect (Reported Speech)",
+      "order_index": 3
+    },
+    {
+      "id": "bd6c857a-2e18-436a-94d0-17a697983760",
+      "title": "Préfixes et suffixes (Prefixes & Suffixes)",
+      "order_index": 4
+    },
+    {
+      "id": "3f4ba8c1-3911-4793-9ace-618d35f6fe5f",
+      "title": "Les prépositions (Prepositions)",
+      "order_index": 5
+    },
+    {
+      "id": "b7882f57-483d-4136-930c-13b144d32938",
+      "title": "Les temps verbaux (Tenses)",
+      "order_index": 6
+    },
+    {
+      "id": "d2770193-d9a4-4802-8c27-6b96bad62721",
+      "title": "AIDS (Health)",
+      "order_index": 7
+    },
+    {
+      "id": "a1de7414-c567-4362-ab30-d4a3fbc45a05",
+      "title": "Leisure and Sport",
+      "order_index": 8
+    },
+    {
+      "id": "52fb5185-d684-4ba3-a06f-7b8c382541c9",
+      "title": "Les verbes irréguliers (Irregular Verbs)",
+      "order_index": 9
+    },
+    {
+      "id": "8c49e54f-7050-4bb1-934c-fc76e857efc2",
+      "title": "Vocabulary : everyday topics",
+      "order_index": 10
+    },
+    {
+      "id": "33adb9c2-0aa5-4400-ad01-2bd5867fd50b",
+      "title": "Skills : reading and writing",
+      "order_index": 11
+    }
+  ],
+  "lessons": [
+    {
+      "id": "962244c2-7035-4f37-a254-5f93e901c1b5",
+      "chapter_id": "754101f6-3e37-4b2b-8468-55261e6b0d11",
+      "type": "quiz",
+      "title": "Exercice — Voix passive",
+      "content": "Turn the following sentences into the passive voice, then check your answers.\n\n1. She watches the television.\n2. I drove my parents.\n3. The pupils will pass the exam next week.\n4. We force our families.\n5. Kihika opposes the teacher.\n\n### Corrigé\n1. The television is watched by her.\n2. My parents were driven by me.\n3. The exam will be passed by the pupils next week.\n4. Our families are forced by us.\n5. The teacher is opposed by Kihika.",
+      "video_url": null,
+      "duration_min": 6,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:19:26.565905+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:19:26.565905+00:00"
+    },
+    {
+      "id": "fd8217ac-3b1c-42a6-968f-3666b244c4ac",
+      "chapter_id": "52fb5185-d684-4ba3-a06f-7b8c382541c9",
+      "type": "cours",
+      "title": "Verbes irréguliers : les apprendre par groupes (et ceux à ne pas confondre)",
+      "content": "Pour mémoriser plus vite les verbes irréguliers, on les regroupe selon leur **façon de se former** : dans un même groupe, le prétérit et le participe passé se construisent de la même manière.\n\n### 1. Voyelle longue → voyelle courte (« ee » → « e »)\n| Infinitif | Prétérit | Participe passé | Sens |\n|---|---|---|---|\n| to bleed | bled | bled | saigner |\n| to feed | fed | fed | nourrir |\n| to meet | met | met | rencontrer |\n| to speed | sped | sped | se hâter |\n\n### 2. Terminaison en « -t »\n| Infinitif | Prétérit | Participe passé | Sens |\n|---|---|---|---|\n| to creep | crept | crept | ramper |\n| to deal | dealt | dealt | négocier |\n| to dream | dreamt | dreamt | rêver |\n| to feel | felt | felt | sentir |\n| to keep | kept | kept | garder |\n| to kneel | knelt | knelt | s'agenouiller |\n| to mean | meant | meant | vouloir dire |\n| to sleep | slept | slept | dormir |\n| to sweep | swept | swept | balayer |\n| to weep | wept | wept | pleurer |\n\n### 3. « -d » final → « -t »\n| Infinitif | Prétérit | Participe passé | Sens |\n|---|---|---|---|\n| to bend | bent | bent | plier |\n| to lend | lent | lent | prêter |\n| to rend | rent | rent | déchirer |\n| to send | sent | sent | envoyer |\n| to spend | spent | spent | dépenser |\n\n### 4. « -ell » → « -old »\n| Infinitif | Prétérit | Participe passé | Sens |\n|---|---|---|---|\n| to sell | sold | sold | vendre |\n| to tell | told | told | dire, raconter |\n\n### 5. Terminaison en « -ought / -aught »\n| Infinitif | Prétérit | Participe passé | Sens |\n|---|---|---|---|\n| to bring | brought | brought | apporter |\n| to buy | bought | bought | acheter |\n| to fight | fought | fought | se battre |\n| to seek | sought | sought | chercher |\n| to think | thought | thought | penser |\n| to catch | caught | caught | attraper |\n| to teach | taught | taught | enseigner |\n\n### 6. Les trois formes identiques\nto bet (parier), to burst (éclater), to cast (jeter), to cost (coûter), to cut (couper), to hit (frapper), to hurt (blesser), to let (laisser), to put (mettre), to rid (débarrasser), to set (placer), to shed (verser), to shut (fermer), to split (fendre), to spread (étendre), to thrust (pousser brusquement).\n*Exemple : to cut – cut – cut.*\n\n### 7. « -ake » → « -ook » → « -aken »\nto shake – shook – shaken (secouer) ; to take – took – taken (prendre).\n\n### 8. Prétérit en « -o- », participe en « -en » ou « -n »\n| Infinitif | Prétérit | Participe passé | Sens |\n|---|---|---|---|\n| to break | broke | broken | casser |\n| to freeze | froze | frozen | geler |\n| to steal | stole | stolen | voler (dérober) |\n| to speak | spoke | spoken | parler |\n| to weave | wove | woven | tisser |\n| to bear | bore | borne | porter |\n| to swear | swore | sworn | jurer |\n| to tear | tore | torn | déchirer |\n| to wear | wore | worn | porter (un vêtement) |\n\n### 9. « i » → « o » → « i + en »\nto drive – drove – driven (conduire) ; to ride – rode – ridden (aller à cheval, à moto) ; to rise – rose – risen (se lever) ; to write – wrote – written (écrire).\n\n### 10. Prétérit en « -ew », participe en « -own »\nto blow – blew – blown (souffler) ; to grow – grew – grown (pousser, grandir) ; to know – knew – known (savoir, connaître) ; to throw – threw – thrown (lancer).\n\n### 11. « got »\nto get – got – got (obtenir) ; to forget – forgot – forgotten (oublier).\n\n### 12. « i » → « a »\nto sit – sat – sat (s'asseoir) ; to spit – spat – spat (cracher).\n\n### 13. « i » → « u »\nto dig – dug – dug (creuser) ; to spin – spun – spun (filer) ; to stick – stuck – stuck (coller).\n\n### 14. « -ing » → « -ung »\nto cling – clung – clung (s'accrocher) ; to fling – flung – flung (jeter) ; to sling – slung – slung (lancer) ; to sting – stung – stung (piquer) ; to swing – swung – swung (se balancer) ; to wring – wrung – wrung (tordre).\n\n### 15. « i » → « a » → « u »\n| Infinitif | Prétérit | Participe passé | Sens |\n|---|---|---|---|\n| to begin | began | begun | commencer |\n| to drink | drank | drunk | boire |\n| to ring | rang | rung | sonner |\n| to sing | sang | sung | chanter |\n| to sink | sank | sunk | sombrer, couler |\n| to shrink | shrank | shrunk | rétrécir |\n| to spring | sprang | sprung | jaillir |\n| to swim | swam | swum | nager |\n\n## Ne pas confondre\n| Infinitif | Prétérit | Participe passé | Sens |\n|---|---|---|---|\n| to fall | fell | fallen | tomber |\n| to fell | felled | felled | abattre (un arbre) |\n| to feel | felt | felt | sentir |\n| to flee | fled | fled | fuir |\n| to fly | flew | flown | voler (dans les airs) |\n| to flow | flowed | flowed | couler (liquide) |\n| to lie | lay | lain | être couché |\n| to lie | lied | lied | mentir |\n| to lay | laid | laid | poser |\n| to rend | rent | rent | déchirer |\n| to rent | rented | rented | louer |\n| to see | saw | seen | voir |\n| to saw | sawed | sawn | scier |\n| to sow | sowed | sown | semer |\n| to sew | sewed | sewn | coudre |\n| to sink | sank | sunk | sombrer |\n| to think | thought | thought | penser |\n| to thank | thanked | thanked | remercier (verbe régulier) |\n\n**Astuce** : récite chaque groupe à voix haute (« to bring, brought, brought ; to buy, bought, bought… ») : le rythme commun aide la mémoire.",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 2,
+      "created_at": "2026-10-19T14:24:01.181227+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-19T14:24:01.181227+00:00"
+    },
+    {
+      "id": "a4f05724-03ac-4d27-86d1-55311b2bd2be",
+      "chapter_id": "bd6c857a-2e18-436a-94d0-17a697983760",
+      "type": "quiz",
+      "title": "Exercice — Préfixes et suffixes",
+      "content": "Use the affixes to form new words, then check.\n\n**Affixes :** dis, un, ary, able, re, ion, ful, in\n**Roots :** defence, perfect, use, connect, real, play, possible\n\n### Corrigé\n- re + play = replay\n- im + possible = impossible\n- dis + connect = disconnect\n- perfect + ion = perfection\n- mix + able = mixable",
+      "video_url": null,
+      "duration_min": 4,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:20:08.764397+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:20:08.764397+00:00"
+    },
+    {
+      "id": "9e406ea3-6abc-40c0-866b-05901cc26a74",
+      "chapter_id": "52fb5185-d684-4ba3-a06f-7b8c382541c9",
+      "type": "cours",
+      "title": "Les verbes irréguliers",
+      "content": "Les verbes irréguliers ne suivent pas la règle habituelle du **-ed** au prétérit et au participe passé. Il faut les **apprendre par cœur**. Voici la liste alphabétique de référence.\n\n| Infinitif | Prétérit | Participe Passé | Sens |\n|---|---|---|---|\n| to arise | arose | arisen | s'élever |\n| to awake | awoke | awoken | se réveiller |\n| to be | was/were | been | être |\n| to bear | bore | born/borne | porter |\n| to beat | beat | beaten | battre/taper |\n| to become | became | become | devenir |\n| to begin | began | begun | commencer |\n| to bend | bent | bent | courber |\n| to bet | bet | bet | parier |\n| to bind | bound | bound | lier |\n| to bite | bit | bitten | mordre/piquer |\n| to bleed | bled | bled | saigner |\n| to blow | blew | blown | souffler |\n| to break | broke | broken | briser/casser |\n| to bring | brought | brought | apporter |\n| to build | built | built | construire |\n| to burn | burnt | burnt | brûler |\n| to burst | burst | burst | éclater |\n| to buy | bought | bought | acheter |\n| to cast | cast | cast | jeter/lancer |\n| to catch | caught | caught | attraper |\n| to choose | chose | chosen | choisir |\n| to cling | clung | clung | s'accrocher |\n| to come | came | come | venir |\n| to cost | cost | cost | coûter |\n| to creep | crept | crept | ramper |\n| to cut | cut | cut | couper |\n| to deal | dealt | dealt | négocier |\n| to dig | dug | dug | creuser |\n| to do | did | done | faire |\n| to draw | drew | drawn | tirer/dessiner |\n| to dream | dreamt | dreamt | rêver |\n| to drink | drank | drunk | boire |\n| to drive | drove | driven | conduire |\n| to eat | ate | eaten | manger |\n| to fall | fell | fallen | tomber |\n| to feed | fed | fed | nourrir |\n| to feel | felt | felt | sentir |\n| to fight | fought | fought | se battre/lutter |\n| to find | found | found | trouver |\n| to flee | fled | fled | fuir |\n| to fling | flung | flung | jeter |\n| to fly | flew | flown | voler |\n| to forbid | forbade | forbidden | interdire |\n| to forget | forgot | forgotten | oublier |\n| to forgive | forgave | forgiven | pardonner |\n| to freeze | froze | frozen | geler |\n| to get | got | got | obtenir |\n| to give | gave | given | donner |\n| to go | went | gone | aller/partir |\n| to grow | grew | grown | croître/grandir |\n| to hang | hung | hung | pendre |\n| to have | had | had | avoir |\n| to hear | heard | heard | entendre |\n| to hide | hid | hidden | cacher |\n| to hit | hit | hit | frapper |\n| to hold | held | held | tenir |\n| to hurt | hurt | hurt | blesser |\n| to keep | kept | kept | garder |\n| to kneel | knelt | knelt | s'agenouiller |\n| to know | knew | known | savoir |\n| to lay | laid | laid | poser/pondre |\n| to lead | led | led | conduire/guider |\n| to lean | leant | leant | s'appuyer |\n| to leap | leapt | leapt | bondir |\n| to learn | learnt | learnt | apprendre |\n| to leave | left | left | quitter/laisser |\n| to lend | lent | lent | prêter |\n| to let | let | let | laisser |\n| to lie | lay | lain | être couché |\n| to light | lit | lit | allumer |\n| to lose | lost | lost | perdre |\n| to make | made | made | faire/fabriquer |\n| to mean | meant | meant | vouloir dire |\n| to meet | met | met | rencontrer |\n| to mistake | mistook | mistaken | se méprendre |\n| to pay | paid | paid | payer |\n| to put | put | put | mettre |\n| to read | read | read | lire |\n| to ride | rode | ridden | aller à cheval/à moto |\n| to ring | rang | rung | sonner |\n| to rise | rose | risen | se lever |\n| to run | ran | run | courir |\n| to say | said | said | dire |\n| to see | saw | seen | voir |\n| to seek | sought | sought | chercher |\n| to sell | sold | sold | vendre |\n| to send | sent | sent | envoyer |\n| to set | set | set | placer |\n| to shake | shook | shaken | secouer |\n| to shine | shone | shone | briller |\n| to shoot | shot | shot | tirer |\n| to show | showed | shown | montrer |\n| to shrink | shrank | shrunk | se rétrécir |\n| to shut | shut | shut | fermer |\n| to sing | sang | sung | chanter |\n| to sink | sank | sunk | sombrer/couler |\n| to sit | sat | sat | être assis/s'asseoir |\n| to sleep | slept | slept | dormir |\n| to slide | slid | slid | glisser |\n| to smell | smelt | smelt | sentir |\n| to sow | sowed | sown | semer |\n| to speak | spoke | spoken | parler |\n| to spell | spelt | spelt | épeler |\n| to spend | spent | spent | dépenser |\n| to spill | spilt | spilt | renverser |\n| to spin | spun | spun | filer |\n| to spit | spat | spat | cracher |\n| to spoil | spoilt | spoilt | gâter |\n| to spread | spread | spread | étendre |\n| to spring | sprang | sprung | jaillir |\n| to stand | stood | stood | être debout |\n| to steal | stole | stolen | voler |\n| to stick | stuck | stuck | coller |\n| to sting | stung | stung | piquer |\n| to strike | struck | struck | frapper/heurter |\n| to swear | swore | sworn | jurer |\n| to sweep | swept | swept | balayer |\n| to swell | swelled | swollen | enfler |\n| to swim | swam | swum | nager |\n| to swing | swung | swung | se balancer |\n| to take | took | taken | prendre |\n| to teach | taught | taught | enseigner |\n| to tear | tore | torn | déchirer |\n| to tell | told | told | dire/raconter |\n| to think | thought | thought | penser |\n| to throw | threw | thrown | lancer |\n| to understand | understood | understood | comprendre |\n| to undertake | undertook | undertaken | entreprendre |\n| to upset | upset | upset | renverser |\n| to wake | woke | woken | s'éveiller |\n| to wear | wore | worn | porter |\n| to weave | wove | woven | tisser |\n| to weep | wept | wept | pleurer |\n| to win | won | won | gagner |\n| to wind | wound | wound | enrouler |\n| to withdraw | withdrew | withdrawn | (se) retirer |\n| to wring | wrung | wrung | tordre |\n| to write | wrote | written | écrire |\n\n### ⚠️ Ne pas confondre\nCertains verbes se ressemblent mais ont un sens et des formes différents.\n\n| Infinitif | Prétérit | Participe Passé | Sens |\n|---|---|---|---|\n| to fall | fell | fallen | tomber |\n| to fell | felled | felled | abattre |\n| to feel | felt | felt | sentir |\n| to flee | fled | fled | fuir |\n| to fly | flew | flown | voler |\n| to flow | flowed | flowed | couler |\n| to lie | lay | lain | être couché |\n| to lie | lied | lied | mentir |\n| to lay | laid | laid | poser |\n| to see | saw | seen | voir |\n| to saw | sawed | sawn | scier |\n| to sow | sowed | sown | semer |\n| to sew | sewed | sewn | coudre |\n| to sink | sank | sunk | sombrer/couler |\n| to think | thought | thought | penser |\n| to thank | thanked | thanked | remercier |",
+      "video_url": null,
+      "duration_min": 20,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:33:29.732588+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:33:29.732588+00:00"
+    },
+    {
+      "id": "c003593f-e718-4000-ac5d-bc7ab1d5101b",
+      "chapter_id": "bd6c857a-2e18-436a-94d0-17a697983760",
+      "type": "cours",
+      "title": "Préfixes et suffixes",
+      "content": "We use **prefixes** and **suffixes** to form new words.\n\n### 1. Prefixes\nA prefix is added **before** the root to create a new word.\n\n| Prefix | Root | New word |\n|---|---|---|\n| im | polite | impolite |\n| re | play | replay |\n| dis | cover | discover |\n| ir | regular | irregular |\n| un | real | unreal |\n| mis | take | mistake |\n| in | formation | information |\n| under | stand | understand |\n\n### 2. Suffixes\nA suffix is added **after** the root (e.g. -ion, -able, -ful, -ary).\n- perfect + **ion** = perfection\n- mix + **able** = mixable",
+      "video_url": null,
+      "duration_min": 6,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:20:08.764397+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:20:08.764397+00:00"
+    },
+    {
+      "id": "d4d95f2c-47c7-4291-af3e-1939a2e1ea46",
+      "chapter_id": "3f4ba8c1-3911-4793-9ace-618d35f6fe5f",
+      "type": "cours",
+      "title": "Les prépositions",
+      "content": "We use prepositions to link words and describe the place of things or people.\n\n- **On** (sur) — My school bag is on the table. / We will be on holiday in June.\n- **In** (dans) — The pupils are in the classroom.\n- **Under** (sous) — My shoes are under the table.\n- **Of** (de) — The Republic of Congo is rich.\n- **Behind** (derrière) — The school is behind the church.\n- **To** (à, vers) — She goes to school.\n- **At** (à) — The kids are at home.\n- **By** (par) — It was done by Buckla.\n- **For** (pour) — Ben can drive a car for me.",
+      "video_url": null,
+      "duration_min": 5,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:20:08.764397+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:20:08.764397+00:00"
+    },
+    {
+      "id": "4c61d71d-e906-495f-af74-269590495486",
+      "chapter_id": "b7882f57-483d-4136-930c-13b144d32938",
+      "type": "cours",
+      "title": "Les temps verbaux",
+      "content": "### 1. Present Simple\nFor habits and general truths.\n\n**Affirmative :** I play / You play / He plays / We play / They play\n**Negative :** I don't play / He doesn't play\n**Interrogative :** Do you play? / Does he play?\n\n**Rule :** with he / she / it, add **-s** to the verb — She works hard.\n\n### 2. Present Continuous\nFor an action happening now.\n\n**Structure :** Subject + to be (am / is / are) + verb + **-ing**\n\n**Affirmative :** I am playing / He is playing / They are playing\n**Negative :** I am not playing / He isn't playing\n**Interrogative :** Are you playing? / Is he playing?\n- They are studying now.\n\n### 3. The verb To Have\n| Person | Affirmative | Negative | Interrogative |\n|---|---|---|---|\n| I | I have | I don't have | Do I have? |\n| You | You have | You don't have | Do you have? |\n| He / She / It | He has | He doesn't have | Does he have? |\n| We / They | We have | We don't have | Do we have? |",
+      "video_url": null,
+      "duration_min": 8,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:20:08.764397+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:20:08.764397+00:00"
+    },
+    {
+      "id": "6646790c-ee16-488c-b60a-9efca23c73d1",
+      "chapter_id": "a1de7414-c567-4362-ab30-d4a3fbc45a05",
+      "type": "quiz",
+      "title": "Exercice — Leisure and Sport",
+      "content": "Classe chaque activité dans la bonne colonne : **Leisure** (loisir) ou **Sport**. Puis vérifie tes réponses.\n\nSwimming — Reading books — Football — Listening to music — Jogging — Painting — Tennis — Watching TV\n\n### Corrigé\n- **Leisure :** Reading books, Listening to music, Painting, Watching TV\n- **Sport :** Swimming, Football, Jogging, Tennis",
+      "video_url": null,
+      "duration_min": 10,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:33:59.12148+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:33:59.12148+00:00"
+    },
+    {
+      "id": "4cd72f6c-3874-423b-89d1-d493c32a23f1",
+      "chapter_id": "52fb5185-d684-4ba3-a06f-7b8c382541c9",
+      "type": "quiz",
+      "title": "Exercice — Verbes irréguliers",
+      "content": "Donne le **prétérit** et le **participe passé** de chaque verbe, puis vérifie tes réponses.\n\n1. to buy\n2. to think\n3. to speak\n4. to go\n5. to write\n6. to take\n7. to bring\n8. to find\n9. to teach\n10. to swim\n\n### Corrigé\n1. bought / bought\n2. thought / thought\n3. spoke / spoken\n4. went / gone\n5. wrote / written\n6. took / taken\n7. brought / brought\n8. found / found\n9. taught / taught\n10. swam / swum",
+      "video_url": null,
+      "duration_min": 10,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:33:29.732588+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:33:29.732588+00:00"
+    },
+    {
+      "id": "e77c1add-3aa8-4e18-b1f6-b50f2c0bda3d",
+      "chapter_id": "754101f6-3e37-4b2b-8468-55261e6b0d11",
+      "type": "cours",
+      "title": "La voix passive",
+      "content": "When we speak, we use two voices: **Active** and **Passive**.\n\n### 1. Active Voice\nHere, the subject **does** the action.\n\n**Structure :** Subject + Verb + Object\n\n**Examples :**\n- The cat eats the mouse.\n- I killed the cockroach this morning.\n- She cuts the chicken.\n\n### 2. Passive Voice\nHere, the subject **undergoes** the action.\n\n**Structure :** To be + Past Participle (P.P) + by\n\n**Examples :**\n- The mouse is eaten by the cat.\n- The cockroach was killed by me this morning.\n- The chickens are cut by him.\n\n### How to transform a sentence\n- **Present simple :** The mechanic repairs cars. → Cars **are** repaired by the mechanic.\n- **Past simple :** We played football in 2010. → Football **was** played by us in 2010.\n- **Future simple :** Ben will buy a telephone. → A telephone **will be** bought by Ben.\n\n### The pronouns change\n| Active voice | Passive voice |\n|---|---|\n| I | by me |\n| You | by you |\n| He | by him |\n| She | by her |\n| We | by us |\n| They | by them |",
+      "video_url": null,
+      "duration_min": 8,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:19:26.565905+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:19:26.565905+00:00"
+    },
+    {
+      "id": "7af551ff-f263-443a-99f8-348db156b34c",
+      "chapter_id": "43dbb29a-9cdd-496c-80c0-ef3b361079a8",
+      "type": "cours",
+      "title": "Les comparatifs",
+      "content": "We use the comparative to compare two things or people.\n\n### 1. Comparative of Superiority\n**Long adjectives :** more + adjective + than\n- The school is more important than football.\n- Mathematics are more difficult than English.\n\n**Short adjectives :** adjective + **-er** + than\n- Tom is taller than Jerry.\n- Bobo is bigger than Peter.\n\n**Note :** short adjectives ending in **-y** become **-ier**.\n- English is easier than French.\n\n**Irregular adjectives :**\n| Adjective | Comparative |\n|---|---|\n| good | better than |\n| bad | worse than |\n| far | farther than |\n\n### 2. Comparative of Inferiority\n**Structure :** less + adjective (short or long) + than\n- The dog is less dangerous than the lion.\n- English is less difficult than Chinese.\n\n### 3. Comparative of Equality\n**Structure :** as + adjective + as\n- The lion is as dangerous as the tiger.\n- I am as intelligent as you.",
+      "video_url": null,
+      "duration_min": 8,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:19:26.565905+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:19:26.565905+00:00"
+    },
+    {
+      "id": "4463d950-b440-4655-b9a8-d4658fcac187",
+      "chapter_id": "3f4ba8c1-3911-4793-9ace-618d35f6fe5f",
+      "type": "quiz",
+      "title": "Exercice — Prépositions",
+      "content": "Complète chaque phrase avec la bonne préposition (**on, in, under, behind, at, to, by, of, for**), puis vérifie tes réponses.\n\n1. My school bag is ______ the table.\n2. The pupils are ______ the classroom.\n3. My shoes are ______ the table.\n4. The school is ______ the church.\n5. She goes ______ school.\n6. The kids are ______ home.\n7. This letter was written ______ Ben.\n8. The Republic ______ Congo is rich.\n\n### Corrigé\n1. on\n2. in\n3. under\n4. behind\n5. to\n6. at\n7. by\n8. of",
+      "video_url": null,
+      "duration_min": 10,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:33:59.12148+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:33:59.12148+00:00"
+    },
+    {
+      "id": "91c8aa6e-53d0-4088-bed0-4a0bdea5e736",
+      "chapter_id": "43dbb29a-9cdd-496c-80c0-ef3b361079a8",
+      "type": "quiz",
+      "title": "Exercice — Comparatifs",
+      "content": "Use the comparative to build the sentences, then check.\n\n1. The lion / dangerous / the dog (superiority)\n2. Peace / good / violence (superiority)\n3. Paris / beautiful / Brazzaville (superiority)\n4. Tom and Jerry / crazy / me (superiority)\n\n### Corrigé\n1. The lion is more dangerous than the dog.\n2. Peace is better than violence.\n3. Paris is more beautiful than Brazzaville.\n4. Tom and Jerry are crazier than me.",
+      "video_url": null,
+      "duration_min": 5,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:19:26.565905+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:19:26.565905+00:00"
+    },
+    {
+      "id": "5eea5e05-392b-44be-a1e0-cea0cef9a10d",
+      "chapter_id": "ad2cbe11-9392-4083-9e0e-c6ddec7df15d",
+      "type": "cours",
+      "title": "Les superlatifs",
+      "content": "We use the superlative to show that someone or something is the **most** or the **least** of a group.\n\n### 1. Superlative of Superiority\n**Long adjectives :** the most + adjective\n- Ben is the most intelligent pupil in the classroom.\n\n**Short adjectives :** the + adjective + **-est**\n- Tommy is the tallest pupil in the classroom.\n\n**Note :** short adjectives ending in **-y** become **-iest**.\n- I am the happiest boy today.\n\n**Irregular adjectives :**\n| Adjective | Superlative |\n|---|---|\n| good | the best |\n| bad | the worst |\n\n- Messi is the best football player.\n\n### 2. Superlative of Inferiority\n**Structure :** the least + adjective\n- Malolo is the least intelligent pupil in the classroom.\n- The Congo is the least wonderful country in Africa.",
+      "video_url": null,
+      "duration_min": 8,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:19:26.565905+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:19:26.565905+00:00"
+    },
+    {
+      "id": "96f74cfb-d0f3-4a63-b310-4d1f2917fe2d",
+      "chapter_id": "ad2cbe11-9392-4083-9e0e-c6ddec7df15d",
+      "type": "quiz",
+      "title": "Exercice — Superlatifs",
+      "content": "Use the superlative to build the sentences, then check.\n\n1. Kilimanjaro / high / mountain in Africa (superiority)\n2. Mombo Beach / attractive / place in Rwanda (superiority)\n3. English / easy / subject for pupils (superiority)\n4. Jet / good / actor in my opinion (superiority)\n5. The dog / fast / animal (inferiority)\n\n### Corrigé\n1. Kilimanjaro is the highest mountain in Africa.\n2. Mombo Beach is the most attractive place in Rwanda.\n3. English is the easiest subject for pupils.\n4. Jet is the best actor in my opinion.\n5. The dog is the least fast animal of all.",
+      "video_url": null,
+      "duration_min": 5,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:19:26.565905+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:19:26.565905+00:00"
+    },
+    {
+      "id": "979b1aa2-44df-4a00-bee4-d5ffffb0febc",
+      "chapter_id": "c3131ffe-d6d5-4670-a63c-fc7c9d73185b",
+      "type": "cours",
+      "title": "Le discours indirect",
+      "content": "When we report speech, we use two types: **Direct** and **Indirect** speech.\n\n### 1. Direct speech\nWe repeat exactly the words of someone, using inverted commas.\n- Mr John said, \"I like speaking English.\"\n\n### 2. Indirect speech\nWe report the words **without** inverted commas, using **that**.\n- Mr John said that he liked speaking English.\n\n### The pronouns and adjectives change\n| Direct speech | Indirect speech |\n|---|---|\n| I | he / she |\n| We | they |\n| My | his / her |\n| Our | their |\n\n### The adverbs and demonstratives change\n| Direct speech | Indirect speech |\n|---|---|\n| this | that |\n| yesterday | the day before |\n| tomorrow | the day after |\n| the next | the following |",
+      "video_url": null,
+      "duration_min": 8,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:19:26.565905+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:19:26.565905+00:00"
+    },
+    {
+      "id": "57dd02b0-e848-4f16-b82c-34ff01db38ad",
+      "chapter_id": "c3131ffe-d6d5-4670-a63c-fc7c9d73185b",
+      "type": "quiz",
+      "title": "Exercice — Discours indirect",
+      "content": "Turn these sentences into indirect speech, then check.\n\n1. John said, \"I learn my lessons every day.\"\n2. Ntika said, \"I will travel tomorrow.\"\n3. The teacher said, \"The pupils are very intelligent.\"\n4. Jan said, \"Jack went to school.\"\n5. Children said, \"We ate all the cereal yesterday.\"\n\n### Corrigé\n1. John said that he learned his lessons every day.\n2. Ntika said that she would travel the day after.\n3. The teacher said that the pupils were very intelligent.\n4. Jan said that Jack had gone to school.\n5. Children said that they had eaten all the cereal the day before.",
+      "video_url": null,
+      "duration_min": 6,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:19:26.565905+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:19:26.565905+00:00"
+    },
+    {
+      "id": "683c5707-bf7b-4bcd-80cf-e4edf357f9eb",
+      "chapter_id": "d2770193-d9a4-4802-8c27-6b96bad62721",
+      "type": "cours",
+      "title": "AIDS",
+      "content": "### 1. Definition\n**AIDS** stands for *Acquired Immunodeficiency Syndrome*. It is a chronic and fatal disease caused by the **Human Immunodeficiency Virus (HIV)**.\n\n### 2. How AIDS affects the body\nHIV enters the body and destroys the **white blood cells**, so they can no longer defend the body. The body becomes open to all infections.\n\n### 3. Symptoms\n- Fever, diarrhoea, headaches, cough\n- Loss of appetite, fatigue\n- Enlarged glands, loss of weight\n\n### 4. Modes of contamination\n- Sexual intercourse\n- Contaminated instruments or blood transfusion\n- From an infected mother to her baby\n\n### 5. Prevention\n- Be careful about the choice of a sexual partner, or use a condom\n- Control blood transfusions and avoid unsterilised instruments\n\n**Get information about HIV prevention.**",
+      "video_url": null,
+      "duration_min": 7,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:20:08.764397+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:20:08.764397+00:00"
+    },
+    {
+      "id": "29c6552a-9872-45c7-b1a5-b92251f3d870",
+      "chapter_id": "d2770193-d9a4-4802-8c27-6b96bad62721",
+      "type": "quiz",
+      "title": "Exercice — AIDS (matching)",
+      "content": "Match each word with its French meaning, then check.\n\n**Words :** 1. HIV — 2. Condom — 3. White blood cells — 4. Enlarged glands — 5. Blood transfusion — 6. Sexual intercourse — 7. Weight loss — 8. Immune system\n\n**Meanings :** a. globules blancs — b. rapports sexuels — c. perte de poids — d. préservatif — e. transfusion sanguine — f. système immunitaire — g. virus — h. ganglions enflés\n\n### Corrigé\n1 = g, 2 = d, 3 = a, 4 = h, 5 = e, 6 = b, 7 = c, 8 = f",
+      "video_url": null,
+      "duration_min": 4,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:20:08.764397+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:20:08.764397+00:00"
+    },
+    {
+      "id": "373c233d-dbb6-4544-a876-2bc0f6c0eb47",
+      "chapter_id": "a1de7414-c567-4362-ab30-d4a3fbc45a05",
+      "type": "cours",
+      "title": "Leisure and Sport",
+      "content": "Leisure and sport are activities people practise for entertainment or fitness.\n\n### 1. Leisure\nAn activity you do for entertainment or pastime:\n- Watching TV, reading books\n- Surfing the internet, painting or drawing\n- Listening to music, dancing\n- Playing games\n\n### 2. Sport\nAn activity you do for fitness:\n- Football, basketball, handball\n- Tennis, swimming\n- Jogging, gym",
+      "video_url": null,
+      "duration_min": 4,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-04T19:20:08.764397+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:20:08.764397+00:00"
+    },
+    {
+      "id": "23f08571-e488-4afb-accd-43bfb887f4d3",
+      "chapter_id": "b7882f57-483d-4136-930c-13b144d32938",
+      "type": "quiz",
+      "title": "Exercice — Les temps verbaux",
+      "content": "Mets le verbe entre parenthèses au temps demandé, puis vérifie tes réponses.\n\n1. She ______ (to work) hard every day. *(present simple)*\n2. They ______ (to study) now. *(present continuous)*\n3. He ______ (not / to play) football on Sundays. *(present simple, négatif)*\n4. ______ you ______ (to have) a pen? *(present simple, interrogatif)*\n5. We ______ (to read) a book at the moment. *(present continuous)*\n\n### Corrigé\n1. works\n2. are studying\n3. does not play (doesn't play)\n4. Do … have\n5. are reading",
+      "video_url": null,
+      "duration_min": 10,
+      "is_premium": false,
+      "order_index": 1,
+      "created_at": "2026-08-04T19:33:59.12148+00:00",
+      "source_id": null,
+      "updated_at": "2026-08-04T19:33:59.12148+00:00"
+    },
+    {
+      "id": "9d88b680-a769-4cb9-82da-3e0785ec776c",
+      "chapter_id": "8c49e54f-7050-4bb1-934c-fc76e857efc2",
+      "type": "cours",
+      "title": "Vocabulary : everyday topics",
+      "content": "Building vocabulary helps you understand and speak English about daily life. Learn the words below by theme (English word — French meaning), and use them in short sentences.\n\n### 1. Family and school\n- family (*la famille*), parents, brother, sister, uncle, aunt, cousin\n- school (*l'école*), teacher, pupil/student, classroom, lesson, homework, exam\n- **Example:** *My sister studies at the same school.*\n\n### 2. Daily routine\n- to wake up (*se réveiller*), to get up, to wash, to have breakfast\n- to go to school, to study, to have lunch, to play, to do homework, to sleep\n- **Example:** *I get up at six and have breakfast before school.*\n\n### 3. City, transport and directions\n- city, town, village, street, market, hospital, shop, station\n- transport: bus, taxi, car, train, plane, bike, boat\n- directions: turn left / right, go straight on, near, far, next to, between\n- **Example:** *Go straight on, then turn left near the market.*\n\n### 4. Travel and holidays\n- to travel (*voyager*), journey, ticket, luggage, passport, hotel\n- holidays (*les vacances*), beach, mountain, visit, tourist\n- **Example:** *During the holidays we travelled to the coast.*\n\n### 5. Health, body and illnesses\n- body: head, arm, leg, hand, foot, eye, ear, heart, stomach\n- health: to be ill/sick, pain, fever, cough, medicine, doctor, nurse, hospital\n- **Example:** *She has a fever, she must see a doctor.*\n\n### 6. Environment and technology\n- environment: pollution, waste, to recycle, to pollute, forest, river, climate\n- technology: computer, phone, internet, screen, to download, network\n- **Example:** *We must recycle waste to protect the environment.*\n\n> **📘 How to learn vocabulary** — Group words by theme, write a short sentence with each word, and revise them regularly. Keep a personal vocabulary notebook.\n\n### À retenir\n- Organise vocabulary by **themes**: family/school, daily routine, city/transport, travel, health, environment/technology.\n- Always learn a word **in a sentence**, not alone.\n- Revise little and often, and reuse new words when you speak or write.",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:55.710108+00:00",
+      "source_id": null,
+      "updated_at": "2026-11-06T00:03:12.529537+00:00"
+    },
+    {
+      "id": "29bc5663-9428-4b1b-9921-faa4421ee8de",
+      "chapter_id": "33adb9c2-0aa5-4400-ad01-2bd5867fd50b",
+      "type": "cours",
+      "title": "Skills : reading and writing",
+      "content": "In the BEPC exam, you must **read** short texts and **write** short productions (paragraphs, letters, emails). This lesson gives methods for both.\n\n### I. Reading comprehension\n\nWhen you read a short text or an authentic document (advertisement, letter, article):\n\n1. Read the **title** and look at the document to guess the topic.\n2. Read the whole text once for the **general idea**, without stopping at every word.\n3. Read again slowly to find **precise information** (who? what? where? when? why?).\n4. Guess unknown words from the **context**; don't translate word by word.\n5. For **True / False** questions, always **justify** with a sentence from the text.\n\n> **📘 Answering questions** — Answer in **complete sentences** and in **your own words** when possible. For \"Find a word that means…\", copy the exact word from the text.\n\n### II. Writing paragraphs\n\nA good paragraph has:\n- a **topic sentence** (the main idea);\n- a few **supporting sentences** (details, examples);\n- correct **linking words**: *first, then, after that, finally, because, but, so*.\n\nCheck: capital letters, full stops, subject + verb in every sentence, and verb tenses.\n\n### III. Writing a letter or an email\n\n- **Informal letter / email** (to a friend): *Dear Peter, … Best wishes, / Yours, [name].*\n- **Formal letter** (to an authority): *Dear Sir/Madam, … Yours faithfully, [name].*\n- Structure: greeting → reason for writing → main message → closing → signature.\n- **Example opening:** *Dear Ali, I am writing to tell you about my holidays.*\n\n### IV. Dialogues and conversations\n\n- Use **question forms** correctly: *What…? Where…? When…? Do you…? Can you…?*\n- Use polite expressions: *Could you…?, Excuse me, Thank you, You're welcome.*\n- Keep the exchange natural: one person asks, the other answers, then continues.\n\n### V. Summarizing a text\n\n- Keep only the **main ideas**; remove examples and repetitions.\n- Respect the **order** and the **meaning** of the text.\n- Use **your own words** and the number of words asked.\n\n### À retenir\n- **Reading:** get the general idea first, then look for precise information; justify True/False answers; guess words from context.\n- **Writing:** a paragraph = topic sentence + details + linking words; check tenses and punctuation.\n- **Letters/emails:** informal (*Dear + first name… Best wishes*) vs formal (*Dear Sir/Madam… Yours faithfully*).\n- **Summary:** main ideas only, in your own words, same order.",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:55.848273+00:00",
+      "source_id": null,
+      "updated_at": "2026-11-06T00:03:12.629087+00:00"
+    }
+  ]
+}

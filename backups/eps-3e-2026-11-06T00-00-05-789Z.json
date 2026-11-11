@@ -1,0 +1,61 @@
+{
+  "created_at": "2026-11-06T00:00:05.792Z",
+  "lessons": [
+    {
+      "id": "63183704-5eaa-4194-81c3-8a501e3fc738",
+      "chapter_id": "0552f1d0-27b7-4916-a04d-55fce3e62f71",
+      "type": "cours",
+      "title": "Natation et pleine nature",
+      "content": "### Au programme de ce chapitre\n\n- Natation (techniques de nage)\n- Course d'endurance, orientation",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:57.453553+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-18T01:04:13.284141+00:00"
+    },
+    {
+      "id": "9498e8a1-d344-4729-aeb7-a57a4b20d47a",
+      "chapter_id": "d26a594c-600d-461e-bf47-158d29462bd4",
+      "type": "cours",
+      "title": "Athlétisme",
+      "content": "### Au programme de ce chapitre\n\n- Course de vitesse et relais\n- Saut en hauteur, lancer de poids\n- Endurance",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:57.063856+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-18T01:04:13.73021+00:00"
+    },
+    {
+      "id": "a74d42ea-6eb3-4122-9f83-fea1fb988dee",
+      "chapter_id": "ade410b1-f17a-47e6-ba68-28e082e67a8c",
+      "type": "cours",
+      "title": "Gymnastique et danse",
+      "content": "### Au programme de ce chapitre\n\n- Gymnastique au sol (figures simples)\n- Danse et expression corporelle (chorégraphies)",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:57.32749+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-18T01:04:13.848299+00:00"
+    },
+    {
+      "id": "d673f5dc-d960-44f8-93a3-75fcb92863b1",
+      "chapter_id": "c5362200-31cb-4d80-b39a-dfcc0c537033",
+      "type": "cours",
+      "title": "Sports collectifs",
+      "content": "### Au programme de ce chapitre\n\n- Football, basket-ball (règles, techniques)\n- Handball, volley-ball (tactiques)",
+      "video_url": null,
+      "duration_min": null,
+      "is_premium": false,
+      "order_index": 0,
+      "created_at": "2026-08-17T18:54:57.196902+00:00",
+      "source_id": null,
+      "updated_at": "2026-10-18T01:04:13.790887+00:00"
+    }
+  ]
+}

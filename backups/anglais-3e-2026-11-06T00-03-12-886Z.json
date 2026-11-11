@@ -1,0 +1,30 @@
+[
+  {
+    "id": "29bc5663-9428-4b1b-9921-faa4421ee8de",
+    "chapter_id": "33adb9c2-0aa5-4400-ad01-2bd5867fd50b",
+    "type": "cours",
+    "title": "Skills : reading and writing",
+    "content": "### Au programme de ce chapitre\n\n- Reading comprehension (short texts, authentic documents)\n- Writing paragraphs, letters, emails\n- Dialogues and conversations\n- Summarizing texts",
+    "video_url": null,
+    "duration_min": null,
+    "is_premium": false,
+    "order_index": 0,
+    "created_at": "2026-08-17T18:54:55.848273+00:00",
+    "source_id": null,
+    "updated_at": "2026-10-18T01:04:13.556373+00:00"
+  },
+  {
+    "id": "9d88b680-a769-4cb9-82da-3e0785ec776c",
+    "chapter_id": "8c49e54f-7050-4bb1-934c-fc76e857efc2",
+    "type": "cours",
+    "title": "Vocabulary : everyday topics",
+    "content": "### Au programme de ce chapitre\n\n- Family, school, daily routine\n- City, transport, directions\n- Travel, holidays\n- Health, body, illnesses\n- Environment, technology",
+    "video_url": null,
+    "duration_min": null,
+    "is_premium": false,
+    "order_index": 0,
+    "created_at": "2026-08-17T18:54:55.710108+00:00",
+    "source_id": null,
+    "updated_at": "2026-10-18T01:04:13.492241+00:00"
+  }
+]

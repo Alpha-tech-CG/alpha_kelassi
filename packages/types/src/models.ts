@@ -1,9 +1,11 @@
 export type UserRole = 'student' | 'admin'
-export type UserPlan = 'free' | 'premium'
-export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'trialing'
+/** Valeur stockée en base ; `premium` est l'ancienne offre unique, lue comme `pro`. */
+export type UserPlan = import('./subscriptions').SubscriptionPlan | 'premium'
+export type SubscriptionStatus = 'active' | 'pending' | 'expired' | 'canceled' | 'suspended' | 'past_due' | 'trialing'
 export type DocumentType = 'cours' | 'examen'
 export type ExamSession = 'normale' | 'rattrapage'
-export type Level = 'bepc' | 'bac_a' | 'bac_c' | 'bac_d'
+/** @deprecated Utiliser `StudyLevel` de `./levels`, aligné sur l'enum PostgreSQL. */
+export type Level = import('./levels').StudyLevel
 export type MessageRole = 'user' | 'assistant'
 
 export interface User {
@@ -21,9 +23,20 @@ export interface Subscription {
   user_id: string
   stripe_sub_id: string | null
   cinetpay_ref: string | null
+  feexpay_ref: string | null
   plan: UserPlan
   status: SubscriptionStatus
+  billing_interval: 'month' | 'year' | null
+  amount: number | null
+  currency: string
+  started_at: string | null
   expires_at: string | null
+  cancelled_at: string | null
+  suspended_at: string | null
+  payment_provider: 'feexpay' | 'stripe' | 'cinetpay' | 'admin' | null
+  provider_transaction_id: string | null
+  product_key: string | null
+  source: 'payment' | 'admin' | 'legacy'
   created_at: string
 }
 

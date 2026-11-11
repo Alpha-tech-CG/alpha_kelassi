@@ -1,0 +1,139 @@
+/* Encadrés de cours — cf. src/components/callouts.ts (même palette dans l'appli mobile).
+   Deux formes : un blockquote « > **📘 Définition** … » (cours de maths) ou un paragraphe
+   qui commence par un intitulé en gras « **💡 Je retiens :** … » (autres matières). */
+.md-content blockquote[data-callout],
+.md-content p[data-callout] {
+  --c-bg: #f6f8fb;
+  --c-border: #d7dee8;
+  --c-accent: #4b5563;
+  --c-title: #1f2937;
+  margin: 1.25rem 0;
+  border: 1px solid var(--c-border);
+  border-left: 5px solid var(--c-accent);
+  border-radius: 0.9rem;
+  background: var(--c-bg);
+  padding: 0.85rem 1.05rem;
+  color: #1f2937;
+  font-style: normal;
+}
+.md-content blockquote[data-callout] > p:first-child {
+  margin-top: 0;
+  color: var(--c-title);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+.md-content blockquote[data-callout] > p:first-child strong {
+  color: inherit;
+}
+.md-content p[data-callout] > strong:first-child {
+  color: var(--c-title);
+  font-weight: 800;
+}
+.md-content blockquote[data-callout] p {
+  margin: 0.4rem 0;
+}
+/* Un paragraphe à intitulé déjà dans un encadré : pas de second cadre. */
+.md-content blockquote p[data-callout] {
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.md-content blockquote[data-callout] .katex-display {
+  margin: 0.6rem 0;
+}
+
+/* 📘 Définition */
+.md-content [data-callout='definition'] { --c-bg: #f3f1ff; --c-border: #dcd6fb; --c-accent: #6d5bd0; --c-title: #4c3bb0; }
+/* 🏛️ Théorème / propriété / règle */
+.md-content [data-callout='theoreme'] { --c-bg: #eef5ff; --c-border: #cfe0fb; --c-accent: #2563eb; --c-title: #1d4ed8; }
+/* 📐 Formule */
+.md-content [data-callout='formule'] {
+  --c-bg: #ecf8f1; --c-border: #c6ead5; --c-accent: #0f8f4f; --c-title: #0b6e3c;
+}
+.md-content blockquote[data-callout='formule'] .katex-display { font-size: 1.08em; }
+/* 💡 Pour bien comprendre / remarque */
+.md-content [data-callout='comprendre'] { --c-bg: #fffbea; --c-border: #f7e7a6; --c-accent: #e3b505; --c-title: #8a6a00; }
+/* ✏️ Exemple */
+.md-content [data-callout='exemple'] { --c-bg: #f8fafc; --c-border: #e2e8f0; --c-accent: #94a3b8; --c-title: #334155; }
+/* 🧭 Méthode */
+.md-content [data-callout='methode'] { --c-bg: #fff4ec; --c-border: #fbd9c0; --c-accent: #ea7a1f; --c-title: #b45309; }
+/* ⚠️ Attention */
+.md-content [data-callout='attention'] { --c-bg: #fff1f1; --c-border: #f8cfcf; --c-accent: #dc2626; --c-title: #b91c1c; }
+/* 🎯 À retenir */
+.md-content [data-callout='retenir'] { --c-bg: #0f8f4f; --c-border: #0f8f4f; --c-accent: #f7d64a; --c-title: #f7d64a; color: #fff; }
+.md-content [data-callout='retenir'] .katex,
+.md-content [data-callout='retenir'] strong { color: #fff; }
+.md-content blockquote [data-callout='retenir'] { color: inherit; }
+
+@media (prefers-color-scheme: dark) {
+  .dark .md-content blockquote[data-callout],
+  .dark .md-content p[data-callout] { color: inherit; }
+}
+
+/* Sommaire d'un cours : chaque sous-titre est une ligne qu'on ouvre pour lire la partie. */
+.md-sections {
+  margin: 1.25rem 0;
+}
+.md-sections-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+.md-sections-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+.md-sections-actions button {
+  border: 1px solid #d7dee8;
+  border-radius: 999px;
+  background: #fff;
+  padding: 0.2rem 0.7rem;
+  font-weight: 600;
+  color: #0f8f4f;
+  cursor: pointer;
+}
+.md-sections-actions button:hover { background: #ecf8f1; }
+.md-section {
+  margin: 0.55rem 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  background: #fff;
+  overflow: hidden;
+}
+.md-section > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.35;
+}
+.md-section > summary::-webkit-details-marker { display: none; }
+.md-section > summary::after {
+  content: '›';
+  margin-left: auto;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #0f8f4f;
+  transition: transform 0.15s ease;
+}
+.md-section[open] > summary::after { transform: rotate(90deg); }
+.md-section > summary:hover { background: #f6faf8; }
+.md-section[open] > summary {
+  border-bottom: 1px solid #e5e7eb;
+  background: #ecf8f1;
+  color: #0b6e3c;
+}
+.md-section-title { min-width: 0; }
+.md-section-body {
+  padding: 0.25rem 1.1rem 0.9rem;
+}
+.md-section-body > :first-child { margin-top: 0.75rem; }

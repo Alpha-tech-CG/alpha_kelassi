@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { isAllowedAdminEmail } from '@/lib/admin-allowlist'
 
 // Client service role partagé (bypass RLS) pour les opérations admin
 export const supabaseAdmin = createAdminClient(
@@ -17,8 +18,16 @@ export async function requireAdmin(): Promise<{ userId: string } | { error: Next
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: NextResponse.json({ error: 'Non authentifié' }, { status: 401 }) }
 
+  // Deux verrous indépendants : la liste blanche d'adresses ET le rôle en base.
+  // Un rôle `admin` accordé par erreur ne suffit donc pas à entrer.
+  if (!isAllowedAdminEmail(user.email)) {
+    return { error: NextResponse.json({ error: 'Admin requis' }, { status: 403 }) }
+  }
+
   const { data: profile } = await supabaseAdmin.from('users').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') return { error: NextResponse.json({ error: 'Admin requis' }, { status: 403 }) }
 
+  // Aucune double authentification exigée : l'accès admin repose sur la liste
+  // blanche d'adresses ET le rôle `admin` en base, jugés suffisants.
   return { userId: user.id }
 }

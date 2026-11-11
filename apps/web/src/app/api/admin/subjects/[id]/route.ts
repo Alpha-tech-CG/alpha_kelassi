@@ -5,6 +5,7 @@ import { z } from 'zod'
 const patchSchema = z.object({
   name: z.string().min(2).max(60).optional(),
   icon: z.string().max(8).nullable().optional(),
+  track_type: z.enum(['generale', 'technique']).optional(),
 })
 
 /** PATCH /api/admin/subjects/:id — renomme / change l'icône d'une matière */
@@ -20,6 +21,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const patch: Record<string, unknown> = {}
   if (body.name !== undefined) patch['name'] = body.name.trim()
   if (body.icon !== undefined) patch['icon'] = body.icon
+  if (body.track_type !== undefined) patch['track_type'] = body.track_type
   if (Object.keys(patch).length === 0) {
     return NextResponse.json({ error: 'Rien à modifier' }, { status: 400 })
   }
@@ -28,7 +30,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     .from('subjects')
     .update(patch)
     .eq('id', id)
-    .select('id, name, level, country_code, icon')
+    .select('id, name, level, track_type, country_code, icon')
     .single()
 
   if (error) {
@@ -38,7 +40,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         { status: 409 }
       )
     }
-    return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+    console.error('[/admin/subjects/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
   }
 
   return NextResponse.json({ data })
@@ -72,6 +75,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   }
 
   const { error } = await supabaseAdmin.from('subjects').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/subjects/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: { deleted: true } })
 }

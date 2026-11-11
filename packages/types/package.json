@@ -6,9 +6,10 @@
   "types": "./src/index.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
-    "lint": "eslint src --ext .ts"
+    "test": "node --test \"test/*.test.ts\"",
+    "lint": "eslint src"
   },
   "devDependencies": {
-    "typescript": "^5.7.0"
+    "typescript": "^5.9.3"
   }
 }

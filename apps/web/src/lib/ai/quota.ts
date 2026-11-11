@@ -1,42 +1,37 @@
+import { AI_DAILY_LIMITS, dayPeriodKey, normalizePlan } from '@alpha-kelassi/types'
 import { redis } from '@/lib/redis'
 
-const FREE_DAILY_LIMIT    = 5
-const PREMIUM_DAILY_LIMIT = 200
+/**
+ * Ancien compteur Redis des questions IA, conservé UNIQUEMENT comme repli
+ * tant que la migration 057 (compteurs en base, idempotents) n'est pas
+ * appliquée. Les limites sont celles des nouvelles formules.
+ *
+ * Défauts connus du repli : Redis « fail-open » (panne = pas de limite) et
+ * aucune protection contre le double comptage d'une nouvelle tentative —
+ * d'où la bascule sur `consume_usage` dès que la base le permet.
+ */
 
 function quotaKey(userId: string): string {
-  const today = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
-  return `quota:chat:${userId}:${today}`
+  return `quota:chat:${userId}:${dayPeriodKey()}`
 }
 
 export async function checkAndIncrementQuota(
   userId: string,
   plan: string
-): Promise<{ allowed: boolean; remaining: number; used: number }> {
-  const limit = plan === 'premium' ? PREMIUM_DAILY_LIMIT : FREE_DAILY_LIMIT
+): Promise<{ allowed: boolean; remaining: number; used: number; limit: number }> {
+  const limit = AI_DAILY_LIMITS[normalizePlan(plan)]
   const key   = quotaKey(userId)
 
   const used = await redis.incr(key)
-
-  // Expire à minuit + 1h de marge
-  if (used === 1) {
-    const now      = new Date()
-    const midnight = new Date(now)
-    midnight.setUTCHours(24, 0, 0, 0)
-    const ttl = Math.floor((midnight.getTime() - now.getTime()) / 1000) + 3600
-    await redis.expire(key, ttl)
-  }
+  if (used === 1) await redis.expire(key, 26 * 3600)
 
   if (used > limit) {
     await redis.decr(key)
-    return { allowed: false, remaining: 0, used: limit }
+    return { allowed: false, remaining: 0, used: limit, limit }
   }
-
-  return { allowed: true, remaining: limit - used, used }
+  return { allowed: true, remaining: limit - used, used, limit }
 }
 
-export async function getQuotaStatus(userId: string, plan: string) {
-  const limit = plan === 'premium' ? PREMIUM_DAILY_LIMIT : FREE_DAILY_LIMIT
-  const key   = quotaKey(userId)
-  const used  = parseInt((await redis.get<string>(key)) ?? '0', 10)
-  return { used, remaining: Math.max(0, limit - used), limit }
+export async function refundLegacyQuota(userId: string): Promise<void> {
+  await redis.decr(quotaKey(userId))
 }

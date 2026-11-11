@@ -1,0 +1,106 @@
+{
+  "created_at": "2026-11-11T12:48:49.494Z",
+  "note": "AVANT ajout Histoire (série A) en BG/G2/G3",
+  "items": [
+    {
+      "what": "subject-created",
+      "level": "bac_bg",
+      "subject_id": "6109d2f0-056e-451b-93b5-d01c1312feac"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_bg",
+      "chapter_id": "3c627844-9b82-4dd7-9ca8-fd05713401ec",
+      "title": "La Deuxième Guerre mondiale (1939-1945)"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_bg",
+      "chapter_id": "bfc60f68-d69c-4d96-822e-b59e5a497464",
+      "title": "L'ONU"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_bg",
+      "chapter_id": "2b1699e0-503b-4745-b8c0-e6baa3eca291",
+      "title": "La Guerre froide"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_bg",
+      "chapter_id": "6dc7ef47-0140-4532-9824-7b1877307268",
+      "title": "La décolonisation"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_bg",
+      "chapter_id": "3000ed85-27ec-4619-93fc-7ab10b817e80",
+      "title": "Méthodologie : commentaire de document et dissertation"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g2",
+      "chapter_id": "653d75b5-b4a4-4980-8646-21ab001f0b87",
+      "title": "La Deuxième Guerre mondiale (1939-1945)"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g2",
+      "chapter_id": "d966842a-2458-42c1-a064-5a898ff57e95",
+      "title": "L'ONU"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g2",
+      "chapter_id": "0328a581-6859-4946-abd9-1ff6c8adbf34",
+      "title": "La Guerre froide"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g2",
+      "chapter_id": "416993a5-f8dc-4881-bc65-d7d3e27c26a6",
+      "title": "La décolonisation"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g2",
+      "chapter_id": "bcf314d3-3b77-469b-901e-20ee0c1bf142",
+      "title": "Méthodologie : commentaire de document et dissertation"
+    },
+    {
+      "what": "subject-created",
+      "level": "bac_g3",
+      "subject_id": "f86a6f44-9074-453a-9f35-308aecef81a4"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g3",
+      "chapter_id": "976e4f97-d6ec-4c78-9508-69acae1aa93a",
+      "title": "La Deuxième Guerre mondiale (1939-1945)"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g3",
+      "chapter_id": "750c9866-d77f-4199-9156-037f36ed12f1",
+      "title": "L'ONU"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g3",
+      "chapter_id": "642e30d2-bd86-4a2d-90d4-1dcdb0e4e398",
+      "title": "La Guerre froide"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g3",
+      "chapter_id": "b407c347-9d6a-4cbf-a73c-e79d30366c75",
+      "title": "La décolonisation"
+    },
+    {
+      "what": "chapter-added",
+      "level": "bac_g3",
+      "chapter_id": "b9946d54-572d-4309-8156-1848d9bbf7cf",
+      "title": "Méthodologie : commentaire de document et dissertation"
+    }
+  ]
+}

@@ -1,18 +1,26 @@
 import type { NextConfig } from 'next'
+import { withSentryConfig } from '@sentry/nextjs'
+
+// Seul NOTRE projet Supabase peut alimenter l'optimiseur d'images : un joker
+// `*.supabase.co` laisserait n'importe qui faire traiter un fichier hébergé
+// dans son propre projet (cf. audit sécurité du 26/10/2026, C1).
+const SUPABASE_IMAGE_HOST = (() => {
+  try {
+    return new URL(process.env['NEXT_PUBLIC_SUPABASE_URL'] ?? '').hostname
+  } catch {
+    return 'evtqdztycnttegzoleqb.supabase.co'
+  }
+})()
 
 const nextConfig: NextConfig = {
   compress: true,
-
-  // Supabase JS v2.106 has complex type inference that requires regenerating
-  // database.ts from live schema. Disable TS build errors until `pnpm db:generate-types` is run.
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // Pas d'en-tête « X-Powered-By: Next.js » (audit du 27/10/2026, F6).
+  poweredByHeader: false,
 
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
-      { protocol: 'https', hostname: '*.supabase.co' },
+      { protocol: 'https', hostname: SUPABASE_IMAGE_HOST, pathname: '/storage/v1/object/public/**' },
       { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
     ],
     minimumCacheTTL: 86400,
@@ -24,6 +32,11 @@ const nextConfig: NextConfig = {
   // Réduit le JS importé pour les libs lourdes
   experimental: {
     optimizePackageImports: ['recharts', 'react-pdf', 'lucide-react'],
+    // Plafond explicite du corps des Server Actions (défaut Next = 1 Mo) :
+    // les uploads passent par les Route Handlers, qui vérifient file.size.
+    serverActions: {
+      bodySizeLimit: '1mb',
+    },
   },
 
   webpack(config) {
@@ -37,23 +50,9 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
-    const csp = [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",   // Next.js + react-pdf worker
-      "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://*.supabase.co",
-      "font-src 'self'",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com",
-      "worker-src blob:",    // pdfjs worker
-      "frame-src 'none'",
-      "object-src 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "upgrade-insecure-requests",
-    ].join('; ')
-
+    // La Content-Security-Policy est posée par le middleware : elle porte un
+    // nonce propre à chaque requête (src/lib/csp.ts).
     const securityHeaders = [
-      { key: 'Content-Security-Policy',       value: csp },
       { key: 'Strict-Transport-Security',     value: 'max-age=63072000; includeSubDomains; preload' },
       { key: 'X-Frame-Options',               value: 'DENY' },
       { key: 'X-Content-Type-Options',        value: 'nosniff' },
@@ -84,4 +83,14 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+// Wrap avec Sentry : upload des source maps au build (no-op silencieux si
+// SENTRY_AUTH_TOKEN n'est pas configuré) + instrumentation auto des routes.
+export default withSentryConfig(nextConfig, {
+  silent: true,
+  org: process.env['SENTRY_ORG'],
+  project: process.env['SENTRY_PROJECT'],
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  disableLogger: true,
+  automaticVercelMonitors: true,
+})

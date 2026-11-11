@@ -7,6 +7,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if ('error' in guard) return guard.error
   const { id } = await params
   const { error } = await supabaseAdmin.from('exam_events').delete().eq('id', id)
-  if (error) return NextResponse.json({ error: { code: 'DB_ERROR', message: error.message } }, { status: 500 })
+  if (error) {
+    console.error('[/api/admin/exams/[id]]', error)
+    return NextResponse.json({ error: { code: 'DB_ERROR', message: 'Une erreur est survenue, réessaie plus tard.' } }, { status: 500 })
+  }
   return NextResponse.json({ data: { deleted: true } })
 }

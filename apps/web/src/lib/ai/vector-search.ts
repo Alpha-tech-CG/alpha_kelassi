@@ -1,11 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from '@alpha-kelassi/types'
 import { embedQuery } from './embeddings'
 
 // Lazy — jamais instancié au build time
-let _admin: ReturnType<typeof createClient> | null = null
+let _admin: ReturnType<typeof createClient<Database>> | null = null
 function getAdmin() {
   if (!_admin) {
-    _admin = createClient(
+    _admin = createClient<Database>(
       process.env['NEXT_PUBLIC_SUPABASE_URL']!,
       process.env['SUPABASE_SERVICE_ROLE_KEY']!
     )
@@ -97,5 +98,5 @@ async function fetchFirstChunks(documentId: string, limit: number, isPremium: bo
     .order('chunk_index')
     .limit(limit)
 
-  return (data ?? []).map((c) => ({ ...c, similarity: 1 }))
+  return (data ?? []).map((c) => ({ ...c, metadata: c.metadata as Record<string, unknown>, similarity: 1 }))
 }

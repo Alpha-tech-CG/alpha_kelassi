@@ -9,6 +9,11 @@
     "jsx": "react-native",
     "moduleResolution": "bundler",
     "strict": true,
+    // Désactivé pour le mobile uniquement : les paquets Expo/React Native
+    // (ex. expo-file-system/legacy) sont importés par leur source .ts et ne
+    // sont pas écrits pour exactOptionalPropertyTypes (TS2375). skipLibCheck
+    // ne couvre pas ces .ts. Le reste de `strict` reste actif.
+    "exactOptionalPropertyTypes": false,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "noEmit": true,
