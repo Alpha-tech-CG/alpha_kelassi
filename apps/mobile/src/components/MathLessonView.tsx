@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { colors } from '../lib/theme'
 import { KATEX_CSS, KATEX_JS_B64, MARKED_JS_B64 } from '../lib/katexBundle'
+import { PURIFY_JS_B64 } from '../lib/purifyBundle'
 import { keepLessonInWebView, LESSON_BASE_URL } from '../lib/webviewLinks'
 import { CognixLoader } from './CognixLoader'
 
@@ -73,9 +74,23 @@ export function MathLessonReader({ content, title }: { content: string; title?: 
   )
 }
 
+/**
+ * JSON inséré tel quel dans un bloc <script> : JSON.stringify n'échappe pas `<`,
+ * donc un cours contenant `</script>` fermerait le bloc et la suite du cours serait
+ * interprétée comme du HTML brut (exécuté avant tout nettoyage). `<` est le
+ * même caractère pour JS, mais le parseur HTML ne le voit plus comme une balise.
+ * U+2028/U+2029 sont échappés par prudence (fins de ligne pour les vieux moteurs).
+ */
+function jsonForScript(value: string): string {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')
+}
+
 function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}): string {
-  const payload = JSON.stringify(md)
-  const titlePayload = JSON.stringify(opts.title ?? '')
+  const payload = jsonForScript(md)
+  const titlePayload = jsonForScript(opts.title ?? '')
   return `<!DOCTYPE html><html><head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -84,6 +99,7 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
 (function(){
   function add(b64){ var s=document.createElement('script'); s.text=decodeURIComponent(escape(atob(b64))); document.head.appendChild(s); }
   try { add("${MARKED_JS_B64}"); add("${KATEX_JS_B64}"); } catch(e){}
+  try { add("${PURIFY_JS_B64}"); } catch(e){}
 })();
 </script>
 <style>
@@ -161,25 +177,34 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
     );
     if(h > 0 && h !== lastH && window.ReactNativeWebView){ lastH = h; window.ReactNativeWebView.postMessage(String(h)); }
   }
-  // Filet de sécurité avant innerHTML : le contenu vient des cours (rédigés
-  // par l'équipe pédagogique), mais on ne fait pas confiance à 100% à la
-  // chaîne d'import — on retire scripts, gestionnaires d'événements inline
-  // et URLs javascript:/data: avant d'injecter le HTML rendu par marked/katex.
-  function sanitize(html){
-    // NB : on est dans un template literal TS — chaque antislash doit être
-    // doublé, et la balise fermante de script doit rester échappée (antislash
-    // avant la barre), sinon elle fermerait ce bloc et tout le rendu KaTeX tomberait.
-    return html
-      .replace(/<script[\\s\\S]*?<\\/script>/gi, '')
-      .replace(/<iframe[\\s\\S]*?<\\/iframe>/gi, '')
-      .replace(/\\son\\w+\\s*=\\s*("[^"]*"|'[^']*'|[^\\s>]*)/gi, '')
-      .replace(/(href|src)\\s*=\\s*("javascript:[^"]*"|'javascript:[^']*'|"data:text\\/html[^"]*"|'data:text\\/html[^']*')/gi, '$1="#"');
-  }
+  // Nettoyage du HTML rendu par marked + KaTeX avant de l'insérer : le contenu
+  // vient des cours (saisis par l'équipe), mais on ne fait pas confiance à 100 %
+  // à la chaîne d'import. DOMPurify (embarqué, cf. lib/purifyBundle.ts) travaille
+  // sur le DOM en liste blanche — un filtre par regex se contourne (attributs
+  // sans guillemets, entités HTML, <object>, <svg>, <base>, <meta refresh>…).
+  // Liste blanche : HTML + SVG + MathML (rendu KaTeX : span/svg/math, class,
+  // style), plus <semantics>/<annotation> de la MathML de KaTeX. URL limitées
+  // à http(s), mailto, ancres et chemins relatifs (data: reste permis sur <img>).
+  // NB : on est dans un template literal TS — chaque antislash doit être doublé,
+  // et une balise fermante de script doit rester échappée (antislash avant la barre).
+  var PURIFY_CFG = {
+    USE_PROFILES: { html: true, svg: true, mathMl: true },
+    ADD_TAGS: ['semantics', 'annotation'],
+    ADD_ATTR: ['encoding'],
+    FORBID_TAGS: ['style', 'form', 'input', 'button', 'textarea', 'select', 'option', 'base', 'meta', 'link', 'object', 'embed', 'iframe', 'frame', 'frameset', 'dialog', 'template'],
+    FORBID_ATTR: ['action', 'formaction', 'srcset', 'ping', 'target'],
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto):|[^a-z]|[a-z+.\\-]+(?:[^a-z+.\\-:]|$))/i,
+    ALLOW_DATA_ATTR: false,
+    RETURN_DOM_FRAGMENT: true
+  };
+  // Fragment DOM (pas de chaîne) : pas de re-parsing entre le nettoyage et l'insertion.
+  function sanitize(html){ return window.DOMPurify.sanitize(html, PURIFY_CFG); }
   var built = false;
   var ro = null;
   function build(){
     if(built) return;
-    if(!window.marked || !window.katex){ return setTimeout(build, 80); }
+    // Sans DOMPurify, on n'insère rien (échec fermé) plutôt que du HTML non nettoyé.
+    if(!window.marked || !window.katex || !window.DOMPurify){ return setTimeout(build, 80); }
     built = true;
     var maths=[];
     // Grandes parties écrites en gras (« **II) APPLICATION AFFINE** ») : traitées comme des titres
@@ -205,7 +230,8 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
       catch(e){ return o.t; }
     });
     var c = document.getElementById('c');
-    c.innerHTML = sanitize(html);
+    c.textContent = '';
+    c.appendChild(sanitize(html));
     // Encadrés : blockquote dont le texte commence par un emoji de type (cf. apps/web/src/components/callouts.ts).
     var kinds = [['📘','definition'],['🏛','theoreme'],['📐','formule'],['💡','comprendre'],['✏','exemple'],['🧭','methode'],['⚠','attention'],['🎯','retenir']];
     // Intitulés en gras en tête de paragraphe (« **💡 Je retiens :** », « **Remarque :** »…) : même liste
@@ -255,7 +281,8 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
         var el = kids[ki];
         if(isHead(el)){
           var d = document.createElement('details'); d.className = 'sec';
-          var sm = document.createElement('summary'); sm.innerHTML = el.innerHTML;
+          // On déplace les nœuds déjà nettoyés (pas de innerHTML : aucun re-parsing).
+          var sm = document.createElement('summary'); while(el.firstChild) sm.appendChild(el.firstChild);
           cur = document.createElement('div'); cur.className = 'sec-body';
           d.appendChild(sm); d.appendChild(cur); list.appendChild(d); el.remove(); nsec++;
         } else if(cur){ cur.appendChild(el); }
@@ -270,7 +297,7 @@ function buildHtml(md: string, opts: { reader?: boolean; title?: string } = {}):
         c.appendChild(head); c.appendChild(list);
       } else {
         // Une seule partie : on remet le contenu à plat.
-        while(list.firstChild){ var dd = list.firstChild; var h = document.createElement('h' + lvl); h.innerHTML = dd.firstChild.innerHTML; c.appendChild(h); while(dd.lastChild.firstChild) c.appendChild(dd.lastChild.firstChild); list.removeChild(dd); }
+        while(list.firstChild){ var dd = list.firstChild; var h = document.createElement('h' + lvl); var s0 = dd.firstChild; while(s0.firstChild) h.appendChild(s0.firstChild); c.appendChild(h); while(dd.lastChild.firstChild) c.appendChild(dd.lastChild.firstChild); list.removeChild(dd); }
       }
     }
     // Enveloppe les tableaux larges dans un conteneur défilable (jamais coupé).
